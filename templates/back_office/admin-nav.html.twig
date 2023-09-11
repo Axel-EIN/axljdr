@@ -1,0 +1,52 @@
+<nav class="nav justify-content-center">
+{% if is_granted("ROLE_MJ") %}
+    <a class="nav-link {% if app.request.get('_route') == 'admin_scene'
+                          or app.request.get('_route') == 'admin_scene_create'
+                          or app.request.get('_route') == 'admin_scene_edit' %}active{% endif %}" href="{{ path('admin_scene') }}">Scènes</a>
+
+    <a class="nav-link {% if app.request.get('_route') == 'admin_episode'
+                          or app.request.get('_route') == 'admin_episode_create'
+                          or app.request.get('_route') == 'admin_episode_edit' %}active{% endif %}" href="{{ path('admin_episode') }}">Episodes</a>
+
+    <a class="nav-link {% if app.request.get('_route') == 'admin_chapitre'
+                          or app.request.get('_route') == 'admin_chapitre_create'
+                          or app.request.get('_route') == 'admin_saison_edit' %}active{% endif %}" href="{{ path('admin_chapitre') }}">Chapitres</a>
+
+    <a class="nav-link {% if app.request.get('_route') == 'admin_saison'
+                          or app.request.get('_route') == 'admin_saison_create'
+                          or app.request.get('_route') == 'admin_saison_edit' %}active{% endif %}" href="{{ path('admin_saison') }}">Saisons</a>
+
+    <a class="nav-link {% if app.request.get('_route') == 'admin_clan'
+                        or app.request.get('_route') == 'admin_clan_create'
+                        or app.request.get('_route') == 'admin_clan_edit' %}active{% endif %}" href="{{ path('admin_clan') }}">Clans</a>
+
+    <a class="nav-link {% if app.request.get('_route') == 'admin_archive'
+                        or app.request.get('_route') == 'admin_archive_create'
+                        or app.request.get('_route') == 'admin_archive_edit' %}active{% endif %}" href="{{ path('admin_archive') }}">Archives</a>
+
+    <a class="nav-link {% if app.request.get('_route') == 'admin_lieu'
+                        or app.request.get('_route') == 'admin_lieu_create'
+                        or app.request.get('_route') == 'admin_lieu_edit' %}active{% endif %}" href="{{ path('admin_lieu') }}">Lieux</a>
+
+    <a class="nav-link {% if app.request.get('_route') == 'admin_classe'
+                        or app.request.get('_route') == 'admin_classe_create'
+                        or app.request.get('_route') == 'admin_classe_edit' %}active{% endif %}" href="{{ path('admin_classe') }}">Classes</a>
+
+    <a class="nav-link {% if app.request.get('_route') == 'admin_ecole'
+                        or app.request.get('_route') == 'admin_ecole_create'
+                        or app.request.get('_route') == 'admin_ecole_edit' %}active{% endif %}" href="{{ path('admin_ecole') }}">Écoles</a>
+
+    <a class="nav-link {% if app.request.get('_route') == 'admin_personnage'
+                          or app.request.get('_route') == 'admin_personnage_create'
+                          or app.request.get('_route') == 'admin_personnage_edit' %}active{% endif %}" href="{{ path('admin_personnage') }}">Personnages</a>
+
+    <a class="nav-link {% if app.request.get('_route') == 'admin_fiche'
+                          or app.request.get('_route') == 'admin_fiche_create'
+                          or app.request.get('_route') == 'admin_fiche_edit' %}active{% endif %}" href="{{ path('admin_fiche') }}">Fiches</a>
+{% endif %}
+{% if is_granted("ROLE_ADMIN") %}
+    <a class="nav-link {% if app.request.get('_route') == 'admin_utilisateur'
+                          or app.request.get('_route') == 'admin_utilisateur_create'
+                          or app.request.get('_route') == 'admin_utilisateur_edit' %}active{% endif %}" href="{{ path('admin_utilisateur') }}">Utilisateurs</a>
+{% endif %}
+</nav>

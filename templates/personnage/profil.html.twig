@@ -1,0 +1,95 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Profil du Personnage {{ parent() }}{% endblock %}
+
+{% block body %}
+
+    <main class="container-fluid bg-light">
+        <section class="container">
+
+            <nav class="pt-3">
+                <span class="text-muted">
+                    <a href="{{ path('aventure') }}">
+                        <i class="fas fa-home"></i></a>
+                        > <a href="{{ path('personnages') }}"><strong>Personnages</strong></a>
+                        {% if personnage.estPj == 1 %}
+                            > <a href="{{ path('personnages', {'_fragment': 'pjs'} ) }}"><strong>PJs</strong></a>
+                        {% else %}
+                            > <a href="{{ path('personnages', {'_fragment': 'pnjs'} ) }}"><strong>PNJs</strong></a>
+                        {% endif %}
+                        > <strong>{{ personnage.nom }} {{ personnage.prenom }}</strong>
+                </span>
+            </nav>
+
+            <h1 class="pt-3 mb-3">
+                {{ personnage.nom }} <strong>{{ personnage.prenom }}</strong>
+                {% if app.user is not empty %}
+                    {% if personnage.joueur is not empty and personnage.joueur.id == app.user.id and personnage.fichePersonnage is not empty %}
+                        <span class="float-right">
+                            <a href="{{path('mon_compte_fiche',{id: personnage.fichePersonnage.id})}}">
+                                <i class="fas fa-user-secret"></i> Voir Fiche Privée
+                            </a>
+                        </span>
+                    {% endif %}
+                {% endif %}
+            </h1>
+
+            <article class="row">
+                <div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6">
+                    <img class="img-fluid" src="{{ asset(personnage.illustration) }}" />
+                </div>
+                <div class="card col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6">
+                    <div class="card-body">
+                        <h4 class="card-title">{{ personnage.titres }}</h4>
+                        <p class="card-text"><strong>Description :</strong></p>
+                        <p class="card-text">{{ personnage.description }}</p>
+                    </div>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">
+                                <strong>Clan :&nbsp;</strong>
+                                <img class="img-48" src="{{ asset(personnage.clan.mon) }}" alt="Mon du Clan du Personnage" />
+                                <strong><a href="{{ path('empire_clan', {id: personnage.clan.id} ) }}">{{ personnage.clan.nom }}</a></strong>
+                        </li>
+                        <li class="list-group-item">
+                                <strong>École :&nbsp;</strong>
+                                <img class="img-48" src="{{ asset(personnage.classe.icone) }}" alt="Icône de la Classe du Personnage" />
+                                <strong><a href="{{ path('regles_ecole', {id: personnage.ecole.id} ) }}">{{ personnage.ecole.nom }}</a></strong>
+                        </li>
+                        <li class="list-group-item"><strong>XP :</strong> </li>
+                        <li class="list-group-item"><strong>Rang :</strong> </li>
+                        <li class="list-group-item"><strong>Joueur :</strong>
+                            {% if personnage.joueur is not empty %}
+                                {{ personnage.joueur.pseudo }}</li>
+                            {% else %}
+                                <small class="text-muted">Personnage Non-Joueur</small>
+                            {% endif %}
+                    </ul>
+                </div>
+                <div class="col-12 px-0">
+                    <div class="card my-3 ml-lg-2 card-body">
+                        <h2 class="card-title">Historique</h2>
+                        <div class="card-text ml-lg-3">
+                            {% for une_participation in personnage.participations %}
+                                {% if une_participation.estMort == 0 %}
+                                    a
+                                    {% if une_participation.xpGagne == 0 %}
+                                        participé 
+                                    {% else %}
+                                        gagné <strong>{{une_participation.xpGagne}}xp</strong> 
+                                    {% endif %}
+                                        dans la scène <a href="{{path('aventure_episode', {id: une_participation.scene.episodeParent.id, '_fragment': 'scn' ~  une_participation.scene.numero  })}}" ><strong>{{une_participation.scene.titre}}</strong></a> de l'episode <strong>{{une_participation.scene.episodeParent.titre}}</strong><br/>
+                                {% else %}
+                                    <strong style="color: red">est mort</strong> dans la scène <a href="{{path('aventure_episode', {id: une_participation.scene.episodeParent.id, '_fragment': 'scn' ~  une_participation.scene.numero  })}}" ><strong>{{une_participation.scene.titre}}</strong></a> de l'episode <strong>{{une_participation.scene.episodeParent.titre}}</strong><br/>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+        </section>
+    </main>
+
+{{ include('/parts/modal.html.twig') }}
+
+{% endblock %}

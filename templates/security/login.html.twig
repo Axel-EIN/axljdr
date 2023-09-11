@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Connexion{% endblock %}
+
+{% block body %}
+<main class="container-fluid bg-light py-5">
+    <section class="container">
+        <h1 class="mb-5">Veuillez-vous connecter</h1>
+        {{ include('parts/messages-flashes.html.twig') }}
+        <div class="col-10 offset-1">
+            {{ include('/parts/form-se-connecter.html.twig') }}
+        </div>
+    </section>
+</main>
+{% endblock %}

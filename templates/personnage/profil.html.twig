@@ -21,7 +21,7 @@
                 </span>
             </nav>
 
-            <h1 class="pt-3 mb-3">
+            <h1 class="mt-3 ancre-relatif">
                 {{ personnage.nom }} <strong>{{ personnage.prenom }}</strong>
                 {% if app.user is not empty %}
                     {% if personnage.joueur is not empty and personnage.joueur.id == app.user.id and personnage.fichePersonnage is not empty %}
@@ -32,7 +32,17 @@
                         </span>
                     {% endif %}
                 {% endif %}
+
+                <!-- BTN - MJ - EDIT -->
+                {% if is_granted("ROLE_MJ") %}
+                <div class="btn-mj-h2-edit-delete">
+                    <a class="text-danger mx-2" href="{{ path('admin_personnage_edit', {id:personnage.id}) }}?redirect=personnage"><i class="fas fa-edit"></i></a>
+                </div>
+                {% endif %}
+                
             </h1>
+
+            <hr>
 
             <article class="row">
                 <div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6">
@@ -42,7 +52,7 @@
                     <div class="card-body">
                         <h4 class="card-title">{{ personnage.titres }}</h4>
                         <p class="card-text"><strong>Description :</strong></p>
-                        <p class="card-text">{{ personnage.description }}</p>
+                        <p class="card-text">{{ personnage.description|raw|nl2br }}</p>
                     </div>
                     <ul class="list-group list-group-flush">
                         <li class="list-group-item">

@@ -36,7 +36,7 @@
                 <!-- BTN - MJ - EDIT -->
                 {% if is_granted("ROLE_MJ") %}
                 <div class="btn-mj-h2-edit-delete">
-                    <a class="text-danger mx-2" href="{{ path('admin_personnage_edit', {id:personnage.id}) }}?redirect=personnage"><i class="fas fa-edit"></i></a>
+                    <a class="text-danger mx-2" href="{{ path('admin_personnage_edit', {id:personnage.id}) }}?redirect=personnage"><i class="fas fa-edit" title="Modifier"></i></a>
                 </div>
                 {% endif %}
                 
@@ -46,7 +46,7 @@
 
             <article class="row">
                 <div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6">
-                    <img class="img-fluid" src="{{ asset(personnage.illustration) }}" />
+                    <img class="img-fluid" src="{{ asset(personnage.illustration) }}" alt="{{personnage.nom}} {{personnage.prenom}}" title="{{personnage.nom}} {{personnage.prenom}}" />
                 </div>
                 <div class="card col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6">
                     <div class="card-body">
@@ -56,14 +56,12 @@
                     </div>
                     <ul class="list-group list-group-flush">
                         <li class="list-group-item">
-                                <strong>Clan :&nbsp;</strong>
-                                <img class="img-48" src="{{ asset(personnage.clan.mon) }}" alt="Mon du Clan du Personnage" />
-                                <strong><a href="{{ path('empire_clan', {id: personnage.clan.id} ) }}">{{ personnage.clan.nom }}</a></strong>
+                                <img class="img-48" src="{{ asset(personnage.clan.mon) }}" alt="Mon du Clan {{personnage.clan.nom}}" title="Mon du Clan {{personnage.clan.nom}}" />
+                                &nbsp;<strong><a href="{{ path('empire_clan', {id: personnage.clan.id} ) }}">{{ personnage.clan.nom }}</a></strong>
                         </li>
                         <li class="list-group-item">
-                                <strong>École :&nbsp;</strong>
-                                <img class="img-48" src="{{ asset(personnage.classe.icone) }}" alt="Icône de la Classe du Personnage" />
-                                <strong><a href="{{ path('regles_ecole', {id: personnage.ecole.id} ) }}">{{ personnage.ecole.nom }}</a></strong>
+                                <img class="img-48" src="{{ asset(personnage.classe.icone) }}" alt="Classe {{personnage.classe.nom}}" title="Classe {{personnage.classe.nom}}" />
+                                &nbsp;<strong><a href="{{ path('regles_ecole', {id: personnage.ecole.id} ) }}">{{ personnage.ecole.nom }}</a></strong>
                         </li>
                         <li class="list-group-item"><strong>XP :</strong> </li>
                         <li class="list-group-item"><strong>Rang :</strong> </li>

@@ -18,16 +18,18 @@
         <!-- LIGNE D'EPISODES -->
         <div class="d-flex pt-3 justify-content-center align-items-center">
             {% for un_episode in episode.chapitreParent.episodes %}
-                {% if un_episode.id == episode.id %}         
-                <div class="relative">
-                    <div class="session-caroussel-number">{{ un_episode.numero }}</div>
-                    <img class="img-160 border border-4 border-danger shadow" src="{{ asset(un_episode.image) }}" alt="image de l'episode {{un_episode.titre}}" title="{{un_episode.titre}}"/>
-                    <i class="fa-sharp fa-solid fa-sort-down fa-bounce fa-2xl btn-arrow-down-pulse" style="color: red;"></i>
-                </div>
-                {% else %}
-                    <a class="bg-dark" href="{{ path('aventure_episode', { id : un_episode.id, '_fragment': 'read-head' } ) }}" >
-                        <img class="img-fluid assombrit img-128" src="{{ asset(un_episode.image) }}" alt="image de l'episode {{un_episode.titre}}" title="{{un_episode.titre}}"/>
-                    </a>
+                {% if un_episode.scenes|length > 0 or is_granted("ROLE_MJ") %}
+                    {% if un_episode.id == episode.id %}         
+                        <div class="relative">
+                            <div class="session-caroussel-number">{{ un_episode.numero }}</div>
+                            <img class="img-160 border border-4 border-danger shadow" src="{{ asset(un_episode.image) }}" alt="image de l'episode {{un_episode.titre}}" title="{{un_episode.titre}}"/>
+                            <i class="fa-sharp fa-solid fa-sort-down fa-bounce fa-2xl btn-arrow-down-pulse" style="color: red;"></i>
+                        </div>
+                    {% else %}
+                        <a class="bg-dark" href="{{ path('aventure_episode', { id : un_episode.id, '_fragment': 'read-head' } ) }}" >
+                            <img class="img-fluid assombrit img-128" src="{{ asset(un_episode.image) }}" alt="image de l'episode {{un_episode.titre}}" title="{{un_episode.titre}}"/>
+                        </a>
+                    {% endif %}
                 {% endif %}
             {% endfor %}
         </div>
@@ -75,10 +77,12 @@
                     </span>
                     <span>
                         <a href="#read-head" class="btn border">Retour en haut</a>
-                    </span>
+                    </span>   
                     <span style="width: 96px; text-align: right;">
                         {% if episode_suivant is not empty %}
-                            <a href="{{ path('aventure_episode', {id: episode_suivant.id}) }}" class="btn btn-primary">Suivant</a>
+                            {% if episode_suivant.scenes|length > 0 or is_granted("ROLE_MJ") %}
+                                <a href="{{ path('aventure_episode', {id: episode_suivant.id}) }}" class="btn btn-primary">Suivant</a>
+                            {% endif %}
                         {% endif %}
                     </span>
                 </div>

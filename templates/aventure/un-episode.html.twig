@@ -57,22 +57,24 @@
                 {{ include('/parts/inserer-scene.html.twig', {numero_scene}) }}
 
                 <hr class="mt-5">
-                <h2 class="text-center">Classement de la Session</h2>
+                <h2 class="text-center my-3">Classement de la Session</h2>
                 <div class="d-flex justify-content-center">
-                    <ol class="text-center">
+                    <div class="list-group list-group-flush">
                         {% for un_personnage in classement_episode %}
-                            <li>
-                                {{un_personnage.prenom}}&nbsp;<strong>{{un_personnage.xp}}xp</strong>
-                            </li>
+                            <div class="list-group-item d-flex align-items-center">
+                                <img class="img-96 mr-4" src="{{ asset(un_personnage.icone) }}" />
+                                <span class="display-4 mr-4">{{un_personnage.prenom}}</span>
+                                <span class="ml-auto badge badge-success badge-pill">{{un_personnage.xp}}xp</span>
+                            </div>
                         {% else %}
-                            <li>
+                            <div>
                                 Désolé ! Il n'y a pas encore de participants à classer !
-                            </li>
+                            </div>
                         {% endfor %}
-                    </ol>
+                    </div>
                 </div>
 
-                <div class="d-flex justify-content-between p-lg-3">
+                <div class="d-flex justify-content-between mt-5 p-lg-3">
                     <div class="col text-left pl-0">
                         {% if episode_precedent is not empty %}
                             <a class="btn-style btn-medium" href="{{ path('aventure_episode', {id: episode_precedent.id}) }}">Session précédente</a>

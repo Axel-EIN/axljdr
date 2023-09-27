@@ -8,7 +8,7 @@
         <h2 class="chapter-number display-5 text-left">CHAPITRE {{ episode.chapitreParent.numero }} </h2>
         <hr>
         <div class="text-left">
-            <a class="btn-style btn-large"
+            <a class="btn-primary-style btn-large"
                 href="{{ path('aventure_saison', {id: episode.chapitreParent.saisonParent.id, '_fragment': 'read-head-ch-id' ~ episode.chapitreParent.id } ) }}">Retour</a>
         </div>
         <h2 id="read-head" class="big-title-effect grand">{{ episode.chapitreParent.titre|relief|raw }}</h2>
@@ -24,7 +24,7 @@
                         <div class="relative">
                             <div class="number-session-caroussel">{{ un_episode.numero }}</div>
                             <img class="img-160 border border-4 border-danger shadow" src="{{ asset(un_episode.image) }}" alt="image de l'episode {{un_episode.titre}}" title="{{un_episode.titre}}"/>
-                            <i class="fa-sharp fa-solid fa-sort-down fa-bounce fa-2xl arrow-down" style="color: red;"></i>
+                            <i class="fa-sharp fa-solid fa-sort-down fa-bounce fa-2xl arrow-down primary-color"></i>
                         </div>
                     {% else %}
                         <a class="bg-dark" href="{{ path('aventure_episode', { id : un_episode.id, '_fragment': 'read-head' } ) }}" >
@@ -77,7 +77,7 @@
                 <div class="d-flex justify-content-between mt-5 p-lg-3">
                     <div class="col text-left pl-0">
                         {% if episode_precedent is not empty %}
-                            <a class="btn-style btn-medium" href="{{ path('aventure_episode', {id: episode_precedent.id}) }}">Session précédente</a>
+                            <a class="btn-primary-style btn-medium" href="{{ path('aventure_episode', {id: episode_precedent.id}) }}">Session précédente</a>
                         {% endif %}
                     </div>
                     <div class="col text-center">
@@ -86,7 +86,7 @@
                     <div class="col text-right pr-0">
                         {% if episode_suivant is not empty %}
                             {% if episode_suivant.scenes|length > 0 or is_granted("ROLE_MJ") %}
-                                <a class="btn-style btn-medium" href="{{ path('aventure_episode', {id: episode_suivant.id}) }}">Session suivante</a>
+                                <a class="btn-primary-style btn-medium" href="{{ path('aventure_episode', {id: episode_suivant.id}) }}">Session suivante</a>
                             {% endif %}
                         {% endif %}
                     </div>

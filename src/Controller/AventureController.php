@@ -31,16 +31,18 @@ class AventureController extends AbstractController
         $suivant = $saisonRepository->findNext($saison->getNumero());
         $lastNumero = $saisonRepository->findOneBy(array(), array('numero' => 'DESC'))->getNumero();
         $user = $this->getUser();
-        $user_personnages = $user->getPersonnages();
         $user_personnages_cumul_episodes = [];
+        if ($user != null) {
+            $user_personnages = $user->getPersonnages();
 
-        foreach($user_personnages as $un_personnage) {
-            foreach($saison->getChapitres() as $un_chapitre) {
-                foreach($un_chapitre->getEpisodes() as $un_episode) {
-                    if ($classeurXP->cumulUnPersoEpisode($un_episode, $un_personnage->getId()))
-                        $user_personnages_cumul_episodes[$un_personnage->getId()][$un_episode->getId()] = $classeurXP->cumulUnPersoEpisode($un_episode, $un_personnage->getId());
-                }
-            }      
+            foreach($user_personnages as $un_personnage) {
+                foreach($saison->getChapitres() as $un_chapitre) {
+                    foreach($un_chapitre->getEpisodes() as $un_episode) {
+                        if ($classeurXP->cumulUnPersoEpisode($un_episode, $un_personnage->getId()))
+                            $user_personnages_cumul_episodes[$un_personnage->getId()][$un_episode->getId()] = $classeurXP->cumulUnPersoEpisode($un_episode, $un_personnage->getId());
+                    }
+                }      
+            }
         }
 
         return $this->render('aventure/index.html.twig', [

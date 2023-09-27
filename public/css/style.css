@@ -375,7 +375,7 @@ a.character-icon { display: inline-block; font-weight: bold; }
 /* --------------------------------------- */                  
 
 #navigation-bar { position: relative; z-index: 10; box-shadow: 0px 2px 8px black; }
-nav .active { font-weight: bold; }
+nav .active { font-weight: bold; border-bottom: 3px solid #EA2027; }
 .connected { color: white; text-align: right; }
 
 .alert-flash { position: absolute; left: 50%; top: 0px; transform: translate(-50%, -50%); z-index: 100; }

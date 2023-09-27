@@ -26,8 +26,8 @@
                     <div class="mx-auto mb-2">
                         <a class="btn-primary-style btn-large" href="#read-head-ch-id{{ un_chapitre.numero }}" data-toggle="collapse"
                            data-target="#ch{{ un_chapitre.numero }}-episodes" aria-controls="ch{{ un_chapitre.numero }}-episodes"
-                           aria-expanded="true" aria-label="Toggle Chapitre {{ un_chapitre.numero }} Episodes" alt="Bouton Voir Les Sessions" title="Voir les Sessions">
-                            Voir les Sessions
+                           aria-expanded="true" aria-label="Toggle Chapitre {{ un_chapitre.numero }} Episodes" alt="Bouton Voir Les Sessions">
+                            <i class="fa-solid fa-scroll fa-fade"></i>&nbsp;Voir les Sessions
                         </a>
                     </div>
                 {% else %}
@@ -51,7 +51,7 @@
 
                 {% for un_episode in un_chapitre.episodes %}
                     {% if un_episode.scenes|length > 0 or is_granted("ROLE_MJ") %}
-                        <article class="col-lg-3 col-md-4 col-sm-6 session-card-spacing">
+                        <article class="col-lg-3 col-md-4 col-sm-6 session-card-spacing hover-zoom">
                             <div class="card session-card-body">
                                 <div class="session-card-number">{{ un_episode.numero }}</div>
                                 <div class="session-card-image-container">
@@ -65,8 +65,8 @@
                                     <p class="session-card-text">{{ un_episode.resume }}</p>
                                 </div>
                                 <div class="text-center">
-                                    <a class="btn-primary-style btn-medium" href="{{ path('aventure_episode', {id:un_episode.id} ) }}" title="Lire la Session" >
-                                        <i class="fab fa-readme fa-bounce" alt="Icône Lire"></i>&nbsp;&nbsp;Lire
+                                    <a class="btn-primary-style btn-medium" href="{{ path('aventure_episode', {id:un_episode.id} ) }}">
+                                        <i class="fab fa-readme fa-fade" alt="Icône Lire"></i>&nbsp;&nbsp;Lire
                                     </a>
                                 </div>
 

@@ -8,7 +8,8 @@
         <h2 class="chapter-number display-5 text-left">CHAPITRE {{ episode.chapitreParent.numero }} </h2>
         <hr>
         <div class="text-left">
-            <a class="btn btn-primary btn-lg" href="{{ path('aventure_saison', {id: episode.chapitreParent.saisonParent.id, '_fragment': 'read-head-ch-id' ~ episode.chapitreParent.id } ) }}">Retour</a>
+            <a class="btn-style btn-large"
+                href="{{ path('aventure_saison', {id: episode.chapitreParent.saisonParent.id, '_fragment': 'read-head-ch-id' ~ episode.chapitreParent.id } ) }}">Retour</a>
         </div>
         <h2 id="read-head" class="title-effect grand">{{ episode.chapitreParent.titre|relief|raw }}</h2>
         <p class="quote">{{ episode.chapitreParent.citation|nl2br }}</p>
@@ -37,12 +38,13 @@
         <!-- TITRE EPISODE -->
         <h2 class="display-3 session-title-h mb-0 mt-3 py-3">{{ episode.titre }}</h2>
         <div class="col-12 col-sm-12 offset-xl-1 col-xl-10 justify-content-center session-card-long">
-            <div class="card justify-content-center pt-5 session-card-long-body">
+            <div class="card justify-content-center {% if is_granted("ROLE_MJ") %}pt-5{% else %}pt-3{% endif %} session-card-long-body">
 
-                <!-- AFFICHAGE DES SCENES -->
+                <!-- AFFICHAGE DES SCENES DE LA SESSION -->
                 {% set numero_scene = 0 %}
                 {% for une_scene in episode.scenes %}
-                    {% set numero_scene = une_scene.numero %}
+                    {% set numero_scene, label = une_scene.numero, 'Insérer' %}
+                    {{ include('/parts/inserer-scene.html.twig', {numero_scene}) }}
                     {{ include('/aventure/une-scene.html.twig', {une_scene}) }}
                 {% else %}
                     <div class="text-center">
@@ -51,9 +53,10 @@
                     </div>
                 {% endfor %}
 
-                {% set numero_scene = numero_scene + 1 %}
+                {% set numero_scene, label = numero_scene + 1, 'Ajouter' %}
                 {{ include('/parts/inserer-scene.html.twig', {numero_scene}) }}
 
+                <hr class="mt-5">
                 <h2 class="text-center">Classement de la Session</h2>
                 <div class="d-flex justify-content-center">
                     <ol class="text-center">
@@ -69,22 +72,22 @@
                     </ol>
                 </div>
 
-                <div class="d-flex justify-content-between p-lg-3 m-1">
-                    <span style="width: 96px">
+                <div class="d-flex justify-content-between p-lg-3">
+                    <div class="col text-left pl-0">
                         {% if episode_precedent is not empty %}
-                            <a href="{{ path('aventure_episode', {id: episode_precedent.id}) }}" class="btn btn-primary">Précédent</a>
+                            <a class="btn-style btn-medium" href="{{ path('aventure_episode', {id: episode_precedent.id}) }}">Session précédente</a>
                         {% endif %}
-                    </span>
-                    <span>
-                        <a href="#read-head" class="btn border">Retour en haut</a>
-                    </span>   
-                    <span style="width: 96px; text-align: right;">
+                    </div>
+                    <div class="col text-center">
+                        <a href="#read-head" class="btn border">Haut de page</a>
+                    </div>   
+                    <div class="col text-right pr-0">
                         {% if episode_suivant is not empty %}
                             {% if episode_suivant.scenes|length > 0 or is_granted("ROLE_MJ") %}
-                                <a href="{{ path('aventure_episode', {id: episode_suivant.id}) }}" class="btn btn-primary">Suivant</a>
+                                <a class="btn-style btn-medium" href="{{ path('aventure_episode', {id: episode_suivant.id}) }}">Session suivante</a>
                             {% endif %}
                         {% endif %}
-                    </span>
+                    </div>
                 </div>
             </div>
         </div>

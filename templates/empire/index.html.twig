@@ -29,12 +29,12 @@
             {% for une_archive in archives %}
                 <article class="col-xl-2 col-lg-3 col-md-4 col-sm-6 py-3 text-center">
                     {% if une_archive.locked == 1 %}
-                        <img class="icon-lock" src="{{asset('assets/img/icons/locked.png')}}" alt="Icône cadena" title="Candena" />
+                        <img class="icon-lock fa-beat-fade" src="{{asset('assets/img/icons/locked.png')}}" alt="Icône cadena" title="Candena" />
                         <img class="img-160" src="{{ asset(une_archive.image) }}" alt="Image de l'Archive" style="filter: brightness(0.3)" />
                         <h3 class="text-center h5"><strong>???</strong></h3>
                     {% else %}
                     <a href="{{ path('empire_archive', {id: une_archive.id} ) }}">
-                        <img class="img-160" src="{{ asset(une_archive.image) }}" alt="Image de l'Archive" />
+                        <img class="img-160 hover-shine" src="{{ asset(une_archive.image) }}" alt="Image de l'Archive" />
                     </a>
                     <h3 class="text-center h5">
                         <strong>

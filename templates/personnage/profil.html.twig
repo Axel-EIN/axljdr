@@ -21,7 +21,7 @@
                 </span>
             </nav>
 
-            <h1 class="mt-3 ancre-relatif">
+            <h1 class="mt-3 relative">
                 {{ personnage.nom }} <strong>{{ personnage.prenom }}</strong>
                 {% if app.user is not empty %}
                     {% if personnage.joueur is not empty and personnage.joueur.id == app.user.id and personnage.fichePersonnage is not empty %}

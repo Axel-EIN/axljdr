@@ -4,14 +4,14 @@
 
 {% block body %}
 
-<header id="personnages" class="en-tete-fond">
+<header id="personnages" class="header-bg">
     <div class="container">
-        <div class="en-tete d-flex flex-column justify-content-center align-items-center">
+        <div class="header d-flex flex-column justify-content-center align-items-center">
 
             <div class="text-center d-flex justify-content-center"><strong class="h1">Les Héros de l'Aventure</strong></div>
 
             <hr class="w-50">     
-            <h1 class="stylise grand">{{ 'Les Personnages'|stylise|raw }}</h1>
+            <h1 class="title-effect grand">{{ 'Les Personnages'|relief|raw }}</h1>
 
         </div>
     </div>
@@ -21,7 +21,7 @@
     <div class="container">
         <section id="pjs"> 
 
-            <h2 class="display-4 ancre-relatif">
+            <h2 class="display-4 relative">
                 Personnages <strong>Joueur</strong>
                 <!-- BTN - MJ - AJOUTER UN PERSONNAGE -->
                 {% if is_granted("ROLE_MJ") %}
@@ -48,8 +48,8 @@
                             <div class="fond-masque-fonce">
                                 <img class="card-img
                                     {# if un_pj.est_mort is not empty and un_pj.est_mort == 1 %}
-                                        mort{% else %} #}
-                                        survol
+                                        dead{% else %} #}
+                                        hover-shine
                                     {# {% endif %} #}"
                                     src="{{ asset(un_pj.illustration) }}" alt="Illustration du personnage">
                             </div>
@@ -66,7 +66,7 @@
         </section>
         <section id="pnjs">
 
-            <h2 class="display-4 mt-5 ancre-relatif">
+            <h2 class="display-4 mt-5 relative">
                 Personnages <strong>Non-Joueur</strong>
                 <!-- BTN - MJ - AJOUTER UN PERSONNAGE -->
                 {% if is_granted("ROLE_MJ") %}
@@ -93,8 +93,8 @@
                             <div class="fond-masque-fonce">
                                 <img class="card-img
                                     {# if un_pnj.est_mort is not empty and un_pnj.est_mort == 1 %}
-                                        mort{% else %} #}
-                                        survol
+                                        dead{% else %} #}
+                                        hover-shine
                                     {# {% endif %} #}"
                                     src="{{ asset(un_pnj.illustration) }}" alt="Illustration du personnage">
                             </div>

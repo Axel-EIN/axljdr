@@ -3,15 +3,15 @@
 {% block title %}L'Univers de l'Aventure {{ parent() }}{% endblock %}
 
 {% block body %}
-<header class="en-tete-fond"
+<header class="header-bg"
 style="background-image: linear-gradient(rgb(40,0,0,0.5),rgb(40,0,0,0.5)),url('{{ asset('assets/img/rubriques/empire.jpg') }}');">
     <div class="container">
-        <div class="en-tete d-flex flex-column justify-content-center align-items-center">
+        <div class="header d-flex flex-column justify-content-center align-items-center">
 
             <div class="text-center d-flex justify-content-center"><strong class="h1">Univers du Jeu</strong></div>
 
             <hr class="w-50">     
-            <h1 class="stylise grand">{{ 'L\'Empire<br/> de Rokugan'|stylise|raw }}</h1>
+            <h1 class="title-effect grand">{{ 'L\'Empire<br/> de Rokugan'|relief|raw }}</h1>
 
         </div>
     </div>
@@ -21,7 +21,7 @@ style="background-image: linear-gradient(rgb(40,0,0,0.5),rgb(40,0,0,0.5)),url('{
 
         <!-- LES ARCHIVES -->
         <section id="archives">
-            <h2 class="display-4 ancre-relatif">
+            <h2 class="display-4 relative">
                 Les <strong>Archives</strong>
 
                 <!-- BTN - MJ - AJOUTER UNE ARCHIVE -->

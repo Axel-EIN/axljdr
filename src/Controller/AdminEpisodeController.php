@@ -84,7 +84,7 @@ class AdminEpisodeController extends AbstractController
             // REDIRECTION
             // -----------
             if (!empty($request->query->get('redirect')) && $request->query->get('redirect') == 'aventure')
-                return $this->redirectToRoute('aventure_saison', ['id' => $episode->getChapitreParent()->getSaisonParent()->getId(),'_fragment' => 'tete-lecture-ch-id' . $episode->getChapitreParent()->getId()]);
+                return $this->redirectToRoute('aventure_saison', ['id' => $episode->getChapitreParent()->getSaisonParent()->getId(),'_fragment' => 'read-head-ch-id' . $episode->getChapitreParent()->getId()]);
             
             return $this->redirectToRoute('admin_episode');
 
@@ -153,7 +153,7 @@ class AdminEpisodeController extends AbstractController
             // REDIRECTION
             // -----------
             if (!empty($request->query->get('redirect')) && $request->query->get('redirect') == 'aventure')
-                return $this->redirectToRoute('aventure_saison', ['id' => $episode->getChapitreParent()->getSaisonParent()->getId(),'_fragment' => 'tete-lecture-ch-id' . $episode->getChapitreParent()->getId()]);
+                return $this->redirectToRoute('aventure_saison', ['id' => $episode->getChapitreParent()->getSaisonParent()->getId(),'_fragment' => 'read-head-ch-id' . $episode->getChapitreParent()->getId()]);
 
             return $this->redirectToRoute('admin_episode');
         }
@@ -213,7 +213,7 @@ class AdminEpisodeController extends AbstractController
         // REDIRECTION
         // -----------
         if (!empty($request->query->get('redirect')) && $request->query->get('redirect') == 'aventure')
-            return $this->redirectToRoute('aventure_saison', ['id' => $chapitreParent->getSaisonParent()->getId(), '_fragment' => 'tete-lecture-ch-id' . $chapitreParent->getId()]);
+            return $this->redirectToRoute('aventure_saison', ['id' => $chapitreParent->getSaisonParent()->getId(), '_fragment' => 'read-head-ch-id' . $chapitreParent->getId()]);
 
         return $this->redirectToRoute('admin_episode');
     }

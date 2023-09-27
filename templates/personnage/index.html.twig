@@ -26,9 +26,9 @@
             {% for un_pj in pjs %}
 
                 <!-- UN PERSONNAGE JOUEUR -->
-                <article class="col-xl-2 col-lg-3 col-md-4 col-sm-6 py-3 hover-shine">
+                <article class="col-xl-2 col-lg-3 col-md-4 col-sm-6 py-3">
                     <a href="{{ path('personnage_profil', {id: un_pj.id} ) }}" alt="Carte d'un personnage" title="Voir le profil de {{un_pj.prenom}}">
-                        <div class="card character-card text-white shadowed">  
+                        <div class="card character-card text-white shadowed hover-zoom">  
                             <img class="corner-badge" src="{{ asset(un_pj.clan.mon) }}" alt="Mon d'un clan"/>
                                 {% if un_pj.estMort is not empty and un_pj.estMort == 1 %}
                                     <img class="icon-dead-big" src="{{asset('assets/img/icons/mort.png')}}" alt="Icône est mort" />
@@ -60,9 +60,9 @@
             {% for un_pnj in pnjs %}
 
                 <!-- UN PERSONNAGE NON-JOUEUR -->
-                <article class="col-xl-2 col-lg-3 col-md-4 col-sm-6 py-3 hover-shine">
+                <article class="col-xl-2 col-lg-3 col-md-4 col-sm-6 py-3">
                     <a href="{{ path('personnage_profil', {id: un_pnj.id} ) }}" alt="Carte d'un personnage" title="Voir le profil de {{un_pnj.prenom}}">
-                        <div class="card character-card text-white shadowed">
+                        <div class="card character-card text-white shadowed hover-zoom">
                             <img class="corner-badge" src="{{ asset(un_pnj.clan.mon) }}" alt="Mon du clan" />
                                 {% if un_pnj.estMort is not empty and un_pnj.estMort == 1 %}
                                     <img class="icon-dead-big" src="{{asset('assets/img/icons/mort.png')}}" alt="est mort" title="est mort" />

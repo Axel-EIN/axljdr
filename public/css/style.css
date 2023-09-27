@@ -8,7 +8,6 @@
 @media (max-width: 480px) { .container { padding-left: 0.5rem; padding-right: 0.5rem; } }
 
 .page-min { min-height: 60vh; }
-
 .relative { position: relative; }
 
 
@@ -41,15 +40,35 @@
 /* --------- TEXT ----------- */
 /* -------------------------- */
 
-html, body { font-size: 16px; }
-@media (max-width: 1200px) { html, body { font-size: 16px; } }
-@media (max-width: 992px) { html, body { font-size: 15px; } }
-@media (max-width: 576px) { html, body { font-size: 14px; } }
-@media (max-width: 480px) { html, body { font-size: 13px; } }
+html, body {    font-size: 16px; }
+                @media (max-width: 1200px) { html, body { font-size: 16px; } }
+                @media (max-width: 992px) { html, body { font-size: 15px; } }
+                @media (max-width: 576px) { html, body { font-size: 14px; } }
+                @media (max-width: 480px) { html, body { font-size: 13px; } }
 
 @font-face { font-family: "Shogun"; src: url("../assets/fonts/shoguns-clan-accentued.otf"); }
 @font-face { font-family: "Hirosh"; src: url("../assets/fonts/hirosh.otf"); }
 @font-face { font-family: "Present"; src: url("../assets/fonts/present-it-black.otf"); }
+
+@media (max-width: 1200px) { .display-1 { font-size: 4.25rem; } }
+@media (max-width: 992px) { .display-1 { font-size: 4rem; } }
+@media (max-width: 576px) { .display-1 { font-size: 3.75rem; } }
+@media (max-width: 480px) { .display-1 { font-size: 3.5rem; } }
+
+@media (max-width: 1200px) { .display-2 { font-size: 4rem; } }
+@media (max-width: 992px) { .display-2 { font-size: 3.75rem; } }
+@media (max-width: 576px) { .display-2 { font-size: 3.5rem; } }
+@media (max-width: 480px) { .display-2 { font-size: 3.25rem; } }
+
+@media (max-width: 1200px) { .display-3 { font-size: 4rem; } }
+@media (max-width: 992px) { .display-3 { font-size: 3.5rem; } }
+@media (max-width: 576px) { .display-3 { font-size: 3.25rem; } }
+@media (max-width: 480px) { .display-3 { font-size: 3rem; } }
+
+@media (max-width: 1200px) { .display-4 { font-size: 3.5rem; } }
+@media (max-width: 992px) { .display-4 { font-size: 3.25rem; } }
+@media (max-width: 576px) { .display-4 { font-size: 3rem; } }
+@media (max-width: 480px) { .display-4 { font-size: 2.75rem; } }
 
 
 
@@ -57,70 +76,56 @@ html, body { font-size: 16px; }
 /* ----- TEXT EFFECTS ----- */
 /* ------------------------ */
 
-.title-effect { font-family: "Shogun";
-        color:#fff;
-        text-align: center;
-        margin: 0;
-        text-shadow: 4px 4px 2rem black; }
+.text-shadowed { text-shadow: 4px 4px 2rem black; }
 
-.session-title-h {
-position: relative;
-z-index: 2;
-font-weight: 300;
-color: white;
-background-image: url('../assets/img/ui/back-title.png');
-background-size: 100% 130%;
-background-repeat: no-repeat;
-background-position: 50% 50%;
-text-shadow: 4px 4px 2rem black;
-text-align: center;
-font-family: "Present"; }
-        
+.number-skillrank-effect { font-family: "Shogun"; }
 
-.number-effect { font-family: "Shogun"; }
+.number-session-caroussel{      position: absolute; right: 8px; bottom: 0px; z-index: 10;
+                                color: white; font-size:2.5rem; font-weight: bold; text-shadow: 0px 2px 8px black; }
 
-.session-caroussel-number{      position: absolute;
-                        right: 8px;
-                        bottom: 0px;
-                        font-size:2.5rem;
-                        font-weight: bold;
-                        color: white;
-                        text-shadow: 0px 2px 8px black;
-                        z-index: 100 }
+.quote { font-size: 1.25rem; font-style: italic;
+        margin-bottom: 1rem;
+        text-shadow: 2px 2px 6px black, 0px 0px 2rem black; }
+        @media (max-width: 1200px) { .quote { font-size: 1.25rem; } }
+        @media (max-width: 992px) { .quote { font-size: 1.25rem; } }
+        @media (max-width: 576px) { .quote { font-size: 1rem; } }
+        @media (max-width: 480px) { .quote { font-size: 1rem; } }
 
-.quote {        font-size: 1.25rem;
-                font-style: italic;
-                margin-bottom: 1rem;
-                text-shadow: 2px 2px 6px black, 0px 0px 2rem black; }
-@media (max-width: 1200px) { .quote { font-size: 1.25rem; } }
-@media (max-width: 992px) { .quote { font-size: 1.25rem; } }
-@media (max-width: 576px) { .quote { font-size: 1rem; } }
-@media (max-width: 480px) { .quote { font-size: 1rem; } }
 
-.plus-petit { font-size: 2rem; }
-@media (max-width: 1200px) { .plus-petit { font-size: 2rem; } }
-@media (max-width: 992px) { .plus-petit { font-size: 1.75rem; } }
-@media (max-width: 576px) { .plus-petit { font-size: 1.5rem; } }
-@media (max-width: 480px) { .plus-petit { font-size: 1.25rem; } }
 
-.petit { font-size: 3rem; }
-@media (max-width: 1200px) { .petit { font-size: 3rem; } }
-@media (max-width: 992px) { .petit { font-size: 2.5rem; } }
-@media (max-width: 576px) { .petit { font-size: 2rem; } }
-@media (max-width: 480px) { .petit { font-size: 1.75rem; } }
+/* ------------------------- */
+/* ----- TITLE EFFECTS ----- */
+/* ------------------------- */
 
-.moyen { font-size: 6rem; }
-@media (max-width: 1200px) { .moyen { font-size: 7rem; } }
-@media (max-width: 992px) { .moyen { font-size: 6rem; } }
-@media (max-width: 576px) { .moyen { font-size: 5rem; } }
-@media (max-width: 480px) { .moyen { font-size: 4rem; } }
+.big-title-effect { font-family: "Shogun"; color:#fff; text-align: center; margin: 0; text-shadow: 4px 4px 2rem black; }
 
-.grand { font-size: 9rem; }
-@media (max-width: 1200px) { .grand { font-size: 9rem; } }
-@media (max-width: 992px) { .grand { font-size: 8rem; } }
-@media (max-width: 576px) { .grand { font-size: 6rem; } }
-@media (max-width: 480px) { .grand { font-size: 4.5rem; } }
+.session-title-container-effect {       position: relative; z-index: 2;
+                                        color: white; font-family: "Present"; font-weight: 300; text-shadow: 4px 4px 2rem black; text-align: center;
+                                        background-image: url('../assets/img/ui/back-title.png'); background-size: 100% 130%; background-repeat: no-repeat; background-position: 50% 50%; }
 
+.plus-petit {   font-size: 2rem; }
+                @media (max-width: 1200px) { .plus-petit { font-size: 2rem; } }
+                @media (max-width: 992px) { .plus-petit { font-size: 1.75rem; } }
+                @media (max-width: 576px) { .plus-petit { font-size: 1.5rem; } }
+                @media (max-width: 480px) { .plus-petit { font-size: 1.25rem; } }
+
+.petit {        font-size: 3rem; }
+                @media (max-width: 1200px) { .petit { font-size: 3rem; } }
+                @media (max-width: 992px) { .petit { font-size: 2.5rem; } }
+                @media (max-width: 576px) { .petit { font-size: 2rem; } }
+                @media (max-width: 480px) { .petit { font-size: 1.75rem; } }
+
+.moyen {        font-size: 6rem; }
+                @media (max-width: 1200px) { .moyen { font-size: 7rem; } }
+                @media (max-width: 992px) { .moyen { font-size: 6rem; } }
+                @media (max-width: 576px) { .moyen { font-size: 5rem; } }
+                @media (max-width: 480px) { .moyen { font-size: 4rem; } }
+
+.grand {        font-size: 9rem; }
+                @media (max-width: 1200px) { .grand { font-size: 9rem; } }
+                @media (max-width: 992px) { .grand { font-size: 8rem; } }
+                @media (max-width: 576px) { .grand { font-size: 6rem; } }
+                @media (max-width: 480px) { .grand { font-size: 4.5rem; } }
 
 
 
@@ -128,87 +133,36 @@ font-family: "Present"; }
 /* -------- NAVIGATION -------- */
 /* ---------------------------- */                  
 
-#navigation-bar {       box-shadow: 0px 2px 8px black;
-                        position: relative;
-                        z-index: 10; }
-
+#navigation-bar { position: relative; z-index: 10; box-shadow: 0px 2px 8px black; }
 nav .active { font-weight: bold; }
-
 .connected { color: white; text-align: right; }
 
 
 
-/* -------------------------------- */
-/* ------- HEADERS & TITLES ------- */
-/* -------------------------------- */
+/* --------------------------------------- */
+/* ------- HEADERS BG & CONTAINERS ------- */
+/* --------------------------------------- */
 
-.header {       min-height: 60vh;
-                position: relative;
-                color: #fff;
-                margin-bottom: 0;
-                padding-top: 0.5rem;
-                padding-bottom: 0.5rem;
-                text-align: center; }
+.header-bg-img { background-size: 100% auto; background-position: top; background-repeat: no-repeat;
+                /* background-color: var(--b); voir doc sur le variable CSS */ }
+                @media (max-width: 1200px) { .header-bg-img { background-size: 150% auto; } }
+                @media (max-width: 992px) { .header-bg-img { background-size: 200% auto; } }
+                @media (max-width: 576px) { .header-bg-img { background-size: 250% auto; } }
+                @media (max-width: 480px) { .header-bg-img { background-size: 300% auto; } }
 
-.header-bg {    background-size: cover; background-position: top; }
+.header {       position: relative; min-height: 60vh;
+                color: #fff; text-align: center;
+                margin-bottom: 0; padding-top: 0.5rem; padding-bottom: 0.5rem; }
+.header-chapter { min-height: 40vh; }
+.header-session { min-height: unset; }
 
-.sub-header {   min-height: 50vh;
-        position: relative;
-        color: #fff;
-        margin-bottom: 0;
-        padding-top: 0.5rem;
-        padding-bottom: 0.5rem;
-        text-align: center; }
+.chapter-number { font-size: 2.5rem; color: #fff; margin: 0; }
+                @media (max-width: 1200px) { .chapter-number { font-size: 2.5rem; } }
+                @media (max-width: 992px) { .chapter-number { font-size: 2.5rem; } }
+                @media (max-width: 576px) { .chapter-number { font-size: 1.5rem; } }
+                @media (max-width: 480px) { .chapter-number { font-size: 1.5rem; } }
 
-.header-session {       position: relative;
-                color: #fff;
-                margin-bottom: 0;
-                padding-top: 0.5rem;
-                padding-bottom: 0.5rem;
-                text-align: center; }
-
-.bg-chapter, .header-session-bg {    min-height: 60vh;
-                        background-size: 100% auto;
-                        background-repeat: no-repeat;
-                        background-position: top;
-                        /* background-color: var(--b); voir doc sur le variable CSS */ }
-@media (max-width: 1200px) { .bg-chapter, .header-session-bg { background-size: 150% auto; } }
-@media (max-width: 992px) { .bg-chapter, .header-session-bg { background-size: 200% auto; } }
-@media (max-width: 576px) { .bg-chapter, .header-session-bg { background-size: 250% auto; } }
-@media (max-width: 480px) { .bg-chapter, .header-session-bg { background-size: 300% auto; } }
-
-@media (max-width: 1200px) { .pre-titre-saison { font-size: 3rem; } }
-@media (max-width: 992px) { .pre-titre-saison { font-size: 3rem; } }
-@media (max-width: 576px) { .pre-titre-saison { font-size: 2rem; } }
-@media (max-width: 480px) { .pre-titre-saison { font-size: 2rem; }}
-
-.chapter-number {       font-size: 2.5rem;
-                        color: #fff;
-                        margin: 0; }
-@media (max-width: 1200px) { .chapter-number { font-size: 2.5rem; } }
-@media (max-width: 992px) { .chapter-number { font-size: 2.5rem; } }
-@media (max-width: 576px) { .chapter-number { font-size: 1.5rem; } }
-@media (max-width: 480px) { .chapter-number { font-size: 1.5rem; } }
-
-.header hr, .sub-header hr, .header-session hr {        background-color: #fff;
-                                                        height: 1px;
-                                                        margin-top: 0.5rem;
-                                                        margin-bottom: 0.5rem; }
-
-@media (max-width: 1200px) { .display-4 { font-size: 3.5rem; } }
-@media (max-width: 992px) { .display-4 { font-size: 3rem; } }
-@media (max-width: 576px) { .display-4 { font-size: 2.5rem; } }
-@media (max-width: 480px) { .display-4 { font-size: 2rem; } }
-
-@media (max-width: 1200px) { .display-3 { font-size: 4.5rem; } }
-@media (max-width: 992px) { .display-3 { font-size: 4rem; } }
-@media (max-width: 576px) { .display-3 { font-size: 3.5rem; } }
-@media (max-width: 480px) { .display-3 { font-size: 3rem; } }
-
-@media (max-width: 1200px) { .display-1 { font-size: 6rem; } }
-@media (max-width: 992px) { .display-1 { font-size: 5rem; } }
-@media (max-width: 576px) { .display-1 { font-size: 4rem; } }
-@media (max-width: 480px) { .display-1 { font-size: 3rem; } }
+.header hr {    background-color: #fff; height: 1px; margin-top: 0.5rem; margin-bottom: 0.5rem; }
 
 
 
@@ -307,38 +261,32 @@ nav .active { font-weight: bold; }
 
 
 
-/* ------------------- */
-/* ------ ICONS ------ */
-/* ------------------- */
+/* --------------------------- */
+/* ------ ICONS BUTTONS ------ */
+/* --------------------------- */
 
-.arrow-left {   position: relative; left: -40px; width: 20px; }
-.arrow-right {  position: relative; left: 40px; width: 20px; }
-.arrow-down {   position: absolute; left: 70px; bottom: -10px; z-index: 100; }
+.arrow-left { position: relative; left: -40px; width: 20px; }
+.arrow-right { position: relative; left: 40px; width: 20px; }
+.arrow-down { position: absolute; left: 70px; bottom: -10px; z-index: 10; }
 
-.btn-icon-big { position: absolute;
-                right: -160px;
-                top: 96px;
-                font-size: 8rem;
-                text-decoration: none;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                text-align: center; }
-.btn-icon-big a { color: white; }
-.btn-icon-big a:hover { text-decoration: none; }
+.btn-icons-small-right-container { position: absolute; top: 4px; right: 12px; font-size: 1.5rem; z-index: 10; }
+.btn-icons-small-right-container a { color: white; }
 
-.btn-icons-32-right-container { position: absolute;
-                                top: 8px;
-                                right: 0px;
-                                font-size: 2rem; }
-.btn-icons-32-right-container a { color: white; }
+.btn-icons-medium-right-container { position: absolute; top: 8px; right: 0px; font-size: 2rem; z-index: 10; }
+.btn-icons-medium-right-container a { color: white; }
 
-.btn-icons-24-right-container { position: absolute;
-                                top: 4px;
-                                right: 12px;
-                                font-size: 1.5rem;
-                                z-index: 100; }
-.btn-icons-24-right-container a { color: white; }
+.btn-icon-display { position: absolute; right: -160px; top: 96px; font-size: 8rem; text-decoration: none; display: flex; justify-content: center; align-items: center; text-align: center; }
+.btn-icon-display a { color: white; }
+.btn-icon-display a:hover { text-decoration: none; }
+
+.icon-lock { position: absolute;  top: 32px; left: 76px; width: 40px; z-index: 1 }
+
+a.character-icon { display: inline-block; font-weight: bold; }
+.characters-icons-container { position: absolute; top: -12px; left: 8px; z-index: 10; }
+.character-icon-medium { width: 48px; border-radius: 4px; }
+.character-icon-large { width: 64px; border-radius: 5px; }
+.character-icon-small { width: 26px; }
+.character-icon-dead { position: absolute; top: -4px; left: -2px; width: 72px;  z-index: 1; }
 
 /* ------------------------ */
 /* -------- IMAGES -------- */
@@ -361,62 +309,34 @@ nav .active { font-weight: bold; }
 .img-540 { min-width: 320px; max-width: 540px; }
 .img-640 { min-width: 320px; max-width: 640px; }
 
-.bg-black { background-color: black; }
-
-.characters-icons-container {   position: absolute;
-                                top: -12px;
-                                left: 8px;
-                                z-index: 100; }
-
-.character-icon-small { width: 26px; }
-a.character-icon { display: inline-block; font-weight: bold; }
-.character-icon-48 { width: 48px; border-radius: 4px; }
-.character-icon-64 { width: 64px; border-radius: 5px; }
-
-.mort-icone { width: 72px; position: absolute; top: -6px; left: -2px; z-index: 1; }
-
-.mini-mort-icone { width: 64px; position: absolute; top: 24px; left: -8px; z-index: 1; }
-
-
-
-
-
 /* -------------------------- */
 /* ----- IMAGES EFFECTS ----- */
 /* -------------------------- */
 
-.hover-shine:hover { filter: brightness(1.3); transition: .5s; }
-.hover-darked:hover { filter: brightness(0.7);  transition: .5s; }
+.bg-black { background-color: black; }
+.shadowed { box-shadow: 2px 2px 4px black; }
+.rounded-8 { border-radius: 0.5rem; }
+.rounded-16 { border-radius: 1rem; }
 
-.grayscale { filter:grayscale(100%); }
-
+.semi-opaque { filter: opacity(0.50); }
+.grayscale { filter: grayscale(100%); }
+.darken { filter: brightness(0.5); }
 .dead { filter: grayscale(100%) brightness(40%) sepia(100%) hue-rotate(-50deg) saturate(600%) contrast(0.8); }
 
-.mask { mask-image: linear-gradient(to top, rgba(0,0,0,0.2),rgba(0,0,0,1),rgba(0,0,0,1),rgba(0,0,0,1));
-        -webkit-mask-image: linear-gradient(to top, rgba(0,0,0,0.2),rgba(0,0,0,1),rgba(0,0,0,1),rgba(0,0,0,1)); }
+.hover-shine:hover { filter: brightness(1.3); transition: 0.5s; }
+.hover-darked:hover { filter: brightness(0.7);  transition: 0.5s; }
+.hover-opaque:hover { filter: opacity(1); transition: 0.5s; }
+.hover-bright { filter: brightness(1); transition: 0.5s; }
 
 .outlined { box-shadow: 2px 2px 0 #0f0, -2px -2px 0 #0f0, 2px -2px 0 #0f0, -2px 2px 0 #0f0; }
 
+.mask { mask-image: linear-gradient(to top, rgba(0,0,0,0.2),rgba(0,0,0,1),rgba(0,0,0,1),rgba(0,0,0,1));
+        -webkit-mask-image: linear-gradient(to top, rgba(0,0,0,0.2),rgba(0,0,0,1),rgba(0,0,0,1),rgba(0,0,0,1)); }
 .fond-masque-fonce { background-color: black; }
-.fond-masque-fonce img { 
-mask-image: linear-gradient(to top, rgba(0,0,0,0.25),rgba(0,0,0,0.50),rgba(0,0,0,1),rgba(0,0,0,1));
--webkit-mask-image: linear-gradient(to top, rgba(0,0,0,0.25),rgba(0,0,0,0.50),rgba(0,0,0,1),rgba(0,0,0,1)); }
+.fond-masque-fonce img { mask-image: linear-gradient(to top, rgba(0,0,0,0.25),rgba(0,0,0,0.50),rgba(0,0,0,1),rgba(0,0,0,1)); -webkit-mask-image: linear-gradient(to top, rgba(0,0,0,0.25),rgba(0,0,0,0.50),rgba(0,0,0,1),rgba(0,0,0,1)); }
 
 .card-img-overlay { top: unset; padding: 0.5rem; }
 .card-img-overlay h4 { margin-bottom: 0; }
-
-.translucide { filter: opacity(0.50); }
-.translucide:hover { filter: opacity(1); transition-duration: 0.5s; }
-
-.assombrit { filter: brightness(0.5); }
-.assombrit:hover { filter: brightness(1); transition-duration: 0.5s; }
-
-.ombre-txt { text-shadow: 4px 4px 2rem black; }
-
-.ombre-img { box-shadow: 2px 2px 4px black; }
-
-.rounded-16 { border-radius: 1rem; }
-.rounded-8 { border-radius: 0.5rem; }
 
 
 

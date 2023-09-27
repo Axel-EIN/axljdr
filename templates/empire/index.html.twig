@@ -3,7 +3,7 @@
 {% block title %}L'Univers de l'Aventure {{ parent() }}{% endblock %}
 
 {% block body %}
-<header class="header-bg"
+<header class="header-bg-img"
 style="background-image: linear-gradient(rgb(40,0,0,0.5),rgb(40,0,0,0.5)),url('{{ asset('assets/img/rubriques/empire.jpg') }}');">
     <div class="container">
         <div class="header d-flex flex-column justify-content-center align-items-center">
@@ -11,7 +11,7 @@ style="background-image: linear-gradient(rgb(40,0,0,0.5),rgb(40,0,0,0.5)),url('{
             <div class="text-center d-flex justify-content-center"><strong class="h1">Univers du Jeu</strong></div>
 
             <hr class="w-50">     
-            <h1 class="title-effect grand">{{ 'L\'Empire<br/> de Rokugan'|relief|raw }}</h1>
+            <h1 class="big-title-effect grand">{{ 'L\'Empire<br/> de Rokugan'|relief|raw }}</h1>
 
         </div>
     </div>
@@ -25,7 +25,7 @@ style="background-image: linear-gradient(rgb(40,0,0,0.5),rgb(40,0,0,0.5)),url('{
                 Les <strong>Archives</strong>
 
                 <!-- BTN - MJ - AJOUTER UNE ARCHIVE -->
-                {% if is_granted("ROLE_MJ") %}
+                {% if app.user and is_granted("ROLE_MJ") %}
                 <div class="btn-mj-h2-create">
                     <a href="{{ path('admin_archive_create') }}?redirect=archive" class="btn btn-primary">
                         <i class="fas fa-plus-square"></i>&nbsp;&nbsp;Ajouter une archive
@@ -41,11 +41,11 @@ style="background-image: linear-gradient(rgb(40,0,0,0.5),rgb(40,0,0,0.5)),url('{
             <div class="row">
             {% for une_archive in archives %}
                 <article class="col-xl-2 col-lg-3 col-md-4 col-sm-6 py-3 text-center">
-                {% if une_archive.locked == 1 %}
-                    <img src="{{asset('assets/img/icons/locked.png')}}" alt="Vérrouillée" style="width: 40px; position: absolute; top: 32px; left: 76px; z-index: 1;" />
-                    <img class="img-160" src="{{ asset(une_archive.image) }}" alt="Image de l'Archive" style="filter: brightness(0.3)" />
-                    <h3 class="text-center h5"><strong>???</strong></h3>
-                {% else %}
+                    {% if une_archive.locked == 1 %}
+                        <img class="icon-lock" src="{{asset('assets/img/icons/locked.png')}}" alt="Icône cadena" title="Candena" />
+                        <img class="img-160" src="{{ asset(une_archive.image) }}" alt="Image de l'Archive" style="filter: brightness(0.3)" />
+                        <h3 class="text-center h5"><strong>???</strong></h3>
+                    {% else %}
                     <a href="{{ path('empire_archive', {id: une_archive.id} ) }}">
                         <img class="img-160" src="{{ asset(une_archive.image) }}" alt="Image de l'Archive" />
                     </a>

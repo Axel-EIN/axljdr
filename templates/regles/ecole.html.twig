@@ -19,8 +19,8 @@
             <h1 class="mt-5 relative">
                 L'École <strong>{{ ecole.nom }}</strong>
                 <!-- BTN - MJ - EDITER -->
-                {% if is_granted("ROLE_MJ") %}
-                <div class="btn-mj-h2-edit-delete">
+                {% if app.user and is_granted("ROLE_MJ") %}
+                <div class="btn-icons-medium-right-container">
                     <a class="text-danger mx-2" href="{{ path('admin_ecole_edit', {id:ecole.id}) }}?redirect=ecole"><i class="fas fa-edit" title="Modifier" ></i></a>
                 </div>
                 {% endif %}

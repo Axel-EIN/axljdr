@@ -1,6 +1,6 @@
-/* -------------------------- */
-/* -------- LAYOUT ---------- */
-/* -------------------------- */
+/* -------------------------------------- */
+/* -------- LAYOUT & POSITIONING -------- */
+/* -------------------------------------- */
 
 @media (max-width: 1200px) { .container { padding-left: 1rem; padding-right: 1rem; } }
 @media (max-width: 992px) { .container { padding-left: 1rem; padding-right: 1rem; } }
@@ -8,7 +8,16 @@
 @media (max-width: 480px) { .container { padding-left: 0.5rem; padding-right: 0.5rem; } }
 
 .page-min { min-height: 60vh; }
+
 .relative { position: relative; }
+
+.right-corner-snap { position: absolute; top: 0px; right: 0px; z-index: 10}
+.right-corner-8 { position: absolute; right:16px; top:8px; z-index: 10}
+.right-corner-16 { top: 1rem; right: 1rem; }
+.overtop-36 { position: relative; top: -36px; }
+
+@media (max-width: 576px) { .icons-char-collapse { visibility: collapse; } }
+@media (max-width: 480px) { .icons-char-collapse { visibility: collapse; } }
 
 
 
@@ -18,8 +27,20 @@
 
 .primary-color { color: #EA2027; }
 .primary-color-light { color: #ff4147; }
-.primary-color-shadow { color: #b6252f; }
-.primary-color-bg { background-color: #EA2027; }
+.primary-color-dark { color: #b6252f; }
+
+.primary-bg-color { background-color: #EA2027; }
+.primary-bg-color-light { background-color: #ff4147; }
+.primary-bg-color-dark { background-color: #b6252f; }
+
+.secondary-color { color: #ff7f00; }
+.secondary-color-light { color: #ffcc66; }
+.secondary-color-dark { color: #cc6600; }
+
+.secondary-bg-color { background-color: #ff7f00; }
+.secondary-bg-color-light { background-color: #ffcc66; }
+.secondary-bg-color-dark { background-color: #cc6600; }
+
 .bg-light-gray { background-color: #eee; }
 
 
@@ -34,6 +55,8 @@
 .link-gray { color: rgba(255,255,255, 0.75) !important; }
 .link-gray:hover { color: rgba(255,255,255,0.9) !important; text-decoration: none !important; }
 .link-gray.active { color: rgba(255,255,255, 1) !important; }
+
+.scene-text a { font-weight: bold; }
 
 
 /* -------------------------- */
@@ -91,11 +114,15 @@ html, body {    font-size: 16px; }
         @media (max-width: 576px) { .quote { font-size: 1rem; } }
         @media (max-width: 480px) { .quote { font-size: 1rem; } }
 
+.text-xp { color: rgb(0, 100, 100); text-shadow: 1px 1px 0 #0ff, -1px -1px 0 #0ff, 1px -1px 0 #0ff, -1px 1px 0 #0ff; }
+.text-your-xp { color: rgb(0, 100, 0); text-shadow: 1px 1px 0 #0f0, -1px -1px 0 #0f0, 1px -1px 0 #0f0, -1px 1px 0 #0f0; }
+.text-dead { color: rgb(100, 0, 0); text-shadow: 1px 1px 0 #f00, -1px -1px 0 #f00, 1px -1px 0 #f00, -1px 1px 0 #f00; }
 
 
-/* ------------------------- */
-/* ----- TITLE EFFECTS ----- */
-/* ------------------------- */
+
+/* ----------------------- */
+/* ----- TITLE STYLE ----- */
+/* ----------------------- */
 
 .big-title-effect { font-family: "Shogun"; color:#fff; text-align: center; margin: 0; text-shadow: 4px 4px 2rem black; }
 
@@ -103,17 +130,11 @@ html, body {    font-size: 16px; }
                                         color: white; font-family: "Present"; font-weight: 300; text-shadow: 4px 4px 2rem black; text-align: center;
                                         background-image: url('../assets/img/ui/back-title.png'); background-size: 100% 130%; background-repeat: no-repeat; background-position: 50% 50%; }
 
-.plus-petit {   font-size: 2rem; }
-                @media (max-width: 1200px) { .plus-petit { font-size: 2rem; } }
-                @media (max-width: 992px) { .plus-petit { font-size: 1.75rem; } }
-                @media (max-width: 576px) { .plus-petit { font-size: 1.5rem; } }
-                @media (max-width: 480px) { .plus-petit { font-size: 1.25rem; } }
-
-.petit {        font-size: 3rem; }
-                @media (max-width: 1200px) { .petit { font-size: 3rem; } }
-                @media (max-width: 992px) { .petit { font-size: 2.5rem; } }
-                @media (max-width: 576px) { .petit { font-size: 2rem; } }
-                @media (max-width: 480px) { .petit { font-size: 1.75rem; } }
+.grand {        font-size: 9rem; }
+                @media (max-width: 1200px) { .grand { font-size: 9rem; } }
+                @media (max-width: 992px) { .grand { font-size: 8rem; } }
+                @media (max-width: 576px) { .grand { font-size: 6rem; } }
+                @media (max-width: 480px) { .grand { font-size: 4.5rem; } }
 
 .moyen {        font-size: 6rem; }
                 @media (max-width: 1200px) { .moyen { font-size: 7rem; } }
@@ -121,27 +142,26 @@ html, body {    font-size: 16px; }
                 @media (max-width: 576px) { .moyen { font-size: 5rem; } }
                 @media (max-width: 480px) { .moyen { font-size: 4rem; } }
 
-.grand {        font-size: 9rem; }
-                @media (max-width: 1200px) { .grand { font-size: 9rem; } }
-                @media (max-width: 992px) { .grand { font-size: 8rem; } }
-                @media (max-width: 576px) { .grand { font-size: 6rem; } }
-                @media (max-width: 480px) { .grand { font-size: 4.5rem; } }
+.petit {        font-size: 3rem; }
+                @media (max-width: 1200px) { .petit { font-size: 3rem; } }
+                @media (max-width: 992px) { .petit { font-size: 2.5rem; } }
+                @media (max-width: 576px) { .petit { font-size: 2rem; } }
+                @media (max-width: 480px) { .petit { font-size: 1.75rem; } }
+
+.plus-petit {   font-size: 2rem; }
+                @media (max-width: 1200px) { .plus-petit { font-size: 2rem; } }
+                @media (max-width: 992px) { .plus-petit { font-size: 1.75rem; } }
+                @media (max-width: 576px) { .plus-petit { font-size: 1.5rem; } }
+                @media (max-width: 480px) { .plus-petit { font-size: 1.25rem; } }
+
+.text-daytime-overtop-container { position: absolute; color: white; top: -5rem; }
+.text-daytime-overtop-container h3, .text-daytime-overtop-container h5 { margin-bottom: 0; }
 
 
 
-/* ---------------------------- */
-/* -------- NAVIGATION -------- */
-/* ---------------------------- */                  
-
-#navigation-bar { position: relative; z-index: 10; box-shadow: 0px 2px 8px black; }
-nav .active { font-weight: bold; }
-.connected { color: white; text-align: right; }
-
-
-
-/* --------------------------------------- */
-/* ------- HEADERS BG & CONTAINERS ------- */
-/* --------------------------------------- */
+/* ----------------------------------------------- */
+/* ------- HEADERS BG & HEADERS CONTAINERS ------- */
+/* ----------------------------------------------- */
 
 .header-bg-img { background-size: 100% auto; background-position: top; background-repeat: no-repeat;
                 /* background-color: var(--b); voir doc sur le variable CSS */ }
@@ -149,6 +169,8 @@ nav .active { font-weight: bold; }
                 @media (max-width: 992px) { .header-bg-img { background-size: 200% auto; } }
                 @media (max-width: 576px) { .header-bg-img { background-size: 250% auto; } }
                 @media (max-width: 480px) { .header-bg-img { background-size: 300% auto; } }
+
+.header-bg-characters { background-image: linear-gradient(rgb(40,0,0,0.5),rgb(40,0,0,0.5)),url('../assets/img/rubriques/personnages.jpg'); background-position: center; }
 
 .header {       position: relative; min-height: 60vh;
                 color: #fff; text-align: center;
@@ -166,63 +188,6 @@ nav .active { font-weight: bold; }
 
 
 
-/* ------------------- */
-/* ------ CARDS ------ */
-/* ------------------- */
-
-.session-card-spacing { padding-right: 8px;
-                        padding-left: 8px;
-                        padding-top: 8px;
-                        padding-bottom: 8px; }
-
-.session-card-body {    background-color: #eee;
-                        min-width: 265px;
-                        min-height: 380px;
-                        max-height: 380px;
-                        box-shadow: 6px 6px 4px black;
-                        border: 0; }
-   
-.session-card-image-container { background-color: black; }
-
-.session-card-number {   position: absolute;
-                        left: 16px;
-                        top: 54px;
-                        color: white;
-                        font-size:3rem;
-                        font-weight: bold;
-                        text-shadow: 0px 2px 8px black;
-                        z-index: 10 }
-
-.session-card-text-container { position: relative; padding: 0.75rem; }
-
-.session-card-title {   position: absolute;
-                        top: -30px;
-                        left: 16px;
-                        font-size: 1rem;
-                        color: white;
-                        font-weight: bold;
-                        text-shadow: 0px 2px 8px black; }
-
-.session-card-text {    font-size: 1rem;
-                        color: gray; }
-
-.session-card-long {
-        position: relative;
-        top: -36px;
-        z-index: 1;
-}
-
-.session-card-long-body {
-        min-height: 500px;
-}
-
-/* @media (max-width: 1200px) { .session-card-long { padding-left: unset; padding-right: unset; } }
-@media (max-width: 992px) { .session-card-long { padding-left: unset; padding-right: unset; } } */
-@media (max-width: 576px) { .session-card-long { padding-left: unset; padding-right: unset; } }
-@media (max-width: 480px) { .session-card-long { padding-left: unset; padding-right: unset; } }
-
-
-
 /* --------------------------- */
 /* --------- BUTTONS --------- */
 /* --------------------------- */
@@ -233,7 +198,6 @@ nav .active { font-weight: bold; }
                 text-align: center; vertical-align: middle; line-height: 1.5;
                 background-color: #EA2027;
                 border-radius: 4px;
-                box-shadow: inset 1px 1px 0px #ff8084, inset -2px -2px 0px #b6252f, 0px 0px 8px rgba(0, 0, 0, .4);
                 border-top: 1px solid #EA2027;
                 border-left: 1px solid #EA2027;
                 border-right: 1px solid #9b1921;
@@ -242,28 +206,14 @@ nav .active { font-weight: bold; }
 
 .btn-disabled { background-color: #b4b4b4; border-color: #9f9f9f; }
 
-.btn-large { font-size: 1.2rem; padding: 0.70rem 1rem; }
-.btn-medium { font-size: 1rem; padding: 0.5rem 1rem; }
-
-.btn-mj-h2-edit-delete {        font-size: 1.5rem;
-                                position: absolute;
-                                padding: 4px;
-                                top: 8px;
-                                right: 0px;
-                                z-index: 100; }
-
-.btn-mj-h2-create {     font-size: 1.5rem;
-                        position: absolute;
-                        padding: 4px;
-                        top: 20px;
-                        right: 0px;
-                        z-index: 100; }
+.btn-large { font-size: 1.2rem; padding: 0.70rem 1rem; box-shadow: inset 1px 1px 0px #ff8084, inset -2px -2px 0px #b6252f, 0px 0px 8px rgba(0, 0, 0, .4); }
+.btn-medium { font-size: 1rem; padding: 0.5rem 1rem; box-shadow: inset 1px 1px 0px #ff8084, inset -2px -2px 0px #b6252f, 0px 0px 8px rgba(0, 0, 0, .2); }
 
 
 
-/* --------------------------- */
-/* ------ ICONS BUTTONS ------ */
-/* --------------------------- */
+/* ------------------------- */
+/* ------ FLAT ICONS  ------ */
+/* ------------------------- */
 
 .arrow-left { position: relative; left: -40px; width: 20px; }
 .arrow-right { position: relative; left: 40px; width: 20px; }
@@ -272,21 +222,33 @@ nav .active { font-weight: bold; }
 .btn-icons-small-right-container { position: absolute; top: 4px; right: 12px; font-size: 1.5rem; z-index: 10; }
 .btn-icons-small-right-container a { color: white; }
 
-.btn-icons-medium-right-container { position: absolute; top: 8px; right: 0px; font-size: 2rem; z-index: 10; }
+.btn-icons-medium-right-container { position: absolute; top: 8px; right: 8px; font-size: 2rem; z-index: 10; }
 .btn-icons-medium-right-container a { color: white; }
 
 .btn-icon-display { position: absolute; right: -160px; top: 96px; font-size: 8rem; text-decoration: none; display: flex; justify-content: center; align-items: center; text-align: center; }
 .btn-icon-display a { color: white; }
 .btn-icon-display a:hover { text-decoration: none; }
 
-.icon-lock { position: absolute;  top: 32px; left: 76px; width: 40px; z-index: 1 }
 
-a.character-icon { display: inline-block; font-weight: bold; }
+
+/* ------------------------- */
+/* ------ PIXEL ICONS ------ */
+/* ------------------------- */
+
+.icon-lock { position: absolute;  top: 32px; left: 76px; width: 40px; z-index: 1 }
+.icon-ornament-container { width: 36px; height: auto; }
+.icon-dead-big { position: absolute; top: 4rem; left: 0.20rem; z-index: 1; width: 156px; }
+
 .characters-icons-container { position: absolute; top: -12px; left: 8px; z-index: 10; }
+
 .character-icon-medium { width: 48px; border-radius: 4px; }
 .character-icon-large { width: 64px; border-radius: 5px; }
 .character-icon-small { width: 26px; }
 .character-icon-dead { position: absolute; top: -4px; left: -2px; width: 72px;  z-index: 1; }
+
+a.character-icon { display: inline-block; font-weight: bold; }
+
+
 
 /* ------------------------ */
 /* -------- IMAGES -------- */
@@ -309,19 +271,23 @@ a.character-icon { display: inline-block; font-weight: bold; }
 .img-540 { min-width: 320px; max-width: 540px; }
 .img-640 { min-width: 320px; max-width: 640px; }
 
-/* -------------------------- */
-/* ----- IMAGES EFFECTS ----- */
-/* -------------------------- */
+.corner-badge { position: absolute; top: -12px; left: -12px; z-index: 100; width: 48px; }
+
+
+
+/* --------------------- */
+/* ------ EFFECTS ------ */
+/* --------------------- */
 
 .bg-black { background-color: black; }
-.shadowed { box-shadow: 2px 2px 4px black; }
+.shadowed { box-shadow: 2px 2px 4px rgba(0, 0, 0, .4); }
 .rounded-8 { border-radius: 0.5rem; }
 .rounded-16 { border-radius: 1rem; }
 
 .semi-opaque { filter: opacity(0.50); }
 .grayscale { filter: grayscale(100%); }
 .darken { filter: brightness(0.5); }
-.dead { filter: grayscale(100%) brightness(40%) sepia(100%) hue-rotate(-50deg) saturate(600%) contrast(0.8); }
+.dead { filter: grayscale(100%) brightness(20%) sepia(100%) hue-rotate(-50deg) saturate(400%); }
 
 .hover-shine:hover { filter: brightness(1.3); transition: 0.5s; }
 .hover-darked:hover { filter: brightness(0.7);  transition: 0.5s; }
@@ -332,99 +298,88 @@ a.character-icon { display: inline-block; font-weight: bold; }
 
 .mask { mask-image: linear-gradient(to top, rgba(0,0,0,0.2),rgba(0,0,0,1),rgba(0,0,0,1),rgba(0,0,0,1));
         -webkit-mask-image: linear-gradient(to top, rgba(0,0,0,0.2),rgba(0,0,0,1),rgba(0,0,0,1),rgba(0,0,0,1)); }
-.fond-masque-fonce { background-color: black; }
-.fond-masque-fonce img { mask-image: linear-gradient(to top, rgba(0,0,0,0.25),rgba(0,0,0,0.50),rgba(0,0,0,1),rgba(0,0,0,1)); -webkit-mask-image: linear-gradient(to top, rgba(0,0,0,0.25),rgba(0,0,0,0.50),rgba(0,0,0,1),rgba(0,0,0,1)); }
+
+.mask-bg-dark { background-color: black; border-radius: 4px; }
+.mask-bg-dark img { mask-image: linear-gradient(to top, rgba(0,0,0,0.25),rgba(0,0,0,0.50),rgba(0,0,0,1),rgba(0,0,0,1)); -webkit-mask-image: linear-gradient(to top, rgba(0,0,0,0.25),rgba(0,0,0,0.50),rgba(0,0,0,1),rgba(0,0,0,1)); }
 
 .card-img-overlay { top: unset; padding: 0.5rem; }
 .card-img-overlay h4 { margin-bottom: 0; }
 
 
 
-/* -------------------------- */
-/* ----- OTHER ELEMENTS ----- */
-/* -------------------------- */
+/* ------------------- */
+/* ------ CARDS ------ */
+/* ------------------- */
 
-.alert-flash {  position: absolute;
-                left: 50%; top: 0px;
-                transform: translate(-50%, -50%);
-                z-index: 100; }
+.session-card-spacing { padding-right: 8px;
+        padding-left: 8px;
+        padding-top: 8px;
+        padding-bottom: 8px; }
 
-.alert-persist {        display: inline-block;
-                        font-size: 1rem;
-                        color: rgba(255, 255, 255, .4);
-                        background-color: rgba(0, 0, 0, .4) !important;
-                        border-color: rgba(255, 255, 255, 0.2) !important;
-                        margin-bottom: 0; }
+.session-card-body {    background-color: #eee;
+        min-width: 265px;
+        min-height: 380px;
+        max-height: 380px;
+        box-shadow: 6px 6px 4px black;
+        border: 0; }
 
-.separator-chapter {    display: block;
-                        color: #fff;
-                        min-height:0.4rem;
-                        background-color: rgb(40, 0, 0); }
+.session-card-image-container { background-color: black; }
 
+.session-card-number {   position: absolute;
+        left: 16px;
+        top: 54px;
+        color: white;
+        font-size:3rem;
+        font-weight: bold;
+        text-shadow: 0px 2px 8px black;
+        z-index: 10 }
 
+.session-card-text-container { position: relative; padding: 0.75rem; }
 
-/* ----------------------------- */
-/* ------ PAGE : EPISODES ------ */
-/* ----------------------------- */
+.session-card-title {   position: absolute;
+        top: -30px;
+        left: 16px;
+        font-size: 1rem;
+        color: white;
+        font-weight: bold;
+        text-shadow: 0px 2px 8px black; }
 
-.scene-daytime{ position: absolute;
-                color: white;
-                top: -5rem; }
+.session-card-text {    font-size: 1rem;
+        color: gray; }
 
-.scene-daytime h3, .scene-daytime h5 { margin-bottom: 0; }
+.session-card-long { position: relative; top: -36px; z-index: 1; }
+        /* @media (max-width: 1200px) { .session-card-long { padding-left: unset; padding-right: unset; } }
+        @media (max-width: 992px) { .session-card-long { padding-left: unset; padding-right: unset; } } */
+        @media (max-width: 576px) { .session-card-long { padding-left: unset; padding-right: unset; } }
+        @media (max-width: 480px) { .session-card-long { padding-left: unset; padding-right: unset; } }
 
-.scene-body {   padding-left: 4rem;
-                padding-right: 4rem;
-                padding-top: 3rem;
-                padding-bottom: 1rem; }
-@media (max-width: 1200px) { .scene-body { padding-left: 4rem; padding-right: 4rem; padding-top: 3rem; padding-bottom: 1rem; } }
-@media (max-width: 992px) { .scene-body { padding-left: 4rem; padding-right: 4rem; padding-top: 3rem; padding-bottom: 1rem; } }
-@media (max-width: 576px) { .scene-body { padding-left: 1rem; padding-right: 1rem; padding-top: 1.5rem; padding-bottom: 0.5rem; } }
-@media (max-width: 480px) { .scene-body { padding-left: 1rem; padding-right: 1rem; padding-top: 1.5rem; padding-bottom: 0.5rem; } }
+.session-card-long-body { min-height: 500px; }
 
-.scene-text a { font-weight: bold; }
+.character-card { border: unset; }
 
-.division { width: 30%; }
-.division-motif { width: 36px; height: auto; }
-.division hr { background-color: #ffbbbb; height: 1px; width: 100%; }
-
-.ligne-icones { position: relative; top: -36px; }
-.ligne-pnjs { position: relative; top: -36px; }
-@media (max-width: 576px) { .ligne-pnjs { visibility: collapse; } }
-@media (max-width: 480px) { .ligne-pnjs { visibility: collapse; } }
-
-@media (max-width: 576px) { .ligne-pjs { visibility: collapse; } }
-@media (max-width: 480px) { .ligne-pjs { visibility: collapse; } }
-
-.xp { color: rgb(0, 100, 100); text-shadow: 1px 1px 0 #0ff, -1px -1px 0 #0ff, 1px -1px 0 #0ff, -1px 1px 0 #0ff; }
-.votre-xp { color: rgb(0, 100, 0); text-shadow: 1px 1px 0 #0f0, -1px -1px 0 #0f0, 1px -1px 0 #0f0, -1px 1px 0 #0f0; }
-.text-mort { color: rgb(100, 0, 0); text-shadow: 1px 1px 0 #f00, -1px -1px 0 #f00, 1px -1px 0 #f00, -1px 1px 0 #f00; }
+.scene-body {   padding-left: 4rem; padding-right: 4rem; padding-top: 3rem; padding-bottom: 1rem; }
+                @media (max-width: 1200px) { .scene-body { padding-left: 4rem; padding-right: 4rem; padding-top: 3rem; padding-bottom: 1rem; } }
+                @media (max-width: 992px) { .scene-body { padding-left: 4rem; padding-right: 4rem; padding-top: 3rem; padding-bottom: 1rem; } }
+                @media (max-width: 576px) { .scene-body { padding-left: 1rem; padding-right: 1rem; padding-top: 1.5rem; padding-bottom: 0.5rem; } }
+                @media (max-width: 480px) { .scene-body { padding-left: 1rem; padding-right: 1rem; padding-top: 1.5rem; padding-bottom: 0.5rem; } }
 
 
 
-/* ------------------------------- */
-/* ------ PAGE : PERSONNAGE ------ */
-/* ------------------------------- */
+/* --------------------------------------- */
+/* ----- NAVIGATION & OTHER ELEMENTS ----- */
+/* --------------------------------------- */                  
 
-#personnages {
-        background-image: linear-gradient(rgb(40,0,0,0.5),rgb(40,0,0,0.5)),url('../assets/img/rubriques/personnages.jpg');
-        background-position: center;
-}
+#navigation-bar { position: relative; z-index: 10; box-shadow: 0px 2px 8px black; }
+nav .active { font-weight: bold; }
+.connected { color: white; text-align: right; }
 
-.badge-coin {
-        position: absolute;
-        top: -12px;
-        left: -12px;
-        z-index: 100;
-        width: 48px;
-}
+.alert-flash { position: absolute; left: 50%; top: 0px; transform: translate(-50%, -50%); z-index: 100; }
+.alert-persist { display: inline-block; font-size: 1rem; color: rgba(255, 255, 255, .4); background-color: rgba(0, 0, 0, .4) !important; border-color: rgba(255, 255, 255, 0.2) !important; margin-bottom: 0; }
 
+.separator-chapter {    display: block; color: #fff; min-height:0.4rem; background-color: rgb(40, 0, 0); }
 
-/* -------------------------------------- */
-/* ------ PAGE : ADMIN BACK OFFICE ------ */
-/* -------------------------------------- */
-
-.coin-droit { position: absolute; right:15px; top:8px;}
+.divider-40 { width: 40%; }
+.divider-40 hr { background-color: #ffbbbb; height: 1px; width: 100%; }
 
 
 
@@ -432,22 +387,9 @@ a.character-icon { display: inline-block; font-weight: bold; }
 /* ---------- FOOTERS --------- */
 /* ---------------------------- */
 
-#pied-de-page1 {
-        min-height: 24vh;
-        background-color: #28323C;
-        color:#b4b4b4; }
-
-#pied-de-page2 {
-        min-height: 8vh;
-        background-color: #1E242A;
-        color: #aaa; }
-
+#footer1 { min-height: 24vh; background-color: #28323C; color:#b4b4b4; }
+#footer2 { min-height: 8vh; background-color: #1E242A; color: #aaa; }
 .footer-link { color:#a0a0a0; }
-
 .footer-link:hover { color:#fff; text-decoration: underline; }
-
-#pied-de-page1 ul, #pied-de-page2 ul {
-        list-style:outside none none;
-        padding: 0; }
-
-#reseaux-sociaux { font-size: 2rem; }
+#footer1 ul, #footer2 ul { list-style:outside none none; padding: 0; }
+#social-medias { font-size: 2rem; }

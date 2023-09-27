@@ -294,6 +294,9 @@ a.character-icon { display: inline-block; font-weight: bold; }
 .hover-opaque:hover { filter: opacity(1); transition: 0.5s; }
 .hover-bright { filter: brightness(1); transition: 0.5s; }
 
+.hover-zoom {  transition: transform 0.5s ease; }
+.hover-zoom:hover {  transform: scale(1.05); }
+
 .outlined { box-shadow: 2px 2px 0 #0f0, -2px -2px 0 #0f0, 2px -2px 0 #0f0, -2px 2px 0 #0f0; }
 
 .mask { mask-image: linear-gradient(to top, rgba(0,0,0,0.2),rgba(0,0,0,1),rgba(0,0,0,1),rgba(0,0,0,1));

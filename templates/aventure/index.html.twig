@@ -1,13 +1,11 @@
 {% extends 'base.html.twig' %}
-
 {% block title %}L'Aventure Saison {{ saison.numero }} {{ parent() }}{% endblock %}
-
 {% block body %}
 <header>
-    <div class="volatile">{{ include('/parts/messages-flashes.html.twig') }}</div>
+    {{ include('/parts/messages-flashes.html.twig') }}
     <div class="container-fluid" style="background-image: linear-gradient(rgb(40,0,0,1),rgb(40,0,0,0.9)),url('{{ asset(saison.image) }}'); background-position: 50% 20%;">
         <div class="d-flex justify-content-center align-items-center p-2">
-            <div class="fleche fleche-gauche">
+            <div class="arrow-left">
                 {% if saison_suivante is not empty %}
                     <a class="text-danger" href="{{ path('aventure_saison', {id : (saison_suivante.id) } ) }}">{{ source('icons/chevron-left-solid.svg') }}</a>
                 {% endif %}
@@ -15,7 +13,7 @@
             <h1 class="text-light text-center">
                 <i><strong>SAISON {{ saison.numero }}</strong> - {{ saison.titre }}</i>
             </h1>
-            <div class="text-light fleche fleche-droite">
+            <div class="arrow-right">
                 {% if saison_precedente is not empty %}
                     <a class="text-danger" href="{{ path('aventure_saison', {id : (saison_precedente.id) } ) }}">{{ source('icons/chevron-right-solid.svg') }}</a>
                 {% endif %}
@@ -24,44 +22,24 @@
     </div>
 </header>
 
-<!-- AFFICHAGE DES CHAPITRES DE LA SAISON -->
+<!-- CHAPITRES de la SAISON -->
 <main>
 {% set numero = 0 %}
-{% set ce_chapitre_personnages = [] %}
+
 {% for un_chapitre in saison.chapitres|reverse %}
-
-    {% for un_chapitre_personnages in chapitres_personnages %}
-        {% if un_chapitre_personnages.chapitreId == un_chapitre.id %}
-            {% set ce_chapitre_personnages = un_chapitre_personnages %}
-            {% set break = true %}
-        {% endif %}
-    {% endfor %}
-
-    <!-- SEPARATEUR -->
-    <div class="chapitre-separateur text-center">
-        <!-- BTN MJ | INSERER CHAPITRE -->
-        {% if is_granted("ROLE_MJ") %}
-            {% set numero = un_chapitre.numero %}
-            {{ include('/parts/btn-inserer-chapitre.html.twig', {ce_chapitre_personnages}) }}
-        {% endif %}
-    </div>
-
-    {{ include('/aventure/un-chapitre.html.twig') }}
-
+    {% set numero = un_chapitre.numero %}
+    {{ include('/parts/separateur-chapitre.html.twig') }}
+    {{ include('/aventure/un-chapitre.html.twig', {numero}) }}
 {% else %}
-    <div class="chapitre-separateur text-center">
-        <div class="alert alert-light mx-auto persistante mt-3 mb-3">
+    <div class="separator-chapter text-center">
+        <div class="alert alert-light mx-auto alert-persist mt-3 mb-3">
             <strong>Désolé il n'y a pas encore de Chapitre dans cette Saison !</strong>
         </div>
     </div>
 {% endfor %}
-    <div class="chapitre-separateur text-center">
-        <!-- BTN MJ | INSERER CHAPITRE -->
-        {% if is_granted("ROLE_MJ") %}
-            {% set numero = numero + 1 %}
-            {{ include('/parts/btn-inserer-chapitre.html.twig') }}
-        {% endif %}
-    </div>
+
+    {% set numero = numero + 1 %}
+    {{ include('/parts/separateur-chapitre.html.twig', {numero}) }}
 
 </main>
 {% endblock %}

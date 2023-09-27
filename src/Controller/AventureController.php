@@ -4,10 +4,9 @@ namespace App\Controller;
 
 use App\Entity\Saison;
 use App\Entity\Episode;
-use App\Service\ParticipeurEpisode;
+use App\Service\ClasseurXP;
 use App\Repository\SaisonRepository;
 use App\Repository\EpisodeRepository;
-use App\Repository\PersonnageRepository;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -26,55 +25,47 @@ class AventureController extends AbstractController
     /**
      * @Route("/aventure/{id}", name="aventure_saison")
      */
-    public function afficherSaison(Saison $saison, SaisonRepository $saisonRepository, ParticipeurEpisode $participeurEpisode): Response
+    public function afficherSaison(Saison $saison, SaisonRepository $saisonRepository, ClasseurXP $classeurXP): Response
     {
         $precedent = $saisonRepository->findPrevious($saison->getNumero());
         $suivant = $saisonRepository->findNext($saison->getNumero());
         $lastNumero = $saisonRepository->findOneBy(array(), array('numero' => 'DESC'))->getNumero();
+        $user = $this->getUser();
+        $user_personnages = $user->getPersonnages();
+        $user_personnages_cumul_episodes = [];
 
-        $chapitres_personnages = [];
-        $compteur = 0;
-        foreach ($saison->getChapitres() as $un_chapitre)
-        {
-            $episodes_personnages = [];
-            $count = 0;
-            foreach($un_chapitre->getEpisodes() as $un_episode)
-            {
-                $episodes_personnages[$count]['episodeId'] = $un_episode->getId();
-                $episodes_personnages[$count]['participationsDeEpisode'] = $participeurEpisode->personnagesEpisodes($un_episode);
-                $count++;
-            }
-            $chapitres_personnages[$compteur]['chapitreId'] = $un_chapitre->getId();
-            $chapitres_personnages[$compteur]['participationsDuChapitre'] = $episodes_personnages;
-            $compteur++;
+        foreach($user_personnages as $un_personnage) {
+            foreach($saison->getChapitres() as $un_chapitre) {
+                foreach($un_chapitre->getEpisodes() as $un_episode) {
+                    if ($classeurXP->cumulUnPersoEpisode($un_episode, $un_personnage->getId()))
+                        $user_personnages_cumul_episodes[$un_personnage->getId()][$un_episode->getId()] = $classeurXP->cumulUnPersoEpisode($un_episode, $un_personnage->getId());
+                }
+            }      
         }
-        
-        // dd($chapitres_personnages);
 
         return $this->render('aventure/index.html.twig', [
             'saison' => $saison,
             'saison_precedente' => $precedent,
             'saison_suivante' => $suivant,
             'last_numero' => $lastNumero,
-            'chapitres_personnages' => $chapitres_personnages
+            'user_personnages_cumul_episodes' => $user_personnages_cumul_episodes
         ]);
     }
 
     /**
      * @Route("/aventure/episode/{id}", name="aventure_episode")
      */
-    public function afficherEpisode(Episode $episode, EpisodeRepository $episodeRepository, PersonnageRepository $personnageRepository, ParticipeurEpisode $participeurEpisode): Response
+    public function afficherEpisode(Episode $episode, EpisodeRepository $episodeRepository, ClasseurXP $classeurXP): Response
     {
         $precedent = $episodeRepository->findPrevious($episode->getChapitreParent()->getId(), $episode->getNumero());
         $suivant = $episodeRepository->findNext($episode->getChapitreParent()->getId(), $episode->getNumero());
-
-        $episode_personnages = $participeurEpisode->personnagesEpisodes($episode);
+        $classement_episode = $classeurXP->classerPersosEpisode($episode);
 
         return $this->render('aventure/un-episode.html.twig', [
             'episode' => $episode,
             'episode_precedent' => $precedent,
             'episode_suivant' => $suivant,
-            'episode_personnages' => $episode_personnages,
+            'classement_episode' => $classement_episode,
         ]);
     }
 }

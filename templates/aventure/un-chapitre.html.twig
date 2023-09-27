@@ -1,126 +1,126 @@
-<section class="chapitre-fond" style="background-color: {{ un_chapitre.couleur }}; background-image:linear-gradient( rgb( 0,0,0,0.6 ), rgb( 0,0,0,0), rgb( 0,0,0,0.3), rgb( 0,0,0,0.6) ), url( {{ asset(un_chapitre.image) }} );" >
+<section class="bg-chapter" style="background-color: {{ un_chapitre.couleur }}; background-image:linear-gradient( rgb( 0,0,0,0.6 ), rgb( 0,0,0,0), rgb( 0,0,0,0.3), rgb( 0,0,0,0.6) ), url( {{ asset(un_chapitre.image) }} );" >
     <div class="container">
-        <div class="sous-en-tete d-flex flex-column justify-content-end" >
-            <h2 class="pre-titre-chapitre text-left">CHAPITRE {{ un_chapitre.numero }}</h2>
+        <div class="sub-header d-flex flex-column justify-content-end" >
+            <h2 class="chapter-number text-left">CHAPITRE {{ un_chapitre.numero }}</h2>
             <div><hr></div>
 
+            <!-- DEBUT HORS FLUX -->
             <!-- BTN - MODIFIER / SUPPRIMER -->
-            {% if is_granted("ROLE_MJ") %}
-                <small>
-                    <div class="header-btn d-flex justify-content-end mr-3 btn-mj">
-                            <a href="{{ path('admin_chapitre_edit', {id:un_chapitre.id}) }}?redirect=aventure" class="text-light">
-                                <i class="fas fa-edit"></i></a>
-                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                            <a href="{{ path('admin_chapitre_delete', {id:un_chapitre.id}) }}?csrf={{ csrf_token('delete' ~ un_chapitre.id) }}&redirect=aventure"
-                            class="text-light" onclick="return confirm('Êtes-vous sûr de vouloir supprimer le chapitre : {{ un_chapitre.titre }} ?')">
-                                <i class="fas fa-trash-alt"></i>
-                            </a>
-                    </div>
-                </small>
-            {% endif %}
-
-            <div class="mt-auto mb-3">
-                <h2 id="tete-lecture-ch-id{{ un_chapitre.id }}" class="stylise grand">{{ un_chapitre.titre|stylise|raw }}</h2>
-                <p class="citation">{{ un_chapitre.citation|nl2br }}</p>
-            {% if un_chapitre.episodes is not empty %}
-                <div class="mx-auto mb-2">
-                    <a href="#tete-lecture-ch-id{{ un_chapitre.numero }}" class="btn btn-primary btn-lg text-center" data-toggle="collapse"
-                            data-target="#ch{{ un_chapitre.numero }}-episodes" aria-controls="ch{{ un_chapitre.numero }}-episodes"
-                            aria-expanded="true" aria-label="Toggle Chapitre {{ un_chapitre.numero }} Episodes">
-                                Voir les Sessions
+            {% if app.user and is_granted("ROLE_MJ") %}
+                <div class="btn-icons-32-right-container">
+                    <a href="{{ path('admin_chapitre_edit', {id:un_chapitre.id}) }}?redirect=aventure">
+                        <i class="fas fa-edit fa-bounce" alt="Icône Modifier" title"Modifier"></i></a>
+                    &nbsp;
+                    <a href="{{ path('admin_chapitre_delete', {id:un_chapitre.id}) }}?csrf={{ csrf_token('delete' ~ un_chapitre.id) }}&redirect=aventure"
+                    onclick="return confirm('Êtes-vous sûr de vouloir supprimer le chapitre : {{ un_chapitre.titre }} ?')">
+                        <i class="fas fa-trash-alt fa-bounce" alt"Icône Supprimer" title="Supprimer"></i>
                     </a>
                 </div>
-            {% else %}
-                <div class="alert alert-light mx-auto persistante">
-                    <strong>Pas encore d'épisode disponible !</strong>&nbsp;&nbsp;
-                    {% if is_granted("ROLE_MJ") %}
-                        <a class="text-light" href="{{path('admin_episode_create')}}?numero=1&chapitreID={{un_chapitre.id}}&redirect=aventure">
-                            <i class="fas fa-plus-square"></i>&nbsp;&nbsp;<strong>Ajouter un Épisode</strong>
-                        </a>
-                    {% endif %}
-                </div>
             {% endif %}
+            <!-- FIN HORS FLUX -->
+
+            <div class="mt-auto mb-3">
+                <h2 id="read-head-ch-id{{ un_chapitre.id }}" class="title-effect grand">{{ un_chapitre.titre|relief|raw }}</h2>
+                <p class="quote">{{ un_chapitre.citation|nl2br }}</p>
+                {% if un_chapitre.episodes is not empty %}
+                    <div class="mx-auto mb-2">
+                        <a href="#read-head-ch-id{{ un_chapitre.numero }}" class="btn btn-primary btn-lg text-center" data-toggle="collapse"
+                           data-target="#ch{{ un_chapitre.numero }}-episodes" aria-controls="ch{{ un_chapitre.numero }}-episodes"
+                           aria-expanded="true" aria-label="Toggle Chapitre {{ un_chapitre.numero }} Episodes">
+                            Voir les Sessions
+                        </a>
+                    </div>
+                {% else %}
+                    <div class="alert alert-light mx-auto alert-persist">
+                        <strong>Il n'y a pas encore d'épisode disponible !</strong>&nbsp;&nbsp;
+                        {% if app.user and is_granted("ROLE_MJ") %}
+                            <a class="text-light" href="{{path('admin_episode_create')}}?numero=1&chapitreID={{un_chapitre.id}}&redirect=aventure">
+                                <i class="fas fa-plus-square fa-bounce" alt="Icône Ajouter" title="Ajouter une Session"></i>&nbsp;&nbsp;<strong>Ajouter une Session</strong>
+                            </a>
+                        {% endif %}
+                    </div>
+                {% endif %}
             </div>
+            
         </div>
 
-         <!-- EPISODES -->
+         <!-- EPISODES / SESSIONS -->
         <div id="ch{{ un_chapitre.numero }}-episodes" class="collapse py-5">
             <div class="container">
-                <div class="row justify-content-center">
-                {% set dernierEpisodeNumero = 1 %}
+                <div class="row justify-content-center relative">
 
-                {% set cette_episode_personnages = [] %}
                 {% for un_episode in un_chapitre.episodes %}
+                    <article class="col-lg-3 col-md-4 col-sm-6 session-card-spacing">
+                        <div class="card session-card-body">
+                            <div class="session-card-number">{{ un_episode.numero }}</div>
+                            <div class="session-card-image-container">
+                                <a href="{{ path('aventure_episode', {id:un_episode.id} ) }}">
+                                    <img class="card-img-top img-fluid hover-shine" src="{{ asset(un_episode.image) }}"
+                                    alt="Image de la session {{un_episode.titre}}" title="{{un_episode.titre}}"  />
+                                </a>
+                            </div>
+                            <div class="session-card-text-container">
+                                <h5 class="session-card-title">{{ un_episode.titre }}</h5>
+                                <p class="session-card-text">{{ un_episode.resume }}</p>
+                            </div>
+                            <div class="text-center">
+                                <a class="btn btn-primary" href="{{ path('aventure_episode', {id:un_episode.id} ) }}" title="Lire la Session" >
+                                    <i class="fab fa-readme fa-bounce" alt="Icône Lire"></i>&nbsp;&nbsp;Lire
+                                </a>
+                            </div>
 
-                    {% for un_episode_personnages in ce_chapitre_personnages.participationsDuChapitre %}
-                        {% if un_episode_personnages.episodeId == un_episode.id %}
-                            {% set cette_episode_personnages = un_episode_personnages %}
-                            {% set break = true %}
-                        {% endif %}
-                    {% endfor %}
-
-                    {% set dernierEpisodeNumero = un_episode.numero %}
-
-                    <article class="col-lg-3 col-md-4 col-sm-6 episode-card">
-                        <div class="card episode-card-liste">
-
-                            <!-- ICON PORTRAIT PARTICPANTS JOUEUR -->
-                            <div class="mini-portrait d-flex flex-row justify-content-center align-items-center">
+                            <!-- START OUT OF FLUX -->
+                            <!-- USER'S PARTICIPATING CHARACTER'S ICON -->
                             {% if app.user %}
-                                {% for un_personnage in cette_episode_personnages.participationsDeEpisode %}
-                                    {% for un_personnage_user in app.user.personnages %}
-                                        {% if un_personnage.personnageId == un_personnage_user.id %}
-                                            <div class="d-flex flex-column justify-content-center align-items-center mr-2">
-                                                {% if un_personnage.xp != 0 and un_personnage.estMort != 1 %}
-                                                    <strong class="votre-xp">+{{un_personnage.xp}}XP</strong>
-                                                {% else %}
-                                                    <strong class="text-mort">MORT</strong>
-                                                {% endif %}
-                                                <br/>
-                                                <a href="{{path('personnage_profil',{id:un_personnage.personnageId})}}" >
-                                                    <img class="mini-perso-icone {% if un_personnage.estMort == 1 %}mort{% elseif un_personnage.xp == 0 %}disabled{% else %}survol{% endif %}" src="{{asset(un_personnage_user.icone)}}" alt="Icone du Personnage" />
-                                                </a>
+                                
+                                {% for un_cumul_personnage in user_personnages_cumul_episodes %}
+                                    {% for keys in un_cumul_personnage|keys %}                                        
+                                        {% if keys == un_episode.id %}
+                                            <div class="characters-icons-container d-flex flex-row justify-content-center align-items-center">
+                                                <div class="d-flex flex-column justify-content-center align-items-center mr-2">
+                                                    {% if un_cumul_personnage[keys]['xp'] != 0 and un_cumul_personnage[keys]['estMort'] != 1 %}
+                                                        <strong class="votre-xp">+{{un_cumul_personnage[keys]['xp']}}XP</strong>
+                                                    {% else %}
+                                                        <strong class="text-mort">MORT</strong>
+                                                    {% endif %}
+                                                    <br/>
+                                                    <a href="{{path('personnage_profil',{id:un_cumul_personnage[keys]['id']})}}" >
+                                                        <img class="character-icon-48 outlined {% if un_cumul_personnage[keys]['estMort'] == 1 %}dead{% elseif un_cumul_personnage[keys]['xp'] == 0 %}grayscale{% else %}hover-shine{% endif %}"
+                                                            src="{{asset(un_cumul_personnage[keys]['icone'])}}" alt="Icone de {{un_cumul_personnage[keys]['prenom']}}"
+                                                            title="{{un_cumul_personnage[keys]['prenom']}}" />
+                                                    </a>
+                                                </div>
                                             </div>
                                         {% endif %}
                                     {% endfor %}
                                 {% endfor %}
-                            {% endif %}
-                            </div>
 
-                            <!-- BTN - MJ -->
-                            {% if is_granted("ROLE_MJ") %}
-                            <div class="btn-mj-episode">
-                                <a class="text-light mx-2" href="{{ path('admin_episode_edit', {id:un_episode.id}) }}?redirect=aventure"><i class="fas fa-edit"></i></a>
-                                <a class="text-light mx-2" href="{{ path('admin_episode_delete', {id:un_episode.id}) }}?csrf={{ csrf_token('delete' ~ un_episode.id) }}&redirect=aventure" onclick="return confirm('Êtes-vous sûr de vouloir supprimer l'épisode : {{ un_episode.titre }} ?')"><i class="fas fa-trash-alt"></i></a>
-                            </div>
-                            {% endif %}
+                                <!-- MJ'S EDIT DELETE BUTTONS -->
+                                {% if app.user and is_granted("ROLE_MJ") %}
+                                    <div class="btn-icons-24-right-container">
+                                        <a href="{{ path('admin_episode_edit', {id:un_episode.id}) }}?redirect=aventure"><i class="fas fa-edit" alt="Icône Modifier" title="Modifier cette Session"></i></a>&nbsp;
+                                        <a href="{{ path('admin_episode_delete', {id:un_episode.id}) }}?csrf={{ csrf_token('delete' ~ un_episode.id) }}&redirect=aventure"
+                                            onclick="return confirm('Êtes-vous sûr de vouloir supprimer l'épisode : {{ un_episode.titre }} ?')"><i class="fas fa-trash-alt" alt="Icône Supprimer" title="Supprimer cette Session"></i></a>
+                                    </div>
+                                {% endif %}
 
-                            <div class="episode-card-numero">{{ un_episode.numero }}</div>
-                            <div class="fond-masque">
-                                <a href="{{ path('aventure_episode', {id:un_episode.id} ) }}">
-                                    <img src="{{ asset(un_episode.image) }}" alt="Image episode" class="card-img-top img-fluid survol" />
-                                </a>
-                            </div>
-                            <div class="card-body ancre-relatif">
-                                <h5 class="card-title shadow">{{ un_episode.titre }}</h5>
-                                <p class="card-text">{{ un_episode.resume }}</p>
-                            </div>
-                            <div class="text-center p-2">
-                                <a href="{{ path('aventure_episode', {id:un_episode.id} ) }}" class="btn btn-primary"><i class="fab fa-readme"></i>&nbsp;&nbsp;Lire</a>
-                            </div>
+                            {% endif %}
+                            <!-- END OUT OF FLUX -->
+
                         </div>
                     </article>
                 {% endfor %}
 
-                <!-- BTN - MJ - AJOUTER UN EPISODE -->
-                {% if is_granted("ROLE_MJ") %}
-                    <div class="col-lg-3 col-md-4 col-sm-6 order-8 episode-card btn-card-mj">
-                        <a class="text-light" href="{{path('admin_episode_create')}}?numero={{(dernierEpisodeNumero)+1}}&chapitreID={{un_chapitre.id}}&redirect=aventure">
-                            <i class="fas fa-plus-square"></i>
-                            <h4>Ajouter un épisode</h4>
+                <!-- START OUT OF FLUX -->
+                <!-- MJ'S ADD SESSION BUTTON -->
+                {% if app.user and is_granted("ROLE_MJ") %}
+                    <div class="btn-icon-big">
+                        <a href="{{path('admin_episode_create')}}?numero={{(un_chapitre.episodes|length)+1}}&chapitreID={{un_chapitre.id}}&redirect=aventure">
+                            <i class="fas fa-plus-square fa-fade" alt="Icône Ajouter" title="Ajouter une Session"></i>
                         </a>
                     </div>
                 {% endif %}
+                <!-- END OUT OF FLUX -->
 
                 </div>
             </div>

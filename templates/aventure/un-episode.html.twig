@@ -1,36 +1,31 @@
 {% extends 'base.html.twig' %}
-
 {% block title %}{{ episode.titre }} | {{ episode.numero }} du Chapitre {{ episode.chapitreParent.titre }} {{ parent() }}{% endblock %}
-
 {% block body %}
 
-<div class="episode-fond p-md-4" style="background-image: url('{{ asset(episode.chapitreParent.image) }}'); background-color: {{ episode.chapitreParent.couleur }}">
-    <header class="container en-tete-episode">
-            <div class="volatile">
-                {{ include('/parts/messages-flashes.html.twig') }}
-            </div>
-            <h2 class="pre-titre-chapitre display-5 text-left">CHAPITRE {{ episode.chapitreParent.numero }} </h2>
-            <hr>
-            <div class="text-left">
-                <a class="btn btn-primary btn-lg" href="{{ path('aventure_saison', {id: episode.chapitreParent.saisonParent.id, '_fragment': 'tete-lecture-ch-id' ~ episode.chapitreParent.id } ) }}">Retour</a>
-            </div>
-            <h2 id="tete-lecture" class="stylise grand">{{ episode.chapitreParent.titre|stylise|raw }}</h2>
-            <p class="citation">{{ episode.chapitreParent.citation|nl2br }}</p>
+<div class="header-session-bg p-md-4" style="background-image: url('{{ asset(episode.chapitreParent.image) }}'); background-color: {{ episode.chapitreParent.couleur }}">
+    <header class="container header-session">
+        {{ include('/parts/messages-flashes.html.twig') }}
+        <h2 class="chapter-number display-5 text-left">CHAPITRE {{ episode.chapitreParent.numero }} </h2>
+        <hr>
+        <div class="text-left">
+            <a class="btn btn-primary btn-lg" href="{{ path('aventure_saison', {id: episode.chapitreParent.saisonParent.id, '_fragment': 'read-head-ch-id' ~ episode.chapitreParent.id } ) }}">Retour</a>
+        </div>
+        <h2 id="read-head" class="title-effect grand">{{ episode.chapitreParent.titre|relief|raw }}</h2>
+        <p class="quote">{{ episode.chapitreParent.citation|nl2br }}</p>
     </header>
 
     <main class="container pt-3">
-
-        {# LIGNE DES EPISODES #}
+        <!-- LIGNE D'EPISODES -->
         <div class="d-flex pt-3 justify-content-center align-items-center">
             {% for un_episode in episode.chapitreParent.episodes %}
                 {% if un_episode.id == episode.id %}         
-                <div class="ancre-relatif">
-                    <div class="episode-caroussel-numero">{{ un_episode.numero }}</div>
+                <div class="relative">
+                    <div class="session-caroussel-number">{{ un_episode.numero }}</div>
                     <img class="img-160 border border-4 border-danger shadow" src="{{ asset(un_episode.image) }}" alt="image de l'episode {{un_episode.titre}}" title="{{un_episode.titre}}"/>
                     <i class="fa-sharp fa-solid fa-sort-down fa-bounce fa-2xl btn-arrow-down-pulse" style="color: red;"></i>
                 </div>
                 {% else %}
-                    <a class="bg-dark" href="{{ path('aventure_episode', { id : un_episode.id, '_fragment': 'tete-lecture' } ) }}" >
+                    <a class="bg-dark" href="{{ path('aventure_episode', { id : un_episode.id, '_fragment': 'read-head' } ) }}" >
                         <img class="img-fluid assombrit img-128" src="{{ asset(un_episode.image) }}" alt="image de l'episode {{un_episode.titre}}" title="{{un_episode.titre}}"/>
                     </a>
                 {% endif %}
@@ -38,36 +33,29 @@
         </div>
 
         <!-- TITRE EPISODE -->
-        <h2 class="display-3 titre-episode mb-0 mt-3 py-3">{{ episode.titre }}</h2>
-        <div class="col-12 col-sm-12 offset-xl-1 col-xl-10 justify-content-center longue-card-episode">
-            <div class="card justify-content-center pt-5 bloc-card-episode">
+        <h2 class="display-3 session-title-h mb-0 mt-3 py-3">{{ episode.titre }}</h2>
+        <div class="col-12 col-sm-12 offset-xl-1 col-xl-10 justify-content-center session-card-long">
+            <div class="card justify-content-center pt-5 session-card-long-body">
 
                 <!-- AFFICHAGE DES SCENES -->
-                {% set numeroScene = 0 %}
+                {% set numero_scene = 0 %}
                 {% for une_scene in episode.scenes %}
-                    {{ include('/aventure/une-scene.html.twig') }}
-                    {% set numeroScene = une_scene.numero %}
+                    {% set numero_scene = une_scene.numero %}
+                    {{ include('/aventure/une-scene.html.twig', {une_scene}) }}
                 {% else %}
                     <div class="text-center">
-                        <img class="img-fluid" src="{{ asset('assets/img/placeholders/pas-de-scenes.png') }}" alt="Il n'y a pas encore de scènes" />
+                        <img class="img-fluid" src="{{ asset('assets/img/placeholders/pas-de-scenes.png') }}" alt="Image pas encore de scènes" title="Il n'y a pas encore de scènes"/>
                         <h5>Il n'y a pas encore de scènes pour cette épisode !</h5>
                     </div>
                 {% endfor %}
 
-                {% if is_granted("ROLE_MJ") %}
-                    <div class="d-flex justify-content-center mt-3">
-                        <div class="text-right mb-3">
-                            <a href="{{ path('admin_scene_create') }}?numero={{(numeroScene)+1}}&episodeID={{episode.id}}&redirect=episode">
-                                <i class="fas fa-plus-square"></i>&nbsp;&nbsp;Insérer une Scène
-                            </a>
-                        </div>
-                    </div>    
-                {% endif %}
+                {% set numero_scene = numero_scene + 1 %}
+                {{ include('/parts/inserer-scene.html.twig', {numero_scene}) }}
 
                 <h2 class="text-center">Classement de la Session</h2>
                 <div class="d-flex justify-content-center">
                     <ol class="text-center">
-                        {% for un_personnage in episode_personnages %}
+                        {% for un_personnage in classement_episode %}
                             <li>
                                 {{un_personnage.prenom}}&nbsp;<strong>{{un_personnage.xp}}xp</strong>
                             </li>
@@ -86,7 +74,7 @@
                         {% endif %}
                     </span>
                     <span>
-                        <a href="#tete-lecture" class="btn border">Retour en haut</a>
+                        <a href="#read-head" class="btn border">Retour en haut</a>
                     </span>
                     <span style="width: 96px; text-align: right;">
                         {% if episode_suivant is not empty %}

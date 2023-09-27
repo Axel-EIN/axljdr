@@ -1,17 +1,8 @@
-{% if is_granted("ROLE_MJ") %}
-    <div class="d-flex justify-content-center mt-3">
-        <div class="text-right mb-3">
-            <a href="{{ path('admin_scene_create') }}?numero={{une_scene.numero}}&episodeID={{episode.id}}&redirect=episode">
-                <i class="fas fa-plus-square"></i>&nbsp;&nbsp;Insérer une Scène
-            </a>
-        </div>
-    </div>    
-{% endif %}
 
-<article id="scn{{ une_scene.id }}" class="mb-3 ancre-relatif">
+<article id="scn{{ une_scene.id }}" class="mb-3 relative">
 
-    <div class="fond-masque">
-        <img src="{{ asset(une_scene.image) }}" class="card-img-top img-fluid" alt="Image d'une scène">
+    <div class="bg-black">
+        <img class="card-img-top img-fluid mask" src="{{ asset(une_scene.image) }}"  alt="Image d'une scène">
     </div>
 
     <div class="text-right ligne-pnjs" style="position: absolute; top: 1rem; right: 1rem;">
@@ -23,7 +14,7 @@
                             {% if une_participation.estMort == 1 %}
                                 <img src="{{asset('assets/img/icons/mort.png')}}" alt="est mort" style="width: 72px; position: absolute; top: -4px; left: -2px; z-index: 1;" />
                             {% endif %}
-                            <img class="ombre-img perso-icone {% if une_participation.estMort == 1 %}mort{% else %}survol{% endif %}"
+                            <img class="ombre-img character-icon-64 {% if une_participation.estMort == 1 %}dead{% else %}hover-shine{% endif %}"
                                 src="{{asset(une_participation.personnage.icone)}}" alt="Icone du Personnage" title="{{une_participation.personnage.prenom}}" />
                         </a>
                     </div>
@@ -32,10 +23,10 @@
         </div>
     </div>
 
-    <div class="card-body corps-scene ancre-relatif">
+    <div class="card-body scene-body relative">
 
             <!-- LEGENDE OVERLAY -->
-            <div class="scene-heure" style="width: 91%;">
+            <div class="scene-daytime" style="width: 91%;">
                 <h5 class="card-title">{{ une_scene.temps }}</h5>
                 <h3 class="card-title">{{ une_scene.titre }}</h3>
                 <div class="text-right ligne-icones ligne-pjs">
@@ -50,7 +41,7 @@
                                     {% if une_participation.estMort == 1 %}
                                         <img src="{{asset('assets/img/icons/mort.png')}}" alt="est mort" style="width: 72px; position: absolute; top: -4px; left: -2px; z-index: 1;" />
                                     {% endif %}
-                                    <img class="perso-icone {% if une_participation.personnage.joueur == app.user %}votre-personnage{% endif %} {% if une_participation.estMort == 1 %}mort{% elseif une_participation.xpGagne == 0 %}disabled{% else %}survol{% endif %}"
+                                    <img class="character-icon-64 {% if une_participation.personnage.joueur == app.user %}outlined{% endif %} {% if une_participation.estMort == 1 %}dead{% elseif une_participation.xpGagne == 0 %}grayscale{% else %}hover-shine{% endif %}"
                                          src="{{asset(une_participation.personnage.icone)}}" alt="Icone du Personnage" title="{{une_participation.personnage.prenom}}" />
                                 </a>
                             </div>
@@ -60,7 +51,7 @@
             </div>
 
         <!-- TEXTE -->
-        <p class="card-text texte-scene text-justify">{{ une_scene.texte|raw|nl2br }}</p>
+        <p class="card-text scene-text text-justify">{{ une_scene.texte|raw|nl2br }}</p>
         {# Il faut mettre le RAW avant pour avoir les balises html et autre caractères spéciaux non échappés #}
 
     </div>

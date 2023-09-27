@@ -15,10 +15,11 @@
 <main class="container-fluid bg-light pt-5">
     <div class="container">
 
-        <!-- PERSONNAGES JOUEURS -->
+        <!-- LES PERSONNAGES JOUEURS -->
+        {% set element = 'Personnage' %}
         <section id="pjs"> 
             <h2 class="display-4 relative">Personnages <strong>Joueur</strong>
-                {{ include('/parts/btn-ajouter-personnage.html.twig') }}
+                {{ include('/parts/btn-ajouter-element.html.twig', {element}) }}
             </h2>
             <hr>
             <div class="row mt-5">
@@ -53,7 +54,7 @@
         <!-- PERSONNAGES NON-JOUEURS -->
         <section id="pnjs">
             <h2 class="display-4 mt-5 relative">Personnages <strong>Non-Joueur</strong>
-                {{ include('/parts/btn-ajouter-personnage.html.twig') }}
+                {{ include('/parts/btn-ajouter-element.html.twig', {element}) }}
             </h2>
             <hr>
             <div class="row mt-5">
@@ -82,6 +83,7 @@
             {% endfor %}
             </div>
         </section>
+
     </div>
 </main>
 {% endblock %}

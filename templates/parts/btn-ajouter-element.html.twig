@@ -1,0 +1,8 @@
+<!-- HORS FLUX - BTN - MJ - AJOUTER UN ELEMENT -->
+{% if app.user and is_granted("ROLE_MJ") %}
+    <div class="right-corner-snap">
+        <a href="{{ path('admin_' ~ element|lower ~ '_create') }}?redirect={{element|lower}}" class="btn-style btn-medium" >
+            <i class="fas fa-plus-square fa-bounce" alt="Icône Ajouter"></i>&nbsp;&nbsp;Ajouter {{element}}
+        </a>
+    </div>
+{% endif %}

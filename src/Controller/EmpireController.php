@@ -21,13 +21,16 @@ class EmpireController extends AbstractController
                                    ArchiveRepository $archiveRepository,
                                    LieuRepository $lieuRepository): Response
     {
-
-        $clans = $clanRepository->findall();
+        $clans = $clanRepository->findAll();
+        $clansMajeurs = $clanRepository->findAllMajeurs();
+        $clansAutres = $clanRepository->findAllAutres();
         $archives = $archiveRepository->findall();
         $lieux = $lieuRepository->findall();
 
         return $this->render('empire/index.html.twig', [
             'clans' => $clans,
+            'clansMajeurs' => $clansMajeurs,
+            'clansAutres' => $clansAutres,
             'archives' => $archives,
             'lieux' => $lieux,
         ]);

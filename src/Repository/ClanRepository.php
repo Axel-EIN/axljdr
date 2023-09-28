@@ -19,6 +19,21 @@ class ClanRepository extends ServiceEntityRepository
         parent::__construct($registry, Clan::class);
     }
 
+    public function findAll()
+    {
+        return $this->findBy(array(), array('nom' => 'ASC'));
+    }
+
+    public function findAllMajeurs()
+    {
+        return $this->findBy(array("est_majeur" => "1"), array('nom' => 'ASC'));
+    }
+
+    public function findAllAutres()
+    {
+        return $this->findBy(array("est_majeur" => "0"), array('nom' => 'ASC'));
+    }
+
     public function countClans() {
         return $this->createQueryBuilder('c')
             ->select('count(c.id)')

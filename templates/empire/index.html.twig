@@ -21,20 +21,19 @@
             <h2 class="display-4 relative">Les <strong>Archives</strong>
                 {{ include('/parts/btn-ajouter-element.html.twig', {element}) }}
             </h2>
-
             <hr>
-            
-            <br/>
-            <div class="row">
+            <div class="row mt-3">
             {% for une_archive in archives %}
-                <article class="col-xl-2 col-lg-3 col-md-4 col-sm-6 py-3 text-center">
+
+                <!--- UNE ARCHIVE -->
+                <article class="col-xl-2 col-lg-3 col-md-4 col-sm-6 py-3 text-center {% if une_archive.locked != 1 %}hover-zoom{% endif %}">
                     {% if une_archive.locked == 1 %}
-                        <img class="icon-lock fa-beat-fade" src="{{asset('assets/img/icons/locked.png')}}" alt="Icône cadena" title="A débloquer !" />
-                        <img class="img-160 darken" src="{{ asset(une_archive.image) }}" alt="Image d'une Archive" />
+                        <img class="icon-lock grayscale fa-beat-fade" src="{{asset('assets/img/icons/locked.png')}}" alt="Icône cadena" title="A débloquer !" />
+                        <img class="img-160 darken-more" src="{{ asset(une_archive.image) }}" alt="Image d'une Archive" />
                         <h3 class="text-center h5"><strong>???</strong></h3>
                     {% else %}
                     <a href="{{ path('empire_archive', {id: une_archive.id} ) }}">
-                        <img class="img-160 hover-shine" src="{{ asset(une_archive.image) }}" alt="Image d'une Archive" />
+                        <img class="img-160" src="{{ asset(une_archive.image) }}" alt="Image d'une Archive" />
                     </a>
                     <h3 class="text-center h5">
                         <strong>
@@ -43,6 +42,7 @@
                     </h3>
                 {% endif %}
                 </article>
+
             {% endfor %}
             </div>
         </section>
@@ -54,15 +54,17 @@
                 {{ include('/parts/btn-ajouter-element.html.twig', {element}) }}
             </h2>
             <hr>
-            <br/>
-            <div class="row">
-{% for un_clan in clans %}
-                <article class="col-xl-2 col-lg-3 col-md-4 col-sm-6 py-3 text-center">
+            <div class="row mt-3">
+            {% for un_clan in clans %}
+
+                <!-- UN CLAN -->
+                <article class="col-xl-2 col-lg-3 col-md-4 col-sm-6 py-3 text-center hover-zoom hover-shine">
                     <a href="{{ path('empire_clan', {id: un_clan.id} ) }}"><img class="img-160" src="{{ asset(un_clan.mon) }}" alt="Mon du clan" /></a>
                     <br/>
                     <h3 class="text-center my-3"><strong><a href="{{ path('empire_clan', {id: un_clan.id} ) }}">{{ un_clan.nom }}</a></strong></h3>
                 </article>
-{% endfor %}
+
+            {% endfor %}
             </div>
         </section>
 
@@ -73,10 +75,11 @@
                 {{ include('/parts/btn-ajouter-element.html.twig', {element}) }}
             </h2>
             <hr>
-            <br/>
-            <div class="row">
-{% for un_lieu in lieux %}
-                <article class="col-xl-2 col-lg-3 col-md-4 col-sm-6 py-3 text-center">
+            <div class="row mt-3">
+            {% for un_lieu in lieux %}
+
+                <!-- UN LIEU -->
+                <article class="col-xl-2 col-lg-3 col-md-4 col-sm-6 py-3 text-center hover-zoom">
                     <a href="{{ path('empire_lieu', {id: un_lieu.id} ) }}">
                         <img class="img-160" src="{{ asset(un_lieu.image) }}" alt="Image du Lieu" />
                     </a>
@@ -87,7 +90,8 @@
                         </strong>
                     </h3>
                 </article>
-{% endfor %}
+
+            {% endfor %}
             </div>
         </section>
     </div>

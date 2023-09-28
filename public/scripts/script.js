@@ -1,19 +1,27 @@
-// Gestion du bouton Voir les Episodes qui se Replier
+// Gestion du bouton Voir les Episodes
 $('.cacher, .voir').click(function(){
 
-    $(this).text(function(i,old){
-
-        if ($(this).hasClass('voir'))
-        {
-            $(this).toggleClass('cacher').toggleClass('voir');
-            return 'Replier';
+        if ($(this).hasClass('voir')) {
+            $(this)
+                .removeClass('voir').addClass('cacher').find('i').removeClass('fa-bounce');
+                // .removeClass('btn-primary-style').addClass('text-white')
+                // .html('<i class="fa-solid fa-eye-slash" alt="Icône cacher"></i>');
+        } else {
+            $(this)
+                .removeClass('cacher').addClass('voir').find('i').addClass('fa-bounce');
+                // .addClass('btn-primary-style').removeClass('text-white')
+                // .html('<i class="fa-solid fa-scroll fa-bounce" alt="Icône Voir" ></i>&nbsp;&nbsp;Voir les Sessions');
         }
-        else if ($(this).hasClass('cacher'))
-        {
-            $(this).toggleClass('voir').toggleClass('cacher'); 
-            return 'Voir les Episodes';
-        }
-        
-    });
 
 });
+
+// Gestion du hover des cartes episodes
+$('.session-card-spacing').hover(mouseEnter, mouseLeave);
+
+function mouseEnter() {
+    $(this).find('.btn-primary-style').addClass('fa-bounce');
+};
+
+function mouseLeave() {
+    $(this).find('.btn-primary-style').removeClass('fa-bounce');
+};

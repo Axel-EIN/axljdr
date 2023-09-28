@@ -19,12 +19,50 @@ class PersonnageRepository extends ServiceEntityRepository
         parent::__construct($registry, Personnage::class);
     }
 
+    public function findAllSorted()
+    {
+        return $this->createQueryBuilder('p')
+            ->leftJoin('p.clan', 'c')
+            ->addOrderBy('c.est_majeur', 'DESC')
+            ->addOrderBy('c.nom', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function findAllPJsSorted()
+    {
+        return $this->createQueryBuilder('p')
+            ->andWhere('p.est_pj = :val')
+            ->setParameter('val', 1)
+            ->leftJoin('p.clan', 'c')
+            ->addOrderBy('c.est_majeur', 'DESC')
+            ->addOrderBy('c.nom', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function findAllPNJsSorted()
+    {
+        return $this->createQueryBuilder('p')
+            ->andWhere('p.est_pj = :val')
+            ->setParameter('val', 0)
+            ->leftJoin('p.clan', 'c')
+            ->addOrderBy('c.est_majeur', 'DESC')
+            ->addOrderBy('c.nom', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
+
+
+    // SQL COUNT CHARACTERS
+
     public function countPersonnages() {
         return $this->createQueryBuilder('p')
             ->select('count(p.id)')
             ->getQuery()
             ->getSingleScalarResult();
     }
+    
 
     public function countPJs() {
         return $this->createQueryBuilder('p')
@@ -44,42 +82,6 @@ class PersonnageRepository extends ServiceEntityRepository
             ->getSingleScalarResult();
     }
 
-    // public function getPersonnagesAllRelations() {
-    //     return $this->createQueryBuilder('p')
-    //         ->leftJoin('p.joueur', 'j')
-    //         ->leftJoin('p.clan', 'c')
-    //         ->leftJoin('p.fichePersonnage', 'f')
-    //         ->orderBy('c.nom')
-    //         ->getQuery()
-    //         ->getResult();
-    // }
-
-    // /**
-    //  * @return Personnage[] Returns an array of Personnage objects
-    //  */
-    /*
-    public function findByExampleField($value)
-    {
-        return $this->createQueryBuilder('p')
-            ->andWhere('p.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('p.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
-
-    /*
-    public function findOneBySomeField($value): ?Personnage
-    {
-        return $this->createQueryBuilder('p')
-            ->andWhere('p.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
+    // ->getSingleScalarResult permet de récupérer un nombre
+    // ->getOneOrNullResult permet de récupérer qu'un seul élément ou bien null
 }

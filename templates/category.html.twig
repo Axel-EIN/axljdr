@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+    <header class="header-bg-img header-bg-{{header_classname}}">
+        <div class="container">
+            <div class="header d-flex flex-column justify-content-center align-items-center">
+                <div class="text-center d-flex justify-content-center">
+                    <strong class="h1">
+                        {{header_up}}
+                    </strong>
+                </div>
+                <hr class="w-50">     
+                <h1 class="big-title-effect grand">
+                    {{header_down|relief|raw}}
+                </h1>
+            </div>
+        </div>
+    </header>
+
+    <main class="container-fluid bg-light py-5">    
+        <div class="container">
+
+            {% set count = 1 %}
+            {% for one_section in sections %}
+                {% set element = one_section['element'] %}
+                <!-- SECTION {{count}} {{one_section['name']}} -->
+                <section id="{{one_section['name']}}" class="mb-5"> 
+                    <h2 class="display-4 relative">
+                        {{one_section['titleLight']}}&nbsp;<strong>{{one_section['titleStrong']}}</strong>
+                        {{ include('/parts/btn-ajouter-element.html.twig', {element}) }}
+                    </h2>
+                    <hr>
+                    <div class="row mt-3">
+                        {{ block('section_content' ~ count) }}
+                    </div>
+                </section>
+            {% set count = count + 1 %}
+            {% endfor %}
+            
+        </div>
+    </main>
+{% endblock %}

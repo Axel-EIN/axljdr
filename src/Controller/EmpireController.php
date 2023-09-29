@@ -21,18 +21,40 @@ class EmpireController extends AbstractController
                                    ArchiveRepository $archiveRepository,
                                    LieuRepository $lieuRepository): Response
     {
-        $clans = $clanRepository->findAll();
         $clansMajeurs = $clanRepository->findAllMajeurs();
         $clansAutres = $clanRepository->findAllAutres();
         $archives = $archiveRepository->findall();
         $lieux = $lieuRepository->findall();
 
+        $sections = [];
+        $sections[0]['name'] = "Archives";
+        $sections[0]['titleLight'] = 'Les';
+        $sections[0]['titleStrong'] = 'Archives';
+        $sections[0]['element'] = 'archive';
+
+        $sections[1]['name'] = "Factions";
+        $sections[1]['titleLight'] = 'Les';
+        $sections[1]['titleStrong'] = 'Factions';
+        $sections[1]['element'] = 'clan';
+
+        $sections[2]['name'] = "Lieux";
+        $sections[2]['titleLight'] = 'Les';
+        $sections[2]['titleStrong'] = 'Lieux';
+        $sections[2]['element'] = 'lieu';
+
+        $header_classname = 'empire';
+        $header_up = "Univers du Jeu";
+        $header_down = "L'Empire de Rokugan";
+
         return $this->render('empire/index.html.twig', [
-            'clans' => $clans,
             'clansMajeurs' => $clansMajeurs,
             'clansAutres' => $clansAutres,
             'archives' => $archives,
             'lieux' => $lieux,
+            'sections' => $sections,
+            'header_classname' => $header_classname,
+            'header_up' => $header_up,
+            'header_down' => $header_down,
         ]);
     }
 

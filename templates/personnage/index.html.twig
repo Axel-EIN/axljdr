@@ -1,18 +1,16 @@
 {% extends 'category.html.twig' %}
 {% block title %}Personnages de l'Aventure {{ parent() }}{% endblock %}
 
+<!-- SECTION 1 : PERSONNAGES JOUEURS -->
 {% block section_content1 %}
     {% for perso in pjs %}
         {{ include('/parts/card-personnage.html.twig', {perso}) }}
     {% endfor %}
 {% endblock %}
 
+<!-- SECTION 2 : PERSONNAGES NON-JOUEURS -->
 {% block section_content2 %}
     {% for perso in pnjs %}
         {{ include('/parts/card-personnage.html.twig', {perso}) }}
     {% endfor %}
 {% endblock %}
-
-{% block section_content3 %}{% endblock %}
-{% block section_content4 %}{% endblock %}
-{% block section_content5 %}{% endblock %}

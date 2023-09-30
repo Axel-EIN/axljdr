@@ -18,13 +18,10 @@
 .secondary-color-pastel-light { color: #464a4d }
 .secondary-color-pastel-dark { color: #343a40 }
 .secondary-color-pastel-darker { color: #1E242A }
-<<<<<<< HEAD
-=======
 
 .accent-color { color: #ff7f00; }
 .accent-color-light { color: #ffcc66; }
 .accent-color-dark { color: #cc6600; }
->>>>>>> 7d9e1b0 (css: edit secondary colors & links)
 
 .accent-color { color: #ff7f00; }
 .accent-color-light { color: #ffcc66; }
@@ -223,10 +220,9 @@ h5 a:hover, h4 a:hover, h3 a:hover, h2 a:hover, h1 a:hover { text-decoration: no
 .relative { position: relative; }
 .shift-left { position: absolute; left: -2rem; }
 
-.shift-left { position: absolute; left: -2rem; }
-
-.right-corner-snap { position: absolute; top: 0px; right: 0px; z-index: 10}
-.right-corner-8 { position: absolute; right:16px; top:8px; z-index: 10}
+.right-corner { position: absolute; top: 0px; right: 0px; z-index: 10}
+.right-corner-4 { position: absolute; right:4px; top:4px; z-index: 10}
+.right-corner-8 { position: absolute; right:8px; top:8px; z-index: 10}
 .right-corner-16 { position: absolute; top: 1rem; right: 1rem; }
 
 .right-snap { position: absolute; right:-8px; top:8px; z-index: 10}
@@ -377,11 +373,10 @@ h5 a:hover, h4 a:hover, h3 a:hover, h2 a:hover, h1 a:hover { text-decoration: no
 
 .arrow-down { position: absolute; left: 70px; bottom: -10px; z-index: 10; }
 
-.btn-icons-small-right-container { position: absolute; top: 4px; right: 12px; font-size: 1.5rem; z-index: 10; }
-.btn-icons-small-right-container a { color: white; }
-
-.btn-icons-medium-right-container { position: absolute; top: 8px; right: 0px; font-size: 2rem; z-index: 10; }
-.btn-icons-medium-right-container a { color: white; }
+.btn-icon-small { display: inline-block; text-align: center; width: 40px; height: 40px; font-size: 1.5rem; }
+.btn-icon-medium { display: inline-block; text-align: center; width: 48px; height: 48px; font-size: 2rem; }
+.btn-icon-text { display: inline-block; text-align: center; font-size: 1rem; font-weight: bold; }
+.btn-icon-small:hover, .btn-icon-medium:hover, .btn-icon-text:hover { color: #ff7f00; text-decoration: none; }
 
 .btn-icon-display { position: absolute; right: -160px; top: 96px; font-size: 8rem; text-decoration: none; display: flex; justify-content: center; align-items: center; text-align: center; }
 .btn-icon-display a { color: white; }

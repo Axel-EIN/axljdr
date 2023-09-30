@@ -1,26 +1,30 @@
 <main class="offset-2 col-8">
     {{ form_start(form) }}
-        <div class="my-3 row justify-content-between align-items-center">
-            <div class="col">{{ form_row(form.nom) }}</div>
-            <div class="col">{{ form_row(form.chef) }}</div>
-            <div class="col">Statut : {{ form_row(form.est_majeur) }}</div>
-        </div>
-        <div class="mx-1 my-3 row justify-content-between align-items-center">
-            <div class="d-flex w-100 align-items-center">
-                {% if type != 'Créer' %}
-                    <img class="img-160 mr-4" src="{{ asset(clan.mon) }}" />
-                {% endif %}
-                <div class="w-100">
-                    {{ form_row(form.mon) }}
-                    {{ form_row(form.couleur) }}
-                </div>
+        <div class="row justify-content-center align-items-start mt-5 mb-4">
+            <div class="col-4">
+                {{ form_row(form.nom) }}
             </div>
-        </div>
-        {{ form_widget(form.description, { 'attr' : {'rows': '35'}}) }}
-        <br/>
-        {{ form_widget(form) }}
-        <div class="text-center">
-            <button class="btn btn-primary">{{ button_label|default('Save') }}</button>
+            <div class="col-4">
+                {{ form_row(form.chef) }}
+            </div>
+            <div class="col-4">
+                Statut : {{ form_row(form.est_majeur) }}
+            </div>
+            <div class="col-4 mt-3 text-center">
+                {% if type == 'Modifier' %}
+                    <img class="img-160" src="{{ asset(clan.mon) }}" />
+                {% endif %}
+            </div>
+            <div class="col-8 mt-3">
+                {{ form_row(form.mon) }}
+                {{ form_row(form.couleur) }}
+            </div>
+            <div class="col-12 mt-3">
+                {{ form_row(form.description,{ 'attr': {'rows': '20'} }) }}
+            </div>
+            <div class="col-12 text-center mt-5">
+                <button class="btn btn-large btn-primary-style">{{ button_label|default('Save') }}</button>
+            </div>
         </div>
     {{ form_end(form) }}
 </main>

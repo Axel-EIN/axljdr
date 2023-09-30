@@ -1,11 +1,29 @@
 <main class="offset-2 col-8">
     {{ form_start(form) }}
-        {% if type != 'Créer' %}
-            <img class="img-fluid" src="{{ asset(archive.image) }}" />
-        {% endif %}
-            {{ form_widget(form) }}
-            <div class="text-center">
-                <button class="btn btn-primary">{{ button_label|default('Save') }}</button>
+        <div class="row justify-content-center align-items-end mt-5 mb-4">
+            <div class="col-8">
+                {{ form_row(form.titre) }}
+            </div> 
+            <div class="col-4 text-center">
+                <div>{{ form_row(form.locked) }}</div>
+            </div> 
+            <div class="col-12">
+                {% if type == 'Modifier' %}
+                    <img class="img-fluid" src="{{ asset(archive.image) }}" />
+                {% endif %}
+            </div> 
+            <div class="col-12">
+                {{ form_row(form.image) }}
+            </div> 
+            <div class="col-12">
+                {{ form_row(form.contenu,{ 'attr': {'rows': '20'} }) }}
             </div>
+            <div class="col-12">
+                {{ form_row(form.auteur) }}
+            </div> 
+            <div class="col-12 text-center mt-5">
+                <button class="btn btn-large btn-primary-style">{{ button_label|default('Save') }}</button>
+            </div>
+        </div>
     {{ form_end(form) }}
 </main>

@@ -12,11 +12,16 @@
 .primary-color-light { color: #ff4147; }
 .primary-color-lighter { color: #ff8084; }
 .primary-color-dark { color: #b6252f; }
+.primary-color-dark-plus { color: #7a1118; }
 .primary-color-darker { color: #64080e; }
 
-.secondary-color { color: #ff7f00; }
-.secondary-color-light { color: #ffcc66; }
-.secondary-color-dark { color: #cc6600; }
+.secondary-color-pastel-light { color: #464a4d }
+.secondary-color-pastel-dark { color: #343a40 }
+.secondary-color-pastel-darker { color: #1E242A }
+
+.accent-color { color: #ff7f00; }
+.accent-color-light { color: #ffcc66; }
+.accent-color-dark { color: #cc6600; }
 
 /* BACKGROUND COLOR */
 
@@ -29,9 +34,9 @@
 .bg-primary-color-lighter { background-color: #ff8084; }
 .bg-primary-color-dark { background-color: #b6252f; }
 
-.bg-secondary-color { background-color: #ff7f00; }
-.bg-secondary-color-light { background-color: #ffcc66; }
-.bg-secondary-color-dark { background-color: #cc6600; }
+.bg-accent-color { background-color: #ff7f00; }
+.bg-accent-color-light { background-color: #ffcc66; }
+.bg-accent-color-dark { background-color: #cc6600; }
 
 /* LINK COLOR */
 
@@ -246,6 +251,7 @@ h5 a:hover, h4 a:hover, h3 a:hover, h2 a:hover, h1 a:hover { text-decoration: no
 
 .saison {       position: relative;
                 background-image: url('../assets/img/ui/banner_back_title.jpg');  background-size: cover; background-repeat: no-repeat; background-position: 20% 50%;
+                border-bottom: 1px solid #7a1118;
                 box-shadow: 0px 4px 8px rgba(0, 0, 0, .4); }
 
 /* CARD CONTAINERS */
@@ -376,7 +382,7 @@ h5 a:hover, h4 a:hover, h3 a:hover, h2 a:hover, h1 a:hover { text-decoration: no
 .character-icon-small, .location-icon-small { width: 26px; }
 .character-icon-dead { position: absolute; top: -4px; left: -2px; width: 72px;  z-index: 1; }
 
-a.character-icon, a.location-icon { display: inline-block; font-weight: bold; }
+a.character-icon, a.location-icon { display: inline-block; font-weight: bold; text-decoration: none; }
 a.location-icon { color: purple; }
 
 /* IMAGES SIZING */
@@ -453,7 +459,7 @@ a.location-icon { color: purple; }
 
 /* NAV */
 
-#navigation-bar { position: relative; z-index: 10; box-shadow: 0px 2px 8px black; }
+#navigation-bar { position: relative; z-index: 10; background-color: #28323C; border-bottom: 1px solid #464a4d; box-shadow: 0px 2px 8px black; }
 .navbar { padding: 0.5rem 0 }
 nav .active { font-weight: bold; border-bottom: 3px solid #EA2027; }
 .connected { color: white; text-align: right; }
@@ -471,7 +477,7 @@ nav .active { font-weight: bold; border-bottom: 3px solid #EA2027; }
 
 /* FOOTER */
 
-#footer1 { min-height: 24vh; background-color: #28323C; color:#b4b4b4; }
+#footer1 { min-height: 24vh; background-color: #28323C; border-top: 1px solid #464a4d; color:#b4b4b4; }
 #footer2 { min-height: 8vh; background-color: #1E242A; color: #aaa; }
 .footer-link { color:#a0a0a0; }
 .footer-link:hover { color:#fff; text-decoration: underline; }

@@ -14,6 +14,7 @@
 .primary-color-dark { color: #b6252f; }
 .primary-color-dark-plus { color: #7a1118; }
 .primary-color-darker { color: #64080e; }
+.bg-primary-color-darkness { background-color: rgb(40, 0, 0);}
 
 .secondary-color-pastel-light { color: #464a4d }
 .secondary-color-pastel-dark { color: #343a40 }
@@ -44,7 +45,7 @@
 .bg-accent-color-light { background-color: #ffcc66; }
 .bg-accent-color-dark { background-color: #cc6600; }
 
-/* LINK COLOR */
+/* LINKS COLOR */
 
 .link-white { color: #fff; }
 .link-white:hover { color: #aaa; text-decoration: underline; }
@@ -58,11 +59,14 @@
 
 h5 a:hover, h4 a:hover, h3 a:hover, h2 a:hover, h1 a:hover { text-decoration: none; color: #007bff };
 
+<<<<<<< HEAD
 .separator-chapter a { color: #fff; text-decoration: none;}
 .separator-chapter a:hover { color: #ff7f00; text-decoration: none; }
 
 .ranking a { color: black;}
 .ranking a:hover { color: #007bff; text-decoration: none;}
+=======
+>>>>>>> 7868f2f (css fix: background for insert button)
 
 
 /* -------------------------- */
@@ -103,6 +107,7 @@ html, body {    font-size: 16px; }
 @font-face { font-family: "Hirosh"; src: url("../assets/fonts/hirosh.otf"); }
 @font-face { font-family: "Present"; src: url("../assets/fonts/present-it-black.otf"); }
 
+<<<<<<< HEAD
 
 
 /* LINKS */
@@ -122,6 +127,8 @@ h5 a:hover, h4 a:hover, h3 a:hover, h2 a:hover, h1 a:hover { text-decoration: no
 .separator-chapter a { color: #fff; text-decoration: none;}
 .separator-chapter a:hover { color: #ff7f00; text-decoration: none; }
 
+=======
+>>>>>>> 7868f2f (css fix: background for insert button)
 /* TEXT EFFECTS */
 
 .clip-text-main {

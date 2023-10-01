@@ -14,6 +14,7 @@
 .primary-color-dark { color: #b6252f; }
 .primary-color-dark-plus { color: #7a1118; }
 .primary-color-darker { color: #64080e; }
+.bg-primary-color-darkness { background-color: rgb(40, 0, 0);}
 
 .secondary-color-pastel-light { color: #464a4d }
 .secondary-color-pastel-dark { color: #343a40 }
@@ -44,7 +45,7 @@
 .bg-accent-color-light { background-color: #ffcc66; }
 .bg-accent-color-dark { background-color: #cc6600; }
 
-/* LINK COLOR */
+/* LINKS COLOR */
 
 .link-white { color: #fff; }
 .link-white:hover { color: #aaa; text-decoration: underline; }
@@ -102,8 +103,6 @@ html, body {    font-size: 16px; }
 @font-face { font-family: "Shogun"; src: url("../assets/fonts/shoguns-clan-accentued.otf"); }
 @font-face { font-family: "Hirosh"; src: url("../assets/fonts/hirosh.otf"); }
 @font-face { font-family: "Present"; src: url("../assets/fonts/present-it-black.otf"); }
-
-
 
 /* LINKS */
 

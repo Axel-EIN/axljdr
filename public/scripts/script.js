@@ -1,4 +1,4 @@
-// Gestion du bouton Voir les Episodes
+// Page Aventure : Gestion du bouton Voir les Episodes
 $('.cacher, .voir').click(function(){
 
         if ($(this).hasClass('voir')) {
@@ -15,7 +15,7 @@ $('.cacher, .voir').click(function(){
 
 });
 
-// Gestion du hover des cartes episodes
+// Page Aventure : Activation/Desactivation de l'animation bounce sur le bouton lire des cartes episodes lors d'un mouseHover / mouseLeave
 $('.session-card-spacing').hover(mouseEnter, mouseLeave);
 
 function mouseEnter() {

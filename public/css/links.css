@@ -36,7 +36,7 @@
 }
 
 
-/* ---- Administration Panel  ---- */
+/* ---- Administration and MJ Band  ---- */
 
 #admin-panel a {
     color: var(--white);
@@ -47,8 +47,16 @@
     text-decoration: underline;
 }
 
+/* ---- Extreme Top Admin/MJ Panel link Band  ---- */
 
-/* ---- MJ Panel  ---- */
+#admin-panel a {
+    color: var(--white);
+}
+
+#admin-panel a:hover {
+    color: var(--white);
+    text-decoration: underline;
+}
 
 #mj-panel a {
     color: var(--white);
@@ -57,6 +65,29 @@
 #mj-panel a:hover {
     color: var(--white);
     text-decoration: underline;
+}
+
+
+
+/* --------------------------------- */
+/* --------- BACK OFFICE  ---------- */
+/* --------------------------------- */
+
+
+/* ---- Administration Panel Nav  ---- */
+
+.mj-link {
+    color: var(--primary-lighter) !important;
+    font-weight: bold;
+}
+
+.mj-link:hover {
+    color: var(--primary) !important;
+    text-decoration: none;
+}
+
+.mj-link.active {
+    color: var(--primary) !important;
 }
 
 

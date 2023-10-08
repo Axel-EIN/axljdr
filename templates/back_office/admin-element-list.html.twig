@@ -1,0 +1,68 @@
+<section>
+    <div class="ml-auto text-center my-3">
+        <a href="{{ path('admin_scene_create') }}" class="btn-medium btn-primary-style"><i class="fas fa-plus-square"></i>&nbsp;&nbsp;Créer {{label}}</a>
+    </div>
+
+    <table class="admin-element-list">
+        <tr>
+            <th>ID</th>
+            <th>Image</th>
+            <th>Titre / Nom</th>
+            <th>Edit</th>
+            <th>Delete</th>
+        </tr>
+
+        {% for un_element in elements %}
+
+            {% if un_element.image is defined %}
+                {% set image = un_element.image %}
+            {% elseif un_element.mon is defined %}
+                {% set image = un_element.mon %}
+            {% elseif un_element.icone is defined %}
+                {% set image = un_element.icone %}
+            {% elseif un_element.personnage is defined %}
+                {% set image = un_element.personnage.icone %}
+            {% else %}
+                {% set image = "pas d'image" %}
+            {% endif %}
+
+            {% if un_element.nom is defined %}
+                {% if un_element.prenom is defined %}
+                    {% set nom = un_element.nom ~ ' ' ~ un_element.prenom %}
+                {% else %}
+                    {% set nom = un_element.nom %}
+                {% endif %}
+            {% elseif un_element.titre is defined %}
+                {% set nom = un_element.titre %}
+            {% elseif un_element.personnage is defined %}
+                {% set nom = 'fiche de ' ~ un_element.personnage.prenom %}
+            {% else %}
+                {% set nom = "pas de nom ou titre" %}
+            {% endif %}
+
+            <tr>
+                <td>{{ un_element.id }}</td>
+                <td>
+                    <img class="img-{{img_size}}" src="{{ asset(image) }}" alt="Image {{label}}" />
+                </td>
+                <td><strong>{{nom}}</strong></td>
+                <td>
+                    <a href="{{ path('admin_' ~ element ~ '_edit', {id: un_element.id} ) }}"><i class="fas fa-edit"></i></a>
+                </td>
+                <td>
+                    <a class="ml-1" href="{{ path('admin_' ~ element ~ '_delete', {'id': un_element.id}) }}?csrf={{ csrf_token('delete' ~ un_element.id) }}"
+                        onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette élément : {{nom}} ?');"><i class="fas fa-trash-alt"></i></a>
+                </td>
+            </tr>
+
+        {% else %}
+            <tr>
+                <td class="p-2" colspan="4"></td>
+            </tr>
+            <tr>
+                <td colspan="4">Désolé ! Il n'y a pas encore de scènes !</td>
+            </tr>
+        {% endfor %}
+
+    </table>
+</section>

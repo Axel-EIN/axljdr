@@ -2,6 +2,6 @@
 {% block title %}Administrer les Écoles {{ parent() }}{% endblock %}
 {% block h1 %}Administrer les <strong>Écoles</strong>{% endblock %}
 {% block child %}
-    {% set label, element, elements, img_size = 'école', 'ecole', ecoles, '48' %}
+    {% set label, element, elements, img_size, genre = 'école', 'ecole', ecoles, '48', 'F' %}
     {{ include('back_office/list-element.html.twig') }}
 {% endblock %}

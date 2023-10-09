@@ -36,7 +36,7 @@ class Uploader extends AbstractController
         }
         catch (FileException $e)
         {
-            $this->addFlash('da,ger', 'Le fichier n\'a pu être téléversé!');
+            $this->addFlash('danger', 'Le fichier n\'a pu être téléversé');
         }
 
         return $nouveau_nomFichier;

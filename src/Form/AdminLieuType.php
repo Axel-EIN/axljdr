@@ -2,8 +2,8 @@
 
 namespace App\Form;
 
-use App\Entity\Clan;
 use App\Entity\Lieu;
+use App\Entity\Clan;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;

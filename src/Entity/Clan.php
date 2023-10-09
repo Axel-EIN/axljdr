@@ -69,6 +69,26 @@ class Clan
      */
     private $familles;
 
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $longDescription;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $citation;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $territoireCarte;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $territoireDesc;
+
     public function __construct()
     {
         $this->ecoles = new ArrayCollection();
@@ -270,6 +290,54 @@ class Clan
                 $famille->setClan(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getLongDescription(): ?string
+    {
+        return $this->longDescription;
+    }
+
+    public function setLongDescription(?string $longDescription): self
+    {
+        $this->longDescription = $longDescription;
+
+        return $this;
+    }
+
+    public function getCitation(): ?string
+    {
+        return $this->citation;
+    }
+
+    public function setCitation(?string $citation): self
+    {
+        $this->citation = $citation;
+
+        return $this;
+    }
+
+    public function getTerritoireCarte(): ?string
+    {
+        return $this->territoireCarte;
+    }
+
+    public function setTerritoireCarte(?string $territoireCarte): self
+    {
+        $this->territoireCarte = $territoireCarte;
+
+        return $this;
+    }
+
+    public function getTerritoireDesc(): ?string
+    {
+        return $this->territoireDesc;
+    }
+
+    public function setTerritoireDesc(?string $territoireDesc): self
+    {
+        $this->territoireDesc = $territoireDesc;
 
         return $this;
     }

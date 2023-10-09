@@ -20,7 +20,19 @@
                 {{ form_row(form.couleur) }}
             </div>
             <div class="col-12 mt-3">
-                {{ form_row(form.description,{ 'attr': {'rows': '20'} }) }}
+                {{ form_row(form.citation) }}
+            </div>
+            <div class="col-12 mt-3">
+                {{ form_row(form.description,{ 'attr': {'rows': '7'} }) }}
+            </div>
+            <div class="col-12 mt-3">
+                {{ form_row(form.longDescription,{ 'attr': {'rows': '20'} }) }}
+            </div>
+            <div class="col-12 mt-3">
+                {{ form_row(form.territoireCarte)}}
+            </div>
+            <div class="col-12 mt-3">
+                {{ form_row(form.territoireDesc,{ 'attr': {'rows': '7'} }) }}
             </div>
             <div class="col-12 text-center mt-5">
                 <button class="btn btn-large btn-primary-style">{{ button_label|default('Save') }}</button>

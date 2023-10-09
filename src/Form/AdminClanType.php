@@ -22,9 +22,13 @@ class AdminClanType extends AbstractType
         $builder
             ->add('nom', TextType::class)
             ->add('estMajeur', CheckboxType::class, ['required' => false])
+            ->add('citation', TextType::class)
             ->add('description', TextareaType::class)
+            ->add('longDescription', TextareaType::class)
             ->add('couleur', ColorType::class)
             ->add('mon', FileType::class, array('mapped' => false, 'data_class' => null, 'required' => false))
+            ->add('territoireCarte', FileType::class, array('mapped' => false, 'data_class' => null, 'required' => false))
+            ->add('territoireDesc', TextareaType::class, ['required' => false])
             ->add('chef', EntityType::class, [
                 'class' => Personnage::class,
                 'choice_label' => 'prenom',

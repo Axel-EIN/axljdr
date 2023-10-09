@@ -21,7 +21,16 @@ class ClanRepository extends ServiceEntityRepository
 
     public function findAll()
     {
-        return $this->findBy(array(), array('nom' => 'ASC'));
+        return $this->findAllSorted();
+    }
+
+    public function findAllSorted()
+    {
+        return $this->createQueryBuilder('c')
+            ->addOrderBy('c.estMajeur', 'DESC')
+            ->addOrderBy('c.nom', 'ASC')
+            ->getQuery()
+            ->getResult();
     }
 
     public function findAllMajeurs()

@@ -23,7 +23,7 @@ class AdminClanController extends AbstractController
 
 
 
-        $clans = $clanRepository->findBy(array(), array('est_majeur' => 'DESC'));
+        $clans = $clanRepository->findBy(array(), array('estMajeur' => 'DESC'));
         return $this->render('admin_clan/index.html.twig', [
             'controller_name' => 'AdminClanController',
             'clans' => $clans

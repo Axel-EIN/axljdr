@@ -47,8 +47,8 @@ class AdminSceneController extends AbstractController
         $scene = new Scene;
 
         // Création de liste pour l'affichage des listes déroulantes dynamiques en JS
-        $tout_pjs = $personnageRepository->findBy(array('est_pj' => true));
-        $tout_pnjs = $personnageRepository->findBy(array('est_pj' => false));
+        $tout_pjs = $personnageRepository->findBy(array('estPj' => true));
+        $tout_pnjs = $personnageRepository->findBy(array('estPj' => false));
 
         // Gestion du pré-remplissage des champs
         if ( !empty($request->query->get('numero')) && $request->query->get('numero') > 0
@@ -128,8 +128,8 @@ class AdminSceneController extends AbstractController
         $fratrieDepartId = $scene->getEpisodeParent()->getId();
         
         // Personnages & Participations pour Affichage & JS
-        $tout_pjs = $personnageRepository->findBy(array('est_pj' => true));
-        $tout_pnjs = $personnageRepository->findBy(array('est_pj' => false));
+        $tout_pjs = $personnageRepository->findBy(array('estPj' => true));
+        $tout_pnjs = $personnageRepository->findBy(array('estPj' => false));
         $participations_pjs = $participationRepository->findBy(array('scene' => $scene, 'estPj' => true));
         $participations_pnjs = $participationRepository->findBy(array('scene' => $scene, 'estPj' => false));
 

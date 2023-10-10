@@ -85,6 +85,15 @@
 /* --------- ANIMATIONS --------- */
 /* ------------------------------ */    
 
+.hover-outline,
+.hover-outline:hover {
+    transition: 0.1s;
+}
+
+.hover-outline:hover {
+    outline: 4px solid var(--blue);
+}
+
 .hover-zoom, .hover-zoom:hover { transition: 0.5s; }
 .hover-zoom:hover { transform: scale(1.05); }
 

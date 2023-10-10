@@ -4,16 +4,18 @@
 {% else %}
     {% set nom, btn = un_element.titre, 'Lire' %}
 {% endif %}
-{% set path = category ~ '_' ~ element %}
+
+{% set path = category ~ '_' ~ entity %}
+
 <article class="col-xl-{{col_xl}} col-lg-{{col_lg}} col-md-{{col_md}} col-sm-{{col_sm}} py-3 text-center {% if un_element.locked|default(0) == 1 %}translucide{% else %}hover-zoom-x2{% endif %}">
     <div class="relative">
     {% if un_element.locked|default(0) == 1 %}
         <img class="absolute icon-lock grayscale fa-beat-fade" src="{{asset('assets/img/icons/locked.png')}}" alt="Icône cadena" title="À débloquer !" />
-        <img class="img-fluid grayscale" src="{{ asset(un_element.image) }}" alt="Image {{element}}" title="{{element}} à débloquer !"/>
+        <img class="img-fluid grayscale" src="{{ asset(un_element.image) }}" alt="Image {{entity}}" title="{{entity}} à débloquer !"/>
         <h5 class="text-center mt-1"><strong>???</strong></h5>
     {% else %}
         <a href="{{ path(path, {id: un_element.id} ) }}">
-            <img class="img-fluid" src="{{ asset(un_element.image) }}" alt="Image {{element}}" title="{{btn}} {{nom}}" />
+            <img class="img-fluid" src="{{ asset(un_element.image) }}" alt="Image {{entity}}" title="{{btn}} {{nom}}" />
         </a>
         <h5 class="text-center mt-1"><strong><a href="{{ path(path, {id: un_element.id} ) }}">{{nom}}</a></strong></h5>
     {% endif %}

@@ -1,69 +1,47 @@
-{% extends 'base.html.twig' %}
-{% block title %}Archive {{ parent() }}{% endblock %}
-{% block body %}
+{% extends 'element.html.twig' %}
+{% block element_content %}
 
-    <main class="container-fluid bg-lightest">
-        <section class="container pb-5">
+<!-- IMAGE -->
+<div class="col-12 text-center">
+    <img class="img-fluid" src="{{ asset(un_element.image|default('assets/img/placeholders/1280x720.jpg')) }}" alt="Image de {{ nom }}" />
+</div>
 
-            <!-- FIL D'ARIANE -->
-            <nav class="pt-3">
-                <span class="text-muted">
-                    <a href="{{ path('aventure') }}"><i class="fas fa-home"></i></a>
-                    > <a href="{{ path('empire') }}"><strong>Empire</strong></a>
-                    > <a href="{{ path('empire', {'_fragment': 'archives'} ) }}"><strong>Archives</strong></a>
-                    > <strong>{{ archive.titre }}</strong>
-                </span>
-            </nav>
+<!-- CARD CONTAINER -->
+<div class="col-12 mb-5">
 
-            <!-- ARTICLE -->
-            <h1 class="mt-5 relative">
-                <strong>{{ archive.titre }}</strong>
+    <!-- CARD -->
+    <div class="card pb-4">
 
-                {% if app.user and is_granted("ROLE_MJ") %}
-                    <!-- MJ - BTN ICON - Edit -->
-                    {% set redirect, element, un_element, size, color, position = 'empire', 'archive', archive, 'medium', 'text-accent', 'right-snap' %}
-                    {{ include('/parts/btn-icon-edit.html.twig') }}
-                {% endif %}
-                
-            </h1>
-            <hr>
+        <!-- CARD BODY -->
+        <div class="card-body">
+            <p class="card-text mt-3 mx-5 text-justify">{{ un_element.contenu|raw|nl2br }}</p>
+        </div>
 
-            <!-- CONTENU -->
-            <article class="row">
-                <!-- IMAGE -->
-                <div class="col-12 text-center">
-                    <img class="img-fluid" src="{{ asset(archive.image) }}" alt="Image de l'Archive" />
-                </div>
-                <div class="col-12">
-                    <div class="card pb-4">
-                        <div class="card-body">
-                            <p class="card-text mt-3 mx-5 text-justify">{{ archive.contenu|raw|nl2br }}</p>
-                        </div>
-                        {% if archive.auteur is not empty %}
-                            <ul class="list-group list-group-flush">
-                                <li class="list-group-item">
-                                    <strong>Auteur&nbsp;:</strong> {{ archive.auteur.nom }} <strong>{{ archive.auteur.prenom }}</strong> 
-                                </li>
-                            </ul>
-                        {% endif %}
-                        {{ include('/parts/separateur-ornament.html.twig') }}
+        <!-- AUTEUR -->
+        {% if un_element.auteur is not empty %}
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item">
+                    <strong>Auteur&nbsp;:</strong> {{ un_element.auteur.nom }} <strong>{{ un_element.auteur.prenom }}</strong> 
+                </li>
+            </ul>
+        {% endif %}
 
-                        {% if app.user and is_granted("ROLE_MJ") %}
-                        <div class="mt-3 text-center">
-                            <!-- MJ - BTN ICON - Delete -->
-                            {% set redirect, element, un_element, color, action = 'empire', 'archive', archive, 'text-accent', 'delete' %}
-                            {{ include('/parts/btn-edit-delete.html.twig') }}
-                        </div>
-                        {% endif %}
-                        
-                    </div>
-                </div>
-            </article>
+        <!-- ORNAMENT -->
+        {{ include('/parts/separateur-ornament.html.twig') }}
 
+        <!-- BTN -->
+        {% if app.user and is_granted("ROLE_MJ") %}
+            <div class="mt-3 text-center">
+                <!-- MJ BTN LINE Delete -->
+                {% set redirect, element, un_element, color, action = 'empire', 'archive', un_element, 'text-accent', 'delete' %}
+                {{ include('/parts/btn-line.html.twig') }}
+            </div>
+        {% endif %}
+        
+    </div>
+    <!-- END CARD -->
 
-        </section>
-    </main>
-
-{{ include('/parts/modal.html.twig') }}
+</div>
+<!-- END CARD CONTAINER -->
 
 {% endblock %}

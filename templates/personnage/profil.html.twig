@@ -1,136 +1,85 @@
-{% extends 'base.html.twig' %}
+{% extends 'element.html.twig' %}
+{% block element_content %}
+    <div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6">
+        <img class="img-fluid" src="{{ asset(personnage.illustration) }}" alt="{{personnage.nom}} {{personnage.prenom}}" title="{{personnage.nom}} {{personnage.prenom}}" />
+    </div>
+    <div class="card col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6">
+        <div class="card-body">
+            <h4 class="card-title">{{ personnage.titres }}</h4>
+            {# <p class="card-text"><strong>Description :</strong></p> #}
+            <p class="card-text">{{ personnage.description|raw|nl2br }}</p>
+        </div>
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item">
+                    <img class="img-48" src="{{ asset(personnage.clan.mon) }}" alt="Mon du Clan {{personnage.clan.nom}}" title="Mon du Clan {{personnage.clan.nom}}" />
+                    &nbsp;<strong><a href="{{ path('empire_clan', {id: personnage.clan.id} ) }}">{{ personnage.clan.nom }}</a></strong>
+            </li>
+            <li class="list-group-item">
+                    <img class="img-48" src="{{ asset(personnage.classe.icone) }}" alt="Classe {{personnage.classe.nom}}" title="Classe {{personnage.classe.nom}}" />
+                    &nbsp;<strong><a href="{{ path('regles_ecole', {id: personnage.ecole.id} ) }}">{{ personnage.ecole.nom }}</a></strong>
+            </li>
 
-{% block title %}Profil du Personnage {{ parent() }}{% endblock %}
+            {% set xp = 0 %}
+            {% for une_participation in personnage.participations|sortByField('scene') %}
+                {% set xp = xp + une_participation.xpGagne %}
+            {% endfor %}
 
-{% block body %}
+            {% if xp > 0 %}
+                {% set rang = 1 %}
+                {% if xp >= 100 %}
+                    {% set rang = 2 %}
+                {% elseif xp >= 150 %}
+                    {% set rang = 3 %}
+                {% elseif xp >= 200 %}
+                    {% set rang = 4 %}
+                {% elseif xp >= 250 %}
+                    {% set rang = 5 %}
+                {% endif %}
+                <li class="list-group-item"><strong>XP :</strong> <span class="petit">{{xp}}</span></li>
+                <li class="list-group-item"><strong>Rang :</strong> <span class="petit">{{rang}}</span></li>
+            {% endif %}
 
-    <main class="container-fluid bg-lightest">
-        <section class="container">
+            {% if personnage.joueur is not empty %}
+                <li class="list-group-item"><strong>Joueur :</strong> {{ personnage.joueur.pseudo }}</li>
+            {% endif %}
+        </ul>
+    </div>
+    <div class="col-12 px-0">
+        <div class="card my-3 card-body">
+            <h2 class="card-title">Historique</h2>
+            <div class="card-text">
+                {% set current_chapitre = 0 %}
+                {% set current_episode = 0 %}
+                {% for une_participation in personnage.participations|sortByField('scene') %}
 
-            <nav class="pt-3">
-                <span class="text-muted">
-                    <a href="{{ path('aventure') }}">
-                        <i class="fas fa-home"></i></a>
-                        > <a href="{{ path('personnages') }}"><strong>Personnages</strong></a>
-                        {% if personnage.estPj == 1 %}
-                            > <a href="{{ path('personnages', {'_fragment': 'pjs'} ) }}"><strong>PJs</strong></a>
-                        {% else %}
-                            > <a href="{{ path('personnages', {'_fragment': 'pnjs'} ) }}"><strong>PNJs</strong></a>
-                        {% endif %}
-                        > <strong>{{ personnage.nom }} {{ personnage.prenom }}</strong>
-                </span>
-            </nav>
-
-            <h1 class="mt-3 relative">
-                {{ personnage.nom }} <strong>{{ personnage.prenom }}</strong>
-                {% if app.user is not empty %}
-                    {% if personnage.joueur is not empty and personnage.joueur.id == app.user.id and personnage.fichePersonnage is not empty %}
-                        <span class="float-right">
-                            <a href="{{path('mon_compte_fiche',{id: personnage.fichePersonnage.id})}}">
-                                <i class="fas fa-user-secret"></i> Voir Fiche Privée
-                            </a>
-                        </span>
+                    {% if une_participation.scene.episodeParent.chapitreParent.id != current_chapitre %}
+                        <hr>
+                        <h4 class="mb-3"><strong>{{une_participation.scene.episodeParent.chapitreParent.titre}}</strong></h4>
                     {% endif %}
-                {% endif %}
+                    {% set current_chapitre = une_participation.scene.episodeParent.chapitreParent.id %}
 
-                {% if app.user and is_granted("ROLE_MJ") %}
-                    <!-- MJ - BTN ICON - Edit -->
-                    {% set redirect, element, un_element, size, color, position = 'personnage', 'personnage', personnage, 'medium', 'text-accent', 'right-snap' %}
-                    {{ include('/parts/btn-icon-edit.html.twig') }}
-                {% endif %}
-                
-            </h1>
+                    {% if une_participation.scene.episodeParent.id != current_episode %}
+                        <h5 class="ml-3"><a href="{{path('aventure_episode', {id: une_participation.scene.episodeParent.id})}}">{{une_participation.scene.episodeParent.titre}}</a></h5>
+                    {% endif %}
+                    {% set current_episode = une_participation.scene.episodeParent.id %}
 
-            <hr>
-
-            <article class="row">
-                <div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6">
-                    <img class="img-fluid" src="{{ asset(personnage.illustration) }}" alt="{{personnage.nom}} {{personnage.prenom}}" title="{{personnage.nom}} {{personnage.prenom}}" />
-                </div>
-                <div class="card col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6">
-                    <div class="card-body">
-                        <h4 class="card-title">{{ personnage.titres }}</h4>
-                        {# <p class="card-text"><strong>Description :</strong></p> #}
-                        <p class="card-text">{{ personnage.description|raw|nl2br }}</p>
-                    </div>
-                    <ul class="list-group list-group-flush">
-                        <li class="list-group-item">
-                                <img class="img-48" src="{{ asset(personnage.clan.mon) }}" alt="Mon du Clan {{personnage.clan.nom}}" title="Mon du Clan {{personnage.clan.nom}}" />
-                                &nbsp;<strong><a href="{{ path('empire_clan', {id: personnage.clan.id} ) }}">{{ personnage.clan.nom }}</a></strong>
-                        </li>
-                        <li class="list-group-item">
-                                <img class="img-48" src="{{ asset(personnage.classe.icone) }}" alt="Classe {{personnage.classe.nom}}" title="Classe {{personnage.classe.nom}}" />
-                                &nbsp;<strong><a href="{{ path('regles_ecole', {id: personnage.ecole.id} ) }}">{{ personnage.ecole.nom }}</a></strong>
-                        </li>
-
-                        {% set xp = 0 %}
-                        {% for une_participation in personnage.participations|sortByField('scene') %}
-                            {% set xp = xp + une_participation.xpGagne %}
-                        {% endfor %}
-
-                        {% if xp > 0 %}
-                            {% set rang = 1 %}
-                            {% if xp >= 100 %}
-                                {% set rang = 2 %}
-                            {% elseif xp >= 150 %}
-                                {% set rang = 3 %}
-                            {% elseif xp >= 200 %}
-                                {% set rang = 4 %}
-                            {% elseif xp >= 250 %}
-                                {% set rang = 5 %}
-                            {% endif %}
-                            <li class="list-group-item"><strong>XP :</strong> <span class="petit">{{xp}}</span></li>
-                            <li class="list-group-item"><strong>Rang :</strong> <span class="petit">{{rang}}</span></li>
+                    <span class="ml-3">
+                    {{personnage.prenom}}
+                    {% if une_participation.estMort == 0 %}
+                        a
+                        {% if une_participation.xpGagne == 0 %}
+                            participé 
+                        {% else %}
+                            gagné <strong>{{une_participation.xpGagne}}xp</strong> 
                         {% endif %}
-
-                        {% if personnage.joueur is not empty %}
-                            <li class="list-group-item"><strong>Joueur :</strong> {{ personnage.joueur.pseudo }}</li>
-                        {% endif %}
-                    </ul>
-                </div>
-                <div class="col-12 px-0">
-                    <div class="card my-3 card-body">
-                        <h2 class="card-title">Historique</h2>
-                        <div class="card-text">
-                            {% set current_chapitre = 0 %}
-                            {% set current_episode = 0 %}
-                            {% for une_participation in personnage.participations|sortByField('scene') %}
-
-                                {% if une_participation.scene.episodeParent.chapitreParent.id != current_chapitre %}
-                                    <hr>
-                                    <h4 class="mb-3"><strong>{{une_participation.scene.episodeParent.chapitreParent.titre}}</strong></h4>
-                                {% endif %}
-                                {% set current_chapitre = une_participation.scene.episodeParent.chapitreParent.id %}
-
-                                {% if une_participation.scene.episodeParent.id != current_episode %}
-                                    <h5 class="ml-3"><a href="{{path('aventure_episode', {id: une_participation.scene.episodeParent.id})}}">{{une_participation.scene.episodeParent.titre}}</a></h5>
-                                {% endif %}
-                                {% set current_episode = une_participation.scene.episodeParent.id %}
-
-                                <span class="ml-3">
-                                {{personnage.prenom}}
-                                {% if une_participation.estMort == 0 %}
-                                    a
-                                    {% if une_participation.xpGagne == 0 %}
-                                        participé 
-                                    {% else %}
-                                        gagné <strong>{{une_participation.xpGagne}}xp</strong> 
-                                    {% endif %}
-                                        lors de la scène <a href="{{path('aventure_episode', {id: une_participation.scene.episodeParent.id, '_fragment': 'scn' ~  une_participation.scene.numero  })}}" ><strong>{{une_participation.scene.titre}}</strong></a><br/>
-                                {% else %}
-                                    <strong class="text-danger">est mort</strong> dans la scène <a href="{{path('aventure_episode', {id: une_participation.scene.episodeParent.id, '_fragment': 'scn' ~  une_participation.scene.numero  })}}" ><strong>{{une_participation.scene.titre}}</strong></a><br/>
-                                {% endif %}
-                                </span>
-                                
-                            {% endfor %}
-                        </div>
-                    </div>
-                </div>
-            </article>
-
-        </section>
-    </main>
-
-{{ include('/parts/modal.html.twig') }}
-
+                            lors de la scène <a href="{{path('aventure_episode', {id: une_participation.scene.episodeParent.id, '_fragment': 'scn' ~  une_participation.scene.numero  })}}" ><strong>{{une_participation.scene.titre}}</strong></a><br/>
+                    {% else %}
+                        <strong class="text-danger">est mort</strong> dans la scène <a href="{{path('aventure_episode', {id: une_participation.scene.episodeParent.id, '_fragment': 'scn' ~  une_participation.scene.numero  })}}" ><strong>{{une_participation.scene.titre}}</strong></a><br/>
+                    {% endif %}
+                    </span>
+                    
+                {% endfor %}
+            </div>
+        </div>
+    </div>
 {% endblock %}

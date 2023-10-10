@@ -10,6 +10,18 @@
     <div class="card">
         <div class="card-body px-5 py-0 relative">
             <p class="card-text mx-5 mt-4 mb-5 text-justify">{{ un_element.description|raw|nl2br }}</p>
+            
+            {% if un_element.clan is not empty %}
+            <p class="text-right px-5">Contrôlé par
+                <img class="ml-2 img-48" src="{{ asset(un_element.clan.mon) }}" />
+                <strong>
+                    <a href="{{ path('empire_clan', {id:un_element.clan.id} ) }}" >
+                        {{ un_element.clan.nom }}
+                    </a>
+                </strong>
+            </p>
+            {% endif %}
+
             <hr>
             <div class="mt-5">
                 <h2><strong>Localisation</strong></strong></h2>
@@ -40,25 +52,10 @@
             <br/>
             <!-- CARTE LIEU -->
             <img class="img-fluid" src="{{asset(un_element.carte)}}" alt="Carte du Lieu">
-
-
-            
+    
         </div>
         <!-- END CARD-BODY -->
 
-        <!-- CARD LIST ITEMS -->
-        <ul class="list-group list-group-flush">
-            {% if un_element.clan is not empty %}
-            <li class="list-group-item px-5">
-                <strong class="ml-5">Clan</strong> : <img class="ml-2 img-48" src="{{ asset(un_element.clan.mon) }}" />
-                <strong>
-                    <a href="{{ path('empire_clan', {id:un_element.clan.id} ) }}" >
-                        {{ un_element.clan.nom }}
-                    </a>
-                </strong>
-            </li>
-            {% endif %}
-        </ul>
     </div>
     <!-- END CARD -->
 

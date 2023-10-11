@@ -47,7 +47,17 @@ class Classe
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $color;
+    private $couleur;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $citation;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $image;
 
     public function __construct()
     {
@@ -156,14 +166,38 @@ class Classe
         return $this;
     }
 
-    public function getColor(): ?string
+    public function getCouleur(): ?string
     {
-        return $this->color;
+        return $this->couleur;
     }
 
-    public function setColor(string $color): self
+    public function setCouleur(string $couleur): self
     {
-        $this->color = $color;
+        $this->couleur = $couleur;
+
+        return $this;
+    }
+
+    public function getCitation(): ?string
+    {
+        return $this->citation;
+    }
+
+    public function setCitation(string $citation): self
+    {
+        $this->citation = $citation;
+
+        return $this;
+    }
+
+    public function getImage(): ?string
+    {
+        return $this->image;
+    }
+
+    public function setImage(?string $image): self
+    {
+        $this->image = $image;
 
         return $this;
     }

@@ -89,6 +89,11 @@ class Clan
      */
     private $territoireDesc;
 
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $image;
+
     public function __construct()
     {
         $this->ecoles = new ArrayCollection();
@@ -338,6 +343,18 @@ class Clan
     public function setTerritoireDesc(?string $territoireDesc): self
     {
         $this->territoireDesc = $territoireDesc;
+
+        return $this;
+    }
+
+    public function getImage(): ?string
+    {
+        return $this->image;
+    }
+
+    public function setImage(string $image): self
+    {
+        $this->image = $image;
 
         return $this;
     }

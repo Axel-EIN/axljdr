@@ -1,44 +1,66 @@
 <main class="offset-2 col-8">
     {{ form_start(form) }}
         <div class="row justify-content-center align-items-start mt-5 mb-4">
+
             <div class="col-4">
                 {{ form_row(form.nom) }}
             </div>
+
             <div class="col-4">
                 {{ form_row(form.chef) }}
             </div>
+
             <div class="col-4">
                 Statut : {{ form_row(form.estMajeur) }}
             </div>
+
             <div class="col-4 mt-3 text-center">
                 {% if type == 'Modifier' %}
                     <img class="img-160" src="{{ asset(clan.mon) }}" />
                 {% endif %}
             </div>
+
             <div class="col-8 mt-3">
                 {{ form_row(form.mon) }}
                 {{ form_row(form.couleur) }}
             </div>
+
+            <div class="col-12 m-3">
+                {% if type == 'Modifier' %}
+                    <img class="img-fluid" src="{{ asset(clan.image|default('assets/img/placeholders/1280x720.jpg')) }}" />
+                {% endif %}
+            </div>
+
+            <div class="col-12 mt-3">
+                {{ form_row(form.image) }}
+            </div>
+
             <div class="col-12 mt-3">
                 {{ form_row(form.citation) }}
             </div>
+
             <div class="col-12 mt-3">
                 {{ form_row(form.description,{ 'attr': {'rows': '7'} }) }}
             </div>
+
             <div class="col-12 mt-3 text-center">
                 {% if type == 'Modifier' %}
                     <img class="img-fluid" src="{{ asset(clan.territoireCarte) }}" />
                 {% endif %}
             </div>
+
             <div class="col-12 mt-3">
                 {{ form_row(form.territoireCarte)}}
             </div>
+
             <div class="col-12 mt-3">
                 {{ form_row(form.territoireDesc,{ 'attr': {'rows': '7'} }) }}
             </div>
+
             <div class="col-12 mt-3">
                 {{ form_row(form.longDescription,{ 'attr': {'rows': '20'} }) }}
             </div>
+            
             <div class="col-12 text-center mt-5">
                 <button class="btn btn-large btn-primary-style">{{ button_label|default('Save') }}</button>
             </div>

@@ -1,55 +1,50 @@
 {% extends 'element.html.twig' %}
 {% block element_content %}
-    <div class="col-12 col-lg-4 text-center">
-        <img class="img-fluid" src="{{ asset(classe.icone) }}" alt="Icône de la Classe" title="{{classe.nom}}" />
-    </div>
 
-    <div class="col-12 col-lg-8">
-        <div class="card card-body h-100">
-            <p class="card-text">{{ classe.description|raw|nl2br }}</p>
+{# BANNER INTRO #}
+{% set un_element, icone, invert = classe, classe.icone, 'invert' %}
+{{ include('parts/banner-intro.html.twig') }}
+
+{# ECOLES #}
+<section class="col-8 p-2 m-0 mb-2">
+    <div class="card card-body pt-4 h-100">
+        <h2 class="card-title"><strong>Écoles</strong></strong></h2>
+        <hr>
+        <div class="card-text row">
+            <!-- UNE ECOLE -->
+            {% for une_ecole in classe.ecoles %}
+                <article class="col-4 p-3 hover-zoom-x2 text-center">
+                    <a href="{{ path('regles_ecole', {id: une_ecole.id} ) }}">
+                        <img class="img-fluid" src="{{ asset(une_ecole.image) }}" alt="Image d'une école" title="{{une_ecole.nom}}" />
+                    </a><br/>
+                    <strong><a href="{{ path('regles_ecole', {id: une_ecole.id} ) }}" >{{ une_ecole.nom }}</a></strong>
+                </article>
+            {% else %}
+                <span class="text-muted"><i>Il n'y a pas encore d'école disponible pour cette classe.</i></span>
+            {% endfor %}
         </div>
     </div>
+</section>
 
-    <!-- LES ECOLES DE CETTE CLASSE -->
-    <section class="col-12 col-lg-6 my-3 text-center">
-        <div class="card card-body h-100">
-            <h2 class="card-title py-3">Ecoles de <strong>{{ classe.nom }}</strong> :</h2>
-            <div class="card-text row text-center justify-content-center align-items-center">
+{# PERSONNAGES #}
+<section class="col-4 p-2 m-0 mb-2">
+    <div class="card card-body pt-4 h-100">
+        <h2 class="card-title"><strong>Personnages</strong></h2>
+        <hr>
+        <div class="card-text row justify-content-center">
 
-                <!-- UNE ECOLE -->
-                {% for une_ecole in classe.ecoles %}
-                    <div class="mb-4 hover-shine">
-                        <a href="{{ path('regles_ecole', {id: une_ecole.id} ) }}">
-                            <img class="img-480" src="{{ asset(une_ecole.image) }}" alt="Image d'une école" title="{{une_ecole.nom}}" />
-                        </a><br/>
-                        <strong><a href="{{ path('regles_ecole', {id: une_ecole.id} ) }}" >{{ une_ecole.nom }}</a></strong>
-                    </div>
-                {% else %}
-                    <span class="text-muted">Désolé ! Il n'y a pas encore d'école disponible pour cette classe !</span>
-                {% endfor %}
+            <!-- UN PERSONNAGE -->
+            {% for un_personnage in classe.personnages %}
+                <article class="p-1 hover-zoom-x2">
+                    <a href="{{ path('personnage_profil', {id: un_personnage.id} ) }}">
+                        <img class="img-128" src="{{ asset(un_personnage.icone) }}" alt="Icône d'un personnage" title="Voir profil de {{un_personnage.prenom}}" />
+                    </a>
+                </article>
+            {% else %}
+                <span class="text-muted">Il n'y a pas encore de personnages disponible pour cette classe.</span>
+            {% endfor %}
 
-            </div>
         </div>
-    </section>
-
-    <!-- PERSONNAGES DE CETTE CLASSE -->
-    <section class="col-12 col-lg-6 my-3 text-center">
-        <div class="card card-body h-100">
-            <h2 class="card-title py-3">Personnages <strong>{{ classe.nom }}</strong> :</h2>
-            <div class="card-text ml-lg-3 row text-center justify-content-center align-items-center">
-
-                <!-- UN PERSONNAGE -->
-                {% for un_personnage in classe.personnages %}
-                    <div class="p-1 hover-zoom-x2">
-                        <a href="{{ path('personnage_profil', {id: un_personnage.id} ) }}">
-                            <img class="img-128" src="{{ asset(un_personnage.icone) }}" alt="Icône d'un personnage" title="Voir profil de {{un_personnage.prenom}}" />
-                        </a>
-                    </div>
-                {% else %}
-                    <span class="text-muted">Désolé ! Il n'y a pas encore de personnages disponible pour cette classe !</span>
-                {% endfor %}
-
-            </div>
-        </div>
-    </section>
+    </div>
+</section>
 {% endblock %}

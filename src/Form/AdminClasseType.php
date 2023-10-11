@@ -9,6 +9,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\ColorType;
 
 class AdminClasseType extends AbstractType
 {
@@ -23,7 +24,17 @@ class AdminClasseType extends AbstractType
                     'required' => false
                 ]
             )
+            ->add('image', FileType::class,
+                [
+                    'mapped' => false,
+                    'data_class' => null,
+                    'required' => false
+                ]
+            )
             ->add('description', TextareaType::class)
+            ->add('citation', TextType::class)
+            ->add('couleur', ColorType::class)
+
         ;
     }
 

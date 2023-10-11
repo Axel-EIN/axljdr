@@ -17,7 +17,7 @@
         <a href="{{ path(path, {id: un_element.id} ) }}">
             <img class="img-fluid" src="{{ asset(un_element.image) }}" alt="Image {{entity}}" title="{{btn}} {{nom}}" />
         </a>
-        <h5 class="text-center mt-1"><strong><a href="{{ path(path, {id: un_element.id} ) }}">{{nom}}</a></strong></h5>
+        <h5 class="text-center mt-1"><strong><a class="link-secondary" href="{{ path(path, {id: un_element.id} ) }}">{{nom}}</a></strong></h5>
     {% endif %}
     </div>
 </article>

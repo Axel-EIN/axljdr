@@ -6,13 +6,30 @@
 /* ---- Common Links ---- */
 
 .link-accent {
-    color: var(--accent);
+    color: var(--accent-dark);
 }
 
 .link-accent:hover {
-    color: var(--accent-light);
+    color: var(--accent);
     text-decoration: none;
 }
+
+.link-primary {
+    color: var(--primary) !important;
+}
+
+.link-primary:hover {
+    color: var(--accent) !important;
+}
+
+.link-secondary {
+    color: var(--secondary-dark) !important;
+}
+
+.link-secondary:hover {
+    color: var(--secondary-light) !important;
+}
+
 
 
 /* ---- Nav Bar ---- */

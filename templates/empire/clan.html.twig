@@ -1,46 +1,9 @@
 {% extends 'element.html.twig' %}
 {% block element_content %} 
 
-{# INTRO #}
-<section class="col-12 px-4 m-0 mb-2" >
-
-    <div class="row p-5" style="background-color: {{clan.couleur}}; background-image: linear-gradient(rgba(0,0,0,1), rgba(0,0,0,0.5), rgba(0,0,0,0.1));">
-
-        <div class="col-5 p-0 m-0 d-flex flex-column justify-content-center align-items-center">
-            <img class="img-fluid" src="{{ asset(clan.mon) }}" alt="Mon du Clan" />
-            <span class="quote text-white m-0">« {{clan.citation}} »</span>
-        </div>
-
-        <div class="col-7 d-flex flex-column justify-content-around">
-
-            {% if clan.estMajeur == 1 %}
-                <div>
-                    <div class="text-center">
-                        <strong class="text-accent">Clan Majeur</strong>
-                    </div>
-                </div>
-            {% endif %}
-
-            <div class="text-justify text-white">
-                {{ clan.description|raw|nl2br }}
-            </div>
-
-            {% if clan.chef %}
-                <div class="text-center hover-zoom-x2">
-                    <a href="{{ path('personnage_profil', {id: clan.chef.id} ) }}">
-                        <img class="img-64" src="{{ asset(clan.chef.icone) }}" alt="Icône du personnage" />
-                    </a>
-                    <a class="link-accent" href="{{ path('personnage_profil', {id: clan.chef.id} ) }}">
-                        &nbsp;<strong>{{ clan.chef.nom }} {{ clan.chef.prenom }}</strong> (Champion)
-                    </a>
-                </div>
-            {% endif %}
-
-        </div>
-
-    </div>
-
-</section>
+{# BANNER INTRO #}
+{% set un_element, icone, invert = clan, clan.mon, '' %}
+{{ include('parts/banner-intro.html.twig') }}
 
 {# FAMILLES #}
 <section class="col-8 p-2 m-0 mb-2">

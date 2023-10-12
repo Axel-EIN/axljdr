@@ -2,28 +2,31 @@
 {% block title %}Les Règles de l'Aventure {{ parent() }}{% endblock %}
 
 {% block section_content1 %}
-<div class="w-100 row justify-content-center">
-    {% for une_classe in classes %}
+    <!--- LES CLASSES -->
+    <div class="w-100 row justify-content-center">
+        {% for une_classe in classes %}
 
-        <!--- UNE CLASSE -->
-        <article class="col-xl-2 col-lg-3 col-md-4 col-sm-6 py-3 text-center hover-zoom">
-            <a href="{{ path('regles_classe', {id: une_classe.id} ) }}">
-                <img class="img-160 hover-{{une_classe.nom|lower}}" src="{{ asset(une_classe.icone) }}" alt="Icône de la classe" title="{{une_classe.nom}}" />
-            </a>
-            <br/>
-            <h3 class="text-center my-3">
-                <strong><a class="link-secondary" href="{{ path('regles_classe', {id: une_classe.id} ) }}">{{ une_classe.nom }}</a></strong>
-            </h3>
-        </article>
+            <!--- UNE CLASSE -->
+            <article class="col-xl-2 col-lg-3 col-md-4 col-sm-6 py-3 text-center hover-zoom">
+                <a href="{{ path('regles_classe', {id: une_classe.id} ) }}">
+                    <img class="img-160 hover-{{une_classe.nom|lower}}" src="{{ asset(une_classe.icone) }}" alt="Icône de la classe" title="{{une_classe.nom}}" />
+                </a>
+                <br/>
+                <h3 class="text-center my-3">
+                    <strong><a class="link-secondary" href="{{ path('regles_classe', {id: une_classe.id} ) }}">{{ une_classe.nom }}</a></strong>
+                </h3>
+            </article>
 
-    {% endfor %}
-</div>
+        {% endfor %}
+    </div>
 {% endblock %}
 
 {% block section_content2 %}
+    <!--- LES ECOLES -->
     {% set col_xl, col_lg, col_md, col_sm = 3, 4, 6, 12 %}
     {% for un_element in ecoles %}
 
+        <!--- UNE ECOLE -->
         {{ include('/parts/element-vignette.html.twig', {un_element}) }}
 
     {% else %}

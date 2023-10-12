@@ -1,123 +1,75 @@
 {% extends 'element.html.twig' %}
 {% block element_content %}
-    <div class="col-12 text-center">
-        <img class="img-fluid" src="{{ asset(ecole.image) }}" alt="Image de l'école" />
-    </div>
 
-    <div class="col-12">
-        <div class="card card-body h-100">
-            <div class="row mb-5 ml-2 mt-3">
-                <div class="col text-center">
-                    {# <strong>Clan :</strong><br/> #}
-                    <a href="{{ path('empire_clan', {id: ecole.clan.id}) }}">
-                        <img class="img-128" src="{{ asset(ecole.clan.mon) }}" alt="Mon du Clan" title="{{ecole.clan.nom}}" />
-                    </a>
-                    <br/><strong><a href="{{ path('empire_clan', {id: ecole.clan.id}) }}">{{ecole.clan.nom}}</a></strong>
+    <!-- BANNER INTRO -->
+    <section class="col-12 pb-1">
+
+        <!-- CONTAINER IMAGE -->
+        <div style="position: relative;">
+
+            <!-- CONTAINER ZONE TEXT + BLUR ABSOLUTE -->
+            <div class="col-10 row p-0 m-0 text-white text-shadow mb-3 justify-content-end" style="position: absolute; z-index: 2; bottom: 0; right: 0;" >
+
+                <div class="col-4 text-center" style="z-index: 2;">
+                    <h2>Bonus</h2>
+                    <span class="text-xp text-big">{{ ecole.bonus }}</span>
                 </div>
-                <div class="col text-center">
-                    {# <strong>Classe :</strong><br/> #}
-                    <a href="{{ path('regles_classe', {id: ecole.classe.id}) }}">
-                        <img class="img-128" src="{{ asset(ecole.classe.icone) }}" alt="Icône de la classe de l'Ecole" title="{{ecole.classe.nom}}" />
-                    </a>
-                    <br/><strong><a href="{{ path('regles_classe', {id: ecole.classe.id}) }}">{{ecole.classe.nom}}</a></strong>
+
+                <div class="col-4" style="z-index: 2;">
+                    <h2>Compétences</h2>
+                    <p class="ml-4 mt-2">{{ ecole.competences|raw }}</p>
                 </div>
-                <div class="col text-center">
-                    <strong>Bonus :</strong><br/>
+
+                <div class="col-4" style="z-index: 2;">
+                    <h2>Équipement</h2>
+                    <p class="ml-4 mt-2">{{ ecole.equipements|raw }}</p>
                 </div>
+
+                <!-- CONTAINER BLUR ABSOLUTE -->
+                <div style="width: 80%; height: 80%; position: absolute; z-index: 1; background-color: #000000; filter: blur(2rem); opacity: 0.4;">&nbsp;</div>
+
             </div>
-            {# <p class="card-text"><strong>Description :</strong></p> #}
-            <p class="card-text mx-5 mb-5">{{ ecole.description|raw|nl2br }}</p>
+
+            <!-- IMAGE -->
+            <div class="gradient-after"><img class="img-fluid" src="{{ asset(ecole.image) }}" alt="Image de l'École"  /></div>
+
         </div>
-    </div>
 
-    <section class="col-12 my-3">
-        <div class="card card-body h-100">
-            <h2 class="card-title py-3 mb-2 mx-lg-5">Techniques de l'école <strong>{{ ecole.nom }}</strong> :</h2>
+        <!-- DESCRIPTION -->
+        <div class="card card-body"><p class="text-justify px-5 py-3 m-3 mb-5 text-medium">{{ ecole.description|raw|nl2br }}</p></div>
 
+    </section>
+
+    <!-- TECHNIQUES -->
+    <section class="col-8 pr-1 pt-1">
+        <div class="card card-body pt-4 h-100">
+            <h2 class="card-title"><strong>Techniques</strong></h2>
             <hr>
 
-            {% if ecole.tech1Nom is not empty %}
-                <div class="row my-3">
-                    <div class="col-12 col-lg-2 text-center" style="color: {{ ecole.clan.couleur }}">
-                        <strong>Rang</strong><br/>
-                        <span class="number-skillrank-effect display-1" >{{ '1'|relief|raw }}</span>
+            {% for i in 1..5 %}
+                {% if attribute(ecole, 'tech' ~ i ~ 'Nom') is not empty %}
+                    <div class="card-text row my-3">
+                        <div class="col-12 col-lg-2 text-center" style="color: {{ ecole.clan.couleur }}">
+                            <strong>Rang</strong><br/>
+                            <span class="number-skillrank-effect display-1" >{{ i|relief|raw }}</span>
+                        </div>
+                        <div class="col-12 col-lg-9">
+                            <strong>{{ attribute(ecole, 'tech' ~ i ~ 'Nom') }}</strong>
+                            <p class="text-justify">{{ attribute(ecole, 'tech' ~ i ~ 'Desc')|raw|nl2br }}</p>
+                        </div>
                     </div>
-                    <div class="col-12 col-lg-9">
-                        <p><strong>{{ ecole.tech1Nom }}</strong></p>
-                        <p>{{ ecole.tech1Desc|raw|nl2br }}</p>
-                    </div>
-                </div>
-            {% endif %}
-
-            <hr>
-
-            {% if ecole.tech2Nom is not empty %}
-                <div class="row my-3">
-                    <div class="col-12 col-lg-2 text-center" style="color: {{ ecole.clan.couleur }}">
-                        <strong>Rang</strong><br/>
-                        <span class="number-skillrank-effect display-1">{{ '2'|relief|raw }}</span>
-                    </div>
-                    <div class="col-12 col-lg-9">
-                        <p><strong>{{ ecole.tech2Nom }}</strong></p>
-                        <p>{{ ecole.tech2Desc|raw|nl2br }}</p>
-                    </div>
-                </div>
-            {% endif %}
-
-            <hr>
-
-            {% if ecole.tech3Nom is not empty %}
-                <div class="row my-3">
-                    <div class="col-12 col-lg-2 text-center" style="color: {{ ecole.clan.couleur }}">
-                        <strong>Rang</strong><br/>
-                        <span class="number-skillrank-effect display-1">{{ '3'|relief|raw }}</span>
-                    </div>
-                    <div class="col-12 col-lg-9">
-                        <p><strong>{{ ecole.tech3Nom }}</strong></p>
-                        <p>{{ ecole.tech3Desc|raw|nl2br }}</p>
-                    </div>
-                </div>
-            {% endif %}
-
-            <hr>
-
-            {% if ecole.tech4Nom is not empty %}
-                <div class="row my-3">
-                    <div class="col-12 col-lg-2 text-center" style="color: {{ ecole.clan.couleur }}">
-                        <strong>Rang</strong><br/>
-                        <span class="number-skillrank-effect display-1">{{ '4'|relief|raw }}</span>
-                    </div>
-                    <div class="col-12 col-lg-9">
-                        <p><strong>{{ ecole.tech4Nom }}</strong></p>
-                        <p>{{ ecole.tech4Desc|raw|nl2br }}</p>
-                    </div>
-                </div>
-            {% endif %}
-
-            <hr>
-            
-            {% if ecole.tech5Nom is not empty %}
-                <div class="row my-3">
-                    <div class="col-12 col-lg-2 text-center" style="color: {{ ecole.clan.couleur }}">
-                        <strong>Rang</strong><br/>
-                        <span class="number-skillrank-effect display-1">{{ '5'|relief|raw }}</span>
-                    </div>
-                    <div class="col-12 col-lg-9">
-                        <p><strong>{{ ecole.tech5Nom }}</strong></p>
-                        <p>{{ ecole.tech5Desc|raw|nl2br }}</p>
-                    </div>
-                </div>
-            {% endif %}
+                {% endif %}
+            {% endfor %}
 
             {% if ecole.techSpecialNom is not empty %}
                 <div class="row my-3">
                     <div class="col-12 col-lg-2 col-lg-offset-2 text-center" style="color: {{ ecole.clan.couleur }}">
                         <strong>Technique</strong><br/>
-                        <span class="number-skillrank-effect plus-petit">{{ 'Spéciale'|relief|raw }}</span>
+                        <span class="number-skillrank-effect title-mini">{{ 'Spéciale'|relief|raw }}</span>
                     </div>
                     <div class="col-12 col-lg-9">
-                        <p><strong>{{ ecole.techSpecialNom }}</strong></p>
-                        <p>{{ ecole.techSpecialDesc|raw|nl2br }}</p>
+                        <strong>{{ ecole.techSpecialNom }}</strong>
+                        <p class="text-justify">{{ ecole.techSpecialDesc|raw|nl2br }}</p>
                     </div>
                 </div>
             {% endif %}
@@ -126,23 +78,25 @@
     </section>
 
     <!-- PERSONNAGES DE CETTE ECOLE -->
-    <section class="col-12 my-3">
+    <section class="col-4 pl-1 pt-1">
         <div class="card card-body h-100">
-            <h2 class="card-title py-3 mx-lg-5">Personnages de l'école <strong>{{ ecole.nom }}</strong> :</h2>
-            <div class="card-text ml-lg-5 mb-3 row text-center">
+            <h2 class="card-title"><strong>Personnages</strong></h2>
+            <hr>
 
+            <div class="row justify-content-center">
                 <!-- UN PERSONNAGE -->
                 {% for un_personnage in ecole.personnages %}
-                    <div class="p-1 hover-zoom-x2">
+                    <article class="p-1 hover-zoom-x2">
                         <a href="{{ path('personnage_profil', {id: un_personnage.id} ) }}">
                             <img class="img-128" src="{{ asset(un_personnage.icone) }}" alt="Icône d'un personnage" title="Voir le profil de {{un_personnage.prenom}}" />
                         </a>
-                    </div>
+                    </article>
                 {% else %}
-                    <span class="text-muted">Désolé ! Il n'y a pas encore de personnages disponible pour cette école !</span>
+                    <span class="text-muted">Pas encore de personnages disponible pour cette école.</span>
                 {% endfor %}
-
             </div>
+
         </div>
     </section>
+
 {% endblock %}

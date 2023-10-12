@@ -21,79 +21,79 @@ class AppExtension extends AbstractExtension
         // qui vont réduire la taille des determinants et des mot de liaisons
     
         $search = ' à ';
-        $replace = '<span class=petit> &nbsp;à&nbsp; </span>';
+        $replace = '<span class=title-small> &nbsp;à&nbsp; </span>';
         $titre = str_replace($search,$replace,$titre);
     
         $search = 'Le ';
-        $replace = '<span class=petit>Le&nbsp; </span>';
+        $replace = '<span class=title-small>Le&nbsp; </span>';
         $titre = str_replace($search,$replace,$titre);
     
         $search = ' le ';
-        $replace = '<span class=petit> &nbsp;le&nbsp; </span>';
+        $replace = '<span class=title-small> &nbsp;le&nbsp; </span>';
         $titre = str_replace($search,$replace,$titre);
     
         $search = 'La ';
-        $replace = '<span class=petit>La&nbsp; </span>';
+        $replace = '<span class=title-small>La&nbsp; </span>';
         $titre = str_replace($search,$replace,$titre);
     
         $search = ' la ';
-        $replace = '<span class=petit> &nbsp;la&nbsp; </span>';
+        $replace = '<span class=title-small> &nbsp;la&nbsp; </span>';
         $titre = str_replace($search,$replace,$titre);
     
         $search = 'Les ';
-        $replace = '<span class=petit>Les&nbsp; </span>';
+        $replace = '<span class=title-small>Les&nbsp; </span>';
         $titre = str_replace($search,$replace,$titre);
     
         $search = ' les ';
-        $replace = '<span class=petit> &nbsp;les&nbsp; </span>';
+        $replace = '<span class=title-small> &nbsp;les&nbsp; </span>';
         $titre = str_replace($search,$replace,$titre);
     
         $search = 'Du ';
-        $replace = '<span class=petit>Du&nbsp; </span>';
+        $replace = '<span class=title-small>Du&nbsp; </span>';
         $titre = str_replace($search,$replace,$titre);
     
         $search = ' du ';
-        $replace = '<span class=petit> &nbsp;du&nbsp; </span>';
+        $replace = '<span class=title-small> &nbsp;du&nbsp; </span>';
         $titre = str_replace($search,$replace,$titre);
     
         $search = 'De ';
-        $replace = '<span class=petit>De&nbsp; </span>';
+        $replace = '<span class=title-small>De&nbsp; </span>';
         $titre = str_replace($search,$replace,$titre);
     
         $search = ' de ';
-        $replace = '<span class=petit> &nbsp;de&nbsp; </span>';
+        $replace = '<span class=title-small> &nbsp;de&nbsp; </span>';
         $titre = str_replace($search,$replace,$titre);
     
         $search = 'Des ';
-        $replace = '<span class=petit>Des&nbsp; </span>';
+        $replace = '<span class=title-small>Des&nbsp; </span>';
         $titre = str_replace($search,$replace,$titre);
     
         $search = ' des ';
-        $replace = '<span class=petit> &nbsp;des&nbsp; </span>';
+        $replace = '<span class=title-small> &nbsp;des&nbsp; </span>';
         $titre = str_replace($search,$replace,$titre);
     
         $search = 'Dans ';
-        $replace = '<span class=petit>Dans&nbsp; </span>';
+        $replace = '<span class=title-small>Dans&nbsp; </span>';
         $titre = str_replace($search,$replace,$titre);
     
         $search = ' dans ';
-        $replace = '<span class=petit> &nbsp;dans&nbsp; </span>';
+        $replace = '<span class=title-small> &nbsp;dans&nbsp; </span>';
         $titre = str_replace($search,$replace,$titre);
     
         $search = 'l\'';
-        $replace = '<span class=petit>l\'&nbsp; </span>';
+        $replace = '<span class=title-small>l\'&nbsp; </span>';
         $titre = str_replace($search,$replace,$titre);
 
         $search = 'L\'';
-        $replace = '<span class=petit>L\'</span>';
+        $replace = '<span class=title-small>L\'</span>';
         $titre = str_replace($search,$replace,$titre);
 
         $search = ' et ';
-        $replace = ' <span class=petit>et</span> ';
+        $replace = ' <span class=title-small>et</span> ';
         $titre = str_replace($search,$replace,$titre);
 
         $search = ' son ';
-        $replace = ' <span class=petit>son</span> ';
+        $replace = ' <span class=title-small>son</span> ';
         $titre = str_replace($search,$replace,$titre);
     
         return $titre;

@@ -22,7 +22,7 @@ class AdminEcoleController extends AbstractController
      */
     public function afficherAdminEcoles(EcoleRepository $ecoleRepository): Response {
 
-        $ecoles = $ecoleRepository->findBy(array(), array('clan' => 'ASC'));
+        $ecoles = $ecoleRepository->findBy(array(), array('id' => 'DESC'));
         return $this->render('admin_ecole/index.html.twig', [
             'ecoles' => $ecoles
         ]);
@@ -70,8 +70,8 @@ class AdminEcoleController extends AbstractController
             $this->addFlash('success', 'L\'école a bien été ajoutée.');
 
             // REDIRECTION
-            if (!empty($request->query->get('redirect')) && $request->query->get('redirect') == 'regles')
-                return $this->redirectToRoute('regles');
+            if (!empty($request->query->get('redirect')) && $request->query->get('redirect') == 'ecole')
+                return $this->redirectToRoute('regles_ecole', ['id' => $ecole->getId()]);
             return $this->redirectToRoute('admin_ecole');
             
         } else {

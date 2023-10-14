@@ -81,7 +81,7 @@ class Baliseur
             if ($lieu_trouve != null) {
                 $tableau_remplacement[] =
                     '<a class="hover-zoom-x2 location-icon bg-lightest pr-1 pt-0 pb-0 pl-0" href="../../empire/lieu/' . $lieu_trouve->getId() . '">'
-                                . '<img class="location-icon-small" src="../../assets/img/icons/icon-location.png'
+                                . '<img class="location-icon-small" src="../../' . $lieu_trouve->getIcone()
                                 . '" alt="Icône Lieu" title="Voir ' . $lieu_trouve->getNom() .'" /> ' . $lieu_trouve->getNom() . '</a>';
             } else
                 $tableau_remplacement[] = $un_match;

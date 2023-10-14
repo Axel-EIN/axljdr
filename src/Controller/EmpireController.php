@@ -81,13 +81,16 @@ class EmpireController extends AbstractController
     /**
      * @Route("/empire/archive/{id}", name="empire_archive")
      */
-    public function afficherArchive(Archive $archive): Response
+    public function afficherArchive(Archive $archive, ArchiveRepository $archiveRepository): Response
     {
+        $archives = $archiveRepository->findall();
+
         return $this->render('empire/archive.html.twig', [
             'un_element' => $archive,
             'nom' => $archive->getTitre(),
             'entity' => 'archive',
             'category' => 'empire',
+            'archives' => $archives
         ]);
     }
 

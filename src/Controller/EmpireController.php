@@ -94,13 +94,16 @@ class EmpireController extends AbstractController
     /**
      * @Route("/empire/lieu/{id}", name="empire_lieu")
      */
-    public function afficherLieu(Lieu $lieu): Response
+    public function afficherLieu(Lieu $lieu, LieuRepository $lieuRepository): Response
     {
+        $lieux = $lieuRepository->findall();
+
         return $this->render('empire/lieu.html.twig', [
             'un_element' => $lieu,
             'nom' => $lieu->getNom(),
             'entity' => 'lieu',
             'category' => 'empire',
+            'lieux' => $lieux
         ]);
     }
 }

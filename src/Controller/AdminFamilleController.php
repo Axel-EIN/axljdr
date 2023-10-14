@@ -50,7 +50,7 @@ class AdminFamilleController extends AbstractController
 
             // REDIRECTION
             if (!empty($request->query->get('redirect')) && $request->query->get('redirect') == 'famille')
-                return $this->redirectToRoute('empire_famille', ['id' => $famille->getId()]);
+                return $this->redirectToRoute('empire_clan', ['id' => $famille->getClan()->getId()]);
             return $this->redirectToRoute('admin_famille');
         } else {
             return $this->render('admin_famille/create.html.twig', [

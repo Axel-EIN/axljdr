@@ -84,6 +84,9 @@ class AdminSceneController extends AbstractController
 
             // BALISAGE : capture les mots entre [], vérifie si un prénom personnage correspondant existe, remplace par un lien personnage HTML
             $scene->setTexte($baliseur->baliserPersonnages($scene->getTexte()));
+
+            // BALISAGE des LIEUX : capture les mots entre {}, vérifie si un nom de lieu correspondant existe, remplace par un lien vers la fiche du lieu en HTML
+            $scene->setTexte($baliseur->baliserLieux($scene->getTexte()));
             
             // CREATION ENTITE
             $em->persist($scene);

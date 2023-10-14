@@ -2,7 +2,7 @@
 {% block title %}{{entity|capitalize}} {{nom}} {{parent()}} {% endblock %}
 {% block body %}
     <main class="container-fluid bg-lightest py-3">
-        <div class="container">
+        <div class="container relative">
 
             <!-- FIL D'ARIANE -->
             <nav>
@@ -13,6 +13,9 @@
                     > <strong>{{ nom }}</strong>
                 </span>
             </nav>   
+
+            <!-- MESSAGE FLASHES -->
+            {{ include('parts/messages-flashes.html.twig') }}
 
             <!-- MAIN SECTION -->
             <section class="mt-5 mb-5"> 

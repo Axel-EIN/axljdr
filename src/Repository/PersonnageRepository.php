@@ -56,6 +56,15 @@ class PersonnageRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+    public function findAllExceptOne($id)
+    {
+        return $this->createQueryBuilder('p')
+            ->andWhere('p.id != :value_id')
+            ->setParameter('value_id', $id)
+            ->getQuery()
+            ->getResult();
+
+    }
 
     // SQL COUNT CHARACTERS
 

@@ -49,7 +49,10 @@ class PersonnageController extends AbstractController
     /**
      * @Route("/personnages/profil/{id}", name="personnage_profil")
      */
-    public function afficherPersonnageProfil(Personnage $personnage): Response {
+    public function afficherPersonnageProfil(Personnage $personnage, PersonnageRepository $personnageRepository): Response {
+
+        $personnages = $personnageRepository->findAllExceptOne($personnage->getId());
+        shuffle($personnages);
 
         $xp_total = 0;
         $participations = $personnage->getParticipations();
@@ -76,7 +79,8 @@ class PersonnageController extends AbstractController
             'category' => 'personnages',
             'un_element' => $personnage,
             'xp' => $xp_total,
-            'rang' => $rang
+            'rang' => $rang,
+            'personnages' => $personnages
         ]);
     }
 }

@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Ecole;
 use App\Service\FileHandler;
 use App\Form\AdminEcoleType;
+use App\Repository\ClanRepository;
 use App\Repository\EcoleRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -32,9 +33,21 @@ class AdminEcoleController extends AbstractController
      * @Route("/admin/ecole/create", name="admin_ecole_create")
      * @IsGranted("ROLE_MJ")
      */
-    public function ajouterEcole(Request $request, EntityManagerInterface $em, FileHandler $fileHandler) {
+    public function ajouterEcole(Request $request, EntityManagerInterface $em, ClanRepository $clanRepository, FileHandler $fileHandler) {
 
         $ecole = new Ecole;
+
+        // PRE-REMPLISSAGE DU CHAMP CLAN PAR LE LIEN URL
+        // -------------------------------------
+        if ( !empty($request->query->get('clanID')) && $request->query->get('clanID') > 0 )
+        {
+            $clan = $clanRepository->find($request->query->get('clanID'));
+            if ($clan !== null)
+                $ecole->setClan($clan);
+        }
+
+        // FORM VIEW
+        //----------
         $form = $this->createForm(AdminEcoleType::class, $ecole);
         $form->handleRequest($request);
 

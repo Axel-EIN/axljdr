@@ -8,9 +8,11 @@
     {# FAMILLES #}
     <section class="col-8 pr-1 py-1">
         <div class="card card-body pt-4 h-100 relative">
+
             <!-- BTN MJ ADD -->
-            {% set redirect, entity, position, label_one = 'clan', 'famille', 'right-corner-16', 'une famille' %}
+            {% set redirect, entity, position, label_one, options = 'clan', 'famille', 'right-corner-16', 'une famille', 'clanID=' ~ clan.id %}
             {{ include('/parts/btn-box-add-element.html.twig', {entity}) }}
+
             <h2 class="card-title"><strong>Familles</strong></h2>
             <div class="card-text">
 
@@ -58,6 +60,11 @@
     {# ECOLES DU CLAN #}
     <section class="col-4 pl-1 py-1">
         <div class="card card-body pt-4 h-100">
+
+            <!-- BTN MJ ADD -->
+            {% set redirect, entity, position, label_one, options = 'clan', 'ecole', 'right-corner-16', 'une école', 'clanID=' ~ clan.id %}
+            {{ include('/parts/btn-box-add-element.html.twig', {entity}) }}
+
             <h2 class="card-title"><strong>Écoles</strong></h2>
             <hr>
             {% for une_ecole in clan.ecoles %}
@@ -77,6 +84,7 @@
     <section class="col-8 pr-1 py-1">
         <div class="card card-body pt-4 h-100">
             <h2 class="card-title"><strong>Territoires</strong></h2>
+            <hr>
                 {% if clan.territoireCarte %}
                     <a href="{{asset(clan.territoireCarte)}}" class="hover-zoom" >
                         <img class="img-fluid" src="{{asset(clan.territoireCarte)}}" alt="Carte du Territoire du clan" />
@@ -93,7 +101,8 @@
     {# LIEUX  #}
     <section class="col-4 pl-1 py-1">
         <div class="card card-body pt-4 h-100">
-            <h2 class="card-title"><strong>Lieux</strong></h2> 
+            <h2 class="card-title"><strong>Lieux</strong></h2>
+            <hr>
             {% for un_lieu in clan.lieux %}
                 <article class="text-center mb-4 hover-zoom relative">
                     <a href="{{path('empire_lieu', {id: un_lieu.id} )}}"><img class="img-fluid" src="{{asset(un_lieu.image)}}" /></a>
@@ -116,6 +125,7 @@
     <section class="col-8 pr-1 py-1 mb-5">
         <div class="card card-body pt-4 h-100">
             <h2 class="card-title"><strong>Autres</strong></h2>
+            <hr>
             <p class="card-text text-justify px-5 py-3">
                 {{ clan.longDescription|raw|nl2br }}
             </p>
@@ -126,6 +136,7 @@
     <aside class="col-4 pl-1 py-1 mb-5">
         <div class="card card-body pt-4 h-100">
             <h2 class="card-title"><strong>Personnages</strong></h2>
+            <hr>
             <div class="card-text row ml-3">
                 {% for un_personnage in clan.personnages %}
                     <article class="p-1">

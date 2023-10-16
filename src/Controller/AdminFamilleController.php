@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Famille;
 use App\Service\FileHandler;
 use App\Form\AdminFamilleType;
+use App\Repository\ClanRepository;
 use App\Repository\FamilleRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -29,9 +30,19 @@ class AdminFamilleController extends AbstractController
      * @Route("/admin/famille/create", name="admin_famille_create")
      * @IsGranted("ROLE_MJ")
      */
-    public function ajouterFamille(Request $request, EntityManagerInterface $em, FileHandler $fileHandler) {
+    public function ajouterFamille(Request $request, EntityManagerInterface $em, ClanRepository $clanRepository, FileHandler $fileHandler) {
 
         $famille = new Famille;
+
+        // PRE-REMPLISSAGE DU CHAMP CLAN PAR LE LIEN URL
+        // -------------------------------------
+        if ( !empty($request->query->get('clanID')) && $request->query->get('clanID') > 0 )
+        {
+            $clan = $clanRepository->find($request->query->get('clanID'));
+            if ($clan !== null)
+                $famille->setClan($clan);
+        }
+
         $form = $this->createForm(AdminFamilleType::class, $famille);
         $form->handleRequest($request);
 

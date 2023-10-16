@@ -1,7 +1,11 @@
 <!-- MJ - BTN ICON+TEXT - Add -->
+
+{% set path = 'admin_' ~ entity|lower ~ '_create' %}
+{% set url = '?redirect=' ~ entity|lower ~ '&' ~ options|default('') %}
+
 {% if app.user and is_granted("ROLE_MJ") %}
     <div class="absolute {{position|default('right-corner-snap')}}">
-        <a href="{{ path('admin_' ~ entity|lower ~ '_create') }}?redirect={{entity|lower}}" class="btn-primary-style btn-medium" >
+        <a href="{{ path(path) }}{{url}}" class="btn-primary-style btn-medium" >
             <i class="fas fa-plus-square fa-fade" alt="Icône Ajouter"></i>&nbsp;&nbsp;Ajouter {{label_one}}
         </a>
     </div>

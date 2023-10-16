@@ -38,10 +38,10 @@
             <h2 class="card-title"><strong>Autres Archives</strong></h2>
             <hr>
 
-            <row class="row px-3">
+            <row class="row p-0 m-0 pt-2">
                 <!-- UN LIEU -->
                 {% for autre_archive in archives|filter(autre_archive => autre_archive.id != un_element.id) %}
-                    <article class="col-2 text-center mb-4 hover-zoom-x2 relative">
+                    <article class="col-2 m-0 p-2 text-center hover-zoom-x2 relative">
                         {% if autre_archive.icone is defined and autre_archive.icone is not empty %}
                             <img class="icon-lieu-top img-64" src="{{ asset(autre_archive.icone) }}" alt="une icône" />
                         {% endif %}

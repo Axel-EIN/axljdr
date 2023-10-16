@@ -99,10 +99,10 @@
             <h2 class="card-title"><strong>Autres Lieux</strong></h2>
             <hr>
 
-            <row class="row px-3">
+            <row class="row p-0 m-0 pt-3">
                 <!-- UN LIEU -->
                 {% for autre_lieu in lieux|filter(autre_lieu => autre_lieu.id != un_element.id) %}
-                    <article class="col-2 text-center mb-4 hover-zoom-x2 relative">
+                    <article class="col-2 m-0 p-2 text-center hover-zoom-x2 relative">
                         {% if autre_lieu.icone is defined and autre_lieu.icone is not empty %}
                             <img class="icon-lieu-top img-64" src="{{ asset(autre_lieu.icone) }}" alt="une icône" />
                         {% endif %}

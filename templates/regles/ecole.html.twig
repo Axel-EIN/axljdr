@@ -7,20 +7,25 @@
         <!-- CONTAINER IMAGE -->
         <div style="position: relative;">
 
+            <!-- SURIMPRESSION DROITE : CONTROLE PAR  -->
+            <a class="hover-zoom-x2 link-white" style="position: absolute; z-index: 5; right: 2rem; top: 3rem;" href="{{ path('empire_clan', {id:un_element.clan.id} ) }}" >
+                <img class="ml-2 img-96" src="{{ asset(un_element.clan.mon) }}" alt="Mon d'une faction" title="{{un_element.clan.nom}}" />
+            </a>
+
             <!-- CONTAINER ZONE TEXT + BLUR ABSOLUTE -->
             <div class="col-10 row p-0 m-0 text-white text-shadow mb-3 justify-content-end" style="position: absolute; z-index: 2; bottom: 0; right: 0;" >
 
-                <div class="col-4 text-center" style="z-index: 2;">
+                <div class="col-4 m-0 p-0 text-center" style="z-index: 2;">
                     <h2>Bonus</h2>
                     <span class="text-xp text-big">{{ ecole.bonus }}</span>
                 </div>
 
-                <div class="col-4" style="z-index: 2;">
+                <div class="col-4 m-0 p-0" style="z-index: 2;">
                     <h2>Compétences</h2>
                     <p class="ml-4 mt-2">{{ ecole.competences|raw }}</p>
                 </div>
 
-                <div class="col-4" style="z-index: 2;">
+                <div class="col-4 m-0 p-0" style="z-index: 2;">
                     <h2>Équipement</h2>
                     <p class="ml-4 mt-2">{{ ecole.equipements|raw }}</p>
                 </div>
@@ -127,17 +132,17 @@
     <!-- AUTRES ECOLES DE CE CLAN -->
     <aside class="col-12 py-1">
         <div class="card card-body h-100">
-            <h2 class="card-title"><strong>Autres Écoles {{ecole.clan.nom}}</strong></h2>
+            <h2 class="card-title"><strong>Autres écoles</strong> du même clan</h2>
             <hr>
 
-            <div class="row px-3">
+            <div class="row p-0 m-0 pt-2">
                 <!-- UNE ECOLE -->
                 {% for une_ecole in ecole.clan.ecoles|filter(autre_ecole => autre_ecole.id != ecole.id) %}
-                    <article class="col-2 text-center mb-4 hover-zoom-x2">
-                        <a href="{{ path('regles_ecole', {id: une_ecole.id} ) }}" ><strong>{{ une_ecole.nom }}</strong></a>
+                    <article class="col-2 col-2 m-0 p-2 text-center hover-zoom-x2">
                         <a href="{{ path('regles_ecole', {id: une_ecole.id} ) }}">
                             <img class="img-fluid" src="{{ asset(une_ecole.image) }}" alt="Image d'une école" />
                         </a>
+                        <a href="{{ path('regles_ecole', {id: une_ecole.id} ) }}" ><strong>{{ une_ecole.nom }}</strong></a>
                     </article>
                 {% else %}
                     <span class="text-muted"><i>Il n'y a pas encore d'autres écoles dans ce clan.</i></span>

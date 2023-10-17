@@ -1,4 +1,10 @@
 {% extends 'element.html.twig' %}
+
+{% block stylesheets %}
+    {{parent()}}
+    <link rel="stylesheet" href="{{asset('css/classe.css')}}" />
+{% endblock %}
+
 {% block element_content %}
 
     <!-- BANNER INTRO -->

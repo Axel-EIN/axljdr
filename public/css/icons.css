@@ -2,14 +2,12 @@
 /* ------ FLAT VECTOR ICONS  ------ */
 /* -------------------------------- */
 
-.arrow-left,
-.arrow-right {
+.arrow-left, .arrow-right {
     font-size: 1.25rem;
     color: var(--primary);
 }
 
-.arrow-left:hover,
-.arrow-right:hover {
+.arrow-left:hover, .arrow-right:hover {
         color: var(--primary-light);
         animation-duration: 0s;
 }
@@ -30,9 +28,7 @@
     text-decoration: none;
 }
 
-.btn-icon-small,
-.btn-icon-medium,
-.btn-icon-text {
+.btn-icon-small, .btn-icon-medium, .btn-icon-text {
     display: inline-block;
     text-align: center;
 }
@@ -55,9 +51,7 @@
 
 }
 
-.btn-icon-small:hover,
-.btn-icon-medium:hover,
-.btn-icon-text:hover {
+.btn-icon-small:hover, .btn-icon-medium:hover, .btn-icon-text:hover {
     color: var(--accent) !important;
     text-decoration: none;
 }

@@ -1,0 +1,164 @@
+/* ------------------------------ */
+/* --------- ANIMATIONS --------- */
+/* ------------------------------ */
+
+.hover-stop:hover {
+    animation-duration: 0s;
+}
+
+.fa-animation-delay {
+    --fa-animation-delay: 0.67s;
+}
+
+/* ______________________________ */
+/* SHINE */
+
+.hover-shine:hover {
+    filter: brightness(1.3);
+    transition: 0.5s;
+}
+
+.animation-shine {
+    overflow: hidden;
+    mask-image: url('http://localhost:8000/assets/img/ui/mon-mask.png');
+    mask-mode: luminance;
+    mask-size: 100%;
+    animation: animation-bright 12s ease 1.5s infinite;
+}
+
+@keyframes animation-bright {
+    from {filter: brightness(1);}
+    1.2% {filter: brightness(1);}
+    2% {filter: brightness(1.3);}
+    2.8% {filter: brightness(1);}
+}
+
+.animation-shine:before {
+    position: absolute;
+    z-index: 2;
+    content: '';
+    top: 0;
+    left: -300px;
+    width: 30%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.5);
+    transform: skewX(-30deg);
+    animation: animation-shine 12s ease 1.5s infinite;
+    opacity: 1;
+}
+  
+@keyframes animation-shine {
+    from {left: -300px; opacity: 1;}
+    4% {left: 300px; opacity: 1;}
+    4.4% {opacity: 0;}
+    100% {opacity: 0;}
+}
+
+
+/* ______________________________ */
+/* ZOOM */
+
+.hover-zoom, .hover-zoom:hover {
+    transition: 0.5s;
+}
+
+.hover-zoom:hover {
+    transform: scale(1.05);
+}
+
+.hover-zoom-x2, .hover-zoom-x2:hover {
+    transition: 0.33s;
+}
+
+.hover-zoom-x2:hover {
+    transform: scale(1.125);
+    transition: 0.33s;
+}
+
+
+/* ______________________________ */
+/* OUTLINE */
+
+.hover-outline, .hover-outline:hover {
+    transition: 0.1s;
+}
+
+.hover-outline:hover {
+    outline: 4px solid var(--blue);
+}
+
+
+/* ______________________________ */
+/* OPACITY */
+
+.hover-opaque:hover {
+    filter: opacity(1);
+    transition: 0.5s;
+}
+
+.hover-visible:hover {
+    opacity: 1;
+}
+
+
+
+/* ______________________________ */
+/* BRIGHTNESS */
+
+.hover-bright:hover {
+    filter: brightness(1);
+    transition: 0.5s;
+}
+
+
+/* ______________________________ */
+/* COLORISATION */
+
+.hover-bushi:hover, .hover-shugenja:hover, .hover-moine:hover, .hover-courtisan:hover, .hover-artisan:hover {
+    transition: 0.25s;
+}
+
+.hover-bushi:hover {
+    filter:
+        invert(40%)
+        sepia(100%)
+        saturate(1000%)
+        hue-rotate(180deg)
+        brightness(0.9);
+}
+
+.hover-shugenja:hover {
+    filter:
+        invert(40%)
+        sepia(100%)
+        saturate(1000%)
+        hue-rotate(-45deg)
+        brightness(0.9);
+}
+
+.hover-moine:hover {
+    filter:
+        invert(40%)
+        sepia(100%)
+        saturate(1000%)
+        hue-rotate(0deg)
+        brightness(0.9);
+}
+
+.hover-courtisan:hover {
+    filter:
+        invert(40%)
+        sepia(100%)
+        saturate(1000%)
+        hue-rotate(-120deg)
+        brightness(0.9);
+}
+
+.hover-artisan:hover {
+    filter:
+        invert(40%)
+        sepia(100%)
+        saturate(1000%)
+        hue-rotate(60deg)
+        brightness(0.9);
+}

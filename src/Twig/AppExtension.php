@@ -11,6 +11,7 @@ class AppExtension extends AbstractExtension
     {
         return [
             new TwigFilter('relief', [$this, 'titreRelief']),
+            new TwigFilter('lister', [$this, 'listerRetourChariot']),
             new TwigFilter('sortByField', [$this, 'sortByField']),
         ];
     }
@@ -97,6 +98,24 @@ class AppExtension extends AbstractExtension
         $titre = str_replace($search,$replace,$titre);
     
         return $titre;
+    }
+
+    public function listerRetourChariot($text)
+    {
+        // Cette fonction prend un texte et pour chaque retour chariot il va l'entourer de balise <li> pour créer une liste HTML
+    
+        $string = "line 1\nline 2\nline3";
+        
+        $lignes = explode("\n", $text);
+        
+        $listedText = "<ul>";
+        foreach($lignes as $ligne)
+        {
+          $listedText .= "<li>" . $ligne . "</li>";
+        }
+        $listedText .= "</ul>";
+    
+        return $listedText;
     }
 
     public function sortByField($content, $sort_by, $direction = 'asc'){

@@ -1,39 +1,45 @@
 {% extends 'element.html.twig' %}
+
+{% block stylesheets %}
+        {{parent()}}
+        <link rel="stylesheet" href="{{asset('css/ecole.css')}}" />
+{% endblock %}
+
 {% block element_content %}
 
     <!-- BANNER INTRO -->
     <section class="col-12 py-1">
 
         <!-- CONTAINER IMAGE -->
-        <div style="position: relative;">
+        <div class="relative">
 
             <!-- SURIMPRESSION DROITE : CONTROLE PAR  -->
-            <a class="hover-zoom-x2 link-white" style="position: absolute; z-index: 5; right: 2rem; top: 3rem;" href="{{ path('empire_clan', {id:un_element.clan.id} ) }}" >
-                <img class="ml-2 img-96" src="{{ asset(un_element.clan.mon) }}" alt="Mon d'une faction" title="{{un_element.clan.nom}}" />
+            <a id="banner-icon-clan" class="hover-zoom-x2" href="{{ path('empire_clan', {id:un_element.clan.id} ) }}" >
+                <img class="img-96 filter-shadow" src="{{ asset(un_element.clan.mon) }}" alt="Mon d'une faction" title="Voir la faction {{un_element.clan.nom}}" />
             </a>
 
             <!-- CONTAINER ZONE TEXT + BLUR ABSOLUTE -->
-            <div class="col-10 row p-0 m-0 text-white text-shadow mb-3 justify-content-end" style="position: absolute; z-index: 2; bottom: 0; right: 0;" >
+            <text id="text-zone" class="col-10 row p-0 m-0 mb-3 justify-content-end" >
 
-                <div class="col-4 m-0 p-0 text-center" style="z-index: 2;">
+                <!-- CONTAINER BLUR ABSOLUTE -->
+                <blur id="blur-zone"></blur>
+
+                <div class="col-4 m-0 p-0 text-center text-shadow on-top">
                     <h2>Bonus</h2>
                     <span class="text-xp text-big">{{ ecole.bonus }}</span>
                 </div>
 
-                <div class="col-4 m-0 p-0" style="z-index: 2;">
+                <div class="col-4 m-0 p-0 on-top">
                     <h2>Compétences</h2>
-                    <p class="ml-4 mt-2">{{ ecole.competences|raw }}</p>
+                    <p class="ml-4 mt-2">{{ ecole.competences|lister|raw }}</p>
                 </div>
 
-                <div class="col-4 m-0 p-0" style="z-index: 2;">
+                <div class="col-4 m-0 p-0 on-top">
                     <h2>Équipement</h2>
-                    <p class="ml-4 mt-2">{{ ecole.equipements|raw }}</p>
+                    <p class="ml-4 mt-2">{{ ecole.equipements|lister|raw }}</p>
                 </div>
 
-                <!-- CONTAINER BLUR ABSOLUTE -->
-                <div style="width: 80%; height: 80%; position: absolute; z-index: 1; background-color: #000000; filter: blur(2rem); opacity: 0.4;">&nbsp;</div>
-
-            </div>
+            </text>
 
             <!-- IMAGE -->
             <div class="gradient-after"><img class="img-fluid" src="{{ asset(ecole.image) }}" alt="Image de l'École"  /></div>
@@ -99,7 +105,7 @@
 
                     <div class="mt-3">
                         <h4>Sorts de départ</h4>
-                        {{ecole.sorts|raw}}
+                        {{ecole.sorts|lister|raw}}
                     </div>
                 </div>
 

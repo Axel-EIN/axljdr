@@ -22,8 +22,8 @@ class AdminEcoleType extends AbstractType
         $builder
             ->add('nom', TextType::class, [ 'constraints' => [ new Length( [ 'max' => 60 ] ) ] ] )
             ->add('image', FileType::class, [ 'required' => false, 'mapped' => false, 'data_class' => null ])
+            ->add('description', TextareaType::class, [ 'required' => false, 'constraints' => [ new Length( [ 'max' => 2000 ] ) ] ])
             ->add('bonus', TextType::class, [ 'required' => false , 'constraints' => [ new Length( [ 'max' => 20 ] ) ] ])
-            ->add('description', TextareaType::class, [ 'required' => false, 'constraints' => [ new Length( [ 'max' => 600 ] ) ] ])
             ->add('competences', TextareaType::class, [ 'required' => false, 'constraints' => [ new Length( [ 'max' => 600 ] ) ] ])
             ->add('equipements', TextareaType::class, [ 'required' => false, 'constraints' => [ new Length( [ 'max' => 600 ] ) ] ])
             ->add('tech1Nom', TextType::class, ['required' => false, 'constraints' => [ new Length( [ 'max' => 100 ] ) ] ])

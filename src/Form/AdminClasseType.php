@@ -11,12 +11,14 @@ use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\ColorType;
 
+use Symfony\Component\Validator\Constraints\Length;
+
 class AdminClasseType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('nom', TextType::class)
+            ->add('nom', TextType::class, [ 'constraints' => [ new Length( [ 'max' => 30 ] ) ] ] )
             ->add('icone', FileType::class,
                 [
                     'mapped' => false,
@@ -31,8 +33,8 @@ class AdminClasseType extends AbstractType
                     'required' => false
                 ]
             )
-            ->add('description', TextareaType::class)
-            ->add('citation', TextType::class)
+            ->add('description', TextareaType::class, [ 'required' => false, 'constraints' => [ new Length( [ 'max' => 600 ] ) ] ] )
+            ->add('citation', TextType::class, [ 'required' => false, 'constraints' => [ new Length( [ 'max' => 100 ] ) ] ] )
             ->add('couleur', ColorType::class)
 
         ;

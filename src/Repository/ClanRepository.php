@@ -43,6 +43,15 @@ class ClanRepository extends ServiceEntityRepository
         return $this->findBy(array("estMajeur" => "0"), array('nom' => 'ASC'));
     }
 
+    public function findAllExceptOne($id)
+    {
+        return $this->createQueryBuilder('c')
+            ->andWhere('c.id != :value_id')
+            ->setParameter('value_id', $id)
+            ->getQuery()
+            ->getResult();
+    }
+
     public function countClans() {
         return $this->createQueryBuilder('c')
             ->select('count(c.id)')

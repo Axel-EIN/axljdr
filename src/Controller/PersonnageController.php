@@ -51,8 +51,8 @@ class PersonnageController extends AbstractController
      */
     public function afficherPersonnageProfil(Personnage $personnage, PersonnageRepository $personnageRepository): Response {
 
-        $personnages = $personnageRepository->findAllExceptOne($personnage->getId());
-        shuffle($personnages);
+        $autresPersonnages = $personnageRepository->findAllExceptOne($personnage->getId());
+        shuffle($autresPersonnages);
 
         $xp_total = 0;
         $participations = $personnage->getParticipations();
@@ -80,7 +80,7 @@ class PersonnageController extends AbstractController
             'un_element' => $personnage,
             'xp' => $xp_total,
             'rang' => $rang,
-            'personnages' => $personnages
+            'autresPersonnages' => $autresPersonnages
         ]);
     }
 }

@@ -18,7 +18,7 @@ class ReglesController extends AbstractController
     public function afficherRegles(EcoleRepository $ecoleRepository, ClasseRepository $classeRepository): Response
     {
         $classes = $classeRepository->findAll();
-        $ecoles = $ecoleRepository->findBy(array(),array('clan' => 'ASC'));
+        $ecoles = $ecoleRepository->findAllSorted();
 
         $sections = [];
         $sections[0]['name'] = "Classes";
@@ -52,14 +52,22 @@ class ReglesController extends AbstractController
     /**
      * @Route("/regles/classe/{id}", name="regles_classe")
      */
-    public function afficherClasse(Classe $classe): Response
+    public function afficherClasse(Classe $classe, EcoleRepository $ecoleRepository, ClasseRepository $classeRepository): Response
     {
+        $autresClasses = $classeRepository->findAllExceptOne($classe->getId());
+        $personnagesClasse = $classe->getPersonnages()->toArray();
+        $ecolesClasse = $ecoleRepository->findByClasseSorted($classe->getId());
+        shuffle($personnagesClasse);
+
         return $this->render('regles/classe.html.twig', [
             'classe' => $classe,
             'nom' => $classe->getNom(),
             'entity' => 'classe',
             'category' => 'regles',
             'un_element' => $classe,
+            'personnagesClasse' => $personnagesClasse,
+            'ecolesClasse' => $ecolesClasse,
+            'autresClasses' => $autresClasses
         ]);
     }
 

@@ -14,11 +14,11 @@
     <!-- ECOLES -->
     <section class="col-8 pr-1 py-1">
         <div class="card card-body pt-4 h-100">
-            <h2 class="card-title"><strong>Écoles</strong></h2>
+            <h2 class="card-title"><strong>Écoles</strong> de {{un_element.nom}}</h2>
             <hr>
             <div class="card-text row">
                 <!-- UNE ECOLE -->
-                {% for une_ecole in classe.ecoles %}
+                {% for une_ecole in ecolesClasse %}
                     <article class="col-4 p-3 hover-zoom-x2 text-center">
                         <a href="{{ path('regles_ecole', {id: une_ecole.id} ) }}">
                             <img class="img-fluid" src="{{ asset(une_ecole.image) }}" alt="Image d'une école" title="{{une_ecole.nom}}" />
@@ -40,7 +40,7 @@
             <div class="card-text row justify-content-center">
 
                 <!-- UN PERSONNAGE -->
-                {% for un_personnage in classe.personnages %}
+                {% for un_personnage in personnagesClasse|slice(0,16) %}
                     <article class="p-1 hover-zoom-x2">
                         <a href="{{ path('personnage_profil', {id: un_personnage.id} ) }}">
                             <img class="img-128" src="{{ asset(un_personnage.icone) }}" alt="Icône d'un personnage" title="Voir profil de {{un_personnage.prenom}}" />
@@ -48,6 +48,28 @@
                     </article>
                 {% else %}
                     <span class="text-muted">Il n'y a pas encore de personnages disponible pour cette classe.</span>
+                {% endfor %}
+
+            </div>
+        </div>
+    </aside>
+
+    <!-- AUTRES CLASSES -->
+    <aside class="col-12 py-1">
+        <div class="card card-body pt-4">
+            <h2 class="card-title"><strong>Autres Classes</strong></h2>
+            <hr>
+            <div class="card-text row justify-content-center">
+
+                <!-- UNE CLASSE -->
+                {% for une_classe in autresClasses %}
+                    <article class="p-1 px-3 hover-zoom-x2">
+                        <a href="{{ path('regles_classe', {id: une_classe.id} ) }}">
+                            <img class="img-128" src="{{ asset(une_classe.icone) }}" alt="Icône d'une Classe" title="Voir la classe{{une_classe.nom}}" />
+                        </a>
+                    </article>
+                {% else %}
+                    <span class="text-muted">Il n'y a pas encore d'autres classes.</span>
                 {% endfor %}
 
             </div>

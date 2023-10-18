@@ -15,17 +15,19 @@ use Symfony\Component\Form\Extension\Core\Type\ColorType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 
+use Symfony\Component\Validator\Constraints\Length;
+
 class AdminClanType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('nom', TextType::class)
+            ->add('nom', TextType::class, [ 'constraints' => [ new Length( [ 'max' => 30 ] ) ] ] )
             ->add('estMajeur', CheckboxType::class, ['required' => false])
-            ->add('citation', TextType::class)
-            ->add('description', TextareaType::class)
-            ->add('longDescription', TextareaType::class)
-            ->add('couleur', ColorType::class)
+            ->add('citation', TextType::class, [ 'required' => false, 'constraints' => [ new Length( [ 'max' => 100 ] ) ] ] )
+            ->add('description', TextareaType::class, ['required' => false, 'constraints' => [ new Length( [ 'max' => 600 ] ) ] ] )
+            ->add('longDescription', TextareaType::class, ['required' => false] )
+            ->add('couleur', ColorType::class, ['required' => false] )
             ->add('mon', FileType::class, array('mapped' => false, 'data_class' => null, 'required' => false))
             ->add('image', FileType::class, array('mapped' => false, 'data_class' => null, 'required' => false))
             ->add('video', FileType::class, array('mapped' => false, 'data_class' => null, 'required' => false))

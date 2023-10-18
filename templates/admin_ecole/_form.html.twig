@@ -25,15 +25,15 @@
             </div>
 
             <div class="col-12 mt-3">
+                {{ form_row(form.description,{ 'attr': {'rows': '8'} }) }}
+            </div>
+
+            <div class="col-12 mt-3">
                 {{ form_row(form.bonus) }}
             </div>
 
             <div class="col-12 mt-3">
-                {{ form_row(form.description,{ 'attr': {'rows': '12'} }) }}
-            </div>
-
-            <div class="col-12 mt-3">
-                {{ form_row(form.competences,{ 'attr': {'rows': '6'} }) }}
+                {{ form_row(form.competences,{ 'attr': {'rows': '7'} }) }}
             </div>
 
             <div class="col-12 mt-3">
@@ -80,20 +80,20 @@
                 {{ form_row(form.tech5Desc,{ 'attr': {'rows': '5'} }) }}
             </div>
 
-            <div class="col-12 mt-3">
-                {{ form_row(form.techSpecialNom) }}
-            </div>
-
-            <div class="col-12 mt-3">
-                {{ form_row(form.techSpecialDesc,{ 'attr': {'rows': '5'} }) }}
-            </div>
-
             <div class="col-6 mt-3">
                 {{ form_row(form.affinite) }}
             </div>
 
             <div class="col-6 mt-3">
                 {{ form_row(form.deficience) }}
+            </div>
+
+            <div class="col-12 mt-3">
+                {{ form_row(form.techSpecialNom) }}
+            </div>
+
+            <div class="col-12 mt-3">
+                {{ form_row(form.techSpecialDesc,{ 'attr': {'rows': '5'} }) }}
             </div>
 
             <div class="col-12 mt-3">

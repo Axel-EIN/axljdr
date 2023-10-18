@@ -67,14 +67,18 @@ class EmpireController extends AbstractController
     /**
      * @Route("/empire/clan/{id}", name="empire_clan")
      */
-    public function afficherClan(Clan $clan): Response
+    public function afficherClan(Clan $clan, ClanRepository $clanRepository): Response
     {
+        $autresClans = $clanRepository->findAllExceptOne($clan->getId());
+        shuffle($autresClans);
+
         return $this->render('empire/clan.html.twig', [
             'clan' => $clan,
             'nom' => $clan->getNom(),
             'entity' => 'clan',
             'category' => 'empire',
             'un_element' => $clan,
+            'autres_clans' => $autresClans,
         ]);
     }
 

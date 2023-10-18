@@ -128,7 +128,7 @@
     </section>
 
     {# AUTRES #}
-    <section class="col-8 pr-1 py-1 mb-5">
+    <section class="col-8 pr-1 py-1">
         <div class="card card-body pt-4 h-100">
             <h2 class="card-title"><strong>Autres</strong></h2>
             <hr>
@@ -139,7 +139,7 @@
     </section>
 
     {# PERSONNAGES #}
-    <aside class="col-4 pl-1 py-1 mb-5">
+    <aside class="col-4 pl-1 py-1">
         <div class="card card-body pt-4 h-100">
             <h2 class="card-title"><strong>Personnages</strong></h2>
             <hr>
@@ -152,6 +152,25 @@
                     </article>
                 {% else %}
                     <span class="text-muted">Pas encore de personnages disponible pour ce clan.</span>
+                {% endfor %}
+            </div>
+        </div>
+    </aside>
+
+    {# AUTRES CLANS #}
+    <aside class="col-12 py-1 mb-5">
+        <div class="card card-body pt-4">
+            <h2 class="card-title"><strong>Autres Factions</strong></h2>
+            <hr>
+            <div class="card-text row ml-3">
+                {% for un_autre_clan in autres_clans %}
+                    <article class="p-1">
+                        <a href="{{ path('empire_clan', {id: un_autre_clan.id} ) }}" >
+                            <img class="hover-zoom-x2 img-96" src="{{ asset(un_autre_clan.mon) }}" alt="Icône de la Faction" />
+                        </a>
+                    </article>
+                {% else %}
+                    <span class="text-muted">Pas d'autres factions à afficher.</span>
                 {% endfor %}
             </div>
         </div>

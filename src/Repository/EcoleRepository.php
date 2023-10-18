@@ -26,6 +26,29 @@ class EcoleRepository extends ServiceEntityRepository
             ->getSingleScalarResult();
     }
 
+    public function findAllSorted()
+    {
+        return $this->createQueryBuilder('e')
+            ->leftJoin('e.clan', 'c')
+            ->addOrderBy('c.estMajeur', 'DESC')
+            ->addOrderBy('c.nom', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function findByClasseSorted($id)
+    {
+        return $this->createQueryBuilder('e')
+            ->andWhere('e.classe = :value_id')
+            ->setParameter('value_id', $id)
+            ->leftJoin('e.clan', 'c')
+            ->addOrderBy('c.estMajeur', 'DESC')
+            ->addOrderBy('c.nom', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
+
+
     // /**
     //  * @return Ecole[] Returns an array of Ecole objects
     //  */

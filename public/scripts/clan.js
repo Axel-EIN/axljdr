@@ -17,7 +17,7 @@ function playInvisible() {
 // Clan Banner Video Focus+Unmute / UnFocus+Mute Top Left Icon
 
 function focusVideo() {
-    document.getElementById('banner-video').style.zIndex = 3;
+    document.getElementById('banner-video').style.zIndex = 4;
     $("#banner-video").prop('muted', false);
     $('#icon-mute-video').removeClass('invisible');
     $('#icon-mute-video').addClass('visible');

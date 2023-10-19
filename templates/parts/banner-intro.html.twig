@@ -1,4 +1,4 @@
-<section class="col-12 pb-1">
+<section id="element-banner" class="col-12 mb-2">
 
     <!-- CONTAINER BANNER IMAGE -->
     <div class="row m-0 p-5 text-center"
@@ -16,7 +16,11 @@
             </icon>
 
             <!-- OVERLAY -->
-            <overlay id="overlay-video" style="background-image: linear-gradient(to bottom, {{un_element.couleur}}AA 50%, rgba(00,00,00));"></overlay>
+            <overlay id="overlay-video"
+            style=" background-image:
+                        linear-gradient( #00000050 , #000000DD ),
+                        linear-gradient(to bottom, {{un_element.couleur}}40, {{un_element.couleur}}BB );
+                    background-blend-mode: multiply, multiply;"></overlay>
 
             <!-- VIDEO -->
             <video id="banner-video" autoplay loop controls muted poster="{{ asset( un_element.image|default('assets/img/placeholders/1280x720.jpg') ) }}">
@@ -25,7 +29,7 @@
         {% endif %}
 
         <!-- ICONE + CITATION + CHAMPION-->
-        <div class="col-5 p-0 px-5 m-0 d-flex flex-column justify-content-center align-items-center" style="z-index: 2;" >
+        <div class="col-5 p-0 m-0 pr-3 d-flex flex-column justify-content-center align-items-center" style="z-index: 2;" >
 
             {% if un_element.estMajeur is defined %}
                 {% if un_element.estMajeur == 1 %}
@@ -44,7 +48,8 @@
                 <img class="img-240 {{invert}} filter-shadow" src="{{ asset(icone) }}" alt="Icône" />
             {% endif %}
             
-            <span class="quote text-white m-0">« {{un_element.citation}} »</span>
+            <!-- CITATION -->
+            <span class="quote text-white m-0">«&nbsp;{{un_element.citation}}&nbsp;»</span>
 
             <!-- CHAMPION -->
             {% if un_element.chef is defined %}
@@ -63,11 +68,22 @@
         </div>
 
         <!-- DESCRIPTION -->
-        <div class="col-7 p-0 m-0 pl-3 d-flex flex-column justify-content-end" style="z-index: 2;">
+        <div class="col-7 p-0 m-0 pl-5 d-flex flex-column justify-content-end" style="z-index: 2;">
             <p class="text-justify text-white mb-0 text-shadow">
                 {{ un_element.description|raw|nl2br }}
             </p>
         </div>
 
     </div>
+
+    <!-- NAV OTHER ELEMENTS -->
+    <nav class="m-0 p-0 d-flex justify-content-center relative {% if un_element.video is not defined or un_element.video is empty %}bg-black{% endif %}" style="z-index: 3; border-bottom: 4px solid {{un_element.couleur}}">
+        {% for un_autre_element in all_elements %}
+            <a class="text-white py-2 px-4" {% if un_autre_element.id == un_element.id %}style="background-color: {{un_element.couleur}}"{% endif %}
+            href="{{ path( category ~ '_' ~ entity , { id: un_autre_element.id, '_fragment' : 'element-banner' } ) }}">
+                <strong>{{un_autre_element.nom|upper}}</strong>
+            </a>
+        {% endfor %}
+    </nav>
+
 </section>

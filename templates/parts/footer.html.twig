@@ -1,40 +1,36 @@
-<!-- FOOTERS -->
-<footer>
-    <!-- FOOTER 1 -->
-    <div id="footer1" class="container-fluid py-5">
-        <div class="container">
-            <div class="row">
-                <div class="col-xl-2 col-lg-3 col-md-4 col-sm-12 col-12">
-                    <h5>Plan du site</h5>
-                    <nav id="footernav">
-                        <ul>
-                            <li><a class="footer-link" href="{{ path('aventure') }}">L'Aventure</a></li>
-                            <li><a class="footer-link" href="{{ path('personnages') }}">Personnages</a></li>
-                            <li><a class="footer-link" href="{{ path('empire') }}">L'Empire</a></li>
-                            <li><a class="footer-link" href="{{ path('regles') }}">Les Règles</a></li>
-                            <li><a class="footer-link" href="{{ path('contact') }}">Contactez-Nous</a></li>
-                            <li><a class="footer-link" href="{{ path('cgu') }}">CGU</a></li>
-                            <li><a class="footer-link" href="{{ path('politique_confidentialite') }}">Politique de Confidentialité</a></li>
-                            <li><a class="footer-link" href="{{ path('mentions_legales') }}">Mentions Légales</a></li>
-                            <li><a class="footer-link" href="{{ path('about') }}">A propos</a></li>
-                        </ul>
-                    </nav>
-                </div>
-                <div class="col-xl-2 offset-xl-8 col-lg-3 offset-lg-6 col-md-4 offset-md-4 col-sm-12 col-12 text-center">
-                    <h5>Réseaux Sociaux</h5>
-                    <nav id="social-medias" class="d-flex justify-content-around">
-                        <a href="" class="link-white hover-zoom-x2"><i class="fab fa-twitter"></i></a>
-                        <a href="" class="link-white hover-zoom-x2"><i class="fab fa-facebook"></i></a> 
-                        <a href="" class="link-white hover-zoom-x2"><i class="fab fa-instagram"></i></a>
-                    </nav>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- FOOTER 2 -->
-    <div id="footer2" class="container-fluid py-4">
-        <div class="container text-center align-middle">
-            <small>&copy;&nbsp;Site réalisé par Axel Onçu-Turan pour l'examen final de Philiance</small>
-        </div>
-    </div>
+<!-- FOOTER -->
+<footer id="footer1" class="mt-5 container-fluid">
+    <container class="container py-5 row">
+
+            <sitemap class="col-2">
+                <h5>Plan du site</h5>
+                <nav id="footernav" class="ml-3">
+                    <ul>
+                        <li><a class="footer-link" href="{{ path('aventure') }}">L'Aventure</a></li>
+                        <li><a class="footer-link" href="{{ path('personnages') }}">Personnages</a></li>
+                        <li><a class="footer-link" href="{{ path('empire') }}">L'Empire</a></li>
+                        <li><a class="footer-link" href="{{ path('regles') }}">Les Règles</a></li>
+                        <li><a class="footer-link" href="{{ path('contact') }}">Contactez-Nous</a></li>
+                        <li><a class="footer-link" href="{{ path('cgu') }}">CGU</a></li>
+                        <li><a class="footer-link" href="{{ path('politique_confidentialite') }}">Politique de Confidentialité</a></li>
+                        <li><a class="footer-link" href="{{ path('mentions_legales') }}">Mentions Légales</a></li>
+                        <li><a class="footer-link" href="{{ path('about') }}">A propos</a></li>
+                    </ul>
+                </nav>
+            </sitemap>
+
+            <social class="col-2 offset-8 text-center">
+                <h5>Réseaux Sociaux</h5>
+                <nav id="social-medias" class="d-flex justify-content-around">
+                    <a href="" class="link-white hover-zoom-x2"><i class="fab fa-twitter"></i></a>
+                    <a href="" class="link-white hover-zoom-x2"><i class="fab fa-facebook"></i></a> 
+                    <a href="" class="link-white hover-zoom-x2"><i class="fab fa-instagram"></i></a>
+                </nav>
+            </social>
+
+    </container>
+</footer>
+
+<footer id="footer2" class="container-fluid">
+    <small class="container py-4 text-center align-middle">&copy;&nbsp;Site réalisé par Axel Onçu-Turan pour l'examen final de Philiance</small>
 </footer>

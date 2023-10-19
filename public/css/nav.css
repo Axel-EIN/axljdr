@@ -1,0 +1,88 @@
+/* ----------------------- */
+/* --------- NAV --------- */
+/* ----------------------- */  
+
+#navigation-bar {
+    position: relative;
+    display: block;
+    z-index: 10;
+    background-color: var(--secondary-pastel-darker);
+    border-bottom: 1px solid var(--secondary-pastel-light);
+    box-shadow: 0px 2px 8px black;
+}
+
+.navbar { padding: 0.5rem 0 }
+
+nav .active {
+    color: var(--white) !important;
+    font-weight: bold;
+    border-bottom: 3px solid var(--primary);
+}
+
+.nav-link {
+    color: var(--light-alpha) !important;
+}
+
+.nav-link:hover {
+    color: var(--lightest) !important;
+    text-decoration: none;
+}
+
+.nav-link:active {
+    color: var(--white) !important;
+}
+
+
+/* ---- User Zone in Nav Bar ---- */
+
+#user-zone {
+    display: flex;
+    color: var(--white);
+    align-items: center;
+}
+
+#user-zone a {
+    color: var(--light);
+}
+
+#user-zone a:hover {
+    color: var(--lightest);
+    text-decoration: none;
+}
+
+#user-zone a:active {
+    color: var(--white);
+}
+
+.connected {
+    flex-direction: row;
+    justify-content: end;
+}
+
+.disconnected {
+    flex-direction: column;
+    justify-content: center;
+}
+
+
+/* ---- Top Band Link to Admin / MJ Panel ---- */
+
+#admin-panel-band, #mj-panel-band {
+    display: block;
+    text-align: center;
+    color: var(--white);
+    font-weight: bold;
+}
+
+#admin-panel-band:hover, #mj-panel-band:hover {
+    color: var(--white);
+    text-decoration: underline;
+}
+
+#admin-panel-band {
+    background-color: var(--primary);
+}
+
+#mj-panel-band {
+    background-color: var(--accent);
+}

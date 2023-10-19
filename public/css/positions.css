@@ -7,6 +7,10 @@
 
 .absolute {
         position: absolute; }
+        
+.z-top {
+        z-index: 100;
+}
 
 .right-snap {
         position: absolute;

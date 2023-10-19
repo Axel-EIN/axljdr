@@ -110,30 +110,3 @@ nav .active {
 
 @media (max-width: 576px) { .pnjs-line, .pjs-line { visibility: collapse; } }
 @media (max-width: 480px) { .pnjs-line, .pjs-line { visibility: collapse; } }
-
-
-
-/* --------------------- */
-/* ------ FOOTER  ------ */
-/* --------------------- */
-
-footer { color: var(--lighter); }
-
-#footer1 {
-        min-height: 24vh;
-        background-color: var(--secondary-pastel-darker);
-        border-top: 1px solid var(--secondary-pastel-light);
-}
-
-#footer2 {
-        min-height: 8vh;
-        background-color: var(--secondary-pastel-darkest);
-}
-
-#footer1 ul, #footer2 ul {
-        list-style:outside none none;
-        padding: 0;
-}
-
-#social-medias { font-size: 2rem; }
-

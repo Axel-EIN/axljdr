@@ -69,6 +69,7 @@ class EmpireController extends AbstractController
      */
     public function afficherClan(Clan $clan, ClanRepository $clanRepository): Response
     {
+        $toutClans = $clanRepository->findAllSorted();
         $autresClans = $clanRepository->findAllExceptOne($clan->getId());
         shuffle($autresClans);
 
@@ -79,6 +80,7 @@ class EmpireController extends AbstractController
             'category' => 'empire',
             'un_element' => $clan,
             'autres_clans' => $autresClans,
+            'toutClans' => $toutClans,
         ]);
     }
 

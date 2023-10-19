@@ -8,7 +8,7 @@
 {% block element_content %} 
 
     {# BANNER INTRO #}
-    {% set un_element, icone, invert = clan, clan.mon, '' %}
+    {% set category, entity, un_element, icone, invert , all_elements = 'empire', 'clan' , clan, clan.mon, '' , toutClans %}
     {{ include('parts/banner-intro.html.twig') }}
 
     {# FAMILLES #}
@@ -50,7 +50,7 @@
 
                         <div class="col-lg-9">
                             <h3><strong> {{ une_famille.nom }}</strong></h3>
-                            <strong>{{une_famille.bonus}}</strong>
+                            <strong>{{une_famille.bonus|upper}}</strong>
                             <p class="text-justify p-3">{{ une_famille.description|raw|nl2br }}</p>
                         </div>
 
@@ -152,25 +152,6 @@
                     </article>
                 {% else %}
                     <span class="text-muted">Pas encore de personnages disponible pour ce clan.</span>
-                {% endfor %}
-            </div>
-        </div>
-    </aside>
-
-    {# AUTRES CLANS #}
-    <aside class="col-12 py-1 mb-5">
-        <div class="card card-body pt-4">
-            <h2 class="card-title"><strong>Autres Factions</strong></h2>
-            <hr>
-            <div class="card-text row ml-3">
-                {% for un_autre_clan in autres_clans %}
-                    <article class="p-1">
-                        <a href="{{ path('empire_clan', {id: un_autre_clan.id} ) }}" >
-                            <img class="hover-zoom-x2 img-96" src="{{ asset(un_autre_clan.mon) }}" alt="Icône de la Faction" />
-                        </a>
-                    </article>
-                {% else %}
-                    <span class="text-muted">Pas d'autres factions à afficher.</span>
                 {% endfor %}
             </div>
         </div>

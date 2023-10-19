@@ -55,6 +55,7 @@ class ReglesController extends AbstractController
     public function afficherClasse(Classe $classe, EcoleRepository $ecoleRepository, ClasseRepository $classeRepository): Response
     {
         $autresClasses = $classeRepository->findAllExceptOne($classe->getId());
+        $classes = $classeRepository->FindAll();
         $personnagesClasse = $classe->getPersonnages()->toArray();
         $ecolesClasse = $ecoleRepository->findByClasseSorted($classe->getId());
         shuffle($personnagesClasse);
@@ -67,7 +68,8 @@ class ReglesController extends AbstractController
             'un_element' => $classe,
             'personnagesClasse' => $personnagesClasse,
             'ecolesClasse' => $ecolesClasse,
-            'autresClasses' => $autresClasses
+            'autresClasses' => $autresClasses,
+            'classes' => $classes
         ]);
     }
 

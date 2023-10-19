@@ -12,33 +12,6 @@ body {  background-color: var(--lightest); }
 .page-min { min-height: 60vh; }
 
 
-
-/* ----------------------- */
-/* --------- NAV --------- */
-/* ----------------------- */  
-
-#navigation-bar {
-        z-index: 10;
-        background-color: var(--secondary-pastel-darker);
-        border-bottom: 1px solid var(--secondary-pastel-light);
-        box-shadow: 0px 2px 8px black;
-}
-
-.navbar { padding: 0.5rem 0 }
-
-nav .active {
-        color: var(--white);
-        font-weight: bold;
-        border-bottom: 3px solid var(--primary);
-}
-
-.connected {
-        color: var(--white);
-        text-align: right;
-}
-
-
-
 /* -------------------------- */
 /* --------- ALERTS --------- */
 /* -------------------------- */  

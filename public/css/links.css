@@ -1,7 +1,10 @@
-/* ----------------------------- */
-/* --------- TOP BAR  ---------- */
-/* ----------------------------- */
+/* --------------------------- */
+/* --------- LINKS  ---------- */
+/* --------------------------- */
 
+:root a:hover {
+    text-decoration: none;
+}
 
 /* ---- Common Links ---- */
 
@@ -42,61 +45,6 @@
 .hover-no-under:hover {
     text-decoration: none;
 }
-
-
-/* ---- Nav Bar ---- */
-
-.nav-link {
-    color: var(--light-alpha) !important;
-
-}
-.nav-link:hover {
-    color: var(--lightest) !important;
-    text-decoration: none;
-}
-
-.nav-link:active,
-.nav-link.active {
-    color: var(--white) !important;
-}
-
-
-/* ---- User Bar ---- */
-
-.top-bar-user a {
-    color: var(--light);
-}
-
-.top-bar-user a:hover {
-    color: var(--lightest);
-    text-decoration: none;
-}
-
-.top-bar-user a:active {
-    color: var(--white);
-}
-
-
-/* ---- Extreme Top Admin/MJ Panel link Band  ---- */
-
-#admin-panel a {
-    color: var(--white);
-}
-
-#admin-panel a:hover {
-    color: var(--white);
-    text-decoration: underline;
-}
-
-#mj-panel a {
-    color: var(--white);
-}
-
-#mj-panel a:hover {
-    color: var(--white);
-    text-decoration: underline;
-}
-
 
 
 /* --------------------------------- */

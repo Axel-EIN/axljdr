@@ -52,6 +52,14 @@
 /* ------------ TEXT COLORS ------- */
 /* -------------------------------- */
 
+.text-light-trans {
+    color: var(--light-trans);
+}
+
+.text-light-alpha {
+    color: var(--light-alpha);
+}
+
 .text-white {
     color: var(--white) !important;
 }

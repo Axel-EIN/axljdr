@@ -7,8 +7,8 @@
 
 {% block element_content %}
 
-    <!-- BANNER INTRO -->
-    {% set un_element, icone, invert = classe, classe.icone, 'invert' %}
+    <!-- BANNER + NAV -->
+    {% set un_element, icone, invert, all_elements = classe, classe.icone, 'invert', classes %}
     {{ include('parts/banner-intro.html.twig') }}
 
     <!-- ECOLES -->
@@ -37,7 +37,7 @@
         <div class="card card-body pt-4 h-100">
             <h2 class="card-title"><strong>Personnages</strong></h2>
             <hr>
-            <div class="card-text row justify-content-center">
+            <div class="card-text row m-0 justify-content-center">
 
                 <!-- UN PERSONNAGE -->
                 {% for un_personnage in personnagesClasse|slice(0,16) %}
@@ -48,28 +48,6 @@
                     </article>
                 {% else %}
                     <span class="text-muted">Il n'y a pas encore de personnages disponible pour cette classe.</span>
-                {% endfor %}
-
-            </div>
-        </div>
-    </aside>
-
-    <!-- AUTRES CLASSES -->
-    <aside class="col-12 py-1">
-        <div class="card card-body pt-4">
-            <h2 class="card-title"><strong>Autres Classes</strong></h2>
-            <hr>
-            <div class="card-text row justify-content-center">
-
-                <!-- UNE CLASSE -->
-                {% for une_classe in autresClasses %}
-                    <article class="p-1 px-3 hover-zoom-x2">
-                        <a href="{{ path('regles_classe', {id: une_classe.id} ) }}">
-                            <img class="img-128" src="{{ asset(une_classe.icone) }}" alt="Icône d'une Classe" title="Voir la classe{{une_classe.nom}}" />
-                        </a>
-                    </article>
-                {% else %}
-                    <span class="text-muted">Il n'y a pas encore d'autres classes.</span>
                 {% endfor %}
 
             </div>

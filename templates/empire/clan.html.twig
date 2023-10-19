@@ -32,20 +32,16 @@
                             {{ include('/parts/btn-icon-edit.html.twig') }}
                         {% endif %}
 
-                        <div class="col-lg-3 text-center">
-                            <div class="d-flex flex-column">
-                                <img class="img-fluid" src="{{ asset(une_famille.mon) }}" alt="Mon Famille" />
-                                {% if une_famille.chef is not empty %}
-                                    <div class="mt-3">
-                                        <a href="{{ path('personnage_profil', {id: une_famille.chef.id} ) }}">
-                                            <img class="character-icon-small" src="{{ asset(une_famille.chef.icone) }}" alt="Icône du personnage" />
-                                        </a>
-                                        <strong><a href="{{ path('personnage_profil', {id: une_famille.chef.id} ) }}" >{{une_famille.chef.nom}} {{une_famille.chef.prenom}}</a></strong>
-                                        <br><i>(Daimyo)</i>
-                                    </div>
-                                    
-                                {% endif %}
-                            </div>
+                        <div class="col-lg-3 text-center d-flex flex-column">
+                            <img class="img-fluid" src="{{ asset(une_famille.mon) }}" alt="Mon Famille" />
+
+                            {% if une_famille.chef is not empty %}
+                                <a class="mt-3 hover-no-under hover-zoom-x2" href="{{ path('personnage_profil', {id: une_famille.chef.id} ) }}" title="{{une_famille.chef.nom}} {{une_famille.chef.prenom}}">
+                                    <img class="character-icon-small" src="{{ asset(une_famille.chef.icone) }}" alt="Icône du personnage" />
+                                    <span class="text-muted align-middle">Daimyo</span>
+                                </a>                                 
+                            {% endif %}
+
                         </div>
 
                         <div class="col-lg-9">
@@ -73,16 +69,16 @@
 
             <h2 class="card-title"><strong>Écoles</strong></h2>
             <hr>
+
             {% for une_ecole in clan.ecoles %}
-                <article class="text-center mb-4 hover-zoom">
-                    <a href="{{ path('regles_ecole', {id: une_ecole.id} ) }}" ><strong>{{ une_ecole.nom }}</strong></a>
-                    <a href="{{ path('regles_ecole', {id: une_ecole.id} ) }}">
-                        <img class="img-fluid" src="{{ asset(une_ecole.image) }}" alt="Image d'une école" />
-                    </a>
-                </article>
+            <a class="vignette-aside mb-3" href="{{ path('regles_ecole', {id: une_ecole.id} ) }}">
+                <strong>{{ une_ecole.nom|upper }}</strong>
+                <img class="img-fluid" src="{{ asset(une_ecole.image) }}" alt="Image d'une école" />
+            </a>
             {% else %}
-                <span class="text-muted"><i>Écoles à venir.</i></span>
+                <i class="text-muted">Écoles à venir.</i>
             {% endfor %}
+
         </div>
     </section>
         
@@ -92,7 +88,7 @@
             <h2 class="card-title"><strong>Territoires</strong></h2>
             <hr>
                 {% if clan.territoireCarte %}
-                    <a href="{{asset(clan.territoireCarte)}}" class="hover-zoom" >
+                    <a href="{{asset(clan.territoireCarte)}}" class="hover-zoom-x2 z-top" >
                         <img class="img-fluid" src="{{asset(clan.territoireCarte)}}" alt="Carte du Territoire du clan" />
                     </a>
                 {% endif %}
@@ -110,17 +106,15 @@
             <h2 class="card-title"><strong>Lieux</strong></h2>
             <hr>
             {% for un_lieu in clan.lieux %}
-                <article class="text-center mb-4 hover-zoom relative">
-                    <a href="{{path('empire_lieu', {id: un_lieu.id} )}}"><img class="img-fluid" src="{{asset(un_lieu.image)}}" /></a>
-                    <h5 class="text-center mt-1">
-                        {% if un_lieu.icone is defined and un_lieu.icone is not empty %}
-                            <img class="icon-lieu-top img-64" src="{{ asset(un_lieu.icone) }}" alt="une icône" />
-                        {% endif %}
-                        <strong>
-                            <a class="link-secondary" href="{{ path('empire_lieu', {id: un_lieu.id} ) }}">{{un_lieu.nom}}</a>
-                        </strong>
-                    </h5>
-                </article>
+                <a class="vignette-aside mb-3" href="{{path('empire_lieu', {id: un_lieu.id} )}}">
+                    <!-- ICON ON TOP -->
+                    {% if un_lieu.icone is defined and un_lieu.icone is not empty %}
+                        <img class="icon-lieu-top img-64" src="{{ asset(un_lieu.icone) }}" alt="une icône" />
+                    {% endif %}
+
+                    <strong>{{ un_lieu.nom|upper }}</strong>
+                    <img class="img-fluid" src="{{asset(un_lieu.image)}}" alt="Image d'un Lieu" /></a>
+                </a>
             {% else %}
                 <p class="text-muted"><i>Pas de Lieux à charger.</i></p>
             {% endfor %}

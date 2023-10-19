@@ -3,6 +3,12 @@
     z-index: 5;
     top: 1rem;
     left: 2rem;
+    color: var(--light-alpha);
+}
+
+#icon-mute-video:hover {
+    cursor: pointer;
+    color: var(--white);
 }
 
 #icon-play {
@@ -12,6 +18,11 @@
     left: 50%;
     transform: translate(-50%, -50%);
     color: white;
+}
+
+#left-part, #right-part {
+    position: relative;
+    z-index: 2;
 }
 
 #zone-mon {

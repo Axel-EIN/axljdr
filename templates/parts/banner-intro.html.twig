@@ -9,27 +9,27 @@
                 background-blend-mode: normal, soft-light;
                 background-position: 50% 10%; ">
 
+        <!-- IF VIDEO IS AVAILABLE -->
         {% if un_element.video is defined and un_element.video is not empty %}
-            <!-- ICON MUTE / UNMUTE VIDE -->
-            <icon id="icon-mute-video" onclick="unfocusVideo()" class="invisible">
-                <i class="text-white fa-solid fa-video-slash"></i>
-            </icon>
+
+            <!-- ICON MUTE VIDEO -->
+            <i id="icon-mute-video" class="fa-solid fa-video-slash invisible" onclick="unfocusVideo()"></i>
 
             <!-- OVERLAY -->
             <overlay id="overlay-video"
-            style=" background-image:
-                        linear-gradient( #00000050 , #000000DD ),
-                        linear-gradient(to bottom, {{un_element.couleur}}40, {{un_element.couleur}}BB );
+            style=" background-image:   linear-gradient( #00000050 , #000000DD ),
+                                        linear-gradient(to bottom, {{un_element.couleur}}40, {{un_element.couleur}}BB );
                     background-blend-mode: multiply, multiply;"></overlay>
 
             <!-- VIDEO -->
             <video id="banner-video" autoplay loop controls muted poster="{{ asset( un_element.image|default('assets/img/placeholders/1280x720.jpg') ) }}">
                 <source src="{{asset(un_element.video)}}" type="video/mp4">
             </video>
+
         {% endif %}
 
-        <!-- ICONE + CITATION + CHAMPION-->
-        <div class="col-5 p-0 m-0 pr-3 d-flex flex-column justify-content-center align-items-center" style="z-index: 2;" >
+        <!-- LEFT : ICON + QUOTE -->
+        <left id="left-part" class="col-5 p-0 m-0 pr-3 d-flex flex-column justify-content-center align-items-center" >
 
             {% if un_element.estMajeur is defined %}
                 {% if un_element.estMajeur == 1 %}
@@ -54,25 +54,24 @@
             <!-- CHAMPION -->
             {% if un_element.chef is defined %}
                 {% if un_element.chef is not empty %}
-                    <div class="text-center hover-zoom-x2 mt-3">
-                        <a href="{{ path('personnage_profil', {id: un_element.chef.id} ) }}">
-                            <img class="img-48" src="{{ asset(un_element.chef.icone) }}" alt="Icône du personnage" />
-                        </a>
-                        <a class="link-accent" href="{{ path('personnage_profil', {id: un_element.chef.id} ) }}">
-                            &nbsp;<strong>{{ un_element.chef.nom }} {{ un_element.chef.prenom }}</strong> (Champion)
-                        </a>
-                    </div>
+                    <a style="color: {{ un_element.couleur }}" class="d-flex hover-no-under hover-zoom-x2 mt-3" href="{{ path('personnage_profil', {id: un_element.chef.id} ) }}">
+                        <img class="img-48" src="{{ asset(un_element.chef.icone) }}" alt="Icône du personnage" />
+                        <div class="d-flex flex-column text-left ml-3">
+                            <strong>{{ un_element.chef.nom }} {{ un_element.chef.prenom }}</strong>
+                            (Champion)
+                        </div>
+                    </a>
                 {% endif %}
             {% endif %}
 
-        </div>
+        </left>
 
-        <!-- DESCRIPTION -->
-        <div class="col-7 p-0 m-0 pl-5 d-flex flex-column justify-content-end" style="z-index: 2;">
+        <!-- RIGHT : DESCRIPTION -->
+        <right id="right-part" class="col-7 p-0 m-0 pl-5 d-flex flex-column justify-content-end">
             <p class="text-justify text-white mb-0 text-shadow">
                 {{ un_element.description|raw|nl2br }}
             </p>
-        </div>
+        </right>
 
     </div>
 

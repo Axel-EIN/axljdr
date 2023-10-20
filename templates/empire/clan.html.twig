@@ -87,17 +87,25 @@
         <div class="card card-body pt-4 h-100">
             <h2 class="card-title"><strong>Territoires</strong></h2>
             <hr>
-                {% if clan.territoireCarte %}
-                    <a href="{{asset(clan.territoireCarte)}}" class="hover-zoom-x2 z-top" >
-                        <img class="img-fluid" src="{{asset(clan.territoireCarte)}}" alt="Carte du Territoire du clan" />
-                    </a>
-                {% endif %}
-                {% if clan.territoireDesc %}
-                    <p class="text-justify mt-3 px-5 py-3">{{clan.territoireDesc}}</p>
-                {% else %}
-                    <p class="text-muted"><i>Description des Territoires à venir.</i></p>
-                {% endif %}
+
+            {% if clan.territoireCarte %}
+                <img id="carte" class="img-fluid" src="{{asset(clan.territoireCarte)}}" alt="Carte du Territoire du clan" />
+            {% endif %}
+
+            {% if clan.territoireDesc %}
+                <p class="text-justify mt-3 px-5 py-3">{{clan.territoireDesc}}</p>
+            {% else %}
+                <p class="text-muted"><i>Description des Territoires à venir.</i></p>
+            {% endif %}
+
         </div>
+
+        <!-- Carte Zoomed Modal -->
+        <div id="carteZoomModal" class="modal">
+            <span class="close">&times;</span>
+            <img class="modal-content" id="carteModal">
+        </div>
+
     </section>
 
     {# LIEUX  #}

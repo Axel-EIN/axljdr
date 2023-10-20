@@ -24,7 +24,7 @@
 
 .vignette-aside > strong {
     position: absolute;
-    z-index: 100;
+    z-index: 5;
     display: block;
     width: 100%;
     bottom: 0px;

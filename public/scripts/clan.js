@@ -29,3 +29,23 @@ function unfocusVideo() {
     $('#icon-mute-video').removeClass('visible');
     $('#icon-mute-video').addClass('invisible');
 };
+
+
+// Territory Map Image Modal Zoom
+
+var modal = document.getElementById("carteZoomModal");
+var img = document.getElementById("carte");
+var modalImg = document.getElementById("carteModal");
+var captionText = document.getElementById("caption");
+
+img.onclick = function(){
+  modal.style.display = "block";
+  modalImg.src = this.src;
+  captionText.innerHTML = this.alt;
+}
+
+var span = document.getElementsByClassName("close")[0];
+
+span.onclick = function() {
+  modal.style.display = "none";
+} 

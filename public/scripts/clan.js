@@ -33,19 +33,17 @@ function unfocusVideo() {
 
 // Territory Map Image Modal Zoom
 
-var modal = document.getElementById("carteZoomModal");
+var modalCarte = document.getElementById("carteZoomModal");
 var img = document.getElementById("carte");
 var modalImg = document.getElementById("carteModal");
-var captionText = document.getElementById("caption");
 
 img.onclick = function(){
-  modal.style.display = "block";
+  modalCarte.style.display = "block";
   modalImg.src = this.src;
-  captionText.innerHTML = this.alt;
 }
 
-var span = document.getElementsByClassName("close")[0];
+var span = document.getElementsByClassName("closeModal")[0];
 
 span.onclick = function() {
-  modal.style.display = "none";
+  modalCarte.style.display = "none";
 } 

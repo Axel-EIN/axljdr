@@ -144,12 +144,9 @@
             <div class="row p-0 m-0 pt-2">
                 <!-- UNE ECOLE -->
                 {% for une_ecole in ecole.clan.ecoles|filter(autre_ecole => autre_ecole.id != ecole.id) %}
-                    <article class="col-2 col-2 m-0 p-2 text-center hover-zoom-x2">
-                        <a href="{{ path('regles_ecole', {id: une_ecole.id} ) }}">
-                            <img class="img-fluid" src="{{ asset(une_ecole.image) }}" alt="Image d'une école" />
-                        </a>
-                        <a href="{{ path('regles_ecole', {id: une_ecole.id} ) }}" ><strong>{{ une_ecole.nom }}</strong></a>
-                    </article>
+                    <a class="col-2 m-0 p-2 hover-zoom-x2" href="{{ path('regles_ecole', {id: une_ecole.id} ) }}" title="{{une_ecole.nom}}">
+                        <img class="img-fluid" src="{{ asset(une_ecole.image) }}" alt="Image d'une école" />
+                    </a>
                 {% else %}
                     <span class="text-muted"><i>Il n'y a pas encore d'autres écoles dans ce clan.</i></span>
                 {% endfor %}

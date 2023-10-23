@@ -20,7 +20,7 @@ class AdminClasseController extends AbstractController
      */
     public function afficherAdminClasses(ClasseRepository $classeRepository): Response
     {
-        $classes = $classeRepository->findAll();
+        $classes = $classeRepository->findBy(array(), array('id' => 'DESC'));
         return $this->render('admin_classe/index.html.twig', [
             'classes' => $classes
         ]);

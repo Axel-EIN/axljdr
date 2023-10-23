@@ -16,7 +16,7 @@
         <div class="card card-body pt-4 h-100">
             <h2 class="card-title"><strong>Écoles</strong> de {{un_element.nom}}</h2>
             <hr>
-            <div class="card-text row">
+            <div class="card-text m-0 row">
                 <!-- UNE ECOLE -->
                 {% for une_ecole in ecolesClasse %}
                     <article class="col-4 p-3 hover-zoom-x2 text-center">
@@ -26,7 +26,7 @@
                         <strong><a href="{{ path('regles_ecole', {id: une_ecole.id} ) }}" >{{ une_ecole.nom }}</a></strong>
                     </article>
                 {% else %}
-                    <span class="text-muted"><i>Il n'y a pas encore d'école disponible pour cette classe.</i></span>
+                    <span class="text-muted">Il n'y a pas encore d'école disponible pour cette classe.</span>
                 {% endfor %}
             </div>
         </div>

@@ -84,39 +84,61 @@
         
     {# TERRITOIRES #}
     {% if clan.territoireDesc is defined and clan.territoireDesc is not empty %}
-    <section class="col-8 p-1">
-            <div class="card card-body pt-4 h-100">
-                <h2 class="card-title"><strong>Territoires</strong></h2>
-                <hr>
+    <section class="col-12 p-1">
+        <div class="card card-body pt-4 h-100">
+            <h2 class="card-title"><strong>Territoires</strong></h2>
+            <hr>
 
-                {% if clan.territoireCarte %}
-                    <img id="carte" class="img-fluid" src="{{asset(clan.territoireCarte)}}" alt="Carte du Territoire du clan" />
-                {% endif %}
+            {% if clan.territoireCarte %}
+                <img id="carte" class="img-fluid" src="{{asset(clan.territoireCarte)}}" alt="Carte du Territoire du clan" />
+            {% endif %}
 
-                {% if clan.territoireDesc %}
-                    <p class="text-justify mt-3 px-5 py-3 text-medium">{{clan.territoireDesc}}</p>
-                {% else %}
-                    <p class="text-muted"><i>Description des Territoires à venir.</i></p>
-                {% endif %}
+            {% if clan.territoireDesc %}
+                <p class="text-justify mt-3 px-5 py-3 text-medium">{{clan.territoireDesc}}</p>
+            {% else %}
+                <p class="text-muted"><i>Description des Territoires à venir.</i></p>
+            {% endif %}
 
-            </div>
+        </div>
 
-            <!-- Carte Zoomed Modal -->
-            <div id="carteZoomModal" class="modalCarte">
-                <span class="closeModal">&times;</span>
-                <img class="modalCarte-content" id="carteModal">
-            </div>
+        {# <!-- Carte Zoomed Modal -->
+        <div id="carteZoomModal" class="modalCarte">
+            <span class="closeModal">&times;</span>
+            <img class="modalCarte-content" id="carteModal">
+        </div> #}
+
     </section>
     {% endif %}
 
-    {# LIEUX  #}
-    {% if clan.lieux is defined and clan.lieux is not empty %}
-    <section class="col-4 p-1">
-        <div class="card card-body pt-4 h-100">
-            <h2 class="card-title"><strong>Lieux</strong></h2>
-            <hr>
+    {# AUTRES #}
+    {% if clan.longDescription is defined and clan.longDescription is not empty %}
+        {% set col_side = "col-4" %}
+        {% set col_lieu = "col-12" %}  
+        {% set col_perso = "col-6" %}  
+        <section class="col-8 p-1">
+            <div class="card card-body pt-4 h-100">
+                <h2 class="card-title"><strong>Autres</strong></h2>
+                <hr>
+                <p class="card-text text-justify px-5 py-3 text-medium">
+                    {{ clan.longDescription|raw|nl2br }}
+                </p>
+            </div>
+        </section>
+    {% else %}
+        {% set col_side = "col-12" %}
+        {% set col_lieu = "col-3" %}  
+        {% set col_perso = "col-2" %}  
+    {% endif %}
+
+    {# LIEUX & PERSONNAGES #}
+    <aside class="{{col_side}} p-1">
+
+        <div class="row m-n1 p-0">
+
+            {# LIEUX  #}
             {% for un_lieu in clan.lieux %}
-                <a class="vignette-aside mb-3" href="{{path('empire_lieu', {id: un_lieu.id} )}}">
+            <div class="p-2 {{col_lieu}}">
+                <a class="vignette-aside" href="{{path('empire_lieu', {id: un_lieu.id} )}}">
                     <!-- ICON ON TOP -->
                     {% if un_lieu.icone is defined and un_lieu.icone is not empty %}
                         <img class="icon-lieu-top img-64" src="{{ asset(un_lieu.icone) }}" alt="une icône" />
@@ -125,41 +147,17 @@
                     <strong>{{ un_lieu.nom|upper }}</strong>
                     <img class="img-fluid" src="{{asset(un_lieu.image)}}" alt="Image d'un Lieu" /></a>
                 </a>
-            {% else %}
-                <p class="text-muted"><i>Pas de Lieux à charger.</i></p>
-            {% endfor %}
-        </div>
-    </section>
-    {% endif %}
-
-    {# AUTRES #}
-    {% if clan.longDescription is defined and clan.longDescription is not empty %}  
-    <section class="col-8 p-1">
-        <div class="card card-body pt-4 h-100">
-            <h2 class="card-title"><strong>Autres</strong></h2>
-            <hr>
-            <p class="card-text text-justify px-5 py-3 text-medium">
-                {{ clan.longDescription|raw|nl2br }}
-            </p>
-        </div>
-    </section>
-    {% endif %}
-
-    {# PERSONNAGES #}
-    <aside class="{% if clan.longDescription is defined and clan.longDescription is not empty %}col-4{% else %}col-12{% endif %} p-1">
-        <div class="card card-body pt-4 h-100">
-            {# <h2 class="card-title"><strong>Personnages</strong></h2>
-            <hr> #}
-            <div class="card-text row ml-2">
-                {% for un_personnage in clan.personnages %}
-                    <a class="p-2 hover-zoom-x2" href="{{ path('personnage_profil', {id: un_personnage.id} ) }}" >
-                        <img class="img-128 rounded-8" src="{{ asset(un_personnage.icone) }}" alt="Icône du personnage" />
-                    </a>
-                {% else %}
-                    <span class="text-muted">Pas encore de personnages disponible pour ce clan.</span>
-                {% endfor %}
             </div>
+            {% endfor %}
+
+            {% for un_personnage in clan.personnages %}
+                <a class="{{col_perso}} p-2 hover-zoom-x2" href="{{ path('personnage_profil', {id: un_personnage.id} ) }}" >
+                    <img class="img-fluid rounded-8" src="{{ asset(un_personnage.icone) }}" alt="Icône du personnage" />
+                </a>
+            {% endfor %}
+
         </div>
+
     </aside>
 
 {% endblock %}

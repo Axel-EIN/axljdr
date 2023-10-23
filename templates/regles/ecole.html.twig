@@ -8,48 +8,50 @@
 {% block element_content %}
 
     <!-- BANNER INTRO -->
-    <section class="col-12 py-1">
+    <section class="col-12 p-1">
+        <card class="card">
 
-        <!-- CONTAINER IMAGE -->
-        <div class="relative">
+            <!-- CONTAINER IMAGE -->
+            <div class="relative">
 
-            <!-- SURIMPRESSION DROITE : CONTROLE PAR  -->
-            <a id="banner-icon-clan" class="hover-zoom-x2" href="{{ path('empire_clan', {id:un_element.clan.id} ) }}" >
-                <img class="img-96 filter-shadow" src="{{ asset(un_element.clan.mon) }}" alt="Mon d'une faction" title="Voir la faction {{un_element.clan.nom}}" />
-            </a>
+                <!-- SURIMPRESSION DROITE : CONTROLE PAR  -->
+                <a id="banner-icon-clan" class="hover-zoom-x2" href="{{ path('empire_clan', {id:un_element.clan.id} ) }}" >
+                    <img class="img-96 filter-shadow" src="{{ asset(un_element.clan.mon) }}" alt="Mon d'une faction" title="Voir la faction {{un_element.clan.nom}}" />
+                </a>
 
-            <!-- CONTAINER ZONE TEXT + BLUR ABSOLUTE -->
-            <text id="text-zone" class="col-10 row p-0 m-0 mb-3 justify-content-end" >
+                <!-- CONTAINER ZONE TEXT + BLUR ABSOLUTE -->
+                <text id="text-zone" class="col-10 row p-0 m-0 mb-3 justify-content-end" >
 
-                <div class="col-4 m-0 p-0 text-center text-shadow on-top">
-                    <h2>Bonus</h2>
-                    <span class="text-zone-blur text-xp text-big">{{ ecole.bonus }}</span>
-                </div>
+                    <div class="col-4 m-0 p-0 text-center text-shadow on-top">
+                        <h2>Bonus</h2>
+                        <span class="text-zone-blur text-xp text-big">{{ ecole.bonus }}</span>
+                    </div>
 
-                <div class="col-4 m-0 p-0 on-top">
-                    <h2>Compétences</h2>
-                    <p class="text-zone-blur ml-4 mt-2">{{ ecole.competences|lister|raw }}</p>
-                </div>
+                    <div class="col-4 m-0 p-0 on-top">
+                        <h2>Compétences</h2>
+                        <p class="text-zone-blur ml-4 mt-2">{{ ecole.competences|lister|raw }}</p>
+                    </div>
 
-                <div class="col-4 m-0 p-0 on-top">
-                    <h2>Équipement</h2>
-                    <p class="text-zone-blur ml-4 mt-2">{{ ecole.equipements|lister|raw }}</p>
-                </div>
+                    <div class="col-4 m-0 p-0 on-top">
+                        <h2>Équipement</h2>
+                        <p class="text-zone-blur ml-4 mt-2">{{ ecole.equipements|lister|raw }}</p>
+                    </div>
 
-            </text>
+                </text>
 
-            <!-- IMAGE -->
-            <div class="gradient-after"><img class="img-fluid" src="{{ asset(ecole.image) }}" alt="Image de l'École"  /></div>
+                <!-- IMAGE -->
+                <div class="gradient-after"><img class="img-fluid" src="{{ asset(ecole.image) }}" alt="Image de l'École"  /></div>
 
-        </div>
+            </div>
 
-        <!-- DESCRIPTION -->
-        <div class="card card-body"><p class="text-justify px-5 py-3 m-3 mb-5 text-medium">{{ ecole.description|raw|nl2br }}</p></div>
+            <!-- DESCRIPTION -->
+            <div class="card-body"><p class="text-justify px-5 py-3 m-3 mb-5 text-medium">{{ ecole.description|raw|nl2br }}</p></div>
 
+        </card>
     </section>
 
     <!-- TECHNIQUES -->
-    <section class="col-8 pr-1 py-1">
+    <section class="col-8 p-1">
         <div class="card card-body pt-4 h-100">
             <h2 class="card-title"><strong>Techniques</strong></h2>
             <hr>
@@ -111,11 +113,8 @@
     {% endif %}
 
     <!-- PERSONNAGES DE CETTE ECOLE -->
-    <aside class="py-1 {% if magie == false %}col-4 pl-1{% else %}col-12{% endif %}">
+    <aside class="p-1 {% if magie == false %}col-4{% else %}col-12{% endif %}">
         <div class="card card-body h-100">
-            <h2 class="card-title"><strong>Personnages</strong></h2>
-            <hr>
-
             <div class="row justify-content-center px-3">
                 <!-- UN PERSONNAGE -->
                 {% for un_personnage in ecole.personnages %}
@@ -132,24 +131,22 @@
         </div>
     </aside>
 
+    {% if autresEcoles is defined and autresEcoles is not empty %}
     <!-- AUTRES ECOLES DE CE CLAN -->
-    <aside class="col-12 py-1">
+    <aside class="col-12 p-1">
         <div class="card card-body h-100">
-            <h2 class="card-title"><strong>Autres écoles</strong> du même clan</h2>
+            <h2 class="card-title"><strong>Autres écoles</strong> de la même Faction</h2>
             <hr>
-
             <div class="row p-0 m-0 pt-2">
                 <!-- UNE ECOLE -->
-                {% for une_ecole in ecole.clan.ecoles|filter(autre_ecole => autre_ecole.id != ecole.id) %}
-                    <a class="col-2 m-0 p-2 hover-zoom-x2" href="{{ path('regles_ecole', {id: une_ecole.id} ) }}" title="{{une_ecole.nom}}">
-                        <img class="img-fluid" src="{{ asset(une_ecole.image) }}" alt="Image d'une école" />
+                {% for une_autre_ecole in autresEcoles %}
+                    <a class="col-2 m-0 p-2 hover-zoom-x2" href="{{ path('regles_ecole', {id: une_autre_ecole.id} ) }}" title="{{une_autre_ecole.nom}}">
+                        <img class="img-fluid" src="{{ asset(une_autre_ecole.image) }}" alt="Image d'une école" />
                     </a>
-                {% else %}
-                    <span class="text-muted"><i>Il n'y a pas encore d'autres écoles dans ce clan.</i></span>
                 {% endfor %}
             </div>
-
         </div>
     </aside>
+    {% endif %}
 
 {% endblock %}

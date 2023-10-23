@@ -76,14 +76,17 @@ class ReglesController extends AbstractController
     /**
      * @Route("/regles/ecole/{id}", name="regles_ecole")
      */
-    public function afficherEcole(Ecole $ecole): Response
+    public function afficherEcole(Ecole $ecole, EcoleRepository $ecoleRepository): Response
     {
+        $autresEcoles = $ecoleRepository->findAllByClanExceptOne($ecole->getClan()->getId(), $ecole->getId());
+
         return $this->render('regles/ecole.html.twig', [
             'ecole' => $ecole,
             'nom' => $ecole->getNom(),
             'entity' => 'ecole',
             'category' => 'regles',
             'un_element' => $ecole,
+            'autresEcoles' => $autresEcoles,
         ]);
     }
 }

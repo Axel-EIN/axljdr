@@ -19,13 +19,6 @@ class EcoleRepository extends ServiceEntityRepository
         parent::__construct($registry, Ecole::class);
     }
 
-    public function countEcoles() {
-        return $this->createQueryBuilder('e')
-            ->select('count(e.id)')
-            ->getQuery()
-            ->getSingleScalarResult();
-    }
-
     public function findAllSorted()
     {
         return $this->createQueryBuilder('e')
@@ -48,33 +41,22 @@ class EcoleRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-
-    // /**
-    //  * @return Ecole[] Returns an array of Ecole objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    public function findAllByClanExceptOne($clanId, $ecoleId)
     {
         return $this->createQueryBuilder('e')
-            ->andWhere('e.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('e.id', 'ASC')
-            ->setMaxResults(10)
+            ->andWhere('e.clan = :value_clanId')
+            ->setParameter('value_clanId', $clanId)
+            ->andWhere('e.id != :value_ecoleId')
+            ->setParameter('value_ecoleId', $ecoleId)
             ->getQuery()
-            ->getResult()
-        ;
+            ->getResult();
     }
-    */
 
-    /*
-    public function findOneBySomeField($value): ?Ecole
-    {
+    public function countEcoles() {
         return $this->createQueryBuilder('e')
-            ->andWhere('e.exampleField = :val')
-            ->setParameter('val', $value)
+            ->select('count(e.id)')
             ->getQuery()
-            ->getOneOrNullResult()
-        ;
+            ->getSingleScalarResult();
     }
-    */
+
 }

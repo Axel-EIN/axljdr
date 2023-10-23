@@ -21,22 +21,19 @@
             <!-- CONTAINER ZONE TEXT + BLUR ABSOLUTE -->
             <text id="text-zone" class="col-10 row p-0 m-0 mb-3 justify-content-end" >
 
-                <!-- CONTAINER BLUR ABSOLUTE -->
-                <blur id="blur-zone"></blur>
-
                 <div class="col-4 m-0 p-0 text-center text-shadow on-top">
                     <h2>Bonus</h2>
-                    <span class="text-xp text-big">{{ ecole.bonus }}</span>
+                    <span class="text-zone-blur text-xp text-big">{{ ecole.bonus }}</span>
                 </div>
 
                 <div class="col-4 m-0 p-0 on-top">
                     <h2>Compétences</h2>
-                    <p class="ml-4 mt-2">{{ ecole.competences|lister|raw }}</p>
+                    <p class="text-zone-blur ml-4 mt-2">{{ ecole.competences|lister|raw }}</p>
                 </div>
 
                 <div class="col-4 m-0 p-0 on-top">
                     <h2>Équipement</h2>
-                    <p class="ml-4 mt-2">{{ ecole.equipements|lister|raw }}</p>
+                    <p class="text-zone-blur ml-4 mt-2">{{ ecole.equipements|lister|raw }}</p>
                 </div>
 
             </text>

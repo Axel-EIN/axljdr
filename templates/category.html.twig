@@ -1,6 +1,7 @@
 {% extends 'base.html.twig' %}
 {% set col_xl, col_lg, col_md, col_sm = 2, 3, 4, 6 %}
 {% block body %}
+
     <!-- HEADER TITLE ONLY -->
     <header class="header-bg-img header-bg-{{header_classname}}">
         <div class="container">
@@ -18,7 +19,7 @@
         </div>
     </header>
 
-    <main class="container-fluid mt-2 pb-5 mb-5">    
+    <main class="container-fluid mt-5 pb-5 mb-5">    
         <div class="container">
 
             {% set compteur = 1 %}
@@ -48,4 +49,5 @@
             
         </div>
     </main>
+
 {% endblock %}

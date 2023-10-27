@@ -90,13 +90,15 @@ class EmpireController extends AbstractController
     public function afficherArchive(Archive $archive, ArchiveRepository $archiveRepository): Response
     {
         $archives = $archiveRepository->findall();
+        $autresArchives = $archiveRepository->findAllExceptOne($archive->getId());
 
         return $this->render('empire/archive.html.twig', [
             'un_element' => $archive,
             'nom' => $archive->getTitre(),
             'entity' => 'archive',
             'category' => 'empire',
-            'archives' => $archives
+            'archives' => $archives,
+            'autresArchives' => $autresArchives
         ]);
     }
 
@@ -106,13 +108,15 @@ class EmpireController extends AbstractController
     public function afficherLieu(Lieu $lieu, LieuRepository $lieuRepository): Response
     {
         $lieux = $lieuRepository->findall();
+        $autresLieux = $lieuRepository->findAllExceptOne($lieu->getId());
 
         return $this->render('empire/lieu.html.twig', [
             'un_element' => $lieu,
             'nom' => $lieu->getNom(),
             'entity' => 'lieu',
             'category' => 'empire',
-            'lieux' => $lieux
+            'lieux' => $lieux,
+            'autresLieux' => $autresLieux
         ]);
     }
 }

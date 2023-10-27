@@ -26,32 +26,12 @@ class LieuRepository extends ServiceEntityRepository
             ->getSingleScalarResult();
     }
 
-    // /**
-    //  * @return Lieu[] Returns an array of Lieu objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    public function findAllExceptOne($id)
     {
         return $this->createQueryBuilder('l')
-            ->andWhere('l.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('l.id', 'ASC')
-            ->setMaxResults(10)
+            ->andWhere('l.id != :value_id')
+            ->setParameter('value_id', $id)
             ->getQuery()
-            ->getResult()
-        ;
+            ->getResult();
     }
-    */
-
-    /*
-    public function findOneBySomeField($value): ?Lieu
-    {
-        return $this->createQueryBuilder('l')
-            ->andWhere('l.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
 }

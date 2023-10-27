@@ -1,0 +1,7 @@
+{% extends 'back_office/index.html.twig' %}
+{% block title %}Administrer les Règles {{ parent() }}{% endblock %}
+{% block h1 %}Administrer les <strong>Règles</strong>{% endblock %}
+{% block child %}
+    {% set label, element, elements, img_size, genre = 'règle', 'rule', rules, '96', 'F' %}
+    {{ include('back_office/list-element.html.twig') }}
+{% endblock %}

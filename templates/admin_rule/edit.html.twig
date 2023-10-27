@@ -1,0 +1,6 @@
+{% extends 'back_office/index.html.twig' %}
+{% block title %}Modifier une Règle {{ parent() }}{% endblock %}
+{% block h1 %}Modifier une Règle{% endblock %}
+{% block child %}
+    {{ include('admin_rule/_form.html.twig', {'button_label': 'Modifier'}) }}
+{% endblock %}

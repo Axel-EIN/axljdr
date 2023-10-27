@@ -2,6 +2,24 @@
 {% block title %}Les Règles de l'Aventure {{ parent() }}{% endblock %}
 
 {% block section_content1 %}
+    <!--- LES REGLES DE BASES -->
+    <div class="w-100 row justify-content-center">
+        {% for uneRule in rules %}
+
+            <!--- UNE REGLE DE BASE -->
+            <a class="col-3 text-center hover-zoom-x2" href="{{ path('regles_rule', {id: uneRule.id} ) }}">
+                <img class="img-160" src="{{ asset(uneRule.image) }}" alt="Image de la Règle" title="{{uneRule.nom}}" />
+                <br>
+                <h3 class="text-center my-3">
+                    <strong>{{ uneRule.nom }}</strong>
+                </h3>
+            </a>
+
+        {% endfor %}
+    </div>
+{% endblock %}
+
+{% block section_content2 %}
     <!--- LES CLASSES -->
     <div class="w-100 row justify-content-center">
         {% for une_classe in classes %}
@@ -21,7 +39,7 @@
     </div>
 {% endblock %}
 
-{% block section_content2 %}
+{# {% block section_content3 %}
     <!--- LES ECOLES -->
     {% set col_xl, col_lg, col_md, col_sm = 3, 4, 6, 12 %}
     {% for un_element in ecoles %}
@@ -32,4 +50,4 @@
     {% else %}
         <small class="text-muted">Il n'y a pas encore d'école disponible.</a>
     {% endfor %}
-{% endblock %}
+{% endblock %} #}

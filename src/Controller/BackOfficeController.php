@@ -15,6 +15,7 @@ use App\Repository\FamilleRepository;
 use App\Repository\ArchiveRepository;
 use App\Repository\LieuRepository;
 
+use App\Repository\RuleRepository;
 use App\Repository\ClasseRepository;
 use App\Repository\EcoleRepository;
 
@@ -39,6 +40,7 @@ class BackOfficeController extends AbstractController
                                        ArchiveRepository $archiveRepository,
                                        LieuRepository $lieuRepository,
 
+                                       RuleRepository $ruleRepository,
                                        ClasseRepository $classeRepository,
                                        EcoleRepository $ecoleRepository,
 
@@ -89,6 +91,9 @@ class BackOfficeController extends AbstractController
         $dernierLieu = $lieuRepository->findOneBy(array(),array('id' => 'DESC'));
 
         // REGLES
+        $nbrRules = $ruleRepository->countRules();
+        $derniereRule = $ruleRepository->findOneBy(array(),array('id' => 'DESC'));
+
         $nbrClasses = $classeRepository->countClasses();
         $dernierClasse = $classeRepository->findOneBy(array(),array('id' => 'DESC'));
 
@@ -127,6 +132,8 @@ class BackOfficeController extends AbstractController
             'nbrLieux' => $nbrLieux,
             'dernierLieu' => $dernierLieu,
 
+            'nbrRules' => $nbrRules,
+            'derniereRule' => $derniereRule,
             'nbrClasses' => $nbrClasses,
             'dernierClasse' => $dernierClasse,
             'nbrEcoles' => $nbrEcoles,

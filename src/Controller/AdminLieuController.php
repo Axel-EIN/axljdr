@@ -20,6 +20,7 @@ class AdminLieuController extends AbstractController
      */
     public function afficherAdminLieux(LieuRepository $lieuRepository): Response {
         $lieux = $lieuRepository->findAll();
+
         return $this->render('admin_lieu/index.html.twig', [
             'lieux' => $lieux
         ]);
@@ -42,25 +43,25 @@ class AdminLieuController extends AbstractController
             if (!empty($nouvelleImage)) {
                 $prefix = 'lieu-' . $lieu->getNom() . '-image';
                 $lieu->setImage($fileHandler->handle($nouvelleImage, null, $prefix, 'lieux'));
-            } else { $lieu->setImage('assets/img/placeholders/1280x720.png'); }
+            }
 
             $nouvelleCarte = $form->get('carte')->getData();
             if (!empty($nouvelleCarte)) {
                 $prefix = 'lieu-' . $lieu->getNom() . '-carte';
                 $lieu->setCarte($fileHandler->handle($nouvelleCarte, null, $prefix, 'lieux'));
-            } else { $lieu->setCarte('assets/img/placeholders/1280x720.png'); }
+            }
 
             $nouvelleRegion = $form->get('region')->getData();
             if (!empty($nouvelleRegion)) {
                 $prefix = 'lieu-' . $lieu->getNom() . '-region';
                 $lieu->setRegion($fileHandler->handle($nouvelleRegion, null, $prefix, 'lieux'));
-            } else { $lieu->setRegion('assets/img/placeholders/1280x720.png'); }
+            }
 
             $nouvelleIcone = $form->get('icone')->getData();
             if (!empty($nouvelleIcone)) {
                 $prefix = 'lieu-' . $lieu->getNom() . '-icone';
                 $lieu->setIcone($fileHandler->handle($nouvelleIcone, null, $prefix, 'lieux'));
-            } else { $lieu->setIcone('assets/img/placeholders/na_mon.png'); }
+            }
 
             $em->persist($lieu);
             $em->flush();
@@ -70,13 +71,14 @@ class AdminLieuController extends AbstractController
             // REDIRECTION
             if (!empty($request->query->get('redirect')) && $request->query->get('redirect') == 'lieu')
                 return $this->redirectToRoute('empire_lieu', ['id' => $lieu->getId()]);
+
             return $this->redirectToRoute('admin_lieu');
-        } else {
-            return $this->render('admin_lieu/create.html.twig', [
-                'type' => 'Créer',
-                'form' => $form->createView()
-            ]);
         }
+        
+        return $this->render('admin_lieu/create.html.twig', [
+            'type' => 'Créer',
+            'form' => $form->createView()
+        ]);
     }
 
     /**
@@ -86,15 +88,9 @@ class AdminLieuController extends AbstractController
     public function editerLieu(Request $request, Lieu $lieu, FileHandler $fileHandler): Response {
 
         $form = $this->createForm(AdminLieuType::class, $lieu);
-        
         $form->handleRequest($request);
 
         if($form->isSubmitted() && $form->isValid()) {
-
-            $nouvelleImage = $form->get('image')->getData();
-            $nouvelleCarte = $form->get('carte')->getData();
-            $nouvelleRegion = $form->get('region')->getData();
-
 
             $nouvelleImage = $form->get('image')->getData();
             if (!empty($nouvelleImage)) {
@@ -126,13 +122,14 @@ class AdminLieuController extends AbstractController
             // REDIRECTION
             if (!empty($request->query->get('redirect')) && $request->query->get('redirect') == 'lieu')
                 return $this->redirectToRoute('empire_lieu', ['id' => $lieu->getId()]);
+
             return $this->redirectToRoute('admin_lieu');
         }
 
         return $this->renderForm('admin_lieu/edit.html.twig', [
-            'lieu' => $lieu,
-            'form' => $form,
             'type' => 'Modifier',
+            'lieu' => $lieu,
+            'form' => $form
         ]);
         
     }

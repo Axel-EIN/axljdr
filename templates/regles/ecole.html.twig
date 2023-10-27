@@ -74,7 +74,7 @@
                                 </div>
                                 <div class="col-10 ml-n2">
                                     <strong>{{ attribute(ecole, 'tech' ~ i ~ 'Nom')|upper }}</strong>
-                                    <p class="text-justify text-medium">{{ attribute(ecole, 'tech' ~ i ~ 'Desc')|raw|nl2br }}</p>
+                                    <p class="text-justify text-regular">{{ attribute(ecole, 'tech' ~ i ~ 'Desc')|raw|nl2br }}</p>
                                 </div>
                             </div>
                         {% endif %}
@@ -130,18 +130,25 @@
 
     </div>
 
+    {% if ecole.clan.genre == 'M' %}
+        {% set preposition = 'du' %}
+    {% elseif ecole.clan.genre == 'F' %}
+        {% set preposition = 'de la' %}
+    {% else %}
+        {% set preposition = '' %}
+    {% endif %}
 
     {% if autresEcoles is defined and autresEcoles is not empty %}
     <!-- AUTRES ECOLES DU CLAN -->
     <aside class="col-12 p-1">
-        <div class="card card-body h-100">
-            <h2 class="card-title"><strong>Autres écoles</strong> de la même faction</h2>
+        <div class="card card-body h-100 pb-1">
+            <h2 class="card-title">Autres écoles {{preposition}} <strong>{{ecole.clan.nom}}</strong></h2>
             <hr>
             <div class="row p-0 m-0 pt-2">
-                <!-- UNE ECOLE -->
-                {% for une_autre_ecole in autresEcoles %}
-                    <a class="col-2 m-0 p-2 hover-zoom-x2" href="{{ path('regles_ecole', {id: une_autre_ecole.id} ) }}" title="{{une_autre_ecole.nom}}">
-                        <img class="img-fluid" src="{{ asset(une_autre_ecole.image) }}" alt="Image d'une école" />
+                {% for autreEcole in autresEcoles %}
+                    <a class="col-2 m-0 p-2 text-center hover-zoom-x2 relative hover-span-visible" href="{{ path('regles_ecole', {id: autreEcole.id} ) }}" title="{{autreEcole.nom}}">
+                        <img class="img-fluid" src="{{ asset(autreEcole.image) }}" alt="Image d'une école" title="{{autreEcole.nom}}"/>
+                        <span class="text-small"><strong>{{autreEcole.nom}}</strong></span>
                     </a>
                 {% endfor %}
             </div>

@@ -23,6 +23,7 @@ class AdminClanType extends AbstractType
     {
         $builder
             ->add('nom', TextType::class, [ 'constraints' => [ new Length( [ 'max' => 30 ] ) ] ] )
+            ->add('genre', TextType::class, [ 'constraints' => [ new Length( [ 'max' => 1 ] ) ] ] )
             ->add('estMajeur', CheckboxType::class, ['required' => false])
             ->add('citation', TextType::class, [ 'required' => false, 'constraints' => [ new Length( [ 'max' => 100 ] ) ] ] )
             ->add('description', TextareaType::class, ['required' => false, 'constraints' => [ new Length( [ 'max' => 600 ] ) ] ] )

@@ -27,8 +27,8 @@ class ReglesController extends AbstractController
         $sections[0]['name'] = "Règles de Bases";
         $sections[0]['entity'] = 'rule';
         $sections[0]['label_one'] = 'une règle';
-        $sections[0]['titleLight'] = 'Les';
-        $sections[0]['titleStrong'] = 'Règles de Bases';
+        $sections[0]['titleLight'] = 'Règles de';
+        $sections[0]['titleStrong'] = 'Bases';
 
         $sections[1]['name'] = "Classes";
         $sections[1]['entity'] = 'classe';

@@ -76,7 +76,7 @@
         <!-- NAV OTHER ELEMENTS -->
         <nav class="col-12 m-0 p-0 d-flex justify-content-center relative {% if un_element.video is not defined or un_element.video is empty %}{% endif %}" style="z-index: 3; border-bottom: 4px solid {{un_element.couleur}}">
             {% for un_autre_element in all_elements %}
-                <a class="text-white py-2 px-4" {% if un_autre_element.id == un_element.id %}style="background-color: {{un_element.couleur}}"{% endif %}
+                <a class="text-white py-2 px-3" {% if un_autre_element.id == un_element.id %}style="background-color: {{un_element.couleur}}"{% endif %}
                 href="{{ path( category ~ '_' ~ entity , { id: un_autre_element.id, '_fragment' : 'element-banner' } ) }}">
                     <strong>{{un_autre_element.nom|upper}}</strong>
                 </a>

@@ -2,6 +2,36 @@
 /* --------- ANIMATIONS --------- */
 /* ------------------------------ */
 
+/* ------------------- */
+/* ----- OPACITY ----- */
+/* ------------------- */
+
+.hover-opaque:hover {
+    filter: opacity(1);
+    transition: 0.5s;
+}
+
+.hover-span-visible > span {
+    opacity: 0;
+}
+
+.hover-span-visible:hover > span {
+    opacity: 1;
+}
+
+/* -------------------------- */
+/* ----- ANIMATION STOP ----- */
+/* -------------------------- */
+
+.hover-opaque:hover {
+    filter: opacity(1);
+    transition: 0.5s;
+}
+
+.hover-visible:hover {
+    opacity: 1;
+}
+
 .hover-stop:hover {
     animation-duration: 0s;
 }
@@ -10,8 +40,9 @@
     --fa-animation-delay: 0.67s;
 }
 
-/* ______________________________ */
-/* SHINE */
+/* ------------------- */
+/* ----- SHINING ----- */
+/* ------------------- */
 
 .hover-shine:hover {
     filter: brightness(1.3);
@@ -55,8 +86,9 @@
 }
 
 
-/* ______________________________ */
-/* ZOOM */
+/* ------------------- */
+/* ----- SHINING ----- */
+/* ------------------- */
 
 .hover-zoom, .hover-zoom:hover {
     transition: 0.5s;
@@ -88,17 +120,7 @@
 }
 
 
-/* ______________________________ */
-/* OPACITY */
 
-.hover-opaque:hover {
-    filter: opacity(1);
-    transition: 0.5s;
-}
-
-.hover-visible:hover {
-    opacity: 1;
-}
 
 
 

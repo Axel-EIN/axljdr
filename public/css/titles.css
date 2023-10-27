@@ -1,0 +1,70 @@
+/* -------------------------------- */
+/* ------ TITLE TEXT SIZES  ------- */
+/* -------------------------------- */
+
+h1 > strong, h2 > strong {
+    color: var(--black-1);
+    font-weight: bold;
+}
+
+.title-mini {
+    font-size: 2rem;
+}
+
+@media (max-width: 1200px) { .title-mini { font-size: 2rem; } }
+@media (max-width: 992px) { .title-mini { font-size: 1.75rem; } }
+@media (max-width: 576px) { .title-mini { font-size: 1.5rem; } }
+@media (max-width: 480px) { .title-mini { font-size: 1.25rem; } }
+
+.title-small {
+    font-size: 3rem;
+}
+
+@media (max-width: 1200px) { .title-small { font-size: 3rem; } }
+@media (max-width: 992px) { .title-small { font-size: 2.5rem; } }
+@media (max-width: 576px) { .title-small { font-size: 2rem; } }
+@media (max-width: 480px) { .title-small { font-size: 1.75rem; } }
+
+.title-medium {
+    font-size: 6rem;
+}
+
+@media (max-width: 1200px) { .title-medium { font-size: 7rem; } }
+@media (max-width: 992px) { .title-medium { font-size: 6rem; } }
+@media (max-width: 576px) { .title-medium { font-size: 5rem; } }
+@media (max-width: 480px) { .title-medium { font-size: 4rem; } }
+
+.title-large {
+    font-size: 9rem;
+}
+
+@media (max-width: 1200px) { .title-large { font-size: 9rem; } }
+@media (max-width: 992px) { .title-large { font-size: 8rem; } }
+@media (max-width: 576px) { .title-large { font-size: 6rem; } }
+@media (max-width: 480px) { .title-large { font-size: 4.5rem; } }
+
+
+
+/* -------------------------------- */
+/* ----- DISPLAY TEXT SIZES  ------ */
+/* -------------------------------- */
+
+@media (max-width: 1200px) { .display-1 { font-size: 4.25rem; } }
+@media (max-width: 992px) { .display-1 { font-size: 4rem; } }
+@media (max-width: 576px) { .display-1 { font-size: 3.75rem; } }
+@media (max-width: 480px) { .display-1 { font-size: 3.5rem; } }
+
+@media (max-width: 1200px) { .display-2 { font-size: 4rem; } }
+@media (max-width: 992px) { .display-2 { font-size: 3.75rem; } }
+@media (max-width: 576px) { .display-2 { font-size: 3.5rem; } }
+@media (max-width: 480px) { .display-2 { font-size: 3.25rem; } }
+
+@media (max-width: 1200px) { .display-3 { font-size: 4rem; } }
+@media (max-width: 992px) { .display-3 { font-size: 3.5rem; } }
+@media (max-width: 576px) { .display-3 { font-size: 3.25rem; } }
+@media (max-width: 480px) { .display-3 { font-size: 3rem; } }
+
+@media (max-width: 1200px) { .display-4 { font-size: 3.5rem; } }
+@media (max-width: 992px) { .display-4 { font-size: 3.25rem; } }
+@media (max-width: 576px) { .display-4 { font-size: 3rem; } }
+@media (max-width: 480px) { .display-4 { font-size: 2.75rem; } }

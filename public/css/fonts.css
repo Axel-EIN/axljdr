@@ -1,0 +1,30 @@
+/* -------------------------------- */
+/* --------- FONT FACES  ---------- */
+/* -------------------------------- */
+
+@font-face {
+    font-family: "Shogun";
+    src: url("../assets/fonts/shoguns-clan-accentued.otf");
+}
+
+@font-face {
+    font-family: "Hirosh";
+    src: url("../assets/fonts/hirosh.otf");
+}
+
+@font-face {
+    font-family: "Present";
+    src: url("../assets/fonts/present-it-black.otf");
+}
+
+@font-face {
+    font-family: 'Barlow';
+    src: url("../assets/fonts/Barlow-Regular.ttf");
+    font-weight: 400;
+}
+
+@font-face {
+    font-family: 'Barlow Condensed';
+    src: url("../assets/fonts/BarlowSemiCondensed-Regular.ttf");
+    font-weight: 400;
+}

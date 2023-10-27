@@ -13,6 +13,7 @@
     --darker: #202020;
     --darkest: #101010;
     --dark-alpha: rgba(0,0,0, 0.5);
+    --black-1: #151010 !important;
     --black: black !important;
 
     --primary-lighter: #ff8084;
@@ -109,6 +110,9 @@
 
 .bg-primary {
     background-color: var(--primary) !important; }
+
+.bg-primary-darker {
+    background-color: var(--primary-darker); }
 
 .bg-primary-darkest {
     background-color: var(--primary-darkest); }

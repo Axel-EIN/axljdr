@@ -94,29 +94,24 @@
     </element>
 
     <!-- AUTRES LIEUX -->
+    {% if autresLieux is defined and autresLieux|length > 0 %}
     <aside class="col-12 pt-1 mb-5">
-        <card class="card card-body">
+        <card class="card card-body pb-1">
             <h2 class="card-title"><strong>Autres Lieux</strong></h2>
             <hr>
-
             <row class="row p-0 m-0 pt-3">
-                <!-- UN LIEU -->
-                {% for autre_lieu in lieux|filter(autre_lieu => autre_lieu.id != un_element.id) %}
-                    <article class="col-2 m-0 p-2 text-center hover-zoom-x2 relative">
-                        {% if autre_lieu.icone is defined and autre_lieu.icone is not empty %}
-                            <img class="icon-lieu-top img-64" src="{{ asset(autre_lieu.icone) }}" alt="une icône" />
-                        {% endif %}
-                        <a href="{{ path('empire_lieu', {id: autre_lieu.id} ) }}">
-                            <img class="img-fluid" src="{{ asset(autre_lieu.image) }}" alt="Image d'un autre Lieu" />
-                        </a>
-                        <a href="{{ path('empire_lieu', {id: autre_lieu.id} ) }}" ><strong>{{ autre_lieu.nom }}</strong></a>
-                    </article>
-                {% else %}
-                    <span class="text-muted"><i>Il n'y a pas d'autres lieux.</i></span>
+                {% for autreLieu in autresLieux %}
+                <a class="col-2 m-0 p-2 text-center hover-zoom-x2 relative hover-span-visible" href="{{ path('empire_lieu', {id: autreLieu.id} ) }}" >
+                    {% if autreLieu.icone is defined and autreLieu.icone is not empty %}
+                        <img class="icon-lieu-top img-64" src="{{ asset(autreLieu.icone) }}" alt="une icône" />
+                    {% endif %}
+                        <img class="img-fluid" src="{{ asset(autreLieu.image) }}" alt="Image d'un autre Lieu" />
+                    <span class="text-small"><strong>{{autreLieu.nom}}</strong></span>
+                </a>
                 {% endfor %}
             </row>
-
         </card>
     </aside>
+    {% endif %}
 
 {% endblock %}

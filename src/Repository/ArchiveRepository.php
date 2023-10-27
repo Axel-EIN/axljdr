@@ -26,32 +26,12 @@ class ArchiveRepository extends ServiceEntityRepository
             ->getSingleScalarResult();
     }
 
-    // /**
-    //  * @return Archive[] Returns an array of Archive objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    public function findAllExceptOne($id)
     {
         return $this->createQueryBuilder('a')
-            ->andWhere('a.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('a.id', 'ASC')
-            ->setMaxResults(10)
+            ->andWhere('a.id != :value_id')
+            ->setParameter('value_id', $id)
             ->getQuery()
-            ->getResult()
-        ;
+            ->getResult();
     }
-    */
-
-    /*
-    public function findOneBySomeField($value): ?Archive
-    {
-        return $this->createQueryBuilder('a')
-            ->andWhere('a.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
 }

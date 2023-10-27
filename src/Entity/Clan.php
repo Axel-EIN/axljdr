@@ -99,6 +99,11 @@ class Clan
      */
     private $video;
 
+    /**
+     * @ORM\Column(type="string", length=1)
+     */
+    private $genre;
+
     public function __construct()
     {
         $this->ecoles = new ArrayCollection();
@@ -372,6 +377,18 @@ class Clan
     public function setVideo(?string $video): self
     {
         $this->video = $video;
+
+        return $this;
+    }
+
+    public function getGenre(): ?string
+    {
+        return $this->genre;
+    }
+
+    public function setGenre(string $genre): self
+    {
+        $this->genre = $genre;
 
         return $this;
     }

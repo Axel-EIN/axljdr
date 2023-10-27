@@ -2,10 +2,12 @@
 
 namespace App\Controller;
 
-use App\Entity\Ecole;
+use App\Entity\Rule;
 use App\Entity\Classe;
+use App\Entity\Ecole;
 use App\Repository\EcoleRepository;
 use App\Repository\ClasseRepository;
+use App\Repository\RuleRepository;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -15,23 +17,24 @@ class ReglesController extends AbstractController
     /**
      * @Route("/regles", name="regles")
      */
-    public function afficherRegles(EcoleRepository $ecoleRepository, ClasseRepository $classeRepository): Response
+    public function afficherRegles(RuleRepository $ruleRepository,  ClasseRepository $classeRepository): Response
     {
+        $rules = $ruleRepository->findAll();
         $classes = $classeRepository->findAll();
-        $ecoles = $ecoleRepository->findAllSorted();
 
         $sections = [];
-        $sections[0]['name'] = "Classes";
-        $sections[0]['entity'] = 'classe';
-        $sections[0]['label_one'] = 'une classe';
-        $sections[0]['titleLight'] = 'Les';
-        $sections[0]['titleStrong'] = 'Classes';
 
-        $sections[1]['name'] = "Écoles";
-        $sections[1]['entity'] = 'ecole';
-        $sections[1]['label_one'] = 'une école';
+        $sections[0]['name'] = "Règles de Bases";
+        $sections[0]['entity'] = 'rule';
+        $sections[0]['label_one'] = 'une règle';
+        $sections[0]['titleLight'] = 'Les';
+        $sections[0]['titleStrong'] = 'Règles de Bases';
+
+        $sections[1]['name'] = "Classes";
+        $sections[1]['entity'] = 'classe';
+        $sections[1]['label_one'] = 'une classe';
         $sections[1]['titleLight'] = 'Les';
-        $sections[1]['titleStrong'] = 'Écoles';
+        $sections[1]['titleStrong'] = 'Classes';
 
         $header_classname = 'rules';
         $header_up = "Mécanique de Jeu";
@@ -39,13 +42,27 @@ class ReglesController extends AbstractController
         $category = 'regles';
 
         return $this->render('regles/index.html.twig', [
-            'ecoles' => $ecoles,
+            'rules' => $rules,
             'classes' => $classes,
             'sections' => $sections,
             'header_classname' => $header_classname,
             'header_up' => $header_up,
             'header_down' => $header_down,
             'category' => $category,
+        ]);
+    }
+
+    /**
+     * @Route("/regles/rule/{id}", name="regles_rule")
+     */
+    public function afficherRule(Rule $rule): Response
+    {
+        return $this->render('regles/rule.html.twig', [
+            'rule' => $rule,
+            'nom' => $rule->getNom(),
+            'entity' => 'rule',
+            'category' => 'regles',
+            'un_element' => $rule,
         ]);
     }
 

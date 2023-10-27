@@ -33,29 +33,24 @@
     </element>
 
      <!-- AUTRES ARCHIVES -->
+     {% if autresArchives is defined and autresArchives|length > 0 %}
     <aside class="col-12 pt-1 mb-5">
-        <card class="card card-body">
+        <card class="card card-body pb-1">
             <h2 class="card-title"><strong>Autres Archives</strong></h2>
             <hr>
-
             <row class="row p-0 m-0 pt-2">
-                <!-- UN LIEU -->
-                {% for autre_archive in archives|filter(autre_archive => autre_archive.id != un_element.id) %}
-                    <article class="col-2 m-0 p-2 text-center hover-zoom-x2 relative">
-                        {% if autre_archive.icone is defined and autre_archive.icone is not empty %}
-                            <img class="icon-lieu-top img-64" src="{{ asset(autre_archive.icone) }}" alt="une icône" />
+                {% for autreArchive in autresArchives %}
+                    <a class="col-2 m-0 p-2 text-center hover-zoom-x2 relative hover-span-visible" href="{{ path('empire_archive', {id: autreArchive.id} ) }}">
+                        {% if autreArchive.icone is defined and autreArchive.icone is not empty %}
+                            <img class="icon-lieu-top img-64" src="{{ asset(autreArchive.icone) }}" alt="une icône" />
                         {% endif %}
-                        <a href="{{ path('empire_archive', {id: autre_archive.id} ) }}">
-                            <img class="img-fluid" src="{{ asset(autre_archive.image) }}" alt="Image d'une autre Archive" />
-                        </a>
-                        <a href="{{ path('empire_archive', {id: autre_archive.id} ) }}" ><strong>{{ autre_archive.titre }}</strong></a>
-                    </article>
-                {% else %}
-                    <span class="text-muted"><i>Il n'y a pas d'autres Archives.</i></span>
+                        <img class="img-fluid" src="{{ asset(autreArchive.image) }}" alt="Image d'une autre Archive" title="{{autreArchive.titre}}" />
+                        <span class="text-small"><strong>{{autreArchive.titre}}</strong></span>
+                    </a>
                 {% endfor %}
             </row>
-
         </card>
     </aside>
+    {% endif %}
 
 {% endblock %}

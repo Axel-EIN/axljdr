@@ -19,7 +19,8 @@ class ReglesController extends AbstractController
      */
     public function afficherRegles(RuleRepository $ruleRepository,  ClasseRepository $classeRepository): Response
     {
-        $rules = $ruleRepository->findAll();
+        $rules = $ruleRepository->findAllTypeSorted(true);
+        $rulesDivers = $ruleRepository->findAllTypeSorted(false);
         $classes = $classeRepository->findAll();
 
         $sections = [];
@@ -36,6 +37,12 @@ class ReglesController extends AbstractController
         $sections[1]['titleLight'] = 'Les';
         $sections[1]['titleStrong'] = 'Classes';
 
+        $sections[2]['name'] = "Règles Annexes";
+        $sections[2]['entity'] = 'rule';
+        $sections[2]['label_one'] = 'une règle';
+        $sections[2]['titleLight'] = 'Règles';
+        $sections[2]['titleStrong'] = 'Annexes';
+
         $header_classname = 'rules';
         $header_up = "Mécanique de Jeu";
         $header_down = "Règles";
@@ -43,6 +50,7 @@ class ReglesController extends AbstractController
 
         return $this->render('regles/index.html.twig', [
             'rules' => $rules,
+            'rulesDivers' => $rulesDivers,
             'classes' => $classes,
             'sections' => $sections,
             'header_classname' => $header_classname,

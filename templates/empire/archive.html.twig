@@ -40,7 +40,7 @@
             <hr>
             <row class="row p-0 m-0 pt-2">
                 {% for autreArchive in autresArchives %}
-                    <a class="col-2 m-0 p-2 text-center hover-zoom-x2 relative hover-span-visible" href="{{ path('empire_archive', {id: autreArchive.id} ) }}">
+                    <a class="col-2 m-0 p-2 text-center hover-zoom relative hover-span-visible" href="{{ path('empire_archive', {id: autreArchive.id} ) }}">
                         {% if autreArchive.icone is defined and autreArchive.icone is not empty %}
                             <img class="icon-lieu-top img-64" src="{{ asset(autreArchive.icone) }}" alt="une icône" />
                         {% endif %}

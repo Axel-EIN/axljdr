@@ -2,25 +2,34 @@
     {{ form_start(form) }}
         <div class="row justify-content-center align-items-end mt-5 mb-4">
         
-            <div class="col-8">
+            <div class="col-4">
                 {{ form_row(form.nom) }}
+            </div>
+
+            <div class="col-4">
+                {{ form_row(form.numero) }}
             </div> 
 
             <div class="col-4 text-center">
                 <div>{{ form_row(form.base) }}</div>
-            </div> 
+            </div>
 
-            <div class="col-12">
-                {% if type == 'Modifier' %}
-                    <img class="img-fluid w-100" src="{{ asset(rule.image) }}" />
-                {% endif %}
-            </div> 
+            <!-- IMAGE -->
+            <div class="col-12 mt-3">
+                {{ form_label(form.image) }}
+                <label id="preview-label" for="admin_rule_image" class="{% if type != 'Modifier' %}d-none{% endif %} hover-slight-fade hover-pointer hover-icon-visible">
+                    <icon class="btn-icon-medium right-corner-16"><i class="fas fa-edit semi-visible link-white"></i></icon>
+                    <img id="image-preview" class="img-fluid" src="{% if type == 'Modifier' %}{{ asset(rule.image|default('assets/img/placeholders/1280x720.jpg')) }}{% endif %}" />
+                </label>
+                <browse id="browse-label">
+                    <span id="fileName"></span>
+                    {{form_widget(form.image, {'attr': {'class': 'input-image'}}) }}
+                </browse> 
+            </div>
 
-            <div class="col-12">
-                {{ form_row(form.image) }}
-            </div> 
-
-            <div class="col-12">
+            <div class="col-12 mt-5">
+                <h2>Part 1</h2>
+                <hr>
                 {{ form_row(form.part1titre) }}
             </div>
 
@@ -32,7 +41,9 @@
                 {{ form_row(form.part1aside,{ 'attr': {'rows': '20'} }) }}
             </div>
 
-            <div class="col-12">
+            <div class="col-12 mt-5">
+                <h2>Part 2</h2>
+                <hr>
                 {{ form_row(form.part2titre) }}
             </div>
 
@@ -44,7 +55,9 @@
                 {{ form_row(form.part2aside,{ 'attr': {'rows': '20'} }) }}
             </div>
 
-            <div class="col-12">
+            <div class="col-12 mt-5">
+                <h2>Part 3</h2>
+                <hr>
                 {{ form_row(form.part3titre) }}
             </div>
 
@@ -56,7 +69,9 @@
                 {{ form_row(form.part3aside,{ 'attr': {'rows': '20'} }) }}
             </div>
 
-            <div class="col-12">
+            <div class="col-12 mt-5">
+                <h2>Part 4</h2>
+                <hr>
                 {{ form_row(form.part4titre) }}
             </div>
 
@@ -68,7 +83,9 @@
                 {{ form_row(form.part4aside,{ 'attr': {'rows': '20'} }) }}
             </div>
 
-            <div class="col-12">
+            <div class="col-12 mt-5">
+                <h2>Part 5</h2>
+                <hr>
                 {{ form_row(form.part5titre) }}
             </div>
 
@@ -80,7 +97,8 @@
                 {{ form_row(form.part5aside,{ 'attr': {'rows': '20'} }) }}
             </div>
 
-            <div class="col-12">
+            <div class="col-12 mt-5">
+                <hr>
                 {{ form_row(form.pdf) }}
             </div>
 

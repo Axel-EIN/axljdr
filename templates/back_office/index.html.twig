@@ -3,117 +3,118 @@
 {% block title %}Panneau d'Administration {{ parent() }}{% endblock %}
 
 {% block stylesheets %}
-        {{parent()}}
-        <link rel="stylesheet" href="{{asset('css/backoffice.css')}}" />
+    {{parent()}}
+    <link rel="stylesheet" href="{{asset('css/backoffice.css')}}" />
+    <link rel="stylesheet" href="{{asset('css/forms.css')}}" />
 {% endblock %}
 
 {% block body %}
 
-<main class="container-fluid page-min">
-    <div class="container py-5 relative">
-        <h1 class="text-center">{% block h1 %}Bienvenue dans le Panneau {% if app.user and is_granted("ROLE_ADMIN") %}d'Administration{% else %}du Maître du Jeu{% endif %} !{% endblock %}</h1>
+    <main class="container-fluid page-min">
+        <div class="container py-5 relative">
+            <h1 class="text-center">{% block h1 %}Bienvenue dans le Panneau {% if app.user and is_granted("ROLE_ADMIN") %}d'Administration{% else %}du Maître du Jeu{% endif %} !{% endblock %}</h1>
 
-        {{ include('back_office/nav-admin.html.twig') }}
-        {{ include('parts/messages-flashes.html.twig') }}
+            {{ include('back_office/nav-admin.html.twig') }}
+            {{ include('parts/messages-flashes.html.twig') }}
 
-        {% block child %}
+            {% block child %}
 
-{% if app.user and is_granted("ROLE_MJ") %}
+                {% if app.user and is_granted("ROLE_MJ") %}
 
-        {# AVENTURE #}
-        <h2 class="mt-5">Aventure</h2>
-        <hr>
-        <p class="mb-4 text-muted">Récapitulatif des éléments ajoutés pour le descriptif de l'aventure.</p>
+                    {# AVENTURE #}
+                    <h2 class="mt-5">Aventure</h2>
+                    <hr>
+                    <p class="mb-4 text-muted">Récapitulatif des éléments ajoutés pour le descriptif de l'aventure.</p>
 
-        <section class="row">
-            {% set label, element, nbr, last, nom, image = 'Scènes', 'scene', nbrScenes, dernierScene, dernierScene.titre, dernierScene.image|default('non-définie') %}
-            {{ include('back_office/card-element-resume.html.twig') }}
+                    <section class="row">
+                        {% set label, element, nbr, last, nom, image = 'Scènes', 'scene', nbrScenes, dernierScene, dernierScene.titre, dernierScene.image|default('non-définie') %}
+                        {{ include('back_office/card-element-resume.html.twig') }}
 
-            {% set label, element, nbr, last, nom, image = 'Épisodes', 'episode', nbrEpisodes, dernierEpisode, dernierEpisode.titre, dernierEpisode.image|default('non-définie') %}
-            {{ include('back_office/card-element-resume.html.twig') }}
+                        {% set label, element, nbr, last, nom, image = 'Épisodes', 'episode', nbrEpisodes, dernierEpisode, dernierEpisode.titre, dernierEpisode.image|default('non-définie') %}
+                        {{ include('back_office/card-element-resume.html.twig') }}
 
-            {% set label, element, nbr, last, nom, image = 'Chapitres', 'chapitre', nbrChapitres, dernierChapitre, dernierChapitre.titre, dernierChapitre.image|default('non-définie') %}
-            {{ include('back_office/card-element-resume.html.twig') }}
+                        {% set label, element, nbr, last, nom, image = 'Chapitres', 'chapitre', nbrChapitres, dernierChapitre, dernierChapitre.titre, dernierChapitre.image|default('non-définie') %}
+                        {{ include('back_office/card-element-resume.html.twig') }}
 
-            {% set label, element, nbr, last, nom, image = 'Saison', 'saison', nbrSaisons, dernierSaison, dernierSaison.titre, dernierChapitre.image|default('non-définie') %}
-            {{ include('back_office/card-element-resume.html.twig') }}
-        </section>
+                        {% set label, element, nbr, last, nom, image = 'Saison', 'saison', nbrSaisons, dernierSaison, dernierSaison.titre, dernierChapitre.image|default('non-définie') %}
+                        {{ include('back_office/card-element-resume.html.twig') }}
+                    </section>
 
-        {# EMPIRE LORE #}
-        <h2 class="mt-5">Empire</h2>
-        <hr>
-        <p class="mb-4 text-muted">Récapitulatif des éléments ajoutés pour le descriptif de l'univers de jeu.</p>
-        <section class="row">
-            {% set label, element, nbr, last, nom, image = 'Factions', 'clan', nbrClans, dernierClan, dernierClan.nom, dernierClan.image|default('non-définie') %}
-            {{ include('back_office/card-element-resume.html.twig') }}
+                    {# EMPIRE LORE #}
+                    <h2 class="mt-5">Empire</h2>
+                    <hr>
+                    <p class="mb-4 text-muted">Récapitulatif des éléments ajoutés pour le descriptif de l'univers de jeu.</p>
+                    <section class="row">
+                        {% set label, element, nbr, last, nom, image = 'Factions', 'clan', nbrClans, dernierClan, dernierClan.nom, dernierClan.image|default('non-définie') %}
+                        {{ include('back_office/card-element-resume.html.twig') }}
 
-            {% set label, element, nbr, last, nom, image = 'Familles', 'famille', nbrFamilles, derniereFamille, derniereFamille.nom, derniereFamille.mon|default('non-définie') %}
-            {{ include('back_office/card-element-resume.html.twig') }}
+                        {% set label, element, nbr, last, nom, image = 'Familles', 'famille', nbrFamilles, derniereFamille, derniereFamille.nom, derniereFamille.mon|default('non-définie') %}
+                        {{ include('back_office/card-element-resume.html.twig') }}
 
-            {% set label, element, nbr, last, nom, image = 'Archives', 'archive', nbrArchives, derniereArchive, derniereArchive.titre, derniereArchive.image|default('non-définie') %}
-            {{ include('back_office/card-element-resume.html.twig') }}
+                        {% set label, element, nbr, last, nom, image = 'Archives', 'archive', nbrArchives, derniereArchive, derniereArchive.titre, derniereArchive.image|default('non-définie') %}
+                        {{ include('back_office/card-element-resume.html.twig') }}
 
-            {% set label, element, nbr, last, nom, image = 'Lieux', 'lieu', nbrLieux, dernierLieu, dernierLieu.nom, dernierLieu.image|default('non-définie') %}
-            {{ include('back_office/card-element-resume.html.twig') }}
-        </section>
+                        {% set label, element, nbr, last, nom, image = 'Lieux', 'lieu', nbrLieux, dernierLieu, dernierLieu.nom, dernierLieu.image|default('non-définie') %}
+                        {{ include('back_office/card-element-resume.html.twig') }}
+                    </section>
 
 
-        {# REGLES #}
-        <h2 class="mt-5">Règles</h2>
-        <hr>
-        <p class="mb-4 text-muted">Récapitulatif des éléments ajoutés pour lees mécaniques de jeu.</p>
+                    {# REGLES #}
+                    <h2 class="mt-5">Règles</h2>
+                    <hr>
+                    <p class="mb-4 text-muted">Récapitulatif des éléments ajoutés pour lees mécaniques de jeu.</p>
 
-        <section class="row">
-            {% set label, element, nbr, last, nom, image = 'Règles', 'rule', nbrRules, derniereRule, derniereRule.nom|default('non-définie'), derniereRule.image|default('non-définie') %}
-            {{ include('back_office/card-element-resume.html.twig') }}
-            
-            {% set label, element, nbr, last, nom, image = 'Classes', 'classe', nbrClasses, dernierClasse, dernierClasse.nom, dernierClasse.icone|default('non-définie') %}
-            {{ include('back_office/card-element-resume.html.twig') }}
+                    <section class="row">
+                        {% set label, element, nbr, last, nom, image = 'Règles', 'rule', nbrRules, derniereRule, derniereRule.nom|default('non-définie'), derniereRule.image|default('non-définie') %}
+                        {{ include('back_office/card-element-resume.html.twig') }}
+                        
+                        {% set label, element, nbr, last, nom, image = 'Classes', 'classe', nbrClasses, dernierClasse, dernierClasse.nom, dernierClasse.icone|default('non-définie') %}
+                        {{ include('back_office/card-element-resume.html.twig') }}
 
-            {% set label, element, nbr, last, nom, image = 'Écoles', 'ecole', nbrEcoles, dernierEcole, dernierEcole.nom, dernierEcole.image|default('non-définie') %}
-            {{ include('back_office/card-element-resume.html.twig') }}
-        </section>
+                        {% set label, element, nbr, last, nom, image = 'Écoles', 'ecole', nbrEcoles, dernierEcole, dernierEcole.nom, dernierEcole.image|default('non-définie') %}
+                        {{ include('back_office/card-element-resume.html.twig') }}
+                    </section>
 
-        {# PERSONNAGES #}
-        <h2 class="mt-5">Personnages</h2>
-        <hr>
-        <p class="mb-4 text-muted">Voici le tableau de bord relatif aux personnages.</p>
+                    {# PERSONNAGES #}
+                    <h2 class="mt-5">Personnages</h2>
+                    <hr>
+                    <p class="mb-4 text-muted">Voici le tableau de bord relatif aux personnages.</p>
 
-        <section class="row">
-            {% set label, element, nbr, last, nom, image = 'PJs', 'personnage', nbrPJs, dernierPJ, dernierPJ.prenom, dernierPJ.icone|default('non-définie') %}
-            {{ include('back_office/card-element-resume.html.twig') }}
+                    <section class="row">
+                        {% set label, element, nbr, last, nom, image = 'PJs', 'personnage', nbrPJs, dernierPJ, dernierPJ.prenom, dernierPJ.icone|default('non-définie') %}
+                        {{ include('back_office/card-element-resume.html.twig') }}
 
-            {% set label, element, nbr, last, nom, image = 'PNJs', 'personnage', nbrPNJs, dernierPNJ, dernierPNJ.prenom, dernierPNJ.icone|default('non-définie') %}
-            {{ include('back_office/card-element-resume.html.twig') }}
+                        {% set label, element, nbr, last, nom, image = 'PNJs', 'personnage', nbrPNJs, dernierPNJ, dernierPNJ.prenom, dernierPNJ.icone|default('non-définie') %}
+                        {{ include('back_office/card-element-resume.html.twig') }}
 
-            {% set label, element, nbr, last, nom, image = 'Fiches personnages', 'fiche', nbrFiches, derniereFiche, derniereFiche.personnage.prenom, derniereFiche.personnage.icone|default('non-définie') %}
-            {{ include('back_office/card-element-resume.html.twig') }}
-        </section>
+                        {% set label, element, nbr, last, nom, image = 'Fiches personnages', 'fiche', nbrFiches, derniereFiche, derniereFiche.personnage.prenom, derniereFiche.personnage.icone|default('non-définie') %}
+                        {{ include('back_office/card-element-resume.html.twig') }}
+                    </section>
 
-{% endif %}
+                {% endif %}
 
-{% if app.user and is_granted("ROLE_ADMIN") %}
+                {% if app.user and is_granted("ROLE_ADMIN") %}
 
-        {# UTILISATEURS #}
-        <h2 class="mt-5">Comptes Utilisateurs</h2>
-        <hr>
-        <p class="mb-4 text-muted">Voici le tableau de bord relatif aux comptes utilisateurs.</p>
+                    {# UTILISATEURS #}
+                    <h2 class="mt-5">Comptes Utilisateurs</h2>
+                    <hr>
+                    <p class="mb-4 text-muted">Voici le tableau de bord relatif aux comptes utilisateurs.</p>
 
-        <section class="row">
-            {% set label, element, nbr, last, nom, image = 'Utilisateurs', 'utilisateur', nbrUtilisateurs, dernierUtilisateur, dernierUtilisateur.pseudo, dernierUtilisateur.avatar %}
-            {{ include('back_office/card-element-resume.html.twig') }}
-        </section>
+                    <section class="row">
+                        {% set label, element, nbr, last, nom, image = 'Utilisateurs', 'utilisateur', nbrUtilisateurs, dernierUtilisateur, dernierUtilisateur.pseudo, dernierUtilisateur.avatar %}
+                        {{ include('back_office/card-element-resume.html.twig') }}
+                    </section>
 
-{% endif %}
+                {% endif %}
 
-        {% endblock %}
+            {% endblock %}
 
-    </div> 
-</main>
+        </div> 
+    </main>
 
-{% endblock %}
+    {% block javascripts %}
+        {{parent()}}
+        <script src="{{ asset('scripts/forms.js') }}"></script>
+    {% endblock %}
 
-{% block javascripts %}
-    {{ parent() }}
-    <script src="{{ asset('scripts/forms.js') }}"></script>
 {% endblock %}

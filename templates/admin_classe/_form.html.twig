@@ -13,17 +13,20 @@
                 {% endif %}
             </div>
 
+            <!-- IMAGE -->
             <div class="col-12 mt-3">
-                {% if type == 'Modifier' %}
-                    <img class="img-fluid" src="{{ asset(classe.image|default('assets/img/placeholders/1280x720.jpg')) }}" />
-                {% endif %}
+                {{ form_label(form.image) }}
+                <label id="preview-label" for="admin_classe_image" class="{% if type != 'Modifier' %}d-none{% endif %} hover-slight-fade hover-pointer hover-icon-visible">
+                    <icon class="btn-icon-medium right-corner-16"><i class="fas fa-edit semi-visible link-white"></i></icon>
+                    <img id="image-preview" class="img-fluid" src="{% if type == 'Modifier' %}{{ asset(classe.image|default('assets/img/placeholders/1280x720.jpg')) }}{% endif %}" />
+                </label>
+                <browse id="browse-label">
+                    <span id="fileName"></span>
+                    {{form_widget(form.image, {'attr': {'class': 'input-image'}}) }}
+                </browse> 
             </div>
 
-            <div class="col-12 mt-2">
-                {{ form_row(form.image) }}
-            </div>
-
-            <div class="col-12">
+            <div class="col-12 mt-5">
                 {{ form_row(form.citation) }}
             </div>
 

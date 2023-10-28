@@ -10,6 +10,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Validator\Constraints\Length;
 
 class AdminRuleType extends AbstractType
@@ -19,6 +20,7 @@ class AdminRuleType extends AbstractType
         $builder
             ->add('nom', TextType::class, [ 'constraints' => [ new Length( [ 'max' => 100 ] ) ] ] )
             ->add('base', CheckboxType::class, ['required' => false])
+            ->add('numero', IntegerType::class)
             ->add('image', FileType::class, array('mapped' => false, 'data_class' => null, 'required' => false))
             ->add('pdf', FileType::class, ['required' => false])
             ->add('part1titre', TextType::class, ['required' => false, 'constraints' => [ new Length( [ 'max' => 100 ] ) ] ] )
@@ -30,6 +32,12 @@ class AdminRuleType extends AbstractType
             ->add('part3titre', TextType::class, ['required' => false, 'constraints' => [ new Length( [ 'max' => 100 ] ) ] ] )
             ->add('part3', TextareaType::class, ['required' => false])
             ->add('part3aside', textareaType::class, ['required' => false])
+            ->add('part4titre', TextType::class, ['required' => false, 'constraints' => [ new Length( [ 'max' => 100 ] ) ] ] )
+            ->add('part4', TextareaType::class, ['required' => false])
+            ->add('part4aside', textareaType::class, ['required' => false])
+            ->add('part5titre', TextType::class, ['required' => false, 'constraints' => [ new Length( [ 'max' => 100 ] ) ] ] )
+            ->add('part5', TextareaType::class, ['required' => false])
+            ->add('part5aside', textareaType::class, ['required' => false])
         ;
     }
 

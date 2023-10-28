@@ -1,19 +1,22 @@
-/* --------------------------- */
-/* --------- LINKS  ---------- */
-/* --------------------------- */
+/* ----------------- */
+/* ----- LINKS ----- */
+/* ----------------- */
 
 :root a:hover {
     text-decoration: none;
 }
 
+.link-disabled {
+    pointer-events: none; cursor: pointer; }
+
 /* ---- Common Links ---- */
 
 .link-accent {
-    color: var(--accent-dark);
+    color: var(--accent);
 }
 
 .link-accent:hover {
-    color: var(--accent);
+    color: var(--primary);
     text-decoration: none;
 }
 
@@ -38,7 +41,7 @@
 }
 
 .link-white:hover {
-    color: var(--secondary-light);
+    color: var(--white);
     text-decoration: none;
 }
 
@@ -86,21 +89,4 @@ a.scene-text {
 
 a.scene-text a:hover {
     text-decoration: none;
-}
-
-
-/* ---- FOOTER  ---- */
-
-.footer-link { color: var(--light-alpha) !important; }
-.footer-link:hover {
-    color: var(--white) !important;
-    text-decoration: underline;
-}
-
-#social-medias a {
-    color: var(--white) !important;
-}
-
-#social-medias a:hover {
-    color: var(--primary) !important;
 }

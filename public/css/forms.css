@@ -1,0 +1,20 @@
+/* ----------------- */
+/* ----- FORMS ----- */
+/* ----------------- */  
+
+#preview-label {
+    display: block;
+    position: relative;
+}
+
+#browse-label {
+    display: block;
+    position: relative;
+}
+
+#fileName {
+    position: absolute;
+    z-index: 10;
+    left: 16px;
+    top: 8px;
+}

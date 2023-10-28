@@ -7,6 +7,8 @@
     --light-alpha: rgba(255, 255, 255, 0.5);
     --light-trans: rgba(255, 255, 255, 0.2);
 
+    --gray-lighter: #808080;
+    --gray-light: #606060;
     --gray: #464a4d;
 
     --dark: #303030;
@@ -34,6 +36,7 @@
     --secondary-pastel-darkest: #1E242A;
 
     --accent: #ff7f00;
+    --accent-lightest: #fcf8e3;
     --accent-light: #ffcc66;
     --accent-dark: #cc6600;
 
@@ -42,62 +45,68 @@
     --green: rgb(0,100,0) !important;
     --cyan: rgb(0,100,100) !important;
     --fuschia: #FF1493;
-    --flash-red: #f00;
+    --flash-red: #f66;
     --flash-green: #0f0;
     --flash-cyan: #0ff;
+
+    --AIR: #7aa9ff;
+    --EAU: #44bdc4;
+    --FEU: rgb(255, 157, 76);
+    --TERRE: #9e816a;
+    --VIDE: #b293ff;
 }
 
 
 
-/* -------------------------------- */
-/* ------------ TEXT COLORS ------- */
-/* -------------------------------- */
+/* ----------------------- */
+/* ----- TEXT COLORS ----- */
+/* ----------------------- */
 
-.text-light-trans {
-    color: var(--light-trans);
-}
+/* BLACK & WHITE */
+.text-black { color:  var(--black) !important; }
+.text-dark { color:  var(--dark) !important; }
+.text-white { color: var(--white) !important; }
 
-.text-light-alpha {
-    color: var(--light-alpha);
-}
+/* GRAY */
+.text-lightest { color: var(--lightest) !important; }
+.text-lighter { color: var(--lighter) !important; }
+.text-light { color: var(--light) !important; }
+.text-gray { color:  var(--gray) !important; }
 
-.text-white {
-    color: var(--white) !important;
-}
+/* PRIMARY, SECONDARY, ACCENT */
+.text-primary { color: var(--primary) !important; }
+.text-primary-dark { color: var(--primary-dark) ; }
+.text-primary-darker { color: var(--primary-darker) ; }
+.text-primary-darker-more { color: var(--primary-darker-more) ; }
+.text-accent { color:var(--accent); }
 
-.text-lightest {
-    color: var(--lightest) !important;
-}
+/* TRANSPARENT */
+.text-light-trans { color: var(--light-trans); }
+.text-light-alpha { color: var(--light-alpha); }
 
-.text-light {
-    color: var(--light) !important;
-}
+/* ELEMENTS */
+.text-AIR { color: var(--AIR); }
+.text-EAU { color: var(--EAU); }
+.text-FEU { color: var(--FEU); }
+.text-TERRE { color: var(--TERRE); }
+.text-VIDE { color: var(--VIDE); }
 
-.text-black {
-    color:  var(--black) !important;
-}
-
-.text-gray {
-        color:  var(--gray) !important;
-}   
-
-.text-primary {
-    color: var(--primary) !important; }
-
-.text-accent {
-    color:var(--accent); }
-
-.text-flash-green {
-    color:var(--flash-green); }
-
-.text-fuschia {
-    color:var(--fuschia); }
+/* OTHERS */
+.text-green { color:var(--green); }
+.text-flash-green { color:var(--flash-green); }
+.text-fuschia { color:var(--fuschia); }
 
 
 
-/* -------------------------------- */
-/* ------ BACKGROUND COLORS ------- */
-/* -------------------------------- */
+/* ----------------------------- */
+/* ----- BACKGROUND COLORS ----- */
+/* ----------------------------- */
+
+.bg-AIR { background-color: var(--AIR); }
+.bg-EAU { background-color: var(--EAU); }
+.bg-FEU { background-color: var(--FEU); }
+.bg-TERRE { background-color: var(--TERRE); }
+.bg-VIDE { background-color: var(--VIDE); }
 
 .bg-black {
     background-color: var(--black) !important; }

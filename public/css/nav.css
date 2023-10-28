@@ -1,6 +1,6 @@
-/* ----------------------- */
-/* --------- NAV --------- */
-/* ----------------------- */  
+/* --------------- */
+/* ----- NAV ----- */
+/* --------------- */  
 
 #navigation-bar {
     position: relative;
@@ -33,7 +33,9 @@ nav .active {
 }
 
 
-/* ---- User Zone in Nav Bar ---- */
+/* --------------------- */
+/* ----- USER ZONE ----- */
+/* --------------------- */  
 
 #user-zone {
     display: flex;
@@ -65,7 +67,10 @@ nav .active {
 }
 
 
-/* ---- Top Band Link to Admin / MJ Panel ---- */
+
+/* --------------------------- */
+/* ----- MJ / ADMIN ZONE ----- */
+/* --------------------------- */  
 
 #admin-panel-band, #mj-panel-band {
     display: block;

@@ -39,7 +39,7 @@
 
             {% if un_element.video is defined and un_element.video is not empty %}
                 <button id="btn-play" class="btn-unstyle" onclick="focusVideo()">
-                    <animation id="zone-mon" class="animation-shine hover-zoom-x2">
+                    <animation id="zone-mon" class="animation-shine hover-zoom">
                         <i id="icon-play" class="invisible fa-solid fa-video fa-4x"></i>
                         <img class="img-240 filter-shadow" src="{{ asset(icone) }}" alt="Blason" title="Visualiser/Écouter la Vidéo" />
                     </animation>
@@ -54,7 +54,7 @@
             <!-- CHAMPION -->
             {% if un_element.chef is defined %}
                 {% if un_element.chef is not empty %}
-                    <a style="color: {{ un_element.couleur }}" class="d-flex hover-no-under hover-zoom-x2 mt-3" href="{{ path('personnage_profil', {id: un_element.chef.id} ) }}">
+                    <a style="color: {{ un_element.couleur }}" class="d-flex hover-no-under hover-zoom mt-3" href="{{ path('personnage_profil', {id: un_element.chef.id} ) }}">
                         <img class="img-48" src="{{ asset(un_element.chef.icone) }}" alt="Icône du personnage" />
                         <div class="d-flex flex-column text-left ml-3">
                             <strong>{{ un_element.chef.nom }} {{ un_element.chef.prenom }}</strong>

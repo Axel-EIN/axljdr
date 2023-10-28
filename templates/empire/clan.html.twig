@@ -36,7 +36,7 @@
                             <img class="img-fluid" src="{{ asset(une_famille.mon) }}" alt="Mon Famille" />
 
                             {% if une_famille.chef is not empty %}
-                                <a class="mt-3 hover-no-under hover-zoom-x2" href="{{ path('personnage_profil', {id: une_famille.chef.id} ) }}" title="{{une_famille.chef.nom}} {{une_famille.chef.prenom}}">
+                                <a class="mt-3 hover-no-under hover-zoom" href="{{ path('personnage_profil', {id: une_famille.chef.id} ) }}" title="{{une_famille.chef.nom}} {{une_famille.chef.prenom}}">
                                     <img class="character-icon-small" src="{{ asset(une_famille.chef.icone) }}" alt="Icône du personnage" />
                                     <span class="text-muted align-middle">Daimyo</span>
                                 </a>                                 
@@ -152,7 +152,7 @@
 
             {# PERSONNAGE  #}
             {% for un_personnage in clan.personnages %}
-                <a class="{{col_perso}} p-1 hover-zoom-x2" href="{{ path('personnage_profil', {id: un_personnage.id} ) }}" >
+                <a class="{{col_perso}} p-1 hover-zoom" href="{{ path('personnage_profil', {id: un_personnage.id} ) }}" >
                     <img class="img-fluid rounded-8" src="{{ asset(un_personnage.icone) }}" alt="Icône du personnage" />
                 </a>
             {% endfor %}

@@ -15,7 +15,7 @@
             <div class="relative">
 
                 <!-- SURIMPRESSION DROITE : CONTROLE PAR  -->
-                <a id="banner-icon-clan" class="hover-zoom-x2" href="{{ path('empire_clan', {id:un_element.clan.id} ) }}" >
+                <a id="banner-icon-clan" class="hover-zoom" href="{{ path('empire_clan', {id:un_element.clan.id} ) }}" >
                     <img class="img-96 filter-shadow" src="{{ asset(un_element.clan.mon) }}" alt="Mon d'une faction" title="Voir la faction {{un_element.clan.nom}}" />
                 </a>
 
@@ -121,7 +121,7 @@
             <div class="row">
             <!-- UN PERSONNAGE -->
             {% for un_personnage in ecole.personnages %}
-                <a class="col-12 hover-zoom-x2 p-2" href="{{ path('personnage_profil', {id: un_personnage.id} ) }}">
+                <a class="col-12 hover-zoom p-2" href="{{ path('personnage_profil', {id: un_personnage.id} ) }}">
                     <img class="img-fluid rounded-8" src="{{ asset(un_personnage.icone) }}" alt="Icône d'un personnage" title="Voir le profil de {{un_personnage.prenom}}" />
                 </a>
             {% endfor %}
@@ -146,7 +146,7 @@
             <hr>
             <div class="row p-0 m-0 pt-2">
                 {% for autreEcole in autresEcoles %}
-                    <a class="col-2 m-0 p-2 text-center hover-zoom-x2 relative hover-span-visible" href="{{ path('regles_ecole', {id: autreEcole.id} ) }}" title="{{autreEcole.nom}}">
+                    <a class="col-2 m-0 p-2 text-center hover-zoom relative hover-span-visible" href="{{ path('regles_ecole', {id: autreEcole.id} ) }}" title="{{autreEcole.nom}}">
                         <img class="img-fluid" src="{{ asset(autreEcole.image) }}" alt="Image d'une école" title="{{autreEcole.nom}}"/>
                         <span class="text-small"><strong>{{autreEcole.nom}}</strong></span>
                     </a>

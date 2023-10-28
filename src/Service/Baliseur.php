@@ -32,7 +32,7 @@ class Baliseur
 
             if ($personnage_trouve != null) {
                 $tableau_remplacement[] =
-                    '<a class="hover-zoom-x2 character-icon bg-lightest pr-1 pt-0 pb-0 pl-0" href="../../personnages/profil/' . $personnage_trouve->getId() . '">'
+                    '<a class="hover-zoom character-icon bg-lightest pr-1 pt-0 pb-0 pl-0" href="../../personnages/profil/' . $personnage_trouve->getId() . '">'
                                 . '<img class="character-icon-small" src="../../' . $personnage_trouve->getIcone()
                                 . '" alt="Icône du personnage" title="' . $personnage_trouve->getPrenom() .'" /> ' . $personnage_trouve->getPrenom() . '</a>';
             } else
@@ -80,7 +80,7 @@ class Baliseur
 
             if ($lieu_trouve != null) {
                 $tableau_remplacement[] =
-                    '<a class="hover-zoom-x2 location-icon bg-lightest pr-1 pt-0 pb-0 pl-0" href="../../empire/lieu/' . $lieu_trouve->getId() . '">'
+                    '<a class="hover-zoom location-icon bg-lightest pr-1 pt-0 pb-0 pl-0" href="../../empire/lieu/' . $lieu_trouve->getId() . '">'
                                 . '<img class="location-icon-small" src="../../' . $lieu_trouve->getIcone()
                                 . '" alt="Icône Lieu" title="Voir ' . $lieu_trouve->getNom() .'" /> ' . $lieu_trouve->getNom() . '</a>';
             } else

@@ -7,7 +7,7 @@
         {% for uneRule in rules %}
 
             <!--- UNE REGLE DE BASE -->
-            <a class="col-3 text-center hover-zoom-x2" href="{{ path('regles_rule', {id: uneRule.id} ) }}">
+            <a class="col-3 text-center hover-zoom" href="{{ path('regles_rule', {id: uneRule.id} ) }}">
                 <img class="img-160" src="{{ asset(uneRule.image) }}" alt="Image de la Règle" title="{{uneRule.nom}}" />
                 <br>
                 <h4 class="text-center my-2">
@@ -25,7 +25,7 @@
         {% for une_classe in classes %}
 
             <!--- UNE CLASSE -->
-            <article class="col-xl-2 col-lg-3 col-md-4 col-sm-6 py-3 text-center hover-zoom-x2">
+            <article class="col-xl-2 col-lg-3 col-md-4 col-sm-6 py-3 text-center hover-zoom">
                 <a href="{{ path('regles_classe', {id: une_classe.id} ) }}">
                     <img class="img-160 hover-{{une_classe.nom|lower}}" src="{{ asset(une_classe.icone) }}" alt="Icône de la classe" title="{{une_classe.nom}}" />
                 </a>

@@ -82,6 +82,41 @@ class Rule
      */
     private $part3aside;
 
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $part4;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $part4titre;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $part4aside;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $part5;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $part5titre;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $part5aside;
+
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $numero;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -245,6 +280,90 @@ class Rule
     public function setPart3aside(?string $part3aside): self
     {
         $this->part3aside = $part3aside;
+
+        return $this;
+    }
+
+    public function getPart4(): ?string
+    {
+        return $this->part4;
+    }
+
+    public function setPart4(?string $part4): self
+    {
+        $this->part4 = $part4;
+
+        return $this;
+    }
+
+    public function getPart4titre(): ?string
+    {
+        return $this->part4titre;
+    }
+
+    public function setPart4titre(?string $part4titre): self
+    {
+        $this->part4titre = $part4titre;
+
+        return $this;
+    }
+
+    public function getPart4aside(): ?string
+    {
+        return $this->part4aside;
+    }
+
+    public function setPart4aside(?string $part4aside): self
+    {
+        $this->part4aside = $part4aside;
+
+        return $this;
+    }
+
+    public function getPart5(): ?string
+    {
+        return $this->part5;
+    }
+
+    public function setPart5(?string $part5): self
+    {
+        $this->part5 = $part5;
+
+        return $this;
+    }
+
+    public function getPart5titre(): ?string
+    {
+        return $this->part5titre;
+    }
+
+    public function setPart5titre(?string $part5titre): self
+    {
+        $this->part5titre = $part5titre;
+
+        return $this;
+    }
+
+    public function getPart5aside(): ?string
+    {
+        return $this->part5aside;
+    }
+
+    public function setPart5aside(?string $part5aside): self
+    {
+        $this->part5aside = $part5aside;
+
+        return $this;
+    }
+
+    public function getNumero(): ?int
+    {
+        return $this->numero;
+    }
+
+    public function setNumero(int $numero): self
+    {
+        $this->numero = $numero;
 
         return $this;
     }

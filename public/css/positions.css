@@ -1,18 +1,25 @@
-/* ------------------------- */
-/* ------- POSITION  ------- */
-/* ------------------------- */
+/* --------------------- */
+/* ----- POSITIONS ----- */
+/* --------------------- */
 
 .relative {
         position: relative; }
 
 .absolute {
         position: absolute; }
-        
+
+.left-overflow {
+        position: absolute;
+        z-index: 10;
+        left: -1.5rem;
+        top: 0.5rem;
+}
+
 .right-snap {
         position: absolute;
         z-index: 10;
         right:-8px;
-        top:8px; }
+        top:18px; }
 
 .right-corner-snap {
         position: absolute;

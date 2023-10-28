@@ -17,7 +17,7 @@
 
                 <!-- SURIMPRESSION DROITE : CONTROLE PAR  -->
                 {% if un_element.clan is not empty %}
-                    <div class="text-center px-5 hover-zoom-x2" style="position: absolute; z-index: 5; right: 3rem; bottom: 1rem;">
+                    <div class="text-center px-5 hover-zoom" style="position: absolute; z-index: 5; right: 3rem; bottom: 1rem;">
                         <a class="link-white" href="{{ path('empire_clan', {id:un_element.clan.id} ) }}" >
                             <img class="ml-2 img-48" src="{{ asset(un_element.clan.mon) }}" alt="Mon d'une faction" title="{{un_element.clan.nom}}" />
                         </a>
@@ -101,7 +101,7 @@
             <hr>
             <row class="row p-0 m-0 pt-3">
                 {% for autreLieu in autresLieux %}
-                <a class="col-2 m-0 p-2 text-center hover-zoom-x2 relative hover-span-visible" href="{{ path('empire_lieu', {id: autreLieu.id} ) }}" >
+                <a class="col-2 m-0 p-2 text-center hover-zoom relative hover-span-visible" href="{{ path('empire_lieu', {id: autreLieu.id} ) }}" >
                     {% if autreLieu.icone is defined and autreLieu.icone is not empty %}
                         <img class="icon-lieu-top img-64" src="{{ asset(autreLieu.icone) }}" alt="une icône" />
                     {% endif %}

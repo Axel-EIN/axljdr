@@ -19,7 +19,7 @@
             <div class="card-text m-0 row">
                 <!-- UNE ECOLE -->
                 {% for une_ecole in ecolesClasse %}
-                    <article class="col-4 p-3 hover-zoom-x2 text-center">
+                    <article class="col-4 p-3 hover-zoom text-center">
                         <a href="{{ path('regles_ecole', {id: une_ecole.id} ) }}">
                             <img class="img-fluid" src="{{ asset(une_ecole.image) }}" alt="Image d'une école" title="{{une_ecole.nom}}" />
                         </a><br/>
@@ -41,7 +41,7 @@
 
                 <!-- UN PERSONNAGE -->
                 {% for un_personnage in personnagesClasse|slice(0,16) %}
-                    <article class="p-1 hover-zoom-x2">
+                    <article class="p-1 hover-zoom">
                         <a href="{{ path('personnage_profil', {id: un_personnage.id} ) }}">
                             <img class="img-128" src="{{ asset(un_personnage.icone) }}" alt="Icône d'un personnage" title="Voir profil de {{un_personnage.prenom}}" />
                         </a>

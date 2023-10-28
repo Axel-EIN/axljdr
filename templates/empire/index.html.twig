@@ -19,7 +19,7 @@
         {% for un_clan_majeur in clansMajeurs %}
 
             <!-- UN CLAN MAJEUR -->
-            <article class="col-lg-3 col-md-4 col-sm-6 py-3 text-center hover-zoom-x2 hover-shine">
+            <article class="col-lg-3 col-md-4 col-sm-6 py-3 text-center hover-zoom hover-shine">
                 <a href="{{ path('empire_clan', {id: un_clan_majeur.id} ) }}"><img class="img-160" src="{{ asset(un_clan_majeur.mon) }}" alt="Mon du clan" /></a>
                 <br/>
                 <h3 class="text-center my-3"><strong><a href="{{ path('empire_clan', {id: un_clan_majeur.id} ) }}">{{ un_clan_majeur.nom }}</a></strong></h3>
@@ -34,7 +34,7 @@
         <div class="row p-0 m-0 justify-content-around">
         {% for un_clan_autre in clansAutres %}
             <!-- UN CLAN AUTRE -->
-            <a class="col-6 m-0 p-1 hover-zoom-x2 hover-shine" href="{{ path('empire_clan', {id: un_clan_autre.id} ) }}">
+            <a class="col-6 m-0 p-1 hover-zoom hover-shine" href="{{ path('empire_clan', {id: un_clan_autre.id} ) }}">
                 <img class="img-96" src="{{ asset(un_clan_autre.mon) }}" alt="Mon du clan" title="{{un_clan_autre.nom}}" /></a>
             </a>
         {% endfor %}

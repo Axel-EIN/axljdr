@@ -47,10 +47,17 @@ class AdminRuleController extends AbstractController
                 $rule->setImage($fileHandler->handle($image, null, $prefix, 'rules'));
             }
 
+            // PDF
+            $pdf = $form->get('pdf')->getData();
+            if (!empty($pdf)) {
+                $prefix = 'rule-' . $rule->getNom() . '-pdf';
+                $rule->setPdf($fileHandler->handle($pdf, null, $prefix, 'rules-pdfs'));
+            }
+
             $em->persist($rule);
             $em->flush();
 
-            $this->addFlash('sucess', 'La Règle a bien été ajoutée.');
+            $this->addFlash('success', 'La Règle a bien été ajoutée.');
 
             // NUMEROTEUR
             // ----------
@@ -93,6 +100,13 @@ class AdminRuleController extends AbstractController
                 $rule->setImage($fileHandler->handle($nouvelleImage, $rule->getImage(), $prefix, 'rules'));
             }
 
+            // PDF
+            $nouveauPDF = $form->get('pdf')->getData();
+            if (!empty($nouveauPDF)) {
+                $prefix = 'rule-' . $rule->getNom() . '-pdf';
+                $rule->setPdf($fileHandler->handle($nouveauPDF, $rule->getPdf(), $prefix, 'rules-pdfs'));
+            }
+
             // NUMEROTEUR
             // ----------
             // Si numero change ou parent change
@@ -104,7 +118,7 @@ class AdminRuleController extends AbstractController
             }
 
             $this->getDoctrine()->getManager()->flush();
-            $this->addFlash('sucess', 'La Règle a bien été modifié.');
+            $this->addFlash('success', 'La Règle a bien été modifiée.');
 
             // REDIRECTION
             if (!empty($request->query->get('redirect')) && $request->query->get('redirect') == 'rule')
@@ -129,6 +143,7 @@ class AdminRuleController extends AbstractController
         if ( $this->isCsrfTokenValid('delete' . $rule->getId(), $request->query->get('csrf')))
         {
             $fileHandler->handle(null, $rule->getImage(), null, 'rules');
+            $fileHandler->handle(null, $rule->getPdf(), null, 'rules-pdfs');
 
             // NUMEROTEUR
             // ----------
@@ -139,7 +154,7 @@ class AdminRuleController extends AbstractController
             $em->remove($rule);
             $em->flush();
 
-            $this->addFlash('success', 'La Règle a bien été ajoutée.');    
+            $this->addFlash('success', 'La Règle a bien été supprimée.');    
         }
 
         return $this->redirectToRoute('admin_rule');

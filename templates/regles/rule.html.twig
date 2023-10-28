@@ -1,10 +1,5 @@
 {% extends 'element.html.twig' %}
 
-{% block stylesheets %}
-    {{parent()}}
-    <link rel="stylesheet" href="{{asset('css/rule.css')}}" />
-{% endblock %}
-
 {% block element_content %}
 
     <section class="col-12 p-1 mb-3">
@@ -15,7 +10,13 @@
                 {% endif %}
             {% endfor %}
         </div>
-        <img class="img-fluid w-100 mt-3" src="{{asset(rule.image)}}" />
+        {% if rule.pdf is defined and rule.pdf is not empty %}
+            <a href="{{ asset(rule.pdf) }}" >
+                <img class="img-fluid w-100 mt-3" src="{{ asset(rule.image|default(asset('assets/img/placeholders/na_rule.jpg'))) }}" />
+            </a>
+        {% else %}
+            <img class="img-fluid w-100 mt-3" src="{{ asset(rule.image) }}" />
+        {% endif %}
     </section>
 
     {% for i in 1..5 %}
@@ -32,20 +33,31 @@
 
         {% if attribute(rule, 'part' ~ i ~ 'aside') is not empty %}
             <section class="col-4 p-1 mt-3 mb-3">
-                {# <aside class="h-100" style="background-image: url({{asset('assets/img/ui/bg-aside.png')}}); background-size: contain; background-repeat: no-repeat;">
-                    <p class="p-3 text-small text-justify">{{ attribute(rule, 'part' ~ i ~ 'aside')|raw|nl2br }}</p>
-                </aside> #}
-                <aside style="border-color: transparent;
-                                            border-style: double;
-                                            border-width: 24px 24px 120px 24px;
-                                            border-image: url({{asset('assets/img/ui/bg-aside.png')}}) 24 24 120 24 fill repeat;
-                                            padding: 10px;" >
+                <aside class="aside">
                     <p class="p-1 text-small text-justify">{{ attribute(rule, 'part' ~ i ~ 'aside')|raw|nl2br }}</p>
                 </aside>
             </section>
         {% endif %}
 
     {% endfor %}
+
+    {% if autresRules is defined and autresRules is not empty %}
+    <!-- AUTRES BASIC RULES -->
+    <aside class="col-12 p-1">
+        <div class="card card-body h-100 pb-1">
+            <h2 class="card-title">Autres <strong>Règles</strong></h2>
+            <hr>
+            <div class="row p-0 m-0 pt-2">
+                {% for autreRule in autresRules %}
+                    <a class="col-2 m-0 p-2 text-center hover-zoom relative hover-span-visible" href="{{ path('regles_rule', {id: autreRule.id} ) }}" title="{{autreRule.nom}}">
+                        <img class="img-fluid" src="{{ asset(autreRule.image|default(asset('assets/img/placeholders/na_rule.jpg'))) }}" alt="Image d'une Règle" title="{{autreRule.nom}}"/>
+                        <span class="text-small"><strong>{{autreRule.nom}}</strong></span>
+                    </a>
+                {% endfor %}
+            </div>
+        </div>
+    </aside>
+    {% endif %}
 
 
 {% endblock %}

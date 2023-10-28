@@ -6,7 +6,7 @@ html, body {
     font-size: 18px;
     font-family: 'Barlow Condensed';
     line-height: 1.4;
-    color: #303030;
+    color: var(--dark);
 }
 
 @media (max-width: 1200px) { html, body { font-size: 16px; } }
@@ -59,6 +59,14 @@ p.text-medium {
 }
 
 
+
+/* --------------------- */
+/* ----- PARAGRAPH ----- */
+/* --------------------- */
+
+p > mark {
+    color: unset;
+}
 
 /* ---------------------------------- */
 /* --------- TEXT EFFECTS  ---------- */
@@ -131,49 +139,10 @@ p.text-medium {
 }
 
 .text-dead {
-    color: var(--primary-dark);
+    color: var(--primary-darker);
     text-shadow:
         1px 1px 0 var(--flash-red),
         -1px -1px 0 var(--flash-red),
         1px -1px 0 var(--flash-red),
         -1px 1px 0 var(--flash-red);
-}
-
-
-
-/* ----------------------------------- */
-/* --------- TITLE EFFECTS  ---------- */
-/* ----------------------------------- */
-
-.big-title-effect {
-    font-family: "Shogun";
-    color: var(--white);
-    text-align: center;
-    margin: 0;
-    text-shadow: 4px 4px 2rem black;
-}
-
-.session-title-container-effect {
-    z-index: 2;
-    color: var(--white);
-    font-family: "Present";
-    font-weight: 300;
-    text-shadow: 4px 4px 2rem black;
-    text-align: center;
-    background-image: url('../assets/img/ui/back-title.png');
-    background-size: 100% 130%;
-    background-repeat: no-repeat;
-    background-position: 50% 50%;
-}
-
-.text-daytime-overtop-container {
-    z-index: 2;
-    color: var(--white);
-    top: -5rem;
-    width: 90%;
-}
-
-.text-daytime-overtop-container h3,
-.text-daytime-overtop-container h5 {
-    margin-bottom: 0;
 }

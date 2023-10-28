@@ -1,4 +1,5 @@
 // Clan Banner Mon Play Video Icon
+
 $('#zone-mon').hover(playVisible, playInvisible);
 
 function playVisible() {
@@ -29,21 +30,3 @@ function unfocusVideo() {
     $('#icon-mute-video').removeClass('visible');
     $('#icon-mute-video').addClass('invisible');
 };
-
-
-// Territory Map Image Modal Zoom
-
-var modalCarte = document.getElementById("carteZoomModal");
-var img = document.getElementById("carte");
-var modalImg = document.getElementById("carteModal");
-
-img.onclick = function(){
-  modalCarte.style.display = "block";
-  modalImg.src = this.src;
-}
-
-var span = document.getElementsByClassName("closeModal")[0];
-
-span.onclick = function() {
-  modalCarte.style.display = "none";
-} 

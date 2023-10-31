@@ -90,7 +90,7 @@ class Clan
     private $territoireDesc;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $image;
 
@@ -104,12 +104,24 @@ class Clan
      */
     private $genre;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Avantage::class, mappedBy="discountClan")
+     */
+    private $avantages;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Avantage::class, mappedBy="discountClan2")
+     */
+    private $avantages2;
+
     public function __construct()
     {
         $this->ecoles = new ArrayCollection();
         $this->personnages = new ArrayCollection();
         $this->lieux = new ArrayCollection();
         $this->familles = new ArrayCollection();
+        $this->avantages = new ArrayCollection();
+        $this->avantages2 = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -389,6 +401,66 @@ class Clan
     public function setGenre(string $genre): self
     {
         $this->genre = $genre;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Avantage>
+     */
+    public function getAvantages(): Collection
+    {
+        return $this->avantages;
+    }
+
+    public function addAvantage(Avantage $avantage): self
+    {
+        if (!$this->avantages->contains($avantage)) {
+            $this->avantages[] = $avantage;
+            $avantage->setDiscountClan($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAvantage(Avantage $avantage): self
+    {
+        if ($this->avantages->removeElement($avantage)) {
+            // set the owning side to null (unless already changed)
+            if ($avantage->getDiscountClan() === $this) {
+                $avantage->setDiscountClan(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Avantage>
+     */
+    public function getAvantages2(): Collection
+    {
+        return $this->avantages2;
+    }
+
+    public function addAvantages2(Avantage $avantages2): self
+    {
+        if (!$this->avantages2->contains($avantages2)) {
+            $this->avantages2[] = $avantages2;
+            $avantages2->setDiscountClan2($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAvantages2(Avantage $avantages2): self
+    {
+        if ($this->avantages2->removeElement($avantages2)) {
+            // set the owning side to null (unless already changed)
+            if ($avantages2->getDiscountClan2() === $this) {
+                $avantages2->setDiscountClan2(null);
+            }
+        }
 
         return $this;
     }

@@ -6,21 +6,17 @@ use App\Repository\SaisonRepository;
 use App\Repository\ChapitreRepository;
 use App\Repository\EpisodeRepository;
 use App\Repository\SceneRepository;
-
 use App\Repository\PersonnageRepository;
 use App\Repository\FichePersonnageRepository;
-
 use App\Repository\ClanRepository;
 use App\Repository\FamilleRepository;
 use App\Repository\ArchiveRepository;
 use App\Repository\LieuRepository;
-
 use App\Repository\RuleRepository;
 use App\Repository\ClasseRepository;
 use App\Repository\EcoleRepository;
-
+use App\Repository\AvantageRepository;
 use App\Repository\UtilisateurRepository;
-
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -30,7 +26,7 @@ class BackOfficeController extends AbstractController
     /**
      * @Route("/back-office", name="back_office")
      */
-    public function afficherBackOffice(SaisonRepository $saisonRepository,
+    public function viewBackOffice(SaisonRepository $saisonRepository,
                                        ChapitreRepository $chapitreRepository,
                                        EpisodeRepository $episodeRepository,
                                        SceneRepository $sceneRepository,
@@ -43,6 +39,7 @@ class BackOfficeController extends AbstractController
                                        RuleRepository $ruleRepository,
                                        ClasseRepository $classeRepository,
                                        EcoleRepository $ecoleRepository,
+                                       AvantageRepository $avantageRepository,
 
                                        PersonnageRepository $personnageRepository,
                                        FichePersonnageRepository $fichePersonnageRepository,
@@ -67,7 +64,7 @@ class BackOfficeController extends AbstractController
         $nbrScenes = $sceneRepository->countScenes();
         $dernierScene = $sceneRepository->findOneBy(array(),array('id' => 'DESC'));
 
-        // PERSONNAGES
+        // CHARACTERS
         $nbrPJs = $personnageRepository->countPJs();
         $dernierPJ = $personnageRepository->findOneBy(array("estPj" => "1"),array('id' => 'DESC'));
 
@@ -90,7 +87,7 @@ class BackOfficeController extends AbstractController
         $nbrLieux = $lieuRepository->countLieux();
         $dernierLieu = $lieuRepository->findOneBy(array(),array('id' => 'DESC'));
 
-        // REGLES
+        // RULES
         $nbrRules = $ruleRepository->countRules();
         $derniereRule = $ruleRepository->findOneBy(array(),array('id' => 'DESC'));
 
@@ -99,6 +96,9 @@ class BackOfficeController extends AbstractController
 
         $nbrEcoles = $ecoleRepository->countEcoles();
         $dernierEcole = $ecoleRepository->findOneBy(array(),array('id' => 'DESC'));
+
+        $nbrAvantages = $avantageRepository->countAvantages();
+        $dernierAvantage = $avantageRepository->findOneBy(array(),array('id' => 'DESC'));
 
         // USER
         $nbrUtilisateurs = $utilisateurRepository->countUtilisateurs();
@@ -138,6 +138,8 @@ class BackOfficeController extends AbstractController
             'dernierClasse' => $dernierClasse,
             'nbrEcoles' => $nbrEcoles,
             'dernierEcole' => $dernierEcole,
+            'nbrAvantages' => $nbrAvantages,
+            'dernierAvantage' => $dernierAvantage,
 
             'nbrUtilisateurs' => $nbrUtilisateurs,
             'dernierUtilisateur' => $dernierUtilisateur,

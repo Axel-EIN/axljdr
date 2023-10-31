@@ -18,7 +18,7 @@ class AdminLieuController extends AbstractController
     /**
      * @Route("/admin/lieu", name="admin_lieu")
      */
-    public function afficherAdminLieux(LieuRepository $lieuRepository): Response {
+    public function viewAdminLieux(LieuRepository $lieuRepository): Response {
         $lieux = $lieuRepository->findAll();
 
         return $this->render('admin_lieu/index.html.twig', [
@@ -30,7 +30,7 @@ class AdminLieuController extends AbstractController
      * @Route("/admin/lieu/create", name="admin_lieu_create")
      * @IsGranted("ROLE_MJ")
      */
-    public function ajouterLieu(Request $request, EntityManagerInterface $em, FileHandler $fileHandler) {
+    public function addLieu(Request $request, EntityManagerInterface $em, FileHandler $fileHandler) {
 
         $lieu = new Lieu;
         $form = $this->createForm(AdminLieuType::class, $lieu);
@@ -38,25 +38,28 @@ class AdminLieuController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
 
-
+            // File Image Handling
             $nouvelleImage = $form->get('image')->getData();
             if (!empty($nouvelleImage)) {
                 $prefix = 'lieu-' . $lieu->getNom() . '-image';
                 $lieu->setImage($fileHandler->handle($nouvelleImage, null, $prefix, 'lieux'));
             }
 
+            // File Map Image Handling
             $nouvelleCarte = $form->get('carte')->getData();
             if (!empty($nouvelleCarte)) {
                 $prefix = 'lieu-' . $lieu->getNom() . '-carte';
                 $lieu->setCarte($fileHandler->handle($nouvelleCarte, null, $prefix, 'lieux'));
             }
 
+            // File Region Image Handling
             $nouvelleRegion = $form->get('region')->getData();
             if (!empty($nouvelleRegion)) {
                 $prefix = 'lieu-' . $lieu->getNom() . '-region';
                 $lieu->setRegion($fileHandler->handle($nouvelleRegion, null, $prefix, 'lieux'));
             }
 
+            // File Icon Image Handling
             $nouvelleIcone = $form->get('icone')->getData();
             if (!empty($nouvelleIcone)) {
                 $prefix = 'lieu-' . $lieu->getNom() . '-icone';
@@ -65,7 +68,6 @@ class AdminLieuController extends AbstractController
 
             $em->persist($lieu);
             $em->flush();
-
             $this->addFlash('success', 'Le Lieu a bien été ajouté.');
 
             // REDIRECTION
@@ -85,31 +87,35 @@ class AdminLieuController extends AbstractController
      * @Route("/admin/lieu/{id}/edit", name="admin_lieu_edit")
      * @IsGranted("ROLE_MJ")
      */
-    public function editerLieu(Request $request, Lieu $lieu, FileHandler $fileHandler): Response {
+    public function editLieu(Request $request, Lieu $lieu, FileHandler $fileHandler): Response {
 
         $form = $this->createForm(AdminLieuType::class, $lieu);
         $form->handleRequest($request);
 
         if($form->isSubmitted() && $form->isValid()) {
 
+            // File Image Handling
             $nouvelleImage = $form->get('image')->getData();
             if (!empty($nouvelleImage)) {
                 $prefix = 'lieu-' . $lieu->getNom() . '-image';
                 $lieu->setImage($fileHandler->handle($nouvelleImage, $lieu->getImage(), $prefix, 'lieux'));
             }
 
+            // File Map Image Handling
             $nouvelleCarte = $form->get('carte')->getData();
             if (!empty($nouvelleCarte)) {
                 $prefix = 'lieu-' . $lieu->getNom() . '-carte';
                 $lieu->setCarte($fileHandler->handle($nouvelleCarte, $lieu->getCarte(), $prefix, 'lieux'));
             }
 
+            // File Region Image Handling
             $nouvelleRegion = $form->get('region')->getData();
             if (!empty($nouvelleRegion)) {
                 $prefix = 'lieu-' . $lieu->getNom() . '-region';
                 $lieu->setRegion($fileHandler->handle($nouvelleRegion, $lieu->getRegion(), $prefix, 'lieux'));
             }
 
+            // File Icon Image Handling
             $nouvelleIcone = $form->get('icone')->getData();
             if (!empty($nouvelleIcone)) {
                 $prefix = 'lieu-' . $lieu->getNom() . '-icone';
@@ -138,12 +144,13 @@ class AdminLieuController extends AbstractController
      * @Route("/admin/lieu/{id}/delete", name="admin_lieu_delete", methods={"GET"})
      * @IsGranted("ROLE_MJ")
      */
-    public function supprimerLieu(Request $request, Lieu $lieu, FileHandler $fileHandler): Response {
+    public function deleteLieu(Request $request, Lieu $lieu, FileHandler $fileHandler): Response {
 
         if ($this->isCsrfTokenValid('delete' . $lieu->getId(), $request->query->get('csrf'))) {
 
             $entityManager = $this->getDoctrine()->getManager();
 
+            // Files Images Handling
             $fileHandler->handle(null, $lieu->getImage(), null, 'lieux');
             $fileHandler->handle(null, $lieu->getCarte(), null, 'lieux');
             $fileHandler->handle(null, $lieu->getRegion(), null, 'lieux');
@@ -151,7 +158,6 @@ class AdminLieuController extends AbstractController
 
             $entityManager->remove($lieu);
             $entityManager->flush();
-
             $this->addFlash('success', 'Le Lieu a bien été supprimé.');
         }
 

@@ -4,7 +4,7 @@
 {% block section_content1 %}
     <!--- REGLES DE BASES -->
     <div class="w-100 row justify-content-center">
-        {% for uneRule in rules %}
+        {% for uneRule in rulesSimplesBases %}
 
             <!--- UNE REGLE DE BASE -->
             <a class="col-3 text-center hover-zoom" href="{{ path('regles_rule', {id: uneRule.id} ) }}">
@@ -40,21 +40,44 @@
 {% endblock %}
 
 {% block section_content3 %}
+    <!--- BIBLIOTHEQUES -->
+    <div class="w-100 row justify-content-center">
+        {% for une_bibliotheque in rulesBibliothequesBases %}
+
+            <!--- UNE BIBLIOTHEQUE -->
+            <a class="col-2 text-center hover-zoom"
+                href="{% if une_bibliotheque.pdf is defined and une_bibliotheque.part1 is empty %}
+                            {{ asset(une_bibliotheque.pdf) }}
+                      {% else %}
+                            {{ path('regles_rule', {id: une_bibliotheque.id} ) }}
+                    {% endif %}">
+                <img class="img-fluid" src="{{ asset(une_bibliotheque.image|default(asset('assets/img/placeholders/na_rule.jpg'))) }}" alt="Image de la Règle" title="{{une_bibliotheque.nom}}" />
+                <br>
+                <h3 class="text-small my-2">
+                    <strong>{{ une_bibliotheque.nom }}</strong>
+                </h3>
+            </a>
+
+        {% endfor %}
+    </div>
+{% endblock %}
+
+{% block section_content4 %}
     <!--- REGLES DIVERS -->
     <div class="w-100 row justify-content-center">
-        {% for uneRuleDivers in rulesDivers %}
+        {% for uneRuleAnnexe in rulesAnnexes %}
 
             <!--- UNE REGLE DIVERS -->
             <a class="col-2 text-center hover-zoom"
-                href="{% if uneRuleDivers.pdf is defined and uneRuleDivers.part1 is empty %}
-                            {{ asset(uneRuleDivers.pdf) }}
+                href="{% if uneRuleAnnexe.pdf is defined and uneRuleAnnexe.part1 is empty %}
+                            {{ asset(uneRuleAnnexe.pdf) }}
                       {% else %}
-                            {{ path('regles_rule', {id: uneRuleDivers.id} ) }}
+                            {{ path('regles_rule', {id: uneRuleAnnexe.id} ) }}
                     {% endif %}">
-                <img class="img-fluid" src="{{ asset(uneRuleDivers.image|default(asset('assets/img/placeholders/na_rule.jpg'))) }}" alt="Image de la Règle" title="{{uneRuleDivers.nom}}" />
+                <img class="img-fluid" src="{{ asset(uneRuleAnnexe.image|default(asset('assets/img/placeholders/na_rule.jpg'))) }}" alt="Image de la Règle" title="{{uneRuleAnnexe.nom}}" />
                 <br>
                 <h3 class="text-small my-2">
-                    <strong>{{ uneRuleDivers.nom }}</strong>
+                    <strong>{{ uneRuleAnnexe.nom }}</strong>
                 </h3>
             </a>
 

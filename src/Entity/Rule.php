@@ -117,6 +117,16 @@ class Rule
      */
     private $numero;
 
+    /**
+     * @ORM\Column(type="string", length=50, nullable=true)
+     */
+    private $liste;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $listeIntro;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -364,6 +374,30 @@ class Rule
     public function setNumero(int $numero): self
     {
         $this->numero = $numero;
+
+        return $this;
+    }
+
+    public function getListe(): ?string
+    {
+        return $this->liste;
+    }
+
+    public function setListe(?string $liste): self
+    {
+        $this->liste = $liste;
+
+        return $this;
+    }
+
+    public function getListeIntro(): ?string
+    {
+        return $this->listeIntro;
+    }
+
+    public function setListeIntro(?string $listeIntro): self
+    {
+        $this->listeIntro = $listeIntro;
 
         return $this;
     }

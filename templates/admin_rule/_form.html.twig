@@ -6,12 +6,16 @@
                 {{ form_row(form.nom) }}
             </div>
 
-            <div class="col-4">
+            <div class="col-2">
                 {{ form_row(form.numero) }}
             </div> 
 
-            <div class="col-4 text-center">
+            <div class="col-2 text-center">
                 <div>{{ form_row(form.base) }}</div>
+            </div>
+
+            <div class="col-4 text-center">
+                <div>{{ form_row(form.liste) }}</div>
             </div>
 
             <!-- IMAGE -->
@@ -26,6 +30,12 @@
                     {{form_widget(form.image, {'attr': {'class': 'input-image'}}) }}
                 </browse> 
             </div>
+
+            <div class="col-12 mt-5">
+                <h2>Bibliothèque</h2>
+                <hr>
+                {{ form_row(form.listeIntro,{ 'attr': {'rows': '8'} }) }}
+            </div>            
 
             <div class="col-12 mt-5">
                 <h2>Part 1</h2>

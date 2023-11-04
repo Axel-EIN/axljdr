@@ -8,6 +8,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
@@ -19,10 +20,20 @@ class AdminRuleType extends AbstractType
     {
         $builder
             ->add('nom', TextType::class, [ 'constraints' => [ new Length( [ 'max' => 100 ] ) ] ] )
-            ->add('base', CheckboxType::class, ['required' => false])
             ->add('numero', IntegerType::class)
+            ->add('base', CheckboxType::class, ['required' => false])
+            ->add('liste', ChoiceType::class, [ 'label' => 'Bibliothèque', 
+                'choices'  => [
+                    'Avantages / Désavantages' => 'avantage',
+                    'Compétences' => 'competence',
+                    'Sorts' => 'sort',
+                    'Kihos' => 'kiho',
+                    'Tatoos' => 'tatoo',
+                ],
+            ])
             ->add('image', FileType::class, array('mapped' => false, 'data_class' => null, 'required' => false))
             ->add('pdf', FileType::class, array('mapped' => false, 'data_class' => null, 'required' => false))
+            ->add('listeIntro', TextareaType::class, ['required' => false, 'constraints' => [ new Length( [ 'max' => 2000 ] ) ] ] )
             ->add('part1titre', TextType::class, ['required' => false, 'constraints' => [ new Length( [ 'max' => 100 ] ) ] ] )
             ->add('part1', TextareaType::class, ['required' => false])
             ->add('part1aside', textareaType::class, ['required' => false])

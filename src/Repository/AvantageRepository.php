@@ -23,6 +23,29 @@ class AvantageRepository extends ServiceEntityRepository
         parent::__construct($registry, Avantage::class);
     }
 
+    public function findAll()
+    {
+        return $this->findAllSorted();
+    }
+
+    public function findAllSorted()
+    {
+        return $this->createQueryBuilder('a')
+            ->addOrderBy('a.nom', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function findAllGenre($genre)
+    {
+        return $this->createQueryBuilder('a')
+            ->andWhere('a.genre = :genre')
+            ->setParameter('genre', $genre)
+            ->addOrderBy('a.nom', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
+
     public function countAvantages() {
         return $this->createQueryBuilder('a')
             ->select('count(a.id)')

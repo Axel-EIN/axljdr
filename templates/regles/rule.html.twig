@@ -12,10 +12,10 @@
         </div>
         {% if rule.pdf is defined and rule.pdf is not empty %}
             <a href="{{ asset(rule.pdf) }}" >
-                <img class="img-fluid w-100 mt-3" src="{{ asset(rule.image|default(asset('assets/img/placeholders/na_rule.jpg'))) }}" />
+                <img class="img-fluid w-100 mt-3" src="{{ asset(rule.image|default(NA_IMG_PDF)) }}" />
             </a>
         {% else %}
-            <img class="img-fluid w-100 mt-3" src="{{ asset(rule.image|default(asset('assets/img/placeholders/na_rule.jpg'))) }}" />
+            <img class="img-fluid w-100 mt-3" src="{{ asset(rule.image|default(NA_IMG_RULE)) }}" />
         {% endif %}
     </section>
 
@@ -50,7 +50,7 @@
             <div class="row p-0 m-0 pt-2">
                 {% for autreRule in autresRules %}
                     <a class="col-2 m-0 p-2 text-center hover-zoom relative hover-span-visible" href="{{ path('regles_rule', {id: autreRule.id} ) }}" title="{{autreRule.nom}}">
-                        <img class="img-fluid" src="{{ asset(autreRule.image|default(asset('assets/img/placeholders/na_rule.jpg'))) }}" alt="Image d'une Règle" title="{{autreRule.nom}}"/>
+                        <img class="img-fluid" src="{{ asset(autreRule.image|default(NA_IMG_RULE)) }}" alt="Image d'une Règle" title="{{autreRule.nom}}"/>
                         <span class="text-small"><strong>{{autreRule.nom}}</strong></span>
                     </a>
                 {% endfor %}

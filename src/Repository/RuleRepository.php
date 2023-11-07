@@ -27,7 +27,7 @@ class RuleRepository extends ServiceEntityRepository
     {
         return $this->createQueryBuilder('r')
             ->andWhere('r.base = true')
-            ->andWhere('r.liste IS NULL')
+            ->andWhere('r.listEntity IS NULL')
             ->addOrderBy('r.numero', 'ASC')
             ->getQuery()
             ->getResult();
@@ -37,7 +37,7 @@ class RuleRepository extends ServiceEntityRepository
     {
         return $this->createQueryBuilder('r')
             ->andWhere('r.base = true')
-            ->andWhere('r.liste IS NOT NULL')
+            ->andWhere('r.listEntity IS NOT NULL')
             ->addOrderBy('r.numero', 'ASC')
             ->getQuery()
             ->getResult();
@@ -47,7 +47,7 @@ class RuleRepository extends ServiceEntityRepository
     {
         return $this->createQueryBuilder('r')
             ->andWhere('r.base = false')
-            ->andWhere('r.liste IS NULL')
+            ->andWhere('r.listEntity IS NULL')
             ->addOrderBy('r.numero', 'ASC')
             ->getQuery()
             ->getResult();

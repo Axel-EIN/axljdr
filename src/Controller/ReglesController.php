@@ -5,12 +5,14 @@ namespace App\Controller;
 use App\Entity\Rule;
 use App\Entity\Classe;
 use App\Entity\Ecole;
+use App\Repository\AvantageRepository;
 use App\Repository\EcoleRepository;
 use App\Repository\ClasseRepository;
 use App\Repository\RuleRepository;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 
 class ReglesController extends AbstractController
 {
@@ -29,7 +31,7 @@ class ReglesController extends AbstractController
         // Section 1 : Règles de Bases
         $sections[0]['name'] = "Règles de Bases";
         $sections[0]['entity'] = 'rule';
-        $sections[0]['label_one'] = 'une règle';
+        $sections[0]['label_one'] = 'une Règle';
         $sections[0]['titleLight'] = 'Règles de';
         $sections[0]['titleStrong'] = 'Bases';
 
@@ -37,7 +39,7 @@ class ReglesController extends AbstractController
         // Section 2 : Les Classes
         $sections[1]['name'] = "Classes";
         $sections[1]['entity'] = 'classe';
-        $sections[1]['label_one'] = 'une classe';
+        $sections[1]['label_one'] = 'une Classe';
         $sections[1]['titleLight'] = 'Les';
         $sections[1]['titleStrong'] = 'Classes';
 
@@ -52,7 +54,7 @@ class ReglesController extends AbstractController
         // Section 4 : Les Règles Annexes (Règles Simples Annexes ou Bibliothèques Annexes)
         $sections[3]['name'] = "Règles Annexes";
         $sections[3]['entity'] = 'rule';
-        $sections[3]['label_one'] = 'une règle';
+        $sections[3]['label_one'] = 'une Règle';
         $sections[3]['titleLight'] = 'Règles';
         $sections[3]['titleStrong'] = 'Annexes';
 
@@ -77,9 +79,48 @@ class ReglesController extends AbstractController
     /**
      * @Route("/regles/rule/{id}", name="regles_rule")
      */
-    public function viewRule(Rule $rule, RuleRepository $ruleRepository): Response
+    public function viewRule(Rule $rule, RuleRepository $ruleRepository, Request $request, AvantageRepository $avantageRepository): Response
     {
         $autresRules = $ruleRepository->findAllSameTypeExceptOneSorted($rule->getId(), $rule->getBase());
+
+        if (!empty($rule->getListEntity())) {
+
+            $items = ${$rule->getListEntity() . 'Repository'}->findAll();
+
+            $itemsTabs = [];
+            $itemsFilters = [];
+            foreach ($items as $item) {
+                $itemsTabs[] = $item->{ 'get' .  ucfirst( $rule->getListTabField() ) }();
+                $itemsFilters[] = $item->{ 'get' . ucfirst( $rule->getListFilterField() ) }();
+            }
+            $tabs = array_unique($itemsTabs);
+            sort($tabs);
+            $filters = array_unique($itemsFilters);
+            sort($filters);
+
+            if (!empty($request->query->get('tab')))
+                $items = ${$rule->getListEntity() . 'Repository'}->{'findAll' . ucfirst( $rule->getListTabField() ) }($request->query->get('tab'));
+
+            if (!empty($request->query->get('filter')))
+            {
+                $filter = $request->query->get('filter');
+                $items = array_filter($items, function ($obj) use ($filter) {
+                    return $obj->getType() == $filter;
+                  });
+            }
+
+            return $this->render('regles/library.html.twig', [
+                'library' => $rule,
+                'nom' => $rule->getNom(),
+                'un_element' => $rule,
+                'entity' => 'rule',
+                'category' => 'regles',
+                'autresRules' => $autresRules,
+                'items' => $items,
+                'tabs' => $tabs,
+                'filters' => $filters
+            ]);
+        }
 
         return $this->render('regles/rule.html.twig', [
             'rule' => $rule,

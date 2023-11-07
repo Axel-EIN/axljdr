@@ -1,0 +1,57 @@
+{% extends 'element.html.twig' %}
+
+{% block stylesheets %}
+        {{parent()}}
+        <link rel="stylesheet" href="{{asset('css/library.css')}}" />
+{% endblock %}
+
+{% block element_content %}
+
+    <tabs class="col-12 p-0 m-0 mb-3">
+        <ul id="tabs">
+            <li>
+                <a href="{{ path( 'regles_rule', {id: un_element.id} ) }}"
+                    class="tab {% if app.request.get('tab') is not defined or app.request.get('tab') is empty %}active{% endif %}"
+                    aria-current="page" >INTRO</a>
+            </li>
+            {% for tab in tabs|reverse %}
+                <li>
+                    <a href="{{ path('regles_rule', {id: un_element.id, 'tab' : tab } ) }}"
+                        class="tab {% if app.request.get('tab') is defined and app.request.get('tab') == tab %}active{% endif %}">
+                        {{tab|upper}}
+                    </a>
+                </li>
+            {% endfor %}
+        </ul>
+    </tabs>
+
+    {% if app.request.get('tab') is not defined or app.request.get('tab') is empty %}
+        <section class="col-12 p-0 m-0 card rounded-top">
+            <img src="{{asset(un_element.image|default(NA_IMG_LIBRARY))}}" class="img-fluid rounded-top" alt="Image d'en tête de la Règle {{un_element.nom}}">
+            <div class="card-body">
+                <p class="text-regular p-2 text-justify">{{un_element.listIntro|raw|nl2br}}</p>
+            </div>
+        </section>
+    {% else %}
+        <section class="col-12 px-3 mb-3">
+            <label for="filter-select">Filtrer :&nbsp;&nbsp;</label>
+            <select name="filter" id="filter-select" >
+                <option value="">TOUS</option>
+                {% for one_filter in filters %}
+                <option value={{one_filter}} {% if app.request.get('filter') == one_filter %}selected{% endif %}>{{one_filter}}</option>
+                {% endfor %}
+            </select>
+        </section>
+
+        <div class="col-12 px-3 row">
+            {{ include('parts/list-' ~ un_element.listEntity ~ '.html.twig') }}
+        </div>
+
+    {% endif %}
+
+{% endblock %}
+
+{% block javascripts %}
+    {{parent()}}
+    <script src="{{ asset('scripts/library.js') }}"></script>
+{% endblock %}

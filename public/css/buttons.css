@@ -1,6 +1,6 @@
-/* --------------------------- */
-/* --------- BUTTONS --------- */
-/* --------------------------- */    
+/* ------------------- */
+/* ----- BUTTONS ----- */
+/* ------------------- */    
 
 /* SIZE */
 
@@ -106,4 +106,37 @@
 .btn-unstyle {
     border: 0;
     background: none;
+}
+
+
+
+/* ---------------- */
+/* ----- TABS ----- */
+/* ---------------- */
+
+#tabs {
+    display: flex;
+    padding: 0;
+    margin: 0;
+    flex-wrap: wrap;
+    list-style: none;
+}
+
+.tab {
+    display: block;
+    font-weight: bold;
+    border-radius: 1rem 0.25rem;
+    padding: 8px 16px;
+    background-color: transparent;
+    color: var(--primary-dark);
+}
+
+.tab:hover {
+    color: var(--primary);
+}
+
+.tab.active {
+    font-weight: bold;
+    color: var(--white);
+    background-color: var(--primary-darker);
 }

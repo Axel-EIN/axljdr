@@ -23,9 +23,9 @@ class Avantage
     private $nom;
 
     /**
-     * @ORM\Column(type="boolean")
+     * @ORM\Column(type="string", length=50)
      */
-    private $desavantage;
+    private $genre;
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -84,14 +84,14 @@ class Avantage
         return $this;
     }
 
-    public function getDesavantage(): ?bool
+    public function getGenre(): ?string
     {
-        return $this->desavantage;
+        return $this->genre;
     }
 
-    public function setDesavantage(bool $desavantage): self
+    public function setGenre(string $genre): self
     {
-        $this->desavantage = $desavantage;
+        $this->genre = $genre;
 
         return $this;
     }

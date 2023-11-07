@@ -1,0 +1,74 @@
+{% set i = 1 %}
+{% set library = un_element %}
+
+<!-- HEADING -->
+<heading id="list-heading" class="col-12">
+    <span>Nom</span>
+    <right class="ml-auto">
+        <span>{% if app.request.get('tab') == 'Avantage' %}Reduction{% elseif app.request.get('tab') == 'Désavantage' %}Gain Additionnel{% endif %}</span>
+        <span class="ml-4">{% if app.request.get('tab') == 'Avantage' %}Coût{% elseif app.request.get('tab') == 'Désavantage' %}Gain{% endif %}</span>
+    </right>
+</heading>
+
+{% for item in items %}
+
+    <!-- ITEM - AVANTAGES / DESAVANTAGES -->
+    <div class="col-12 p-0 m-0 relative">
+
+        <!-- MJ EDIT -->
+        {% if app.user and is_granted("ROLE_MJ") %}
+            {% set position, size, color, entity, un_element, redirect = 'left-overflow', 'btn-icon-mini', 'link-accent', 'avantage', item, 'library&libraryID=' ~ library.id %}
+            {{ include('/parts/btn-icon-edit.html.twig') }}
+        {% endif %}
+
+        <a href="#collapse{{i}}" class="card item" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="collapse{{i}}">
+
+            <!-- VISIBLE LINE -->
+            <line class="item-line">
+                <strong class="item-name">{{ item.nom }}</strong>
+                {% if item.exclusive %}
+                    <div class="ml-2">
+                        <span class="badge badge-secondary">{{item.exclusive.nom}}</span>
+                    </div>
+                {% endif %}
+                <right class="ml-auto">
+                    {% if item.discountClasse %}<span class="badge badge-info">{{item.discountClasse.nom}}</span>{% endif %}
+                    {% if item.discountClan %}<span class="badge badge-success">{{item.discountClan.nom}}</span>{% endif %}
+                    {% if item.discountClan2 %}<span class="badge badge-success">{{item.discountClan2.nom}}</span>{% endif %}
+                    <strong class="ml-3 {% if item.genre == 'Avantage' %}text-dead{% elseif item.genre == 'Désavantage' %}text-your-xp{% endif %}">
+                        {% if item.genre == 'Avantage' %}-{% elseif item.genre == 'Désavantage' %}+{% endif %}{{ item.cout }} xp
+                    </strong>
+                </right>
+            </line>
+
+            <!-- COLLAPSED CONTENT -->
+            <collapse id="collapse{{i}}" class="collapse">
+                <span class="badge badge-pill badge-dark mt-2">{{item.type}}</span>
+                <p class="p-2 m-0 item-description">
+                    {{ item.description|raw|nl2br }}
+                </p>
+                {% if item.discount %}
+                    <div class="item-reduction text-small text-green ml-2">
+                        Les personnages
+                        {% if item.discountClasse %}- <strong>{{item.discountClasse.nom}}</strong> {% endif %}
+                        {% if item.discountClan %}{% if item.discountClasse and item.discountClan %}- ou{% endif %} - <strong>{{item.discountClan.nom}}</strong>{% endif %}
+                        {% if item.discountClan2 %}- ou - <strong>{{item.discountClan2.nom}}</strong>{% endif %} -
+                            {% if item.genre == 'Avantage' %}
+                                peuvent dépenser <strong>{{item.discount}} xp</strong>
+                            {% elseif item.genre == 'Désavantage' %}
+                                peuvent gagner jusqu'à <strong>{{item.discount}} xp</strong> en prenant cette Avantage
+                            {% endif %}
+                    </div>
+                {% endif %}
+                {% if item.exclusive %}
+                    <div class="text-small text-secondary ml-2">
+                        Exclusif aux personnages <strong>{{item.exclusive.nom}}</strong>
+                    </div>
+                {% endif %}
+            </collapse>
+
+        </a>
+    </div>
+
+    {% set i = i + 1 %}
+{% endfor %}

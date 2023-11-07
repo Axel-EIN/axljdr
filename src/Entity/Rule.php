@@ -120,12 +120,22 @@ class Rule
     /**
      * @ORM\Column(type="string", length=50, nullable=true)
      */
-    private $liste;
+    private $listEntity;
 
     /**
      * @ORM\Column(type="text", nullable=true)
      */
-    private $listeIntro;
+    private $listIntro;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $listTabField;
+
+    /**
+     * @ORM\Column(type="string", length=50, nullable=true)
+     */
+    private $listFilterField;
 
     public function getId(): ?int
     {
@@ -378,26 +388,50 @@ class Rule
         return $this;
     }
 
-    public function getListe(): ?string
+    public function getListEntity(): ?string
     {
-        return $this->liste;
+        return $this->listEntity;
     }
 
-    public function setListe(?string $liste): self
+    public function setListEntity(?string $listEntity): self
     {
-        $this->liste = $liste;
+        $this->listEntity = $listEntity;
 
         return $this;
     }
 
-    public function getListeIntro(): ?string
+    public function getListIntro(): ?string
     {
-        return $this->listeIntro;
+        return $this->listIntro;
     }
 
-    public function setListeIntro(?string $listeIntro): self
+    public function setListIntro(?string $listIntro): self
     {
-        $this->listeIntro = $listeIntro;
+        $this->listIntro = $listIntro;
+
+        return $this;
+    }
+
+    public function getListTabField(): ?string
+    {
+        return $this->listTabField;
+    }
+
+    public function setListTabField(?string $listTabField): self
+    {
+        $this->listTabField = $listTabField;
+
+        return $this;
+    }
+
+    public function getListFilterField(): ?string
+    {
+        return $this->listFilterField;
+    }
+
+    public function setListFilterField(?string $listFilterField): self
+    {
+        $this->listFilterField = $listFilterField;
 
         return $this;
     }

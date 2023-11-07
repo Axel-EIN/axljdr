@@ -66,8 +66,11 @@ class AdminAvantageController extends AbstractController
             $this->addFlash('success', 'La Avantage a bien été modifiée.');
 
             // REDIRECTION
-            if (!empty($request->query->get('redirect')) && $request->query->get('redirect') == 'avantage')
-                return $this->redirectToRoute('regles_avantages');
+            if (    !empty($request->query->get('redirect'))
+                    && $request->query->get('redirect') == 'library'
+                    && !empty($request->query->get('libraryID'))
+                    && $request->query->get('libraryID') > 0  )
+                return $this->redirectToRoute( 'regles_rule', [ 'id' => $request->query->get('libraryID') , 'tab' => $avantage->getGenre() ] );
 
             return $this->redirectToRoute('admin_avantage');
         }

@@ -14,16 +14,12 @@
                 <div>{{ form_row(form.base) }}</div>
             </div>
 
-            <div class="col-4 text-center">
-                <div>{{ form_row(form.liste) }}</div>
-            </div>
-
             <!-- IMAGE -->
             <div class="col-12 mt-3">
                 {{ form_label(form.image) }}
                 <label id="preview-label" for="admin_rule_image" class="{% if type != 'Modifier' %}d-none{% endif %} hover-slight-fade hover-pointer hover-icon-visible">
                     <icon class="btn-icon-medium right-corner-16"><i class="fas fa-edit semi-visible link-white"></i></icon>
-                    <img id="image-preview" class="img-fluid" src="{% if type == 'Modifier' %}{{ asset(rule.image|default('assets/img/placeholders/1280x720.jpg')) }}{% endif %}" />
+                    <img id="image-preview" class="img-fluid" src="{% if type == 'Modifier' %}{{ asset(rule.image|default(NA_IMG_RULE)) }}{% endif %}" />
                 </label>
                 <browse id="browse-label">
                     <span id="fileName"></span>
@@ -34,7 +30,22 @@
             <div class="col-12 mt-5">
                 <h2>Bibliothèque</h2>
                 <hr>
-                {{ form_row(form.listeIntro,{ 'attr': {'rows': '8'} }) }}
+            </div>
+
+            <div class="col-4">
+                {{ form_row(form.listEntity) }}
+            </div>
+
+            <div class="col-4">
+                {{ form_row(form.listTabField) }}
+            </div>
+
+            <div class="col-4">
+                {{ form_row(form.listFilterField) }}
+            </div>
+
+            <div class="col-12">
+                {{ form_row(form.listIntro,{ 'attr': {'rows': '8'} }) }}
             </div>            
 
             <div class="col-12 mt-5">

@@ -14,7 +14,7 @@
 
             {% if app.user and is_granted("ROLE_MJ") %}
                 <!-- MJ - BTN ICON - Edit -->
-                {% set redirect, entity, un_element, size, color = 'aventure', 'chapitre', un_chapitre, 'medium', 'text-accent' %}
+                {% set position, redirect, entity, un_element, size, color = 'right-corner-8', 'aventure', 'chapitre', un_chapitre, 'btn-icon-medium', 'link-accent' %}
                 {{ include('/parts/btn-icon-edit.html.twig') }}
             {% endif %}
 

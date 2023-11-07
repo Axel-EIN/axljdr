@@ -1,0 +1,32 @@
+/* ------------------------ */
+/* ----- PAGE LIBRARY ----- */
+/* ------------------------ */
+
+.item {
+    padding: 0.5rem 1rem;
+}
+
+.item:hover {
+    background-color: var(--accent-lightest);
+}
+
+#list-heading {
+    display: flex;
+    flex-direction: row;
+    padding: 0.5rem 1rem;
+    color: var(--lightest);
+    background-color: var(--gray);
+}
+
+.item-line {
+    display: flex;
+    flex-direction: row;
+}
+
+.item-name {
+    color: var(--dark);
+}
+
+.item-description {
+    color: var(--gray);
+}

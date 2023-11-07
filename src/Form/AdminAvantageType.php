@@ -22,7 +22,12 @@ class AdminAvantageType extends AbstractType
     {
         $builder
         ->add('nom', TextType::class, array( 'constraints' => [ new Length( [ 'max' => 100 ] ) ] ) )
-        ->add('desavantage', CheckboxType::class, ['required' => false])
+        ->add('genre', ChoiceType::class, [
+            'choices'  => [
+                'Avantage' => 'Avantage',
+                'Désavantage' => 'Désavantage'
+            ],
+        ])
         ->add('type', ChoiceType::class, [
             'choices'  => [
                 'MATERIEL' => 'MATERIEL',

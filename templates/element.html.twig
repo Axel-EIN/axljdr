@@ -23,7 +23,7 @@
 
                     {% if app.user and is_granted("ROLE_MJ") %}
                         <!-- MJ - BTN ICON EDIT - RIGHT SNAP -->
-                        {% set redirect, size, color, position = entity, 'medium', 'text-accent', 'right-snap' %}
+                        {% set redirect, size, color, position = entity, 'btn-icon-medium', 'link-accent', 'right-snap' %}
                         {{ include('/parts/btn-icon-edit.html.twig') }}
                     {% endif %}
 

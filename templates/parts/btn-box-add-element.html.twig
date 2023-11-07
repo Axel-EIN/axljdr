@@ -4,9 +4,7 @@
 {% set url = '?redirect=' ~ entity|lower ~ '&' ~ options|default('') %}
 
 {% if app.user and is_granted("ROLE_MJ") %}
-    <div class="absolute {{position|default('right-corner-snap')}}">
-        <a href="{{ path(path) }}{{url}}" class="btn-primary-style btn-medium" >
-            <i class="fas fa-plus-square fa-fade" alt="Icône Ajouter"></i>&nbsp;&nbsp;Ajouter {{label_one}}
-        </a>
-    </div>
+    <a href="{{ path(path) }}{{url}}" class="btn-primary-style btn-medium absolute {{position|default('right-snap')}}" >
+        <i class="fas fa-plus-square fa-fade" alt="Icône Ajouter"></i>&nbsp;&nbsp;Ajouter {{label_one}}
+    </a>
 {% endif %}

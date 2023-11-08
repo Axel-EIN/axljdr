@@ -26,7 +26,7 @@
             <card class="card card-body">
                 <h2 class="title-h3">{{ attribute(rule, 'part' ~ i ~ 'titre') }}</h2>
                 <hr>
-                <p class="text-justify text-regular p-2">{{ attribute(rule, 'part' ~ i)|raw|nl2br }}</p>
+                <div class="paragraph text-justify text-regular p-2">{{ attribute(rule, 'part' ~ i)|raw|nl2br }}</div>
             </card>
         </section>
         {% endif %}

@@ -2,20 +2,13 @@
     {{ form_start(form) }}
         <div class="row justify-content-center align-items-end mt-5 mb-4">
         
-            <div class="col-4">
-                {{ form_row(form.nom) }}
-            </div>
-
-            <div class="col-2">
-                {{ form_row(form.numero) }}
-            </div> 
-
-            <div class="col-2 text-center">
-                <div>{{ form_row(form.base) }}</div>
-            </div>
+            <div class="col-4">{{ form_row(form.nom) }}</div>
+            <div class="col-1">{{ form_row(form.numero) }}</div> 
+            <div class="col-1">{{ form_row(form.base) }}</div>
+            <div class="col-4">{{ form_row(form.pdf) }}</div>
 
             <!-- IMAGE -->
-            <div class="col-12 mt-3">
+            <section id="image" class="col-10 mt-3 mb-5">
                 {{ form_label(form.image) }}
                 <label id="preview-label" for="admin_rule_image" class="{% if type != 'Modifier' %}d-none{% endif %} hover-slight-fade hover-pointer hover-icon-visible">
                     <icon class="btn-icon-medium right-corner-16"><i class="fas fa-edit semi-visible link-white"></i></icon>
@@ -25,104 +18,45 @@
                     <span id="fileName"></span>
                     {{form_widget(form.image, {'attr': {'class': 'input-image'}}) }}
                 </browse> 
-            </div>
+            </section>
 
-            <div class="col-12 mt-5">
-                <h2 class="title-h3">Bibliothèque</h2>
+            {% for i in 1..5 %}
+                <!-- PART {{i}} -->
+                <section id="part{{i}}" class="col-12 mt-3">
+                    <a class="w-100" data-toggle="collapse" href="#part{{i}}collapse" role="button" aria-expanded="{% if type == 'Modifier' and attribute(rule,'part' ~ i) is defined and attribute(rule,'part' ~ i) is not empty %}true{% else %}false{% endif %}" aria-controls="part{{i}}collapse">
+                        <h2 class="title-h3">Part {{i}}</h2>
+                    </a>
+                    <hr>
+                    <collapse id="part{{i}}collapse" class="collapse{% if type == 'Modifier' and attribute(rule,'part' ~ i) is defined and attribute(rule,'part' ~ i) is not empty %} show{% endif %} row">
+                        <div class="col-12">
+                            {{ form_row(attribute(form,'part' ~ i ~ 'titre')) }}
+                        </div>
+                        <div class="col-8">
+                            {{ form_row(attribute(form,'part' ~ i),{ 'attr': {'rows': '20'} }) }}
+                        </div>
+
+                        <div class="col-4">
+                            {{ form_row(attribute(form,'part' ~ i ~ 'aside'),{ 'attr': {'rows': '20'} }) }}
+                        </div>
+                    </collapse>
+                </section>
+            {% endfor %}
+
+            <!-- LIBRARY -->
+            <section id="library" class="col-12 mt-3">
+                <a class="w-100" data-toggle="collapse" href="#libraryCollapse" role="button" aria-expanded="false" aria-controls="libraryCollapse">
+                    <h2 class="title-h3">Bibliothèque</h2>
+                </a>
                 <hr>
-            </div>
+                <collapse id="libraryCollapse" class="collapse row">
+                    <div class="col-4">{{ form_row(form.listEntity) }}</div>
+                    <div class="col-4">{{ form_row(form.listTabField) }}</div>
+                    <div class="col-4">{{ form_row(form.listFilterField) }}</div>
+                    <div class="col-12">{{ form_row(form.listIntro,{ 'attr': {'rows': '8'} }) }}</div>
+                </collapse>
+            </section>  
 
-            <div class="col-4">
-                {{ form_row(form.listEntity) }}
-            </div>
-
-            <div class="col-4">
-                {{ form_row(form.listTabField) }}
-            </div>
-
-            <div class="col-4">
-                {{ form_row(form.listFilterField) }}
-            </div>
-
-            <div class="col-12">
-                {{ form_row(form.listIntro,{ 'attr': {'rows': '8'} }) }}
-            </div>            
-
-            <div class="col-12 mt-5">
-                <h2 class="title-h3">Part 1</h2>
-                <hr>
-                {{ form_row(form.part1titre) }}
-            </div>
-
-            <div class="col-8">
-                {{ form_row(form.part1,{ 'attr': {'rows': '20'} }) }}
-            </div>
-
-            <div class="col-4">
-                {{ form_row(form.part1aside,{ 'attr': {'rows': '20'} }) }}
-            </div>
-
-            <div class="col-12 mt-5">
-                <h2 class="title-h3">Part 2</h2>
-                <hr>
-                {{ form_row(form.part2titre) }}
-            </div>
-
-            <div class="col-8">
-                {{ form_row(form.part2,{ 'attr': {'rows': '20'} }) }}
-            </div>
-
-            <div class="col-4">
-                {{ form_row(form.part2aside,{ 'attr': {'rows': '20'} }) }}
-            </div>
-
-            <div class="col-12 mt-5">
-                <h2 class="title-h3">Part 3</h2>
-                <hr>
-                {{ form_row(form.part3titre) }}
-            </div>
-
-            <div class="col-8">
-                {{ form_row(form.part3,{ 'attr': {'rows': '20'} }) }}
-            </div>
-
-            <div class="col-4">
-                {{ form_row(form.part3aside,{ 'attr': {'rows': '20'} }) }}
-            </div>
-
-            <div class="col-12 mt-5">
-                <h2 class="title-h3">Part 4</h2>
-                <hr>
-                {{ form_row(form.part4titre) }}
-            </div>
-
-            <div class="col-8">
-                {{ form_row(form.part4,{ 'attr': {'rows': '20'} }) }}
-            </div>
-
-            <div class="col-4">
-                {{ form_row(form.part4aside,{ 'attr': {'rows': '20'} }) }}
-            </div>
-
-            <div class="col-12 mt-5">
-                <h2 class="title-h3">Part 5</h2>
-                <hr>
-                {{ form_row(form.part5titre) }}
-            </div>
-
-            <div class="col-8">
-                {{ form_row(form.part5,{ 'attr': {'rows': '20'} }) }}
-            </div>
-
-            <div class="col-4">
-                {{ form_row(form.part5aside,{ 'attr': {'rows': '20'} }) }}
-            </div>
-
-            <div class="col-12 mt-5">
-                <hr>
-                {{ form_row(form.pdf) }}
-            </div>
-
+            <!-- SAVE -->
             <div class="col-12 text-center mt-5">
                 <button class="btn btn-large btn-primary-style">{{ button_label|default('Save') }}</button>
             </div>

@@ -7,9 +7,7 @@
             <!-- FIL D'ARIANE -->
             <nav>
                 <span class="text-muted">
-                    <a href="/"><i class="fas fa-home"></i></a>&nbsp;
-                    >&nbsp;&nbsp;<a href="{{ path(category) }}"><strong>{{category|capitalize}}</strong></a>
-                    >&nbsp;&nbsp;<a href="{{ path(category, {'_fragment': entity} ) }}"><strong>{{entity|capitalize}}</strong></a>
+                    <a href="{{ path(category, {'_fragment': entity} ) }}"><strong>{{category|capitalize}}</strong></a>
                     > <strong>{{ nom }}</strong>
                 </span>
             </nav>   

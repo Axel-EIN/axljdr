@@ -1,30 +1,54 @@
 {% extends 'element.html.twig' %}
 
+{% block stylesheets %}
+        {{parent()}}
+        <link rel="stylesheet" href="{{asset('css/page-rule.css')}}" />
+{% endblock %}
+
 {% block element_content %}
 
-    <section class="col-12 p-1 mb-3">
-        <div class="list-group">
+    <!-- IMAGE & SUMMARY -->
+    <section class="col-12 p-0 mb-3 relative">
+
+        <!-- SOMMAIRE -->
+        {% if rule.part1 is defined and rule.part1 is not empty and rule.part2 is defined and rule.part2 is not empty %}
+        <summary id="sommaire" class="list-group">
+            <strong class="text-large text-white ml-4 mt-3">SOMMAIRE</strong>
             {% for i in 1..5 %}
                 {% if attribute(rule, 'part' ~ i ~ 'titre') is defined and attribute(rule, 'part' ~ i ~ 'titre') is not empty %}
-                    <a class="list-group-item list-group-item-action" href="#{{i}}" ><strong>{{ attribute(rule, 'part' ~ i ~ 'titre') }}</strong></a>
+                    <a class="list-group-item list-group-item-action text-medium" href="#part{{i}}" >
+                        <span class="ml-4">{{i}}. {{ attribute(rule, 'part' ~ i ~ 'titre') }}</span>
+                    </a>
                 {% endif %}
             {% endfor %}
-        </div>
+        </summary>
+        {% endif %}
+
+        <!-- IMAGE -->
         {% if rule.pdf is defined and rule.pdf is not empty %}
             <a href="{{ asset(rule.pdf) }}" >
-                <img class="img-fluid w-100 mt-3" src="{{ asset(rule.image|default(NA_IMG_PDF)) }}" />
+                <img class="img-fluid w-100" src="{{ asset(rule.image|default(NA_IMG_PDF)) }}" />
             </a>
         {% else %}
-            <img class="img-fluid w-100 mt-3" src="{{ asset(rule.image|default(NA_IMG_RULE)) }}" />
+            <div {% if rule.part1 is defined and rule.part1 is not empty and rule.part2 is defined and rule.part2 is not empty %}id="image"{% endif %}>
+                <img class="img-fluid w-100" src="{{ asset(rule.image|default(NA_IMG_RULE)) }}" />
+            </div>
         {% endif %}
+
     </section>
 
+    <!-- PART 1 TO 5 -->
     {% for i in 1..5 %}
         {% if attribute(rule, 'part' ~ i ~ 'titre') is defined and attribute(rule, 'part' ~ i ~ 'titre') is not empty %}
         <hr class="col-12 mb-3">
-        <section id="{{i}}" class="col-8 p-1 mt-3 mb-3">
+        <section id="part{{i}}" class="col-8 p-1 mt-3 mb-3 relative">
+            <!-- MJ EDIT -->
+            {% if app.user and is_granted("ROLE_MJ") %}
+                {% set position, size, color, entity, un_element, redirect, fragment = 'right-corner-16', 'btn-icon-medium', 'link-accent', 'rule', rule, 'rule', 'part' ~ i %}
+                {{ include('/parts/btn-icon-edit.html.twig') }}
+            {% endif %}
             <card class="card card-body">
-                <h2 class="title-h3">{{ attribute(rule, 'part' ~ i ~ 'titre') }}</h2>
+                <h2 class="title-h3">{{i}}. {{ attribute(rule, 'part' ~ i ~ 'titre') }}</h2>
                 <hr>
                 <div class="paragraph text-justify text-regular p-2">{{ attribute(rule, 'part' ~ i)|raw|nl2br }}</div>
             </card>
@@ -41,22 +65,31 @@
 
     {% endfor %}
 
-    {% if autresRules is defined and autresRules is not empty %}
     <!-- AUTRES -->
-    <aside class="col-12 p-1">
-        <div class="card card-body pb-1">
-            <h2 class="title-h3">Autres Règles {% if rule.base %}de Bases{% else %}Annexes{% endif %}</h2>
-            <hr>
-            <div class="row p-0 m-0">
-                {% for autreRule in autresRules %}
-                    <a class="col-2 m-0 p-2 text-center hover-zoom relative hover-span-visible" href="{{ path('regles_rule', {id: autreRule.id} ) }}" title="{{autreRule.nom}}">
-                        <img class="img-fluid" src="{{ asset(autreRule.image|default(NA_IMG_RULE)) }}" alt="Image d'une Règle" title="{{autreRule.nom}}"/>
-                        <span class="text-small"><strong>{{autreRule.nom}}</strong></span>
-                    </a>
-                {% endfor %}
+    {% if autresRules is defined and autresRules is not empty %}
+        <aside class="col-12 p-1">
+            <div class="card card-body pb-1">
+                <h2 class="title-h3">Autres Règles {% if rule.base %}de Bases{% else %}Annexes{% endif %}</h2>
+                <hr>
+                <div class="row p-0 m-0">
+                    {% for autreRule in autresRules %}
+
+                        {% if autreRule.pdf is defined and autreRule.pdf is not empty %}
+                            {% set na_image = NA_IMG_PDF %}
+                        {% elseif autreRule.listEntity is defined and autreRule.listEntity is not empty %}
+                            {% set na_image = NA_IMG_LIBRARY %}
+                        {% else %}
+                            {% set na_image = NA_IMG_RULE %}
+                        {% endif %}
+
+                        <a class="col-2 m-0 p-2 text-center hover-zoom relative hover-span-visible" href="{{ path('regles_rule', {id: autreRule.id} ) }}" title="{{autreRule.nom}}">
+                            <img class="img-fluid" src="{{ asset(autreRule.image|default(na_image)) }}" alt="Image d'une Règle" title="{{autreRule.nom}}"/>
+                            <span class="text-small"><strong>{{autreRule.nom}}</strong></span>
+                        </a>
+                    {% endfor %}
+                </div>
             </div>
-        </div>
-    </aside>
+        </aside>
     {% endif %}
 
 

@@ -12,9 +12,9 @@
 {% block section_content2 %}
     <div class="col-9">
         <h4 class="text-secondary">Clans Majeurs</h4>
-        <p class="text-medium m-3 text-justify">Les Clans Majeurs sont les plus grandes factions de Rokugan.
+        <p class="text-regular m-3">Les Clans Majeurs sont les plus grandes factions de Rokugan.
         Chacune d'elle est héritière d'un Kami originel qui juera fidélité à l'Empereur et se répartit la majeur partie de l'Empire.
-        Elles se composent de plusieurs familles et forment des miliers de Samuraï dans leur nombreux dojo différents.</p>
+        Elles se composent de plusieurs familles et forment des miliers de Samuraïs dans leur dojos.</p>
         <div class="row mt-3">
         {% for un_clan_majeur in clansMajeurs %}
 
@@ -34,7 +34,7 @@
         <div class="row p-0 m-0 justify-content-around">
         {% for un_clan_autre in clansAutres %}
             <!-- UN CLAN AUTRE -->
-            <a class="col-6 m-0 p-1 hover-zoom hover-shine" href="{{ path('empire_clan', {id: un_clan_autre.id} ) }}">
+            <a class="col-6 m-0 p-1 hover-zoom" href="{{ path('empire_clan', {id: un_clan_autre.id} ) }}">
                 <img class="img-96" src="{{ asset(un_clan_autre.mon|default(NA_ICON_MON)) }}" alt="Mon du clan" title="{{un_clan_autre.nom}}" /></a>
             </a>
         {% endfor %}

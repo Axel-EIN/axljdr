@@ -42,12 +42,12 @@
     {% endfor %}
 
     {% if autresRules is defined and autresRules is not empty %}
-    <!-- AUTRES BASIC RULES -->
+    <!-- AUTRES -->
     <aside class="col-12 p-1">
-        <div class="card card-body h-100 pb-1">
+        <div class="card card-body pb-1">
             <h2 class="title-h3">Autres Règles {% if rule.base %}de Bases{% else %}Annexes{% endif %}</h2>
             <hr>
-            <div class="row p-0 m-0 pt-2">
+            <div class="row p-0 m-0">
                 {% for autreRule in autresRules %}
                     <a class="col-2 m-0 p-2 text-center hover-zoom relative hover-span-visible" href="{{ path('regles_rule', {id: autreRule.id} ) }}" title="{{autreRule.nom}}">
                         <img class="img-fluid" src="{{ asset(autreRule.image|default(NA_IMG_RULE)) }}" alt="Image d'une Règle" title="{{autreRule.nom}}"/>

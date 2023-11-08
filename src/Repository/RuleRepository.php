@@ -53,10 +53,16 @@ class RuleRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-    public function findAllSameTypeExceptOneSorted($id, $type)
+    public function findAllSameTypeExceptOneSorted($id, $type, $library)
     {
+        if ($library != null)
+            $library = 'IS NOT NULL';
+        else
+            $library = 'IS NULL';
+
         return $this->createQueryBuilder('r')
             ->andWhere('r.base = :value_type')
+            ->andWhere('r.listEntity ' . $library)
             ->andWhere('r.id != :value_id')
             ->setParameter('value_id', $id)
             ->setParameter('value_type', $type)

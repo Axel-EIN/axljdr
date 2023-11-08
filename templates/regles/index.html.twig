@@ -2,85 +2,69 @@
 {% block title %}Les Règles de l'Aventure {{ parent() }}{% endblock %}
 
 {% block section_content1 %}
-    <!--- REGLES DE BASES -->
-    <div class="w-100 row justify-content-center">
-        {% for uneRule in rulesSimplesBases %}
-
-            <!--- UNE REGLE DE BASE -->
-            <a class="col-3 text-center hover-zoom" href="{{ path('regles_rule', {id: uneRule.id} ) }}">
-                <img class="img-fluid" src="{{ asset(uneRule.image|default(NA_IMG_RULE)) }}" alt="Image de la Règle" title="{{uneRule.nom}}" />
-                <br>
-                <h3 class="text-regular my-2">
-                    <strong>{{ uneRule.nom }}</strong>
-                </h3>
-            </a>
-
-        {% endfor %}
-    </div>
+<!-- REGLES DE BASES -->
+    {% for uneRule in rulesSimplesBases %}
+        <!-- UNE REGLE DE BASE -->
+        <a href="{{ path('regles_rule', {id: uneRule.id} ) }}" class="col-3 text-center hover-zoom">
+            <img class="img-fluid" src="{{ asset(uneRule.image|default(NA_IMG_RULE)) }}" alt="Image de la Règle" title="{{uneRule.nom}}" />
+            <br>
+            <h3 class="text-regular my-2">
+                <strong>{{ uneRule.nom }}</strong>
+            </h3>
+        </a>
+    {% endfor %}
 {% endblock %}
 
 {% block section_content2 %}
-    <!--- LES CLASSES -->
-    <div class="w-100 row justify-content-center">
-        {% for une_classe in classes %}
-
-            <!--- UNE CLASSE -->
-            <article class="col-xl-2 col-lg-3 col-md-4 col-sm-6 py-3 text-center hover-zoom">
-                <a href="{{ path('regles_classe', {id: une_classe.id} ) }}">
-                    <img class="img-160 hover-{{une_classe.nom|lower}}" src="{{ asset(une_classe.icone|default(NA_IMG_RULE)) }}" alt="Icône de la classe" title="{{une_classe.nom}}" />
-                </a>
-                <br/>
-                <h3 class="text-center my-3">
-                    <strong><a class="link-secondary" href="{{ path('regles_classe', {id: une_classe.id} ) }}">{{ une_classe.nom }}</a></strong>
-                </h3>
-            </article>
-
-        {% endfor %}
-    </div>
+<!-- LES CLASSES -->
+    {% for une_classe in classes %}
+        <!-- CLASSE -->
+        <a href="{{ path('regles_classe', {id: une_classe.id} ) }}" class="col-2 text-center hover-zoom">
+            <img src="{{ asset(une_classe.icone|default(NA_ICON_CLASS)) }}"  class="img-fluid" alt="Icône de la classe" title="{{une_classe.nom}}" />
+            <br>
+            <h3 class="text-center my-3">
+                <strong>{{ une_classe.nom }}</strong>
+            </h3>
+        </a>
+    {% endfor %}
 {% endblock %}
 
 {% block section_content3 %}
-    <!--- BIBLIOTHEQUES -->
-    <div class="w-100 row justify-content-center">
-        {% for une_bibliotheque in rulesBibliothequesBases %}
-
-            <!--- UNE BIBLIOTHEQUE -->
-            <a class="col-2 text-center hover-zoom"
-                href="{% if une_bibliotheque.pdf is defined and une_bibliotheque.pdf is not empty and une_bibliotheque.part1 is empty %}
-                            {{ asset(une_bibliotheque.pdf) }}
-                      {% else %}
-                            {{ path('regles_rule', {id: une_bibliotheque.id} ) }}
-                    {% endif %}">
-                <img class="img-fluid" src="{{ asset(une_bibliotheque.image|default(NA_IMG_LIBRARY)) }}" alt="Image de la Règle" title="{{une_bibliotheque.nom}}" />
-                <br>
-                <h3 class="text-small my-2">
-                    <strong>{{ une_bibliotheque.nom }}</strong>
-                </h3>
-            </a>
-
-        {% endfor %}
-    </div>
+<!-- BIBLIOTHEQUES -->
+    {% for une_bibliotheque in rulesBibliothequesBases %}
+        <!-- BIBLIOTHEQUE -->
+        <a class="col-3 text-center hover-zoom"
+            href="{% if une_bibliotheque.pdf is defined and une_bibliotheque.pdf is not empty and une_bibliotheque.part1 is empty %}
+                        {{ asset(une_bibliotheque.pdf) }}
+                    {% else %}
+                        {{ path('regles_rule', {id: une_bibliotheque.id} ) }}
+                {% endif %}">
+            <img class="img-fluid" src="{{ asset(une_bibliotheque.image|default(NA_IMG_LIBRARY)) }}" alt="Image de la Règle" title="{{une_bibliotheque.nom}}" />
+            <br>
+            <h3 class="text-regular my-2">
+                <strong>{{ une_bibliotheque.nom }}</strong>
+            </h3>
+        </a>
+    {% endfor %}
 {% endblock %}
 
 {% block section_content4 %}
-    <!--- REGLES ANNEXES -->
-    <div class="w-100 row justify-content-center">
-        {% for uneRuleAnnexe in rulesAnnexes %}
-            {% if uneRuleAnnexe.pdf is defined and uneRuleAnnexe.part1 is empty and uneRuleAnnexe.listIntro is empty %}
-                {% set href = asset(uneRuleAnnexe.pdf) %}
-                {% set na_image = NA_IMG_PDF %}
-            {% else %}
-                {% set href = path('regles_rule', {id: uneRuleAnnexe.id} ) %}
-                {% set na_image = NA_IMG_RULE %}
-            {% endif %}
-            <!--- UNE REGLE ANNEXE -->
-            <a href="{{href}}" class="col-2 text-center hover-zoom">
-                <img src="{{ asset(uneRuleAnnexe.image|default(na_image)) }}" class="img-fluid" alt="Image de la Règle {{uneRuleAnnexe.nom}}" title="{{uneRuleAnnexe.nom}}" />
-                <br>
-                <h3 class="text-small my-2">
-                    <strong>{{ uneRuleAnnexe.nom }}</strong>
-                </h3>
-            </a>
-        {% endfor %}
-    </div>
+<!-- REGLES ANNEXES -->
+    {% for uneRuleAnnexe in rulesAnnexes %}
+        {% if uneRuleAnnexe.pdf is defined and uneRuleAnnexe.part1 is empty and uneRuleAnnexe.listIntro is empty %}
+            {% set href = asset(uneRuleAnnexe.pdf) %}
+            {% set na_image = NA_IMG_PDF %}
+        {% else %}
+            {% set href = path('regles_rule', {id: uneRuleAnnexe.id} ) %}
+            {% set na_image = NA_IMG_RULE %}
+        {% endif %}
+        <!-- REGLE -->
+        <a href="{{href}}" class="col-2 text-center hover-zoom">
+            <img src="{{ asset(uneRuleAnnexe.image|default(na_image)) }}" class="img-fluid" alt="Image de la Règle {{uneRuleAnnexe.nom}}" title="{{uneRuleAnnexe.nom}}" />
+            <br>
+            <h3 class="text-small my-2">
+                <strong>{{ uneRuleAnnexe.nom }}</strong>
+            </h3>
+        </a>
+    {% endfor %}
 {% endblock %}

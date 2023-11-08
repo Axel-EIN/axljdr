@@ -30,7 +30,7 @@ p.text-small {
     font-size: 1.1rem;
 }
 
-p.text-regular {
+p.text-regular, .paragraph.text-regular {
     line-height: 1.60;
 }
 
@@ -38,7 +38,7 @@ p.text-regular {
     font-size: 1.2rem;
 }
 
-p.text-medium {
+p.text-medium, .paragraph.text-medium {
     line-height: 1.70;
 }
 

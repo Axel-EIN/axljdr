@@ -81,7 +81,7 @@ class ReglesController extends AbstractController
      */
     public function viewRule(Rule $rule, RuleRepository $ruleRepository, Request $request, AvantageRepository $avantageRepository): Response
     {
-        $autresRules = $ruleRepository->findAllSameTypeExceptOneSorted($rule->getId(), $rule->getBase());
+        $autresRules = $ruleRepository->findAllSameTypeExceptOneSorted($rule->getId(), $rule->getBase(), $rule->getListEntity());
 
         if (!empty($rule->getListEntity())) {
 

@@ -22,7 +22,7 @@ class AdminRuleType extends AbstractType
             ->add('nom', TextType::class, [ 'constraints' => [ new Length( [ 'max' => 100 ] ) ] ] )
             ->add('numero', IntegerType::class)
             ->add('base', CheckboxType::class, ['required' => false])
-            ->add('listEntity', ChoiceType::class, [ 'label' => 'Bibliothèque', 
+            ->add('listEntity', ChoiceType::class, [ 'required' => false, 'label' => 'Bibliothèque', 
                 'choices'  => [
                     'Avantages / Désavantages' => 'avantage',
                     'Compétences' => 'competence',
@@ -31,8 +31,8 @@ class AdminRuleType extends AbstractType
                     'Tatoos' => 'tatoo',
                 ],
             ])
-            ->add('listTabField', TextType::class, [ 'constraints' => [ new Length( [ 'max' => 30 ] ) ] ] )
-            ->add('listFilterField', TextType::class, [ 'constraints' => [ new Length( [ 'max' => 30 ] ) ] ] )
+            ->add('listTabField', TextType::class, [ 'required' => false, 'constraints' => [ new Length( [ 'max' => 30 ] ) ] ] )
+            ->add('listFilterField', TextType::class, [ 'required' => false, 'constraints' => [ new Length( [ 'max' => 30 ] ) ] ] )
             ->add('image', FileType::class, array('mapped' => false, 'data_class' => null, 'required' => false))
             ->add('pdf', FileType::class, array('mapped' => false, 'data_class' => null, 'required' => false))
             ->add('listIntro', TextareaType::class, ['required' => false, 'constraints' => [ new Length( [ 'max' => 3000 ] ) ] ] )

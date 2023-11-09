@@ -32,7 +32,7 @@ class ReglesController extends AbstractController
         $sections[0]['name'] = "Règles de Bases";
         $sections[0]['entity'] = 'rule';
         $sections[0]['label_one'] = 'une Règle';
-        $sections[0]['titleLight'] = 'Les ';
+        $sections[0]['titleLight'] = 'Règles de ';
         $sections[0]['titleStrong'] = 'Bases';
 
         
@@ -55,7 +55,7 @@ class ReglesController extends AbstractController
         $sections[3]['name'] = "Règles Annexes";
         $sections[3]['entity'] = 'rule';
         $sections[3]['label_one'] = 'une Règle';
-        $sections[3]['titleLight'] = 'Les ';
+        $sections[3]['titleLight'] = 'Règles ';
         $sections[3]['titleStrong'] = 'Annexes';
 
         $header_classname = 'rules';

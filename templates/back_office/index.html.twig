@@ -112,3 +112,8 @@
 </main>
 
 {% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('scripts/forms.js') }}"></script>
+{% endblock %}

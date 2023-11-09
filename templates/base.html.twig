@@ -2,6 +2,7 @@
 <html lang="fr">
 
     {% use "parts/head.html.twig" %}
+    {% use "scripts/scripts.twig" %}
 
     {% block head %}
         {{ parent() }}
@@ -15,10 +16,6 @@
 
         {% block body %}{% endblock %}
 
-        {% block javascripts %}
-            {{ include('scripts/scripts.twig') }}
-        {% endblock %}
-
         {% block footer %}
             {{ include('parts/footer.html.twig') }}
         {% endblock %}
@@ -26,6 +23,10 @@
         {% if app.user is empty %}
             {{ include('parts/modal.html.twig') }}
         {% endif %}
+
+        {% block scripts %}
+            {{ parent() }}
+        {% endblock %}
 
     </body>
 

@@ -141,7 +141,7 @@
                 <a class="vignette-aside" href="{{path('empire_lieu', {id: un_lieu.id} )}}">
                     <!-- ICON ON TOP -->
                     {% if un_lieu.icone is defined and un_lieu.icone is not empty %}
-                        <img class="icon-lieu-top img-64" src="{{ asset(un_lieu.icone) }}" alt="une icône" />
+                        <img class="badge-top img-64" src="{{ asset(un_lieu.icone) }}" alt="une icône" />
                     {% endif %}
 
                     <strong>{{ un_lieu.nom|upper }}</strong>

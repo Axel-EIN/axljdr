@@ -26,8 +26,7 @@
     </tabs>
 
     {% if app.request.get('tab') is not defined or app.request.get('tab') is empty %}
-        <section class="col-12 p-0 m-0 card rounded-top">
-            <img src="{{asset(un_element.image|default(NA_IMG_LIBRARY))}}" class="img-fluid rounded-top" alt="Image d'en tête de la Règle {{un_element.nom}}">
+        <section id="intro" class="col-12 p-0 m-0 card">
             <div class="card-body">
                 <p class="text-regular p-2 text-justify">{{un_element.listIntro|raw|nl2br}}</p>
             </div>

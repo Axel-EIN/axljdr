@@ -24,6 +24,7 @@ class AdminEcoleController extends AbstractController
     public function afficherAdminEcoles(EcoleRepository $ecoleRepository): Response {
 
         $ecoles = $ecoleRepository->findBy(array(), array('id' => 'DESC'));
+        
         return $this->render('admin_ecole/index.html.twig', [
             'ecoles' => $ecoles
         ]);

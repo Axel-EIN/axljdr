@@ -22,7 +22,7 @@ style="background-image: linear-gradient(rgb(40,0,0,0.5),rgb(40,0,0,0.5)),url('{
         <!-- LES ARCHIVES -->
         <section id="archives">
             <h2 class="display-4 ancre-relatif">
-                Les Archives de l'<strong>Histoire</strong>
+                Les <strong>Archives</strong>
 
                 <!-- BTN - MJ - AJOUTER -->
                 {% if is_granted("ROLE_MJ") %}
@@ -58,8 +58,9 @@ style="background-image: linear-gradient(rgb(40,0,0,0.5),rgb(40,0,0,0.5)),url('{
             {% endfor %}
             </div>
         </section>
-        <section id="clans">
-            <h2 class="display-4">Les <strong>Clans</strong> :</h2>
+
+        <section id="clans" class="mt-4">
+            <h2 class="display-4">Les <strong>Factions</strong></h2>
             <hr>
             <br/>
             <div class="row">
@@ -72,8 +73,9 @@ style="background-image: linear-gradient(rgb(40,0,0,0.5),rgb(40,0,0,0.5)),url('{
 {% endfor %}
             </div>
         </section>
-        <section id="lieux">
-            <h2 class="display-4">Les <strong>Cartes</strong> et <strong>Lieux</strong> :</h2>
+
+        <section id="lieux" class="mt-4">
+            <h2 class="display-4">Les <strong>Lieux</strong></h2>
             <hr>
             <br/>
             <div class="row">

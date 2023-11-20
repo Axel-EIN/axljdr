@@ -41,12 +41,20 @@ html, body {
     font-size: 0.8rem;
 }
 
+.text-regular {
+    font-size: 1.1rem;
+}
+
+p.text-medium {
+    line-height: 1.70;
+}
+
 .text-medium {
     font-size: 1.2rem;
 }
 
 p.text-medium {
-    line-height: 1.8;
+    line-height: 1.75;
 }
 
 .text-large {

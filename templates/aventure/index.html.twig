@@ -5,36 +5,29 @@
     {{ include('/parts/messages-flashes.html.twig') }}
     <div class="container relative" >
 
+            <!-- BOUTON FLECHE GAUCHE DROITE SAISON -->
             <div class="shift-left">
                 {% if saison_precedente is not empty %}
                     <a class="arrow-left" href="{{ path('aventure_saison', {id : (saison_precedente.id) } ) }}" alt="Flèche Gauche" title="Voir Saison précédente">
                         <i class="fa-solid fa-caret-left"></i>
-                    </a>
-                {% else %}
-                        <i class="fa-solid fa-caret-left"></i>
+                    </a>{% else %}<i class="fa-solid fa-caret-left"></i>
                 {% endif %}
                 {% if saison_suivante is not empty %}
                     <a class="arrow-right" href="{{ path('aventure_saison', {id : (saison_suivante.id) } ) }}" alt="Flèche Droite" title="Voir Saison suivante">
                         <i class="fa-solid fa-caret-right"></i>
-                    </a>
-                {% else %}
-                        <i class="fa-solid fa-caret-right"></i>
+                    </a>{% else %}<i class="fa-solid fa-caret-right"></i>
                 {% endif %}
             </div>
 
-            <div class="d-flex">
+            <!-- TEXTE DE LA SAISON -->
+            {% if saison_suivante is empty %}
                 <div class="clip-text-main">
-                    <div class="clip-text">
-                        {% if saison_suivante is empty %}
-                            Cette SAISON est en cours de Jeu !
-                        {% else %}
-                            <span class="primary-color">SAISON {{ saison.numero }} - {{ saison.titre }}</span>
-                        {% endif %}
-                    </div>
+                    <div class="clip-text">Cette SAISON est en cours !</div>
                 </div>
-
-            </div>
-        </div>
+            {% else %}
+                <div class="primary-color-dark"><strong>SAISON {{ saison.numero }} - {{ saison.titre }}</strong></div>
+            {% endif %}
+    
     </div>
 </header>
 

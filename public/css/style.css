@@ -92,7 +92,6 @@ html, body {    font-size: 16px; }
 @font-face { font-family: "Hirosh"; src: url("../assets/fonts/hirosh.otf"); }
 @font-face { font-family: "Present"; src: url("../assets/fonts/present-it-black.otf"); }
 
-<<<<<<< Updated upstream
 
 
 /* LINKS */
@@ -109,16 +108,16 @@ html, body {    font-size: 16px; }
 
 h5 a:hover, h4 a:hover, h3 a:hover, h2 a:hover, h1 a:hover { text-decoration: none; color: #007bff };
 
-=======
->>>>>>> Stashed changes
+.separator-chapter a { color: #fff; text-decoration: none;}
+.separator-chapter a:hover { color: #ff7f00; text-decoration: none; }
+
+.separator-chapter a { color: #fff; text-decoration: none;}
+.separator-chapter a:hover { color: #ff7f00; text-decoration: none; }
+
 /* TEXT EFFECTS */
 
 .clip-text-main {
         position: relative;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        background-color: #ff0000;
 }
       
 .clip-text {
@@ -131,7 +130,9 @@ h5 a:hover, h4 a:hover, h3 a:hover, h2 a:hover, h1 a:hover { text-decoration: no
                 color: transparent;
                 background-clip: text;
                 -webkit-background-clip: text;
-                background-image: url(https://scitechdaily.com/images/Fire-Flame.gif);
+                /* background-image: url(https://scitechdaily.com/images/Fire-Flame.gif); */
+                background-image: url(https://media.tenor.com/8psp5NTb-yMAAAAC/fire-burning.gif);
+                /* background-image: url(https://www.gifcen.com/wp-content/uploads/2021/10/galaxy-gif-15.gif); */
                 background-size: cover;
                 background-position: center;
         }
@@ -360,7 +361,7 @@ h5 a:hover, h4 a:hover, h3 a:hover, h2 a:hover, h1 a:hover { text-decoration: no
 .btn-icons-small-right-container { position: absolute; top: 4px; right: 12px; font-size: 1.5rem; z-index: 10; }
 .btn-icons-small-right-container a { color: white; }
 
-.btn-icons-medium-right-container { position: absolute; top: 8px; right: 8px; font-size: 2rem; z-index: 10; }
+.btn-icons-medium-right-container { position: absolute; top: 8px; right: 0px; font-size: 2rem; z-index: 10; }
 .btn-icons-medium-right-container a { color: white; }
 
 .btn-icon-display { position: absolute; right: -160px; top: 96px; font-size: 8rem; text-decoration: none; display: flex; justify-content: center; align-items: center; text-align: center; }
@@ -470,7 +471,7 @@ nav .active { font-weight: bold; border-bottom: 3px solid #EA2027; }
 
 /* SEPARATOR & DIVIDER */
 
-.separator-chapter {    display: block; color: #fff; background-color: rgb(40, 0, 0); }
+.separator-chapter {    display: block; color: #fff; background-color: rgba(30, 20, 20); }
 .divider-40 { width: 40%; }
 .divider-40 hr { background-color: #ffbbbb; height: 1px; width: 100%; }
 

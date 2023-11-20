@@ -1,0 +1,6 @@
+{% extends 'back_office/index.html.twig' %}
+{% block title %}Modifier {{determinant}} {{label}} | {{ parent() }}{% endblock %}
+{% block h1 %}Modifier {{determinant}} {{label}}{% endblock %}
+{% block child %}
+    {{ include('admin_' ~ entity ~ '/_form.html.twig', {'button_label': 'Modifier'}) }}
+{% endblock %}

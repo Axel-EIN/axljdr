@@ -5,12 +5,12 @@
         <a href="{{ path('personnage_profil', {id: perso.id} ) }}" alt="Carte d'un personnage" title="Voir le profil de {{perso.prenom}}">
     {% endif %}
 
-    {% set zoom, translucide, hover_opaque, text, dead, grayscale = 'hover-zoom', '', '', 'text-white', '', '' %}
+    {% set zoom, translucide, hover_opaque, text, dead, grayscale = 'hover-zoom-x2', '', '', 'text-white', '', '' %}
     
     {% if perso.locked == 1 %}
         {% set zoom, translucide, hover_opaque, text, dead, grayscale = '', 'translucide', '', 'text-white', '', 'grayscale' %}
     {% elseif perso.estMort == 1 %}
-        {% set zoom, translucide, hover_opaque, text, dead, grayscale = 'hover-zoom', 'translucide', 'hover-opaque', 'text-danger', 'dead', '' %}
+        {% set zoom, translucide, hover_opaque, text, dead, grayscale = 'hover-zoom-x2', 'translucide', 'hover-opaque', 'text-danger', 'dead', '' %}
     {% endif %}
 
             <div class="card character-card text-white shadow-more {{zoom}} {{translucide}} {{hover_opaque}} relative">

@@ -2,23 +2,27 @@
 
 namespace App\Controller;
 
-use App\Entity\FichePersonnage;
-use App\Repository\ArchiveRepository;
+use App\Repository\SaisonRepository;
 use App\Repository\ChapitreRepository;
+use App\Repository\EpisodeRepository;
+use App\Repository\SceneRepository;
+
+use App\Repository\PersonnageRepository;
+use App\Repository\FichePersonnageRepository;
+
 use App\Repository\ClanRepository;
+use App\Repository\FamilleRepository;
+use App\Repository\ArchiveRepository;
+use App\Repository\LieuRepository;
+
 use App\Repository\ClasseRepository;
 use App\Repository\EcoleRepository;
-use App\Repository\EpisodeRepository;
-use App\Repository\FichePersonnageRepository;
-use App\Repository\LieuRepository;
-use App\Repository\PersonnageRepository;
-use App\Repository\SaisonRepository;
-use App\Repository\SceneRepository;
+
 use App\Repository\UtilisateurRepository;
+
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
 class BackOfficeController extends AbstractController
 {
@@ -29,20 +33,26 @@ class BackOfficeController extends AbstractController
                                        ChapitreRepository $chapitreRepository,
                                        EpisodeRepository $episodeRepository,
                                        SceneRepository $sceneRepository,
-                                       UtilisateurRepository $utilisateurRepository,
+
                                        ClanRepository $clanRepository,
-                                       ClasseRepository $classeRepository,
-                                       EcoleRepository $ecoleRepository,
-                                       PersonnageRepository $personnageRepository,
+                                       FamilleRepository $familleRepository,
                                        ArchiveRepository $archiveRepository,
                                        LieuRepository $lieuRepository,
-                                       FichePersonnageRepository $fichePersonnageRepository
+
+                                       ClasseRepository $classeRepository,
+                                       EcoleRepository $ecoleRepository,
+
+                                       PersonnageRepository $personnageRepository,
+                                       FichePersonnageRepository $fichePersonnageRepository,
+
+                                       UtilisateurRepository $utilisateurRepository
                                        ): Response
     {
 
         if( !$this->isGranted('ROLE_ADMIN') && !$this->isGranted('ROLE_MJ') ) // Si pas Admin ou pas MJ alors redirection
             throw new \Exception('Permission denied!');
 
+        // AVENTURE
         $nbrSaisons = $saisonRepository->countSaisons();
         $dernierSaison = $saisonRepository->findOneBy(array(),array('id' => 'DESC'));
 
@@ -55,21 +65,7 @@ class BackOfficeController extends AbstractController
         $nbrScenes = $sceneRepository->countScenes();
         $dernierScene = $sceneRepository->findOneBy(array(),array('id' => 'DESC'));
 
-        $nbrArchives = $archiveRepository->countArchives();
-        $derniereArchive = $archiveRepository->findOneBy(array(),array('id' => 'DESC'));
-
-        $nbrClans = $clanRepository->countClans();
-        $dernierClan = $clanRepository->findOneBy(array(),array('id' => 'DESC'));
-
-        $nbrLieux = $lieuRepository->countLieux();
-        $dernierLieu = $lieuRepository->findOneBy(array(),array('id' => 'DESC'));
-
-        $nbrClasses = $classeRepository->countClasses();
-        $dernierClasse = $classeRepository->findOneBy(array(),array('id' => 'DESC'));
-
-        $nbrEcoles = $ecoleRepository->countEcoles();
-        $dernierEcole = $ecoleRepository->findOneBy(array(),array('id' => 'DESC'));
-
+        // PERSONNAGES
         $nbrPJs = $personnageRepository->countPJs();
         $dernierPJ = $personnageRepository->findOneBy(array("estPj" => "1"),array('id' => 'DESC'));
 
@@ -79,11 +75,33 @@ class BackOfficeController extends AbstractController
         $nbrFiches = $fichePersonnageRepository->countFiches();
         $derniereFiche = $fichePersonnageRepository->findOneBy(array(),array('id' => 'DESC'));
 
+        // EMPIRE
+        $nbrClans = $clanRepository->countClans();
+        $dernierClan = $clanRepository->findOneBy(array(),array('id' => 'DESC'));
+
+        $nbrFamilles = $familleRepository->countFamilles();
+        $derniereFamille = $familleRepository->findOneBy(array(),array('id' => 'DESC'));
+        
+        $nbrArchives = $archiveRepository->countArchives();
+        $derniereArchive = $archiveRepository->findOneBy(array(),array('id' => 'DESC'));
+
+        $nbrLieux = $lieuRepository->countLieux();
+        $dernierLieu = $lieuRepository->findOneBy(array(),array('id' => 'DESC'));
+
+        // REGLES
+        $nbrClasses = $classeRepository->countClasses();
+        $dernierClasse = $classeRepository->findOneBy(array(),array('id' => 'DESC'));
+
+        $nbrEcoles = $ecoleRepository->countEcoles();
+        $dernierEcole = $ecoleRepository->findOneBy(array(),array('id' => 'DESC'));
+
+        // USER
         $nbrUtilisateurs = $utilisateurRepository->countUtilisateurs();
         $dernierUtilisateur = $utilisateurRepository->findOneBy(array(),array('id' => 'DESC'));
 
         return $this->render('back_office/index.html.twig', [
             'controller_name' => 'BackOfficeController',
+
             'nbrSaisons' => $nbrSaisons,
             'dernierSaison' => $dernierSaison,
             'nbrChapitres' => $nbrChapitres,
@@ -92,24 +110,30 @@ class BackOfficeController extends AbstractController
             'dernierEpisode' => $dernierEpisode,
             'nbrScenes' => $nbrScenes,
             'dernierScene' => $dernierScene,
-            'nbrClans' => $nbrClans,
-            'nbrArchives' => $nbrArchives,
-            'derniereArchive' => $derniereArchive,
-            'dernierClan' => $dernierClan,
-            'nbrClasses' => $nbrClasses,
-            'dernierLieu' => $dernierLieu,
-            'nbrLieux' => $nbrLieux,
-            'dernierClasse' => $dernierClasse,
-            'nbrEcoles' => $nbrEcoles,
-            'dernierEcole' => $dernierEcole,
+
             'nbrPJs' => $nbrPJs,
             'dernierPJ' => $dernierPJ,
             'nbrPNJs' => $nbrPNJs,
             'dernierPNJ' => $dernierPNJ,
-            'nbrUtilisateurs' => $nbrUtilisateurs,
-            'dernierUtilisateur' => $dernierUtilisateur,
             'nbrFiches' => $nbrFiches,
             'derniereFiche' => $derniereFiche,
+
+            'nbrClans' => $nbrClans,
+            'dernierClan' => $dernierClan,
+            'nbrFamilles' => $nbrFamilles,
+            'derniereFamille' => $derniereFamille,
+            'nbrArchives' => $nbrArchives,
+            'derniereArchive' => $derniereArchive,
+            'nbrLieux' => $nbrLieux,
+            'dernierLieu' => $dernierLieu,
+
+            'nbrClasses' => $nbrClasses,
+            'dernierClasse' => $dernierClasse,
+            'nbrEcoles' => $nbrEcoles,
+            'dernierEcole' => $dernierEcole,
+
+            'nbrUtilisateurs' => $nbrUtilisateurs,
+            'dernierUtilisateur' => $dernierUtilisateur,
         ]);
     }
 }

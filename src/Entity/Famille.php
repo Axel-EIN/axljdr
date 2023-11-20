@@ -40,7 +40,7 @@ class Famille
 
     /**
      * @ORM\OneToOne(targetEntity=Personnage::class, cascade={"persist", "remove"})
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=true)
      */
     private $chef;
 

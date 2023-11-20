@@ -1,0 +1,40 @@
+#icon-mute-video {
+    position: absolute;
+    z-index: 4;
+    top: 1rem;
+    left: 2rem;
+}
+
+#icon-play {
+    position: absolute;
+    z-index: 2;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+}
+
+#zone-mon {
+    display: block;
+}
+
+#overlay-video {
+    position: absolute;
+    z-index: 1;
+    top: 0;
+    left: 15px;
+    width: calc(100% - 30px);
+    height: 100%;
+    object-fit: cover;
+}
+
+#banner-video {
+    position: absolute;
+    z-index: 0;
+    object-fit: cover;
+    top: 0;
+    left: 15px;
+    width: calc(100% - 30px);
+    height: 100%;
+}
+

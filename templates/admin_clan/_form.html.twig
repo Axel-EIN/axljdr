@@ -27,7 +27,7 @@
 
             <div class="col-12 mt-3">
                 {% if type == 'Modifier' %}
-                    <img class="img-fluid" src="{{ asset( clan.image|default( 'assets/img/placeholders/1280x720.jpg' ) ) }}" />
+                    <img class="img-fluid" src="{{ asset( clan.image|default( 'assets/img/placeholders/na_clan.jpg' ) ) }}" />
                 {% endif %}
             </div>
 
@@ -57,7 +57,7 @@
 
             <div class="col-12 mt-3 text-center">
                 {% if type == 'Modifier' %}
-                    <img class="img-fluid" src="{{ asset( clan.territoireCarte|default( 'assets/img/placeholders/1280x720.jpg' ) ) }}" />
+                    <img class="img-fluid" src="{{ asset( clan.territoireCarte|default( 'assets/img/placeholders/na_map.jpg' ) ) }}" />
                 {% endif %}
             </div>
 

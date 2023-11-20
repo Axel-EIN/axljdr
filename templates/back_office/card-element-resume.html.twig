@@ -1,28 +1,27 @@
-<div class="col-lg-3 col-12 px-1">
-    <article class="border p-3 bg-white d-flex flex-column h-100 relative">
+<element class="col-3 p-1">
+    <card class="card card-body p-3 bg-white d-flex flex-column h-100 relative">
 
-        <a class="absolute right-corner-16" href="{{ path('admin_' ~ element) }}">
-            <strong>Liste</strong>
-            <i class="fa-solid fa-table-list ml-1"></i>
-        </a>
+        <icons class="absolute right-corner-16">
+            <a href="{{ path('admin_' ~ element) }}"><i class="fa-solid fa-table-list ml-1"></i></a>
+            <a href="{{ path('admin_' ~ element ~ '_create') }}"><i class="fa-solid fa-plus ml-1"></i></a>
+        </icons>
 
-        <h5 class="m-0 mt-n3" ><span class="display-4">{{nbr}}</span> &nbsp; <strong>{{label}}</strong></h5>
+        <h5 class="m-0 mt-n3"><span class="display-4">{{nbr}}</span> <strong>{{label}}</strong></h5>
 
-        <div class="mb-3">
+        <last class="mt-2">
             {% if last is not empty %}
-                <small class="text-muted">Dernier ajout
-                    <strong><a href="{{ path('admin_' ~ element ~ '_edit', {id: last.id} ) }}" >
-                        <i class="fa-solid fa-edit ml-1"></i></a>
-                    </strong>
-                </small><br/>
-                <a href="{{ path('admin_' ~ element ~ '_edit', {id: last.id} ) }}" >
-                    <img class="img-fluid" src="{{ asset(image|default(NA_169)) }}" alt="Image {{element}}" />
-                </a><br/>
-                <strong class="d-block text-center">{{nom}}</strong>
+                <small class="text-muted">Dernier ajout</small><br/>
+                <a class="relative d-block link-white hover-slight-fade" href="{{ path('admin_' ~ element ~ '_edit', {id: last.id} ) }}" >
+                    <i class="right-corner-8 absolute fa-solid fa-edit"></i>
+                    <div class="ratio-{{ratio|default('43')}}">
+                        <img class="bg-lightest ratio-cropped" src="{{ asset(image|default(NA_43)) }}" alt="Image {{element}}" />
+                    </div>
+                </a>
+                <strong class="d-block text-center mt-1">{{nom}}</strong>
             {% else %}
-                <p class="my-5">Il n'y a pas encore de {{element}}</p>
+                <div class="text-muted text-center">Il n'y a pas encore de {{element}}</div>
             {% endif %}
-        </div>
-        <a href="{{ path('admin_' ~ element ~ '_create') }}" class="btn btn-primary mt-auto">Ajouter</a>
-    </article>
-</div>
+        </last>
+
+    </card>
+</element>

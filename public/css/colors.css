@@ -3,6 +3,7 @@
     --lightest: #eee;
     --lighter: #aaa ;
     --light: #8f8f8f;
+
     --light-alpha: rgba(255, 255, 255, 0.5);
     --light-trans: rgba(255, 255, 255, 0.2);
 
@@ -47,14 +48,25 @@
 /* ------------ TEXT COLORS ------- */
 /* -------------------------------- */
 
-.text-black {
-    color:  var(--black) !important; }
-
 .text-white {
-    color: var(--white) !important; }
+    color: var(--white) !important;
+}
 
 .text-lightest {
-    color: var(--lightest) !important; }
+    color: var(--lightest) !important;
+}
+
+.text-light {
+    color: var(--light) !important;
+}
+
+.text-black {
+    color:  var(--black) !important;
+}
+
+.text-gray {
+        color:  var(--gray) !important;
+}   
 
 .text-primary {
     color: var(--primary) !important; }

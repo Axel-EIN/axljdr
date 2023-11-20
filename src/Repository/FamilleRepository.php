@@ -23,6 +23,26 @@ class FamilleRepository extends ServiceEntityRepository
         parent::__construct($registry, Famille::class);
     }
 
+    public function findAll()
+    {
+        return $this->findAllSorted();
+    }
+
+    public function findAllSorted()
+    {
+        return $this->createQueryBuilder('e')
+            ->addOrderBy('c.nom', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function countFamilles() {
+        return $this->createQueryBuilder('e')
+            ->select('count(e.id)')
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
+
     /**
      * @throws ORMException
      * @throws OptimisticLockException
@@ -46,33 +66,4 @@ class FamilleRepository extends ServiceEntityRepository
             $this->_em->flush();
         }
     }
-
-    // /**
-    //  * @return Famille[] Returns an array of Famille objects
-    //  */
-    /*
-    public function findByExampleField($value)
-    {
-        return $this->createQueryBuilder('f')
-            ->andWhere('f.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('f.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
-
-    /*
-    public function findOneBySomeField($value): ?Famille
-    {
-        return $this->createQueryBuilder('f')
-            ->andWhere('f.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
 }

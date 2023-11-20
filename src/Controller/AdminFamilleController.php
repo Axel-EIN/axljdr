@@ -20,7 +20,8 @@ class AdminFamilleController extends AbstractController
      * @Route("/admin/famille", name="admin_famille")
      */
     public function afficherAdminFamilles(FamilleRepository $familleRepository): Response {
-        $familles = $familleRepository->findAll();
+        $familles = $familleRepository->findBy(array(), array('id' => 'DESC'));
+
         return $this->render('admin_famille/index.html.twig', [
             'familles' => $familles
         ]);

@@ -3,17 +3,15 @@
 namespace App\Controller;
 
 use App\Entity\Saison;
-use App\Service\Uploader;
+use App\Service\FileHandler;
 use App\Service\Numeroteur;
 use App\Form\AdminSaisonType;
 use App\Repository\SaisonRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
-use Symfony\Component\Filesystem\Exception\IOExceptionInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class AdminSaisonController extends AbstractController
@@ -35,7 +33,7 @@ class AdminSaisonController extends AbstractController
      * @Route("/admin/saison/create", name="admin_saison_create")
      * @IsGranted("ROLE_MJ")
      */
-    public function creerSaison(Request $request, EntityManagerInterface $em, Uploader $uploadeur, SaisonRepository $saisonRepository, Numeroteur $numeroteur) {
+    public function creerSaison(Request $request, EntityManagerInterface $em, FileHandler $fileHandler, SaisonRepository $saisonRepository, Numeroteur $numeroteur) {
 
         $saison = new Saison;
 
@@ -57,16 +55,15 @@ class AdminSaisonController extends AbstractController
             // ----------------------
             $nouvelleImage = $form->get('image')->getData();
             if (!empty($nouvelleImage)) {
-                $nouvelleImageNomFichier = $uploadeur->upload($nouvelleImage, 'saison-' . $saison->getNumero(), 'saisons');
-                $nouveauCheminRelatif = 'assets/img/saisons/' . $nouvelleImageNomFichier;
-                $saison->setImage($nouveauCheminRelatif);
+                $prefix = 'saison-' . $saison->getNumero();
+                $saison->setImage($fileHandler->handle($nouvelleImage, null, $prefix, 'saisons'));
             } else { $saison->setImage('assets/img/placeholders/1920x1080.jpg'); }
 
             // CREATION ENTITE
             // ---------------
             $em->persist($saison);
             $em->flush();
-            $this->addFlash('success', 'La saison a bien été créee !');
+            $this->addFlash('success', 'La saison a bien été créee.');
 
             // NUMEROTEUR
             // ----------
@@ -94,7 +91,7 @@ class AdminSaisonController extends AbstractController
      * @Route("/admin/saison/{id}/edit", name="admin_saison_edit")
      * @IsGranted("ROLE_MJ")
      */
-    public function editerSaison(Request $request, Saison $saison, Uploader $uploadeur, Numeroteur $numeroteur, SaisonRepository $saisonRepository): Response {
+    public function editerSaison(Request $request, Saison $saison, FileHandler $fileHandler, Numeroteur $numeroteur, SaisonRepository $saisonRepository): Response {
 
         // Stockage du numéro et de l'ID de l'episode avant édition
         $numeroDepart = $saison->getNumero();
@@ -113,15 +110,8 @@ class AdminSaisonController extends AbstractController
             // ---------------------
             $nouvelleImage = $form->get('image')->getData();
             if (!empty($nouvelleImage)) {
-                $AncienneImageNomFichier = basename($saison->getImage());
-
-                $nouvelleImageNomFichier = $uploadeur->upload($nouvelleImage, 'saison-' . $saison->getNumero(), 'saisons');
-                $nouveauChemingRelatif = 'assets/img/saisons/' . $nouvelleImageNomFichier;
-                $saison->setImage($nouveauChemingRelatif);
-
-                $ancienneImageCheminComplet = $this->getParameter('image_directory') . '/saisons/' . $AncienneImageNomFichier;
-                $filesystem = new Filesystem();
-                $filesystem->remove($ancienneImageCheminComplet);
+                $prefix = 'saison-' . $saison->getNumero();
+                $saison->setImage($fileHandler->handle($nouvelleImage, $saison->getImage(), $prefix, 'saisons'));
             }
 
             // NUMEROTEUR
@@ -137,7 +127,7 @@ class AdminSaisonController extends AbstractController
             // EDITION ENTITE
             // --------------
             $this->getDoctrine()->getManager()->flush();
-            $this->addFlash('success', 'La saison a bien été modifiée !');
+            $this->addFlash('success', 'La saison a bien été modifiée.');
 
             // REDIRECTION
             // -----------
@@ -161,7 +151,7 @@ class AdminSaisonController extends AbstractController
      * @Route("/admin/saison/{id}/delete", name="admin_saison_delete", methods={"GET"})
      * @IsGranted("ROLE_MJ")
      */
-    public function supprimerSaison(Request $request, Saison $saison, Numeroteur $numeroteur, SaisonRepository $saisonRepository): Response {
+    public function supprimerSaison(Request $request, Saison $saison, Numeroteur $numeroteur, SaisonRepository $saisonRepository, FileHandler $fileHandler): Response {
 
         // GESTION FORMULAIRE VALIDE
         // -------------------------
@@ -176,13 +166,7 @@ class AdminSaisonController extends AbstractController
 
             // SUPPRESSION FICHIER IMAGE
             // -------------------------
-            $nomImageASupprimer = basename($saison->getImage());
-            $cheminImageASupprimer = $this->getParameter('image_directory') . '/saisons/' . $nomImageASupprimer;
-
-            if (file_exists($cheminImageASupprimer)) {
-                $filesystem = new Filesystem();
-                $filesystem->remove($cheminImageASupprimer);
-            }
+            $fileHandler->handle(null, $saison->getImage(), null, 'saisons');
 
             // NUMEROTEUR
             // ----------
@@ -194,7 +178,7 @@ class AdminSaisonController extends AbstractController
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($saison);
             $entityManager->flush();
-            $this->addFlash('success', 'La saison a bien été supprimée !');
+            $this->addFlash('success', 'La saison a bien été supprimée.');
         } else
             $this->addFlash('danger', 'Token de protection invalide !');
 

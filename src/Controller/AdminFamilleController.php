@@ -3,11 +3,10 @@
 namespace App\Controller;
 
 use App\Entity\Famille;
-use App\Service\Uploader;
+use App\Service\FileHandler;
 use App\Form\AdminFamilleType;
 use App\Repository\FamilleRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -30,7 +29,7 @@ class AdminFamilleController extends AbstractController
      * @Route("/admin/famille/create", name="admin_famille_create")
      * @IsGranted("ROLE_MJ")
      */
-    public function ajouterFamille(Request $request, EntityManagerInterface $em, Uploader $uploadeur) {
+    public function ajouterFamille(Request $request, EntityManagerInterface $em, FileHandler $fileHandler) {
 
         $famille = new Famille;
         $form = $this->createForm(AdminFamilleType::class, $famille);
@@ -39,17 +38,15 @@ class AdminFamilleController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
 
             $nouveauMon = $form->get('mon')->getData();
-
             if (!empty($nouveauMon)) {
-                $nouveauMonNomFichier = $uploadeur->upload($nouveauMon, 'famille-' . $famille->getNom() . '-mon', 'familles');
-                $nouveauCheminRelatif = 'assets/img/familles/' . $nouveauMonNomFichier;
-                $famille->setMon($nouveauCheminRelatif);
+                $prefix = 'famille-' . $famille->getNom() . '-mon';
+                $famille->setMon($fileHandler->handle($nouveauMon, null, $prefix, 'familles'));
             } else { $famille->setMon('assets/img/placeholders/na_mon.png'); }
 
             $em->persist($famille);
             $em->flush();
 
-            $this->addFlash('success', 'Le Famille a bien été ajoutée !');
+            $this->addFlash('success', 'Le Famille a bien été ajoutée.');
 
             // REDIRECTION
             if (!empty($request->query->get('redirect')) && $request->query->get('redirect') == 'famille')
@@ -67,7 +64,7 @@ class AdminFamilleController extends AbstractController
      * @Route("/admin/famille/{id}/edit", name="admin_famille_edit")
      * @IsGranted("ROLE_MJ")
      */
-    public function editerFamille(Request $request, Famille $famille, Uploader $uploadeur): Response {
+    public function editerFamille(Request $request, Famille $famille, FileHandler $fileHandler): Response {
 
         $form = $this->createForm(AdminFamilleType::class, $famille);
         
@@ -76,26 +73,13 @@ class AdminFamilleController extends AbstractController
         if($form->isSubmitted() && $form->isValid()) {
 
             $nouveauMon = $form->get('mon')->getData();
-
             if (!empty($nouveauMon)) {
-                $ancienMonNomFichier = basename($famille->getMon());
-
-                $nouveauMonNomFichier = $uploadeur->upload($nouveauMon, 'famille-' . $famille->getNom() . '-image', 'familles');
-                $nouveauCheminRelatif = 'assets/img/familles/' . $nouveauMonNomFichier;
-                $famille->setMon($nouveauCheminRelatif);
-
-                // Efface l'ancien fichier uniquement s'il a réussit à récupérer depuis l'url un nom de fichier et que ce n'est pas un dossier (protection)
-                if ($ancienMonNomFichier) {
-                    $ancienMonCheminComplet = $this->getParameter('image_directory') . '/familles/' . $ancienMonNomFichier;
-                    if (is_dir($ancienMonCheminComplet) == false) {
-                        $filesystem = new Filesystem();
-                        $filesystem->remove($ancienMonCheminComplet);
-                    }
-                }
+                $prefix = 'famille-' . $famille->getNom() . '-image';
+                $famille->setMon($fileHandler->handle($nouveauMon, $famille->getMon(), $prefix, 'familles'));
             }
 
             $this->getDoctrine()->getManager()->flush();
-            $this->addFlash('success', 'La Famille a bien été modifiée !');
+            $this->addFlash('success', 'La Famille a bien été modifiée.');
 
             // REDIRECTION
             if (!empty($request->query->get('redirect')) && $request->query->get('redirect') == 'famille')
@@ -115,24 +99,18 @@ class AdminFamilleController extends AbstractController
      * @Route("/admin/famille/{id}/delete", name="admin_famille_delete", methods={"GET"})
      * @IsGranted("ROLE_MJ")
      */
-    public function supprimerFamille(Request $request, Famille $famille): Response {
+    public function supprimerFamille(Request $request, Famille $famille, FileHandler $fileHandler): Response {
 
         if ($this->isCsrfTokenValid('delete' . $famille->getId(), $request->query->get('csrf'))) {
 
             $entityManager = $this->getDoctrine()->getManager();
 
-            $nomImageASupprimer = basename($famille->getMon());
-            $cheminImageASupprimer = $this->getParameter('image_directory') . '/familles/' . $nomImageASupprimer;
-
-            if (file_exists($cheminImageASupprimer) && is_dir($cheminImageASupprimer) == false) {
-                $filesystem = new Filesystem();
-                $filesystem->remove($cheminImageASupprimer);
-            }
+            $fileHandler->handle(null, $famille->getMon(), null, 'familles');
 
             $entityManager->remove($famille);
             $entityManager->flush();
 
-            $this->addFlash('success', 'La Famille a bien été supprimée !');
+            $this->addFlash('success', 'La Famille a bien été supprimée.');
         }
 
         return $this->redirectToRoute('admin_famille');

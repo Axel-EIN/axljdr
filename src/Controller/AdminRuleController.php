@@ -52,12 +52,12 @@ class AdminRuleController extends AbstractController
             $pdf = $form->get('pdf')->getData();
             if (!empty($pdf)) {
                 $prefix = 'rule-' . $rule->getNom() . '-pdf';
-                $rule->setPdf($fileHandler->handle($pdf, null, $prefix, 'rules-pdfs'));
+                $rule->setPdf($fileHandler->handle($pdf, null, $prefix, '../pdf/rules'));
             }
 
             $em->persist($rule);
             $em->flush();
-            $this->addFlash('success', 'La Règle a bien été ajoutée.');
+            $this->addFlash('success', 'La Règle a bien été ajoutée');
 
             // RE-ORDERING
             $fratrieArrivee = $ruleRepository->findBy(['base' => $rule->getBase()]);
@@ -103,7 +103,7 @@ class AdminRuleController extends AbstractController
             $nouveauPDF = $form->get('pdf')->getData();
             if (!empty($nouveauPDF)) {
                 $prefix = 'rule-' . $rule->getNom() . '-pdf';
-                $rule->setPdf($fileHandler->handle($nouveauPDF, $rule->getPdf(), $prefix, 'rules-pdfs'));
+                $rule->setPdf($fileHandler->handle($nouveauPDF, $rule->getPdf(), $prefix, '../pdf/rules'));
             }
 
             // RE-ORDERING : if number has changed or if parent has changed
@@ -115,7 +115,7 @@ class AdminRuleController extends AbstractController
             }
 
             $this->getDoctrine()->getManager()->flush();
-            $this->addFlash('success', 'La Règle a bien été modifiée.');
+            $this->addFlash('success', 'La Règle a bien été modifiée');
 
             // REDIRECTION
             if (!empty($request->query->get('redirect')) && $request->query->get('redirect') == 'rule')
@@ -141,7 +141,7 @@ class AdminRuleController extends AbstractController
         {
             // File Image and PDF handling
             $fileHandler->handle(null, $rule->getImage(), null, 'rules');
-            $fileHandler->handle(null, $rule->getPdf(), null, 'rules-pdfs');
+            $fileHandler->handle(null, $rule->getPdf(), null, '../pdf/rules');
 
             // RE-ORDERING
             $fratrieDepartId = $rule->getBase();
@@ -150,7 +150,7 @@ class AdminRuleController extends AbstractController
 
             $em->remove($rule);
             $em->flush();
-            $this->addFlash('success', 'La Règle a bien été supprimée.');    
+            $this->addFlash('success', 'La Règle a bien été supprimée');    
         }
 
         return $this->redirectToRoute('admin_rule');

@@ -1,39 +1,57 @@
 <section class="col-12 pb-1">
 
-    <!-- CONTAINER BACKGROUND IMAGE -->
-    <div class="row m-0 p-5"
+    <!-- CONTAINER BANNER IMAGE -->
+    <div class="row m-0 p-5 text-center"
         style=" background-image:
                     linear-gradient( #00000020 , #000000FF ),
                     linear-gradient( {{un_element.couleur}}AA , {{un_element.couleur}}FF ),
-                    url('{{ asset( un_element.image|default('assets/img/placeholders/1280x720.jpg') ) }}')
-                    ;
+                    url('{{ asset( un_element.image|default('assets/img/placeholders/1280x720.jpg') ) }}');
                 background-blend-mode: normal, soft-light;
-                background-position: 50% 10%;
-    ">
+                background-position: 50% 10%; ">
 
-        <!-- MON + CITATION -->
-        <div class="col-5 p-0 px-5 m-0 d-flex flex-column justify-content-center align-items-center">
+        {% if un_element.video is defined and un_element.video is not empty %}
+            <!-- ICON MUTE / UNMUTE VIDE -->
+            <icon id="icon-mute-video" onclick="unfocusVideo()" class="invisible">
+                <i class="text-white fa-solid fa-video-slash"></i>
+            </icon>
+
+            <!-- OVERLAY -->
+            <overlay id="overlay-video" style="background-image: linear-gradient(to bottom, {{un_element.couleur}}AA 50%, rgba(00,00,00));"></overlay>
+
+            <!-- VIDEO -->
+            <video id="banner-video" autoplay loop controls muted poster="{{ asset( un_element.image|default('assets/img/placeholders/1280x720.jpg') ) }}">
+                <source src="{{asset(un_element.video)}}" type="video/mp4">
+            </video>
+        {% endif %}
+
+        <!-- ICONE + CITATION + CHAMPION-->
+        <div class="col-5 p-0 px-5 m-0 d-flex flex-column justify-content-center align-items-center" style="z-index: 2;" >
+
             {% if un_element.estMajeur is defined %}
                 {% if un_element.estMajeur == 1 %}
                     <strong class="text-white mb-3 text-shadow">Clan Majeur</strong>
                 {% endif %}
             {% endif %}
-            <img class="img-240 {{invert}}" src="{{ asset(icone) }}" alt="Blason" />
+
+            {% if un_element.video is defined and un_element.video is not empty %}
+                <button id="btn-play" class="btn-unstyle" onclick="focusVideo()">
+                    <animation id="zone-mon" class="animation-shine hover-zoom-x2">
+                        <i id="icon-play" class="invisible fa-solid fa-video fa-4x"></i>
+                        <img class="img-240 filter-shadow" src="{{ asset(icone) }}" alt="Blason" title="Visualiser/Écouter la Vidéo" />
+                    </animation>
+                </button>
+            {% else %}
+                <img class="img-240 {{invert}} filter-shadow" src="{{ asset(icone) }}" alt="Icône" />
+            {% endif %}
+            
             <span class="quote text-white m-0">« {{un_element.citation}} »</span>
-        </div>
 
-        <!-- DESCRIPTION -->
-        <div class="col-7 p-0 m-0 pl-3 d-flex flex-column justify-content-end">
-            <p class="text-justify text-white mb-0">
-                {{ un_element.description|raw|nl2br }}
-            </p>
-
-            <!-- ICON CHAMPION -->
+            <!-- CHAMPION -->
             {% if un_element.chef is defined %}
                 {% if un_element.chef is not empty %}
                     <div class="text-center hover-zoom-x2 mt-3">
                         <a href="{{ path('personnage_profil', {id: un_element.chef.id} ) }}">
-                            <img class="img-64" src="{{ asset(un_element.chef.icone) }}" alt="Icône du personnage" />
+                            <img class="img-48" src="{{ asset(un_element.chef.icone) }}" alt="Icône du personnage" />
                         </a>
                         <a class="link-accent" href="{{ path('personnage_profil', {id: un_element.chef.id} ) }}">
                             &nbsp;<strong>{{ un_element.chef.nom }} {{ un_element.chef.prenom }}</strong> (Champion)
@@ -43,5 +61,13 @@
             {% endif %}
 
         </div>
+
+        <!-- DESCRIPTION -->
+        <div class="col-7 p-0 m-0 pl-3 d-flex flex-column justify-content-end" style="z-index: 2;">
+            <p class="text-justify text-white mb-0 text-shadow">
+                {{ un_element.description|raw|nl2br }}
+            </p>
+        </div>
+
     </div>
 </section>

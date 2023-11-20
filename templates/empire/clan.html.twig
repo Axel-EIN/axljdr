@@ -1,4 +1,10 @@
 {% extends 'element.html.twig' %}
+
+{% block stylesheets %}
+        {{parent()}}
+        <link rel="stylesheet" href="{{asset('css/clan.css')}}" />
+{% endblock %}
+
 {% block element_content %} 
 
     {# BANNER INTRO #}
@@ -151,4 +157,9 @@
         </div>
     </aside>
 
+{% endblock %}
+
+{% block javascripts %}
+    {{parent()}}
+    <script src="{{ asset('scripts/clan.js') }}"></script>
 {% endblock %}

@@ -28,6 +28,7 @@ class AdminClanType extends AbstractType
             ->add('couleur', ColorType::class)
             ->add('mon', FileType::class, array('mapped' => false, 'data_class' => null, 'required' => false))
             ->add('image', FileType::class, array('mapped' => false, 'data_class' => null, 'required' => false))
+            ->add('video', FileType::class, array('mapped' => false, 'data_class' => null, 'required' => false))
             ->add('territoireCarte', FileType::class, array('mapped' => false, 'data_class' => null, 'required' => false))
             ->add('territoireDesc', TextareaType::class, ['required' => false])
             ->add('chef', EntityType::class, [

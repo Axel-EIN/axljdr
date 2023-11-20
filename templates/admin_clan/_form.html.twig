@@ -36,6 +36,18 @@
             </div>
 
             <div class="col-12 mt-3">
+                {% if type == 'Modifier' %}
+                    <video class="img-fluid" controls muted poster="{{ asset( clan.image|default('assets/img/placeholders/1280x720.jpg') ) }}">
+                        <source src="{{asset(clan.video|default('assets/img/placeholders/1280x720.jpg'))}}" type="video/mp4">
+                    </video>
+                {% endif %}
+            </div>
+
+            <div class="col-12">
+                {{ form_row(form.video) }}
+            </div>
+
+            <div class="col-12 mt-3">
                 {{ form_row(form.citation) }}
             </div>
 

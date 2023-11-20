@@ -55,10 +55,7 @@ class BackOfficeController extends AbstractController
         UtilisateurRepository $utilisateurRepository ): Response
     {
 
-        if(
-            !$this->isGranted('ROLE_ADMIN')
-         || !$this->isGranted('ROLE_MJ')
-         )
+        if( !$this->isGranted('ROLE_ADMIN') && !$this->isGranted('ROLE_MJ') )
             throw new \Exception('Permission denied!');
 
         // AVENTURE

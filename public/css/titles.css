@@ -2,6 +2,9 @@
 /* ----- TITLES ----- */
 /* ------------------ */
 
+
+/** DISPLAY **/
+
 .title-display-h1 {
     font-family: "Shogun";
     color: var(--white);
@@ -17,6 +20,16 @@
     font-size: 4rem;
     text-shadow: 4px 4px 1rem var(--dark);
     margin: 0;
+}
+
+/** TITLES **/
+
+.title-h1 {
+    font-family: "Misaki";
+    font-size: 4rem;
+    margin: 0;
+    padding: 0;
+    line-height: 1;
 }
 
 .title-h2 {

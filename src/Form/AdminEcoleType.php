@@ -21,9 +21,19 @@ class AdminEcoleType extends AbstractType
     {
         $builder
             ->add('nom', TextType::class, [ 'constraints' => [ new Length( [ 'max' => 60 ] ) ] ] )
+            ->add('classe', EntityType::class, [
+                'class' => Classe::class,
+                'choice_label' => 'nom'
+            ])
+            ->add('clan', EntityType::class, [
+                'class' => Clan::class,
+                'choice_label' => 'nom'
+            ])
+
+            // Nullables Fields
             ->add('image', FileType::class, [ 'required' => false, 'mapped' => false, 'data_class' => null ])
             ->add('description', TextareaType::class, [ 'required' => false, 'constraints' => [ new Length( [ 'max' => 2000 ] ) ] ])
-            ->add('bonus', TextType::class, [ 'required' => false , 'constraints' => [ new Length( [ 'max' => 20 ] ) ] ])
+            ->add('bonus', TextType::class, [ 'required' => false, 'constraints' => [ new Length( [ 'max' => 20 ] ) ] ])
             ->add('competences', TextareaType::class, [ 'required' => false, 'constraints' => [ new Length( [ 'max' => 600 ] ) ] ])
             ->add('equipements', TextareaType::class, [ 'required' => false, 'constraints' => [ new Length( [ 'max' => 600 ] ) ] ])
             ->add('tech1Nom', TextType::class, ['required' => false, 'constraints' => [ new Length( [ 'max' => 100 ] ) ] ])
@@ -41,14 +51,6 @@ class AdminEcoleType extends AbstractType
             ->add('affinite', TextType::class, ['required' => false, 'constraints' => [ new Length( [ 'max' => 50 ] ) ] ])
             ->add('deficience', TextType::class, ['required' => false, 'constraints' => [ new Length( [ 'max' => 50 ] ) ] ])
             ->add('sorts', TextareaType::class, ['required' => false])
-            ->add('classe', EntityType::class, [
-                'class' => Classe::class,
-                'choice_label' => 'nom'
-            ])
-            ->add('clan', EntityType::class, [
-                'class' => Clan::class,
-                'choice_label' => 'nom'
-            ])
         ;
     }
 

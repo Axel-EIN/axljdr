@@ -47,7 +47,7 @@
                         <div class="col-lg-9">
                             <h3><strong> {{ une_famille.nom }}</strong></h3>
                             <strong>{{une_famille.bonus|upper}}</strong>
-                            <p class="text-justify text-medium mt-2 pr-2">{{ une_famille.description|raw|nl2br }}</p>
+                            <p class="text-justify text-regular mt-2 pr-2">{{ une_famille.description|raw|nl2br }}</p>
                         </div>
 
                     </article>
@@ -137,7 +137,7 @@
 
             {# LIEUX  #}
             {% for un_lieu in clan.lieux %}
-            <div class="p-2 {{col_lieu}}">
+            <div class="p-1 {{col_lieu}}">
                 <a class="vignette-aside" href="{{path('empire_lieu', {id: un_lieu.id} )}}">
                     <!-- ICON ON TOP -->
                     {% if un_lieu.icone is defined and un_lieu.icone is not empty %}
@@ -150,8 +150,9 @@
             </div>
             {% endfor %}
 
+            {# PERSONNAGE  #}
             {% for un_personnage in clan.personnages %}
-                <a class="{{col_perso}} p-2 hover-zoom-x2" href="{{ path('personnage_profil', {id: un_personnage.id} ) }}" >
+                <a class="{{col_perso}} p-1 hover-zoom-x2" href="{{ path('personnage_profil', {id: un_personnage.id} ) }}" >
                     <img class="img-fluid rounded-8" src="{{ asset(un_personnage.icone) }}" alt="Icône du personnage" />
                 </a>
             {% endfor %}

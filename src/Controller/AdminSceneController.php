@@ -4,13 +4,14 @@ namespace App\Controller;
 
 use App\Entity\Scene;
 use App\Service\Uploader;
+use App\Service\Numeroteur;
+use App\Service\BaliseurPersonnage;
 use App\Form\AdminSceneType;
 use App\Entity\Participation;
 use App\Repository\EpisodeRepository;
 use App\Repository\ParticipationRepository;
 use App\Repository\SceneRepository;
 use App\Repository\PersonnageRepository;
-use App\Service\Numeroteur;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\Request;
@@ -38,36 +39,39 @@ class AdminSceneController extends AbstractController
      * @Route("/admin/scene/create", name="admin_scene_create")
      * @IsGranted("ROLE_MJ")
      */
-    public function creerScene(Request $request, EntityManagerInterface $em, Uploader $uploadeur, PersonnageRepository $personnageRepository, EpisodeRepository $episodeRepository, Numeroteur $numeroteur, SceneRepository $sceneRepository) {
+    public function creerScene(Request $request,
+                            EntityManagerInterface $em,
+                            Uploader $uploadeur,
+                            BaliseurPersonnage $baliseur,
+                            PersonnageRepository $personnageRepository,
+                            EpisodeRepository $episodeRepository,
+                            Numeroteur $numeroteur,
+                            SceneRepository $sceneRepository) {
 
         $scene = new Scene;
 
-        // Pour l'affichage des liste déroulantes dynamiques en JS
+        // Création de liste pour l'affichage des listes déroulantes dynamiques en JS
         $tout_pjs = $personnageRepository->findBy(array('est_pj' => true));
         $tout_pnjs = $personnageRepository->findBy(array('est_pj' => false));
 
-        // PRE-REMPLISSAGE FROM FRONT PAGE LINKS
-        // -------------------------------------
+        // Gestion du pré-remplissage des champs
         if ( !empty($request->query->get('numero')) && $request->query->get('numero') > 0
         && !empty($request->query->get('episodeID')) && $request->query->get('episodeID') > 0 )
         {
-                $scene->setNumero($request->query->get('numero'));
-                $episodeParent = $episodeRepository->find($request->query->get('episodeID'));
-                if ($episodeParent !== null)
-                    $scene->setEpisodeParent($episodeParent);
+            $scene->setNumero($request->query->get('numero'));
+            $episodeParent = $episodeRepository->find($request->query->get('episodeID'));
+            if ($episodeParent !== null)
+                $scene->setEpisodeParent($episodeParent);
         }
 
-        // FORM VIEW
-        //-----------
+        // Création du Formulaire
         $form = $this->createForm(AdminSceneType::class, $scene);
         $form->handleRequest($request);
 
-        // GESTION FORMULAIRE VALIDE
-        // -------------------------
+        // Gestion du Formulaire posté et valide
         if ($form->isSubmitted() && $form->isValid()) {
 
-            // CREATION FICHIER IMAGE
-            // ----------------------
+            // CREATION FICHIER IMAGE & UPLOAD
             $nouvelleImage = $form->get('image')->getData();
             if (!empty($nouvelleImage)) {
                 $nouvelleImageNomFichier = $uploadeur->upload($nouvelleImage,
@@ -78,8 +82,7 @@ class AdminSceneController extends AbstractController
                 $scene->setImage($nouveauCheminRelatif);
             } else { $scene->setImage('assets/img/placeholders/1280x720.jpg'); }
 
-            // PARTICIPATIONS CRUD
-            // -------------------
+            // Récupération des données liées à la participation des PJs
             if(!empty($request->get('participants'))) {
                 $participants_pjs = $request->get('participants');
                 $participants_pjs_xp = $request->get('participants_xp');
@@ -93,6 +96,7 @@ class AdminSceneController extends AbstractController
                 $participants_pjs_mort = [];
             }
 
+            // Récupération des données liées à la participation des PNJs
             if(!empty($request->get('participants_pnjs'))) {
                 $participants_pnjs = $request->get('participants_pnjs');
                 if(!empty($request->get('participants_pnjs_mort')))
@@ -104,7 +108,7 @@ class AdminSceneController extends AbstractController
                 $participants_pnjs_mort = [];
             }
 
-            // Regroupement des données participations POST PJS (ID, XP, MORT) & PNJS (ID, MORT)
+            // Fusion des données liées aux participations à ajouter
             $participants_a_ajoutes = [];
             $compteur = 0;
             
@@ -134,7 +138,7 @@ class AdminSceneController extends AbstractController
                 }
             }
 
-            // Ajout des participants
+            // Ajout des participations
             if (!empty($participants_a_ajoutes)) {
                 foreach ($participants_a_ajoutes as $cle => $un_participant_a_ajoute) {
                     // Ajoute un participant à une scène et renvoi le dernier ID inséré dans la table ou false
@@ -154,48 +158,26 @@ class AdminSceneController extends AbstractController
                 }
             }
 
-            // TAG DES PERSONNAGES
-            // -------------------
-            $tableau = [];
-            $texte = $scene->getTexte();
-            preg_match_all('#\[(.*)\]#Ui', $texte, $tableau); // Capture tout les mots entre [ ]
-            $tableau_de_regexp = array_fill(0, count($tableau[1]), '#\[(.*)\]#Ui'); // On crée un tableau de regexp au nbr de matchs
-            $tableau_remplacement = [];
-
-            foreach ($tableau[1] as $key => $un_match) {
-                $personnage_trouve = $personnageRepository->findOneBy(array('prenom' => $un_match));
-                if ($personnage_trouve != null) {
-                    $tableau_remplacement[] =
-                        '<a class="perso-img" href="../../personnages/profil/' . $personnage_trouve->getId() . '">'
-                                    . '<img src="../../' . $personnage_trouve->getIcone()
-                                    . '" alt="Icône du personnage" /> ' . $personnage_trouve->getPrenom() . '</a>';
-                } else
-                    $tableau_remplacement[] = $un_match;
-            }
-
-            $scene->setTexte(preg_replace($tableau_de_regexp, $tableau_remplacement, $texte, 1));
+            // BALISAGE : capture les mots entre [], vérifie si un prénom personnage correspondant existe, remplace par un lien personnage HTML
+            $scene->setTexte($baliseur->baliserPersonnage($scene->getTexte()));
             
             // CREATION ENTITE
-            // ---------------
             $em->persist($scene);
             $em->flush();
             $this->addFlash('success', 'La scène a bien été crée !');
 
-            // NUMEROTEUR
-            // ----------
+            // NUMEROTAGE : ajuste le numéro si des scènes ont été supprimés ou intercalés
             $fratrieArrivee = $sceneRepository->findBy(['episodeParent' => $scene->getEpisodeParent()->getId()]);
             $numeroteur->reordonnerNumero($scene->getId(), -1, $scene->getNumero(), [], $fratrieArrivee);
 
             // REDIRECTION
-            // -----------
             if (!empty($request->query->get('redirect')) && $request->query->get('redirect') == 'episode')
                 return $this->redirectToRoute('aventure_episode', ['id' => $scene->getEpisodeParent()->getId(),'_fragment' => 'scn' . $scene->getId()]);
         
             return $this->redirectToRoute('admin_scene');
 
         } else {
-            // AFFICHAGE FORMULAIRE
-            // --------------------
+            // AFFICHAGE FORMULAIRE si formulaire pas soumis ou pas valide
             return $this->render('admin_scene/create.html.twig', [
                 'type' => 'Créer',
                 'form' => $form->createView(),
@@ -209,7 +191,7 @@ class AdminSceneController extends AbstractController
      * @Route("/admin/scene/{id}/edit", name="admin_scene_edit")
      * @IsGranted("ROLE_MJ")
      */
-    public function editerScene(Request $request, Scene $scene, Uploader $uploadeur, Numeroteur $numeroteur, PersonnageRepository $personnageRepository, ParticipationRepository $participationRepository, SceneRepository $sceneRepository): Response {
+    public function editerScene(Request $request, Scene $scene, Uploader $uploadeur, Numeroteur $numeroteur, BaliseurPersonnage $baliseur, PersonnageRepository $personnageRepository, ParticipationRepository $participationRepository, SceneRepository $sceneRepository): Response {
 
         // Stockage du numéro et de l'ID de l'episode avant édition
         $numeroDepart = $scene->getNumero();
@@ -221,45 +203,17 @@ class AdminSceneController extends AbstractController
         $participations_pjs = $participationRepository->findBy(array('scene' => $scene, 'estPj' => true));
         $participations_pnjs = $participationRepository->findBy(array('scene' => $scene, 'estPj' => false));
 
-        // UNTAGGING HTML
-        //----------------
-
-        // Parsing pour débaliser les prénoms de personnages de leur balise HTML
-        $tableau = [];
-        $texte = $scene->getTexte();
-
-        // Capture tout les prenoms entre les balises a img
-        preg_match_all('#<a .*><img .*/> (.*)<\/a>#Ui', $texte, $tableau);
-
-        // On crée un tableau de regexp au nbr de matchs
-        $tableau_de_regexp = array_fill(0, count($tableau[1]), '#<a .*><img .*/> (.*)<\/a>#Ui');
-        $tableau_remplacement = [];
-
-        // On remplace par des crochets
-        foreach ($tableau[1] as $key => $un_match) {
-            $personnage_trouve = $personnageRepository->findOneBy(array('prenom' => $un_match));
-            if ($personnage_trouve != null) {
-                $tableau_remplacement[] = '[' . $personnage_trouve->getPrenom() . ']';
-            } else
-                $tableau_remplacement[] = $un_match;
-        }
-
-        $scene->setTexte(preg_replace($tableau_de_regexp, $tableau_remplacement, $texte, 1));
+        // DEBALISEUR : dans le texte, capture les prénoms entre balises <a><img>, vérifie si le personnage existe, remplace les balises par des crochets []
+        $scene->setTexte($baliseur->debaliserPersonnage($scene->getTexte()));
 
         // FORM VIEW
-        //-----------
         $form = $this->createForm(AdminSceneType::class, $scene);
         $form->handleRequest($request);
 
-        // FORM HANDLE
-        //-----------
-
         // GESTION FORMULAIRE VALIDE
-        // -------------------------
         if($form->isSubmitted() && $form->isValid()) {
 
-            // EDITION FICHIER IMAGE
-            // ---------------------
+            // EDITION FICHIER IMAGE & UPLOAD
             $nouvelleImage = $form->get('image')->getData();
 
             if (!empty($nouvelleImage)) {
@@ -386,34 +340,10 @@ class AdminSceneController extends AbstractController
                 }
             }
 
-            // TAG [] PERSONNAGES -> TRANSFORMATION EN BALISAGE HTML
-            // -----------------------------------------------------
-            $tableau = [];
-            $texte = $scene->getTexte();
+            // BALISAGE : capture les mots entre [], vérifie si un prénom personnage correspondant existe, remplace par un lien personnage HTML
+            $scene->setTexte($baliseur->baliserPersonnage($scene->getTexte()));
 
-            // Capture tout les mots entre [ ]
-            preg_match_all('#\[(.*)\]#Ui', $texte, $tableau);
-
-            // On crée un tableau de regexp au nbr de matchs
-            $tableau_de_regexp = array_fill(0, count($tableau[1]), '#\[(.*)\]#Ui');
-            $tableau_remplacement = [];
-
-            foreach ($tableau[1] as $key => $un_match) {
-                $personnage_trouve = $personnageRepository->findOneBy(array('prenom' => $un_match));
-                if ($personnage_trouve != null) {
-                    $tableau_remplacement[] =
-                        '<a class="perso-img" href="../../personnages/profil/' . $personnage_trouve->getId() . '">'
-                                    . '<img src="../../' . $personnage_trouve->getIcone()
-                                    . '" alt="Icône du personnage" /> ' . $personnage_trouve->getPrenom() . '</a>';
-                } else
-                    $tableau_remplacement[] = $un_match;
-            }
-
-            $scene->setTexte(preg_replace($tableau_de_regexp, $tableau_remplacement, $texte, 1));
-
-            // NUMEROTEUR
-            // ----------
-            // Si numero change ou parent change
+            // NUMEROTAGE : augmente ou réduit le numéro de la scène si une scne a été supprimée ou intercalée
             if ($numeroDepart != $scene->getNumero() || $fratrieDepartId != $scene->getEpisodeParent()->getId())
             {
                 $fratrieDepart = $sceneRepository->findBy(['episodeParent' => $fratrieDepartId]);
@@ -422,20 +352,17 @@ class AdminSceneController extends AbstractController
             }
 
             // EDITION ENTITE
-            // --------------
             $this->getDoctrine()->getManager()->flush();
             $this->addFlash('success', 'La scène a bien été modifiée !');
 
             // REDIRECTION
-            // -----------
             if (!empty($request->query->get('redirect')) && $request->query->get('redirect') == 'episode')
                 return $this->redirectToRoute('aventure_episode', ['id' => $scene->getEpisodeParent()->getId(),'_fragment' => 'scn' . $scene->getId()]);
     
             return $this->redirectToRoute('admin_scene');
         }
 
-        // AFFICHAGE FORMULAIRE
-        // --------------------
+        // AFFICHAGE FORMULAIRE si formulaire pas soumis et valide
         return $this->renderForm('admin_scene/edit.html.twig', [
             'scene' => $scene,
             'form' => $form,

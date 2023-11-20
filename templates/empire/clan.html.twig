@@ -8,7 +8,7 @@
 {% block element_content %} 
 
     {# BANNER INTRO #}
-    {% set category, entity, un_element, icone, invert , all_elements = 'empire', 'clan' , clan, clan.mon, '' , toutClans %}
+    {% set category, entity, un_element, icone, invert , all_elements = 'empire', 'clan' , clan, clan.mon|default(NA_ICON_MON), '' , toutClans %}
     {{ include('parts/banner-intro.html.twig') }}
 
     {# FAMILLES #}
@@ -28,12 +28,12 @@
 
                         {% if app.user and is_granted("ROLE_MJ") %}
                         <!-- MJ BTN ICON EDIT -->
-                            {% set redirect, entity, un_element, size, color, position = 'clan', 'famille', une_famille, 'medium', 'text-accent', 'right-corner-snap' %}
+                            {% set redirect, entity, un_element, size, color, position = 'clan', 'famille', une_famille, 'btn-icon-small', 'link-accent', 'right-corner-snap' %}
                             {{ include('/parts/btn-icon-edit.html.twig') }}
                         {% endif %}
 
                         <div class="col-lg-3 text-center d-flex flex-column">
-                            <img class="img-fluid" src="{{ asset(une_famille.mon) }}" alt="Mon Famille" />
+                            <img class="img-fluid" src="{{ asset(une_famille.mon|default(NA_ICON_MON)) }}" alt="Mon Famille" />
 
                             {% if une_famille.chef is not empty %}
                                 <a class="mt-3 hover-no-under hover-zoom" href="{{ path('personnage_profil', {id: une_famille.chef.id} ) }}" title="{{une_famille.chef.nom}} {{une_famille.chef.prenom}}">
@@ -73,7 +73,7 @@
             {% for une_ecole in clan.ecoles %}
             <a class="vignette-aside mb-3" href="{{ path('regles_ecole', {id: une_ecole.id} ) }}">
                 <strong>{{ une_ecole.nom|upper }}</strong>
-                <img class="img-fluid" src="{{ asset(une_ecole.image) }}" alt="Image d'une école" />
+                <img class="img-fluid" src="{{ asset(une_ecole.image|default('assets/img/placeholders/na_' ~ une_ecole.classe.nom|lower ~ '.jpg')) }}" alt="Image d'une école" />
             </a>
             {% else %}
                 <i class="text-muted">Écoles à venir.</i>
@@ -100,13 +100,6 @@
             {% endif %}
 
         </div>
-
-        {# <!-- Carte Zoomed Modal -->
-        <div id="carteZoomModal" class="modalCarte">
-            <span class="closeModal">&times;</span>
-            <img class="modalCarte-content" id="carteModal">
-        </div> #}
-
     </section>
     {% endif %}
 

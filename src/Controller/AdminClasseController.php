@@ -43,14 +43,14 @@ class AdminClasseController extends AbstractController
             if (!empty($nouvelleIcone)) {
                 $prefix = 'classe-' . $classe->getNom() . '-icon';
                 $classe->setIcone($fileHandler->handle($nouvelleIcone, null, $prefix, 'classes'));
-            } else { $classe->setIcone('assets/img/placeholders/na_class.png'); }
+            }
 
             // Image Handling
             $nouvelleImage = $form->get('image')->getData();
             if (!empty($nouvelleImage)) {
                 $prefix = 'classe-' . $classe->getNom() . '-image';
                 $classe->setImage($fileHandler->handle($nouvelleImage, null, $prefix, 'classes'));
-            } else { $classe->setImage('assets/img/placeholders/1280x720.jpg'); }
+            }
 
             $em->persist($classe);
             $em->flush();

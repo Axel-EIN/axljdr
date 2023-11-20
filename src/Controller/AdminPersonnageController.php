@@ -44,14 +44,14 @@ class AdminPersonnageController extends AbstractController
             if (!empty($nouvelleIcone)) {
                 $prefix = 'personnage-' . $personnage->getNom() . '-' . $personnage->getPrenom() . '-icone';
                 $personnage->setIcone($fileHandler->handle($nouvelleIcone, null, $prefix, 'personnages'));
-            } else { $personnage->setIcone('assets/img/placeholders/na_personnage_icone.jpg'); }
+            }
 
             // File Illustration Image Handling
             $nouvelleIllustration = $form->get('illustration')->getData();
             if (!empty($nouvelleIllustration)) {
                 $prefix = 'personnage-' . $personnage->getNom() . '-' . $personnage->getPrenom() . '-illustration';
                 $personnage->setIllustration($fileHandler->handle($nouvelleIllustration, null, $prefix, 'personnages'));
-            } else { $personnage->setIllustration('assets/img/placeholders/na_personnage_illustration.jpg'); }
+            }
 
             // CHARACTER TAGGER : capture words between [], check if character exist, replace by a link
             $personnage->setDescription($baliseur->baliserPersonnages($personnage->getDescription()));

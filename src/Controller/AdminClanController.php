@@ -48,33 +48,33 @@ class AdminClanController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
 
-            // Symbol Image Handling
+            // Emblem Image Handling
             $nouveauMon = $form->get('mon')->getData();
             if (!empty($nouveauMon)) {
                 $prefix = 'clan-' . $clan->getNom() . '-mon';
                 $clan->setMon($fileHandler->handle($nouveauMon, null, $prefix, 'clans'));
-            } else { $clan->setMon('assets/img/placeholders/na_mon.png'); }
+            }
 
             // Banner Image Handling
             $nouvelleImage = $form->get('image')->getData();
             if (!empty($nouvelleImage)) {
                 $prefix = 'clan-' . $clan->getNom() . '-image';
                 $clan->setImage($fileHandler->handle($nouvelleImage, null, $prefix, 'clans'));
-            } else { $clan->setImage('assets/img/placeholders/na_clan.jpg'); }
+            }
 
             // Map Image Handling
             $nouvelleCarte = $form->get('territoireCarte')->getData();
             if (!empty($nouvelleCarte)) {
                 $prefix = 'clan-' . $clan->getNom() . '-territoire';
                 $clan->setTerritoireCarte($fileHandler->handle($nouvelleCarte, null, $prefix, 'clans'));
-            } else { $clan->setTerritoireCarte('assets/img/placeholders/na_map.jpg'); }
+            }
 
             // Video Handling
             $nouvelleVideo = $form->get('video')->getData();
             if (!empty($nouvelleVideo)) {
                 $prefix = 'clan-' . $clan->getNom() . '-video';
                 $clan->setVideo($fileHandler->handle($nouvelleVideo, null, $prefix, '../video'));
-            } else { $clan->setVideo(null); }
+            }
 
             $em->persist($clan);
             $em->flush();

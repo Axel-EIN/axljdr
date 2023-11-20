@@ -21,7 +21,7 @@
                 {% for une_ecole in ecolesClasse %}
                     <article class="col-4 p-3 hover-zoom text-center">
                         <a href="{{ path('regles_ecole', {id: une_ecole.id} ) }}">
-                            <img class="img-fluid" src="{{ asset(une_ecole.image) }}" alt="Image d'une école" title="{{une_ecole.nom}}" />
+                            <img class="img-fluid" src="{{ asset(une_ecole.image|default('assets/img/placeholders/na_' ~ une_ecole.classe.nom|lower ~ '.jpg')) }}" alt="Image d'une école" title="{{une_ecole.nom}}" />
                         </a><br/>
                         <strong><a href="{{ path('regles_ecole', {id: une_ecole.id} ) }}" >{{ une_ecole.nom }}</a></strong>
                     </article>

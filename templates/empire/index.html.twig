@@ -12,6 +12,9 @@
 {% block section_content2 %}
     <div class="col-9">
         <h4 class="text-secondary">Clans Majeurs</h4>
+        <p class="text-medium m-3 text-justify">Les Clans Majeurs sont les plus grandes factions de Rokugan.
+        Chacune d'elle est héritière d'un Kami originel qui juera fidélité à l'Empereur et se répartit la majeur partie de l'Empire.
+        Elles se composent de plusieurs familles et forment des miliers de Samuraï dans leur nombreux dojo différents.</p>
         <div class="row mt-3">
         {% for un_clan_majeur in clansMajeurs %}
 
@@ -27,16 +30,13 @@
     </div>
     <div class="col-3 border-left">
     <h4 class="text-secondary text-center">Autres</h4>
-        <div class="row mt-3">
+        <p class="text-regular m-3">Clans Mineurs, Confrérie des Moines, Familles Impérialles, Ennemis...</p>
+        <div class="row p-0 m-0 justify-content-around">
         {% for un_clan_autre in clansAutres %}
-
             <!-- UN CLAN AUTRE -->
-            <article class="col-lg-6 col-md-12 col-sm-12 py-3 text-center hover-zoom-x2 hover-shine">
-                <a href="{{ path('empire_clan', {id: un_clan_autre.id} ) }}"><img class="img-96" src="{{ asset(un_clan_autre.mon) }}" alt="Mon du clan" /></a>
-                <br/>
-                <h5 class="text-center my-3"><strong><a href="{{ path('empire_clan', {id: un_clan_autre.id} ) }}">{{ un_clan_autre.nom }}</a></strong></h5>
-            </article>
-
+            <a class="col-6 m-0 p-1 hover-zoom-x2 hover-shine" href="{{ path('empire_clan', {id: un_clan_autre.id} ) }}">
+                <img class="img-96" src="{{ asset(un_clan_autre.mon) }}" alt="Mon du clan" title="{{un_clan_autre.nom}}" /></a>
+            </a>
         {% endfor %}
         </div>
     </div>

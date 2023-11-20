@@ -35,10 +35,6 @@
                 {% set image = un_element.icone %}
             {% elseif un_element.personnage is defined and un_element.personnage is not empty %}
                 {% set image = un_element.personnage.icone %}
-            {% elseif un_element.pdf is defined and un_element.pdf is not empty and un_element.part1 is empty %}
-                {% set image = NA_PDF %}
-            {% else %}
-                {% set image = NA_43 %}
             {% endif %}
 
             {% if un_element.nom is defined %}
@@ -58,7 +54,7 @@
             <tr>
                 <td>{{ un_element.id }}</td>
 
-                <td><img class="img-{{img_size}}" src="{{ asset(image) }}" alt="Image {{label}}" /></td>
+                <td><img class="img-{{img_size}}" src="{{ asset(image|default(na_image)) }}" alt="Image {{label}}" /></td>
 
                 <td><strong>{{nom}}</strong></td>
 
@@ -87,7 +83,7 @@
                 {% set count = count + 1 %}
             {% endif %}
             <tr>
-                <td colspan="{{count}}">Il n'y a pas encore de {{element}}s.</td>
+                <td colspan="{{count}}">Il n'y a pas encore de {{labels}}.</td>
             </tr>
         {% endfor %}
 

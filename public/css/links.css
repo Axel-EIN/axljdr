@@ -47,33 +47,9 @@
 }
 
 
-/* --------------------------------- */
-/* --------- BACK OFFICE  ---------- */
-/* --------------------------------- */
-
-
-/* ---- Administration Panel Nav  ---- */
-
-.mj-link {
-    color: var(--primary-lighter) !important;
-    font-weight: bold;
-}
-
-.mj-link:hover {
-    color: var(--primary) !important;
-    text-decoration: none;
-}
-
-.mj-link.active {
-    color: var(--primary) !important;
-}
-
-
-
 /* --------------------------- */
 /* --------- PAGES  ---------- */
 /* --------------------------- */
-
 
 h5 a:hover,
 h4 a:hover,

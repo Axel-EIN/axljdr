@@ -33,7 +33,7 @@
                     <img class="img-fluid" src="{{ asset(clan.mon) }}" alt="Mon du Clan" />
                 </div>
                 
-                <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-8">
+                <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-8 mb-3">
                     <div class="card">
                         <div class="card-body">
                             <p class="card-text">{{ clan.description|raw|nl2br }}</p>
@@ -48,7 +48,7 @@
                                     {% endif %}
                             </li>
                             <li class="list-group-item">
-                                <strong>Chef&nbsp;:</strong>
+                                <strong>Champion&nbsp;:</strong>
                                     {% if clan.chef %}
                                         <a href="{{ path('personnage_profil', {id: clan.chef.id} ) }}">
                                             <img class="img-64" src="{{ asset(clan.chef.icone) }}" alt="Icône du personnage" />
@@ -65,31 +65,57 @@
                     </div>
                 </div>
 
+                {# FAMILLES DU CLAN #}
+                <section class="col-12 my-3">
+                    <div class="card card-body h-100 px-5 pt-4">
+                        <h2 class="card-title"><strong>Familles</strong></h2>
+                        <div class="card-text">
+                            {% for une_famille in clan.familles %}
+                                <hr>
+                                <div class="my-4 row align-items-start relative">
+                                    <div class="col-12 col-lg-2">
+                                        <a href="{{ path('regles_ecole', {id: une_famille.id} ) }}">
+                                            <img class="img-fluid" src="{{ asset(une_famille.mon) }}" alt="Mon Famille" />
+                                        </a>
+                                    </div>
+                                    <div class="col">
+                                        <h3>
+                                            <strong><a href="{{ path('regles_ecole', {id: une_famille.id} ) }}" >{{ une_famille.nom }}</a></strong>
+                                        </h3>
+                                        <div>{{ une_famille.description|raw|nl2br }}</div>
+                                    </div>
+                                </div>
+                            {% else %}
+                                <span class="text-muted">Désolé ! Il n'y a pas encore de familles disponible pour ce clan.</span>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </section>
+
                 {# ECOLES DU CLAN #}
                 <section class="col-12 my-3">
-                    <div class="card card-body h-100">
-                        <h2 class="card-title"><strong>Écoles</strong> du clan {{ clan.nom }} :</h2>
-                        <hr>
-                        <div class="card-text ml-3">
+                    <div class="card card-body h-100 px-5 pt-4">
+                        <h2 class="card-title"><strong>Écoles</strong></h2>
+                        <div class="card-text">
                             {% for une_ecole in clan.ecoles %}
-                                <div class="mb-5 row align-items-start relative">
+                                <hr>
+                                <div class="my-4 row align-items-start relative">
                                     <div class="col-12 col-lg-4">
                                         <a href="{{ path('regles_ecole', {id: une_ecole.id} ) }}">
                                             <img class="img-fluid" src="{{ asset(une_ecole.image) }}" alt="Image d'une école" />
                                         </a>
                                     </div>
-                                    <div class="col row">
+                                    <div class="col">
                                         <h3>
                                             <a href="{{ path('regles_classe', {id: une_ecole.classe.id} ) }}" >
                                                 <img class="img-64" src="{{ asset(une_ecole.classe.icone) }}" alt="Icône {{une_ecole.classe.nom}}" title="{{une_ecole.classe.nom}}" />
                                             </a>
                                             <strong><a href="{{ path('regles_ecole', {id: une_ecole.id} ) }}" >{{ une_ecole.nom }}</a></strong>
                                         </h3>
-                                        <div class="col-12">{{ une_ecole.description|raw|nl2br }}</div>
+                                        <div>{{ une_ecole.description|raw|nl2br }}</div>
                                     </div>
                                     <a class="absolute btn border right-corner-8" href="{{ path('regles_ecole', {id: une_ecole.id} ) }}" >Voir les techniques</a>
                                 </div>
-                                <hr>
                             {% else %}
                                 <span class="text-muted">Désolé ! Il n'y a pas encore d'école disponible pour ce clan !</span>
                             {% endfor %}
@@ -99,7 +125,7 @@
 
                 <div class="col-12">
                     <div class="card my-3 card-body">
-                        <h2 class="card-title"><strong>Personnages</strong> du clan {{ clan.nom }} :</h2>
+                        <h2 class="card-title"><strong>Personnages</strong></h2>
                         <div class="card-text ml-3">
                             {% for un_personnage in clan.personnages %}
                                 <a href="{{ path('personnage_profil', {id: un_personnage.id} ) }}">

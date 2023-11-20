@@ -92,10 +92,16 @@
     <div class="card card-body pt-4 h-100">
         <h2 class="card-title"><strong>Lieux</strong></h2> 
         {% for un_lieu in clan.lieux %}
-            <article class="text-center mb-4 hover-zoom">
+            <article class="text-center mb-4 hover-zoom relative">
                 <a href="{{path('empire_lieu', {id: un_lieu.id} )}}"><img class="img-fluid" src="{{asset(un_lieu.image)}}" /></a>
-                <br/>
-                <a href="{{path('empire_lieu', {id: un_lieu.id} )}}"><strong>{{un_lieu.nom}}</strong></a>
+                <h5 class="text-center mt-1">
+                    {% if un_lieu.icone is defined and un_lieu.icone is not empty %}
+                        <img class="icon-lieu-top img-64" src="{{ asset(un_lieu.icone) }}" alt="une icône" />
+                    {% endif %}
+                    <strong>
+                        <a class="link-secondary" href="{{ path('empire_lieu', {id: un_lieu.id} ) }}">{{un_lieu.nom}}</a>
+                    </strong>
+                </h5>
             </article>
         {% else %}
             <p class="text-muted"><i>Pas de Lieux à charger.</i></p>

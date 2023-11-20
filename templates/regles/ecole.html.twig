@@ -50,92 +50,92 @@
         </card>
     </section>
 
-    <!-- TECHNIQUES -->
-    <section class="col-8 p-1">
-        <div class="card card-body pt-4 h-100">
-            <h2 class="card-title"><strong>Techniques</strong></h2>
-            <hr>
+    {% if ecole.personnages|length > 0 %}
+        {% set col = 'col-10' %}
+    {% else %}
+        {% set col = 'col-12' %}
+    {% endif %}
 
-            {% for i in 1..5 %}
-                {% if attribute(ecole, 'tech' ~ i ~ 'Nom') is not empty %}
-                    <div class="card-text row p-0 my-3 mx-0">
-                        <div class="col-2 text-center" style="color: {{ ecole.clan.couleur }}">
-                            <strong>Rang</strong><br/>
-                            <span class="number-skillrank-effect display-1" >{{ i|relief|raw }}</span>
+    <div class="col-12 p-0 m-0 row">
+        <div class="{{col}} p-0 m-0 row">
+
+            <!-- TECHNIQUES -->
+            <section class="col-12 p-1 m-0">
+                <div class="card card-body pt-4 h-100">
+                    <h2 class="card-title"><strong>Techniques</strong></h2>
+                    <hr>
+
+                    {% for i in 1..5 %}
+                        {% if attribute(ecole, 'tech' ~ i ~ 'Nom') is not empty %}
+                            <div class="card-text row p-0 my-3 mx-0">
+                                <div class="col-2 text-center" style="color: {{ ecole.clan.couleur }}">
+                                    <strong>Rang</strong><br/>
+                                    <span class="number-skillrank-effect display-1" >{{ i|relief|raw }}</span>
+                                </div>
+                                <div class="col-10 ml-n2">
+                                    <strong>{{ attribute(ecole, 'tech' ~ i ~ 'Nom')|upper }}</strong>
+                                    <p class="text-justify text-medium">{{ attribute(ecole, 'tech' ~ i ~ 'Desc')|raw|nl2br }}</p>
+                                </div>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+
+                    {% if ecole.techSpecialNom is not empty %}
+                        <strong>{{ ecole.techSpecialNom|upper }}</strong>
+                        <p class="text-justify text-medium">{{ ecole.techSpecialDesc|raw|nl2br }}</p>
+                    {% endif %}
+
+                </div>
+            </section>
+
+            {% if ecole.sorts is defined and ecole.sorts is not empty %}
+            <!-- MAGIE -->
+            <section class="col-12 p-1 m-0">
+                <div class="card card-body pt-4 h-100">
+                    <h2 class="card-title"><strong>Magie</strong></h2>
+                    <hr>
+
+                    <div class="d-flex justify-content-around align-items-start">
+                        <div>
+                            <h4>Affinité</h4>
+                            <span class="text-xp text-large">{{ecole.affinite}}</span>
                         </div>
-                        <div class="col-10">
-                            <strong>{{ attribute(ecole, 'tech' ~ i ~ 'Nom')|upper }}</strong>
-                            <p class="text-justify">{{ attribute(ecole, 'tech' ~ i ~ 'Desc')|raw|nl2br }}</p>
+                        <div>
+                            <h4>Déficience</h4>
+                            <span class="text-dead text-large">{{ecole.deficience}}</span>
+                        </div>
+                        <div>
+                            <h4>Sorts de départ</h4>
+                            {{ecole.sorts|lister|raw}}
                         </div>
                     </div>
-                {% endif %}
-            {% endfor %}
 
-            {% if ecole.techSpecialNom is not empty %}
-                <strong>{{ ecole.techSpecialNom|upper }}</strong>
-                <p class="text-justify">{{ ecole.techSpecialDesc|raw|nl2br }}</p>
+                </div>
+            </section>
             {% endif %}
 
         </div>
-    </section>
 
-    {% if ecole.sorts is defined and ecole.sorts is not empty %}
-        {% set magie = true %}
-    {% else %}
-        {% set magie = false %}
-    {% endif %}
-
-    {% if magie == true %}
-        <!-- MAGIE -->
-        <section class="col-4 pl-1 py-1">
-            <div class="card card-body pt-4 h-100">
-                <h2 class="card-title"><strong>Magie</strong></h2>
-                <hr>
-
-                <div class="d-flex flex-column justify-content-between">
-                    <div>
-                        <h4>Affinité</h4>
-                        <span class="text-xp text-large">{{ecole.affinite}}</span>
-                    </div>
-                    <div class="mt-3">
-                        <h4>Déficience</h4>
-                        <span class="text-dead text-large">{{ecole.deficience}}</span>
-                    </div>
-
-                    <div class="mt-3">
-                        <h4>Sorts de départ</h4>
-                        {{ecole.sorts|lister|raw}}
-                    </div>
-                </div>
-
+        <!-- PERSONNAGES DE CETTE ECOLE -->
+        <aside class="col-2">
+            <div class="row">
+            <!-- UN PERSONNAGE -->
+            {% for un_personnage in ecole.personnages %}
+                <a class="col-12 hover-zoom-x2 p-2" href="{{ path('personnage_profil', {id: un_personnage.id} ) }}">
+                    <img class="img-fluid rounded-8" src="{{ asset(un_personnage.icone) }}" alt="Icône d'un personnage" title="Voir le profil de {{un_personnage.prenom}}" />
+                </a>
+            {% endfor %}
             </div>
-        </section>
-    {% endif %}
+        </aside>
 
-    <!-- PERSONNAGES DE CETTE ECOLE -->
-    <aside class="p-1 {% if magie == false %}col-4{% else %}col-12{% endif %}">
-        <div class="card card-body h-100">
-            <div class="row justify-content-center px-3">
-                <!-- UN PERSONNAGE -->
-                {% for un_personnage in ecole.personnages %}
-                    <article class="p-1 hover-zoom-x2">
-                        <a href="{{ path('personnage_profil', {id: un_personnage.id} ) }}">
-                            <img class="img-128" src="{{ asset(un_personnage.icone) }}" alt="Icône d'un personnage" title="Voir le profil de {{un_personnage.prenom}}" />
-                        </a>
-                    </article>
-                {% else %}
-                    <span class="text-muted"><i>Il n'y a pas encore de personnage de cette école.</i></span>
-                {% endfor %}
-            </div>
+    </div>
 
-        </div>
-    </aside>
 
     {% if autresEcoles is defined and autresEcoles is not empty %}
-    <!-- AUTRES ECOLES DE CE CLAN -->
+    <!-- AUTRES ECOLES DU CLAN -->
     <aside class="col-12 p-1">
         <div class="card card-body h-100">
-            <h2 class="card-title"><strong>Autres écoles</strong> de la même Faction</h2>
+            <h2 class="card-title"><strong>Autres écoles</strong> de la même faction</h2>
             <hr>
             <div class="row p-0 m-0 pt-2">
                 <!-- UNE ECOLE -->

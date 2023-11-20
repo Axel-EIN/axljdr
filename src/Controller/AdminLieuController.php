@@ -40,6 +40,7 @@ class AdminLieuController extends AbstractController
 
             $nouvelleImage = $form->get('image')->getData();
             $nouvelleCarte = $form->get('carte')->getData();
+            $nouvelleRegion = $form->get('region')->getData();
 
             if (!empty($nouvelleImage)) {
                 $nouvelleImageNomFichier = $uploadeur->upload($nouvelleImage, 'lieu-' . $lieu->getNom() . '-image', 'lieux');
@@ -52,6 +53,12 @@ class AdminLieuController extends AbstractController
                 $nouveauCheminRelatif = 'assets/img/lieux/' . $nouvelleCarteNomFichier;
                 $lieu->setCarte($nouveauCheminRelatif);
             } else { $lieu->setCarte('assets/img/placeholders/1280x720.png'); }
+
+            if (!empty($nouvelleRegion)) {
+                $nouvelleRegionNomFichier = $uploadeur->upload($nouvelleRegion, 'lieu-' . $lieu->getNom() . '-region', 'lieux');
+                $nouveauCheminRelatif = 'assets/img/lieux/' . $nouvelleRegionNomFichier;
+                $lieu->setRegion($nouveauCheminRelatif);
+            } else { $lieu->setRegion('assets/img/placeholders/1280x720.png'); }
 
             $em->persist($lieu);
             $em->flush();
@@ -84,29 +91,57 @@ class AdminLieuController extends AbstractController
 
             $nouvelleImage = $form->get('image')->getData();
             $nouvelleCarte = $form->get('carte')->getData();
+            $nouvelleRegion = $form->get('region')->getData();
 
             if (!empty($nouvelleImage)) {
                 $ancienneImageNomFichier = basename($lieu->getImage());
 
                 $nouvelleImageNomFichier = $uploadeur->upload($nouvelleImage, 'lieu-' . $lieu->getNom() . '-image', 'lieux');
-                $nouveauChemingRelatif = 'assets/img/lieux/' . $nouvelleImageNomFichier;
-                $lieu->setImage($nouveauChemingRelatif);
+                $nouveauCheminRelatif = 'assets/img/lieux/' . $nouvelleImageNomFichier;
+                $lieu->setImage($nouveauCheminRelatif);
 
-                $ancienneImageCheminComplet = $this->getParameter('image_directory') . '/lieux/' . $ancienneImageNomFichier;
-                $filesystem = new Filesystem();
-                $filesystem->remove($ancienneImageCheminComplet);
+                // Efface l'ancien fichier uniquement s'il a réussit à récupérer depuis l'url un nom de fichier et que ce n'est pas un dossier (protection)
+                if ($ancienneImageNomFichier) {
+                    $ancienneImageCheminComplet = $this->getParameter('image_directory') . '/lieux/' . $ancienneImageNomFichier;
+                    if (is_dir($ancienneImageCheminComplet) == false) {
+                        $filesystem = new Filesystem();
+                        $filesystem->remove($ancienneImageCheminComplet);
+                    }
+                }
             }
 
             if (!empty($nouvelleCarte)) {
                 $ancienneCarteNomFichier = basename($lieu->getCarte());
 
                 $nouvelleCarteNomFichier = $uploadeur->upload($nouvelleCarte, 'lieu-' . $lieu->getNom() . '-carte', 'lieux');
-                $nouveauChemingRelatif = 'assets/img/lieux/' . $nouvelleCarteNomFichier;
-                $lieu->setCarte($nouveauChemingRelatif);
+                $nouveauCheminRelatif = 'assets/img/lieux/' . $nouvelleCarteNomFichier;
+                $lieu->setCarte($nouveauCheminRelatif);
 
-                $ancienneCarteCheminComplet = $this->getParameter('image_directory') . '/lieux/' . $ancienneCarteNomFichier;
-                $filesystem = new Filesystem();
-                $filesystem->remove($ancienneCarteCheminComplet);
+                // Efface l'ancien fichier uniquement s'il a réussit à récupérer depuis l'url un nom de fichier et que ce n'est pas un dossier (protection)
+                if ($ancienneCarteNomFichier) {
+                    $ancienneCarteCheminComplet = $this->getParameter('image_directory') . '/lieux/' . $ancienneCarteNomFichier;
+                    if (is_dir($ancienneCarteCheminComplet) == false) {
+                        $filesystem = new Filesystem();
+                        $filesystem->remove($ancienneCarteCheminComplet);
+                    }
+                }
+            }
+
+            if (!empty($nouvelleRegion)) {
+                $ancienneRegionNomFichier = basename($lieu->getRegion());
+
+                $nouvelleRegionNomFichier = $uploadeur->upload($nouvelleRegion, 'lieu-' . $lieu->getNom() . '-region', 'lieux');
+                $nouveauCheminRelatif = 'assets/img/lieux/' . $nouvelleRegionNomFichier;
+                $lieu->setRegion($nouveauCheminRelatif);
+
+                // Efface l'ancien fichier uniquement s'il a réussit à récupérer depuis l'url un nom de fichier et que ce n'est pas un dossier (protection)
+                if ($ancienneRegionNomFichier) {
+                    $ancienneRegionCheminComplet = $this->getParameter('image_directory') . '/lieux/' . $ancienneRegionNomFichier;
+                    if (is_dir($ancienneRegionCheminComplet) == false) {
+                        $filesystem = new Filesystem();
+                        $filesystem->remove($ancienneRegionCheminComplet);
+                    }
+                }
             }
 
             $this->getDoctrine()->getManager()->flush();

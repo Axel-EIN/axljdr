@@ -98,6 +98,12 @@ class AdminEcoleController extends AbstractController
             $this->getDoctrine()->getManager()->flush();
             $this->addFlash('success', 'L\'école a bien été modifiée !');
 
+            // REDIRECTION
+            // -----------
+            if (!empty($request->query->get('redirect')) && $request->query->get('redirect') == 'ecole')
+                return $this->redirectToRoute('regles_ecole', ['id' => $ecole->getId()]);
+            return $this->redirectToRoute('admin_ecole');
+
             return $this->redirectToRoute('admin_ecole');
         }
 

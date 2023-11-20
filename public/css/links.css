@@ -30,6 +30,15 @@
     color: var(--secondary-light) !important;
 }
 
+.link-white {
+    color: var(--white);
+}
+
+.link-white:hover {
+    color: var(--secondary-light);
+    text-decoration: none;
+}
+
 
 
 /* ---- Nav Bar ---- */

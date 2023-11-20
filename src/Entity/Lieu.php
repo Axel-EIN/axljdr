@@ -69,6 +69,11 @@ class Lieu
      */
     private $icone;
 
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $quartiers;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -190,6 +195,18 @@ class Lieu
     public function setIcone(?string $icone): self
     {
         $this->icone = $icone;
+
+        return $this;
+    }
+
+    public function getQuartiers(): ?string
+    {
+        return $this->quartiers;
+    }
+
+    public function setQuartiers(?string $quartiers): self
+    {
+        $this->quartiers = $quartiers;
 
         return $this;
     }

@@ -2,11 +2,18 @@
 {% set library = un_element %}
 
 <!-- HEADING -->
-<heading id="list-heading" class="col-12">
+<heading class="col-12 list-heading">
+
+    <!-- MJ ADD -->
+    {% if app.user and is_granted("ROLE_MJ") %}
+        {% set action, entity, redirect, position, color, size = 'create', 'avantage', 'library&libraryID=' ~ library.id ~ '&tab=' ~ app.request.get('tab'), 'left-overflow', 'link-accent', 'btn-icon-mini' %}
+        {{ include('/btns/btn-icon.html.twig') }}
+    {% endif %}
+
     <span>Nom</span>
     <right class="ml-auto">
-        <span>{% if app.request.get('tab') == 'Avantage' %}Reduction{% elseif app.request.get('tab') == 'Désavantage' %}Gain Additionnel{% endif %}</span>
-        <span class="ml-4">{% if app.request.get('tab') == 'Avantage' %}Coût{% elseif app.request.get('tab') == 'Désavantage' %}Gain{% endif %}</span>
+        <span>Bonus</span>
+        <span class="ml-4">{% if app.request.get('tab') == 'Avantage' %}Coût{% elseif app.request.get('tab') == 'Désavantage' %}Gain{% else %}Coût / Gain{% endif %}</span>
     </right>
 </heading>
 

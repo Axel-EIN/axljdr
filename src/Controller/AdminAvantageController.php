@@ -73,7 +73,7 @@ class AdminAvantageController extends AbstractController
                     && $request->query->get('redirect') == 'library'
                     && !empty($request->query->get('libraryID'))
                     && $request->query->get('libraryID') > 0  )
-                return $this->redirectToRoute( 'regles_rule', [ 'id' => $request->query->get('libraryID') , 'tab' => $avantage->getGenre() ] );
+                return $this->redirectToRoute( 'regles_library', [ 'id' => $request->query->get('libraryID') , 'tab' => $avantage->getGenre(), 'subtab' => $avantage->getType() ] );
 
             return $this->redirectToRoute('admin_avantage');
         }

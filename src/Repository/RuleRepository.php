@@ -41,7 +41,7 @@ class RuleRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-    public function FindAllTypeExceptCurrent($id, $type)
+    public function FindOthersSameType($id, $type)
     {
         return $this->createQueryBuilder('r')
             ->andWhere('r.id != :value_id')

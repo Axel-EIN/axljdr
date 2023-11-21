@@ -117,26 +117,6 @@ class Rule
      */
     private $numero;
 
-    /**
-     * @ORM\Column(type="string", length=50, nullable=true)
-     */
-    private $listEntity;
-
-    /**
-     * @ORM\Column(type="text", nullable=true)
-     */
-    private $listIntro;
-
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    private $listTabField;
-
-    /**
-     * @ORM\Column(type="string", length=50, nullable=true)
-     */
-    private $listFilterField;
-
     public function getId(): ?int
     {
         return $this->id;
@@ -190,8 +170,6 @@ class Rule
         return $this;
     }
 
-    // content part 1
-
     public function getPart1(): ?string
     {
         return $this->part1;
@@ -228,8 +206,6 @@ class Rule
         return $this;
     }
 
-    // content part 2
-
     public function getPart2titre(): ?string
     {
         return $this->part2titre;
@@ -265,8 +241,6 @@ class Rule
 
         return $this;
     }
-
-    // content part 3
 
     public function getPart3titre(): ?string
     {
@@ -384,54 +358,6 @@ class Rule
     public function setNumero(int $numero): self
     {
         $this->numero = $numero;
-
-        return $this;
-    }
-
-    public function getListEntity(): ?string
-    {
-        return $this->listEntity;
-    }
-
-    public function setListEntity(?string $listEntity): self
-    {
-        $this->listEntity = $listEntity;
-
-        return $this;
-    }
-
-    public function getListIntro(): ?string
-    {
-        return $this->listIntro;
-    }
-
-    public function setListIntro(?string $listIntro): self
-    {
-        $this->listIntro = $listIntro;
-
-        return $this;
-    }
-
-    public function getListTabField(): ?string
-    {
-        return $this->listTabField;
-    }
-
-    public function setListTabField(?string $listTabField): self
-    {
-        $this->listTabField = $listTabField;
-
-        return $this;
-    }
-
-    public function getListFilterField(): ?string
-    {
-        return $this->listFilterField;
-    }
-
-    public function setListFilterField(?string $listFilterField): self
-    {
-        $this->listFilterField = $listFilterField;
 
         return $this;
     }

@@ -50,6 +50,18 @@ class EpisodeRepository extends ServiceEntityRepository
             ->getSingleScalarResult();
     }
 
+    // public function getEpisodeFullRelations($episodeID) {
+    //     return $this->createQueryBuilder('e')
+    //         ->andWhere('e.id = :value_episodeID')
+    //         ->setParameter('value_episodeID', $episodeID)
+    //         ->leftJoin('e.chapitreParent', 'c')
+    //         ->leftJoin('e.scenes', 's')
+    //         ->leftJoin('s.participations', 'pt')
+    //         ->leftJoin('pt.personnage', 'pe')
+    //         ->getQuery()
+    //         ->getOneOrNullResult();
+    // }
+
     // /**
     //  * @return Episode[] Returns an array of Episode objects
     //  */

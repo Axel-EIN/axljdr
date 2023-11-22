@@ -118,6 +118,24 @@ nav .active { font-weight: bold; }
         z-index: 100;
 }
 
+.btn-mj-h2-edit-delete {
+        font-size: 1.5rem;
+        position: absolute;
+        padding: 4px;
+        top: 8px;
+        right: 0px;
+        z-index: 100;
+}
+
+.btn-mj-h2-create {
+        font-size: 1.5rem;
+        position: absolute;
+        padding: 4px;
+        top: 20px;
+        right: 0px;
+        z-index: 100;
+}
+
 /* -------------------------------  */
 /* HEADERS                          */
 /* -------------------------------- */
@@ -386,7 +404,7 @@ img.disabled { filter:grayscale(100%); }
         top: -30px; }
 
 .episode-card-liste {
-        background: linear-gradient(rgb(0,0,0,0.6),rgb(0,0,0,0.2));
+        background: rgba(0, 0, 0, .4);
         min-height: 380px;
         max-height: 380px;
         border-radius: 4px;

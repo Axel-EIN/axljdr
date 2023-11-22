@@ -56,7 +56,11 @@ class AdminEcoleController extends AbstractController
 
             $this->addFlash('success', 'L\'école a bien été ajoutée !');
 
+            // REDIRECTION
+            if (!empty($request->query->get('redirect')) && $request->query->get('redirect') == 'regles')
+                return $this->redirectToRoute('regles');
             return $this->redirectToRoute('admin_ecole');
+            
         } else {
             return $this->render('admin_ecole/create.html.twig', [
                 'type' => 'Créer',

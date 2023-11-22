@@ -77,9 +77,9 @@
                                     {% else %}
                                         gagné <strong>{{une_participation.xpGagne}}xp</strong> 
                                     {% endif %}
-                                        dans la scène <a href="{{path('aventure_episode', {id: une_participation.scene.episodeParent.id, '_fragment': 'scn' ~  une_participation.scene.numero  })}}" ><strong>{{une_participation.scene.titre}}</strong></a> de l'episode <strong>{{une_participation.scene.episodeParent.titre}}</strong><br/>
+                                        dans la scène <a href="{{path('aventure_episode', {id: une_participation.scene.episodeParent.id, '_fragment': 'scn' ~  une_participation.scene.numero  })}}" ><strong>{{une_participation.scene.titre}}</strong></a> de la session <strong>{{une_participation.scene.episodeParent.titre}}</strong><br/>
                                 {% else %}
-                                    <strong style="color: red">est mort</strong> dans la scène <a href="{{path('aventure_episode', {id: une_participation.scene.episodeParent.id, '_fragment': 'scn' ~  une_participation.scene.numero  })}}" ><strong>{{une_participation.scene.titre}}</strong></a> de l'episode <strong>{{une_participation.scene.episodeParent.titre}}</strong><br/>
+                                    <strong style="color: red">est mort</strong> dans la scène <a href="{{path('aventure_episode', {id: une_participation.scene.episodeParent.id, '_fragment': 'scn' ~  une_participation.scene.numero  })}}" ><strong>{{une_participation.scene.titre}}</strong></a> de la session <strong>{{une_participation.scene.episodeParent.titre}}</strong><br/>
                                 {% endif %}
                             {% endfor %}
                         </div>

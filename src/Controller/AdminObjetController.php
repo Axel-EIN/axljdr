@@ -85,10 +85,14 @@ class AdminObjetController extends AbstractController
         }
         
         // RENDER
-        return $this->render('admin_objet/create.html.twig', [
+        return $this->render('back_office/create.html.twig', [
             'type' => 'Créer',
+            'label' => 'Objet',
+            'genre' => 'M',
+            'determinant' => 'un',
+            'entity' => 'objet',
             'form' => $form->createView()
-            ]);
+        ]);
     }
 
     /**
@@ -142,12 +146,15 @@ class AdminObjetController extends AbstractController
             return $this->redirectToRoute('admin_objet');
         }
 
-        return $this->renderForm('admin_objet/edit.html.twig', [
-            'objet' => $objet,
-            'form' => $form,
+        return $this->renderForm('back_office/edit.html.twig', [
             'type' => 'Modifier',
+            'objet' => $objet,
+            'entity' => 'objet',
+            'label' => 'Objet',
+            'genre' => 'M',
+            'determinant' => 'un',
+            'form' => $form,
         ]);
-        
     }
 
     /**

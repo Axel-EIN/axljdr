@@ -70,36 +70,6 @@ class AventureController extends AbstractController
 
         $episode_personnages = $participeurEpisode->personnagesEpisodes($episode);
 
-        // $episode_participations = [];
-        // $episode_personnages_id = [];
-        // foreach($episode->getScenes() as $une_scene) {
-        //     foreach($une_scene->getParticipations() as $une_participation) {
-        //         if ($une_participation->getEstPj()) {
-        //             $episode_participations[] = $une_participation;
-        //             $episode_personnages_id[] = $une_participation->getPersonnage()->getId();
-        //         }
-        //     }
-        // }
-
-        // $episode_personnages_id = array_unique($episode_personnages_id);
-        // $compteur = 0;
-        // $episode_personnages = [];
-        // foreach($episode_personnages_id as $un_personnage_id) {
-        //     $compteurXp = 0;
-        //     foreach($episode_participations as $une_participation) {
-        //         if ($une_participation->getPersonnage()->getId() == $un_personnage_id)
-        //             $compteurXp = $compteurXp + $une_participation->getXpGagne();
-        //     }
-        //     $episode_personnages[$compteur]['prenom'] = $personnageRepository->find($un_personnage_id)->getPrenom();
-        //     $episode_personnages[$compteur]['xp'] = $compteurXp;
-        //     $compteur++;
-        // }
-
-        // usort($episode_personnages, function ($a, $b) {
-        //     return strcmp($a['xp'], $b['xp']);
-        // } );
-        // $episode_personnages = array_reverse($episode_personnages);
-
         return $this->render('aventure/un-episode.html.twig', [
             'episode' => $episode,
             'episode_precedent' => $precedent,

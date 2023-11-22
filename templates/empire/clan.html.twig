@@ -39,7 +39,7 @@
                     <div class="card">
                         <div class="card-body">
                             <p class="card-text"><strong>Description :</strong></p>
-                            <p class="card-text">{{ clan.description }}</p>
+                            <p class="card-text">{{ clan.description|raw|nl2br }}</p>
                         </div>
                         <ul class="list-group list-group-flush">
                             <li class="list-group-item">
@@ -91,7 +91,7 @@
                                                 <img class="img-96" src="{{ asset(une_ecole.classe.icone) }}" alt="Icône de la Classe" />
                                             </a>
                                         </div>
-                                        <div class="col-12"><strong>Description :</strong><br/>{{ une_ecole.description }}</div>
+                                        <div class="col-12"><strong>Description :</strong><br/>{{ une_ecole.description|raw|nl2br }}</div>
                                     </div>
                                     <a class="btn btn-primary coin-droit" href="{{ path('regles_ecole', {id: une_ecole.id} ) }}" >Voir les techniques</a>
                                 </div>

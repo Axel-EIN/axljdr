@@ -20,28 +20,31 @@
 
             <div class="row">
 
-                <div class="col-12 col-lg-4 text-center">
+                <div class="col-12 text-center">
                     <img class="img-fluid" src="{{ asset(ecole.image) }}" alt="Image de l'école" />
                 </div>
 
-                <div class="col-12 col-lg-8">
+                <div class="col-12">
                     <div class="card card-body h-100">
                         <div class="row mb-5 ml-2">
-                            <div class="col">
+                            <div class="col text-center">
                                 <strong>Clan :</strong><br/>
                                 <a href="{{ path('empire_clan', {id: ecole.clan.id}) }}">
                                     <img class="img-128" src="{{ asset(ecole.clan.mon) }}" alt="Mon du Clan" />
                                 </a>
                             </div>
-                            <div class="col">
+                            <div class="col text-center">
                                 <strong>Classe :</strong><br/>
                                 <a href="{{ path('regles_classe', {id: ecole.classe.id}) }}">
                                     <img class="img-128" src="{{ asset(ecole.classe.icone) }}" alt="Icône de l'École" />
                                 </a>
                             </div>
+                            <div class="col text-center">
+                                <strong>Bonus :</strong><br/>
+                            </div>
                         </div>
                         <p class="card-text"><strong>Description :</strong></p>
-                        <p class="card-text">{{ ecole.description }}</p>
+                        <p class="card-text">{{ ecole.description|raw|nl2br }}</p>
                     </div>
                 </div>
 
@@ -57,7 +60,7 @@
                                 </div>
                                 <div class="col-12 col-lg-10">
                                     <p><strong>{{ ecole.tech1Nom }}</strong></p>
-                                    <p>{{ ecole.tech1Desc }}</p>
+                                    <p>{{ ecole.tech1Desc|raw|nl2br }}</p>
                                 </div>
                             </div>
                         {% endif %}
@@ -70,7 +73,7 @@
                                 </div>
                                 <div class="col-12 col-lg-10">
                                     <p><strong>{{ ecole.tech2Nom }}</strong></p>
-                                    <p>{{ ecole.tech2Desc }}</p>
+                                    <p>{{ ecole.tech2Desc|raw|nl2br }}</p>
                                 </div>
                             </div>
                         {% endif %}
@@ -83,7 +86,7 @@
                                 </div>
                                 <div class="col-12 col-lg-10">
                                     <p><strong>{{ ecole.tech3Nom }}</strong></p>
-                                    <p>{{ ecole.tech3Desc }}</p>
+                                    <p>{{ ecole.tech3Desc|raw|nl2br }}</p>
                                 </div>
                             </div>
                         {% endif %}
@@ -96,7 +99,7 @@
                                 </div>
                                 <div class="col-12 col-lg-10">
                                     <p><strong>{{ ecole.tech4Nom }}</strong></p>
-                                    <p>{{ ecole.tech4Desc }}</p>
+                                    <p>{{ ecole.tech4Desc|raw|nl2br }}</p>
                                 </div>
                             </div>
                         {% endif %}
@@ -109,7 +112,7 @@
                                 </div>
                                 <div class="col-12 col-lg-10">
                                     <p><strong>{{ ecole.tech5Nom }}</strong></p>
-                                    <p>{{ ecole.tech5Desc }}</p>
+                                    <p>{{ ecole.tech5Desc|raw|nl2br }}</p>
                                 </div>
                             </div>
                         {% endif %}
@@ -122,7 +125,7 @@
                                 </div>
                                 <div class="col-12 col-lg-10">
                                     <p><strong>{{ ecole.techSpecialNom }}</strong></p>
-                                    <p>{{ ecole.techSpecialDesc }}</p>
+                                    <p>{{ ecole.techSpecialDesc|raw|nl2br }}</p>
                                 </div>
                             </div>
                         {% endif %}

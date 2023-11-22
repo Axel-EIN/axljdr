@@ -29,7 +29,7 @@
                 <div class="col-12 col-lg-8">
                     <div class="card card-body h-100">
                         <p class="card-text"><strong>Description :</strong></p>
-                        <p class="card-text">{{ classe.description }}</p>
+                        <p class="card-text">{{ classe.description|raw|nl2br }}</p>
                     </div>
                 </div>
 
@@ -37,18 +37,13 @@
                 <section class="col-12 col-lg-6 my-3 text-center">
                     <div class="card card-body h-100">
                         <h2 class="card-title py-3">Ecoles de <strong>{{ classe.nom }}</strong> :</h2>
-                        <div class="card-text ml-lg-3 row text-center justify-content-center align-items-center">
+                        <div class="card-text row text-center justify-content-center align-items-center">
                             {% for une_ecole in classe.ecoles %}
-                                <div class="ml-lg-1 mb-2 row align-items-center col-12">
-                                    <div class="col-6">
-                                        <a href="{{ path('regles_ecole', {id: une_ecole.id} ) }}">
-                                            <img class="img-128" src="{{ asset(une_ecole.image) }}" alt="Image d'une école" />
-                                        </a>
-                                    </div>
-                                    <div class="col-6 ml-lg-3">
-                                        Nom : <strong><a href="{{ path('regles_ecole', {id: une_ecole.id} ) }}" >{{ une_ecole.nom }}</a></strong><br/>
-                                        Clan : <img class="img-48" src="{{ asset(une_ecole.clan.mon) }}" alt="Mon d'un clan" />
-                                    </div>
+                                <div class="mb-4">
+                                    <a href="{{ path('regles_ecole', {id: une_ecole.id} ) }}">
+                                        <img class="img-480" src="{{ asset(une_ecole.image) }}" alt="Image d'une école" />
+                                    </a><br/>
+                                    Nom : <strong><a href="{{ path('regles_ecole', {id: une_ecole.id} ) }}" >{{ une_ecole.nom }}</a></strong>
                                 </div>
                             {% else %}
                                 <span class="text-muted">Désolé ! Il n'y a pas encore d'école disponible pour cette classe !</span>

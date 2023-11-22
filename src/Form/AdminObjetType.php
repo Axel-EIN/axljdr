@@ -23,20 +23,29 @@ class AdminObjetType extends AbstractType
             ->add('nom', TextType::class, [
                 'constraints' => [ new Length( [ 'max' => 60 ] ) ]
             ])
+            ->add('categorie', ChoiceType::class, [
+                'choices'  => [
+                    'ARME' => 'ARME',
+                    'PROJECTILE' => 'PROJECTILE',
+                    "ARMURE" => "ARMURE",
+                    'OBJET' => 'OBJET',
+                ],
+            ])
             ->add('type', ChoiceType::class, [
                 'choices'  => [
-                    'ARMURE' => 'ARMURE',
                     'ÉPÉE OU SABRE' => 'ÉPÉE',
                     "ARME D'HAST" => "HAST",
                     'LANCE' => 'LANCE',
-                    'BÂTON' => 'BÂTON',
                     'ARME LOURDE' => 'LOURDE',
                     'ARME À CHAÎNE' => 'CHAÎNE',
-                    'ARC' => 'ARC',
+                    'BÂTON' => 'BÂTON',
                     'COUTEAU' => 'COUTEAU',
                     'ÉVENTAIL DE GUERRE' => 'ÉVENTAIL',
+                    'ARC' => 'ARC',
+                    'ENSEMBLE' => 'ENSEMBLE',
+                    'FLÈCHE' => 'FLÈCHE',
                     'ARME DE NINJUTSU' => 'NINJUTSU',
-                    'OBJET DIVERS' => 'DIVERS',
+                    'DIVERS' => 'DIVERS',
                 ],
             ])
             ->add('prix', MoneyType::class, [

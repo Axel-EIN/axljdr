@@ -21,11 +21,24 @@ style="background-image: linear-gradient(rgb(40,0,0,0.5),rgb(40,0,0,0.5)),url('{
 
         <!-- LES ARCHIVES -->
         <section id="archives">
-            <h2 class="display-4">Les Archives de l'<strong>Histoire</strong> :</h2>
+            <h2 class="display-4 ancre-relatif">
+                Les Archives de l'<strong>Histoire</strong>
+
+                <!-- BTN - MJ - AJOUTER -->
+                {% if is_granted("ROLE_MJ") %}
+                <div class="btn-mj-h2-create">
+                    <a href="{{ path('admin_archive_create') }}?redirect=archive" class="btn btn-primary">
+                        <i class="fas fa-plus-square"></i>&nbsp;&nbsp;Ajouter une archive
+                    </a>
+                </div>
+                {% endif %}
+
+            </h2>
+
             <hr>
             <br/>
             <div class="row">
-{% for une_archive in archives %}
+            {% for une_archive in archives %}
                 <article class="col-xl-2 col-lg-3 col-md-4 col-sm-6 py-3 text-center">
                 {% if une_archive.locked == 1 %}
                     <img src="{{asset('assets/img/icons/locked.png')}}" alt="Vérrouillée" style="width: 40px; position: absolute; top: 32px; left: 76px; z-index: 1;" />
@@ -35,15 +48,14 @@ style="background-image: linear-gradient(rgb(40,0,0,0.5),rgb(40,0,0,0.5)),url('{
                     <a href="{{ path('empire_archive', {id: une_archive.id} ) }}">
                         <img class="img-160" src="{{ asset(une_archive.image) }}" alt="Image de l'Archive" />
                     </a>
-                    <br/>
-                    <h3 class="text-center my-3">
+                    <h3 class="text-center h5">
                         <strong>
                             <a href="{{ path('empire_archive', {id: une_archive.id} ) }}">{{ une_archive.titre }}</a>
                         </strong>
                     </h3>
                 {% endif %}
                 </article>
-{% endfor %}
+            {% endfor %}
             </div>
         </section>
         <section id="clans">

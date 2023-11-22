@@ -578,7 +578,7 @@ img.disabled { filter:grayscale(100%); }
 .mort-icone { width: 72px; position: absolute; top: -6px; left: -2px; z-index: 1; }
 .mini-mort-icone { width: 64px; position: absolute; top: 24px; left: -8px; z-index: 1; }
 a.perso-img img { width: 24px; }
-a.perso-img { display: inline-block; }
+a.perso-img { display: inline-block; font-weight: bold; }
 
 
 /* -------------------------------  */

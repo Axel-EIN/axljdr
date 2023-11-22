@@ -52,7 +52,12 @@ class AdminArchiveController extends AbstractController
 
             $this->addFlash('success', 'L\'Archive a bien été ajoutée !');
 
+            // REDIRECTION
+            // -----------
+            if (!empty($request->query->get('redirect')) && $request->query->get('redirect') == 'archive')
+                return $this->redirectToRoute('empire_archive', ['id' => $archive->getId()]);
             return $this->redirectToRoute('admin_archive');
+
         } else {
             return $this->render('admin_archive/create.html.twig', [
                 'type' => 'Créer',
@@ -92,6 +97,10 @@ class AdminArchiveController extends AbstractController
             $this->getDoctrine()->getManager()->flush();
             $this->addFlash('success', 'L\'Archive a bien été modifiée !');
 
+            // REDIRECTION
+            // -----------
+            if (!empty($request->query->get('redirect')) && $request->query->get('redirect') == 'archive')
+                return $this->redirectToRoute('empire_archive', ['id' => $archive->getId()]);
             return $this->redirectToRoute('admin_archive');
         }
 
@@ -127,6 +136,10 @@ class AdminArchiveController extends AbstractController
             $this->addFlash('success', 'L\'archive a bien été supprimée !');
         }
 
+        // REDIRECTION
+        // -----------
+        if (!empty($request->query->get('redirect')) && $request->query->get('redirect') == 'archive')
+            return $this->redirectToRoute('empire');
         return $this->redirectToRoute('admin_archive');
     }
 }

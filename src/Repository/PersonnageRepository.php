@@ -44,6 +44,16 @@ class PersonnageRepository extends ServiceEntityRepository
             ->getSingleScalarResult();
     }
 
+    // public function getPersonnagesAllRelations() {
+    //     return $this->createQueryBuilder('p')
+    //         ->leftJoin('p.joueur', 'j')
+    //         ->leftJoin('p.clan', 'c')
+    //         ->leftJoin('p.fichePersonnage', 'f')
+    //         ->orderBy('c.nom')
+    //         ->getQuery()
+    //         ->getResult();
+    // }
+
     // /**
     //  * @return Personnage[] Returns an array of Personnage objects
     //  */

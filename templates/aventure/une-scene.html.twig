@@ -1,7 +1,7 @@
 {% if is_granted("ROLE_MJ") %}
     <div class="d-flex justify-content-center mt-3">
         <div class="text-right mb-3">
-            <a href="{{ path('admin_scene_create') }}?numero={{une_scene.numero}}&episodeID={{une_scene.episodeParent.id}}&redirect=episode">
+            <a href="{{ path('admin_scene_create') }}?numero={{une_scene.numero}}&episodeID={{episode.id}}&redirect=episode">
                 <i class="fas fa-plus-square"></i>&nbsp;&nbsp;Insérer une Scène
             </a>
         </div>
@@ -40,7 +40,7 @@
                 <h3 class="card-title">{{ une_scene.titre }}</h3>
                 <div class="text-right ligne-icones ligne-pjs">
                     {% for une_participation in une_scene.participations %}
-                        {% if une_participation.estPj == 1 %}
+                        {% if une_participation.estPj %}
                             <div style="display: inline-block; position: relative;">
                                 {% if une_participation.xpGagne != 0 and une_participation.estMort != 1 %}
                                     <strong class="{% if une_participation.personnage.joueur == app.user %}votre-xp{% else %}xp{% endif %}">+{{une_participation.xpGagne}}XP</strong>

@@ -62,7 +62,13 @@ nav .active { font-weight: bold; }
 #logo { width: 120px;
         height: auto; }
 
-.fleche { width: 28px; }
+.fleche { width: 20px; }
+
+.fleche-gauche { position: relative;
+                 left: -40px; }
+
+.fleche-droite { position: relative;
+                 left: 40px; }
 
 @font-face { font-family: "Shogun"; src: url("../assets/fonts/shoguns-clan-accentued.otf"); }
 @font-face { font-family: "Hirosh"; src: url("../assets/fonts/hirosh.otf"); }
@@ -110,8 +116,6 @@ nav .active { font-weight: bold; }
         top: 0px;
         right: 0px;
         z-index: 100;
-        background-color: rgba(180, 0, 0, 0.67);
-        border-radius: 0px 2px 0px 8px;
 }
 
 /* -------------------------------  */
@@ -147,11 +151,6 @@ nav .active { font-weight: bold; }
         padding-top: 0.5rem;
         padding-bottom: 0.5rem;
         text-align: center; }
-
-.pre-titre-saison {
-        font-size: 3rem;
-        color:#fff;
-        margin: 0; }
 
 @media (max-width: 1200px) { .pre-titre-saison { font-size: 3rem; } }
 @media (max-width: 992px) { .pre-titre-saison { font-size: 3rem; } }
@@ -383,14 +382,16 @@ img.disabled { filter:grayscale(100%); }
         color: white;
         font-weight: bold;
         position: absolute;
+        text-shadow: 0px 2px 8px black;
         top: -30px; }
 
 .episode-card-liste {
-        background-color: #fff;
+        background: linear-gradient(rgb(0,0,0,0.6),rgb(0,0,0,0.2));
         min-height: 380px;
         max-height: 380px;
         border-radius: 4px;
-        box-shadow: 4px 4px 10px rgba(0,0,0,0.25); }
+        box-shadow: 6px 6px 4px rgba(0,0,0,0.5);
+        border: 0; }
 
 .episode-card-numero{
         color: white;
@@ -399,12 +400,13 @@ img.disabled { filter:grayscale(100%); }
         position: absolute;
         left: 16px;
         top: 54px;
+        text-shadow: 0px 2px 8px black;
         z-index: 100 }
 
 .episode-card .card-body{ padding: 0.75rem; }
 
 .episode-card .card-text {
-        color: black;
+        color: #CCC;
         font-size: 1rem;
         text-align: left;
         text-justify: inter-word; }

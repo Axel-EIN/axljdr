@@ -43,11 +43,11 @@ class ObjetRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-    public function findAllType($type)
+    public function findAllCategorie($categorie)
     {
         return $this->createQueryBuilder('o')
-            ->andWhere('o.type = :type')
-            ->setParameter('type', $type)
+            ->andWhere('o.categorie = :categorie')
+            ->setParameter('categorie', $categorie)
             ->addOrderBy('o.nom', 'ASC')
             ->getQuery()
             ->getResult();

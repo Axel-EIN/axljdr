@@ -92,6 +92,11 @@ class Objet
      */
     private $motCle2;
 
+    /**
+     * @ORM\Column(type="string", length=60)
+     */
+    private $categorie;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -273,6 +278,18 @@ class Objet
     public function setMotCle2(?string $motCle2): self
     {
         $this->motCle2 = $motCle2;
+
+        return $this;
+    }
+
+    public function getCategorie(): ?string
+    {
+        return $this->categorie;
+    }
+
+    public function setCategorie(string $categorie): self
+    {
+        $this->categorie = $categorie;
 
         return $this;
     }

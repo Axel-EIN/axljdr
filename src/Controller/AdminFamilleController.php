@@ -18,6 +18,7 @@ class AdminFamilleController extends AbstractController
 {
     /**
      * @Route("/admin/famille", name="admin_famille")
+     * @IsGranted("ROLE_MJ")
      */
     public function viewAdminFamilles(FamilleRepository $familleRepository): Response {
         $familles = $familleRepository->findBy(array(), array('id' => 'DESC'));

@@ -22,9 +22,19 @@ class AdminPersonnageController extends AbstractController
      */
     public function viewAdminPersonnages(PersonnageRepository $personnageRepository): Response
     {
-        $personnages = $personnageRepository->findBy(array(), array('clan' => 'ASC'));
-        return $this->render('admin_personnage/index.html.twig', [
-            'personnages' => $personnages
+        $personnages = $personnageRepository->findBy( [] , ['id' => 'DESC'] );
+
+        return $this->render('back_office/list-element.html.twig', [
+            'elements' => $personnages,
+            'element' => 'personnage',
+            'label' => 'Personnage',
+            'labels' => 'Personnages',
+            'genre' => 'M',
+            'determinant' => 'un',
+            'img_size' => '48',
+            'extra_col1' => 'estPj',
+            'extra_col2' => 'locked',
+            'extra_col3' => 'estMort',
         ]);
     }
 
@@ -71,8 +81,13 @@ class AdminPersonnageController extends AbstractController
             return $this->redirectToRoute('admin_personnage');
         }
 
-        return $this->render('admin_personnage/create.html.twig', [
+        // RENDER
+        return $this->render('back_office/create.html.twig', [
             'type' => 'Créer',
+            'entity' => 'personnage',
+            'label' => 'Personnage',
+            'genre' => 'M',
+            'determinant' => 'un',
             'form' => $form->createView()
         ]);
     }
@@ -124,12 +139,16 @@ class AdminPersonnageController extends AbstractController
             return $this->redirectToRoute('admin_personnage');
         }
 
-        return $this->renderForm('admin_personnage/edit.html.twig', [
-            'personnage' => $personnage,
-            'form' => $form,
+        // RENDER
+        return $this->renderForm('back_office/edit.html.twig', [
             'type' => 'Modifier',
+            'personnage' => $personnage,
+            'entity' => 'personnage',
+            'label' => 'Personnage',
+            'genre' => 'M',
+            'determinant' => 'un',
+            'form' => $form,
         ]);
-        
     }
 
     /**

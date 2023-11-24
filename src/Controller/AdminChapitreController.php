@@ -21,11 +21,20 @@ class AdminChapitreController extends AbstractController
      * @Route("/admin/chapitre", name="admin_chapitre")
      * @IsGranted("ROLE_MJ")
      */
-    public function viewAdminChapitres(ChapitreRepository $chapitreRepository): Response {
-        $chapitres = $chapitreRepository->findBy(array(), array('saisonParent' => 'ASC'));
-        return $this->render('admin_chapitre/index.html.twig', [
-            'controller_name' => 'AdminChapitreController',
-            'chapitres' => $chapitres,
+    public function viewAdminChapitres(ChapitreRepository $chapitreRepository): Response
+    {
+        $chapitres = $chapitreRepository->findBy(array(), array('id' => 'DESC'));
+
+        return $this->render('back_office/list-element.html.twig', [
+            'elements' => $chapitres,
+            'element' => 'chapitre',
+            'label' => 'Chapitre',
+            'labels' => "Chapitres",
+            'genre' => 'M',
+            'determinant' => 'un',
+            'img_size' => '128',
+            'extra_col2' => 'numero',
+            'extra_col1' => 'couleur',
         ]);
     }
 
@@ -74,8 +83,13 @@ class AdminChapitreController extends AbstractController
             return $this->redirectToRoute('admin_chapitre');
         }
         
-        return $this->render('admin_chapitre/create.html.twig', [
+        // RENDER
+        return $this->render('back_office/create.html.twig', [
             'type' => 'Créer',
+            'entity' => 'chapitre',
+            'label' => 'Chapitre',
+            'genre' => 'M',
+            'determinant' => 'un',
             'form' => $form->createView()
         ]);
     }
@@ -120,10 +134,14 @@ class AdminChapitreController extends AbstractController
             return $this->redirectToRoute('admin_chapitre');
         }
 
-        return $this->renderForm('admin_chapitre/edit.html.twig', [
-            'chapitre' => $chapitre,
-            'form' => $form,
+        return $this->renderForm('back_office/edit.html.twig', [
             'type' => 'Modifier',
+            'chapitre' => $chapitre,
+            'entity' => 'chapitre',
+            'label' => 'Chapitre',
+            'genre' => 'M',
+            'determinant' => 'un',
+            'form' => $form,
         ]);
     }
 

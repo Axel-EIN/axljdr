@@ -31,24 +31,26 @@ class EmpireController extends AbstractController
         $lores = $loreRepository->findall();
 
         $sections = [];
-        $sections[0]['name'] = "Archives";
-        $sections[0]['entity'] = 'archive';
-        $sections[0]['label_one'] = "une archive";
-        $sections[0]['titleLight'] = 'Les ';
-        $sections[0]['titleStrong'] = 'Archives';
+        $i = 0;
+        $sections[$i]['name'] = "Archives";
+        $sections[$i]['entity'] = 'archive';
+        $sections[$i]['label_one'] = "une archive";
+        $sections[$i]['titleLight'] = 'Les ';
+        $sections[$i]['titleStrong'] = 'Archives';
 
+        $i++;
+        $sections[$i]['name'] = "Factions";
+        $sections[$i]['entity'] = 'clan';
+        $sections[$i]['label_one'] = "une faction";
+        $sections[$i]['titleLight'] = 'Les ';
+        $sections[$i]['titleStrong'] = 'Factions';
 
-        $sections[1]['name'] = "Factions";
-        $sections[1]['entity'] = 'clan';
-        $sections[1]['label_one'] = "une faction";
-        $sections[1]['titleLight'] = 'Les ';
-        $sections[1]['titleStrong'] = 'Factions';
-
-        $sections[2]['name'] = "Lieux";
-        $sections[2]['entity'] = 'lieu';
-        $sections[2]['label_one'] = "un lieu";
-        $sections[2]['titleLight'] = 'Les ';
-        $sections[2]['titleStrong'] = 'Lieux';
+        $i++;
+        $sections[$i]['name'] = "Lieux";
+        $sections[$i]['entity'] = 'lieu';
+        $sections[$i]['label_one'] = "un lieu";
+        $sections[$i]['titleLight'] = 'Les ';
+        $sections[$i]['titleStrong'] = 'Lieux';
 
         $i++;
         $sections[$i]['name'] = "Lore";

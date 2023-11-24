@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Repository\ClanRepository;
 use App\Repository\LieuRepository;
 use App\Repository\RuleRepository;
+use App\Repository\SortRepository;
 use App\Repository\EcoleRepository;
 use App\Repository\ObjetRepository;
 use App\Repository\SceneRepository;
@@ -48,6 +49,7 @@ class BackOfficeController extends AbstractController
         AvantageRepository $avantageRepository,
         CompetenceRepository $competenceRepository,
         ObjetRepository $objetRepository,
+        SortRepository $sortRepository,
 
         PersonnageRepository $personnageRepository,
         FichePersonnageRepository $fichePersonnageRepository,
@@ -279,6 +281,23 @@ class BackOfficeController extends AbstractController
             $admin_elements[16]['last'] = $lastObjet;
             $admin_elements[16]['nom'] = $lastObjet->getNom();
             $admin_elements[16]['image'] = $lastObjet->getImage();
+        }
+
+        // SORT
+        $admin_elements[17]['element'] = 'sort' ;
+        $admin_elements[17]['label'] = 'Sorts';
+        $admin_elements[17]['genre'] = 'M';
+        $admin_elements[17]['categorie'] = 'REGLES';
+        $admin_elements[17]['nbr'] = $sortRepository->countSorts();
+        $lastSort = $sortRepository->findOneBy(array(),array('id' => 'DESC'));
+        if (!empty($lastSort)) {
+            $admin_elements[17]['last'] = $lastSort;
+            $admin_elements[17]['nom'] = $lastSort->getNom();
+            $admin_elements[17]['image'] = '';
+        } else {
+            $admin_elements[17]['last'] = '';
+            $admin_elements[17]['nom'] = '';
+            $admin_elements[17]['image'] = '';
         }
 
         // USER

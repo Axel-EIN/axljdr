@@ -20,11 +20,18 @@ class AdminFamilleController extends AbstractController
      * @Route("/admin/famille", name="admin_famille")
      * @IsGranted("ROLE_MJ")
      */
-    public function viewAdminFamilles(FamilleRepository $familleRepository): Response {
+    public function viewAdminFamilles(FamilleRepository $familleRepository): Response
+    {
         $familles = $familleRepository->findBy(array(), array('id' => 'DESC'));
 
-        return $this->render('admin_famille/index.html.twig', [
-            'familles' => $familles
+        return $this->render('back_office/list-element.html.twig', [
+            'elements' => $familles,
+            'element' => 'famille',
+            'label' => 'Famille',
+            'labels' => 'Familles',
+            'genre' => 'F',
+            'determinant' => 'une',
+            'img_size' => '48',
         ]);
     }
 
@@ -61,14 +68,19 @@ class AdminFamilleController extends AbstractController
             $this->addFlash('success', 'Le Famille a bien été ajoutée.');
 
             // REDIRECTION
-            if (!empty($request->query->get('redirect')) && $request->query->get('redirect') == 'famille')
+            if (!empty($request->query->get('redirect')) && $request->query->get('redirect') == 'clan')
                 return $this->redirectToRoute('empire_clan', ['id' => $famille->getClan()->getId()]);
             
             return $this->redirectToRoute('admin_famille');
         }
         
-        return $this->render('admin_famille/create.html.twig', [
+        // RENDER
+        return $this->render('back_office/create.html.twig', [
             'type' => 'Créer',
+            'entity' => 'famille',
+            'label' => 'Famille',
+            'genre' => 'F',
+            'determinant' => 'une',
             'form' => $form->createView()
         ]);
     }
@@ -101,12 +113,16 @@ class AdminFamilleController extends AbstractController
             return $this->redirectToRoute('admin_famille');
         }
 
-        return $this->renderForm('admin_famille/edit.html.twig', [
-            'famille' => $famille,
-            'form' => $form,
+        // RENDER
+        return $this->renderForm('back_office/edit.html.twig', [
             'type' => 'Modifier',
+            'famille' => $famille,
+            'entity' => 'famille',
+            'label' => 'Famille',
+            'genre' => 'F',
+            'determinant' => 'une',
+            'form' => $form,
         ]);
-        
     }
 
     /**

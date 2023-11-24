@@ -19,13 +19,19 @@ class AdminClanController extends AbstractController
      * @Route("/admin/clan", name="admin_clan")
      * @IsGranted("ROLE_MJ")
      */
-    public function afficherAdminClans(ClanRepository $clanRepository): Response {
+    public function afficherAdminClans(ClanRepository $clanRepository): Response
+    {
+        $clans = $clanRepository->findBy(array(), array('id' => 'DESC'));
 
-        $clans = $clanRepository->findAll();
-
-        return $this->render('admin_clan/index.html.twig', [
-            'controller_name' => 'AdminClanController',
-            'clans' => $clans
+        return $this->render('back_office/list-element.html.twig', [
+            'elements' => $clans,
+            'element' => 'clan',
+            'label' => 'Clan',
+            'labels' => 'Clans',
+            'genre' => 'M',
+            'determinant' => 'un',
+            'img_size' => '96',
+            'extra_col1' => 'couleur',
         ]);
     }
 
@@ -84,8 +90,13 @@ class AdminClanController extends AbstractController
             return $this->redirectToRoute('admin_clan');
         }
         
-        return $this->render('admin_clan/create.html.twig', [
+        // RENDER
+        return $this->render('back_office/create.html.twig', [
             'type' => 'Créer',
+            'entity' => 'clan',
+            'label' => 'Clan',
+            'genre' => 'M',
+            'determinant' => 'un',
             'form' => $form->createView()
         ]);
     }
@@ -134,18 +145,21 @@ class AdminClanController extends AbstractController
             $this->addFlash('success', 'Le clan a bien été modifié.');
 
             // REDIRECTION
-            if (!empty($request->query->get('redirect')) && ($request->query->get('redirect') == 'clan' || $request->query->get('redirect') == 'empire'))
+            if (!empty($request->query->get('redirect')) && $request->query->get('redirect') == 'clan' )
                 return $this->redirectToRoute('empire_clan', ['id' => $clan->getId()]);
             
             return $this->redirectToRoute('admin_clan');
         }
 
-        return $this->renderForm('admin_clan/edit.html.twig', [
-            'clan' => $clan,
-            'form' => $form,
+        return $this->renderForm('back_office/edit.html.twig', [
             'type' => 'Modifier',
+            'clan' => $clan,
+            'entity' => 'clan',
+            'label' => 'Clan',
+            'genre' => 'M',
+            'determinant' => 'un',
+            'form' => $form,
         ]);
-        
     }
 
     /**

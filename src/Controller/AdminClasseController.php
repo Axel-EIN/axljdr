@@ -22,8 +22,16 @@ class AdminClasseController extends AbstractController
     public function viewAdminClasses(ClasseRepository $classeRepository): Response
     {
         $classes = $classeRepository->findBy(array(), array('id' => 'DESC'));
-        return $this->render('admin_classe/index.html.twig', [
-            'classes' => $classes
+
+        return $this->render('back_office/list-element.html.twig', [
+            'elements' => $classes,
+            'element' => 'classe',
+            'label' => 'Classe',
+            'labels' => 'Classes',
+            'genre' => 'F',
+            'determinant' => 'une',
+            'img_size' => '96',
+            'extra_col1' => 'couleur',
         ]);
     }
 
@@ -60,8 +68,13 @@ class AdminClasseController extends AbstractController
             return $this->redirectToRoute('admin_classe');
         }
         
-        return $this->render('admin_classe/create.html.twig', [
+        // RENDER
+        return $this->render('back_office/create.html.twig', [
             'type' => 'Créer',
+            'entity' => 'classe',
+            'label' => 'Classe',
+            'genre' => 'F',
+            'determinant' => 'une',
             'form' => $form->createView()
         ]);
     }
@@ -101,12 +114,15 @@ class AdminClasseController extends AbstractController
             return $this->redirectToRoute('admin_classe');
         }
 
-        return $this->renderForm('admin_classe/edit.html.twig', [
-            'classe' => $classe,
-            'form' => $form,
+        return $this->renderForm('back_office/edit.html.twig', [
             'type' => 'Modifier',
+            'classe' => $classe,
+            'entity' => 'classe',
+            'label' => 'Classe',
+            'genre' => 'F',
+            'determinant' => 'une',
+            'form' => $form,
         ]);
-        
     }
 
     /**

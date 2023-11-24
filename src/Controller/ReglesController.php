@@ -7,6 +7,7 @@ use App\Entity\Ecole;
 use App\Entity\Classe;
 use App\Entity\Library;
 use App\Repository\RuleRepository;
+use App\Repository\SortRepository;
 use App\Repository\EcoleRepository;
 use App\Repository\ObjetRepository;
 use App\Repository\ClasseRepository;
@@ -107,6 +108,7 @@ class ReglesController extends AbstractController
     public function viewLibrary(Library $library, LibraryRepository $libraryRepository, Request $request,
                                 AvantageRepository $avantageRepository,
                                 CompetenceRepository $competenceRepository,
+                                SortRepository $sortRepository,
                                 ObjetRepository $objetRepository): Response
     {
         // RECUPERATION des noms des champs de la librairie
@@ -133,7 +135,8 @@ class ReglesController extends AbstractController
             foreach ( $items as $item )
             {
                 $tabs[] = $item->{ 'get' .  ucfirst( $tab_field_name ) }();
-                $filters[] = $item->{ 'get' .  ucfirst( $filter_field_name ) }();
+                if (!empty($filter_field_name))
+                    $filters[] = $item->{ 'get' .  ucfirst( $filter_field_name ) }();
             }
             $tabs = array_unique($tabs);
             $filters = array_unique($filters);
@@ -146,10 +149,17 @@ class ReglesController extends AbstractController
                 $items = array_filter($items, function ($obj) use ($tab_url_param, $tab_field_name) { return $obj->{ 'get' .  ucfirst( $tab_field_name ) }() == $tab_url_param; });
 
             if ( !empty( $subtab_field_name ) ) {
-                $subtab_first = array_values($items)[0]->{ 'get' .  ucfirst( $subtab_field_name ) }();
                 foreach ( $items as $item )
                     $subtabs[] = $item->{ 'get' .  ucfirst( $subtab_field_name ) }();
                 $subtabs = array_unique($subtabs);
+                if ($library->getNom() == 'Avantages / Désavantages')
+                    $subtabs = ['MENTAL','PHYSIQUE','SOCIAL','SPIRITUEL', 'MATERIEL'];
+                elseif ($library->getNom() == 'Grimoire Magique' && $tab_url_param == 'MAGIE' )
+                    $subtabs = ['AIR', 'EAU', 'FEU', 'TERRE', 'VIDE', 'UNIVERSEL'];
+                elseif ($library->getNom() == 'Armurerie' && $tab_url_param == 'ARME' )
+                    $subtabs = ['ÉPÉE', 'HAST', 'LANCE', 'LOURDE', 'BÂTON', 'ARC', 'CHAÎNE', 'COUTEAU', 'ÉVENTAIL'];
+
+                $subtab_first = $subtabs[0];
 
                 if ( empty($subtab_url_param) )
                     $items = [];

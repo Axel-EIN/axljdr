@@ -17,6 +17,7 @@ class AdminClasseController extends AbstractController
 {
     /**
      * @Route("/admin/classe", name="admin_classe")
+     * @IsGranted("ROLE_MJ")
      */
     public function viewAdminClasses(ClasseRepository $classeRepository): Response
     {

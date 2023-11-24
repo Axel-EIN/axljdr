@@ -16,6 +16,7 @@ class AdminFicheController extends AbstractController
 {
     /**
      * @Route("/admin/fiche", name="admin_fiche")
+     * @IsGranted("ROLE_MJ")
      */
     public function viewAdminFiches(FichePersonnageRepository $fichePersonnageRepository): Response {
         $fiches = $fichePersonnageRepository->findAll();

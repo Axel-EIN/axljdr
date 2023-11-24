@@ -1,7 +1,0 @@
-{% extends 'back_office/index.html.twig' %}
-{% block title %}Administrer les Scènes {{ parent() }}{% endblock %}
-{% block h1 %}Administrer les <strong>Scènes</strong>{% endblock %}
-{% block child %}
-    {% set label, element, elements, img_size, genre = 'scène', 'scene', scenes, '48', 'F' %}
-    {{ include('back_office/list-element.html.twig') }}
-{% endblock %}

@@ -1,7 +1,0 @@
-{% extends 'back_office/index.html.twig' %}
-{% block title %}Administrer les Archives {{ parent() }}{% endblock %}
-{% block h1 %}Administrer les <strong>Archives</strong>{% endblock %}
-{% block child %}
-    {% set label, element, elements, img_size, genre = 'archive', 'archive', archives, '96', 'F' %}
-    {{ include('back_office/list-element.html.twig') }}
-{% endblock %}

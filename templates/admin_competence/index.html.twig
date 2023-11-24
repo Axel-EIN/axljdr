@@ -1,7 +1,0 @@
-{% extends 'back_office/index.html.twig' %}
-{% block title %}Administrer les Compétences {{ parent() }}{% endblock %}
-{% block h1 %}Administrer les <strong>Compétences</strong>{% endblock %}
-{% block child %}
-    {% set label, element, elements, img_size, genre, extra_col1, extra_col2, extra_col3 = 'compétence', 'competence', competences, '32', 'F', 'trait', 'categorie', '' %}
-    {{ include('back_office/list-element.html.twig') }}
-{% endblock %}

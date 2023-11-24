@@ -22,8 +22,15 @@ class AdminCompetenceController extends AbstractController
     {
         $competences = $competenceRepository->findBy( [] , ['id' => 'DESC'] );
 
-        return $this->render('admin_competence/index.html.twig', [
-            'competences' => $competences,
+        return $this->render('back_office/list-element.html.twig', [
+            'elements' => $competences,
+            'element' => 'competence',
+            'label' => 'Compétence',
+            'labels' => 'Compétences',
+            'genre' => 'F',
+            'determinant' => 'une',
+            'img_size' => '48',
+            'extra_col1' => 'categorie',
         ]);
     }
 
@@ -43,15 +50,23 @@ class AdminCompetenceController extends AbstractController
             $em->flush();
             $this->addFlash('success', "La compétence a bien été ajoutée.");
 
-            if (!empty($request->query->get('redirect')) && $request->query->get('redirect') == 'competence')
-                return $this->redirectToRoute('regles_competences');
+            // REDIRECTION
+            if (!empty($request->query->get('redirect')) && $request->query->get('redirect') == 'library'
+            && !empty($request->query->get('libraryID')) && $request->query->get('libraryID') > 0)
+                return $this->redirectToRoute( 'regles_library', [ 'id' => $request->query->get('libraryID') , 'tab' => $competence->getCategorie() ] );
+
             return $this->redirectToRoute('admin_competence');
         }
         
-        return $this->render('admin_competence/create.html.twig', [
+        // RENDER
+        return $this->render('back_office/create.html.twig', [
             'type' => 'Créer',
+            'entity' => 'competence',
+            'label' => 'Compétence',
+            'genre' => 'F',
+            'determinant' => 'une',
             'form' => $form->createView()
-            ]);
+        ]);
     }
 
     /**
@@ -69,21 +84,22 @@ class AdminCompetenceController extends AbstractController
             $this->addFlash('success', 'La compétence a bien été modifiée.');
 
             // REDIRECTION
-            if (    !empty($request->query->get('redirect'))
-                    && $request->query->get('redirect') == 'library'
-                    && !empty($request->query->get('libraryID'))
-                    && $request->query->get('libraryID') > 0  )
-                return $this->redirectToRoute( 'regles_rule', [ 'id' => $request->query->get('libraryID') , 'tab' => $competence->getCategorie() ] );
+            if (!empty($request->query->get('redirect')) && $request->query->get('redirect') == 'library'
+            && !empty($request->query->get('libraryID')) && $request->query->get('libraryID') > 0)
+                return $this->redirectToRoute( 'regles_library', [ 'id' => $request->query->get('libraryID') , 'tab' => $competence->getCategorie() ] );
 
             return $this->redirectToRoute('admin_competence');
         }
 
-        return $this->renderForm('admin_competence/edit.html.twig', [
-            'competence' => $competence,
-            'form' => $form,
+        return $this->renderForm('back_office/edit.html.twig', [
             'type' => 'Modifier',
+            'competence' => $competence,
+            'entity' => 'competence',
+            'label' => 'Compétence',
+            'genre' => 'F',
+            'determinant' => 'une',
+            'form' => $form,
         ]);
-        
     }
 
     /**

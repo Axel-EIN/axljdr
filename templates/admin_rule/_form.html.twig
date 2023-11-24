@@ -42,20 +42,6 @@
                 </section>
             {% endfor %}
 
-            <!-- LIBRARY -->
-            <section id="library" class="col-12 mt-3">
-                <a class="w-100" data-toggle="collapse" href="#libraryCollapse" role="button" aria-expanded="false" aria-controls="libraryCollapse">
-                    <h2 class="title-h3">Bibliothèque</h2>
-                </a>
-                <hr>
-                <collapse id="libraryCollapse" class="collapse row">
-                    <div class="col-4">{{ form_row(form.listEntity) }}</div>
-                    <div class="col-4">{{ form_row(form.listTabField) }}</div>
-                    <div class="col-4">{{ form_row(form.listFilterField) }}</div>
-                    <div class="col-12">{{ form_row(form.listIntro,{ 'attr': {'rows': '8'} }) }}</div>
-                </collapse>
-            </section>  
-
             <!-- SAVE -->
             <div class="col-12 text-center mt-5">
                 <button class="btn btn-large btn-primary-style">{{ button_label|default('Save') }}</button>

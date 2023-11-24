@@ -18,10 +18,18 @@ class AdminFicheController extends AbstractController
      * @Route("/admin/fiche", name="admin_fiche")
      * @IsGranted("ROLE_MJ")
      */
-    public function viewAdminFiches(FichePersonnageRepository $fichePersonnageRepository): Response {
-        $fiches = $fichePersonnageRepository->findAll();
-        return $this->render('admin_fiche/index.html.twig', [
-            'fiches' => $fiches
+    public function viewAdminFiches(FichePersonnageRepository $fichePersonnageRepository): Response
+    {
+        $fiches = $fichePersonnageRepository->findBy( [] , ['id' => 'DESC'] );
+
+        return $this->render('back_office/list-element.html.twig', [
+            'elements' => $fiches,
+            'element' => 'fiche',
+            'label' => 'Fiche',
+            'labels' => 'Fiches',
+            'genre' => 'F',
+            'determinant' => 'une',
+            'img_size' => '48',
         ]);
     }
 
@@ -44,8 +52,13 @@ class AdminFicheController extends AbstractController
             return $this->redirectToRoute('admin_fiche');
         }
 
-        return $this->render('admin_fiche/create.html.twig', [
+        // RENDER
+        return $this->render('back_office/create.html.twig', [
             'type' => 'Créer',
+            'entity' => 'fiche',
+            'label' => 'Fiche',
+            'genre' => 'F',
+            'determinant' => 'une',
             'form' => $form->createView()
         ]);
     }
@@ -67,10 +80,15 @@ class AdminFicheController extends AbstractController
             return $this->redirectToRoute('admin_fiche');
         }
 
-        return $this->renderForm('admin_fiche/edit.html.twig', [
-            'fiche' => $fiche,
-            'form' => $form,
+        // RENDER
+        return $this->renderForm('back_office/edit.html.twig', [
             'type' => 'Modifier',
+            'fiche' => $fiche,
+            'entity' => 'fiche',
+            'label' => 'Fiche',
+            'genre' => 'F',
+            'determinant' => 'une',
+            'form' => $form,
         ]);
     }
 

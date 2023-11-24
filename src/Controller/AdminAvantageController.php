@@ -14,7 +14,10 @@ use App\Form\AdminAvantageType;
 
 class AdminAvantageController extends AbstractController
 {
-    #[Route('/admin/avantage', name: 'admin_avantage')]
+    /**
+     * @Route("/admin/avantage", name="admin_avantage")
+     * @IsGranted("ROLE_MJ")
+     */
     public function viewAdminAvantages( AvantageRepository $avantageRepository): Response
     {
         $avantages = $avantageRepository->findBy( [] , ['id' => 'DESC'] );

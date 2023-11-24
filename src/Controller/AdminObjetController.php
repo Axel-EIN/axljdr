@@ -24,8 +24,17 @@ class AdminObjetController extends AbstractController
     {
         $objets = $objetRepository->findBy( [] , ['id' => 'DESC'] );
 
-        return $this->render('admin_objet/index.html.twig', [
-            'objets' => $objets,
+        return $this->render('back_office/list-element.html.twig', [
+            'elements' => $objets,
+            'element' => 'objet',
+            'label' => 'Objet',
+            'labels' => 'Objets',
+            'genre' => 'M',
+            'determinant' => 'un',
+            'img_size' => '48',
+            'extra_col1' => 'categorie',
+            'extra_col2' => 'type',
+            'extra_col3' => 'numero',
         ]);
     }
 
@@ -69,28 +78,21 @@ class AdminObjetController extends AbstractController
             // RE-ORDER
             $numeroteur->reordonnerNumero( $objet->getId() , -1 , $objet->getNumero() , [] , $fratrieArrivee );
 
-
             // REDIRECTION
-            if (    !empty($request->query->get('redirect'))
-                    && $request->query->get('redirect') == 'library'
-                    && !empty($request->query->get('libraryID'))
-                    && $request->query->get('libraryID') > 0
-                )
-                return $this->redirectToRoute( 'regles_rule', [ 'id' => $request->query->get('libraryID') , 'tab' => $objet->getType() ] );
+            if (!empty($request->query->get('redirect')) && $request->query->get('redirect') == 'library'
+            && !empty($request->query->get('libraryID')) && $request->query->get('libraryID') > 0)
+                return $this->redirectToRoute( 'regles_library', [ 'id' => $request->query->get('libraryID') , 'tab' => $objet->getCategorie() ] );
 
-
-            if (!empty($request->query->get('redirect')) && $request->query->get('redirect') == 'objet')
-                return $this->redirectToRoute('regles_objets');
             return $this->redirectToRoute('admin_objet');
         }
         
         // RENDER
         return $this->render('back_office/create.html.twig', [
             'type' => 'Créer',
+            'entity' => 'objet',
             'label' => 'Objet',
             'genre' => 'M',
             'determinant' => 'un',
-            'entity' => 'objet',
             'form' => $form->createView()
         ]);
     }
@@ -137,15 +139,14 @@ class AdminObjetController extends AbstractController
             $this->addFlash('success', "L'objet a bien été modifié.");
 
             // REDIRECTION
-            if (    !empty($request->query->get('redirect'))
-                    && $request->query->get('redirect') == 'library'
-                    && !empty($request->query->get('libraryID'))
-                    && $request->query->get('libraryID') > 0  )
-                return $this->redirectToRoute( 'regles_rule', [ 'id' => $request->query->get('libraryID') , 'tab' => $objet->getType() ] );
+            if (!empty($request->query->get('redirect')) && $request->query->get('redirect') == 'library'
+            && !empty($request->query->get('libraryID')) && $request->query->get('libraryID') > 0)
+                return $this->redirectToRoute( 'regles_library', [ 'id' => $request->query->get('libraryID') , 'tab' => $objet->getCategorie() ] );
 
             return $this->redirectToRoute('admin_objet');
         }
 
+        // RENDER
         return $this->renderForm('back_office/edit.html.twig', [
             'type' => 'Modifier',
             'objet' => $objet,

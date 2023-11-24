@@ -49,3 +49,11 @@
         {{ include('/parts/element-vignette.html.twig', {un_element}) }}
     {% endfor %}
 {% endblock %}
+
+{% block section_content4 %}
+<!-- LORES -->
+    {% set col, size, na_image = 'col-2', 'small', NA_ARCHIVE %}
+    {% for un_element in lores %}
+        {{ include('/parts/element-vignette.html.twig', {un_element}) }}
+    {% endfor %}
+{% endblock %}

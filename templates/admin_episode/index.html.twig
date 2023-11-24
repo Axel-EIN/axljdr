@@ -1,7 +1,0 @@
-{% extends 'back_office/index.html.twig' %}
-{% block title %}Administrer les Episodes {{ parent() }}{% endblock %}
-{% block h1 %}Administrer les <strong>Episodes</strong>{% endblock %}
-{% block child %}
-    {% set label, element, elements, img_size, genre = 'épisode', 'episode', episodes, '96', 'M' %}
-    {{ include('back_office/list-element.html.twig') }}
-{% endblock %}

@@ -23,10 +23,17 @@ class AdminEpisodeController extends AbstractController
      */
     public function viewAdminEpisodes(EpisodeRepository $episodeRepository): Response
     {
-        $episodes = $episodeRepository->findBy(array(), array('chapitreParent' => 'ASC'));
-        return $this->render('admin_episode/index.html.twig', [
-            'controller_name' => 'AdminEpisodeController',
-            'episodes' => $episodes,
+        $episodes = $episodeRepository->findBy(array(), array('id' => 'DESC'));
+
+        return $this->render('back_office/list-element.html.twig', [
+            'elements' => $episodes,
+            'element' => 'episode',
+            'label' => 'Épisode',
+            'labels' => 'Épisodes',
+            'genre' => 'M',
+            'determinant' => 'un',
+            'img_size' => '64',
+            'extra_col1' => 'numero',
         ]);
     }
 
@@ -76,8 +83,13 @@ class AdminEpisodeController extends AbstractController
             return $this->redirectToRoute('admin_episode');
         } 
 
-        return $this->render('admin_episode/create.html.twig', [
+        // RENDER
+        return $this->render('back_office/create.html.twig', [
             'type' => 'Créer',
+            'entity' => 'episode',
+            'label' => 'Épisode',
+            'genre' => 'M',
+            'determinant' => 'un',
             'form' => $form->createView()
         ]);
     }
@@ -124,10 +136,14 @@ class AdminEpisodeController extends AbstractController
             return $this->redirectToRoute('admin_episode');
         }
 
-        return $this->renderForm('admin_episode/edit.html.twig', [
-            'episode' => $episode,
-            'form' => $form,
+        return $this->renderForm('back_office/edit.html.twig', [
             'type' => 'Modifier',
+            'episode' => $episode,
+            'entity' => 'episode',
+            'label' => 'Épisode',
+            'genre' => 'M',
+            'determinant' => 'un',
+            'form' => $form,
         ]);
     }
 

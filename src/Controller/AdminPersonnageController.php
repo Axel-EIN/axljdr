@@ -18,6 +18,7 @@ class AdminPersonnageController extends AbstractController
 {
     /**
      * @Route("/admin/personnage", name="admin_personnage")
+     * @IsGranted("ROLE_MJ")
      */
     public function viewAdminPersonnages(PersonnageRepository $personnageRepository): Response
     {

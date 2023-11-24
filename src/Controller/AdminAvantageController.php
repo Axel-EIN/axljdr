@@ -20,10 +20,18 @@ class AdminAvantageController extends AbstractController
      */
     public function viewAdminAvantages( AvantageRepository $avantageRepository): Response
     {
-        $avantages = $avantageRepository->findBy( [] , ['id' => 'DESC'] );
+        $avantages = $avantageRepository->findBy(array(), array('id' => 'DESC'));
 
-        return $this->render('admin_avantage/index.html.twig', [
-            'avantages' => $avantages
+        return $this->render('back_office/list-element.html.twig', [
+            'elements' => $avantages,
+            'element' => 'avantage',
+            'label' => 'Avantage',
+            'labels' => "Avantages",
+            'genre' => 'M',
+            'determinant' => 'un',
+            'img_size' => '48',
+            'extra_col1' => 'genre',
+            'extra_col2' => 'type'
         ]);
     }
 
@@ -43,15 +51,23 @@ class AdminAvantageController extends AbstractController
             $em->flush();
             $this->addFlash('success', "L'Avantage a bien été ajouté.");
 
-            if (!empty($request->query->get('redirect')) && $request->query->get('redirect') == 'avantage')
-                return $this->redirectToRoute('regles_avantages');
+            // REDIRECTION
+            if (!empty($request->query->get('redirect')) && $request->query->get('redirect') == 'library'
+                && !empty($request->query->get('libraryID')) && $request->query->get('libraryID') > 0)
+                return $this->redirectToRoute( 'regles_library', [ 'id' => $request->query->get('libraryID') , 'tab' => $avantage->getGenre(), 'subtab' => $avantage->getType() ] );
+
             return $this->redirectToRoute('admin_avantage');
         }
         
-        return $this->render('admin_avantage/create.html.twig', [
+        // RENDER
+        return $this->render('back_office/create.html.twig', [
             'type' => 'Créer',
+            'entity' => 'avantage',
+            'label' => 'Avantage/Désavantage',
+            'genre' => 'M',
+            'determinant' => 'un',
             'form' => $form->createView()
-            ]);
+        ]);
     }
 
     /**
@@ -69,21 +85,22 @@ class AdminAvantageController extends AbstractController
             $this->addFlash('success', 'La Avantage a bien été modifiée.');
 
             // REDIRECTION
-            if (    !empty($request->query->get('redirect'))
-                    && $request->query->get('redirect') == 'library'
-                    && !empty($request->query->get('libraryID'))
-                    && $request->query->get('libraryID') > 0  )
+            if (!empty($request->query->get('redirect')) && $request->query->get('redirect') == 'library'
+                && !empty($request->query->get('libraryID')) && $request->query->get('libraryID') > 0)
                 return $this->redirectToRoute( 'regles_library', [ 'id' => $request->query->get('libraryID') , 'tab' => $avantage->getGenre(), 'subtab' => $avantage->getType() ] );
 
             return $this->redirectToRoute('admin_avantage');
         }
 
-        return $this->renderForm('admin_avantage/edit.html.twig', [
-            'avantage' => $avantage,
-            'form' => $form,
+        return $this->renderForm('back_office/edit.html.twig', [
             'type' => 'Modifier',
+            'avantage' => $avantage,
+            'entity' => 'avantage',
+            'label' => 'Avantage/Désavantage',
+            'genre' => 'M',
+            'determinant' => 'un',
+            'form' => $form,
         ]);
-        
     }
 
     /**

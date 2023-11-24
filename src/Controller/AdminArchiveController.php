@@ -18,6 +18,7 @@ class AdminArchiveController extends AbstractController
 
     /**
      * @Route("/admin/archive", name="admin_archive")
+     * @IsGranted("ROLE_MJ")
      */
     public function viewAdminArchives(ArchiveRepository $archiveRepository): Response {
         $archives = $archiveRepository->findAll();

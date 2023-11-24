@@ -18,6 +18,7 @@ class AdminRuleController extends AbstractController
 {
     /**
      * @Route("/admin/rule", name="admin_rule")
+     * @IsGranted("ROLE_MJ")
      */
     public function viewAdminRules(RuleRepository $ruleRepository): Response
     {

@@ -20,6 +20,7 @@ class AdminEcoleController extends AbstractController
 {
     /**
      * @Route("/admin/ecole", name="admin_ecole")
+     * @IsGranted("ROLE_MJ")
      */
     public function viewAdminEcoles(EcoleRepository $ecoleRepository): Response {
 

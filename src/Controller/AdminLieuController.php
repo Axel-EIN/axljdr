@@ -17,6 +17,7 @@ class AdminLieuController extends AbstractController
 {
     /**
      * @Route("/admin/lieu", name="admin_lieu")
+     * @IsGranted("ROLE_MJ")
      */
     public function viewAdminLieux(LieuRepository $lieuRepository): Response {
         $lieux = $lieuRepository->findAll();

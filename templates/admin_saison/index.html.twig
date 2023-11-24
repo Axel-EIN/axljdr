@@ -1,7 +1,0 @@
-{% extends 'back_office/index.html.twig' %}
-{% block title %}Administrer les Saisons {{ parent() }}{% endblock %}
-{% block h1 %}Administrer les <strong>Saisons</Strong>{% endblock %}
-{% block child %}
-    {% set label, element, elements, img_size, genre = 'saison', 'saison', saisons, '480', 'F' %}
-    {{ include('back_office/list-element.html.twig') }}
-{% endblock %}

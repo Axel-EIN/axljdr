@@ -1,91 +1,98 @@
-{% if genre is defined %}
-    {% if genre == 'M' %}
-        {% set create_label = "Créer un nouveau" %}
-    {% elseif genre == 'F' %}
-        {% set create_label = "Créer une nouvelle" %}
+{% extends 'back_office/index.html.twig' %}
+{% block title %}Administrer les {{labels}} | {{ parent() }}{% endblock %}
+{% block h1 %}Administrer les {{labels}}{% endblock %}
+{% block child %}
+
+    {% if genre is defined %}
+        {% if genre == 'M' %}
+            {% set create_label = "Créer un nouveau" %}
+        {% elseif genre == 'F' %}
+            {% set create_label = "Créer une nouvelle" %}
+        {% endif %}
+    {% else %}
+        {% set create_label = "Créer un nouvel élément" %}
     {% endif %}
-{% else %}
-    {% set create_label = "Créer un nouvel élément" %}
-{% endif %}
 
-<section>
-    <div class="text-right my-3">
-        <a href="{{ path('admin_' ~ element ~ '_create') }}" class="btn-medium btn-primary-style"><i class="fas fa-plus-square"></i>&nbsp;&nbsp;{{create_label}} {{label}}</a>
-    </div>
+    <section>
+        <div class="text-right my-3">
+            <a href="{{ path('admin_' ~ element ~ '_create') }}" class="btn-medium btn-primary-style"><i class="fas fa-plus-square"></i>&nbsp;&nbsp;{{create_label}} {{label}}</a>
+        </div>
 
-    <table class="admin-element-list">
-        <tr>
-            <th>ID</th>
-            <th>Image</th>
-            <th>Titre / Nom</th>
-            {% if extra_col1 is defined and extra_col1 is not empty %}<th>{{ extra_col1 }}</th>{% endif %}
-            {% if extra_col2 is defined and extra_col2 is not empty %}<th>{{ extra_col2 }}</th>{% endif %}
-            {% if extra_col3 is defined and extra_col3 is not empty %}<th>{{ extra_col3 }}</th>{% endif %}
-            <th>Edit</th>
-            <th>Delete</th>
-        </tr>
+        <table class="admin-element-list">
+            <tr>
+                <th>ID</th>
+                <th>Image</th>
+                <th>Titre / Nom</th>
+                {% if extra_col1 is defined and extra_col1 is not empty %}<th>{{ extra_col1 }}</th>{% endif %}
+                {% if extra_col2 is defined and extra_col2 is not empty %}<th>{{ extra_col2 }}</th>{% endif %}
+                {% if extra_col3 is defined and extra_col3 is not empty %}<th>{{ extra_col3 }}</th>{% endif %}
+                <th>Edit</th>
+                <th>Delete</th>
+            </tr>
 
-        {% for un_element in elements %}
+            {% for un_element in elements %}
 
-            {% if un_element.image is defined and un_element.image is not empty %}
-                {% set image = un_element.image %}
-            {% elseif un_element.mon is defined and un_element.mon is not empty %}
-                {% set image = un_element.mon %}
-            {% elseif un_element.icone is defined and un_element.icone is not empty %}
-                {% set image = un_element.icone %}
-            {% elseif un_element.personnage is defined and un_element.personnage is not empty %}
-                {% set image = un_element.personnage.icone %}
-            {% endif %}
-
-            {% if un_element.nom is defined %}
-                {% if un_element.prenom is defined %}
-                    {% set nom = un_element.nom ~ ' ' ~ un_element.prenom %}
-                {% else %}
-                    {% set nom = un_element.nom %}
+                {% if un_element.image is defined and un_element.image is not empty %}
+                    {% set image = un_element.image %}
+                {% elseif un_element.mon is defined and un_element.mon is not empty %}
+                    {% set image = un_element.mon %}
+                {% elseif un_element.icone is defined and un_element.icone is not empty %}
+                    {% set image = un_element.icone %}
+                {% elseif un_element.personnage is defined and un_element.personnage is not empty %}
+                    {% set image = un_element.personnage.icone %}
                 {% endif %}
-            {% elseif un_element.titre is defined %}
-                {% set nom = un_element.titre %}
-            {% elseif un_element.personnage is defined %}
-                {% set nom = 'fiche de ' ~ un_element.personnage.prenom %}
+
+                {% if un_element.nom is defined %}
+                    {% if un_element.prenom is defined %}
+                        {% set nom = un_element.nom ~ ' ' ~ un_element.prenom %}
+                    {% else %}
+                        {% set nom = un_element.nom %}
+                    {% endif %}
+                {% elseif un_element.titre is defined %}
+                    {% set nom = un_element.titre %}
+                {% elseif un_element.personnage is defined %}
+                    {% set nom = 'fiche de ' ~ un_element.personnage.prenom %}
+                {% else %}
+                    {% set nom = "pas de nom ou titre" %}
+                {% endif %}
+
+                <tr>
+                    <td>{{ un_element.id }}</td>
+
+                    <td><img class="img-{{img_size}}" src="{{ asset(image|default(na_image)) }}" alt="Image {{label}}" /></td>
+
+                    <td><strong>{{nom}}</strong></td>
+
+                    {% if extra_col1 is defined and extra_col1 is not empty %}<td>{{ attribute(un_element, extra_col1) }}</td>{% endif %}
+
+                    {% if extra_col2 is defined and extra_col2 is not empty %}<td>{{ attribute(un_element, extra_col2) }}</td>{% endif %}
+
+                    {% if extra_col3 is defined and extra_col3 is not empty %}<td>{{ attribute(un_element, extra_col3) }}</td>{% endif %}
+
+                    <td><a href="{{ path('admin_' ~ element ~ '_edit', {id: un_element.id} ) }}"><i class="fas fa-edit"></i></a></td>
+
+                    <td><a class="ml-1" href="{{ path('admin_' ~ element ~ '_delete', {'id': un_element.id}) }}?csrf={{ csrf_token('delete' ~ un_element.id) }}"
+                            onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette élément : {{nom}} ?');"><i class="fas fa-trash-alt"></i></a></td>
+
+                </tr>
+
             {% else %}
-                {% set nom = "pas de nom ou titre" %}
-            {% endif %}
+                {% set count = 5 %}
+                {% if extra_col1 is defined and extra_col1 is not empty %}
+                    {% set count = count + 1 %}
+                {% endif %}
+                {% if extra_col2 is defined and extra_col2 is not empty %}
+                    {% set count = count + 1 %}
+                {% endif %}
+                {% if extra_col3 is defined and extra_col3 is not empty %}
+                    {% set count = count + 1 %}
+                {% endif %}
+                <tr>
+                    <td colspan="{{count}}">Il n'y a pas encore de {{labels}}.</td>
+                </tr>
+            {% endfor %}
 
-            <tr>
-                <td>{{ un_element.id }}</td>
+        </table>
+    </section>
 
-                <td><img class="img-{{img_size}}" src="{{ asset(image|default(na_image)) }}" alt="Image {{label}}" /></td>
-
-                <td><strong>{{nom}}</strong></td>
-
-                {% if extra_col1 is defined and extra_col1 is not empty %}<td>{{ attribute(un_element, extra_col1) }}</td>{% endif %}
-
-                {% if extra_col2 is defined and extra_col2 is not empty %}<td>{{ attribute(un_element, extra_col2) }}</td>{% endif %}
-
-                {% if extra_col3 is defined and extra_col3 is not empty %}<td>{{ attribute(un_element, extra_col3) }}</td>{% endif %}
-
-                <td><a href="{{ path('admin_' ~ element ~ '_edit', {id: un_element.id} ) }}"><i class="fas fa-edit"></i></a></td>
-
-                <td><a class="ml-1" href="{{ path('admin_' ~ element ~ '_delete', {'id': un_element.id}) }}?csrf={{ csrf_token('delete' ~ un_element.id) }}"
-                        onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette élément : {{nom}} ?');"><i class="fas fa-trash-alt"></i></a></td>
-
-            </tr>
-
-        {% else %}
-            {% set count = 5 %}
-            {% if extra_col1 is defined and extra_col1 is not empty %}
-                {% set count = count + 1 %}
-            {% endif %}
-            {% if extra_col2 is defined and extra_col2 is not empty %}
-                {% set count = count + 1 %}
-            {% endif %}
-            {% if extra_col3 is defined and extra_col3 is not empty %}
-                {% set count = count + 1 %}
-            {% endif %}
-            <tr>
-                <td colspan="{{count}}">Il n'y a pas encore de {{labels}}.</td>
-            </tr>
-        {% endfor %}
-
-    </table>
-</section>
+{% endblock %}

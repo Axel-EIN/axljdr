@@ -1,62 +1,101 @@
 <nav class="nav justify-content-center align-items-center">
 
     {% if app.user and is_granted("ROLE_MJ") %}
-    <!-- MJ NAV TABS LINKS -->
+    
+        <!-- MJ NAV TABS LINKS -->
+        {% set navs = {
+            'Saisons': {
+                'element': 'saison',
+                'label': 'Saisons',
+                'genre': 'F',
+            },
+            'Chapitres': {
+                'element': 'chapitre',
+                'label': 'Chapitres',
+                'genre': 'M',
+            },
+            'Episodes': {
+                'element': 'episode',
+                'label': 'Épisodes',
+                'genre': 'M',
+            },
+            'Scènes': {
+                'element': 'scene',
+                'label': 'Scènes',
+                'genre': 'F',
+            },
+            'Clans': {
+                'element': 'clan',
+                'label': 'Clans',
+                'genre': 'M',
+            },
+            'Familles': {
+                'element': 'famille',
+                'label': 'Familles',
+                'genre': 'F',
+            },
+            'Archive': {
+                'element': 'archive',
+                'label': 'Archives',
+                'genre': 'F',
+            },
+            'Lieux': {
+                'element': 'lieu',
+                'label': 'Lieux',
+                'genre': 'M',
+            },
+            'Classes': {
+                'element': 'classe',
+                'label': 'Classes',
+                'genre': 'F',
+            },
+            'Écoles': {
+                'element': 'ecole',
+                'label': 'Écoles',
+                'genre': 'F',
+            },
+            'Rule': {
+                'element': 'rule',
+                'label': 'Rules',
+                'genre': 'F',
+            },
+            'Bibliothèques': {
+                'element': 'library',
+                'label': 'Bibliothèques',
+                'genre': 'F',
+            },
+            'Avantages/Désavantages': {
+                'element': 'avantage',
+                'label': 'Avantages / Désavantages',
+                'genre': 'M',
+            },
+            'Compétences': {
+                'element': 'competence',
+                'label': 'Compétences',
+                'genre': 'F',
+            },
+            'Objets': {
+                'element': 'objet',
+                'label': 'Objets',
+                'genre': 'M',
+            },
+            'Fiches': {
+                'element': 'fiche',
+                'label': 'Fiches',
+                'genre': 'F',
+            },
+            'Personnages': {
+                'element': 'personnage',
+                'label': 'Personnages',
+                'genre': 'M',
+            },
+        }
+        %}
 
-        <!-- AVENTURE -->
-        {% set element, label, genre = 'scene', 'Scènes', 'F' %}
-        {{ include('/back_office/btn-mj-tab-link.html.twig') }}
-
-        {% set element, label, genre = 'episode', 'Épisodes', 'M' %}
-        {{ include('/back_office/btn-mj-tab-link.html.twig') }}
-
-        {% set element, label, genre = 'chapitre', 'Chapitres', 'M' %}
-        {{ include('/back_office/btn-mj-tab-link.html.twig') }}
-
-        {% set element, label, genre = 'saison', 'Saisons', 'F' %}
-        {{ include('/back_office/btn-mj-tab-link.html.twig') }}
-
-        <!-- EMPIRE -->
-        {% set element, label, genre = 'clan', 'Factions', 'F' %}
-        {{ include('/back_office/btn-mj-tab-link.html.twig') }}
-
-        {% set element, label, genre = 'famille', 'Familles', 'F' %}
-        {{ include('/back_office/btn-mj-tab-link.html.twig') }}
-
-        {% set element, label, genre = 'archive', 'Archives', 'F' %}
-        {{ include('/back_office/btn-mj-tab-link.html.twig') }}
-
-        {% set element, label, genre = 'lieu', 'Lieux', 'M' %}
-        {{ include('/back_office/btn-mj-tab-link.html.twig') }}
-
-        <!-- RÈGLES -->
-        {% set element, label, genre = 'rule', 'Règles', 'F' %}
-        {{ include('/back_office/btn-mj-tab-link.html.twig') }}
-
-        {% set element, label, genre = 'library', 'Bibliothèques', 'F' %}
-        {{ include('/back_office/btn-mj-tab-link.html.twig') }}
-
-        {% set element, label, genre = 'classe', 'Classes', 'F' %}
-        {{ include('/back_office/btn-mj-tab-link.html.twig') }}
-
-        {% set element, label, genre = 'ecole', 'Écoles', 'F' %}
-        {{ include('/back_office/btn-mj-tab-link.html.twig') }}
-
-        {% set element, label, genre = 'avantage', 'Avantages / Désavantages', 'M' %}
-        {{ include('/back_office/btn-mj-tab-link.html.twig') }}
-
-        {% set element, label, genre = 'competence', 'Compétences', 'F' %}
-        {{ include('/back_office/btn-mj-tab-link.html.twig') }}
-
-        {% set element, label, genre = 'objet', 'Objets', 'M' %}
-        {{ include('/back_office/btn-mj-tab-link.html.twig') }}
-
-        <!-- PERSONNAGES -->
-        {% set element, label, genre = 'personnage', 'Personnages', 'M' %}
-        {{ include('/back_office/btn-mj-tab-link.html.twig') }}
-
-        {% set element, label, genre = 'fiche', 'Fiches', 'F' %}
-        {{ include('/back_office/btn-mj-tab-link.html.twig') }}
+        {% for nav in navs %}
+            {% set element, label, genre = nav['element'], nav['label'], nav['genre'] %}
+            {{ include('/back_office/btn-mj-tab-link.html.twig') }}
+        {% endfor %}
 
     {% endif %}
 

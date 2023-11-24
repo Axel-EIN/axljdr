@@ -20,12 +20,20 @@ class AdminSaisonController extends AbstractController
      * @Route("/admin/saison", name="admin_saison")
      * @IsGranted("ROLE_MJ")
      */
-    public function viewAdminSaisons(SaisonRepository $saisonRepository): Response {
+    public function viewAdminSaisons(SaisonRepository $saisonRepository): Response
+    {
+        $saisons = $saisonRepository->findBy( [] , ['id' => 'DESC'] );
 
-        $saisons = $saisonRepository->findBy(array(), array('numero' => 'ASC'));
-        return $this->render('admin_saison/index.html.twig', [
-            'controller_name' => 'AdminSaisonController',
-            'saisons' => $saisons,
+        return $this->render('back_office/list-element.html.twig', [
+            'elements' => $saisons,
+            'element' => 'saison',
+            'label' => 'Saison',
+            'labels' => 'Saisons',
+            'genre' => 'F',
+            'determinant' => 'une',
+            'img_size' => '320',
+            'extra_col1' => 'numero',
+            'extra_col2' => 'couleur',
         ]);
     }
 
@@ -68,8 +76,14 @@ class AdminSaisonController extends AbstractController
             return $this->redirectToRoute('admin_saison');
 
         }
-        return $this->render('admin_saison/create.html.twig', [
+
+        // RENDER
+        return $this->render('back_office/create.html.twig', [
             'type' => 'Créer',
+            'entity' => 'saison',
+            'label' => 'Saison',
+            'genre' => 'F',
+            'determinant' => 'une',
             'form' => $form->createView()
         ]);
     }
@@ -114,11 +128,16 @@ class AdminSaisonController extends AbstractController
             return $this->redirectToRoute('admin_saison');
         }
 
-        return $this->renderForm('admin_saison/edit.html.twig', [
-            'saison' => $saison,
-            'form' => $form,
+        // RENDER
+        return $this->renderForm('back_office/edit.html.twig', [
             'type' => 'Modifier',
-        ]);   
+            'saison' => $saison,
+            'entity' => 'saison',
+            'label' => 'Saison',
+            'genre' => 'F',
+            'determinant' => 'une',
+            'form' => $form,
+        ]); 
     }
 
     /**

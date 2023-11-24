@@ -14,7 +14,10 @@ use App\Form\AdminCompetenceType;
 
 class AdminCompetenceController extends AbstractController
 {
-    #[Route('/admin/competence', name: 'admin_competence')]
+    /**
+     * @Route("/admin/competence", name="admin_competence")
+     * @IsGranted("ROLE_MJ")
+     */
     public function viewAdminCompetences( CompetenceRepository $competenceRepository ): Response
     {
         $competences = $competenceRepository->findBy( [] , ['id' => 'DESC'] );

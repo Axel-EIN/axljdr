@@ -20,10 +20,19 @@ class AdminArchiveController extends AbstractController
      * @Route("/admin/archive", name="admin_archive")
      * @IsGranted("ROLE_MJ")
      */
-    public function viewAdminArchives(ArchiveRepository $archiveRepository): Response {
-        $archives = $archiveRepository->findAll();
-        return $this->render('admin_archive/index.html.twig', [
-            'archives' => $archives
+    public function viewAdminArchives(ArchiveRepository $archiveRepository): Response
+    {
+        $archives = $archiveRepository->findBy(array(), array('id' => 'DESC'));
+
+        return $this->render('back_office/list-element.html.twig', [
+            'elements' => $archives,
+            'element' => 'archive',
+            'label' => 'Archive',
+            'labels' => "Archives",
+            'genre' => 'F',
+            'determinant' => 'une',
+            'img_size' => '96',
+            'extra_col1' => 'locked'
         ]);
     }
 
@@ -57,8 +66,13 @@ class AdminArchiveController extends AbstractController
             return $this->redirectToRoute('admin_archive');
         }
 
-        return $this->render('admin_archive/create.html.twig', [
+        // RENDER
+        return $this->render('back_office/create.html.twig', [
             'type' => 'Créer',
+            'entity' => 'archive',
+            'label' => 'Archive',
+            'genre' => 'F',
+            'determinant' => 'une',
             'form' => $form->createView()
         ]);
     }
@@ -91,12 +105,15 @@ class AdminArchiveController extends AbstractController
             return $this->redirectToRoute('admin_archive');
         }
 
-        return $this->renderForm('admin_archive/edit.html.twig', [
-            'archive' => $archive,
-            'form' => $form,
+        return $this->renderForm('back_office/edit.html.twig', [
             'type' => 'Modifier',
+            'archive' => $archive,
+            'entity' => 'archive',
+            'label' => 'Archive',
+            'genre' => 'F',
+            'determinant' => 'une',
+            'form' => $form,
         ]);
-        
     }
 
     /**
@@ -118,7 +135,7 @@ class AdminArchiveController extends AbstractController
         }
 
         // REDIRECTION
-        if (!empty($request->query->get('redirect')) && $request->query->get('redirect') == 'archive')
+        if (!empty($request->query->get('redirect')) && $request->query->get('redirect') == 'empire')
             return $this->redirectToRoute('empire');
         
         return $this->redirectToRoute('admin_archive');

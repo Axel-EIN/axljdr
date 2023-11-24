@@ -26,12 +26,19 @@ class AdminSceneController extends AbstractController
      * @Route("/admin/scene", name="admin_scene")
      * @IsGranted("ROLE_MJ")
      */
-    public function viewAdminScenes(SceneRepository $sceneRepository): Response {
+    public function viewAdminScenes(SceneRepository $sceneRepository): Response
+    {
         $scenes = $sceneRepository->findBy(array(), array('episodeParent' => 'ASC'));
 
-        return $this->render('admin_scene/index.html.twig', [
-            'controller_name' => 'AdminSceneController',
-            'scenes' => $scenes,
+        return $this->render('back_office/list-element.html.twig', [
+            'elements' => $scenes,
+            'element' => 'scene',
+            'label' => 'Scène',
+            'labels' => 'Scènes',
+            'genre' => 'F',
+            'determinant' => 'une',
+            'img_size' => '48',
+            'extra_col1' => 'numero',
         ]);
     }
 
@@ -102,11 +109,14 @@ class AdminSceneController extends AbstractController
             return $this->redirectToRoute('admin_scene');
         }
 
-        return $this->render('admin_scene/create.html.twig', [
+        // RENDER
+        return $this->render('back_office/create.html.twig', [
             'type' => 'Créer',
-            'form' => $form->createView(),
-            'tout_pjs' => $tout_pjs,
-            'tout_pnjs' => $tout_pnjs,
+            'entity' => 'scene',
+            'label' => 'Scène',
+            'genre' => 'F',
+            'determinant' => 'une',
+            'form' => $form->createView()
         ]);
     }
 
@@ -228,15 +238,16 @@ class AdminSceneController extends AbstractController
             return $this->redirectToRoute('admin_scene');
         }
 
-        return $this->renderForm('admin_scene/edit.html.twig', [
-            'scene' => $scene,
-            'form' => $form,
+        // RENDER
+        return $this->renderForm('back_office/edit.html.twig', [
             'type' => 'Modifier',
-            'tout_pjs' => $tout_pjs,
-            'tout_pnjs' => $tout_pnjs,
-            'participations_pjs' => $participations_pjs,
-            'participations_pnjs' => $participations_pnjs,
-        ]); 
+            'scene' => $scene,
+            'entity' => 'scene',
+            'label' => 'Scène',
+            'genre' => 'F',
+            'determinant' => 'une',
+            'form' => $form,
+        ]);
     }
 
     /**

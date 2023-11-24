@@ -17,6 +17,7 @@ class AdminClanController extends AbstractController
 {
     /**
      * @Route("/admin/clan", name="admin_clan")
+     * @IsGranted("ROLE_MJ")
      */
     public function afficherAdminClans(ClanRepository $clanRepository): Response {
 

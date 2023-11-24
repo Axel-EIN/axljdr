@@ -22,10 +22,18 @@ class AdminRuleController extends AbstractController
      */
     public function viewAdminRules(RuleRepository $ruleRepository): Response
     {
-        $rules = $ruleRepository->findAll();
+        $rules = $ruleRepository->findBy( [] , ['id' => 'DESC'] );
 
-        return $this->render('admin_rule/index.html.twig', [
-            'rules' => $rules
+        return $this->render('back_office/list-element.html.twig', [
+            'elements' => $rules,
+            'element' => 'rule',
+            'label' => 'Rule',
+            'labels' => 'Rules',
+            'genre' => 'F',
+            'determinant' => 'une',
+            'img_size' => '48',
+            'extra_col1' => 'base',
+            'extra_col2' => 'numero',
         ]);
     }
 
@@ -70,10 +78,14 @@ class AdminRuleController extends AbstractController
             return $this->redirectToRoute('admin_rule');
         }
 
-        return $this->render('admin_rule/create.html.twig', [
+        // RENDER
+        return $this->render('back_office/create.html.twig', [
             'type' => 'Créer',
+            'entity' => 'rule',
+            'label' => 'Rule',
+            'genre' => 'F',
+            'determinant' => 'une',
             'form' => $form->createView()
-
         ]);
     }
 
@@ -124,10 +136,15 @@ class AdminRuleController extends AbstractController
             return $this->redirectToRoute('admin_rule');
         }
 
-        return $this->renderForm('admin_rule/edit.html.twig', [
+        // RENDER
+        return $this->renderForm('back_office/edit.html.twig', [
             'type' => 'Modifier',
             'rule' => $rule,
-            'form' => $form
+            'entity' => 'rule',
+            'label' => 'Rule',
+            'genre' => 'F',
+            'determinant' => 'une',
+            'form' => $form,
         ]);
     }
 

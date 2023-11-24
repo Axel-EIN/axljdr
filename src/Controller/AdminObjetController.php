@@ -16,7 +16,10 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class AdminObjetController extends AbstractController
 {
-    #[Route('/admin/objet', name: 'admin_objet')]
+    /**
+     * @Route("/admin/objet", name="admin_objet")
+     * @IsGranted("ROLE_MJ")
+     */
     public function viewAdminObjets( ObjetRepository $objetRepository ): Response
     {
         $objets = $objetRepository->findBy( [] , ['id' => 'DESC'] );

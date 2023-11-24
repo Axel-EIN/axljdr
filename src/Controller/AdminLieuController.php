@@ -20,10 +20,16 @@ class AdminLieuController extends AbstractController
      * @IsGranted("ROLE_MJ")
      */
     public function viewAdminLieux(LieuRepository $lieuRepository): Response {
-        $lieux = $lieuRepository->findAll();
+        $lieux = $lieuRepository->findBy( [] , ['id' => 'DESC'] );
 
-        return $this->render('admin_lieu/index.html.twig', [
-            'lieux' => $lieux
+        return $this->render('back_office/list-element.html.twig', [
+            'elements' => $lieux,
+            'element' => 'lieu',
+            'label' => 'Lieu',
+            'labels' => 'Lieux',
+            'genre' => 'M',
+            'determinant' => 'un',
+            'img_size' => '96'
         ]);
     }
 
@@ -78,8 +84,13 @@ class AdminLieuController extends AbstractController
             return $this->redirectToRoute('admin_lieu');
         }
         
-        return $this->render('admin_lieu/create.html.twig', [
+        // RENDER
+        return $this->render('back_office/create.html.twig', [
             'type' => 'Créer',
+            'entity' => 'lieu',
+            'label' => 'Lieu',
+            'genre' => 'M',
+            'determinant' => 'un',
             'form' => $form->createView()
         ]);
     }
@@ -133,12 +144,16 @@ class AdminLieuController extends AbstractController
             return $this->redirectToRoute('admin_lieu');
         }
 
-        return $this->renderForm('admin_lieu/edit.html.twig', [
+        // RENDER
+        return $this->renderForm('back_office/edit.html.twig', [
             'type' => 'Modifier',
             'lieu' => $lieu,
-            'form' => $form
+            'entity' => 'lieu',
+            'label' => 'Lieu',
+            'genre' => 'M',
+            'determinant' => 'un',
+            'form' => $form,
         ]);
-        
     }
 
     /**

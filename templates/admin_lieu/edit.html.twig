@@ -1,9 +1,0 @@
-{% extends 'back_office/index.html.twig' %}
-
-{% block title %}Modifier un Lieu {{ parent() }}{% endblock %}
-
-{% block h1 %}Modifier un Lieu{% endblock %}
-
-{% block child %}
-    {{ include('admin_lieu/_form.html.twig', {'button_label': 'Modifier'}) }}
-{% endblock %}

@@ -1,7 +1,0 @@
-{% extends 'back_office/index.html.twig' %}
-{% block title %}Administrer les Lieux {{ parent() }}{% endblock %}
-{% block h1 %}Administrer les <strong>Lieux</strong>{% endblock %}
-{% block child %}
-    {% set label, element, elements, img_size, genre = 'lieu', 'lieu', lieux, '48', 'M' %}
-    {{ include('back_office/list-element.html.twig') }}
-{% endblock %}

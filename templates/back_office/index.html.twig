@@ -27,34 +27,26 @@
                     <h2 class="title-h2 mt-5">Aventure</h2>
                     <p class="mb-4 text-muted">Éléments ajoutés pour le descriptif de l'aventure.</p>
                     <section class="row pb-5">
-                        {% set label, element, nbr, last, nom, image = 'Scènes', 'scene', nbrScenes, lastScene, lastScene.titre, lastScene.image|default('non-définie') %}
-                        {{ include('back_office/card-element-resume.html.twig') }}
-
-                        {% set label, element, nbr, last, nom, image = 'Épisodes', 'episode', nbrEpisodes, lastEpisode, lastEpisode.titre, lastEpisode.image|default('non-définie') %}
-                        {{ include('back_office/card-element-resume.html.twig') }}
-
-                        {% set label, element, nbr, last, nom, image = 'Chapitres', 'chapitre', nbrChapitres, lastChapitre, lastChapitre.titre, lastChapitre.image|default('non-définie') %}
-                        {{ include('back_office/card-element-resume.html.twig') }}
-
-                        {% set label, element, nbr, last, nom, image = 'Saison', 'saison', nbrSaisons, lastSaison, lastSaison.titre, lastSaison.image|default('non-définie') %}
-                        {{ include('back_office/card-element-resume.html.twig') }}
+                        {% for admin_element in admin_elements %}
+                            {% if admin_element['categorie'] == 'AVENTURE' %}
+                                {% set  label, element, nbr, last, nom, image =
+                                        admin_element['label'], admin_element['element'], admin_element['nbr'], admin_element['last'], admin_element['nom'], admin_element['image'] %}
+                                {{ include('back_office/card-element-resume.html.twig') }}
+                            {% endif %}
+                        {% endfor %}
                     </section>
 
                     {# EMPIRE LORE #}
                     <h2 class="title-h2 mt-5">Empire</h2>
                     <p class="mb-4 text-muted">Éléments ajoutés pour le descriptif de l'univers de jeu.</p>
                     <section class="row pb-5">
-                        {% set label, element, nbr, last, nom, image = 'Factions', 'clan', nbrClans, lastClan, lastClan.nom, lastClan.mon|default(NA_ICON_MON) %}
-                        {{ include('back_office/card-element-resume.html.twig') }}
-
-                        {% set label, element, nbr, last, nom, image = 'Familles', 'famille', nbrFamilles, lastFamille, lastFamille.nom, lastFamille.mon|default(NA_ICON_MON) %}
-                        {{ include('back_office/card-element-resume.html.twig') }}
-
-                        {% set label, element, nbr, last, nom, image = 'Archives', 'archive', nbrArchives, lastArchive, lastArchive.titre, lastArchive.image|default(NA_ARCHIVE) %}
-                        {{ include('back_office/card-element-resume.html.twig') }}
-
-                        {% set label, element, nbr, last, nom, image = 'Lieux', 'lieu', nbrLieux, lastLieu, lastLieu.nom, lastLieu.image|default(NA_LIEU) %}
-                        {{ include('back_office/card-element-resume.html.twig') }}
+                        {% for admin_element in admin_elements %}
+                            {% if admin_element['categorie'] == 'EMPIRE' %}
+                                {% set   label, element, nbr, last, nom, image =
+                                        admin_element['label'], admin_element['element'], admin_element['nbr'], admin_element['last'], admin_element['nom'], admin_element['image'] %}
+                                {{ include('back_office/card-element-resume.html.twig') }}
+                            {% endif %}
+                        {% endfor %}
                     </section>
 
 
@@ -62,54 +54,39 @@
                     <h2 class="title-h2 mt-5">Règles</h2>
                     <p class="mb-4 text-muted">Éléments ajoutés pour les mécaniques de jeu.</p>
                     <section class="row pb-5">
-                        {% set label, element, nbr, last, nom, image = 'Règles', 'rule', nbrRules, lastRule, lastRule.nom|default('non-définie'), lastRule.image|default(NA_RULE) %}
-                        {{ include('back_office/card-element-resume.html.twig') }}
-                        
-                        {% set label, element, nbr, last, nom, image = 'Bibliothèques', 'library', nbrLibraries, lastLibrary, lastLibrary.nom|default('non-définie'), lastLibrary.image|default(NA_LIBRARY) %}
-                        {{ include('back_office/card-element-resume.html.twig') }}
-                        
-                        {% set label, element, nbr, last, nom, image = 'Classes', 'classe', nbrClasses, lastClasse, lastClasse.nom, lastClasse.icone|default('non-définie') %}
-                        {{ include('back_office/card-element-resume.html.twig') }}
-
-                        {% set label, element, nbr, last, nom, image = 'Écoles', 'ecole', nbrEcoles, lastEcole, lastEcole.nom, lastEcole.image|default('assets/img/placeholders/na_' ~ lastEcole.classe.nom|lower ~ '.jpg') %}
-                        {{ include('back_office/card-element-resume.html.twig') }}
-
-                        {% set label, element, nbr, last, nom, image = 'Avantages/Dés.', 'avantage', nbrAvantages, lastAvantage, lastAvantage.nom|default('null'), lastAvantage.image|default(NA_RULE) %}
-                        {{ include('back_office/card-element-resume.html.twig') }}
-
-                        {% set label, element, nbr, last, nom, image = 'Compétences', 'competence', nbrCompetences, lastCompetence, lastCompetence.nom|default('null'), lastCompetence.image|default(NA_RULE) %}
-                        {{ include('back_office/card-element-resume.html.twig') }}
-
-                        {% set label, element, nbr, last, nom, image = 'Objets', 'objet', nbrObjets, lastObjet, lastObjet.nom|default('null'), lastObjet.image|default(NA_RULE) %}
-                        {{ include('back_office/card-element-resume.html.twig') }}
+                        {% for admin_element in admin_elements %}
+                            {% if admin_element['categorie'] == 'REGLES' %}
+                                {% set  label, element, nbr, last, nom, image =
+                                        admin_element['label'], admin_element['element'], admin_element['nbr'], admin_element['last'], admin_element['nom'], admin_element['image'] %}
+                                {{ include('back_office/card-element-resume.html.twig') }}
+                            {% endif %}
+                        {% endfor %}
                     </section>
 
                     {# PERSONNAGES #}
                     <h2 class="title-h2 mt-5">Personnages</h2>
                     <p class="mb-4 text-muted">Tout les personnages enregistrés.</p>
                     <section class="row pb-5">
-                        {% set label, element, nbr, last, nom, image = 'PJs', 'personnage', nbrPJs, lastPJ, lastPJ.prenom, lastPJ.icone|default('non-définie') %}
-                        {{ include('back_office/card-element-resume.html.twig') }}
-
-                        {% set label, element, nbr, last, nom, image = 'PNJs', 'personnage', nbrPNJs, lastPNJ, lastPNJ.prenom, lastPNJ.icone|default('non-définie') %}
-                        {{ include('back_office/card-element-resume.html.twig') }}
-
-                        {% set label, element, nbr, last, nom, image = 'Fiches personnages', 'fiche', nbrFiches, lastFiche, lastFiche.personnage.prenom, lastFiche.personnage.icone|default('non-définie') %}
-                        {{ include('back_office/card-element-resume.html.twig') }}
+                        {% for admin_element in admin_elements %}
+                            {% if admin_element['categorie'] == 'PERSONNAGES' %}
+                                {% set  label, element, nbr, last, nom, image =
+                                        admin_element['label'], admin_element['element'], admin_element['nbr'], admin_element['last'], admin_element['nom'], admin_element['image'] %}
+                                {{ include('back_office/card-element-resume.html.twig') }}
+                            {% endif %}
+                        {% endfor %}
                     </section>
 
                 {% endif %}
 
                 {% if app.user and is_granted("ROLE_ADMIN") %}
-
                     {# UTILISATEURS #}
                     <h2 class="title-h2 mt-5">Comptes Utilisateurs</h2>
                     <p class="mb-4 text-muted">Tout les comptes utilisateurs.</p>
                     <section class="row pb-5">
-                        {% set label, element, nbr, last, nom, image = 'Utilisateurs', 'utilisateur', nbrUtilisateurs, lastUtilisateur, lastUtilisateur.pseudo, lastUtilisateur.avatar %}
+                        {% set  label, element, nbr, last, nom, image =
+                                'Utilisateurs', 'utilisateur', nbrUtilisateurs, lastUtilisateur, lastUtilisateur.pseudo, lastUtilisateur.avatar %}
                         {{ include('back_office/card-element-resume.html.twig') }}
                     </section>
-
                 {% endif %}
 
             {% endblock %}

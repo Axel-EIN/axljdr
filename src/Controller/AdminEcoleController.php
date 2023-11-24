@@ -26,8 +26,14 @@ class AdminEcoleController extends AbstractController
 
         $ecoles = $ecoleRepository->findBy(array(), array('id' => 'DESC'));
         
-        return $this->render('admin_ecole/index.html.twig', [
-            'ecoles' => $ecoles
+        return $this->render('back_office/list-element.html.twig', [
+            'elements' => $ecoles,
+            'element' => 'ecole',
+            'label' => 'Écoles',
+            'labels' => 'Écoless',
+            'genre' => 'F',
+            'determinant' => 'une',
+            'img_size' => '48',
         ]);
     }
 
@@ -70,8 +76,13 @@ class AdminEcoleController extends AbstractController
             return $this->redirectToRoute('admin_ecole');    
         }
 
-        return $this->render('admin_ecole/create.html.twig', [
+        // RENDER
+        return $this->render('back_office/create.html.twig', [
             'type' => 'Créer',
+            'entity' => 'ecole',
+            'label' => 'École',
+            'genre' => 'F',
+            'determinant' => 'une',
             'form' => $form->createView()
         ]);
     }
@@ -105,10 +116,14 @@ class AdminEcoleController extends AbstractController
             return $this->redirectToRoute('admin_ecole');
         }
 
-        return $this->renderForm('admin_ecole/edit.html.twig', [
-            'ecole' => $ecole,
-            'form' => $form,
+        return $this->renderForm('back_office/edit.html.twig', [
             'type' => 'Modifier',
+            'ecole' => $ecole,
+            'entity' => 'ecole',
+            'label' => 'École',
+            'genre' => 'F',
+            'determinant' => 'une',
+            'form' => $form,
         ]);
     }
 

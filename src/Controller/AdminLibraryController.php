@@ -22,15 +22,19 @@ class AdminLibraryController extends AbstractController
      */
     public function viewAdminLibraries(LibraryRepository $libraryRepository): Response
     {
-        $libraries = $libraryRepository->findAll();
+        $libraries = $libraryRepository->findBy( [] , ['id' => 'DESC'] );
 
-        return $this->render('admin_library/index.html.twig', [
+        return $this->render('back_office/list-element.html.twig', [
             'elements' => $libraries,
+            'element' => 'library',
             'label' => 'Bibliothèque',
-            'labels' => "Bibliothèques",
+            'labels' => 'Bibliothèques',
             'genre' => 'F',
             'determinant' => 'une',
-            'element' => 'library'
+            'img_size' => '96',
+            'extra_col1' => 'base',
+            'extra_col2' => 'numero',
+            'extra_col3' => 'entity',
         ]);
     }
 
@@ -75,12 +79,13 @@ class AdminLibraryController extends AbstractController
             return $this->redirectToRoute('admin_library');
         }
 
+        // RENDER
         return $this->render('back_office/create.html.twig', [
             'type' => 'Créer',
+            'entity' => 'library',
             'label' => 'Bibliothèque',
             'genre' => 'F',
             'determinant' => 'une',
-            'entity' => 'library',
             'form' => $form->createView()
         ]);
     }
@@ -132,6 +137,7 @@ class AdminLibraryController extends AbstractController
             return $this->redirectToRoute('admin_library');
         }
 
+        // RENDER
         return $this->renderForm('back_office/edit.html.twig', [
             'type' => 'Modifier',
             'library' => $library,

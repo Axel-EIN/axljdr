@@ -56,6 +56,20 @@
                     {% set nom = "pas de nom ou titre" %}
                 {% endif %}
 
+                {% if un_element.anneau is defined %}
+                    {% if un_element.anneau == 'AIR' %}
+                        {% set image = AIR %}
+                    {% elseif un_element.anneau == 'EAU' %}
+                        {% set image = EAU %}
+                    {% elseif un_element.anneau == 'FEU' %}
+                        {% set image = FEU %}
+                    {% elseif un_element.anneau == 'TERRE' %}
+                        {% set image = TERRE %}
+                    {% elseif un_element.anneau == 'VIDE' %}
+                        {% set image = VIDE %}
+                    {% endif %}
+                {% endif %}
+
                 <tr>
                     <td>{{ un_element.id }}</td>
 

@@ -1,80 +1,78 @@
 <section id="element-banner" class="col-12 mb-3 px-1">
 
     <!-- CONTAINER BANNER IMAGE -->
-    <div class="row m-0 p-0 text-center relative"
-        style=" background-image:
-                    linear-gradient( #00000000 ,  #00000040 , #000000EE ),
-                    linear-gradient( {{un_element.couleur}}60 , {{un_element.couleur}}FF ),
-                    url('{{ asset( un_element.image|default(NA_CLAN) ) }}');
-                background-blend-mode: multiply, soft-light;
-                background-position: 50% 10%; ">
+    <div class="row" style="background-image: linear-gradient( #00000000 ,  #00000040 , #000000EE ), linear-gradient( {{un_element.couleur}}60 , {{un_element.couleur}}FF ),
+                            url('{{ asset( un_element.image|default(NA_CLAN) ) }}');">
 
-        <!-- IF VIDEO IS AVAILABLE -->
-        {% if un_element.video is defined and un_element.video is not empty %}
-
-            <!-- ICON MUTE VIDEO -->
-            <i id="icon-mute-video" class="fa-solid fa-video-slash invisible" onclick="unfocusVideo()"></i>
-
-            <!-- OVERLAY -->
-            <overlay id="overlay-video"
-            style=" background-image:   linear-gradient( #00000050 , #000000DD ),
-                                        linear-gradient(to bottom, {{un_element.couleur}}40, {{un_element.couleur}}BB );
-                    background-blend-mode: multiply, multiply;"></overlay>
-
-            <!-- VIDEO -->
-            <video id="banner-video" autoplay loop controls muted poster="{{ asset( un_element.image|default(NA_169) ) }}">
-                <source src="{{asset(un_element.video)}}" type="video/mp4">
-            </video>
-
-        {% endif %}
-
-        <!-- LEFT : ICON + QUOTE -->
-        <left id="left-part" class="col-5 py-5 pl-5 pr-0 m-0 d-flex flex-column justify-content-center align-items-center" >
-
-            {% if un_element.estMajeur is defined %}
-                {% if un_element.estMajeur == 1 %}
-                    <strong class="text-white mb-3 text-shadow">Clan Majeur</strong>
-                {% endif %}
-            {% endif %}
-
+        <div class="row m-0 p-0">
+            <!-- IF VIDEO IS AVAILABLE -->
             {% if un_element.video is defined and un_element.video is not empty %}
-                <button id="btn-play" class="btn-unstyle" onclick="focusVideo()">
-                    <animation id="zone-mon" class="animation-shine hover-zoom">
-                        <i id="icon-play" class="invisible fa-solid fa-video fa-4x"></i>
-                        <img class="img-240 filter-shadow" src="{{ asset(icone) }}" alt="Blason" title="Visualiser/Écouter la Vidéo" />
-                    </animation>
-                </button>
-            {% else %}
-                <img class="img-240 {{invert}} filter-shadow" src="{{ asset(icone) }}" alt="Icône" />
-            {% endif %}
-            
-            <!-- CITATION -->
-            <span class="quote text-white m-0 pr-3">«&nbsp;{{un_element.citation}}&nbsp;»</span>
 
-            <!-- CHAMPION -->
-            {% if un_element.chef is defined %}
-                {% if un_element.chef is not empty %}
-                    <a style="color: {{ un_element.couleur }}" class="d-flex hover-no-under hover-zoom mt-3" href="{{ path('personnage_profil', {id: un_element.chef.id} ) }}">
-                        <img class="img-48" src="{{ asset(un_element.chef.icone) }}" alt="Icône du personnage" />
-                        <div class="d-flex flex-column text-left ml-3">
-                            <strong>{{ un_element.chef.nom }} {{ un_element.chef.prenom }}</strong>
-                            (Champion)
-                        </div>
-                    </a>
+                <!-- ICON MUTE VIDEO -->
+                <i id="icon-mute-video" class="fa-solid fa-video-slash invisible" onclick="unfocusVideo()"></i>
+
+                <!-- OVERLAY -->
+                <overlay id="overlay-video"
+                style=" background-image:   linear-gradient( #00000050 , #000000DD ),
+                                            linear-gradient(to bottom, {{un_element.couleur}}40, {{un_element.couleur}}BB );
+                        background-blend-mode: multiply, multiply;"></overlay>
+
+                <!-- VIDEO -->
+                <video id="banner-video" autoplay loop controls muted poster="{{ asset( un_element.image|default(NA_169) ) }}">
+                    <source src="{{asset(un_element.video)}}" type="video/mp4">
+                </video>
+
+            {% endif %}
+
+            <!-- LEFT : ICON + QUOTE -->
+            <left id="left-part" class="col-5 py-5 pl-5 pr-0 m-0 d-flex flex-column justify-content-center align-items-center" >
+
+                {% if un_element.estMajeur is defined %}
+                    {% if un_element.estMajeur == 1 %}
+                        <strong class="text-white mb-3 text-shadow">Clan Majeur</strong>
+                    {% endif %}
                 {% endif %}
-            {% endif %}
 
-        </left>
+                {% if un_element.video is defined and un_element.video is not empty %}
+                    <button id="btn-play" class="btn-unstyle" onclick="focusVideo()">
+                        <animation id="zone-mon" class="animation-shine hover-zoom">
+                            <i id="icon-play" class="invisible fa-solid fa-video fa-4x"></i>
+                            <img class="img-240 filter-shadow" src="{{ asset(icone) }}" alt="Blason" title="Visualiser/Écouter la Vidéo" />
+                        </animation>
+                    </button>
+                {% else %}
+                    <img class="img-240 {{invert}} filter-shadow" src="{{ asset(icone) }}" alt="Icône" />
+                {% endif %}
+                
+                <!-- CITATION -->
+                <span class="quote text-white m-0 pr-3">«&nbsp;{{un_element.citation}}&nbsp;»</span>
 
-        <!-- RIGHT : DESCRIPTION -->
-        <right id="right-part" class="col-7 m-0 pt-5 pb-3 pr-5 pl-0 d-flex flex-column justify-content-end">
-            <p class="text-zone-blur text-justify text-white mb-0 pl-3 text-shadow">
-                {{ un_element.description|raw|nl2br }}
-            </p>
-        </right>
+                <!-- CHAMPION -->
+                {% if un_element.chef is defined %}
+                    {% if un_element.chef is not empty %}
+                        <a style="color: {{ un_element.couleur }}" class="d-flex hover-no-under hover-zoom mt-3" href="{{ path('personnage_profil', {id: un_element.chef.id} ) }}">
+                            <img class="img-48" src="{{ asset(un_element.chef.icone) }}" alt="Icône du personnage" />
+                            <div class="d-flex flex-column text-left ml-3">
+                                <strong>{{ un_element.chef.nom }} {{ un_element.chef.prenom }}</strong>
+                                (Champion)
+                            </div>
+                        </a>
+                    {% endif %}
+                {% endif %}
+
+            </left>
+
+            <!-- RIGHT : DESCRIPTION -->
+            <right id="right-part" class="col-7">
+                <p class="text-zone-blur">
+                    {{ un_element.description|raw|nl2br }}
+                </p>
+            </right>
+
+        </div>
 
         <!-- NAV OTHER ELEMENTS -->
-        <nav class="col-12 m-0 p-0 d-flex justify-content-center relative {% if un_element.video is not defined or un_element.video is empty %}{% endif %}" style="z-index: 3; border-bottom: 4px solid {{un_element.couleur}}">
+        <nav class="col-12 d-flex justify-content-center relative {% if un_element.video is not defined or un_element.video is empty %}{% endif %}" style="z-index: 3; border-bottom: 4px solid {{un_element.couleur}}">
             {% for un_autre_element in all_elements %}
                 <a class="text-white py-2 px-3" {% if un_autre_element.id == un_element.id %}style="background-color: {{un_element.couleur}}"{% endif %}
                 href="{{ path( category ~ '_' ~ entity , { id: un_autre_element.id, '_fragment' : 'element-banner' } ) }}">

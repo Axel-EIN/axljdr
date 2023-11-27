@@ -25,6 +25,12 @@
 .right-snap {
         position: absolute;
         z-index: 10;
+        right: 0px;
+        top: 0px; }
+
+.right-ng-snap {
+        position: absolute;
+        z-index: 10;
         right:-8px;
         top: 0.5rem; }
 

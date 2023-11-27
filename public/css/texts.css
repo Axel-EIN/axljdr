@@ -140,3 +140,57 @@ p > mark {
         1px -1px 0 var(--flash-red),
         -1px 1px 0 var(--flash-red);
 }
+
+.text-outline-lightblue, .text-outline-1 {
+    color: var(--lightblue);
+    text-shadow:
+        1px 1px 0 var(--flash-lightblue),
+        -1px -1px 0 var(--flash-lightblue),
+        1px -1px 0 var(--flash-lightblue),
+        -1px 1px 0 var(--flash-lightblue);
+}
+
+.text-outline-blue, .text-outline-2 {
+    color: var(--blue);
+    text-shadow:
+        1px 1px 0 var(--flash-blue),
+        -1px -1px 0 var(--flash-blue),
+        1px -1px 0 var(--flash-blue),
+        -1px 1px 0 var(--flash-blue);
+}
+
+.text-outline-green, .text-outline-3 {
+    color: var(--green);
+    text-shadow:
+        1px 1px 0 var(--flash-green),
+        -1px -1px 0 var(--flash-green),
+        1px -1px 0 var(--flash-green),
+        -1px 1px 0 var(--flash-green);
+}
+
+.text-outline-orange, .text-outline-4 {
+    color: var(--accent);
+    text-shadow:
+        1px 1px 0 var(--accent-light),
+        -1px -1px 0 var(--accent-light),
+        1px -1px 0 var(--accent-light),
+        -1px 1px 0 var(--accent-light);
+}
+
+.text-outline-red, .text-outline-5 {
+    color: var(--primary);
+    text-shadow:
+        1px 1px 0 var(--flash-red),
+        -1px -1px 0 var(--flash-red),
+        1px -1px 0 var(--flash-red),
+        -1px 1px 0 var(--flash-red);
+}
+
+.text-outline-purple, .text-outline-6 {
+    color: var(--purple);
+    text-shadow:
+        1px 1px 0 var(--fuschia),
+        -1px -1px 0 var(--fuschia),
+        1px -1px 0 var(--fuschia),
+        -1px 1px 0 var(--fuschia);
+}

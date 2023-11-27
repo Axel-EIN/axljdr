@@ -100,14 +100,9 @@
             <h2 class="title-h3">Autres Lieux</h2>
             <hr>
             <row class="row p-0 m-0 pt-3">
-                {% for autreLieu in autresLieux %}
-                <a class="col-2 m-0 p-2 text-center hover-zoom relative hover-span-visible" href="{{ path('empire_lieu', {id: autreLieu.id} ) }}" >
-                    {% if autreLieu.icone is defined and autreLieu.icone is not empty %}
-                        <img class="icon-lieu-top img-64" src="{{ asset(autreLieu.icone) }}" alt="une icône" />
-                    {% endif %}
-                        <img class="img-fluid" src="{{ asset(autreLieu.image) }}" alt="Image d'un autre Lieu" />
-                    <span class="text-small"><strong>{{autreLieu.nom}}</strong></span>
-                </a>
+                {% set col, size, na_image = 'col-2', 'small', NA_LIEU %}
+                {% for un_element in autresLieux %}
+                    {{ include('/parts/element-vignette.html.twig', {un_element}) }}
                 {% endfor %}
             </row>
         </card>

@@ -2,6 +2,17 @@
 /* ------- BODY TEXT  ------- */
 /* -------------------------- */
 
+:root {
+    --mini : 0.6rem;
+    --small : 0.8rem;
+    --normal : 1rem;
+    --regular : 1.1rem;
+    --medium : 1.2rem;
+    --large : 1.5rem;
+    --big : 1.5rem;
+    --fat : 1.5rem;
+}
+
 html, body {
     font-size: 18px;
     font-family: 'Barlow';
@@ -14,28 +25,23 @@ html, body {
 @media (max-width: 576px) { html, body { font-size: 14px; } }
 @media (max-width: 480px) { html, body { font-size: 13px; } }
 
-.text-mini {
-    font-size: 0.6rem;
-}
+.text-mini { font-size: var(--mini); }
+.text-small { font-size: var(--small); }
+.text-normal { font-size: var(--normal); }
+.text-regular { font-size: var(--regular); }
+.text-medium { font-size: var(--medium); }
+.text-large { font-size: var(--large); }
+.text-big { font-size: var(--big); }
+.text-fat { font-size: var(--fat); }
 
-.text-small {
-    font-size: 0.8rem;
-}
+/* --- PARAGRAPHS --- */
 
 p.text-small {
     line-height: 1.6;
 }
 
-.text-regular {
-    font-size: 1.1rem;
-}
-
 p.text-regular, .paragraph.text-regular {
     line-height: 1.60;
-}
-
-.text-medium {
-    font-size: 1.2rem;
 }
 
 p.text-medium, .paragraph.text-medium {
@@ -44,18 +50,6 @@ p.text-medium, .paragraph.text-medium {
 
 p.text-medium {
     line-height: 1.75;
-}
-
-.text-large {
-    font-size: 1.5rem;
-}
-
-.text-big {
-    font-size: 2rem;
-}
-
-.text-fat {
-    font-size: 3rem;
 }
 
 

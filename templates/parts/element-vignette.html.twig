@@ -1,30 +1,34 @@
 <!-- UN ELEMENT -->
 {% if un_element.nom is defined %}
-    {% set nom, btn = un_element.nom, 'Voir' %}
+    {% set nom = un_element.nom %}
 {% else %}
-    {% set nom, btn = un_element.titre, 'Lire' %}
+    {% set nom = un_element.titre %}
 {% endif %}
 
-{% set path = category ~ '_' ~ entity %}
+{% if un_element.pdf is defined and un_element.pdf is not empty %}
+    {% set href = asset(un_element.pdf) %}
+    {% set na_image = NA_PDF %}
+{% else %}
+    {% set href = path(category ~ '_' ~ entity, {id: un_element.id} ) %}
+{% endif %}
 
-<article class="col-xl-{{col_xl}} col-lg-{{col_lg}} col-md-{{col_md}} col-sm-{{col_sm}} py-3 text-center {% if un_element.locked|default(0) == 1 %}translucide{% else %}hover-zoom{% endif %}">
+<a href="{{href}}" class="{{col}} vignette {% if un_element.locked|default(0) == 1 %}translucide link-disabled{% else %}hover-zoom{% endif %}">
     <div class="relative">
-    {% if un_element.locked|default(0) == 1 %}
-        <img class="absolute icon-lock grayscale fa-beat-fade" src="{{asset('assets/img/icons/locked.png')}}" alt="Icône cadena" title="À débloquer !" />
-        <img class="img-fluid grayscale" src="{{ asset(un_element.image) }}" alt="Image {{entity}}" title="{{entity}} à débloquer !"/>
-        <h5 class="text-center mt-1"><strong>???</strong></h5>
+    {% if un_element.locked|default(0) != 1 %}
+        <!-- TOP ICON -->
+        {% if un_element.icone is defined and un_element.icone is not empty %}
+            <img class="badge-top" src="{{ asset(un_element.icone) }}" alt="Icône" />
+        {% elseif un_element.pdf is defined and un_element.pdf is not empty %}
+            <img class="badge-corner" src="{{ asset(PDF) }}" alt="Icône PDF" />
+        {% endif %}
     {% else %}
-        <a href="{{ path(path, {id: un_element.id} ) }}">
-            <img class="img-fluid" src="{{ asset(un_element.image) }}" alt="Image {{entity}}" title="{{btn}} {{nom}}" />
-        </a>
-        <h5 class="text-center mt-1">
-            {% if un_element.icone is defined and un_element.icone is not empty %}
-                <img class="icon-lieu-top" src="{{ asset(un_element.icone) }}" alt="une icône" class="img-48" />
-            {% endif %}
-            <strong>
-                <a class="link-secondary" href="{{ path(path, {id: un_element.id} ) }}">{{nom}}</a>
-            </strong>
-        </h5>
+        <!-- LOCKED -->
+        {% set grayscale, tooltip, nom = 'grayscale', 'À débloquer', '???' %}
+        <img class="absolute icon-lock grayscale fa-beat-fade" src="{{asset('assets/img/icons/locked.png')}}" alt="Icône cadena" title="À débloquer !" />
     {% endif %}
+        <div class="ratio-{{ratio|default('1610')}}">
+            <img class="ratio-cropped {{grayscale|default('')}}" src="{{ asset(un_element.image|default(na_image)) }}" alt="Image {{entity}}" title="{{tooltip|default('') }}"/>
+        </div>
     </div>
-</article>
+    <div class="label text-{{size}} mt-1">{{ nom }}</div>
+</a>

@@ -5,7 +5,7 @@
         style=" background-image:
                     linear-gradient( #00000000 ,  #00000040 , #000000EE ),
                     linear-gradient( {{un_element.couleur}}60 , {{un_element.couleur}}FF ),
-                    url('{{ asset( un_element.image|default(NA_IMG_CLAN) ) }}');
+                    url('{{ asset( un_element.image|default(NA_CLAN) ) }}');
                 background-blend-mode: multiply, soft-light;
                 background-position: 50% 10%; ">
 
@@ -22,7 +22,7 @@
                     background-blend-mode: multiply, multiply;"></overlay>
 
             <!-- VIDEO -->
-            <video id="banner-video" autoplay loop controls muted poster="{{ asset( un_element.image|default(NA_IMG_169) ) }}">
+            <video id="banner-video" autoplay loop controls muted poster="{{ asset( un_element.image|default(NA_169) ) }}">
                 <source src="{{asset(un_element.video)}}" type="video/mp4">
             </video>
 

@@ -8,81 +8,84 @@
 {% block element_content %}
 
     <!-- IMAGE & SUMMARY -->
-    <section class="col-12 p-0 mb-3 relative">
+    <cardtopimg class="col-12 card-top-img">
 
         <!-- SOMMAIRE -->
         {% if rule.part1 is defined and rule.part1 is not empty and rule.part2 is defined and rule.part2 is not empty %}
-        <summary id="sommaire" class="list-group">
-            <strong class="text-large text-white ml-4 mt-3">SOMMAIRE</strong>
-            {% for i in 1..5 %}
-                {% if attribute(rule, 'part' ~ i ~ 'titre') is defined and attribute(rule, 'part' ~ i ~ 'titre') is not empty %}
-                    <a class="list-group-item list-group-item-action text-medium" href="#part{{i}}" >
-                        <span class="ml-4">{{i}}. {{ attribute(rule, 'part' ~ i ~ 'titre') }}</span>
-                    </a>
-                {% endif %}
-            {% endfor %}
-        </summary>
+        {% set gradient_left = 'gradient-left' %}
+            <summary id="sommaire">
+                <header>SOMMAIRE</header>
+                {% for i in 1..5 %}
+                    {% if attribute(rule, 'part' ~ i ~ 'titre') is defined and attribute(rule, 'part' ~ i ~ 'titre') is not empty %}
+                        <a class="list-group-item list-group-item-action" href="#part{{i}}">{{i}}. {{ attribute(rule, 'part' ~ i ~ 'titre') }}</a>
+                    {% endif %}
+                {% endfor %}
+            </summary>
         {% endif %}
 
         <!-- IMAGE -->
         {% if rule.pdf is defined and rule.pdf is not empty %}
-            <a href="{{ asset(rule.pdf) }}" >
-                <img class="img-fluid w-100" src="{{ asset(rule.image|default(NA_PDF)) }}" />
-            </a>
+            <a href="{{asset(rule.pdf)}}"><img class="img-fluid w-100" src="{{ asset(rule.image|default(NA_PDF)) }}" /></a>
         {% else %}
-            <div {% if rule.part1 is defined and rule.part1 is not empty and rule.part2 is defined and rule.part2 is not empty %}id="image"{% endif %}>
-                <img class="img-fluid w-100" src="{{ asset(rule.image|default(NA_RULE)) }}" />
-            </div>
+            <div class="ratio-1610 {{gradient_left|default('')}}"><img class="ratio-cropped" src="{{ asset(rule.image|default(NA_RULE)) }}" /></div>
         {% endif %}
 
-    </section>
+    </cardtopimg>
 
-    <!-- PART 1 TO 5 -->
-    {% for i in 1..5 %}
-        {% if attribute(rule, 'part' ~ i ~ 'titre') is defined and attribute(rule, 'part' ~ i ~ 'titre') is not empty %}
-        <hr class="col-12 mb-3">
-        <section id="part{{i}}" class="col-8 p-1 mt-3 mb-3 relative">
-            <!-- MJ EDIT -->
-            {% if app.user and is_granted("ROLE_MJ") %}
-                {% set position, size, color, entity, un_element, redirect, fragment = 'right-corner-16', 'btn-icon-medium', 'link-accent', 'rule', rule, 'rule', 'part' ~ i %}
-                {{ include('/parts/btn-icon-edit.html.twig') }}
+    <cardcontent class="col-12 card-content">
+
+        <!-- PART 1 TO 5 -->
+        {% for i in 1..5 %}
+
+            <!-- HEADER TITLE -->
+            {% if attribute(rule, 'part' ~ i ~ 'titre') is defined and attribute(rule, 'part' ~ i ~ 'titre') is not empty %}
+                <cardheader id="part{{i}}" class="part-header">
+
+                    <!-- MJ EDIT -->
+                    {% if app.user and is_granted("ROLE_MJ") %}
+                        {% set position, size, color, entity, un_element, redirect, fragment = 'right-snap', 'btn-icon-medium', 'link-accent', 'rule', rule, 'rule', 'part' ~ i %}
+                        {{ include('/parts/btn-icon-edit.html.twig') }}
+                    {% endif %}
+                    
+                    <h2 class="title-h3">{{i}}. {{ attribute(rule, 'part' ~ i ~ 'titre') }}</h2>
+                    <hr>
+                </cardheader>
             {% endif %}
-            <card class="card card-body">
-                <h2 class="title-h3">{{i}}. {{ attribute(rule, 'part' ~ i ~ 'titre') }}</h2>
-                <hr>
-                <div class="paragraph text-justify text-regular p-2">{{ attribute(rule, 'part' ~ i)|raw|nl2br }}</div>
-            </card>
-        </section>
-        {% endif %}
 
-        {% if attribute(rule, 'part' ~ i ~ 'aside') is not empty %}
-            <section class="col-4 p-1 mt-3 mb-3">
-                <aside class="aside">
-                    <p class="p-1 text-small text-justify">{{ attribute(rule, 'part' ~ i ~ 'aside')|raw|nl2br }}</p>
-                </aside>
-            </section>
-        {% endif %}
+            <!-- TEXT + ASIDE -->
+            {% if attribute(rule, 'part' ~ i) is defined and attribute(rule, 'part' ~ i) is not empty %}
+                <cardbody class="part-body">
+                    <!-- ASIDE -->
+                    {% if attribute(rule, 'part' ~ i ~ 'aside') is defined and attribute(rule, 'part' ~ i ~ 'aside') is not empty %}
+                        <aside class="aside">
+                            <p>{{ attribute(rule, 'part' ~ i ~ 'aside')|raw|nl2br }}</p>
+                        </aside>
+                    {% endif %}
+                    <!-- TEXT -->
+                    <div>{{ attribute(rule, 'part' ~ i)|raw|nl2br }}</div>
+                </cardbody>
+                <spacer class="spacer">{{ include('/parts/separateur-ornament.html.twig') }}</spacer>
+            {% endif %}
 
-    {% endfor %}
+        {% endfor %}
+        
+    </cardcontent>
 
     <!-- AUTRES -->
     {% if autresRules is defined and autresRules is not empty %}
-        <aside class="col-12 p-1">
-            <div class="card card-body pb-1">
-                <h2 class="title-h3">Autres Règles {% if rule.base %}de Bases{% else %}Annexes{% endif %}</h2>
-                <hr>
-                <div class="row p-0 m-0">
-                    {% set col, size, na_image = 'col-2', 'small', NA_RULE %}
-                    {% for un_element in autresRules %}
-                        {% if un_element.listEntity is defined and un_element.listEntity is not empty %}
-                            {% set na_image = NA_LIBRARY %}
-                        {% endif %}
-                        {{ include('/parts/element-vignette.html.twig', {un_element}) }}
-                    {% endfor %}
-                </div>
-            </div>
-        </aside>
+        <other id="other" class="col-12">
+            <h2 class="title-h3">Autres Règles {% if rule.base %}de Bases{% else %}Annexes{% endif %}</h2>
+            <hr>
+            <row class="row">
+                {% set col, size, na_image = 'col-2', 'small', NA_RULE %}
+                {% for un_element in autresRules %}
+                    {% if un_element.listEntity is defined and un_element.listEntity is not empty %}
+                        {% set na_image = NA_LIBRARY %}
+                    {% endif %}
+                    {{ include('/parts/element-vignette.html.twig', {un_element}) }}
+                {% endfor %}
+            </row>
+        </other>
     {% endif %}
-
 
 {% endblock %}

@@ -72,20 +72,12 @@
                 <h2 class="title-h3">Autres Règles {% if rule.base %}de Bases{% else %}Annexes{% endif %}</h2>
                 <hr>
                 <div class="row p-0 m-0">
-                    {% for autreRule in autresRules %}
-
-                        {% if autreRule.pdf is defined and autreRule.pdf is not empty %}
-                            {% set na_image = NA_IMG_PDF %}
-                        {% elseif autreRule.listEntity is defined and autreRule.listEntity is not empty %}
-                            {% set na_image = NA_IMG_LIBRARY %}
-                        {% else %}
-                            {% set na_image = NA_IMG_RULE %}
+                    {% set col, size, na_image = 'col-2', 'small', NA_RULE %}
+                    {% for un_element in autresRules %}
+                        {% if un_element.listEntity is defined and un_element.listEntity is not empty %}
+                            {% set na_image = NA_LIBRARY %}
                         {% endif %}
-
-                        <a class="col-2 m-0 p-2 text-center hover-zoom relative hover-span-visible" href="{{ path('regles_rule', {id: autreRule.id} ) }}" title="{{autreRule.nom}}">
-                            <img class="img-fluid" src="{{ asset(autreRule.image|default(na_image)) }}" alt="Image d'une Règle" title="{{autreRule.nom}}"/>
-                            <span class="text-small"><strong>{{autreRule.nom}}</strong></span>
-                        </a>
+                        {{ include('/parts/element-vignette.html.twig', {un_element}) }}
                     {% endfor %}
                 </div>
             </div>

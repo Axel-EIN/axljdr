@@ -2,10 +2,10 @@
 {% block title %}L'Univers de l'Aventure {{ parent() }}{% endblock %}
 
 {% block section_content1 %}
+<!-- ARCHIVES -->
+    {% set col, size, na_image = 'col-2', 'small', NA_ARCHIVE %}
     {% for un_element in archives %}
-
         {{ include('/parts/element-vignette.html.twig', {un_element}) }}
-
     {% endfor %}
 {% endblock %}
 
@@ -43,9 +43,9 @@
 {% endblock %}
 
 {% block section_content3 %}
+<!-- LIEUX -->
+    {% set col, size, na_image = 'col-2', 'small', NA_LIEU %}
     {% for un_element in lieux %}
-
         {{ include('/parts/element-vignette.html.twig', {un_element}) }}
-        
     {% endfor %}
 {% endblock %}

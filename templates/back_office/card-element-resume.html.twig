@@ -16,7 +16,7 @@
                     </strong>
                 </small><br/>
                 <a href="{{ path('admin_' ~ element ~ '_edit', {id: last.id} ) }}" >
-                    <img class="img-fluid" src="{{ asset(image|default(NA_IMG_169)) }}" alt="Image {{element}}" />
+                    <img class="img-fluid" src="{{ asset(image|default(NA_169)) }}" alt="Image {{element}}" />
                 </a><br/>
                 <strong class="d-block text-center">{{nom}}</strong>
             {% else %}

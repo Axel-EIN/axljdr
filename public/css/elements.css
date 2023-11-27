@@ -10,6 +10,29 @@
     padding: 10px;
 }
 
+.vignette {
+    position: relative;
+    margin: 0;
+    padding: 0 0.5rem;
+    white-space: nowrap;
+}
+
+.vignette img {
+    border-top-left-radius: 1rem;
+    border-bottom-right-radius: 1rem;
+}
+
+.vignette .label {
+    color: var(--primary-darker-more);
+    font-weight: bold;
+    text-align: center;
+    line-height: 1.4;
+}
+
+.vignette .text-small {
+    font-size: 1rem;
+}
+
 .vignette-aside {
     position: relative;
     display: block;

@@ -27,11 +27,11 @@
         <!-- IMAGE -->
         {% if rule.pdf is defined and rule.pdf is not empty %}
             <a href="{{ asset(rule.pdf) }}" >
-                <img class="img-fluid w-100" src="{{ asset(rule.image|default(NA_IMG_PDF)) }}" />
+                <img class="img-fluid w-100" src="{{ asset(rule.image|default(NA_PDF)) }}" />
             </a>
         {% else %}
             <div {% if rule.part1 is defined and rule.part1 is not empty and rule.part2 is defined and rule.part2 is not empty %}id="image"{% endif %}>
-                <img class="img-fluid w-100" src="{{ asset(rule.image|default(NA_IMG_RULE)) }}" />
+                <img class="img-fluid w-100" src="{{ asset(rule.image|default(NA_RULE)) }}" />
             </div>
         {% endif %}
 

@@ -29,6 +29,26 @@
     z-index: 2;
 }
 
+#right-part {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    z-index: 2;
+    margin: 0;
+    padding: 1rem;
+}
+
+#right-part > p {
+    color: var(--white);
+    text-align: justify;
+    margin: 0;
+    margin-bottom: 2rem;
+    margin-right: 2rem;
+    padding: 0;
+}
+
+
 #zone-mon {
     display: block;
 }

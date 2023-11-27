@@ -3,15 +3,9 @@
 
 {% block section_content1 %}
 <!-- REGLES DE BASES -->
-    {% for uneRule in rulesSimplesBases %}
-        <!-- UNE REGLE DE BASE -->
-        <a href="{{ path('regles_rule', {id: uneRule.id} ) }}" class="col-3 text-center hover-zoom">
-            <img class="img-fluid" src="{{ asset(uneRule.image|default(NA_IMG_RULE)) }}" alt="Image de la Règle" title="{{uneRule.nom}}" />
-            <br>
-            <h3 class="text-regular my-2">
-                <strong>{{ uneRule.nom }}</strong>
-            </h3>
-        </a>
+    {% set col, size, na_image, ratio = 'col-3', 'medium', NA_RULE, '43' %}
+    {% for un_element in rulesSimplesBases %}
+        {{ include('/parts/element-vignette.html.twig', {un_element}) }}
     {% endfor %}
 {% endblock %}
 
@@ -22,7 +16,7 @@
         <a href="{{ path('regles_classe', {id: une_classe.id} ) }}" class="col-2 text-center hover-zoom">
             <img src="{{ asset(une_classe.icone|default(NA_ICON_CLASS)) }}"  class="img-fluid" alt="Icône de la classe" title="{{une_classe.nom}}" />
             <br>
-            <h3 class="text-center my-3">
+            <h3 class="text-center my-2 text-primary-darker-more">
                 <strong>{{ une_classe.nom }}</strong>
             </h3>
         </a>
@@ -31,40 +25,16 @@
 
 {% block section_content3 %}
 <!-- BIBLIOTHEQUES -->
-    {% for une_bibliotheque in rulesBibliothequesBases %}
-        <!-- BIBLIOTHEQUE -->
-        <a class="col-3 text-center hover-zoom"
-            href="{% if une_bibliotheque.pdf is defined and une_bibliotheque.pdf is not empty and une_bibliotheque.part1 is empty %}
-                        {{ asset(une_bibliotheque.pdf) }}
-                    {% else %}
-                        {{ path('regles_rule', {id: une_bibliotheque.id} ) }}
-                {% endif %}">
-            <img class="img-fluid" src="{{ asset(une_bibliotheque.image|default(NA_IMG_LIBRARY)) }}" alt="Image de la Règle" title="{{une_bibliotheque.nom}}" />
-            <br>
-            <h3 class="text-regular my-2">
-                <strong>{{ une_bibliotheque.nom }}</strong>
-            </h3>
-        </a>
+    {% set col, size, na_image, ratio = 'col-3', 'medium', NA_LIBRARY, '43' %}
+    {% for un_element in rulesBibliothequesBases %}
+        {{ include('/parts/element-vignette.html.twig', {un_element}) }}
     {% endfor %}
 {% endblock %}
 
 {% block section_content4 %}
 <!-- REGLES ANNEXES -->
-    {% for uneRuleAnnexe in rulesAnnexes %}
-        {% if uneRuleAnnexe.pdf is defined and uneRuleAnnexe.part1 is empty and uneRuleAnnexe.listIntro is empty %}
-            {% set href = asset(uneRuleAnnexe.pdf) %}
-            {% set na_image = NA_IMG_PDF %}
-        {% else %}
-            {% set href = path('regles_rule', {id: uneRuleAnnexe.id} ) %}
-            {% set na_image = NA_IMG_RULE %}
-        {% endif %}
-        <!-- REGLE -->
-        <a href="{{href}}" class="col-2 text-center hover-zoom">
-            <img src="{{ asset(uneRuleAnnexe.image|default(na_image)) }}" class="img-fluid" alt="Image de la Règle {{uneRuleAnnexe.nom}}" title="{{uneRuleAnnexe.nom}}" />
-            <br>
-            <h3 class="text-small my-2">
-                <strong>{{ uneRuleAnnexe.nom }}</strong>
-            </h3>
-        </a>
+    {% set col, size, na_image, ratio = 'col-2', 'small', NA_RULE, '43' %}
+    {% for un_element in rulesAnnexes %}
+        {{ include('/parts/element-vignette.html.twig', {un_element}) }}
     {% endfor %}
 {% endblock %}

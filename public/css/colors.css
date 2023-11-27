@@ -1,6 +1,7 @@
 :root {
     --white: white !important;
     --lightest: #eee;
+    --lighter-more: #ddd ;
     --lighter: #aaa ;
     --light: #8f8f8f;
 
@@ -41,12 +42,15 @@
     --accent-dark: #cc6600;
 
     --blue: #007bff !important;
+    --lightblue: rgb(128, 187, 255);
     --purple: purple !important;
     --green: rgb(0,100,0) !important;
     --cyan: rgb(0,100,100) !important;
     --fuschia: #FF1493;
     --flash-red: #f66;
     --flash-green: #0f0;
+    --flash-blue: #4Cf;
+    --flash-lightblue: rgb(227, 247, 255);
     --flash-cyan: #0ff;
 
     --AIR: #7aa9ff;

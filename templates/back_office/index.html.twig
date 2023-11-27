@@ -51,10 +51,10 @@
                         {% set label, element, nbr, last, nom, image = 'Familles', 'famille', nbrFamilles, derniereFamille, derniereFamille.nom, derniereFamille.mon|default(NA_ICON_MON) %}
                         {{ include('back_office/card-element-resume.html.twig') }}
 
-                        {% set label, element, nbr, last, nom, image = 'Archives', 'archive', nbrArchives, derniereArchive, derniereArchive.titre, derniereArchive.image|default(NA_IMG_ARCHIVE) %}
+                        {% set label, element, nbr, last, nom, image = 'Archives', 'archive', nbrArchives, derniereArchive, derniereArchive.titre, derniereArchive.image|default(NA_ARCHIVE) %}
                         {{ include('back_office/card-element-resume.html.twig') }}
 
-                        {% set label, element, nbr, last, nom, image = 'Lieux', 'lieu', nbrLieux, dernierLieu, dernierLieu.nom, dernierLieu.image|default(NA_IMG_LIEU) %}
+                        {% set label, element, nbr, last, nom, image = 'Lieux', 'lieu', nbrLieux, dernierLieu, dernierLieu.nom, dernierLieu.image|default(NA_LIEU) %}
                         {{ include('back_office/card-element-resume.html.twig') }}
                     </section>
 
@@ -65,7 +65,7 @@
                     <p class="mb-4 text-muted">Récapitulatif des éléments ajoutés pour lees mécaniques de jeu.</p>
 
                     <section class="row">
-                        {% set label, element, nbr, last, nom, image = 'Règles', 'rule', nbrRules, derniereRule, derniereRule.nom|default('non-définie'), derniereRule.image|default(NA_IMG_RULE) %}
+                        {% set label, element, nbr, last, nom, image = 'Règles', 'rule', nbrRules, derniereRule, derniereRule.nom|default('non-définie'), derniereRule.image|default(NA_RULE) %}
                         {{ include('back_office/card-element-resume.html.twig') }}
                         
                         {% set label, element, nbr, last, nom, image = 'Classes', 'classe', nbrClasses, dernierClasse, dernierClasse.nom, dernierClasse.icone|default('non-définie') %}
@@ -74,13 +74,13 @@
                         {% set label, element, nbr, last, nom, image = 'Écoles', 'ecole', nbrEcoles, dernierEcole, dernierEcole.nom, dernierEcole.image|default('assets/img/placeholders/na_' ~ dernierEcole.classe.nom|lower ~ '.jpg') %}
                         {{ include('back_office/card-element-resume.html.twig') }}
 
-                        {% set label, element, nbr, last, nom, image = 'Avantages/Dés.', 'avantage', nbrAvantages, dernierAvantage, dernierAvantage.nom|default('null'), dernierAvantage.image|default(NA_IMG_RULE) %}
+                        {% set label, element, nbr, last, nom, image = 'Avantages/Dés.', 'avantage', nbrAvantages, dernierAvantage, dernierAvantage.nom|default('null'), dernierAvantage.image|default(NA_RULE) %}
                         {{ include('back_office/card-element-resume.html.twig') }}
 
                         {% set label, element, nbr, last, nom, image = 'Avantages/Dés.', 'avantage', nbrAvantages, dernierAvantage, dernierAvantage.nom|default('null'), dernierAvantage.image|default('assets/img/placeholders/na_1200.jpg') %}
                         {{ include('back_office/card-element-resume.html.twig') }}
 
-                        {% set label, element, nbr, last, nom, image = 'Objets', 'objet', nbrObjets, dernierObjet, dernierObjet.nom|default('null'), dernierObjet.image|default(NA_IMG_RULE) %}
+                        {% set label, element, nbr, last, nom, image = 'Objets', 'objet', nbrObjets, dernierObjet, dernierObjet.nom|default('null'), dernierObjet.image|default(NA_RULE) %}
                         {{ include('back_office/card-element-resume.html.twig') }}
                     </section>
 

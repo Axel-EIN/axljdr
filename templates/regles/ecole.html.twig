@@ -147,11 +147,9 @@
             <h2 class="title-h3">Autres écoles {{preposition}} {{ecole.clan.nom}}</h2>
             <hr>
             <div class="row p-0 m-0 pt-2">
-                {% for autreEcole in autresEcoles %}
-                    <a class="col-2 m-0 p-2 text-center hover-zoom relative hover-span-visible" href="{{ path('regles_ecole', {id: autreEcole.id} ) }}" title="{{autreEcole.nom}}">
-                        <img class="img-fluid" src="{{ asset(autreEcole.image|default('assets/img/placeholders/na_' ~ autreEcole.classe.nom|lower ~ '.jpg')) }}" alt="Image d'une école" title="{{autreEcole.nom}}"/>
-                        <span class="text-small"><strong>{{autreEcole.nom}}</strong></span>
-                    </a>
+                {% set col, size, na_image, ratio = 'col-2', 'small', NA_43, '43' %}
+                {% for un_element in autresEcoles %}
+                    {{ include('/parts/element-vignette.html.twig', {un_element}) }}
                 {% endfor %}
             </div>
         </div>

@@ -2,12 +2,18 @@
 /* ----- PAGE LIBRARY ----- */
 /* ------------------------ */
 
+#intro {
+    border-radius: 1rem;
+}
+
 .item {
     padding: 0.5rem 1rem;
+    color: var(--dark);
 }
 
 .item:hover {
     background-color: var(--accent-lightest);
+    color: var(--dark);
 }
 
 #list-heading {
@@ -29,4 +35,20 @@
 
 .item-description {
     color: var(--gray);
+}
+
+#capacite {
+    color: var(--dark);
+    margin-left: 0.5rem;
+    margin-top: 1rem;
+    padding: 0.5rem;
+}
+
+#capacite > ul {
+    margin-top: 0.5rem;
+    list-style-image: url('../assets/img/ui/bullet.png');
+}
+
+#capacite li {
+    padding: 0.125rem;
 }

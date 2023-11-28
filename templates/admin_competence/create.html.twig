@@ -1,0 +1,6 @@
+{% extends 'back_office/index.html.twig' %}
+{% block title %}Ajouter une Compétence{{ parent() }}{% endblock %}
+{% block h1 %}Ajouter une Compétence{% endblock %}
+{% block child %}
+    {{ include('admin_competence/_form.html.twig', {'button_label': 'Créer'}) }}
+{% endblock %}

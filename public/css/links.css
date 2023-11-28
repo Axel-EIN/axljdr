@@ -12,11 +12,11 @@
 /* ---- Common Links ---- */
 
 .link-accent {
-    color: var(--accent);
+    color: var(--accent) !important;
 }
 
 .link-accent:hover {
-    color: var(--primary);
+    color: var(--primary) !important;
     text-decoration: none;
 }
 

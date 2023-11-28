@@ -3,39 +3,35 @@
 /* -------------------------------- */
 
 .btn-icon-mini {
+    display: inline-block;
+    text-align: center;
+    cursor: pointer;
     width: 32px;
     height: 32px;
     font-size: 1rem;
-    cursor: pointer;
 }
 
 .btn-icon-small {
+    display: inline-block;
+    text-align: center;
+    cursor: pointer;
     width: 40px;
     height: 40px;
     font-size: 1.5rem;
-    cursor: pointer;
 }
 
 .btn-icon-medium {
+    display: inline-block;
+    text-align: center;
+    cursor: pointer;
     width: 48px;
     height: 48px;
     font-size: 2rem;
-    cursor: pointer;
 }
 
 .btn-icon-text {
     font-size: 1rem;
     font-weight: bold;
-}
-
-.btn-icon-small:hover, .btn-icon-medium:hover, .btn-icon-text:hover {
-    color: var(--accent) !important;
-    text-decoration: none;
-}
-
-.btn-icon-small, .btn-icon-medium, .btn-icon-text {
-    display: inline-block;
-    text-align: center;
 }
 
 .arrow-left, .arrow-right {

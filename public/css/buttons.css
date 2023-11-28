@@ -81,14 +81,15 @@
 /* TRANSPARENT */
 
 .btn-tertiary-style {
-    background-color: transparent;      
+    background-color: transparent;     
     color: var(--primary-lighter);
+    font-weight: bold;
 }
 
 .btn-tertiary-style:hover,
 .btn-tertiary-style:active,
 .btn-tertiary-style:target {
-    color: var(--primary-lighter);
+    color: var(--primary);
     text-decoration: underline;
 }
 
@@ -126,7 +127,7 @@
     display: block;
     font-weight: bold;
     border-radius: 1rem 0.25rem;
-    padding: 8px 16px;
+    padding: 8px 14px;
     background-color: transparent;
     color: var(--primary-dark);
 }

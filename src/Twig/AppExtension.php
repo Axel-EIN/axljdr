@@ -12,6 +12,8 @@ class AppExtension extends AbstractExtension
         return [
             new TwigFilter('relief', [$this, 'titreRelief']),
             new TwigFilter('lister', [$this, 'listerRetourChariot']),
+            new TwigFilter('pricer', [$this, 'distribuerPrix']),
+            new TwigFilter('jeter', [$this, 'calculerJet']),
             new TwigFilter('sortByField', [$this, 'sortByField']),
         ];
     }
@@ -108,14 +110,79 @@ class AppExtension extends AbstractExtension
         
         $lignes = explode("\n", $text);
         
-        $listedText = "<ul>";
+        $listedText = "";
         foreach($lignes as $ligne)
         {
           $listedText .= "<li>" . $ligne . "</li>";
         }
-        $listedText .= "</ul>";
+        $listedText .= "";
     
         return $listedText;
+    }
+
+    public function distribuerPrix($prix)
+    {
+        // Cette fonction distribue le prix selon les différentes pièces de monnaie
+
+        $reste = $prix;
+        $html = '';
+
+        if ( $reste >= 50  ) {
+            $html = '<strong class="text-medium">' . floor($reste / 50) . '</strong>'
+                  . '<img class="ml-1 img-24 align-text-bottom" src="/assets/img/ui/koku.png" alt="image pièce koku" title="Koku" /><br>';
+            $reste = $reste % 50;
+        }
+
+        if ( $reste >= 10 ) {
+            $html = $html . '<strong class="align-middle">' . floor($reste / 10) . '</strong>'
+                          . '<img class="ml-1 img-18 align-middle" src="/assets/img/ui/bu.png" alt="image pièce bu" title="Bu" /><br>';
+            $reste = $reste % 10;
+        }
+
+        if ( $reste > 0 ) {
+            $html = $html . '<strong class="text-small align-middle">' . $reste . '</strong>'
+                          . '<img class="ml-1 img-14 align-middle" src="/assets/img/ui/zeni.png" alt="image pièce zeni" title="Zeni" />';
+        }
+    
+        return $html;
+    }
+
+    public function calculerJet($jet, $force)
+    {
+        // Cette fonction calcule le score moyen selon le jet
+
+        $jet = explode('g', $jet);
+        $jet[0] += $force;
+
+        $Lfactor = 1.1;
+        $Gfactor = 5.2;
+
+        // xG1
+        if ($jet[1] == 1 && $jet[0] >= 5) {
+            $Lfactor = 1.1;
+            $Gfactor = 5.4;
+        } elseif ($jet[1] == 1) {
+            $Lfactor = 1.55;
+            $Gfactor = 5.4;
+        } elseif ($jet[1] == 2) {
+            $Lfactor = 1.2;
+            $Gfactor = 6.3;
+        } elseif ($jet[1] == 3 && $jet[0] >= 7) {
+            $Lfactor = 1.6;
+            $Gfactor = 5.8;
+        } elseif ($jet[1] == 3 ) {
+            $Lfactor = 1.7;
+            $Gfactor = 5.65;
+        } elseif ($jet[1] >= 4 && $jet[0] >= 7) {
+            $Lfactor = 1.6;
+            $Gfactor = 5.8;
+        } elseif ($jet[1] >= 4 ) {
+            $Lfactor = 1.5;
+            $Gfactor = 5.7;
+        }
+
+        $score = floor( $jet[0] * $Lfactor + $jet[1] * $Gfactor );
+        return $score;
     }
 
     public function sortByField($content, $sort_by, $direction = 'asc'){

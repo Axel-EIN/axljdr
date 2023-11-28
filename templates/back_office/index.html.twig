@@ -79,6 +79,9 @@
 
                         {% set label, element, nbr, last, nom, image = 'Avantages/Dés.', 'avantage', nbrAvantages, dernierAvantage, dernierAvantage.nom|default('null'), dernierAvantage.image|default('assets/img/placeholders/na_1200.jpg') %}
                         {{ include('back_office/card-element-resume.html.twig') }}
+
+                        {% set label, element, nbr, last, nom, image = 'Objets', 'objet', nbrObjets, dernierObjet, dernierObjet.nom|default('null'), dernierObjet.image|default(NA_IMG_RULE) %}
+                        {{ include('back_office/card-element-resume.html.twig') }}
                     </section>
 
                     {# PERSONNAGES #}

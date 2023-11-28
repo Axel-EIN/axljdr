@@ -191,6 +191,9 @@
 
 #logo { width: 120px; height: auto; }
 
+.img-14 { min-width: 12px; max-width: 14px; }
+.img-18 { min-width: 14px; max-width: 18px; }
+.img-24 { min-width: 16px; max-width: 24px; }
 .img-32 { min-width: 16px; max-width: 32px; }
 .img-48 { min-width: 24px; max-width: 48px; }
 .img-56 { min-width: 28px; max-width: 56px; }

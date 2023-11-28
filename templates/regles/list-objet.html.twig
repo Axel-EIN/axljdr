@@ -1,0 +1,313 @@
+{% set i = 1 %}
+{% set library = un_element %}
+
+<!-- BULLE INFO -->
+{% if app.request.get('tab') is defined and app.request.get('tab') != 'ARMURE' %}
+
+    <info id="effet-rappel" class="col-12 row">
+
+        <!-- COMPÉTENCE ARMES -->
+        <left class="col-7 m-0 p-1 pr-2">
+            <span class="title-h4">Compétence d'Arme {{app.request.get('tab')}}</span>
+            <ul>
+
+                <!-- RAPPEL EPEES -->
+                {% if app.request.get('tab') is defined and app.request.get('tab') == 'ÉPÉE' %}
+                    <li>Rang 5 : Les Dommages des 9 sont OUVERTS contre les Adversaires ayant moins de 5pts de Réduction</li>
+                {% endif %}
+
+                <!-- RAPPEL HASTS -->
+                {% if app.request.get('tab') is defined and app.request.get('tab') == 'HAST' %}
+                    <li>+5 Initiative au 1er Round</li>
+                    <li>Rang 5 : Les Dommages des 9 sont OUVERTS contre les Adversaires de Grande Taille</li>
+                {% endif %}
+
+                <!-- RAPPEL LANCES -->
+                {% if app.request.get('tab') is defined and app.request.get('tab') == 'LANCE' %}
+                    <li>Les Attaques du 1er Round ignorent 4pts de Réduction</li>
+                    <li>Rang 5 : Hormis en Posture Assaut, les Dommages des 9 sont OUVERTS contre les Adversaires en Posture d'Assaut ou Montée à cheval</li>
+                {% endif %}
+
+                <!-- RAPPEL LOURDES -->
+                {% if app.request.get('tab') is defined and app.request.get('tab') == 'LOURDE' %}
+                    <li>Les Attaques ignorent 2pts de Réduction</li>
+                    <li>Rang 5 : Les Dommages des 9 sont OUVERTS contre les Adversaires ayant plus de 3pts de Réduction</li>
+                {% endif %}
+
+                <!-- RAPPEL BÂTONS -->
+                {% if app.request.get('tab') is defined and app.request.get('tab') == 'BÂTON' %}
+                    <li>+5 Initiative. Les Armures ont leur bonus ND doublé contre les Bâtons</li>
+                    <li>Rang 5 : Dommages +1g0 et Augmentation Gratuite pour Assommer</li>
+                {% endif %}
+
+                <!-- RAPPEL CHAINES -->
+                {% if app.request.get('tab') is defined and app.request.get('tab') == 'CHAÎNE' %}
+                    <li>Une Attaque à Distance Gratuite. Peut déclencher une Empoignade</li>
+                    <li>Rang 5 : Dommages des 9 OUVERTS sur Adversaire Empoigné ou Enchevêtré</li>
+                {% endif %}
+
+                <!-- RAPPEL ARCS -->
+                {% if app.request.get('tab') is defined and app.request.get('tab') == 'ARC' %}
+                    <li>Tir à Distance mais -10 ND Attaque au Corps à Corps</li>
+                    <li>Rang 5 : Force Arc +1 et Malus Corps à Corps baisse à -5</li>
+                {% endif %}
+
+                <!-- RAPPEL COUTEAUX -->
+                {% if app.request.get('tab') is defined and app.request.get('tab') == 'COUTEAU' %}
+                    <li>Augmentation Gratuite pour Coup Précis</li>
+                    <li>Rang 5 : Dommages +1g0 et Augmentation Gratuite Attaque Supp.</li>
+                {% endif %}
+
+                <!-- RAPPEL EVENTAILS -->
+                {% if app.request.get('tab') is defined and app.request.get('tab') == 'ÉVENTAIL' %}
+                    <li>Envoi de signaux sur le Champ de Bataille</li>
+                    <li>Rang 5 : Pas de Malus du port de 2 armes et ND d'Armure +3</li>
+                {% endif %}
+
+                <!-- RAPPEL NINJUTSU -->
+                {% if app.request.get('tab') is defined and app.request.get('tab') == 'NINJUTSU' %}
+                    <li>Les Dommages ne sont pas OUVERTS</li>
+                    <li>Rang 5 : Dommages +1g0 et deviennent OUVERT</li>
+                {% endif %}
+
+            </ul>
+        </left>
+
+        <!-- MOTS CLES TAILLE POIDS -->
+        <right class="col-5 m-0 p-1 pl-3">
+            <span class="title-h4">Taille / Poids</span>
+            <ul>
+                <li>PETITE : Dissimulable</li>
+                <li>GRANDE : En environement exigus +5 ND Attaque</li>
+                <li>LOURDE : -5 Initiative</li>
+            </ul>
+        </right>
+
+    </info>
+
+{% endif %}
+
+<!-- TABLE HEADING -->
+<heading class="col-12 row m-0 p-1 relative list-heading">
+
+    <!-- MJ ADD -->
+    {% if app.user and is_granted("ROLE_MJ") %}
+        {% set action, entity, redirect, position, color, size = 'create', 'objet', 'library&libraryID=' ~ library.id ~ '&tab=' ~ app.request.get('tab'), 'right-overflow', 'link-accent', 'btn-icon-small' %}
+        {{ include('/btns/btn-icon.html.twig') }}
+    {% endif %}
+
+    <div class="col-4 text-left pl-3">Nom</div>
+
+{% if app.request.get('tab') is defined and app.request.get('tab') == 'ARMURE' %}
+
+    <div class="col-5"></div>
+    <div class="col-1 text-small">+ND Armure</div>
+    <div class="col-1">Reduction</div>
+
+{% else %}
+
+    <div class="col-3"></div>
+    <div class="col-1">Poids</div>
+    <div class="col-1">Taille</div>
+    <div class="col-1">
+        {% if app.request.get('tab') is defined and app.request.get('tab') == 'ARC' %}
+            Force Arc
+        {% else %}
+            VD
+        {% endif %}
+    </div>
+
+    <div class="col-1 text-small">Dmg. Moy.<br><span class="text-mini">
+        {% if app.request.get('tab') is defined and app.request.get('tab') == 'ARC' %}
+            Flèche 2g2 + 1g0
+        {% else %}
+            Force 3 + 1g0
+        {% endif %}
+        </span>
+    </div>
+
+{% endif %}
+
+    <div class="col-1">Prix</div>
+
+</heading>
+
+{% for item in items %}
+
+    {% if item.vd is defined and item.vd is not empty and app.request.get('tab') != 'ARC' or item.forceArc is defined and item.forceArc is not empty or app.request.get('tab') == 'ARMURE' %}
+
+        <!-- UN ITEM -->
+        <item class="col-12 p-0 m-0 relative">
+
+            <!-- MJ EDIT -->
+            {% if app.user and is_granted("ROLE_MJ") %}
+                {% set position, size, color, entity, un_element, redirect = 'left-overflow', 'btn-icon-mini', 'link-accent', 'objet', item, 'library&libraryID=' ~ library.id %}
+                {{ include('/parts/btn-icon-edit.html.twig') }}
+            {% endif %}
+
+            <card class="card item-no-hover">
+
+                <!-- HEAD LINE -->
+                <line class="item-line row">
+
+                    <div class="col-4 text-left">
+                        <strong class="item-name mr-1">{{ item.nom }}</strong>
+                        <span class="badge badge-secondary">{{item.motCle1}}</span>
+                        <span class="badge badge-secondary">{{item.motCle2}}</span>
+                    </div>
+
+                    {% if app.request.get('tab') == 'ARMURE' %}
+                        <div class="col-5"></div>
+                        <div class="col-1 text-center"><strong class="text-medium">{{item.ndArmure}}</strong></div>
+                        <div class="col-1 text-center"><strong class="text-medium">{{item.reduction}}</strong></div>
+                    {% else %}
+                        <div class="col-3"></div>
+                        <div class="col-1 text-center"><strong class="align-text-middle">{{item.poids}}</strong></div>
+                        <div class="col-1 text-center"><strong class="align-text-middle">{{item.taille}}</strong></div>
+                        <div class="col-1 text-center">
+                            <strong class="text-medium text-dead">
+                                {% if app.request.get('tab') is defined and app.request.get('tab') == 'ARC' %}
+                                    {{item.forceArc}}
+                                {% else %}
+                                    {{item.vd}}
+                                {% endif %}
+                            </strong>
+                        </div>
+                        <div class="col-1 text-center">
+                                {% if app.request.get('tab') is defined and app.request.get('tab') == 'ARC' and item.forceArc is defined and item.forceArc is not empty %}
+                                    {{'2g2'|jeter(item.forceArc + 1)}}
+                                {% elseif app.request.get('tab') is defined and app.request.get('tab') == 'NINJUTSU' %}
+                                    {{item.vd|jeter(0)}}
+                                {% else %}
+                                    {{item.vd|jeter(4)}}
+                                {% endif %}
+                        </div>
+                    {% endif %}
+
+                        <div class="col-1 text-right">{{item.prix|pricer|raw}}</div>
+
+                    </line>
+
+                    <!-- CONTENT -->
+                    <article class="row">
+                        <div class="col-2 p-0 pl-3 m-0 mt-2">
+                            <img class="img-fluid" src="{{ asset( item.image|default(NA_ICON) ) }}" />
+                        </div>
+                        <div class="col-10 p-3 m-0 mt-2">
+                            <p class="item-description text-justify">
+                                {{ item.description|raw|nl2br }}
+                            </p>
+
+                            <!-- REGLES -->
+                            {% if item.regles is defined and item.regles is not empty or item.taille is defined and item.taille is not empty and item.poids is defined and item.poids is not empty %}
+                                <div id="capacite">
+                                    <span class="title-h4">RÈGLES</span>
+                                    <ul>
+
+                                        {% if item.taille is defined and item.taille == 'GRANDE' and item.poids is defined and item.poids == 'LOURDE' %}
+                                            <li>Maniement à 2 mains obligatoire</li>
+                                        {% endif %}
+
+                                        {% if item.taille is defined and item.taille == 'GRANDE' and item.poids is defined and item.poids == 'LÉGÈRE' %}
+                                            <li>LÉGÈRE + GRANDE : Bonus +5 Initiative</li>
+                                        {% endif %}
+
+                                        {% if item.regles is defined and item.regles is not empty %}
+                                            {{item.regles|lister|raw}}
+                                        {% endif %}
+
+                                    </ul>
+                                </div>
+                            {% endif %}
+
+                        </div>
+                    </article>
+            </card>
+        </item>
+
+    {% endif %}
+
+{% set i = i + 1 %}
+
+{% endfor %}
+
+<!-- ANNEXE HEADING ARC => FLECHES -->
+{% if app.request.get('tab') is defined and app.request.get('tab') == 'ARC' %}
+
+    <heading class="col-12 row m-0 mt-5 p-1 relative list-heading">
+
+        <!-- MJ ADD -->
+        {% if app.user and is_granted("ROLE_MJ") %}
+            {% set action, entity, redirect, position, color, size = 'create', 'objet', 'library&libraryID=' ~ library.id ~ '&tab=' ~ app.request.get('tab'), 'right-overflow', 'link-accent', 'btn-icon-small' %}
+            {{ include('/btns/btn-icon.html.twig') }}
+        {% endif %}
+
+        <div class="col-4 text-left pl-3">Nom</div>
+        <div class="col-5"></div>
+        <div class="col-1 text-small">VD Projectile</div>
+        <div class="col-1 text-small">Dmg. Moy.<br><span class="text-mini">Arc Force3 + 1g0</span></div>
+        <div class="col-1">Prix</div>
+
+    </heading>
+
+    {% for item in items %}
+
+        {% if item.type == 'ARC' and item.vd is defined and item.vd is not empty %}
+
+            <!-- UN ITEM -->
+            <item class="col-12 p-0 m-0 relative">
+
+                <!-- MJ EDIT -->
+                {% if app.user and is_granted("ROLE_MJ") %}
+                    {% set position, size, color, entity, un_element, redirect = 'left-overflow', 'btn-icon-mini', 'link-accent', 'objet', item, 'library&libraryID=' ~ library.id %}
+                    {{ include('/parts/btn-icon-edit.html.twig') }}
+                {% endif %}
+
+                <card class="card item-no-hover">
+
+                    <!-- HEAD LINE -->
+                    <line class="item-line row">
+
+                        <div class="col-4 text-left">
+                            <strong class="item-name mr-1">{{ item.nom }}</strong>
+                            <span class="badge badge-secondary">{{item.motCle1}}</span>
+                        </div>
+
+                        <div class="col-5"></div>
+                        <div class="col-1"><strong class="text-medium text-dead">{{item.vd}}</strong></div>
+
+                        <div class="col-1">
+                            {{item.vd|jeter(4)}}
+                        </div>
+
+                        <div class="col-1 text-right">{{item.prix|pricer|raw}}</div>
+
+                    </line>
+
+                    <!-- CONTENT -->
+                    <article class="row">
+                        <div class="col-2 p-0 pl-3 m-0 mt-2">
+                            <img class="img-fluid" src="{{ asset( item.image|default(NA_ICON) ) }}" />
+                        </div>
+                        <div class="col-10 p-3 m-0 mt-2">
+                            <p class="item-description">{{ item.description|raw|nl2br }}</p>
+                            <!-- REGLES -->
+                            {% if item.regles is defined and item.regles is not empty %}
+                                <div id="capacite">
+                                    <span class="title-h4">RÈGLES</span>
+                                    <ul>{{item.regles|lister|raw}}</ul>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </article>
+
+                </card>
+            </item>
+
+        {% endif %}
+
+        {% set i = i + 1 %}
+        
+    {% endfor %}
+
+{% endif %}

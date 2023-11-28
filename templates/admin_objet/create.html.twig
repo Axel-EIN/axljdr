@@ -1,0 +1,6 @@
+{% extends 'back_office/index.html.twig' %}
+{% block title %}Ajouter un Objet | {{ parent() }}{% endblock %}
+{% block h1 %}Ajouter un Objet{% endblock %}
+{% block child %}
+    {{ include('admin_objet/_form.html.twig', {'button_label': 'Créer'}) }}
+{% endblock %}

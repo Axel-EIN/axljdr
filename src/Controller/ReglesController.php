@@ -5,10 +5,12 @@ namespace App\Controller;
 use App\Entity\Rule;
 use App\Entity\Ecole;
 use App\Entity\Classe;
+use App\Entity\Library;
 use App\Repository\RuleRepository;
 use App\Repository\EcoleRepository;
 use App\Repository\ObjetRepository;
 use App\Repository\ClasseRepository;
+use App\Repository\LibraryRepository;
 use App\Repository\AvantageRepository;
 use App\Repository\CompetenceRepository;
 use Symfony\Component\HttpFoundation\Request;
@@ -48,7 +50,7 @@ class ReglesController extends AbstractController
         
         // Section 3 : Les Bibliothèques de Bases (Liste d'Objet de Règles comme les Avantages/Désavantages/Compétences/Equipement/Sorts/Kiho/Tatoo)
         $sections[2]['name'] = "Bibliothèques";
-        $sections[2]['entity'] = 'rule';
+        $sections[2]['entity'] = 'library';
         $sections[2]['label_one'] = 'une Bibliothèque';
         $sections[2]['titleLight'] = 'Les ';
         $sections[2]['titleStrong'] = 'Bibliothèques';
@@ -83,60 +85,7 @@ class ReglesController extends AbstractController
      */
     public function viewRule(Rule $rule, RuleRepository $ruleRepository, Request $request, AvantageRepository $avantageRepository, CompetenceRepository $competenceRepository, ObjetRepository $objetRepository): Response
     {
-        $autresRules = $ruleRepository->findAllSameTypeExceptOneSorted($rule->getId(), $rule->getBase(), $rule->getListEntity());
-
-        // LIBRARY
-        if (!empty($rule->getListEntity())) {
-
-            $items = ${$rule->getListEntity() . 'Repository'}->findAll();
-
-            $tabs = [];
-            if ($rule->getListTabField()) {
-                $itemsTabs = [];
-                foreach ($items as $item) {
-                    $itemsTabs[] = $item->{ 'get' .  ucfirst( $rule->getListTabField() ) }();
-                }
-                $tabs = array_unique($itemsTabs);
-                sort($tabs);
-            }
-
-            $filters = [];
-            if ($rule->getListFilterField()) {
-                $itemsFilters = [];
-                foreach ($items as $item) {
-                    $itemsFilters[] = $item->{ 'get' . ucfirst( $rule->getListFilterField() ) }();
-                }
-                $filters = array_unique($itemsFilters);
-                sort($filters);
-            }
-
-            if (!empty($request->query->get('tab'))) {
-                $items = ${$rule->getListEntity() . 'Repository'}->{'findAll' . ucfirst( $rule->getListTabField() ) }($request->query->get('tab'));
-
-                if ( !empty($items[0]) && !empty($items[1]) && method_exists($items[0],'getNumero') )
-                    usort( $items , function ($a, $b) { return strcmp( $a->getNumero() , $b->getNumero() ); });
-            }
-
-            if (!empty($request->query->get('filter')))
-            {
-                $filter = $request->query->get('filter');
-                $items = array_filter($items, function ($obj) use ($filter, $rule) {
-                    return $obj->{ 'get' .  ucfirst( $rule->getListFilterField() ) }() == $filter;
-                  });
-            }
-
-            return $this->render('regles/library.html.twig', [
-                'library' => $rule,
-                'nom' => $rule->getNom(),
-                'un_element' => $rule,
-                'entity' => 'rule',
-                'category' => 'regles',
-                'autresRules' => $autresRules,
-                'items' => $items,
-                'tabs' => $tabs,
-                'filters' => $filters
-            ]);
-        }
+        $autresRules = $ruleRepository->findOthersSameType($rule->getId(), $rule->getBase());
 
         return $this->render('regles/rule.html.twig', [
             'rule' => $rule,
@@ -145,6 +94,92 @@ class ReglesController extends AbstractController
             'category' => 'regles',
             'un_element' => $rule,
             'autresRules' => $autresRules
+        ]);
+    }
+
+     /**
+     * @Route("/regles/library/{id}", name="regles_library")
+     */
+    public function viewLibrary(Library $library, LibraryRepository $libraryRepository, Request $request,
+                                AvantageRepository $avantageRepository,
+                                CompetenceRepository $competenceRepository,
+                                ObjetRepository $objetRepository): Response
+    {
+        // RECUPERATION des noms des champs de la librairie
+        $tab_field_name = $library->getTabField();
+        $subtab_field_name = $library->getSubTabField();
+        $filter_field_name = $library->getFilterField();
+
+        // RECUPERATION URL PARAMS
+        $tab_url_param = $request->query->get('tab');
+        $subtab_url_param = $request->query->get('subtab');
+        $filter_url_param = $request->query->get('filter');
+
+        // LIBRARY ALL ITEMS
+        $entity_name = $library->getEntity();
+        $items = ${ $entity_name . 'Repository' }->findAll();
+
+        // TABS, SUBTABS initialize
+        $tabs = [];
+        $subtabs = [];
+        $filters = [];
+
+        // TABS
+        if ( !empty( $tab_field_name ) ) {
+            foreach ( $items as $item )
+            {
+                $tabs[] = $item->{ 'get' .  ucfirst( $tab_field_name ) }();
+                $filters[] = $item->{ 'get' .  ucfirst( $filter_field_name ) }();
+            }
+            $tabs = array_unique($tabs);
+            $filters = array_unique($filters);
+        }
+
+        // IF TAB SELECTED
+        if ( !empty( $tab_url_param ) && !empty( $tab_field_name ) )
+        {
+            if ( $tab_url_param != 'all')
+                $items = array_filter($items, function ($obj) use ($tab_url_param, $tab_field_name) { return $obj->{ 'get' .  ucfirst( $tab_field_name ) }() == $tab_url_param; });
+
+            if ( !empty( $subtab_field_name ) ) {
+                $subtab_first = array_values($items)[0]->{ 'get' .  ucfirst( $subtab_field_name ) }();
+                foreach ( $items as $item )
+                    $subtabs[] = $item->{ 'get' .  ucfirst( $subtab_field_name ) }();
+                $subtabs = array_unique($subtabs);
+
+                if ( empty($subtab_url_param) )
+                    $items = [];
+            }
+
+            // IF SUB TAB SELECTED
+            if ( !empty( $subtab_url_param ) && !empty( $subtab_field_name ) && $subtab_url_param != 'all' && $subtab_url_param != 'first' )
+                $items = array_filter($items, function ($obj) use ($subtab_url_param, $subtab_field_name) { return $obj->{ 'get' .  ucfirst( $subtab_field_name ) }() == $subtab_url_param; });
+            elseif ( $subtab_url_param == 'first' && !empty($subtab_first) )
+            {
+                $items = array_filter($items, function ($obj) use ($subtab_first, $subtab_field_name) { return $obj->{ 'get' .  ucfirst( $subtab_field_name ) }() == $subtab_first; });
+                $request->query->set('subtab', $subtab_first);
+            }
+        }
+
+        // IF FILTER SELECTED
+        if ( !empty( $filter_url_param ) && !empty( $filter_field_name ) )
+            $items = array_filter($items, function ($obj) use ($filter_url_param, $filter_field_name) { return $obj->{ 'get' .  ucfirst( $filter_field_name ) }() == $filter_url_param; });
+
+        // OTHER LIBRARIES
+        $otherLibraries = $libraryRepository->findOthersSameType($library->getId(), $library->getBase());
+
+        // VIEW
+        return $this->render('regles/library.html.twig', [
+            'library' => $library,
+            'nom' => $library->getNom(),
+            'un_element' => $library,
+            'entity' => 'library',
+            'category' => 'regles',
+            'otherLibraries' => $otherLibraries,
+            'items' => $items,
+            'tabs' => $tabs,
+            'subtabs' => $subtabs,
+            'filters' => $filters
         ]);
     }
 

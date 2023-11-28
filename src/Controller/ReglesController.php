@@ -3,17 +3,18 @@
 namespace App\Controller;
 
 use App\Entity\Rule;
-use App\Entity\Classe;
 use App\Entity\Ecole;
+use App\Entity\Classe;
+use App\Repository\RuleRepository;
+use App\Repository\EcoleRepository;
+use App\Repository\ObjetRepository;
+use App\Repository\ClasseRepository;
 use App\Repository\AvantageRepository;
 use App\Repository\CompetenceRepository;
-use App\Repository\EcoleRepository;
-use App\Repository\ClasseRepository;
-use App\Repository\RuleRepository;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Request;
 
 class ReglesController extends AbstractController
 {
@@ -80,7 +81,7 @@ class ReglesController extends AbstractController
     /**
      * @Route("/regles/rule/{id}", name="regles_rule")
      */
-    public function viewRule(Rule $rule, RuleRepository $ruleRepository, Request $request, AvantageRepository $avantageRepository, CompetenceRepository $competenceRepository): Response
+    public function viewRule(Rule $rule, RuleRepository $ruleRepository, Request $request, AvantageRepository $avantageRepository, CompetenceRepository $competenceRepository, ObjetRepository $objetRepository): Response
     {
         $autresRules = $ruleRepository->findAllSameTypeExceptOneSorted($rule->getId(), $rule->getBase(), $rule->getListEntity());
 
@@ -89,19 +90,32 @@ class ReglesController extends AbstractController
 
             $items = ${$rule->getListEntity() . 'Repository'}->findAll();
 
-            $itemsTabs = [];
-            $itemsFilters = [];
-            foreach ($items as $item) {
-                $itemsTabs[] = $item->{ 'get' .  ucfirst( $rule->getListTabField() ) }();
-                $itemsFilters[] = $item->{ 'get' . ucfirst( $rule->getListFilterField() ) }();
+            $tabs = [];
+            if ($rule->getListTabField()) {
+                $itemsTabs = [];
+                foreach ($items as $item) {
+                    $itemsTabs[] = $item->{ 'get' .  ucfirst( $rule->getListTabField() ) }();
+                }
+                $tabs = array_unique($itemsTabs);
+                sort($tabs);
             }
-            $tabs = array_unique($itemsTabs);
-            sort($tabs);
-            $filters = array_unique($itemsFilters);
-            sort($filters);
 
-            if (!empty($request->query->get('tab')))
+            $filters = [];
+            if ($rule->getListFilterField()) {
+                $itemsFilters = [];
+                foreach ($items as $item) {
+                    $itemsFilters[] = $item->{ 'get' . ucfirst( $rule->getListFilterField() ) }();
+                }
+                $filters = array_unique($itemsFilters);
+                sort($filters);
+            }
+
+            if (!empty($request->query->get('tab'))) {
                 $items = ${$rule->getListEntity() . 'Repository'}->{'findAll' . ucfirst( $rule->getListTabField() ) }($request->query->get('tab'));
+
+                if ( !empty($items[0]) && !empty($items[1]) && method_exists($items[0],'getNumero') )
+                    usort( $items , function ($a, $b) { return strcmp( $a->getNumero() , $b->getNumero() ); });
+            }
 
             if (!empty($request->query->get('filter')))
             {

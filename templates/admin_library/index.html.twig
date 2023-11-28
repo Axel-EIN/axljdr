@@ -1,0 +1,7 @@
+{% extends 'back_office/index.html.twig' %}
+{% block title %}Administrer les {{label}}s {{ parent() }}{% endblock %}
+{% block h1 %}Administrer les <strong>{{label}}s</strong>{% endblock %}
+{% block child %}
+    {% set img_size, extra_col1, extra_col2, extra_col3, na_image = '96', 'base', 'entity', 'numero', NA_LIBRARY %}
+    {{ include('back_office/list-element.html.twig') }}
+{% endblock %}

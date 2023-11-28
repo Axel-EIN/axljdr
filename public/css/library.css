@@ -26,11 +26,19 @@
     flex-direction: row;
     align-items: center;
     padding: 0.5rem 1rem;
-    color: var(--lightest);
+}
+
+.list-heading-short {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 0.5rem 1rem;
+    border-radius: 1rem;
+    color: var(--white);
     background-color: var(--gray);
 }
 
-.list-heading > div {
+.list-heading > div, .list-heading-short > div {
     text-align: center;
     padding: 0 .5rem;
     margin: 0;

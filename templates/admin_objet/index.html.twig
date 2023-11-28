@@ -1,0 +1,7 @@
+{% extends 'back_office/index.html.twig' %}
+{% block title %}Administrer les Objets {{ parent() }}{% endblock %}
+{% block h1 %}Administrer les <strong>Objets</strong>{% endblock %}
+{% block child %}
+    {% set label, element, elements, img_size, genre, extra_col1, extra_col2 = 'objets', 'objet', objets, '32', 'F', 'type', 'numero' %}
+    {{ include('back_office/list-element.html.twig') }}
+{% endblock %}

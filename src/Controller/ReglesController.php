@@ -6,6 +6,7 @@ use App\Entity\Rule;
 use App\Entity\Classe;
 use App\Entity\Ecole;
 use App\Repository\AvantageRepository;
+use App\Repository\CompetenceRepository;
 use App\Repository\EcoleRepository;
 use App\Repository\ClasseRepository;
 use App\Repository\RuleRepository;
@@ -79,10 +80,11 @@ class ReglesController extends AbstractController
     /**
      * @Route("/regles/rule/{id}", name="regles_rule")
      */
-    public function viewRule(Rule $rule, RuleRepository $ruleRepository, Request $request, AvantageRepository $avantageRepository): Response
+    public function viewRule(Rule $rule, RuleRepository $ruleRepository, Request $request, AvantageRepository $avantageRepository, CompetenceRepository $competenceRepository): Response
     {
         $autresRules = $ruleRepository->findAllSameTypeExceptOneSorted($rule->getId(), $rule->getBase(), $rule->getListEntity());
 
+        // LIBRARY
         if (!empty($rule->getListEntity())) {
 
             $items = ${$rule->getListEntity() . 'Repository'}->findAll();
@@ -104,8 +106,8 @@ class ReglesController extends AbstractController
             if (!empty($request->query->get('filter')))
             {
                 $filter = $request->query->get('filter');
-                $items = array_filter($items, function ($obj) use ($filter) {
-                    return $obj->getType() == $filter;
+                $items = array_filter($items, function ($obj) use ($filter, $rule) {
+                    return $obj->{ 'get' .  ucfirst( $rule->getListFilterField() ) }() == $filter;
                   });
             }
 

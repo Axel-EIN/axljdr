@@ -5,6 +5,8 @@
 #preview-label {
     display: block;
     position: relative;
+    background-color: gray;
+    text-align: center;
 }
 
 #browse-label {

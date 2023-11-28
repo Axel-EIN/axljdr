@@ -4,9 +4,11 @@ namespace App\Controller;
 
 use App\Entity\Clan;
 use App\Entity\Lieu;
+use App\Entity\Lore;
 use App\Entity\Archive;
 use App\Repository\ClanRepository;
 use App\Repository\LieuRepository;
+use App\Repository\LoreRepository;
 use App\Repository\ArchiveRepository;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -19,12 +21,14 @@ class EmpireController extends AbstractController
      */
     public function afficherEmpire(ClanRepository $clanRepository,
                                    ArchiveRepository $archiveRepository,
-                                   LieuRepository $lieuRepository): Response
+                                   LieuRepository $lieuRepository,
+                                   LoreRepository $loreRepository): Response
     {
         $clansMajeurs = $clanRepository->findAllMajeurs();
         $clansAutres = $clanRepository->findAllAutres();
         $archives = $archiveRepository->findall();
         $lieux = $lieuRepository->findall();
+        $lores = $loreRepository->findall();
 
         $sections = [];
         $sections[0]['name'] = "Archives";
@@ -46,6 +50,13 @@ class EmpireController extends AbstractController
         $sections[2]['titleLight'] = 'Les ';
         $sections[2]['titleStrong'] = 'Lieux';
 
+        $i++;
+        $sections[$i]['name'] = "Lore";
+        $sections[$i]['entity'] = 'lore';
+        $sections[$i]['label_one'] = "un Lore";
+        $sections[$i]['titleLight'] = '';
+        $sections[$i]['titleStrong'] = 'Lore';
+
         $header_classname = 'empire';
         $header_up = "Univers du Jeu";
         $header_down = "L'Empire de Rokugan";
@@ -56,6 +67,7 @@ class EmpireController extends AbstractController
             'clansAutres' => $clansAutres,
             'archives' => $archives,
             'lieux' => $lieux,
+            'lores' => $lores,
             'sections' => $sections,
             'header_classname' => $header_classname,
             'header_up' => $header_up,
@@ -117,6 +129,24 @@ class EmpireController extends AbstractController
             'category' => 'empire',
             'lieux' => $lieux,
             'autresLieux' => $autresLieux
+        ]);
+    }
+
+    /**
+     * @Route("/empire/lore/{id}", name="empire_lore")
+     */
+    public function afficherLore(Lore $lore, LoreRepository $loreRepository): Response
+    {
+        $lores = $loreRepository->findall();
+        $autresLores = $loreRepository->findAllExceptOne($lore->getId());
+
+        return $this->render('empire/lore.html.twig', [
+            'un_element' => $lore,
+            'nom' => $lore->getNom(),
+            'entity' => 'lore',
+            'category' => 'empire',
+            'lores' => $lores,
+            'autresLores' => $autresLores,
         ]);
     }
 }

@@ -1,0 +1,105 @@
+{% set i = 1 %}
+{% set library = un_element %}
+
+<!-- HEADING -->
+<heading id="list-heading" class="col-12">
+    <span>Nom</span>
+    <right class="ml-auto">
+        <span></span>
+        <span class="ml-4">Trait associé</span>
+    </right>
+</heading>
+
+{% for item in items %}
+
+    <!-- ITEM - COMPETENCES -->
+    <div class="col-12 p-0 m-0 relative">
+
+        <!-- MJ EDIT -->
+        {% if app.user and is_granted("ROLE_MJ") %}
+            {% set position, size, color, entity, un_element, redirect = 'left-overflow', 'btn-icon-mini', 'link-accent', 'competence', item, 'library&libraryID=' ~ library.id %}
+            {{ include('/parts/btn-icon-edit.html.twig') }}
+        {% endif %}
+
+        <a href="#collapse{{i}}" class="card item" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="collapse{{i}}">
+
+            <!-- VISIBLE LINE -->
+            <line class="item-line">
+                <strong class="item-name">{{ item.nom }}</strong>
+                {% if item.globale is defined and item.globale == true %}
+                    <div class="ml-2">
+                        <span class="badge badge-secondary">Globale</span>
+                    </div>
+                {% endif %}
+                {% if item.degradante is defined and item.degradante == true %}
+                    <div class="ml-2">
+                        <span class="badge badge-danger">Dégradante</span>
+                    </div>
+                {% endif %}
+                <right class="ml-auto">
+                    {% if item.motCle1 %}<span class="badge badge-info">{{item.motCle1}}</span>{% endif %}
+                    {% if item.motCle2 %}<span class="badge badge-info">{{item.motCle2}}</span>{% endif %}
+
+                    {% if item.trait == 'INTUITION' or item.trait == 'RÉFLEXES' %}
+                        {% set anneau = 'AIR' %}
+                    {% elseif item.trait == 'PERCEPTION' or item.trait == 'FORCE' %}
+                        {% set anneau = 'EAU' %}
+                    {% elseif item.trait == 'INTELLIGENCE' or item.trait == 'AGILITÉ' %}
+                        {% set anneau = 'FEU' %}
+                    {% elseif item.trait == 'VOLONTÉ' or item.trait == 'CONSTITUTION' %}
+                        {% set anneau = 'TERRE' %}
+                    {% elseif item.trait == 'VIDE' %}
+                        {% set anneau = 'VIDE' %}
+                    {% elseif item.trait == 'VARIABLE' %}
+                        {% set anneau = 'lighter' %}
+                    {% endif %}
+
+                    <strong class="ml-2 p-1 text-{{anneau}}">
+                        {{ item.trait }}
+                    </strong>
+                </right>
+            </line>
+
+            <!-- COLLAPSED CONTENT -->
+            <collapse id="collapse{{i}}" class="collapse">
+                <span class="badge badge-pill badge-dark mt-2">{{item.categorie}}</span>
+                <br/><br/>
+                <span class="text-muted">Spécialisations : </span>
+                {% if item.specialisation1 is defined and item.specialisation1 is not empty %}
+                    {{item.specialisation1}}
+                    {% if item.specialisation2 is defined and item.specialisation2 is not empty %}
+                        {{', ' ~ item.specialisation2}}
+                        {% if item.specialisation3 is defined and item.specialisation3 is not empty %}
+                            {{', ' ~ item.specialisation3}}
+                            {% if item.specialisation4 is defined and item.specialisation4 is not empty %}
+                                {{', ' ~ item.specialisation4}}
+                                {% if item.specialisation5 is defined and item.specialisation5 is not empty %}
+                                    {{', ' ~ item.specialisation5}}
+                                    {% if item.specialisation6 is defined and item.specialisation6 is not empty %}
+                                        {{', ' ~ item.specialisation6}}
+                                    {% endif %}
+                                {% endif %}
+                            {% endif %}
+                        {% endif %}
+                    {% endif %}
+                {% else %}
+                    Aucune
+                {% endif %}
+                <p class="p-2 m-0 item-description">
+                    {{ item.description|raw|nl2br }}
+                </p>
+                <div id="capacite">
+                    <span class="title-h4">MAÎTRISES</span>
+                    <ul>
+                        <li class="text-muted">RANG 3 : Spécialisaion Offerte</li>
+                        <li><strong>RANG 5 : {{ item.capacite|raw|nl2br }}</strong></li>
+                        <li class="text-muted">RANG 7 : Augmentation Gratuite</li>
+                    </ul>
+                </div>
+            </collapse>
+
+        </a>
+    </div>
+
+    {% set i = i + 1 %}
+{% endfor %}

@@ -17,6 +17,7 @@ use App\Repository\ClasseRepository;
 use App\Repository\EcoleRepository;
 use App\Repository\AvantageRepository;
 use App\Repository\CompetenceRepository;
+use App\Repository\ObjetRepository;
 use App\Repository\UtilisateurRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -42,6 +43,7 @@ class BackOfficeController extends AbstractController
                                        EcoleRepository $ecoleRepository,
                                        AvantageRepository $avantageRepository,
                                        CompetenceRepository $competenceRepository,
+                                       ObjetRepository $objetRepository,
 
                                        PersonnageRepository $personnageRepository,
                                        FichePersonnageRepository $fichePersonnageRepository,
@@ -105,6 +107,9 @@ class BackOfficeController extends AbstractController
         $nbrCompetences = $competenceRepository->countCompetences();
         $derniereCompetence = $competenceRepository->findOneBy(array(),array('id' => 'DESC'));
 
+        $nbrObjets = $objetRepository->countObjets();
+        $dernierObjet = $objetRepository->findOneBy(array(),array('id' => 'DESC'));
+
         // USER
         $nbrUtilisateurs = $utilisateurRepository->countUtilisateurs();
         $dernierUtilisateur = $utilisateurRepository->findOneBy(array(),array('id' => 'DESC'));
@@ -147,6 +152,8 @@ class BackOfficeController extends AbstractController
             'dernierAvantage' => $dernierAvantage,
             'nbrCompetences' => $nbrCompetences,
             'derniereCompetence' => $derniereCompetence,
+            'nbrObjets' => $nbrObjets,
+            'dernierObjet' => $dernierObjet,
 
             'nbrUtilisateurs' => $nbrUtilisateurs,
             'dernierUtilisateur' => $dernierUtilisateur,

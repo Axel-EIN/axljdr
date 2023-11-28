@@ -26,16 +26,14 @@ class AdminRuleType extends AbstractType
                 'choices'  => [
                     'Avantages / Désavantages' => 'avantage',
                     'Compétences' => 'competence',
-                    'Sorts' => 'sort',
-                    'Kihos' => 'kiho',
-                    'Tatoos' => 'tatoo',
+                    'Objets' => 'objet'
                 ],
             ])
             ->add('listTabField', TextType::class, [ 'required' => false, 'constraints' => [ new Length( [ 'max' => 30 ] ) ] ] )
             ->add('listFilterField', TextType::class, [ 'required' => false, 'constraints' => [ new Length( [ 'max' => 30 ] ) ] ] )
             ->add('image', FileType::class, array('mapped' => false, 'data_class' => null, 'required' => false))
             ->add('pdf', FileType::class, array('mapped' => false, 'data_class' => null, 'required' => false))
-            ->add('listIntro', TextareaType::class, ['required' => false, 'constraints' => [ new Length( [ 'max' => 3000 ] ) ] ] )
+            ->add('listIntro', TextareaType::class, ['required' => false, 'constraints' => [ new Length( [ 'max' => 5000 ] ) ] ] )
             ->add('part1titre', TextType::class, ['required' => false, 'constraints' => [ new Length( [ 'max' => 100 ] ) ] ] )
             ->add('part1', TextareaType::class, ['required' => false])
             ->add('part1aside', textareaType::class, ['required' => false])

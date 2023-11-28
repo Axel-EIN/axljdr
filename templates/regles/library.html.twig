@@ -2,52 +2,144 @@
 
 {% block stylesheets %}
         {{parent()}}
-        <link rel="stylesheet" href="{{asset('css/library.css')}}" />
+        <link rel="stylesheet" href="{{asset('css/page-rule.css')}}" />
+        <link rel="stylesheet" href="{{asset('css/page-library.css')}}" />
 {% endblock %}
 
 {% block element_content %}
 
-    <tabs class="col-12 p-0 m-0 mb-3">
-        <ul id="tabs">
-            <li>
-                <a href="{{ path( 'regles_rule', {id: un_element.id} ) }}"
-                    class="tab {% if app.request.get('tab') is not defined or app.request.get('tab') is empty %}active{% endif %}"
-                    aria-current="page" ><i class="fa-solid fa-house"></i></a>
-            </li>
-            {% for tab in tabs|reverse %}
-            <li>
-                <a href="{{ path('regles_rule', {id: un_element.id, 'tab' : tab } ) }}"
-                    class="tab {% if app.request.get('tab') is defined and app.request.get('tab') == tab %}active{% endif %}">
-                    {{tab|upper}}
-                </a>
-            </li>
-            {% endfor %}
-        </ul>
-    </tabs>
+    <navtabs class="mb-3">
+    <!-- TABS -->
+        <tabs class="d-block col-12 p-0 m-0">
+            <ul id="tabs">
+                <!-- HOME -->
+                <li>
+                    <a href="{{ path( 'regles_library', {id: un_element.id} ) }}"
+                    class="tab {% if app.request.get('tab') is not defined or app.request.get('tab') is empty %}active{% endif %}">
+                            <i class="fa-solid fa-house" title="Lire l'introduction" alt="Icône accueil"></i>
+                    </a>
+                </li>
+                {% for tab in tabs %}
+                    <li>
+                        {% if un_element.subTabField is defined and un_element.subTabField is not empty and app.request.get('subtab') is empty
+                            or un_element.subTabField is defined and un_element.subTabField is not empty and un_element.mixable != true %}
+                            <a href="{{ path('regles_library', {id: un_element.id, 'tab' : tab, 'subtab' : 'first' } ) }}"
+                                class="tab {% if app.request.get('tab') is defined and app.request.get('tab') == tab %}active{% endif %}">
+                                {{tab|upper}}
+                            </a>
+                        {% else %}
+                            <a href="{{ path('regles_library', {id: un_element.id, 'tab' : tab, 'subtab' : app.request.get('subtab') } ) }}"
+                                class="tab {% if app.request.get('tab') is defined and app.request.get('tab') == tab %}active{% endif %}">
+                                {{tab|upper}}
+                            </a>
+                        {% endif %}
+                    </li>
+                {% endfor %}
 
+                {% if un_element.mixable is defined and un_element.mixable == true %}
+                    <!-- ALL -->
+                    <li>
+                        {% if un_element.subTabField is defined and un_element.subTabField is not empty and app.request.get('subtab') is empty %}
+                            <a  href="{{ path('regles_library', {id: un_element.id, 'tab' : 'all', 'subtab' : 'first' } ) }}"
+                                class="tab {% if app.request.get('tab') is defined and app.request.get('tab') == 'all' %}active{% endif %}">
+                                    <i class="fa-solid fa-list" title="Voir tout" alt="Icône toute la liste"></i>
+                            </a>
+                        {% else %}
+                            <a  href="{{ path('regles_library', {id: un_element.id, 'tab' : 'all', 'subtab' : app.request.get('subtab') } ) }}"
+                                class="tab {% if app.request.get('tab') is defined and app.request.get('tab') == 'all' %}active{% endif %}">
+                                    <i class="fa-solid fa-list" title="Voir tout" alt="Icône toute la liste"></i>
+                            </a>
+                        {% endif %}
+                    </li>
+                {% endif %}
+            </ul>
+        </tabs>
+
+        <!-- SUB TABS -->
+        {% if app.request.get('tab') is defined and app.request.get('tab') is not empty and subtabs is defined and subtabs is not empty %}
+            <subtabs class="d-block col-12 p-0 m-0 ml-4 mt-2 pl-2">
+                <ul id="sub-tabs">
+                    {% for subtab in subtabs %}
+                        <li>
+                            <a href="{{ path('regles_library', {id: un_element.id, 'tab' : app.request.get('tab'), 'subtab' : subtab } ) }}"
+                                class="{% if app.request.get('subtab') is defined and app.request.get('subtab') == subtab %}active{% endif %}">
+                                {{subtab|capitalize}}
+                            </a>
+                        </li>
+                    {% endfor %}
+                    {% if un_element.mixable is defined and un_element.mixable == true %}
+                        <!-- ALL -->
+                        <li>
+                            <a href="{{ path('regles_library', {id: un_element.id, 'tab' : app.request.get('tab'), 'subtab' : 'all' } ) }}"
+                            class="{% if app.request.get('subtab') is defined and app.request.get('subtab') == 'all' %}active{% endif %}">
+                                    <i class="fa-solid fa-list" title="Voir tout" alt="Icône toute la liste"></i>
+                            </a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </subtabs>
+        {% endif %}
+    </navtabs>
+
+    <!-- IF TAB NOT DEFINED OR EMPTY => INTRO DESCRIPTION -->
     {% if app.request.get('tab') is not defined or app.request.get('tab') is empty %}
-        <section id="intro" class="col-12 p-0 m-0 card">
-            <div class="card-body">
-                <p class="text-regular p-2 text-justify">{{un_element.listIntro|raw|nl2br}}</p>
-            </div>
-        </section>
+
+        <!-- IMAGE -->
+        <cardtopimg class="col-12 card-top-img">
+
+            {% if un_element.pdf is defined and un_element.pdf is not empty %}
+                <a href="{{asset(un_element.pdf)}}">
+                    <img class="img-fluid w-100" src="{{ asset(un_element.image|default(NA_PDF)) }}" />
+                </a>
+            {% else %}
+                <div class="ratio-169 {{gradient_left|default('')}}">
+                    <img class="ratio-cropped" src="{{ asset(un_element.image|default(NA_LIBRARY)) }}" />
+                </div>
+            {% endif %}
+
+        </cardtopimg>  
+
+        <!-- CARD TEXT + ASIDE -->
+        <cardcontent class="col-12 card-content">
+
+            <cardbody class="part-body">
+
+                <!-- ASIDE -->
+                {% if un_element.aside is defined and un_element.aside is not empty %}
+                    <aside class="aside">
+                        <p>{{ un_element.aside|raw|nl2br }}</p>
+                    </aside>
+                {% endif %}
+
+                <!-- TEXT -->
+                <div>{{ un_element.description|raw|nl2br }}</div>
+
+            </cardbody>
+            <spacer class="spacer-last">{{ include('/parts/separateur-ornament.html.twig') }}</spacer>
+
+        </cardcontent>
+
     {% else %}
 
-    {% if filters is defined and filters is not empty %}
-        <section class="col-12 px-3 mb-3">
-            <label for="filter-select">Filtrer :&nbsp;&nbsp;</label>
-            <select name="filter" id="filter-select" >
-                <option value="">TOUS</option>
-                {% for one_filter in filters %}
-                <option value={{one_filter}} {% if app.request.get('filter') == one_filter %}selected{% endif %}>{{one_filter}}</option>
-                {% endfor %}
-            </select>
-        </section>
-    {% endif %}
+        <!-- FILTERS -->
+        {% if filters is defined and filters is not empty %}
+            <section class="col-12 px-3 mb-3">
+                <label for="filter-select">Filtrer :&nbsp;&nbsp;</label>
+                <select name="filter" id="filter-select" >
+                    <option value="">TOUS</option>
+                    {% for one_filter in filters %}
+                    <option value={{one_filter}} {% if app.request.get('filter') == one_filter %}selected{% endif %}>{{one_filter}}</option>
+                    {% endfor %}
+                </select>
+            </section>
+        {% endif %}
 
-        <section class="col-12 px-3 row">
-            {{ include('regles/list-' ~ un_element.listEntity ~ '.html.twig') }}
-        </section>
+        <!-- LIST -->
+        {% if subtabs is empty or subtabs is not empty and app.request.get('subtab') is defined and app.request.get('subtab') is not empty %}
+            <section class="col-12 px-3 row">
+                {{ include('regles/list-' ~ un_element.entity ~ '.html.twig') }}
+            </section>
+        {% endif %}
 
     {% endif %}
 

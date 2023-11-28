@@ -23,47 +23,29 @@ class RuleRepository extends ServiceEntityRepository
         parent::__construct($registry, Rule::class);
     }
 
-    public function findAllReglesSimpleBasesOrdered()
+    public function findBases()
     {
         return $this->createQueryBuilder('r')
             ->andWhere('r.base = true')
-            ->andWhere('r.listEntity IS NULL')
             ->addOrderBy('r.numero', 'ASC')
             ->getQuery()
             ->getResult();
     }
 
-    public function findAllBibliothequesBasesOrdered()
-    {
-        return $this->createQueryBuilder('r')
-            ->andWhere('r.base = true')
-            ->andWhere('r.listEntity IS NOT NULL')
-            ->addOrderBy('r.numero', 'ASC')
-            ->getQuery()
-            ->getResult();
-    } 
-    
-    public function findAllAnnexesOrdered()
+    public function findAnnexes()
     {
         return $this->createQueryBuilder('r')
             ->andWhere('r.base = false')
-            ->andWhere('r.listEntity IS NULL')
             ->addOrderBy('r.numero', 'ASC')
             ->getQuery()
             ->getResult();
     }
 
-    public function findAllSameTypeExceptOneSorted($id, $type, $library)
+    public function FindAllTypeExceptCurrent($id, $type)
     {
-        if ($library != null)
-            $library = 'IS NOT NULL';
-        else
-            $library = 'IS NULL';
-
         return $this->createQueryBuilder('r')
-            ->andWhere('r.base = :value_type')
-            ->andWhere('r.listEntity ' . $library)
             ->andWhere('r.id != :value_id')
+            ->andWhere('r.base = :value_type')
             ->setParameter('value_id', $id)
             ->setParameter('value_type', $type)
             ->addOrderBy('r.numero', 'ASC')

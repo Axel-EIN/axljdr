@@ -23,12 +23,16 @@ class ReglesController extends AbstractController
     /**
      * @Route("/regles", name="regles")
      */
-    public function viewRegles(RuleRepository $ruleRepository,  ClasseRepository $classeRepository): Response
+    public function viewRegles(RuleRepository $ruleRepository,  ClasseRepository $classeRepository, LibraryRepository $libraryRepository): Response
     {
-        $rulesSimplesBases = $ruleRepository->findAllReglesSimpleBasesOrdered();
+        $rulesBases = $ruleRepository->findBases();
+        $librariesBases = $libraryRepository->findBases();
+
+        $rulesAnnexes = $ruleRepository->findAnnexes();
+        $librariesAnnexes = $libraryRepository->findAnnexes();
+
+        $annexes = array_merge($rulesAnnexes, $librariesAnnexes);
         $classes = $classeRepository->findAll();
-        $rulesBibliothequesBases = $ruleRepository->findAllBibliothequesBasesOrdered();
-        $rulesAnnexes = $ruleRepository->findAllAnnexesOrdered();
 
         $sections = [];
 
@@ -73,10 +77,10 @@ class ReglesController extends AbstractController
             'header_down' => $header_down,
             'category' => $category,
             'sections' => $sections,
-            'rulesSimplesBases' => $rulesSimplesBases,
+            'rulesBases' => $rulesBases,
+            'librariesBases' => $librariesBases,
+            'annexes' => $annexes,
             'classes' => $classes,
-            'rulesBibliothequesBases' => $rulesBibliothequesBases,
-            'rulesAnnexes' => $rulesAnnexes,
         ]);
     }
 

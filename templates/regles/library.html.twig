@@ -12,15 +12,15 @@
             <li>
                 <a href="{{ path( 'regles_rule', {id: un_element.id} ) }}"
                     class="tab {% if app.request.get('tab') is not defined or app.request.get('tab') is empty %}active{% endif %}"
-                    aria-current="page" >INTRO</a>
+                    aria-current="page" ><i class="fa-solid fa-house"></i></a>
             </li>
             {% for tab in tabs|reverse %}
-                <li>
-                    <a href="{{ path('regles_rule', {id: un_element.id, 'tab' : tab } ) }}"
-                        class="tab {% if app.request.get('tab') is defined and app.request.get('tab') == tab %}active{% endif %}">
-                        {{tab|upper}}
-                    </a>
-                </li>
+            <li>
+                <a href="{{ path('regles_rule', {id: un_element.id, 'tab' : tab } ) }}"
+                    class="tab {% if app.request.get('tab') is defined and app.request.get('tab') == tab %}active{% endif %}">
+                    {{tab|upper}}
+                </a>
+            </li>
             {% endfor %}
         </ul>
     </tabs>
@@ -32,6 +32,8 @@
             </div>
         </section>
     {% else %}
+
+    {% if filters is defined and filters is not empty %}
         <section class="col-12 px-3 mb-3">
             <label for="filter-select">Filtrer :&nbsp;&nbsp;</label>
             <select name="filter" id="filter-select" >
@@ -41,10 +43,11 @@
                 {% endfor %}
             </select>
         </section>
+    {% endif %}
 
-        <div class="col-12 px-3 row">
-            {{ include('parts/list-' ~ un_element.listEntity ~ '.html.twig') }}
-        </div>
+        <section class="col-12 px-3 row">
+            {{ include('regles/list-' ~ un_element.listEntity ~ '.html.twig') }}
+        </section>
 
     {% endif %}
 

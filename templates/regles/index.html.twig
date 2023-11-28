@@ -4,7 +4,7 @@
 {% block section_content1 %}
 <!-- REGLES DE BASES -->
     {% set col, size, na_image, ratio = 'col-3', 'medium', NA_RULE, '43' %}
-    {% for un_element in rulesSimplesBases %}
+    {% for un_element in rulesBases %}
         {{ include('/parts/element-vignette.html.twig', {un_element}) }}
     {% endfor %}
 {% endblock %}
@@ -26,7 +26,7 @@
 {% block section_content3 %}
 <!-- BIBLIOTHEQUES -->
     {% set col, size, na_image, ratio = 'col-3', 'medium', NA_LIBRARY, '43' %}
-    {% for un_element in rulesBibliothequesBases %}
+    {% for un_element in librariesBases %}
         {{ include('/parts/element-vignette.html.twig', {un_element}) }}
     {% endfor %}
 {% endblock %}
@@ -34,7 +34,7 @@
 {% block section_content4 %}
 <!-- REGLES ANNEXES -->
     {% set col, size, na_image, ratio = 'col-2', 'small', NA_RULE, '43' %}
-    {% for un_element in rulesAnnexes %}
+    {% for un_element in annexes %}
         {{ include('/parts/element-vignette.html.twig', {un_element}) }}
     {% endfor %}
 {% endblock %}

@@ -53,7 +53,7 @@ class Sort
     private $duree;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $augmentations;
 
@@ -65,12 +65,32 @@ class Sort
     /**
      * @ORM\Column(type="string", length=60, nullable=true)
      */
-    private $motCle1;
+    private $keyword1;
 
     /**
      * @ORM\Column(type="string", length=60, nullable=true)
      */
-    private $motCle2;
+    private $keyword2;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $keyword3;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $originalName;
+
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $numero;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $kihoType;
 
     public function getId(): ?int
     {
@@ -185,26 +205,74 @@ class Sort
         return $this;
     }
 
-    public function getMotCle1(): ?string
+    public function getKeyword1(): ?string
     {
-        return $this->motCle1;
+        return $this->keyword1;
     }
 
-    public function setMotCle1(?string $motCle1): self
+    public function setKeyword1(?string $keyword1): self
     {
-        $this->motCle1 = $motCle1;
+        $this->keyword1 = $keyword1;
 
         return $this;
     }
 
-    public function getMotCle2(): ?string
+    public function getKeyword2(): ?string
     {
-        return $this->motCle2;
+        return $this->keyword2;
     }
 
-    public function setMotCle2(?string $motCle2): self
+    public function setKeyword2(?string $keyword2): self
     {
-        $this->motCle2 = $motCle2;
+        $this->keyword2 = $keyword2;
+
+        return $this;
+    }
+
+    public function getKeyword3(): ?string
+    {
+        return $this->keyword3;
+    }
+
+    public function setKeyword3(?string $keyword3): self
+    {
+        $this->keyword3 = $keyword3;
+
+        return $this;
+    }
+
+    public function getOriginalName(): ?string
+    {
+        return $this->originalName;
+    }
+
+    public function setOriginalName(?string $originalName): self
+    {
+        $this->originalName = $originalName;
+
+        return $this;
+    }
+
+    public function getNumero(): ?int
+    {
+        return $this->numero;
+    }
+
+    public function setNumero(int $numero): self
+    {
+        $this->numero = $numero;
+
+        return $this;
+    }
+
+    public function getKihoType(): ?string
+    {
+        return $this->kihoType;
+    }
+
+    public function setKihoType(?string $kihoType): self
+    {
+        $this->kihoType = $kihoType;
 
         return $this;
     }

@@ -31,7 +31,9 @@ class SortRepository extends ServiceEntityRepository
     public function findAllSorted()
     {
         return $this->createQueryBuilder('s')
+            ->addOrderBy('s.anneau', 'ASC')
             ->addOrderBy('s.niveau', 'ASC')
+            ->addOrderBy('s.numero', 'ASC')
             ->getQuery()
             ->getResult();
     }

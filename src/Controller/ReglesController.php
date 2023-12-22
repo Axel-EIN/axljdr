@@ -120,6 +120,7 @@ class ReglesController extends AbstractController
         $tab_url_param = $request->query->get('tab');
         $subtab_url_param = $request->query->get('subtab');
         $filter_url_param = $request->query->get('filter');
+        $keyword_url_param = $request->query->get('keyword');
 
         // LIBRARY ALL ITEMS
         $entity_name = $library->getEntity();
@@ -129,17 +130,25 @@ class ReglesController extends AbstractController
         $tabs = [];
         $subtabs = [];
         $filters = [];
+        $keywords = [];
 
         // TABS
         if ( !empty( $tab_field_name ) ) {
             foreach ( $items as $item )
             {
                 $tabs[] = $item->{ 'get' .  ucfirst( $tab_field_name ) }();
+
                 if (!empty($filter_field_name))
+                {
                     $filters[] = $item->{ 'get' .  ucfirst( $filter_field_name ) }();
+                }
+
             }
             $tabs = array_unique($tabs);
             $filters = array_unique($filters);
+
+            if ($library->getNom() == 'Grimoire' )
+                $tabs = ['MAGIE', 'MAHO', 'KIHO', 'TATOUAGE'];
         }
 
         // IF TAB SELECTED
@@ -149,28 +158,64 @@ class ReglesController extends AbstractController
                 $items = array_filter($items, function ($obj) use ($tab_url_param, $tab_field_name) { return $obj->{ 'get' .  ucfirst( $tab_field_name ) }() == $tab_url_param; });
 
             if ( !empty( $subtab_field_name ) ) {
+
                 foreach ( $items as $item )
                     $subtabs[] = $item->{ 'get' .  ucfirst( $subtab_field_name ) }();
+
                 $subtabs = array_unique($subtabs);
+
                 if ($library->getNom() == 'Avantages / Désavantages')
                     $subtabs = ['MENTAL','PHYSIQUE','SOCIAL','SPIRITUEL', 'MATERIEL'];
-                elseif ($library->getNom() == 'Grimoire Magique' && $tab_url_param == 'MAGIE' )
-                    $subtabs = ['AIR', 'EAU', 'FEU', 'TERRE', 'VIDE', 'UNIVERSEL'];
                 elseif ($library->getNom() == 'Armurerie' && $tab_url_param == 'ARME' )
                     $subtabs = ['ÉPÉE', 'HAST', 'LANCE', 'LOURDE', 'BÂTON', 'ARC', 'CHAÎNE', 'COUTEAU', 'ÉVENTAIL'];
+                elseif ($library->getNom() == 'Grimoire' && $tab_url_param == 'MAGIE' )
+                    $subtabs = ['AIR', 'EAU', 'FEU', 'TERRE', 'VIDE', 'UNIVERSEL'];
 
                 $subtab_first = $subtabs[0];
 
-                if ( empty($subtab_url_param) )
-                    $items = [];
             }
+
+            // IF FILTER KEYWORD EXISTS
+            $keyword2_field_name = $library->getKeyword2Field();
+            $keyword3_field_name = $library->getKeyword3Field();
+            $keyword1_field_name = $library->getKeyword1Field();
+            
+            $keywords = [];
+  
+            foreach ( $items as $item ) {
+
+                if ( !empty($keyword1_field_name) && !empty( $item->{ 'get' .  ucfirst( $keyword1_field_name ) }() ) )
+                {
+                    $keywords[] = $item->{ 'get' .  ucfirst( $keyword1_field_name ) }();
+                }
+    
+                if ( !empty($keyword2_field_name) && !empty( $item->{ 'get' .  ucfirst( $keyword2_field_name ) }() ) )
+                {
+                    $keywords[] = $item->{ 'get' .  ucfirst( $keyword2_field_name ) }();
+                }
+                
+                if ( !empty($keyword3_field_name) && !empty( $item->{ 'get' .  ucfirst( $keyword3_field_name ) }() ) )
+                {
+                    $keywords[] = $item->{ 'get' .  ucfirst( $keyword3_field_name ) }();
+                }
+            }
+
+            $keywords = array_unique($keywords);
+            sort($keywords);
+
+            if ( !empty($subtab_field_name) && empty( $subtab_url_param ) )
+                $items = [];
 
             // IF SUB TAB SELECTED
             if ( !empty( $subtab_url_param ) && !empty( $subtab_field_name ) && $subtab_url_param != 'all' && $subtab_url_param != 'first' )
-                $items = array_filter($items, function ($obj) use ($subtab_url_param, $subtab_field_name) { return $obj->{ 'get' .  ucfirst( $subtab_field_name ) }() == $subtab_url_param; });
+            {
+                $items = array_filter($items, function ($obj) use ($subtab_url_param, $subtab_field_name) {
+                    return $obj->{ 'get' .  ucfirst( $subtab_field_name ) }() == $subtab_url_param; });
+            }
             elseif ( $subtab_url_param == 'first' && !empty($subtab_first) )
             {
-                $items = array_filter($items, function ($obj) use ($subtab_first, $subtab_field_name) { return $obj->{ 'get' .  ucfirst( $subtab_field_name ) }() == $subtab_first; });
+                $items = array_filter($items, function ($obj) use ($subtab_first, $subtab_field_name) {
+                    return $obj->{ 'get' .  ucfirst( $subtab_field_name ) }() == $subtab_first; });
                 $request->query->set('subtab', $subtab_first);
             }
         }
@@ -178,6 +223,22 @@ class ReglesController extends AbstractController
         // IF FILTER SELECTED
         if ( !empty( $filter_url_param ) && !empty( $filter_field_name ) )
             $items = array_filter($items, function ($obj) use ($filter_url_param, $filter_field_name) { return $obj->{ 'get' .  ucfirst( $filter_field_name ) }() == $filter_url_param; });
+
+        // IF KEYWORD FILTER SELECTED
+        if ( !empty( $keyword_url_param ) && ( !empty( $keyword1_field_name ) || !empty( $keyword2_field_name ) || !empty( $keyword3_field_name ) ) )
+        {
+            $filtered_items = [];
+            foreach ( $items as $item )
+            {
+                if ( !empty( $item->{ 'get' . ucfirst( $keyword1_field_name ) }() )  && $item->{ 'get' . ucfirst( $keyword1_field_name ) }() == $keyword_url_param )
+                    $filtered_items[] = $item;
+                elseif (!empty( $item->{ 'get' . ucfirst( $keyword2_field_name ) }() )  && $item->{ 'get' . ucfirst( $keyword2_field_name ) }() == $keyword_url_param )
+                    $filtered_items[] = $item;
+                elseif (!empty( $item->{ 'get' . ucfirst( $keyword3_field_name ) }() )  && $item->{ 'get' . ucfirst( $keyword3_field_name ) }() == $keyword_url_param )
+                    $filtered_items[] = $item;
+            }
+            $items = $filtered_items;
+        }
 
         // OTHER LIBRARIES
         $otherLibraries = $libraryRepository->findOthersSameType($library->getId(), $library->getBase());
@@ -193,7 +254,8 @@ class ReglesController extends AbstractController
             'items' => $items,
             'tabs' => $tabs,
             'subtabs' => $subtabs,
-            'filters' => $filters
+            'filters' => $filters,
+            'keywords' => $keywords,
         ]);
     }
 

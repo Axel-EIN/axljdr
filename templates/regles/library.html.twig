@@ -57,13 +57,25 @@
 
         <!-- SUB TABS -->
         {% if app.request.get('tab') is defined and app.request.get('tab') is not empty and subtabs is defined and subtabs is not empty %}
-            <subtabs class="d-block col-12 p-0 m-0 ml-4 mt-2 pl-2">
+            <subtabs class="d-block col-12 p-0 m-0 ml-4 mt-3 pl-2">
                 <ul id="sub-tabs">
                     {% for subtab in subtabs %}
-                        <li>
+                        <li class="mt-auto mb-auto">
                             <a href="{{ path('regles_library', {id: un_element.id, 'tab' : app.request.get('tab'), 'subtab' : subtab } ) }}"
                                 class="{% if app.request.get('subtab') is defined and app.request.get('subtab') == subtab %}active{% endif %}">
-                                {{subtab|capitalize}}
+                                {% if app.request.get('tab') == 'MAGIE' %}
+                                    {% if subtab == 'UNIVERSEL' %}
+                                        {{subtab}}
+                                    {% else %}
+                                        <img class="img-48" src="/assets/img/ui/{{subtab|lower}}.png" title='{{subtab}}' alt='Icône {{subtab}}' />
+                                    {% endif %}
+                                {% elseif app.request.get('tab') == 'MAHO' %}
+                                    <img class="img-48" src="/assets/img/ui/{{subtab|lower}}-maho.png" title='{{subtab}} Maho' alt='Icône {{subtab}} Maho' />
+                                {% elseif app.request.get('tab') == 'KIHO' %}
+                                    <img class="img-48" src="/assets/img/ui/{{subtab|lower}}-kiho.png" title='{{subtab}} Kiho' alt='Icône {{subtab}} Kiho' />
+                                {% else %}
+                                    {{subtab|capitalize}}
+                                {% endif %}
                             </a>
                         </li>
                     {% endfor %}
@@ -122,15 +134,38 @@
     {% else %}
 
         <!-- FILTERS -->
-        {% if filters is defined and filters is not empty %}
+        {% if (filters is defined and filters is not empty) or keywords is defined and keywords is not empty %}
+            <section class="col-12 px-3 mt-3 row">
+
+                <div class="col-4">
+                    <label for="keyword-select">Filtrer par Mot Clés :</label>
+                    <select name="filter" id="keyword-select" >
+                        <option value="">TOUS</option>
+                        {% for keyword in keywords %}
+                            <option value={{keyword}} {% if app.request.get('keyword') == keyword %}selected{% endif %}>{{keyword}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="col-4">
+                    <label for="filter-select">Filtrer par {{un_element.filterField|capitalize}} :</label>
+                    <select name="filter" id="filter-select" >
+                        <option value="">TOUS</option>
+                        {% for one_filter in filters %}
+                            <option value={{one_filter}} {% if app.request.get('filter') == one_filter %}selected{% endif %}>{{one_filter}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="col4"></div>
+
+            </section>
+        {% endif %}
+
+        <!-- KEYWORDS -->
+        {% if keywords is defined and keywords is not empty %}
             <section class="col-12 px-3 mb-3">
-                <label for="filter-select">Filtrer :&nbsp;&nbsp;</label>
-                <select name="filter" id="filter-select" >
-                    <option value="">TOUS</option>
-                    {% for one_filter in filters %}
-                    <option value={{one_filter}} {% if app.request.get('filter') == one_filter %}selected{% endif %}>{{one_filter}}</option>
-                    {% endfor %}
-                </select>
+
             </section>
         {% endif %}
 

@@ -6,19 +6,24 @@
 @font-face {
     font-family: 'Barlow';
     src: url("../assets/fonts/Barlow-Regular-Semi-Condensed.ttf");
-    font-weight: 400;
 }
 
-/* H1 DISPLAY TITLES */
+.font-barlow { font-family: 'Barlow'; }
+
+/* H1 */
 @font-face {
     font-family: "Shogun";
     src: url("../assets/fonts/Shoguns-Clan-Edited-Accentued.otf");
 }
 
+.font-shogun { font-family: 'Shogun'; }
+
 @font-face {
     font-family: "Misaki";
     src: url("../assets/fonts/Misaki-Regular.otf");
 }
+
+.font-misaki { font-family: 'Misaki'; }
 
 /* H2 DISPLAY TITLES */
 @font-face {
@@ -26,14 +31,20 @@
     src: url("../assets/fonts/Present-LT-Black-Condensed.otf");
 }
 
+.font-present { font-family: 'Present'; }
+
 /* H3 DISPLAY TITLES */
 @font-face {
     font-family: "Avenir";
     src: url("../assets/fonts/Avenir-Black.ttf");
 }
 
+.font-avenir { font-family: 'Avenir'; }
+
 /* H4 DISPLAY TITLES */
 @font-face {
     font-family: "Amerigo";
     src: url("../assets/fonts/Amerigo-Bold-BT.ttf");
 }
+
+.font-amerigo { font-family: 'Amerigo'; }

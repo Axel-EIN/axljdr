@@ -186,7 +186,7 @@ p > mark {
         -1px 1px 0 var(--flash-red);
 }
 
-.text-outline-purple, .text-outline-6 {
+.text-outline-purple {
     color: var(--purple);
     text-shadow:
         1px 1px 0 var(--fuschia),

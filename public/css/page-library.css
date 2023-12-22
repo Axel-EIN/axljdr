@@ -9,6 +9,16 @@
 .item {
     padding: 0.5rem 1rem;
     color: var(--dark);
+    border-top-right-radius: 0;
+    border-top-left-radius: 1rem;
+    border-bottom-right-radius: 1rem;
+    border-bottom-left-radius: 0;
+}
+
+.item.AIR {
+    box-shadow:
+        inset 2px 2px 0 0 var(--lightest),
+        0px 0px .5rem 0 var(--AIR);
 }
 
 .item:hover {
@@ -87,4 +97,16 @@
     margin-bottom: 1.5rem;
     margin-top: 0;
     border: 1px solid #00000020;
+}
+
+.text-rank {
+    color: white;
+    padding-left: .5rem;
+    padding-right: .5rem;
+    padding-top: 0.25rem;
+    padding-bottom: 0.25rem;
+    border-radius: 1rem;
+    font-weight: bold;
+    min-width: 24px;
+    font-size: var(--regular);
 }

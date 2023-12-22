@@ -26,6 +26,7 @@
                 {% if extra_col1 is defined and extra_col1 is not empty %}<th>{{ extra_col1 }}</th>{% endif %}
                 {% if extra_col2 is defined and extra_col2 is not empty %}<th>{{ extra_col2 }}</th>{% endif %}
                 {% if extra_col3 is defined and extra_col3 is not empty %}<th>{{ extra_col3 }}</th>{% endif %}
+                {% if extra_col4 is defined and extra_col4 is not empty %}<th>{{ extra_col4 }}</th>{% endif %}
                 <th>Edit</th>
                 <th>Delete</th>
             </tr>
@@ -83,6 +84,8 @@
 
                     {% if extra_col3 is defined and extra_col3 is not empty %}<td>{{ attribute(un_element, extra_col3) }}</td>{% endif %}
 
+                    {% if extra_col4 is defined and extra_col4 is not empty %}<td>{{ attribute(un_element, extra_col4) }}</td>{% endif %}
+
                     <td><a href="{{ path('admin_' ~ element ~ '_edit', {id: un_element.id} ) }}"><i class="fas fa-edit"></i></a></td>
 
                     <td><a class="ml-1" href="{{ path('admin_' ~ element ~ '_delete', {'id': un_element.id}) }}?csrf={{ csrf_token('delete' ~ un_element.id) }}"
@@ -99,6 +102,9 @@
                     {% set count = count + 1 %}
                 {% endif %}
                 {% if extra_col3 is defined and extra_col3 is not empty %}
+                    {% set count = count + 1 %}
+                {% endif %}
+                {% if extra_col4 is defined and extra_col4 is not empty %}
                     {% set count = count + 1 %}
                 {% endif %}
                 <tr>

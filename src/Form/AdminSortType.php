@@ -19,6 +19,9 @@ class AdminSortType extends AbstractType
         $builder
         ->add('nom', TextType::class, [
             'constraints' => [ new Length( [ 'max' => 60 ] ) ] ])
+        ->add('originalName', TextType::class, [
+            'required' => false,
+            'constraints' => [ new Length( [ 'max' => 60 ] ) ] ])
         ->add('categorie', ChoiceType::class, [
             'choices'  => [
                 'MAGIE' => 'MAGIE',
@@ -30,16 +33,17 @@ class AdminSortType extends AbstractType
         ->add('anneau', ChoiceType::class, [
             'required' => false,
             'choices'  => [
-                'TERRE' => 'TERRE',
                 'AIR' => 'AIR',
-                "FEU" => "FEU",
                 'EAU' => 'EAU',
+                "FEU" => "FEU",
+                'TERRE' => 'TERRE',
                 'VIDE' => 'VIDE',
                 'UNIVERSEL' => 'UNIVERSEL',
             ],
         ])
         ->add('niveau', IntegerType::class, [
             'required' => false ] )
+        ->add('numero', IntegerType::class)
         ->add('portee', TextType::class, [
             'required' => false ] )
         ->add('zone', TextType::class, [
@@ -50,25 +54,79 @@ class AdminSortType extends AbstractType
             'required' => false ] )
         ->add('description', TextareaType::class, [ 
             'constraints' => [ new Length( [ 'max' => 3000 ] ) ] ])
-        ->add('motCle1', ChoiceType::class, [
+        ->add('keyword1', ChoiceType::class, [
             'required' => false,
             'choices'  => [
-                'Illusion' => 'Illusion',
-                'Tonnerre' => 'Tonnerre',
+                'Affliction' => 'Affliction',
+                'Art de la Guerre' => 'Guerre',
+                'Artisanat' => 'Artisanat',
+                'Bénédiction' => 'Bénédiction',
                 'Défense' => 'Défense',
-                'Voyage' => 'Voyage',
+                'Detection' => 'Detection',
                 'Divination' => 'Divination',
-                'Arme' => 'Arme',
+                'Explosion' => 'Explosion',
+                'Glyphe' => 'Glyphe',
+                'Illusion' => 'Illusion',
+                'Invocation' => 'Invocation',
+                'Jade' => 'Jade',
+                'Soins' => 'Soins',
+                'Souillure' => 'Souillure',
+                'Tonnerre' => 'Tonnerre',
+                'Voyage' => 'Voyage',
+                'Atemi' => 'Atemi',
             ],
         ])
-        ->add('motCle2', ChoiceType::class, [
+        ->add('keyword2', ChoiceType::class, [
             'required' => false,
             'choices'  => [
+                'Affliction' => 'Affliction',
+                'Art de la Guerre' => 'Guerre',
                 'Artisanat' => 'Artisanat',
-                'Art de la Guerre' => 'Art de la Guerre',
-                'Soins' => 'Soins',
+                'Bénédiction' => 'Bénédiction',
+                'Défense' => 'Défense',
+                'Detection' => 'Detection',
+                'Divination' => 'Divination',
+                'Explosion' => 'Explosion',
                 'Glyphe' => 'Glyphe',
+                'Illusion' => 'Illusion',
+                'Invocation' => 'Invocation',
                 'Jade' => 'Jade',
+                'Soins' => 'Soins',
+                'Souillure' => 'Souillure',
+                'Tonnerre' => 'Tonnerre',
+                'Voyage' => 'Voyage',
+                'Atemi' => 'Atemi',
+            ],
+        ])
+        ->add('keyword3', ChoiceType::class, [
+            'required' => false,
+            'choices'  => [
+                'Affliction' => 'Affliction',
+                'Art de la Guerre' => 'Guerre',
+                'Artisanat' => 'Artisanat',
+                'Bénédiction' => 'Bénédiction',
+                'Défense' => 'Défense',
+                'Detection' => 'Detection',
+                'Divination' => 'Divination',
+                'Explosion' => 'Explosion',
+                'Glyphe' => 'Glyphe',
+                'Illusion' => 'Illusion',
+                'Invocation' => 'Invocation',
+                'Jade' => 'Jade',
+                'Soins' => 'Soins',
+                'Souillure' => 'Souillure',
+                'Tonnerre' => 'Tonnerre',
+                'Voyage' => 'Voyage',
+                'Atemi' => 'Atemi',
+            ],
+        ])
+        ->add('kihoType', ChoiceType::class, [
+            'required' => false,
+            'choices'  => [
+                'Intérieur' => 'Intérieur',
+                'Mystique' => 'Mystique',
+                'Karmique' => 'Karmique',
+                'Martial' => 'Martial',
             ],
         ])
         ;

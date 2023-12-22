@@ -2,18 +2,24 @@
     {{ form_start(form) }}
         <div class="row justify-content-center align-items-end mb-4">
 
-            <div class="col-3">{{ form_row(form.nom) }}</div>
+            <div class="col-6">{{ form_row(form.nom) }}</div>
+            <div class="col-6">{{ form_row(form.originalName) }}</div>
+
             <div class="col-3">{{ form_row(form.categorie) }}</div>
             <div class="col-3">{{ form_row(form.anneau) }}</div>
             <div class="col-3">{{ form_row(form.niveau) }}</div>
+            <div class="col-3">{{ form_row(form.numero) }}</div>
 
-            <div class="col-2">{{ form_row(form.portee) }}</div>
-            <div class="col-2">{{ form_row(form.zone) }}</div>
-            <div class="col-2">{{ form_row(form.duree) }}</div>
-            <div class="col-6">{{ form_row(form.augmentations) }}</div>
+            <div class="col-4">{{ form_row(form.portee) }}</div>
+            <div class="col-4">{{ form_row(form.zone) }}</div>
+            <div class="col-4">{{ form_row(form.duree) }}</div>
 
-            <div class="col-6">{{ form_row(form.motCle1) }}</div>
-            <div class="col-6">{{ form_row(form.motCle2) }}</div>
+            <div class="col-12">{{ form_row(form.augmentations) }}</div>
+
+            <div class="col-3">{{ form_row(form.keyword1) }}</div>
+            <div class="col-3">{{ form_row(form.keyword2) }}</div>
+            <div class="col-3">{{ form_row(form.keyword3) }}</div>
+            <div class="col-3">{{ form_row(form.kihoType) }}</div>
 
             <div class="col-12">{{ form_row(form.description,{ 'attr': {'rows': '10'} }) }}</div>
             

@@ -1,25 +1,80 @@
 {% set i = 1 %}
+{% set past_rank = 1 %}
 {% set library = un_element %}
 
-<!-- HEADING -->
-<heading class="col-12 list-heading">
+    <!-- HEADING -->
+    <heading class="col-12 p-0 py-2 m-0 list-heading row">
 
-    <!-- MJ ADD -->
-    {% if app.user and is_granted("ROLE_MJ") %}
-        {% set action, entity, redirect, position, color, size = 'create', 'sort', 'library&libraryID=' ~ library.id ~ '&tab=' ~ app.request.get('tab'), 'left-overflow', 'link-accent', 'btn-icon-mini' %}
-        {{ include('/btns/btn-icon.html.twig') }}
-    {% endif %}
+        <!-- MJ ADD -->
+        {% if app.user and is_granted("ROLE_MJ") %}
+            {% set numero = items|length + 1 %}
+            {% set action, entity, position, color, size = 'create', 'sort', 'left-overflow', 'link-accent', 'btn-icon-mini' %}
+            {% set redirect = 'library&libraryID=' ~ library.id ~ '&tab=' ~ app.request.get('tab') ~ '&subtab=' ~ app.request.get('subtab') ~ '&numero=' ~ numero %}
+            {{ include('/btns/btn-icon.html.twig') }}
+        {% endif %}
 
-    <span>Nom</span>
-    <right class="ml-auto">
-        <span class="ml-4">Niveau de Maîtrise</span>
-    </right>
-</heading>
+        <div class="col-6 text-left">Nom</div>
+        {% if app.request.get('tab') == 'KIHO' %}
+            <div class="col-2"></div>
+            <div class="col-2">Type Kiho</div>
+        {% elseif app.request.get('tab') == 'TATOUAGE' %}
+            <div class="col-5"></div>
+        {% else %}
+            <div class="col-4"></div>
+        {% endif %}
+
+        <div class="col-1 p-0 m-0">Mot-Clés</div>
+
+        {% if app.request.get('tab') != 'TATOUAGE' %}
+            <div class="col-1 p-0 m-0">Niveau</div>
+        {% endif %}
+
+    </heading>
 
 {% for item in items %}
 
+    {% if item.anneau is defined %}
+
+        {% if app.request.get('tab') == 'MAGIE' %}
+            {% if item.anneau == 'AIR' %}
+                {% set icone = FLAT_AIR %}
+            {% elseif item.anneau == 'EAU' %}
+                {% set icone = FLAT_EAU %}
+            {% elseif item.anneau == 'FEU' %}
+                {% set icone = FLAT_FEU %}
+            {% elseif item.anneau == 'TERRE' %}
+                {% set icone = FLAT_TERRE %}
+            {% elseif item.anneau == 'VIDE' %}
+                {% set icone = FLAT_VIDE %}
+            {% endif %}
+        {% elseif app.request.get('tab') == 'MAHO' %}
+            {% if item.anneau == 'AIR' %}
+                {% set icone = FLAT_AIR_MAHO %}
+            {% elseif item.anneau == 'EAU' %}
+                {% set icone = FLAT_EAU_MAHO %}
+            {% elseif item.anneau == 'FEU' %}
+                {% set icone = FLAT_FEU_MAHO %}
+            {% elseif item.anneau == 'TERRE' %}
+                {% set icone = FLAT_TERRE_MAHO %}
+            {% endif %}
+        {% elseif app.request.get('tab') == 'KIHO' %}
+            {% if item.anneau == 'AIR' %}
+                {% set icone = FLAT_AIR_KIHO %}
+            {% elseif item.anneau == 'EAU' %}
+                {% set icone = FLAT_EAU_KIHO %}
+            {% elseif item.anneau == 'FEU' %}
+                {% set icone = FLAT_FEU_KIHO %}
+            {% elseif item.anneau == 'TERRE' %}
+                {% set icone = FLAT_TERRE_KIHO %}
+            {% elseif item.anneau == 'VIDE' %}
+                {% set icone = FLAT_VIDE_KIHO %}
+            {% endif %}
+        {% endif %}
+
+    {% endif %}
+
     <!-- ITEM - SORT -->
-    <div class="col-12 p-0 m-0 relative">
+    <div class="col-12 p-0 m-0 {% if past_rank != item.niveau %}mt-3{% endif %} relative row">
 
         <!-- MJ EDIT -->
         {% if app.user and is_granted("ROLE_MJ") %}
@@ -27,55 +82,192 @@
             {{ include('/parts/btn-icon-edit.html.twig') }}
         {% endif %}
 
-        <a href="#collapse{{i}}" class="card item" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="collapse{{i}}">
+        <a href="#collapse{{i}}" class="p-2 w-100 card item" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="collapse{{i}}">
 
             <!-- VISIBLE LINE -->
             <line class="item-line">
-                <strong class="item-name">{{ item.nom }}</strong>
-                {% if item.motCle1 %}
-                    <div class="ml-2">
-                        <span class="badge badge-secondary">{{item.motCle1}}</span>
-                    </div>
-                {% endif %}
-                {% if item.motCle2 %}
-                    <div class="ml-2">
-                        <span class="badge badge-secondary">{{item.motCle2}}</span>
-                    </div>
-                {% endif %}
-                {% if item.anneau is defined %}
-                    {% if item.anneau == 'AIR' %}
-                        {% set icone = AIR %}
-                    {% elseif item.anneau == 'EAU' %}
-                        {% set icone = EAU %}
-                    {% elseif item.anneau == 'FEU' %}
-                        {% set icone = FEU %}
-                    {% elseif item.anneau == 'TERRE' %}
-                        {% set icone = TERRE %}
-                    {% elseif item.anneau == 'VIDE' %}
-                        {% set icone = VIDE %}
+
+                <div class="col-6 p-0 m-0 ml-2 text-left">
+                    {% if app.request.get('tab') != 'TATOUAGE' %}
+                        <img class="img-24" src="{{asset(icone|default(NA_ICON))}}" />
                     {% endif %}
+                    <strong class="item-name ml-1">{{ item.nom }}</strong>
+                    {% if app.user and is_granted("ROLE_MJ") %}<em class="ml-2 text-muted">- {{ item.originalName }}</em>{% endif %}
+                </div>
+
+                {% if app.request.get('tab') == 'KIHO' %}
+                    <div class="col-2 p-0 m-0"></div>
+                    <div class="col-2 p-0 m-0 text-small">{{item.kihoType|upper}}</div>
+                {% elseif app.request.get('tab') == 'TATOUAGE' %}
+                    <div class="col-5 p-0 m-0"></div>
+                {% else %}
+                    <div class="col-4 p-0 m-0"></div>
                 {% endif %}
 
-                <right class="ml-auto">
-                    <span class="badge p-0 m-0 text-{{item.anneau}}">
-                        <img class="img-24" src="{{asset(icone|default(NA_ICON))}}" />
-                        {{item.anneau}}
-                    </span>
-                    <strong class="ml-2 text-outline-{{item.niveau}}">
-                        {{ item.niveau }}
-                    </strong>
-                </right>
+                <div class="col-1 p-0 m-0 align-bottom text-{{item.anneau}}">
+
+                    {% if item.keyword1 %}
+                        {% if item.keyword1 == 'Soins' %}
+                            <i class="fa-solid fa-heart" title="Soins" alt="Icône Soins"></i>
+                        {% elseif item.keyword1 == 'Illusion' %}
+                            <i class="fa-solid fa-eye-low-vision" title="Illusion" alt="Icône Illusion"></i>
+                        {% elseif item.keyword1 == 'Detection' %}
+                            <i class="fa-solid fa-eye" title="Detection" alt="Icône Detection"></i>
+                        {% elseif item.keyword1 == 'Tonnerre' %}
+                            <i class="fa-solid fa-bolt-lightning" title="Tonnerre" alt="Icône Tonnerre"></i>
+                        {% elseif item.keyword1 == 'Défense' %}
+                            <i class="fa-solid fa-shield-halved" title="Défense" alt="Icône Défense"></i>
+                        {% elseif item.keyword1 == 'Artisanat' %}
+                            <i class="fa-solid fa-cube" title="Artisanat" alt="Icône Artisanat"></i>
+                        {% elseif item.keyword1 == 'Arme' %}
+                            <i class="fa-solid fa-gavel" title="Arme" alt="Icône Arme"></i>
+                        {% elseif item.keyword1 == 'Divination' %}
+                            <i class="fa-solid fa-hat-wizard" title="Divination" alt="Icône Divination"></i>                                 
+                        {% elseif item.keyword1 == 'Voyage' %}
+                            <i class="fa-solid fa-person-running" title="Voyage" alt="Icône Voyage"></i>                                 
+                        {% elseif item.keyword1 == 'Guerre' %}
+                            <i class="fa-solid fa-chess-knight" title="Art de la Guerre" alt="Icône Art de la Guerre"></i>  
+                        {% elseif item.keyword1 == 'Glyphe' %}
+                            <i class="fa-solid fa-austral-sign" title="Glyphe" alt="Icône Glyphe"></i>                                                              
+                        {% elseif item.keyword1 == 'Jade' %}
+                            <i class="fa-solid fa-gem" title="Jade" alt="Icône Jade"></i>                                                              
+                        {% elseif item.keyword1 == 'Affliction' %}
+                            <i class="fa-solid fa-arrow-down-wide-short" title="Affliction" alt="Icône Affliction"></i>                                                              
+                        {% elseif item.keyword1 == 'Bénédiction' %}
+                            <i class="fa-solid fa-arrow-up-wide-short" title="Bénédiction" alt="Icône Bénédiction"></i>
+                        {% elseif item.keyword1 == 'Invocation' %}
+                            <i class="fa-solid fa-ghost" title="Invocation" alt="Icône Invocation"></i>                                                                                            
+                        {% elseif item.keyword1 == 'Explosion' %}
+                            <i class="fa-solid fa-bomb" title="Explosion" alt="Icône Explosion"></i>                                                                                            
+                        {% elseif item.keyword1 == 'Souillure' %}
+                            <i class="fa-solid fa-biohazard" title="Souillure" alt="Icône Souillure"></i>
+                        {% elseif item.keyword1 == 'Atemi' %}
+                            <i class="fa-solid fa-hand-fist" title="Atemi" alt="Atemi"></i>                                                                                                   
+                        {% else %}
+                            <span class="badge badge-secondary">{{item.keyword1}}</span>
+                        {% endif %}
+                    {% endif %}
+
+                    {% if item.keyword2 %}
+                        <span class="ml-1">
+                            {% if item.keyword2 == 'Soins' %}
+                                <i class="fa-solid fa-heart" title="Soins" alt="Icône Soins"></i>
+                            {% elseif item.keyword2 == 'Illusion' %}
+                                <i class="fa-solid fa-eye-low-vision" title="Illusion" alt="Icône Illusion"></i>
+                            {% elseif item.keyword2 == 'Detection' %}
+                                <i class="fa-solid fa-eye" title="Detection" alt="Icône Detection"></i>
+                            {% elseif item.keyword2 == 'Tonnerre' %}
+                                <i class="fa-solid fa-bolt-lightning" title="Tonnerre" alt="Icône Tonnerre"></i>
+                            {% elseif item.keyword2 == 'Défense' %}
+                                <i class="fa-solid fa-shield-halved" title="Défense" alt="Icône Défense"></i>
+                            {% elseif item.keyword2 == 'Artisanat' %}
+                                <i class="fa-solid fa-cube" title="Artisanat" alt="Icône Artisanat"></i>
+                            {% elseif item.keyword2 == 'Arme' %}
+                                <i class="fa-solid fa-gavel" title="Arme" alt="Icône Arme"></i>
+                            {% elseif item.keyword2 == 'Divination' %}
+                                <i class="fa-solid fa-hat-wizard" title="Divination" alt="Icône Divination"></i>
+                            {% elseif item.keyword2 == 'Voyage' %}
+                                <i class="fa-solid fa-person-running" title="Voyage" alt="Icône Voyage"></i>    
+                            {% elseif item.keyword2 == 'Guerre' %}
+                                <i class="fa-solid fa-chess-knight" title="Art de la Guerre" alt="Icône Art de la Guerre"></i>      
+                            {% elseif item.keyword2 == 'Glyphe' %}
+                                <i class="fa-solid fa-austral-sign" title="Glyphe" alt="Icône Glyphe"></i>  
+                            {% elseif item.keyword2 == 'Jade' %}
+                                <i class="fa-solid fa-gem" title="Jade" alt="Icône Jade"></i>   
+                            {% elseif item.keyword2 == 'Affliction' %}
+                                <i class="fa-solid fa-arrow-down-wide-short" title="Affliction" alt="Icône Affliction"></i>                                                              
+                            {% elseif item.keyword2 == 'Bénédiction' %}
+                                <i class="fa-solid fa-arrow-up-wide-short" title="Bénédiction" alt="Icône Bénédiction"></i>   
+                            {% elseif item.keyword2 == 'Invocation' %}
+                                <i class="fa-solid fa-ghost" title="Invocation" alt="Icône Invocation"></i>  
+                            {% elseif item.keyword2 == 'Explosion' %}
+                                <i class="fa-solid fa-bomb" title="Explosion" alt="Icône Explosion"></i>
+                            {% elseif item.keyword2 == 'Souillure' %}
+                                <i class="fa-solid fa-biohazard" title="Souillure" alt="Icône Souillure"></i>
+                            {% elseif item.keyword2 == 'Atemi' %}
+                                <i class="fa-solid fa-hand-fist" title="Atemi" alt="Atemi"></i>                                                                                                                                                                                                                                                                                                           
+                            {% else %}
+                                <span class="badge badge-secondary">{{item.keyword2}}</span>
+                            {% endif %}
+                        </span>
+                    {% endif %}
+
+                    {% if item.keyword3 %}
+                        <span class="ml-1">
+                            {% if item.keyword3 == 'Soins' %}
+                                <i class="fa-solid fa-heart" title="Soins" alt="Icône Soins"></i>
+                            {% elseif item.keyword3 == 'Illusion' %}
+                                <i class="fa-solid fa-eye-low-vision" title="Illusion" alt="Icône Illusion"></i>
+                            {% elseif item.keyword3 == 'Detection' %}
+                                <i class="fa-solid fa-eye" title="Detection" alt="Icône Detection"></i>
+                            {% elseif item.keyword3 == 'Tonnerre' %}
+                                <i class="fa-solid fa-bolt-lightning" title="Tonnerre" alt="Icône Tonnerre"></i>
+                            {% elseif item.keyword3 == 'Défense' %}
+                                <i class="fa-solid fa-shield-halved" title="Défense" alt="Icône Défense"></i>                            
+                            {% elseif item.keyword3 == 'Artisanat' %}
+                                <i class="fa-solid fa-cube" title="Artisanat" alt="Icône Artisanat"></i>
+                            {% elseif item.keyword3 == 'Arme' %}
+                                <i class="fa-solid fa-gavel" title="Arme" alt="Icône Arme"></i>        
+                            {% elseif item.keyword3 == 'Divination' %}
+                                <i class="fa-solid fa-hat-wizard" title="Artisanat" alt="Icône Divination"></i>
+                            {% elseif item.keyword3 == 'Voyage' %}
+                                <i class="fa-solid fa-person-running" title="Voyage" alt="Icône Voyage"></i>
+                            {% elseif item.keyword3 == 'Guerre' %}
+                                <i class="fa-solid fa-chess-knight" title="Art de la Guerre" alt="Icône Art de la Guerre"></i>                                                               
+                            {% elseif item.keyword3 == 'Glyphe' %}
+                                <i class="fa-solid fa-austral-sign" title="Glyphe" alt="Icône Glyphe"></i>     
+                            {% elseif item.keyword3 == 'Jade' %}
+                                <i class="fa-solid fa-gem" title="Jade" alt="Icône Jade"></i>
+                            {% elseif item.keyword3 == 'Affliction' %}
+                                <i class="fa-solid fa-arrow-down-wide-short" title="Affliction" alt="Icône Affliction"></i>                                                              
+                            {% elseif item.keyword3 == 'Bénédiction' %}
+                                <i class="fa-solid fa-arrow-up-wide-short" title="Bénédiction" alt="Icône Bénédiction"></i>                                                                                                                                       
+                            {% elseif item.keyword3 == 'Invocation' %}
+                                <i class="fa-solid fa-ghost" title="Invocation" alt="Icône Invocation"></i>  
+                            {% elseif item.keyword3 == 'Explosion' %}
+                                <i class="fa-solid fa-bomb" title="Explosion" alt="Icône Explosion"></i>
+                            {% elseif item.keyword3 == 'Souillure' %}
+                                <i class="fa-solid fa-biohazard" title="Souillure" alt="Icône Souillure"></i>
+                            {% elseif item.keyword3 == 'Atemi' %}
+                                <i class="fa-solid fa-hand-fist" title="Atemi" alt="Atemi"></i>                                                                                                                                                                                                             
+                            {% else %}
+                                <span class="badge badge-secondary">{{item.keyword3}}</span>
+                            {% endif %}
+                        </span>
+                    {% endif %}
+
+                </div>
+
+                {% if app.request.get('tab') != 'TATOUAGE' %}
+                    <div class="col-1 p-0 m-0 text-{{item.anneau|default('black')}}">
+                        <strong class="text-rank font-present bg-{{item.anneau|default('black')}}">{{ item.niveau }}</strong>
+                    </div>
+                {% endif %}
+
             </line>
 
             <!-- COLLAPSED CONTENT -->
             <collapse id="collapse{{i}}" class="collapse">
-                <p class="p-2 m-0 item-description">{{ item.description|raw|nl2br }}</p>
+                <p class="p-2 px-3 m-0 item-description">{{ item.description|raw|nl2br }}</p>
                 <div id="capacite">
                     <ul>
-                        <li><span class="text-muted">Portée :</span> {{item.portee}}</li>
-                        <li><span class="text-muted">Zone d'Effet :</span> {{item.zone}}</strong></li>
-                        <li><span class="text-muted">Durée :</span> {{item.duree}}</li>
-                        <li><span class="text-muted">Augmentations :</span> {{item.augmentations}}</li>
+
+                        {% if item.portee is defined and item.portee is not empty %}
+                            <li><span class="text-muted">Portée :</span> {{item.portee}}</li>
+                        {% endif %}
+
+                        {% if item.zone is defined and item.zone is not empty %}
+                            <li><span class="text-muted">Zone d'Effet :</span> {{item.zone}}</strong></li>
+                        {% endif %}
+
+                        {% if item.duree is defined and item.duree is not empty %}
+                            <li><span class="text-muted">Durée :</span> {{item.duree}}</li>
+                        {% endif %}
+
+                        {% if item.augmentations is defined and item.augmentations is not empty %}
+                            <li><span class="text-muted">Augmentations :</span> {{item.augmentations}}</li>
+                        {% endif %}
+
                     </ul>
                 </div>
             </collapse>
@@ -84,4 +276,5 @@
     </div>
 
     {% set i = i + 1 %}
+    {% set past_rank = item.niveau %}
 {% endfor %}

@@ -73,7 +73,7 @@
             {% for une_ecole in clan.ecoles %}
             <a class="vignette-aside mb-3" href="{{ path('regles_ecole', {id: une_ecole.id} ) }}">
                 <strong>{{ une_ecole.nom|upper }}</strong>
-                <img class="img-fluid" src="{{ asset(une_ecole.image|default('assets/img/placeholders/na_' ~ une_ecole.classe.nom|lower ~ '.jpg')) }}" alt="Image d'une école" />
+                <img class="img-fluid" src="{{ asset(une_ecole.image|default('assets/img/placeholders/na_school_' ~ une_ecole.classe.nom|lower ~ '.jpg')) }}" alt="Image d'une école" />
             </a>
             {% else %}
                 <i class="text-muted">Écoles à venir.</i>

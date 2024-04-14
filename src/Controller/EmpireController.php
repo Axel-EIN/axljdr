@@ -83,7 +83,11 @@ class EmpireController extends AbstractController
      */
     public function afficherClan(Clan $clan, ClanRepository $clanRepository): Response
     {
-        $toutClans = $clanRepository->findAllSorted();
+        if ($clan->getEstMajeur() == 1)
+            $toutClans = $clanRepository->findAllMajeurs();
+        else
+            $toutClans = $clanRepository->findAllAutres();
+
         $autresClans = $clanRepository->findAllExceptOne($clan->getId());
         shuffle($autresClans);
 

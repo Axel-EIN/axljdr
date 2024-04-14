@@ -83,6 +83,7 @@
 .text-zone-blur {
     position: relative;
     z-index: 2;
+    color: var(--lighter-more);
 }
 
 .text-zone-blur::before {

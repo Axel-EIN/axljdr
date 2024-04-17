@@ -2,6 +2,16 @@
 /* ----- BUTTONS ----- */
 /* ------------------- */    
 
+/* BTN ICON + TEXT LINK */
+
+.btn-icon-text-white-alpha {
+    color: var(--light-alpha);
+}
+
+.btn-icon-text-white-alpha:hover {
+    color: var(--primary);
+}
+
 /* SIZE */
 
 .btn-large {

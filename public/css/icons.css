@@ -34,21 +34,6 @@
     font-weight: bold;
 }
 
-.arrow-left, .arrow-right {
-    font-size: 1.25rem;
-    color: var(--primary);
-}
-
-.arrow-left:hover, .arrow-right:hover {
-        color: var(--primary-light);
-        animation-duration: 0s;
-}
-
-.arrow-disabled {
-    font-size: 1.25rem;
-    color: var(--gray);
-}
-
 .arrow-down {
     z-index: 10;
     left: 70px;

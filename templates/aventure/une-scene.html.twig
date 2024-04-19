@@ -57,7 +57,9 @@
                 {% if une_participation.estPj %}
                     <div class="d-inline-block relative hover-zoom">
                         {% if une_participation.xpGagne != 0 and une_participation.estMort != 1 %}
-                            <strong class="{% if une_participation.personnage.joueur == app.user %}text-your-xp{% else %}text-xp{% endif %}">+{{une_participation.xpGagne}}XP</strong>
+                            <strong class="{% if une_participation.personnage.joueur == app.user %}text-your-xp{% else %}text-xp{% endif %}">
+                                +{{une_participation.xpGagne}} <span class="text-small">XP</span>
+                            </strong>
                         {% endif %}
                         <br/>
                         <a href="{{path('personnage_profil',{id:une_participation.personnage.id})}}" >

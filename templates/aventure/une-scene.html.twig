@@ -53,7 +53,7 @@
 
         <!-- LIGNE HORIZONTALE DE PJS -->
         <div class="absolute pjs-line">
-            {% for une_participation in une_scene.participations %}
+            {% for une_participation in une_scene.participations|sort( (a, b) => a.xpGagne <=> b.xpGagne)|reverse %}
                 {% if une_participation.estPj %}
                     <div class="d-inline-block relative hover-zoom">
                         {% if une_participation.xpGagne != 0 and une_participation.estMort != 1 %}

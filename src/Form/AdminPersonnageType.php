@@ -23,7 +23,9 @@ class AdminPersonnageType extends AbstractType
     {
         $builder
             ->add('prenom', TextType::class)
-            ->add('nom', TextType::class)
+            ->add('nom', TextType::class, [
+                'required' => false,
+            ])
             ->add('titres', TextType::class, [
                 'required' => false,
             ])
@@ -41,13 +43,16 @@ class AdminPersonnageType extends AbstractType
             ])
             ->add('clan', EntityType::class, [
                 'class' => Clan::class,
-                'choice_label' => 'nom'])
+                'choice_label' => 'nom',
+                'required' => false])
             ->add('classe', EntityType::class, [
                 'class' => Classe::class,
-                'choice_label' => 'nom'])
+                'choice_label' => 'nom',
+                'required' => false])
             ->add('ecole', EntityType::class, [
                 'class' => Ecole::class,
-                'choice_label' => 'nom'])
+                'choice_label' => 'nom',
+                'required' => false])
             ->add('joueur', EntityType::class, [
                 'class' => Utilisateur::class,
                 'choice_label' => 'pseudo',

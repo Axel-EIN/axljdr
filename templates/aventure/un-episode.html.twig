@@ -2,7 +2,11 @@
 {% block title %}L'épisode {{ episode.titre }} du Chapitre {{ episode.chapitreParent.titre }} {{ parent() }}{% endblock %}
 {% block body %}
 
-<div class="header-bg-img p-md-4" style="background-image: url('{{ asset(episode.chapitreParent.image) }}'); background-color: {{ episode.chapitreParent.couleur }}">
+<div    class="header-bg-img-session p-md-4"
+        style=" background-image:
+                    linear-gradient( rgb( 0,0,0,0.4 ), rgb( 0,0,0,0.4) ),
+                    url('{{ asset(episode.chapitreParent.image) }}');
+                background-color: {{ episode.chapitreParent.couleur }}">
     <header class="container header header-session">
         {{ include('/parts/messages-flashes.html.twig') }}
         <h2 class="chapter-number display-5 text-left">CHAPITRE {{ episode.chapitreParent.numero }} </h2>

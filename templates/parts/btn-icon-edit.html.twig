@@ -1,6 +1,6 @@
 <a  href="{{ path('admin_' ~ entity ~ '_edit', {id:un_element.id}) }}{%
         if redirect is defined and redirect is not empty %}?redirect={{redirect}}{% endif %}{%
         if fragment is defined and fragment is not empty %}#{{fragment}}{% endif %}"
-    class="{{position|default('')}} {{color}} {{size}}">
+    class="btn-icon {{position|default('')}} {{color}} {{size}}">
         <i class="fas fa-edit" alt="Icône Modifier" title="Modifier"></i>
 </a>

@@ -74,6 +74,7 @@
 
 .saison {
     display: flex;
+    padding: 0.125rem 0;
     justify-content: space-between;
     align-items: center;
     color: var(--light-alpha);

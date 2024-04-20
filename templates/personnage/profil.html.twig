@@ -6,7 +6,7 @@
         <card class="card">
 
             <!-- ILLUSTRATION -->
-            <img class="img-fluid w-100" src="{{ asset(personnage.illustration) }}" alt="{{personnage.nom}} {{personnage.prenom}}" title="{{personnage.nom}} {{personnage.prenom}}" />
+            <img class="img-fluid w-100" src="{{ asset(personnage.illustration|default(NA_PERSO_ILLU)) }}" alt="{{personnage.nom}} {{personnage.prenom}}" title="{{personnage.nom}} {{personnage.prenom}}" />
 
             <!-- LIST -->
             <ul class="list-group list-group-flush">
@@ -14,7 +14,7 @@
                 <!-- CLAN + XP -->
                 <li class="list-group-item d-flex align-items-center">
                     <a class="hover-no-under" href="{{ path('empire_clan', {id: personnage.clan.id} ) }}">
-                        <img class="img-48" src="{{ asset(personnage.clan.mon) }}" alt="Mon du Clan {{personnage.clan.nom}}" title="Mon du Clan {{personnage.clan.nom}}" />
+                        <img class="img-48" src="{{ asset(personnage.clan.mon|default(NA_ICON_MON)) }}" alt="Mon du Clan {{personnage.clan.nom}}" title="Mon du Clan {{personnage.clan.nom}}" />
                         &nbsp;
                         <strong>{{ personnage.clan.nom }}</strong>
                     </a>
@@ -102,7 +102,7 @@
                 {% for un_personnage in autresPersonnages|slice(0,10) %}
                     <article class="p-1 hover-zoom">
                         <a href="{{ path('personnage_profil', {id: un_personnage.id} ) }}">
-                            <img class="img-128" src="{{ asset(un_personnage.icone) }}" alt="Icône d'un personnage" title="Voir le profil de {{un_personnage.prenom}}" />
+                            <img class="img-128" src="{{ asset(un_personnage.icone|default(NA_PERSO_ICO)) }}" alt="Icône d'un personnage" title="Voir le profil de {{un_personnage.prenom}}" />
                         </a>
                     </article>
                 {% else %}

@@ -124,7 +124,7 @@
             <!-- UN PERSONNAGE -->
             {% for un_personnage in ecole.personnages %}
                 <a class="col-12 hover-zoom p-2" href="{{ path('personnage_profil', {id: un_personnage.id} ) }}">
-                    <img class="img-fluid rounded-8" src="{{ asset(un_personnage.icone) }}" alt="Icône d'un personnage" title="Voir le profil de {{un_personnage.prenom}}" />
+                    <img class="img-fluid rounded-8" src="{{ asset(un_personnage.icone|default(NA_PERSO_ICO)) }}" alt="Icône d'un personnage" title="Voir le profil de {{un_personnage.prenom}}" />
                 </a>
             {% endfor %}
             </div>

@@ -22,14 +22,17 @@
                 </li>
 
                 <!-- CLASSE + RANK-->
-                <li class="list-group-item d-flex align-items-center">
-                    <a class="hover-no-under" href="{{ path('regles_ecole', {id: personnage.ecole.id} ) }}">
-                        <img class="img-48" src="{{ asset(personnage.classe.icone) }}" alt="Classe {{personnage.classe.nom}}" title="Classe {{personnage.classe.nom}}" />
-                        &nbsp;
-                        <strong>{{ personnage.ecole.nom }}</strong>
-                    </a>                    
-                    {% if xp > 0 %}<span class="ml-auto badge badge-info">RANG {{rang}}</span>{% endif %}
-                </li>
+                {% if personnage.ecole is defined and personnage.ecole is not empty %}
+                    <li class="list-group-item d-flex align-items-center">
+                        
+                            <a class="hover-no-under" href="{{ path('regles_ecole', {id: personnage.ecole.id} ) }}">
+                                <img class="img-48" src="{{ asset(personnage.classe.icone) }}" alt="Classe {{personnage.classe.nom}}" title="Classe {{personnage.classe.nom}}" />
+                                &nbsp;
+                                <strong>{{ personnage.ecole.nom }}</strong>
+                            </a>           
+                        {% if xp > 0 %}<span class="ml-auto badge badge-info">RANG {{rang}}</span>{% endif %}
+                    </li>
+                {% endif %} 
 
                 {% if personnage.joueur is not empty %}
                     <li class="list-group-item"><strong>Joueur :</strong> {{ personnage.joueur.pseudo }}</li>

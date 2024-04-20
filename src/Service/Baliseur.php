@@ -36,7 +36,7 @@ class Baliseur
                 else
                     $icone_personnage = '../../assets/img/placeholders/na_perso_icon.jpg';
                 $tableau_remplacement[] =
-                    '<a class="hover-zoom character-icon bg-lightest pr-1 pt-0 pb-0 pl-0" href="../../personnages/profil/' . $personnage_trouve->getId() . '">'
+                    '<a class="tag-character hover-zoom character-icon bg-lightest pr-1 pt-0 pb-0 pl-0" href="../../personnages/profil/' . $personnage_trouve->getId() . '">'
                                 . '<img class="character-icon-small" src="../../' . $icone_personnage
                                 . '" alt="Icône du personnage" title="' . $personnage_trouve->getPrenom() .'" /> ' . $personnage_trouve->getPrenom() . '</a>';
             } else
@@ -48,11 +48,15 @@ class Baliseur
 
     public function debaliserPersonnages($texte)
     {
+        $tableau = [];
+
         // Capture tout les prenoms entre les balises a img
-        preg_match_all('#<a .*><img class="character-icon-small" .* \/> (.*)<\/a>#Ui', $texte, $tableau);
+        // preg_match_all('#<a data-type="character" .*><img class="character-icon-small" .* \/> (.*)<\/a>#Ui', $texte, $tableau);
+        preg_match_all('#<a class="tag-character .*><img class="character-icon-small" .* \/> (.*)<\/a>#Ui', $texte, $tableau);
 
         // Crée un tableau de regexp au nbr de matchs
-        $tableau_de_regexp = array_fill(0, count($tableau[1]), '#<a .*><img class="character-icon-small" .* \/> (.*)<\/a>#Ui');
+        // $tableau_de_regexp = array_fill(0, count($tableau[1]), '#<a data="character".*><img class="character-icon-small" .* \/> (.*)<\/a>#Ui');
+        $tableau_de_regexp = array_fill(0, count($tableau[1]), '#<a class="tag-character .*><img class="character-icon-small" .* \/> (.*)<\/a>#Ui');
         $tableau_remplacement = [];
 
         // Remplace par des crochets
@@ -84,7 +88,7 @@ class Baliseur
 
             if ($lieu_trouve != null) {
                 $tableau_remplacement[] =
-                    '<a class="hover-zoom location-icon bg-lightest pr-1 pt-0 pb-0 pl-0" href="../../empire/lieu/' . $lieu_trouve->getId() . '">'
+                    '<a class="tag-location over-zoom location-icon bg-lightest pr-1 pt-0 pb-0 pl-0" href="../../empire/lieu/' . $lieu_trouve->getId() . '">'
                                 . '<img class="location-icon-small" src="../../' . $lieu_trouve->getIcone()
                                 . '" alt="Icône Lieu" title="Voir ' . $lieu_trouve->getNom() .'" /> ' . $lieu_trouve->getNom() . '</a>';
             } else
@@ -96,11 +100,13 @@ class Baliseur
 
     public function debaliserLieux($texte)
     {
+        $tableau = [];
+
         // Capture tout les prenoms entre les balises a img
-        preg_match_all('#<a .*><img class="location-icon-small" .* \/> (.*)<\/a>#Ui', $texte, $tableau);
+        preg_match_all('#<a class="tag-location .*><img class="location-icon-small" .* \/> (.*)<\/a>#Ui', $texte, $tableau);
 
         // Crée un tableau de regexp au nbr de matchs
-        $tableau_de_regexp = array_fill(0, count($tableau[1]), '#<a .*><img class="location-icon-small" .* \/> (.*)<\/a>#Ui');
+        $tableau_de_regexp = array_fill(0, count($tableau[1]), '#<a class="tag-location .*><img class="location-icon-small" .* \/> (.*)<\/a>#Ui');
         $tableau_remplacement = [];
 
         // Remplace par des crochets

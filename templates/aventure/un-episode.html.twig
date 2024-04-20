@@ -62,10 +62,7 @@
                     {{ include('/aventure/une-scene.html.twig', {une_scene}) }}
 
                 {% else %}
-                    <div class="text-center">
-                        <img class="img-fluid" src="{{ asset('assets/img/placeholders/pas-de-scenes.png') }}" alt="Image pas encore de scènes" title="Il n'y a pas encore de scènes"/>
-                        <h5>Il n'y a pas encore de scènes pour cette épisode.</h5>
-                    </div>
+                    <p class="text-center text-light">Il n'y a pas encore de scènes pour cette épisode.</p>
                 {% endfor %}
 
                 {% if app.user and is_granted("ROLE_MJ") %}

@@ -1,58 +1,40 @@
-/* ------------------- */
-/* ----- BUTTONS ----- */
-/* ------------------- */    
-
-/* BTN ICON + TEXT LINK */
+/* ---------------------------------- */
+/* ----- BTN LINE : ICON + TEXT ----- */
+/* ---------------------------------- */    
 
 .btn-icon-text {
     padding: 0.125rem;
+    &.text-light-alpha:hover {
+        color: var(--white);   
+    }
+    &.text-accent:hover {
+        color: var(--accent-light);  
+    }
+    &.text-accent-alpha:hover {
+        color: var(--accent);  
+    }
 }
 
-.btn-icon-text.text-light-alpha:hover {
-    color: var(--white);
-}
-
-.btn-icon-text.text-accent-alpha:hover {
-    color: var(--accent);
-}
-
-.btn-display-icon-light-alpha {
-    z-index: 10;
-    top: 96px;
-    right: -160px;
-    font-size: 8rem;
-    text-decoration: none;
-    color: var(--light-alpha);
-    transition: 0.25s; }
-
-.btn-display-icon-light-alpha:hover {
-    color: var(--white);
-    transition: 0.25s; }
-
-/* SIZE */
-
-.btn-large {
-    font-size: 1.2rem;
-    padding: 0.70rem 1rem;
-}
+/* ------------------------------------------------------- */
+/* ----- BTN BASE : BOXED, OUTLINED, TRANSPARENT CTA ----- */
+/* ------------------------------------------------------- */    
 
 .btn-medium {
     font-size: 1rem;
     padding: 0.5rem 1rem;
 }
 
+.btn-large {
+    font-size: 1.2rem;
+    padding: 0.70rem 1rem;
+}
 
-/* BASE */
-
-.btn-primary-style,
-.btn-secondary-style,
-.btn-tertiary-style {
+.btn-primary-style, .btn-secondary-style, .btn-tertiary-style {
     display: inline-block;
     text-align: center;
     vertical-align: middle;
     line-height: 1.5;
 }
-
 
 /* BOXED */
 
@@ -69,22 +51,11 @@
         inset 1px 1px 0px var(--primary-lighter),
         inset -2px -2px 0px var(--primary-dark),
         0px 0px 8px rgba(0, 0, 0, .2);
+    &:hover, &:active, &:target {
+        background-color: var(--primary-light);
+        color: var(--white);
+        text-decoration: none;    }
 }
-
-.btn-primary-style:hover,
-.btn-primary-style:active,
-.btn-primary-style:target {
-    background-color: var(--primary-light);
-    color: var(--primary-white);
-    text-decoration: none;
-}
-
-.btn-primary-style a,
-.btn-primary-style:hover,
-.btn-primary-style:active {
-    color: var(--white);
-}
-
 
 /* OUTLINED */
 
@@ -94,16 +65,11 @@
     color: var(--primary-lighter);
     border-radius: 4px;
     border: 2px solid var(--primary-lighter);
+    &:hover, &:active, &:target {
+        background-color: var(--primary-lighter);
+        color: var(--white);
+        text-decoration: none;    }
 }
-
-.btn-secondary-style:hover,
-.btn-secondary-style:active,
-.btn-secondary-style:target {
-    background-color: var(--primary-lighter);
-    color: var(--white);
-    text-decoration: none;
-}
-
 
 /* TRANSPARENT */
 
@@ -111,15 +77,10 @@
     background-color: transparent;     
     color: var(--primary-lighter);
     font-weight: bold;
+    &:hover, &:active, &:target {
+        color: var(--primary);
+        text-decoration: underline;    }
 }
-
-.btn-tertiary-style:hover,
-.btn-tertiary-style:active,
-.btn-tertiary-style:target {
-    color: var(--primary);
-    text-decoration: underline;
-}
-
 
 /* DISABLED */
 
@@ -136,7 +97,23 @@
     background: none;
 }
 
+/* ---------------------------- */
+/* ----- BTN DISPLAY ICON ----- */
+/* ---------------------------- */  
 
+.btn-display-icon-light-alpha {
+    z-index: 10;
+    top: 96px;
+    right: -160px;
+    font-size: 8rem;
+    text-decoration: none;
+    color: var(--light-alpha);
+    transition: 0.25s;
+    &:hover {
+        color: var(--white);
+        transition: 0.25s;
+    }
+}
 
 /* ---------------- */
 /* ----- TABS ----- */
@@ -148,25 +125,20 @@
     margin: 0;
     flex-wrap: wrap;
     list-style: none;
-}
-
-.tab {
-    display: block;
-    font-weight: bold;
-    border-radius: 1rem 0.25rem;
-    padding: 8px 14px;
-    background-color: transparent;
-    color: var(--primary-dark);
-}
-
-.tab:hover {
-    color: var(--primary);
-}
-
-.tab.active {
-    font-weight: bold;
-    color: var(--white);
-    background-color: var(--primary-darker);
+    .tab {
+        display: block;
+        font-weight: bold;
+        border-radius: 1rem 0.25rem;
+        padding: 8px 14px;
+        background-color: transparent;
+        color: var(--primary-dark);
+        &:hover { color: var(--primary); }
+        &.active {
+            font-weight: bold;
+            color: var(--white);
+            background-color: var(--primary-darker);
+        }
+    }
 }
 
 #sub-tabs {
@@ -175,22 +147,17 @@
     margin: 0;
     flex-wrap: wrap;
     list-style: none;
-}
-
-#sub-tabs > li > a {
-    display: block;
-    font-weight: bold;
-    padding: 8px 14px;
-    color: var(--primary-dark);
-}
-    
-#sub-tabs > li > a:hover {
-    color: var(--primary);
-}
-    
-#sub-tabs > li > a.active {
-    position: relative;
-    font-weight: bold;
-    color: var(--primary);
-    border-bottom:  solid var(--primary);
+    > li > a {
+        display: block;
+        font-weight: bold;
+        padding: 8px 14px;
+        color: var(--primary-dark);
+        &:hover { color: var(--primary); }
+        &.active {
+            position: relative;
+            font-weight: bold;
+            color: var(--primary);
+            border-bottom:  solid var(--primary);
+        }
+    }
 }

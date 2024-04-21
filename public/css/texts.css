@@ -90,14 +90,19 @@ p > mark {
     font-family: "Shogun";
 }
 
-.number-session-caroussel{
+.number-session-caroussel {
     z-index: 10;
-    right: 8px;
-    bottom: 0px; 
-    color: var(--white);
-    font-size:2.5rem;
+    right: 4px;
+    bottom: -4px;
+    font-size: 2rem;
     font-weight: bold;
+    color: var(--white);
     text-shadow: 0px 2px 8px black;
+}
+
+.number-session-caroussel.active {
+    font-size: 3rem;
+    right: 8px;
 }
 
 .quote {

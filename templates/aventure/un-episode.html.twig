@@ -20,22 +20,30 @@
     <main class="container pt-3 pb-5 mb-5">
     
         <!-- LIGNE D'EPISODES -->
-        <div class="d-flex pt-3 justify-content-center align-items-center">
-            {% for un_episode in episode.chapitreParent.episodes %}
-                {% if un_episode.scenes|length > 0 or is_granted("ROLE_MJ") %}
-                    {% if un_episode.id == episode.id %}         
-                        <div class="relative">
-                            <div class="absolute number-session-caroussel">{{ un_episode.numero }}</div>
-                            <img class="img-160 border border-4 border-danger shadow" src="{{ asset(un_episode.image) }}" alt="image de l'episode {{un_episode.titre}}" title="{{un_episode.titre}}"/>
-                            <i class="absolute arrow-down fa-sharp fa-solid fa-sort-down fa-bounce fa-2xl text-primary"></i>
-                        </div>
-                    {% else %}
-                        <a class="bg-dark" href="{{ path('aventure_episode', { id : un_episode.id, '_fragment': 'read-head' } ) }}" >
-                            <img class="img-fluid darken hover-bright img-128" src="{{ asset(un_episode.image) }}" alt="image de l'episode {{un_episode.titre}}" title="{{un_episode.titre}}"/>
-                        </a>
+        <div class="d-flex flex-column justify-content-center align-items-center">
+            <div>
+                <strong class="text-light-alpha">- SESSIONS DU CHAPITRE -</strong>
+            </div>
+            <div class="d-flex justify-content-center align-items-center">
+                {% for un_episode in episode.chapitreParent.episodes %}
+                    {% if un_episode.scenes|length > 0 or is_granted("ROLE_MJ") %}
+                        {% if un_episode.id == episode.id %}
+                            <div class="vignette-caroussel active">         
+                                <span class="absolute number-session-caroussel active">{{ un_episode.numero }}</span>
+                                <img class="img-160 border border-4 border-danger shadow" src="{{ asset(un_episode.image) }}" alt="image de l'episode {{un_episode.titre}}" title="{{un_episode.titre}}"/>
+                                <i class="absolute arrow-down fa-sharp fa-solid fa-sort-down fa-bounce fa-2xl text-primary"></i>
+                            </div>
+                        {% else %}
+                            <div class="relative darken hover-bright bg-dark vignette-caroussel">         
+                                <span class="absolute number-session-caroussel">{{ un_episode.numero }}</span>
+                                <a href="{{ path('aventure_episode', { id : un_episode.id, '_fragment': 'read-head' } ) }}" >
+                                    <img class="img-fluid img-128" src="{{ asset(un_episode.image) }}" alt="image de l'episode {{un_episode.titre}}" title="{{un_episode.titre}}"/>
+                                </a>
+                            </div>
+                        {% endif %}
                     {% endif %}
-                {% endif %}
-            {% endfor %}
+                {% endfor %}
+            </div>
         </div>
 
         <!-- TITRE EPISODE -->

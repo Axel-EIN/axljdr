@@ -12,8 +12,7 @@
         <h2 class="chapter-number display-5 text-left">CHAPITRE {{ episode.chapitreParent.numero }} </h2>
         <hr>
         <div class="text-left">
-            <a class="btn-primary-style btn-large"
-                href="{{ path('aventure_saison', {id: episode.chapitreParent.saisonParent.id, '_fragment': 'read-head-ch-id' ~ episode.chapitreParent.id } ) }}">Retour</a>
+            <a class="btn-primary-style btn-medium" href="{{ path('aventure_saison', {id: episode.chapitreParent.saisonParent.id, '_fragment': 'read-head-ch-id' ~ episode.chapitreParent.id } ) }}">Retour</a>
         </div>
         <h2 id="read-head" class="title-display-h1">{{ episode.chapitreParent.titre|relief|raw }}</h2>
         <p class="quote">{{ episode.chapitreParent.citation|nl2br }}</p>

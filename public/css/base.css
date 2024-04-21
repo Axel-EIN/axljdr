@@ -1,0 +1,20 @@
+body {  background-color: var(--lightest); }
+
+/* --------------------------------- */
+/* ------- COMMON CONTAINER  ------- */
+/* --------------------------------- */
+
+@media (max-width: 1200px) { .container { padding-left: 1rem; padding-right: 1rem; } }
+@media (max-width: 992px) { .container { padding-left: 1rem; padding-right: 1rem; } }
+@media (max-width: 576px) { .container { padding-left: 0.5rem; padding-right: 0.5rem; } }
+@media (max-width: 480px) { .container { padding-left: 0.5rem; padding-right: 0.5rem; } }
+
+.page-min { min-height: 60vh; }
+
+/* ---------------------------- */
+/* --------- DIVIDERS --------- */
+/* ---------------------------- */
+
+.separator-chapter {    display: block; color: #fff; background-color: rgba(30, 20, 20); }
+.divider-40 { width: 40%; }
+.divider-40 hr { background-color: #ffbbbb; height: 1px; width: 100%; }

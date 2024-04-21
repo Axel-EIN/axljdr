@@ -9,13 +9,8 @@
     overflow: hidden;
 }
 
-.header-bg-img {
-    background-position: 50% 25%;
-}
-
-.header-bg-img-session {
-    background-position: top;
-}
+.header-bg-img { background-position: 50% 25%; }
+.header-bg-img-session { background-position: top; }
 
 @media (max-width: 1200px) { .header-bg-img { background-size: 150% auto; } }
 @media (max-width: 992px) { .header-bg-img { background-size: 200% auto; } }

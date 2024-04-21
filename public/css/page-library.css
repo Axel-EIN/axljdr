@@ -13,17 +13,16 @@
     border-top-left-radius: 1rem;
     border-bottom-right-radius: 1rem;
     border-bottom-left-radius: 0;
+    &:hover {
+        background-color: var(--accent-lightest);
+        color: var(--dark);
+    }
 }
 
 .item.AIR {
     box-shadow:
         inset 2px 2px 0 0 var(--lightest),
         0px 0px .5rem 0 var(--AIR);
-}
-
-.item:hover {
-    background-color: var(--accent-lightest);
-    color: var(--dark);
 }
 
 .item-no-hover {
@@ -57,15 +56,10 @@
 .item-line {
     display: flex;
     flex-direction: row;
+    &>div { text-align: center; }
 }
 
-.item-line > div {
-    text-align: center;
-}
-
-.item-name {
-    color: var(--dark);
-}
+.item-name { color: var(--dark); }
 
 .item-description {
     text-align: justify;

@@ -12,14 +12,16 @@
             <ul class="list-group list-group-flush">
 
                 <!-- CLAN + XP -->
-                <li class="list-group-item d-flex align-items-center">
-                    <a class="hover-no-under" href="{{ path('empire_clan', {id: personnage.clan.id} ) }}">
-                        <img class="img-48" src="{{ asset(personnage.clan.mon|default(NA_ICON_MON)) }}" alt="Mon du Clan {{personnage.clan.nom}}" title="Mon du Clan {{personnage.clan.nom}}" />
-                        &nbsp;
-                        <strong>{{ personnage.clan.nom }}</strong>
-                    </a>
-                    {% if xp > 0 %}<span class="ml-auto text-xp text-big">{{xp}} XP</span>{% endif %}
-                </li>
+                {% if personnage.clan is defined and personnage.clan is not empty %}
+                    <li class="list-group-item d-flex align-items-center">
+                        <a class="hover-no-under" href="{{ path('empire_clan', {id: personnage.clan.id} ) }}">
+                            <img class="img-48" src="{{ asset(personnage.clan.mon|default(NA_ICON_MON)) }}" alt="Mon du Clan {{personnage.clan.nom}}" title="Mon du Clan {{personnage.clan.nom}}" />
+                            &nbsp;
+                            <strong>{{ personnage.clan.nom }}</strong>
+                        </a>
+                        {% if xp > 0 %}<span class="ml-auto text-xp text-big">{{xp}} XP</span>{% endif %}
+                    </li>
+                {% endif %}
 
                 <!-- CLASSE + RANK-->
                 {% if personnage.ecole is defined and personnage.ecole is not empty %}

@@ -1,16 +1,24 @@
-<section    class="header-bg-img"
+<section    class="header-bg-img relative"
             style=" background-color: {{ un_chapitre.couleur }};
                     background-image:
                         linear-gradient( rgb( 0,0,0,0.4 ), rgb( 0,0,0,0.4) ),
                         linear-gradient( rgb( 0,0,0,0.6 ), rgb( 0,0,0,0), rgb( 0,0,0,0.3), rgb( 0,0,0,0.6) ),
                         url( {{ asset(un_chapitre.image) }} );" >
+
     <div class="container p-1">
 
         {% if app.user and is_granted("ROLE_MJ") %}
-            <div class="text-center">
-                <!-- MJ BTN ICON+TEXT Insert or Add -->
+
+            {% if un_chapitre.numero == saison.chapitres|length %}
+                {% set label, numero, position = 'Ajouter', (un_chapitre.numero + 1), 'top-center' %}
+            {% else %}
+                {% set label, numero, position = 'Insérer', (un_chapitre.numero + 1), 'top-center' %}
+            {% endif %}
+
+            <div class="{{position}} mt-1">
                 {{ include('/parts/btn-line-insert.html.twig') }}
             </div>
+
         {% endif %}
 
         <div class="header header-chapter d-flex flex-column" >

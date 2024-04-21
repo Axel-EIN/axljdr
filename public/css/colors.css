@@ -37,6 +37,7 @@
     --secondary-pastel-darkest: #1E242A;
 
     --accent: #ff7f00;
+    --accent-alpha: #ff7f0080;
     --accent-lightest: #fcf8e3;
     --accent-light: #ffcc66;
     --accent-dark: #cc6600;
@@ -83,6 +84,7 @@
 .text-primary-darker { color: var(--primary-darker) ; }
 .text-primary-darker-more { color: var(--primary-darker-more) ; }
 .text-accent { color:var(--accent); }
+.text-accent-alpha { color:var(--accent-alpha); }
 
 /* TRANSPARENT */
 .text-light-trans { color: var(--light-trans); }

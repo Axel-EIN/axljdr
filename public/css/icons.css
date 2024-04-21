@@ -45,25 +45,6 @@
     text-decoration: none;
 }
 
-
-
-.btn-icon-display {
-    z-index: 10;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    top: 96px;
-    right: -160px;
-    font-size: 8rem;
-    text-decoration: none;
-}
-
-.btn-icon-display a, .btn-icon-display a:hover {
-    color: var(--accent);
-    text-decoration: none;
-}
-
 .localisator-icon {
     z-index: 10;
     text-align: center;

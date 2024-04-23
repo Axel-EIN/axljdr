@@ -103,9 +103,19 @@
                                     <a href="{{path('personnage_profil',{id:un_personnage.id})}}">
                                         <img class="img-96 mr-4" src="{{ asset(un_personnage.icone|default(NA_PERSO_ICO)) }}" alt="Portrait du Personnage" title="Voir le profil de {{un_personnage.prenom}}"/>
                                     </a>
-                                    <a class="display-4 mr-4" href="{{path('personnage_profil',{id:un_personnage.id})}}">{{un_personnage.prenom}}</a>
-                                    <span class="ml-auto badge  {% if un_personnage.xp >= 4 %}badge-success
-                                                                {% elseif un_personnage.xp >= 3 %}badge-info
+                                    <a class="display-4 mr-4    {% if un_personnage.xp >= 7 %}text-fuschia
+                                                                {% elseif un_personnage.xp >= 6 %}text-primary
+                                                                {% elseif un_personnage.xp >= 5 %}text-success
+                                                                {% elseif un_personnage.xp >= 4 %}text-secondary
+                                                                {% elseif un_personnage.xp >= 3 %}text-accent
+                                                                {% elseif un_personnage.xp >= 2 %}text-gray
+                                                                {% elseif un_personnage.xp >= 1 %}text-light
+                                                                {% endif %}" href="{{path('personnage_profil',{id:un_personnage.id})}}">{{un_personnage.prenom}}</a>
+                                    <span class="ml-auto badge  {% if un_personnage.xp >= 7 %}bg-fuschia text-white
+                                                                {% elseif un_personnage.xp >= 6 %}bg-primary text-white
+                                                                {% elseif un_personnage.xp >= 5 %}badge-success
+                                                                {% elseif un_personnage.xp >= 4 %}bg-secondary text-white
+                                                                {% elseif un_personnage.xp >= 3 %}bg-accent text-white
                                                                 {% elseif un_personnage.xp >= 2 %}badge-secondary
                                                                 {% elseif un_personnage.xp >= 1 %}badge-light
                                                                 {% endif %} badge-pill text-large">{{un_personnage.xp}}xp</span>

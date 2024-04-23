@@ -1,83 +1,129 @@
 <!DOCTYPE html>
 <html lang="fr">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>{% block title %} | {{ nom_du_site }}{% endblock %}</title>
-        <meta name="description" content="Immergez-vos joueurs, grâce au Gestionnaire de Campagne de Jeu de Rôle : AXL-JDR !">
 
-    {% block stylesheets %}
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css"
-        integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
-        <link rel="stylesheet" href="{{asset('css/style.css')}}" />
+    {% use "parts/head.html.twig" %}
+    {% use "scripts/scripts.twig" %}
+
+    {% block head %}
+        {{ parent() }}
     {% endblock %}
 
-    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
-        <link rel="manifest" href="/site.webmanifest">
-    </head>
+    <!-- ICONS -->
+    {% set NA_ICON = '/assets/placeholders/na_icon.png' %}
+    {% set NA_MON = '/assets/placeholders/na_mon.png' %}
+    {% set NA_LIEU_ICO = '/assets/placeholders/na_lieu_ico.png' %}
+    {% set NA_CLASS_ICO = '/assets/placeholders/na_class.png' %}
+    {% set NA_OBJET = NA_ICON %}
+    {% set NA_TIME = '/assets/placeholders/na_time.png' %}
 
-    <body>
+    {% set MORNING = '/assets/icons/time/time-morning.png' %}
+    {% set NOON = '/assets/icons/time/time-noon.png' %}
+    {% set EVENING = '/assets/icons/time/time-evening.png' %}
+    {% set NIGHT = '/assets/icons/time/time-night.png' %}
+    {% set INTEMPOREL = '/assets/icons/time/time-intemporel.png' %}
 
-    {% block nav %}
-        {{ include('/parts/nav.html.twig') }}
-    {% endblock %}
+    {% set ZENI = '/assets/icons/money/zeni.png' %}
+    {% set BU = '/assets/icons/money/bu.png' %}
+    {% set KOKU = '/assets/icons/money/koku.png' %}
 
-    {% block body %}{% endblock %}
+    {% set PDF = '/assets/icons/pdf.png' %}
+    {% set AIR = '/assets/img/rules/air.png' %}
+    {% set EAU = '/assets/img/rules/eau.png' %}
+    {% set FEU = '/assets/img/rules/feu.png' %}
+    {% set TERRE = '/assets/img/rules/terre.png' %}
+    {% set VIDE = '/assets/img/rules/vide.png' %}
 
-    {% block javascripts %}
-        {{ include('/scripts/scripts.twig') }}
-    {% endblock %}
+    {% set FLAT_AIR = '/assets/icons/elements/air.png' %}
+    {% set FLAT_EAU = '/assets/icons/elements/eau.png' %}
+    {% set FLAT_FEU = '/assets/icons/elements/feu.png' %}
+    {% set FLAT_TERRE = '/assets/icons/elements/terre.png' %}
+    {% set FLAT_VIDE = '/assets/icons/elements/vide.png' %}
+    {% set FLAT_AIR_MAHO = '/assets/icons/elements/air-maho.png' %}
+    {% set FLAT_EAU_MAHO = '/assets/icons/elements/eau-maho.png' %}
+    {% set FLAT_FEU_MAHO = '/assets/icons/elements/feu-maho.png' %}
+    {% set FLAT_TERRE_MAHO = '/assets/icons/elements/terre-maho.png' %}
+    {% set FLAT_AIR_KIHO = '/assets/icons/elements/air-kiho.png' %}
+    {% set FLAT_EAU_KIHO = '/assets/icons/elements/eau-kiho.png' %}
+    {% set FLAT_FEU_KIHO = '/assets/icons/elements/feu-kiho.png' %}
+    {% set FLAT_TERRE_KIHO = '/assets/icons/elements/terre-kiho.png' %}
+    {% set FLAT_VIDE_KIHO = '/assets/icons/elements/vide-kiho.png' %}
 
-    {% block footer %}
-        <footer>
+    {% set AVENTURE_SCENE_ICO = '/assets/icons/aventure/aventure-scene.png' %}
+    {% set AVENTURE_EPISODE_ICO = '/assets/icons/aventure/aventure-episode.png' %}
+    {% set AVENTURE_CHAPITRE_ICO = '/assets/icons/aventure/aventure-chapitre.png' %}
+    {% set AVENTURE_SAISON_ICO = '/assets/icons/aventure/aventure-saison.png' %}
 
-            <div id="pied-de-page1" class="container-fluid py-5">
+    {% set MORT_ICO = '/assets/ui/mort.png' %}
+    {% set ORNAMENT_ICO = '/assets/ui/ornament.png' %}
+    {% set LOGO = '/assets/ui/logo-axljdr.png' %}
+    {% set LOCKED_ICO = '/assets/icons/locked.png' %}
 
-                <div class="container">
-                    <div class="row">
-                        <div class="col-xl-2 col-lg-3 col-md-4 col-sm-12 col-12 text-white">
-                            <h5>Plan du site</h5>
-                            <nav>
-                                <ul>
-                                    <li><a class="footer-link" href="{{ path('aventure') }}">L'Aventure</a></li>
-                                    <li><a class="footer-link" href="{{ path('personnages') }}">Personnages</a></li>
-                                    <li><a class="footer-link" href="{{ path('empire') }}">L'Empire</a></li>
-                                    <li><a class="footer-link" href="{{ path('regles') }}">Les Règles</a></li>
-                                    <li><a class="footer-link" href="{{ path('contact') }}">Contactez-Nous</a></li>
-                                    <li><a class="footer-link" href="{{ path('cgu') }}">CGU</a></li>
-                                    <li><a class="footer-link" href="{{ path('politique_confidentialite') }}">Politique de Confidentialité</a></li>
-                                    <li><a class="footer-link" href="{{ path('mentions_legales') }}">Mentions Légales</a></li>
-                                    <li><a class="footer-link" href="{{ path('about') }}">A propos</a></li>
-                                </ul>
-                            </nav>
-                        </div>
-                        <div class="col-xl-2 offset-xl-8 col-lg-3 offset-lg-6 col-md-4 offset-md-4 col-sm-12 col-12 text-white">
-                            <h5>Réseaux Sociaux</h5>
-                            <nav id="reseaux-sociaux" class="d-flex justify-content-around">
-                                <a href="" class="lien-blanc"><i class="fab fa-twitter"></i></a>
-                                <a href="" class="lien-blanc"><i class="fab fa-facebook"></i></a> 
-                                <a href="" class="lien-blanc"><i class="fab fa-instagram"></i></a>
-                            </nav>
-                        </div>
-                    </div>
-                </div>
+    {% set HANDS = '/assets/ui/hands.png' %}
 
-            </div>
+    <!-- IMAGES -->
+    {% set NA_43 = '/assets/placeholders/na_43.jpg' %}
+    {% set NA_1610 = '/assets/placeholders/na_1610.jpg' %}
+    {% set NA_169 = '/assets/placeholders/na_169.jpg' %}
 
-            <div id="pied-de-page2" class="container-fluid py-4">
-                <div class="container text-center align-middle">
-                    <small>&copy;&nbsp;Site réalisé par Axel Onçu pour l'examen final de Philiance</small>
-                </div>
-            </div>
+    {% set NA_SAISON = '/assets/placeholders/na_aventure_saison.jpg' %}
+    {% set NA_CHAPITRE = '/assets/placeholders/na_aventure_chapitre.jpg' %}
+    {% set NA_SESSION = '/assets/placeholders/na_aventure_session.jpg' %}
+    {% set NA_SCENE = '/assets/placeholders/na_aventure_scene.jpg' %}
 
-        </footer>
-    {% endblock %}
+    {% set NA_CLAN = '/assets/placeholders/na_clan.jpg' %}
+    {% set NA_MAP = '/assets/placeholders/na_map.jpg' %}
+    {% set NA_ARCHIVE = '/assets/placeholders/na_archive.jpg' %}
+    {% set NA_LIEU = '/assets/placeholders/na_lieu.jpg' %}
+    {% set NA_LIEU_BG = '/assets/placeholders/na_lieu_bg.jpg' %}
 
-    {% if app.user is empty %}
-        {{ include('parts/modal.html.twig') }}
-    {% endif %}
+    {% set NA_RULE = '/assets/placeholders/na_rule.jpg' %}
+    {% set NA_LORE = '/assets/placeholders/na_rule.jpg' %}
+
+    {% set NA_CLASS = NA_169 %}
+    
+    {% set NA_ECOLE = NA_43 %}
+    {% set NA_BUSHI = '/assets/placeholders/na_school_bushi.jpg' %}
+    {% set NA_MOINE = '/assets/placeholders/na_school_moine.jpg' %}
+    {% set NA_COURTISAN = '/assets/placeholders/na_school_courtisan.jpg' %}
+    {% set NA_SHUGENJA = '/assets/placeholders/na_school_shugenja.jpg' %}
+    {% set NA_NINJA = '/assets/placeholders/na_school_ninja.jpg' %}
+    {% set NA_ARTISAN = '/assets/placeholders/na_school_artisan.jpg' %}
+
+    {% set NA_LIBRARY = '/assets/placeholders/na_library.jpg' %}
+
+    {% set NA_PDF = '/assets/placeholders/na_pdf.jpg' %}
+
+    <!-- CHARACTERS IMG -->
+    {% set NA_PERSO_PORTRAIT = '/assets/placeholders/na_perso_icon.jpg' %}
+    {% set NA_PERSO_PORTRAIT_M = '/assets/placeholders/na_perso_icon_M.jpg' %}
+    {% set NA_PERSO_PORTRAIT_F = '/assets/placeholders/na_perso_icon_F.jpg' %}
+    {% set NA_PERSO_ILLU = '/assets/placeholders/na_perso_illu.jpg' %}
+    {% set NA_PERSO_ILLU_M = '/assets/placeholders/na_perso_illu_M.jpg' %}
+    {% set NA_PERSO_ILLU_F = '/assets/placeholders/na_perso_illu_F.jpg' %}
+
+    <!-- BACK OFFICE TABLE ROW ELEMENT IMG -->
+    {% set na_image = NA_1610 %}
+
+    <body class="bg-clouds">
+
+        {% block nav %}
+            {{ include('parts/nav.html.twig') }}
+        {% endblock %}
+
+        {% block body %}{% endblock %}
+
+        {% block footer %}
+            {{ include('parts/footer.html.twig') }}
+        {% endblock %}
+        
+        {% if app.user is empty %}
+            {{ include('parts/modal.html.twig') }}
+        {% endif %}
+
+        {% block scripts %}
+            {{ parent() }}
+        {% endblock %}
 
     </body>
+
 </html>

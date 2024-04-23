@@ -1,6 +1,45 @@
-/* -------------------------------  */
-/* BASE TEXT                        */
-/* -------------------------------- */
+/* -------------------------- */
+/* -------- LAYOUT ---------- */
+/* -------------------------- */
+
+@media (max-width: 1200px) { .container { padding-left: 1rem; padding-right: 1rem; } }
+@media (max-width: 992px) { .container { padding-left: 1rem; padding-right: 1rem; } }
+@media (max-width: 576px) { .container { padding-left: 0.5rem; padding-right: 0.5rem; } }
+@media (max-width: 480px) { .container { padding-left: 0.5rem; padding-right: 0.5rem; } }
+
+.page-min { min-height: 60vh; }
+
+.relative { position: relative; }
+
+
+
+/* -------------------------- */
+/* --------- COLORS --------- */
+/* -------------------------- */
+
+.primary-color { color: #EA2027; }
+.primary-color-shadow { color: #b6252f; }
+.primary-color-light { color: #ff4147; }
+.primary-color-bg { background-color: #EA2027; }
+.bg-light-gray { background-color: #eee; }
+
+
+
+/* -------------------------- */
+/* -------- LINKS ----------- */
+/* -------------------------- */
+
+.link-white { color: #fff; }
+.link-white:hover { color: #aaa; text-decoration: underline; }
+
+.link-gray { color: rgba(255,255,255, 0.75) !important; }
+.link-gray:hover { color: rgba(255,255,255,0.9) !important; text-decoration: none !important; }
+.link-gray.active { color: rgba(255,255,255, 1) !important; }
+
+
+/* -------------------------- */
+/* --------- TEXT ----------- */
+/* -------------------------- */
 
 html, body { font-size: 16px; }
 @media (max-width: 1200px) { html, body { font-size: 16px; } }
@@ -8,258 +47,153 @@ html, body { font-size: 16px; }
 @media (max-width: 576px) { html, body { font-size: 14px; } }
 @media (max-width: 480px) { html, body { font-size: 13px; } }
 
-/* -------------------------------  */
-/* BASE COLORS                      */
-/* -------------------------------- */
-
-.couleur-primaire { color: #EA2027; }
-.ombre-primaire { color: #b6252f; }
-.lumiere-primaire { color: #ff4147; }
-.fond-primaire { background-color: #EA2027; }
-
-
-/* -------------------------------  */
-/* CONTAINER                        */
-/* -------------------------------- */
-
-@media (max-width: 1200px) { .container { padding-left: 1rem; padding-right: 1rem; } }
-@media (max-width: 992px) { .container { padding-left: 1rem; padding-right: 1rem; } }
-@media (max-width: 576px) { .container { padding-left: 0.5rem; padding-right: 0.5rem; } }
-@media (max-width: 480px) { .container { padding-left: 0.5rem; padding-right: 0.5rem; } }
-
-
-/* -------------------------------  */
-/* LINKS                            */
-/* -------------------------------- */
-
-.lien-blanc { color: #fff; }
-.lien-blanc:hover { color: #aaa; text-decoration: underline; }
-.lien-gris { color: rgba(255,255,255, 0.75) !important; }
-.lien-gris:hover { color: rgba(255,255,255,0.9) !important; text-decoration: none !important; }
-.lien-gris.active { color: rgba(255,255,255, 1) !important; }
-
-
-/* -------------------------------  */
-/* NAVIGATION                       */
-/* -------------------------------- */                  
-
-#barre-navigation {
-        box-shadow: 0px 2px 8px black;
-        position: relative;
-        z-index: 10; }
-
-nav .active { font-weight: bold; }
-
-.connecte {
-        color: white;
-        text-align: right; }
-
-
-/* -------------------------------  */
-/* ASSETS                           */
-/* -------------------------------- */
-
-#logo { width: 120px;
-        height: auto; }
-
-.fleche { width: 20px; }
-
-.fleche-gauche { position: relative;
-                 left: -40px; }
-
-.fleche-droite { position: relative;
-                 left: 40px; }
-
 @font-face { font-family: "Shogun"; src: url("../assets/fonts/shoguns-clan-accentued.otf"); }
 @font-face { font-family: "Hirosh"; src: url("../assets/fonts/hirosh.otf"); }
 @font-face { font-family: "Present"; src: url("../assets/fonts/present-it-black.otf"); }
 
 
-/* -------------------------------  */
-/* BUTTONS                          */
-/* -------------------------------- */
 
-.btn-primary { background-color: #EA2027 !important;
-               border-color: #b6252f !important; }
+/* ------------------------ */
+/* ----- TEXT EFFECTS ----- */
+/* ------------------------ */
 
-.btn-primary:hover, .btn-primary:active, .btn-primary:target {
-        background-color: #ff4147 !important;
-        border-color: #EA2027 !important;}
-
-.btn-primary.disabled { background-color: #b4b4b4;
-                        border-color: #9f9f9f; }
-
-.btn-mj {
-        font-size: 2rem;
-        position: absolute;
-        top: 8px;
-        right: 0px;
-}
-
-.btn-card-mj {
-        font-size: 8rem;
-        text-decoration: none;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        text-align: center;
-}
-
-.btn-card-mj a:hover {
-        text-decoration: none;        
-}
-
-.btn-mj-episode {
-        font-size: 1.5rem;
-        position: absolute;
-        padding: 4px;
-        top: 0px;
-        right: 0px;
-        z-index: 100;
-}
-
-.btn-mj-h2-edit-delete {
-        font-size: 1.5rem;
-        position: absolute;
-        padding: 4px;
-        top: 8px;
-        right: 0px;
-        z-index: 100;
-}
-
-.btn-mj-h2-create {
-        font-size: 1.5rem;
-        position: absolute;
-        padding: 4px;
-        top: 20px;
-        right: 0px;
-        z-index: 100;
-}
-
-.btn-arrow-down-pulse {
-        position: absolute;
-        left: 70px;
-        bottom: -10px;
-        z-index: 100;
-}
-
-/* -------------------------------  */
-/* HEADERS                          */
-/* -------------------------------- */
-
-.en-tete {
-        min-height: 60vh;
-        position: relative;
-        color: #fff;
-        margin-bottom: 0;
-        padding-top: 0.5rem;
-        padding-bottom: 0.5rem;
-        text-align: center; }
-
-.en-tete-fond {
-        background-size: cover;
-        background-position: top; }
-
-.sous-en-tete {
-        min-height: 50vh;
-        position: relative;
-        color: #fff;
-        margin-bottom: 0;
-        padding-top: 0.5rem;
-        padding-bottom: 0.5rem;
-        text-align: center; }
-
-.en-tete-episode {
-        position: relative;
-        color: #fff;
-        margin-bottom: 0;
-        padding-top: 0.5rem;
-        padding-bottom: 0.5rem;
-        text-align: center; }
-
-@media (max-width: 1200px) { .pre-titre-saison { font-size: 3rem; } }
-@media (max-width: 992px) { .pre-titre-saison { font-size: 3rem; } }
-@media (max-width: 576px) { .pre-titre-saison { font-size: 2rem; } }
-@media (max-width: 480px) { .pre-titre-saison { font-size: 2rem; }}
-
-.pre-titre-chapitre {
-        font-size: 2.5rem;
-        color: #fff;
-        margin: 0; }
-
-@media (max-width: 1200px) { .pre-titre-chapitre { font-size: 2.5rem; } }
-@media (max-width: 992px) { .pre-titre-chapitre { font-size: 2.5rem; } }
-@media (max-width: 576px) { .pre-titre-chapitre { font-size: 1.5rem; } }
-@media (max-width: 480px) { .pre-titre-chapitre { font-size: 1.5rem; } }
-
-.en-tete hr, .sous-en-tete hr, .en-tete-episode hr {
-        background-color: #fff;
-        height: 1px;
-        margin-top: 0.5rem;
-        margin-bottom: 0.5rem; }
-
-.stylise {
-        text-align: center;
+.title-effect { font-family: "Shogun";
         color:#fff;
-        font-family: "Shogun";
+        text-align: center;
         margin: 0;
         text-shadow: 4px 4px 2rem black; }
 
-.stylise-couleur {
-        font-family: "Shogun";
-}
+.session-title-h {
+position: relative;
+z-index: 2;
+font-weight: 300;
+color: white;
+background-image: url('../assets/img/ui/back-title.png');
+background-size: 100% 130%;
+background-repeat: no-repeat;
+background-position: 50% 50%;
+text-shadow: 4px 4px 2rem black;
+text-align: center;
+font-family: "Present"; }
+        
+
+.number-effect { font-family: "Shogun"; }
+
+.session-caroussel-number{      position: absolute;
+                        right: 8px;
+                        bottom: 0px;
+                        font-size:2.5rem;
+                        font-weight: bold;
+                        color: white;
+                        text-shadow: 0px 2px 8px black;
+                        z-index: 100 }
+
+.quote {        font-size: 1.25rem;
+                font-style: italic;
+                margin-bottom: 1rem;
+                text-shadow: 2px 2px 6px black, 0px 0px 2rem black; }
+@media (max-width: 1200px) { .quote { font-size: 1.25rem; } }
+@media (max-width: 992px) { .quote { font-size: 1.25rem; } }
+@media (max-width: 576px) { .quote { font-size: 1rem; } }
+@media (max-width: 480px) { .quote { font-size: 1rem; } }
 
 .plus-petit { font-size: 2rem; }
-
 @media (max-width: 1200px) { .plus-petit { font-size: 2rem; } }
 @media (max-width: 992px) { .plus-petit { font-size: 1.75rem; } }
 @media (max-width: 576px) { .plus-petit { font-size: 1.5rem; } }
 @media (max-width: 480px) { .plus-petit { font-size: 1.25rem; } }
 
 .petit { font-size: 3rem; }
-
 @media (max-width: 1200px) { .petit { font-size: 3rem; } }
 @media (max-width: 992px) { .petit { font-size: 2.5rem; } }
 @media (max-width: 576px) { .petit { font-size: 2rem; } }
 @media (max-width: 480px) { .petit { font-size: 1.75rem; } }
 
 .moyen { font-size: 6rem; }
-
 @media (max-width: 1200px) { .moyen { font-size: 7rem; } }
 @media (max-width: 992px) { .moyen { font-size: 6rem; } }
 @media (max-width: 576px) { .moyen { font-size: 5rem; } }
 @media (max-width: 480px) { .moyen { font-size: 4rem; } }
 
 .grand { font-size: 9rem; }
-
 @media (max-width: 1200px) { .grand { font-size: 9rem; } }
 @media (max-width: 992px) { .grand { font-size: 8rem; } }
 @media (max-width: 576px) { .grand { font-size: 6rem; } }
 @media (max-width: 480px) { .grand { font-size: 4.5rem; } }
 
-.citation {
-        font-size: 1.25rem;
-        font-style: italic;
-        margin-bottom: 1rem;
-        text-shadow: 2px 2px 6px black, 0px 0px 2rem black; }
 
-@media (max-width: 1200px) { .citation { font-size: 1.25rem; } }
-@media (max-width: 992px) { .citation { font-size: 1.25rem; } }
-@media (max-width: 576px) { .citation { font-size: 1rem; } }
-@media (max-width: 480px) { .citation { font-size: 1rem; } }
 
-.chapitre-fond, .episode-fond {
-        min-height: 60vh;
-        background-size: 100% auto;
-        background-repeat: no-repeat;
-        background-position: top;
-        /* background-color: var(--b); voir doc sur le variable CSS */ 
-}
 
-@media (max-width: 1200px) { .chapitre-fond, .episode-fond { background-size: 150% auto; } }
-@media (max-width: 992px) { .chapitre-fond, .episode-fond { background-size: 200% auto; } }
-@media (max-width: 576px) { .chapitre-fond, .episode-fond { background-size: 250% auto; } }
-@media (max-width: 480px) { .chapitre-fond, .episode-fond { background-size: 300% auto; } }
+/* ---------------------------- */
+/* -------- NAVIGATION -------- */
+/* ---------------------------- */                  
+
+#navigation-bar {       box-shadow: 0px 2px 8px black;
+                        position: relative;
+                        z-index: 10; }
+
+nav .active { font-weight: bold; }
+
+.connected { color: white; text-align: right; }
+
+
+
+/* -------------------------------- */
+/* ------- HEADERS & TITLES ------- */
+/* -------------------------------- */
+
+.header {       min-height: 60vh;
+                position: relative;
+                color: #fff;
+                margin-bottom: 0;
+                padding-top: 0.5rem;
+                padding-bottom: 0.5rem;
+                text-align: center; }
+
+.header-bg {    background-size: cover; background-position: top; }
+
+.sub-header {   min-height: 50vh;
+        position: relative;
+        color: #fff;
+        margin-bottom: 0;
+        padding-top: 0.5rem;
+        padding-bottom: 0.5rem;
+        text-align: center; }
+
+.header-session {       position: relative;
+                color: #fff;
+                margin-bottom: 0;
+                padding-top: 0.5rem;
+                padding-bottom: 0.5rem;
+                text-align: center; }
+
+.bg-chapter, .header-session-bg {    min-height: 60vh;
+                        background-size: 100% auto;
+                        background-repeat: no-repeat;
+                        background-position: top;
+                        /* background-color: var(--b); voir doc sur le variable CSS */ }
+@media (max-width: 1200px) { .bg-chapter, .header-session-bg { background-size: 150% auto; } }
+@media (max-width: 992px) { .bg-chapter, .header-session-bg { background-size: 200% auto; } }
+@media (max-width: 576px) { .bg-chapter, .header-session-bg { background-size: 250% auto; } }
+@media (max-width: 480px) { .bg-chapter, .header-session-bg { background-size: 300% auto; } }
+
+@media (max-width: 1200px) { .pre-titre-saison { font-size: 3rem; } }
+@media (max-width: 992px) { .pre-titre-saison { font-size: 3rem; } }
+@media (max-width: 576px) { .pre-titre-saison { font-size: 2rem; } }
+@media (max-width: 480px) { .pre-titre-saison { font-size: 2rem; }}
+
+.chapter-number {       font-size: 2.5rem;
+                        color: #fff;
+                        margin: 0; }
+@media (max-width: 1200px) { .chapter-number { font-size: 2.5rem; } }
+@media (max-width: 992px) { .chapter-number { font-size: 2.5rem; } }
+@media (max-width: 576px) { .chapter-number { font-size: 1.5rem; } }
+@media (max-width: 480px) { .chapter-number { font-size: 1.5rem; } }
+
+.header hr, .sub-header hr, .header-session hr {        background-color: #fff;
+                                                        height: 1px;
+                                                        margin-top: 0.5rem;
+                                                        margin-bottom: 0.5rem; }
 
 @media (max-width: 1200px) { .display-4 { font-size: 3.5rem; } }
 @media (max-width: 992px) { .display-4 { font-size: 3rem; } }
@@ -277,27 +211,301 @@ nav .active { font-weight: bold; }
 @media (max-width: 480px) { .display-1 { font-size: 3rem; } }
 
 
-/* -----------------------------------  */
-/* ALERTES                              */
-/* ------------------------------------ */
 
-.volatile {
+/* ------------------- */
+/* ------ CARDS ------ */
+/* ------------------- */
+
+.session-card-spacing { padding-right: 8px;
+                        padding-left: 8px;
+                        padding-top: 8px;
+                        padding-bottom: 8px; }
+
+.session-card-body {    background-color: #eee;
+                        min-width: 265px;
+                        min-height: 380px;
+                        max-height: 380px;
+                        box-shadow: 6px 6px 4px black;
+                        border: 0; }
+   
+.session-card-image-container { background-color: black; }
+
+.session-card-number {   position: absolute;
+                        left: 16px;
+                        top: 54px;
+                        color: white;
+                        font-size:3rem;
+                        font-weight: bold;
+                        text-shadow: 0px 2px 8px black;
+                        z-index: 10 }
+
+.session-card-text-container { position: relative; padding: 0.75rem; }
+
+.session-card-title {   position: absolute;
+                        top: -30px;
+                        left: 16px;
+                        font-size: 1rem;
+                        color: white;
+                        font-weight: bold;
+                        text-shadow: 0px 2px 8px black; }
+
+.session-card-text {    font-size: 1rem;
+                        color: gray; }
+
+.session-card-long {
+        position: relative;
+        top: -36px;
+        z-index: 1;
+}
+
+.session-card-long-body {
+        min-height: 500px;
+}
+
+/* @media (max-width: 1200px) { .session-card-long { padding-left: unset; padding-right: unset; } }
+@media (max-width: 992px) { .session-card-long { padding-left: unset; padding-right: unset; } } */
+@media (max-width: 576px) { .session-card-long { padding-left: unset; padding-right: unset; } }
+@media (max-width: 480px) { .session-card-long { padding-left: unset; padding-right: unset; } }
+
+
+
+/* --------------------------- */
+/* --------- BUTTONS --------- */
+/* --------------------------- */
+
+.btn-primary { background-color: #EA2027 !important;
+        border-color: #b6252f !important; }
+
+.btn-primary:hover, .btn-primary:active, .btn-primary:target {
+ background-color: #ff4147 !important;
+ border-color: #EA2027 !important;}
+
+.btn-primary.disabled { background-color: #b4b4b4;
+                 border-color: #9f9f9f; }
+
+.btn-mj-h2-edit-delete {        font-size: 1.5rem;
+                                position: absolute;
+                                padding: 4px;
+                                top: 8px;
+                                right: 0px;
+                                z-index: 100; }
+
+.btn-mj-h2-create {     font-size: 1.5rem;
+                        position: absolute;
+                        padding: 4px;
+                        top: 20px;
+                        right: 0px;
+                        z-index: 100; }
+
+.btn-arrow-down-pulse { position: absolute;
+                        left: 70px;
+                        bottom: -10px;
+                        z-index: 100; }
+
+
+
+/* ------------------- */
+/* ------ ICONS ------ */
+/* ------------------- */
+
+.arrow-left { position: relative; left: -40px; width: 20px; }
+.arrow-right { position: relative; left: 40px; width: 20px; }
+
+.btn-icon-big { position: absolute;
+                right: -160px;
+                top: 96px;
+                font-size: 8rem;
+                text-decoration: none;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                text-align: center; }
+.btn-icon-big a { color: white; }
+.btn-icon-big a:hover { text-decoration: none; }
+
+.btn-icons-32-right-container { position: absolute;
+                                top: 8px;
+                                right: 0px;
+                                font-size: 2rem; }
+.btn-icons-32-right-container a { color: white; }
+
+.btn-icons-24-right-container { position: absolute;
+                                top: 4px;
+                                right: 12px;
+                                font-size: 1.5rem;
+                                z-index: 100; }
+.btn-icons-24-right-container a { color: white; }
+
+/* ------------------------ */
+/* -------- IMAGES -------- */
+/* ------------------------ */
+
+#logo { width: 120px; height: auto; }
+
+.img-24 { min-width: 12px; max-width: 24px; }
+.img-32 { min-width: 16px; max-width: 32px; }
+.img-36 { min-width: 18px; max-width: 36px; }
+.img-48 { min-width: 24px; max-width: 48px; }
+.img-64 { min-width: 32px; max-width: 64px; }
+.img-96 { min-width: 48px; max-width: 96px; }
+.img-128 { min-width: 64px; max-width: 128px; }
+.img-160 { min-width: 80px; max-width: 160px; }
+.img-240 { min-width: 120px; max-width: 240px; }
+.img-320 { min-width: 160px; max-width: 320px; }
+.img-360 { min-width: 180px; max-width: 360px; }
+.img-480 { min-width: 240px; max-width: 480px; }
+.img-540 { min-width: 320px; max-width: 540px; }
+.img-640 { min-width: 320px; max-width: 640px; }
+
+.bg-black { background-color: black; }
+
+.characters-icons-container {   position: absolute;
+                                top: -12px;
+                                left: 8px;
+                                z-index: 100; }
+
+.character-icon-small { width: 26px; }
+a.character-icon { display: inline-block; font-weight: bold; }
+.character-icon-48 { width: 48px; border-radius: 4px; }
+.character-icon-64 { width: 64px; border-radius: 5px; }
+
+.mort-icone { width: 72px; position: absolute; top: -6px; left: -2px; z-index: 1; }
+
+.mini-mort-icone { width: 64px; position: absolute; top: 24px; left: -8px; z-index: 1; }
+
+
+
+
+
+/* -------------------------- */
+/* ----- IMAGES EFFECTS ----- */
+/* -------------------------- */
+
+.hover-shine:hover { filter: brightness(1.3); transition: .5s; }
+
+.grayscale { filter:grayscale(100%); }
+
+.dead { filter: grayscale(100%) brightness(40%) sepia(100%) hue-rotate(-50deg) saturate(600%) contrast(0.8); }
+
+.mask { mask-image: linear-gradient(to top, rgba(0,0,0,0.2),rgba(0,0,0,1),rgba(0,0,0,1),rgba(0,0,0,1));
+        -webkit-mask-image: linear-gradient(to top, rgba(0,0,0,0.2),rgba(0,0,0,1),rgba(0,0,0,1),rgba(0,0,0,1)); }
+
+.outlined { box-shadow: 2px 2px 0 #0f0, -2px -2px 0 #0f0, 2px -2px 0 #0f0, -2px 2px 0 #0f0; }
+
+.fond-masque-fonce { background-color: black; }
+.fond-masque-fonce img { 
+mask-image: linear-gradient(to top, rgba(0,0,0,0.25),rgba(0,0,0,0.50),rgba(0,0,0,1),rgba(0,0,0,1));
+-webkit-mask-image: linear-gradient(to top, rgba(0,0,0,0.25),rgba(0,0,0,0.50),rgba(0,0,0,1),rgba(0,0,0,1)); }
+
+.card-img-overlay { top: unset; padding: 0.5rem; }
+.card-img-overlay h4 { margin-bottom: 0; }
+
+.translucide { filter: opacity(0.50); }
+.translucide:hover { filter: opacity(1); transition-duration: 0.5s; }
+
+.assombrit { filter: brightness(0.5); }
+.assombrit:hover { filter: brightness(1); transition-duration: 0.5s; }
+
+.ombre-txt { text-shadow: 4px 4px 2rem black; }
+
+.ombre-img { box-shadow: 2px 2px 4px black; }
+
+.rounded-16 { border-radius: 1rem; }
+.rounded-8 { border-radius: 0.5rem; }
+
+
+
+/* -------------------------- */
+/* ----- OTHER ELEMENTS ----- */
+/* -------------------------- */
+
+.alert-flash {  position: absolute;
+                left: 50%; top: 0px;
+                transform: translate(-50%, -50%);
+                z-index: 100; }
+
+.alert-persist {        display: inline-block;
+                        font-size: 1rem;
+                        color: rgba(255, 255, 255, .4);
+                        background-color: rgba(0, 0, 0, .4) !important;
+                        border-color: rgba(255, 255, 255, 0.2) !important;
+                        margin-bottom: 0; }
+
+.separator-chapter {    display: block;
+                        color: #fff;
+                        min-height:0.4rem;
+                        background-color: rgb(40, 0, 0); }
+
+
+
+/* ----------------------------- */
+/* ------ PAGE : EPISODES ------ */
+/* ----------------------------- */
+
+.scene-daytime{ position: absolute;
+                color: white;
+                top: -5rem; }
+
+.scene-daytime h3, .scene-daytime h5 { margin-bottom: 0; }
+
+.scene-body {   padding-left: 4rem;
+                padding-right: 4rem;
+                padding-top: 3rem;
+                padding-bottom: 1rem; }
+@media (max-width: 1200px) { .scene-body { padding-left: 4rem; padding-right: 4rem; padding-top: 3rem; padding-bottom: 1rem; } }
+@media (max-width: 992px) { .scene-body { padding-left: 4rem; padding-right: 4rem; padding-top: 3rem; padding-bottom: 1rem; } }
+@media (max-width: 576px) { .scene-body { padding-left: 1rem; padding-right: 1rem; padding-top: 1.5rem; padding-bottom: 0.5rem; } }
+@media (max-width: 480px) { .scene-body { padding-left: 1rem; padding-right: 1rem; padding-top: 1.5rem; padding-bottom: 0.5rem; } }
+
+.scene-text a { font-weight: bold; }
+
+.division { width: 30%; }
+.division-motif { width: 36px; height: auto; }
+.division hr { background-color: #ffbbbb; height: 1px; width: 100%; }
+
+.ligne-icones { position: relative; top: -36px; }
+.ligne-pnjs { position: relative; top: -36px; }
+@media (max-width: 576px) { .ligne-pnjs { visibility: collapse; } }
+@media (max-width: 480px) { .ligne-pnjs { visibility: collapse; } }
+
+@media (max-width: 576px) { .ligne-pjs { visibility: collapse; } }
+@media (max-width: 480px) { .ligne-pjs { visibility: collapse; } }
+
+.xp { color: rgb(0, 100, 100); text-shadow: 1px 1px 0 #0ff, -1px -1px 0 #0ff, 1px -1px 0 #0ff, -1px 1px 0 #0ff; }
+.votre-xp { color: rgb(0, 100, 0); text-shadow: 1px 1px 0 #0f0, -1px -1px 0 #0f0, 1px -1px 0 #0f0, -1px 1px 0 #0f0; }
+.text-mort { color: rgb(100, 0, 0); text-shadow: 1px 1px 0 #f00, -1px -1px 0 #f00, 1px -1px 0 #f00, -1px 1px 0 #f00; }
+
+
+
+/* ------------------------------- */
+/* ------ PAGE : PERSONNAGE ------ */
+/* ------------------------------- */
+
+#personnages {
+        background-image: linear-gradient(rgb(40,0,0,0.5),rgb(40,0,0,0.5)),url('../assets/img/rubriques/personnages.jpg');
+        background-position: center;
+}
+
+.badge-coin {
         position: absolute;
-        left: 50%; top: 0px;
-        transform: translate(-50%, -50%);
-        z-index: 100; }
+        top: -12px;
+        left: -12px;
+        z-index: 100;
+        width: 48px;
+}
 
-.persistante {
-        font-size: 1rem;
-        display: inline-block;
-        color: rgba(255, 255, 255, .4);
-        background-color: rgba(0, 0, 0, .4) !important;
-        border-color: rgba(255, 255, 255, 0.2) !important;
-        margin-bottom: 0;}
 
-/* -------------------------------- */
-/* FOOTERS                          */
-/* -------------------------------- */
+/* -------------------------------------- */
+/* ------ PAGE : ADMIN BACK OFFICE ------ */
+/* -------------------------------------- */
+
+.coin-droit { position: absolute; right:15px; top:8px;}
+
+
+
+/* ---------------------------- */
+/* ---------- FOOTERS --------- */
+/* ---------------------------- */
 
 #pied-de-page1 {
         min-height: 24vh;
@@ -318,289 +526,3 @@ nav .active { font-weight: bold; }
         padding: 0; }
 
 #reseaux-sociaux { font-size: 2rem; }
-
-
-/* -------------------------------  */
-/* IMAGES                           */
-/* -------------------------------- */
-
-.img-24 { min-width: 12px; max-width: 24px; }
-.img-32 { min-width: 16px; max-width: 32px; }
-.img-36 { min-width: 18px; max-width: 36px; }
-.img-48 { min-width: 24px; max-width: 48px; }
-.img-64 { min-width: 32px; max-width: 64px; }
-.img-96 { min-width: 48px; max-width: 96px; }
-.img-128 { min-width: 64px; max-width: 128px; }
-.img-160 { min-width: 80px; max-width: 160px; }
-.img-240 { min-width: 120px; max-width: 240px; }
-.img-320 { min-width: 160px; max-width: 320px; }
-.img-360 { min-width: 180px; max-width: 360px; }
-.img-480 { min-width: 240px; max-width: 480px; }
-.img-540 { min-width: 320px; max-width: 540px; }
-.img-640 { min-width: 320px; max-width: 640px; }
-
-
-/* -------------------------------  */
-/* EFFECTS                          */
-/* -------------------------------- */
-
-.survol:hover { filter: brightness(1.3);
-        transition: .5s; }
-
-.fond-masque { background-color: black; }
-
-.fond-masque img { mask-image: linear-gradient(to top, rgba(0,0,0,0.2),rgba(0,0,0,1),rgba(0,0,0,1),rgba(0,0,0,1));
-           -webkit-mask-image: linear-gradient(to top, rgba(0,0,0,0.2),rgba(0,0,0,1),rgba(0,0,0,1),rgba(0,0,0,1)); }
-
-.fond-masque-fonce { background-color: black; }
-.fond-masque-fonce img { 
-mask-image: linear-gradient(to top, rgba(0,0,0,0.25),rgba(0,0,0,0.50),rgba(0,0,0,1),rgba(0,0,0,1));
--webkit-mask-image: linear-gradient(to top, rgba(0,0,0,0.25),rgba(0,0,0,0.50),rgba(0,0,0,1),rgba(0,0,0,1));
-}
-
-.card-img-overlay { top: unset; padding: 0.5rem; }
-.card-img-overlay h4 { margin-bottom: 0; }
-
-.ancre-relatif { position:relative; }
-
-.translucide { filter: opacity(0.50); }
-.translucide:hover { filter: opacity(1); transition-duration: 0.5s; }
-
-.assombrit { filter: brightness(0.5); }
-.assombrit:hover { filter: brightness(1); transition-duration: 0.5s; }
-
-.ombre-txt { text-shadow: 4px 4px 2rem black; }
-
-.ombre-img { box-shadow: 2px 2px 4px black; }
-
-.rounded-16 { border-radius: 1rem; }
-.rounded-8 { border-radius: 0.5rem; }
-
-img.disabled { filter:grayscale(100%); }
-
-
-
-/** PAGES **/
-/** ______________________________________________________________________ **/
-
-/* -------------------------------  */
-/* GENERAL PAGES                    */
-/* -------------------------------- */
-
-.page-min { min-height: 60vh; }
-
-/* ----------------------------------  */
-/* PAGE : AVENTURE > LISTE CHAPITRES   */
-/* ----------------------------------- */
-
-.chapitre-separateur {
-        display: block;
-        color: #fff;
-        min-height:0.4rem;
-        background-color: rgb(40, 0, 0); }
-
-
-/* -----------------------------------  */
-/* PAGE : AVENTURE > LISTE EPISODES     */
-/* ------------------------------------ */
-
-.episode-card {
-        padding-right: 8px;
-        padding-left: 8px;
-        padding-top: 8px;
-        padding-bottom: 8px; }
-
-.episode-card .card-title {
-        font-size: 1rem;
-        color: white;
-        font-weight: bold;
-        position: absolute;
-        text-shadow: 0px 2px 8px black;
-        top: -30px; }
-
-.episode-card-liste {
-        background: rgba(80, 80, 80, .4);
-        min-height: 380px;
-        max-height: 380px;
-        border-radius: 4px;
-        box-shadow: 6px 6px 4px rgba(0,0,0,0.5);
-        border: 0; }
-
-.episode-card-numero{
-        color: white;
-        font-size:3rem;
-        font-weight: bold;
-        position: absolute;
-        left: 16px;
-        top: 54px;
-        text-shadow: 0px 2px 8px black;
-        z-index: 100 }
-
-.episode-caroussel-numero{
-        position: absolute;
-        right: 8px;
-        bottom: 0px;
-        font-size:2.5rem;
-        font-weight: bold;
-        color: white;
-        text-shadow: 0px 2px 8px black;
-        z-index: 100 }
-
-.episode-card .card-body{ padding: 0.75rem; }
-
-.episode-card .card-text {
-        color: #CCC;
-        font-size: 1rem;
-        text-align: left;
-        text-justify: inter-word; }
-
-
-/* -----------------------------------  */
-/* PAGE : EPISODEE                      */
-/* ------------------------------------ */
-
-.vignette { width: 180px; }
-@media (max-width: 576px) { .vignette { visibility: collapse; } }
-@media (max-width: 480px) { .vignette { visibility: collapse; } }
-
-.vignette .fond-masque, .vignette-principale .fond-masque {
-        position: relative;
-        border: thick double;
-        border-radius: 15px; }
-
-.vignette img { border-radius: 15px; }
-
-.vignette-principale {
-        width: 480px;
-        border: thick double;
-        border-radius: 20px;
-}
-
-.vignette-principale img { border-radius: 20px; }
-
-.numero-episode-courant {
-        position: absolute;
-        bottom: 10px;
-        left: 10px;
-        color: white;
-        font-weight: bold;
-        line-height: 1;
-        z-index: 10; } 
-
-.titre-episode {
-        position: relative;
-        z-index: 2;
-        font-weight: 300;
-        color: white;
-        background-image: url('../assets/img/ui/back-title.png');
-        background-size: 100% 130%;
-        background-repeat: no-repeat;
-        background-position: 50% 50%;
-        text-shadow: 4px 4px 2rem black;
-        text-align: center;
-        font-family: "Present"; }
-
-.longue-card-episode {
-        position: relative;
-        top: -36px;
-        z-index: 1;
-}
-
-/* @media (max-width: 1200px) { .longue-card-episode { padding-left: unset; padding-right: unset; } }
-@media (max-width: 992px) { .longue-card-episode { padding-left: unset; padding-right: unset; } } */
-@media (max-width: 576px) { .longue-card-episode { padding-left: unset; padding-right: unset; } }
-@media (max-width: 480px) { .longue-card-episode { padding-left: unset; padding-right: unset; } }
-
-.bloc-card-episode {
-        min-height: 500px;
-}
-
-.scene-heure{
-        position: absolute;
-        color: white;
-        top: -5rem; }
-
-.scene-heure h3, .scene-heure h5 { margin-bottom: 0; }
-
-.corps-scene {
-        padding-left: 4rem;
-        padding-right: 4rem;
-        padding-top: 3rem;
-        padding-bottom: 1rem; }
-
-@media (max-width: 1200px) { .corps-scene { padding-left: 4rem; padding-right: 4rem; padding-top: 3rem; padding-bottom: 1rem; } }
-@media (max-width: 992px) { .corps-scene { padding-left: 4rem; padding-right: 4rem; padding-top: 3rem; padding-bottom: 1rem; } }
-@media (max-width: 576px) { .corps-scene { padding-left: 1rem; padding-right: 1rem; padding-top: 1.5rem; padding-bottom: 0.5rem; } }
-@media (max-width: 480px) { .corps-scene { padding-left: 1rem; padding-right: 1rem; padding-top: 1.5rem; padding-bottom: 0.5rem; } }
-
-.texte-scene a { font-weight: bold; }
-
-.division { width: 30%; }
-.division-motif { width: 36px; height: auto; }
-.division hr { background-color: #ffbbbb; height: 1px; width: 100%; }
-
-
-/* -----------------------------------  */
-/* PAGE : AVENTURE > EPISODE > SCENES   */
-/* ------------------------------------ */
-
-.ligne-icones { position: relative; top: -36px; }
-.ligne-pnjs { position: relative; top: -36px; }
-@media (max-width: 576px) { .ligne-pnjs { visibility: collapse; } }
-@media (max-width: 480px) { .ligne-pnjs { visibility: collapse; } }
-
-@media (max-width: 576px) { .ligne-pjs { visibility: collapse; } }
-@media (max-width: 480px) { .ligne-pjs { visibility: collapse; } }
-
-.xp { color: rgb(0, 100, 100); text-shadow: 1px 1px 0 #0ff, -1px -1px 0 #0ff, 1px -1px 0 #0ff, -1px 1px 0 #0ff; }
-.votre-xp { color: rgb(0, 100, 0); text-shadow: 1px 1px 0 #0f0, -1px -1px 0 #0f0, 1px -1px 0 #0f0, -1px 1px 0 #0f0; }
-.text-mort { color: rgb(100, 0, 0); text-shadow: 1px 1px 0 #f00, -1px -1px 0 #f00, 1px -1px 0 #f00, -1px 1px 0 #f00; }
-
-.perso-icone { width: 64px; border-radius: 5px; }
-
-.mini-portrait {
-        position: absolute;
-        top: -48px;
-        left: 8px;
-        z-index: 100;
-}
-.mini-perso-icone {
-        width: 48px;
-        box-shadow: 2px 2px 0 #0f0, -2px -2px 0 #0f0, 2px -2px 0 #0f0, -2px 2px 0 #0f0;
-        border-radius: 4px;
-}
-
-.votre-personnage {
-        box-shadow: 2px 2px 0 #0f0, -2px -2px 0 #0f0, 2px -2px 0 #0f0, -2px 2px 0 #0f0;
-}
-
-.mort { filter: grayscale(100%) brightness(40%) sepia(100%) hue-rotate(-50deg) saturate(600%) contrast(0.8); }
-.mort-icone { width: 72px; position: absolute; top: -6px; left: -2px; z-index: 1; }
-.mini-mort-icone { width: 64px; position: absolute; top: 24px; left: -8px; z-index: 1; }
-a.perso-img img { width: 24px; }
-a.perso-img { display: inline-block; font-weight: bold; }
-
-
-/* -------------------------------  */
-/* PAGE : PERSONNAGE                */
-/* -------------------------------- */
-
-#personnages {
-        background-image: linear-gradient(rgb(40,0,0,0.5),rgb(40,0,0,0.5)),url('../assets/img/rubriques/personnages.jpg');
-        background-position: center;
-}
-
-.badge-coin {
-        position: absolute;
-        top: -12px;
-        left: -12px;
-        z-index: 100;
-        width: 48px;
-}
-
-
-/* -------------------------------  */
-/* PAGE : ADMIN BACK OFFICE         */
-/* -------------------------------- */
-
-.coin-droit { position: absolute; right:15px; top:8px;}

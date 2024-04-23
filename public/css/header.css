@@ -74,12 +74,12 @@
         text-decoration: none;
     }
 
-    .connected {
+    &.connected {
         flex-direction: row;
         justify-content: end;
     }
 
-    .disconnected {
+    &.disconnected {
         flex-direction: column;
         justify-content: center;
     }

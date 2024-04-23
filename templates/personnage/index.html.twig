@@ -11,7 +11,7 @@
             <div class="text-center d-flex justify-content-center"><strong class="h1">Les Héros de l'Aventure</strong></div>
 
             <hr class="w-50">     
-            <h1 class="stylise grand">{{ 'Les Personnages'|stylise|raw }}</h1>
+            <h1 class="title-effect grand">{{ 'Les Personnages'|relief|raw }}</h1>
 
         </div>
     </div>
@@ -21,7 +21,7 @@
     <div class="container">
         <section id="pjs"> 
 
-            <h2 class="display-4 ancre-relatif">
+            <h2 class="display-4 relative">
                 Personnages <strong>Joueur</strong>
                 <!-- BTN - MJ - AJOUTER UN PERSONNAGE -->
                 {% if is_granted("ROLE_MJ") %}
@@ -66,7 +66,7 @@
         </section>
         <section id="pnjs">
 
-            <h2 class="display-4 mt-5 ancre-relatif">
+            <h2 class="display-4 mt-5 relative">
                 Personnages <strong>Non-Joueur</strong>
                 <!-- BTN - MJ - AJOUTER UN PERSONNAGE -->
                 {% if is_granted("ROLE_MJ") %}

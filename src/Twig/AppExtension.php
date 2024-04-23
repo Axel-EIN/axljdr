@@ -10,14 +10,14 @@ class AppExtension extends AbstractExtension
     public function getFilters()
     {
         return [
-            new TwigFilter('stylise', [$this, 'titreStylise']),
+            new TwigFilter('relief', [$this, 'titreRelief']),
             new TwigFilter('sortByField', [$this, 'sortByField']),
         ];
     }
 
-    public function titreStylise($titre)
+    public function titreRelief($titre)
     {
-        // Cette fonction prend une chaîne de caractère et la stylise en ajoutant des balises span
+        // Cette fonction prend une chaîne de caractère et met du relief en ajoutant des balises span
         // qui vont réduire la taille des determinants et des mot de liaisons
     
         $search = ' à ';

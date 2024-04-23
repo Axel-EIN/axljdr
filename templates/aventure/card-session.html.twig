@@ -5,7 +5,7 @@
             <div class="absolute session-card-number">{{ un_episode.numero }}</div>
 
             <div class="session-card-image-container">
-                <img class="card-img-top img-fluid mask" src="{{ asset(un_episode.image) }}" alt="Image de la session {{un_episode.titre}}" title="{{un_episode.titre}}"  />
+                <img class="card-img-top img-fluid mask" src="{{ asset(un_episode.image|default(NA_SESSION)) }}" alt="Image de la session {{un_episode.titre}}" title="{{un_episode.titre}}"  />
             </div>
 
             <div class="relative session-card-text-container">

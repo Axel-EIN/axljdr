@@ -105,6 +105,8 @@ p > mark {
 
 .text-xp {
     color: var(--flash-blue);
+    text-shadow:
+        0px 0px 8px var(--black);
 }
 
 .text-your-xp {

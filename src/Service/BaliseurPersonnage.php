@@ -30,9 +30,9 @@ class BaliseurPersonnage
 
             if ($personnage_trouve != null) {
                 $tableau_remplacement[] =
-                    '<a class="perso-img" href="../../personnages/profil/' . $personnage_trouve->getId() . '">'
-                                . '<img src="../../' . $personnage_trouve->getIcone()
-                                . '" alt="Icône du personnage" /> ' . $personnage_trouve->getPrenom() . '</a>';
+                    '<a class="character-icon bg-light-gray pr-1 pt-0 pb-0 pl-0" href="../../personnages/profil/' . $personnage_trouve->getId() . '">'
+                                . '<img class="character-icon-small" src="../../' . $personnage_trouve->getIcone()
+                                . '" alt="Icône du personnage" title="' . $personnage_trouve->getPrenom() .'" /> ' . $personnage_trouve->getPrenom() . '</a>';
             } else
                 $tableau_remplacement[] = $un_match;
         }

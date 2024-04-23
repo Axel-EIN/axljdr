@@ -10,7 +10,7 @@
 
             <div class="relative session-card-text-container">
                 <h5 class="absolute session-card-title">{{ un_episode.titre }}</h5>
-                <p class="session-card-text">{{ un_episode.resume }}</p>
+                <p class="session-card-text">{{ un_episode.resume|default('Résumé à venir...') }}</p>
             </div>
 
             <div class="text-center">

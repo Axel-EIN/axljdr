@@ -1,0 +1,7 @@
+{% extends 'back_office/index.html.twig' %}
+{% block title %}Administrer les Avantages / Désavantages {{ parent() }}{% endblock %}
+{% block h1 %}Administrer les <strong>Avantages / Désavantages</strong>{% endblock %}
+{% block child %}
+    {% set label, element, elements, img_size, genre, extra_col1, extra_col2, extra_col3 = 'avantage', 'avantage', avantages, '32', 'M', 'desavantage', 'type', 'cout' %}
+    {{ include('back_office/list-element.html.twig') }}
+{% endblock %}

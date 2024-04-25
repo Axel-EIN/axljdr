@@ -1,0 +1,6 @@
+{% extends 'back_office/index.html.twig' %}
+{% block title %}Modifier un Avantage / Désavantage{{ parent() }}{% endblock %}
+{% block h1 %}Modifier un Avantage / Désavantage{% endblock %}
+{% block child %}
+    {{ include('admin_avantage/_form.html.twig', {'button_label': 'Modifier'}) }}
+{% endblock %}

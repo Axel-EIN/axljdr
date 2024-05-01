@@ -3,12 +3,12 @@
 
 {% block section_content1 %}
     {% for perso in pjs %}
-        {{ include('/parts/card-personnage.html.twig', {perso}) }}
+        {{ include('/personnage/card-personnage.html.twig', {perso}) }}
     {% endfor %}
 {% endblock %}
 
 {% block section_content2 %}
     {% for perso in pnjs %}
-        {{ include('/parts/card-personnage.html.twig', {perso}) }}
+        {{ include('/personnage/card-personnage.html.twig', {perso}) }}
     {% endfor %}
 {% endblock %}

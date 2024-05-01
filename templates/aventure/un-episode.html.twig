@@ -46,7 +46,7 @@
                             <div class="relative darken hover-bright bg-dark vignette-caroussel">         
                                 <span class="absolute number-session-caroussel">{{ un_episode.numero }}</span>
                                 <a href="{{ path('aventure_episode', { id : un_episode.id, '_fragment': 'read-head' } ) }}" >
-                                    <img class="img-fluid img-128" src="{{ asset(un_episode.image) }}" alt="image de l'episode {{un_episode.titre}}" title="{{un_episode.titre}}"/>
+                                    <img class="img-fluid img-128" src="{{ asset(un_episode.image|default(NA_SESSION)) }}" alt="image de l'episode {{un_episode.titre}}" title="{{un_episode.titre}}"/>
                                 </a>
                             </div>
                         {% endif %}

@@ -66,6 +66,7 @@
     --purple: purple !important;
     --green: rgb(0,100,0) !important;
     --fuschia: #FF1493;
+    --fuschia-light: #FF54C3;
     --flash-red: #f66;
     --flash-green: #0f0;
     --flash-blue: #4Cf;
@@ -110,6 +111,7 @@
 
 .text-primary { color: var(--primary) !important; }
 .bg-primary { background-color: var(--primary) !important; }
+a.text-primary:hover { color: var(--primary-light) !important; }
 
 .text-primary-dark { color: var(--primary-dark) ; }
 .bg-primary-dark { background-color: var(--primary-dark) ; }
@@ -128,11 +130,13 @@
 
 .text-secondary { color: var(--secondary) !important; }
 .bg-secondary { background-color: var(--secondary) !important; }
+a.text-secondary:hover { color: var(--secondary-light) !important; }
 
 /* ACCENT */
 
 .text-accent { color: var(--accent) !important; }
 .bg-accent { background-color: var(--accent) !important; }
+a.text-accent:hover { color: var(--accent-light) !important; }
 
 .text-accent-alpha { color:var(--accent-alpha); }
 .bg-accent-alpha { background-color:var(--accent-alpha); }
@@ -162,3 +166,4 @@
 
 .text-fuschia { color:var(--fuschia); }
 .bg-fuschia { background-color: var(--fuschia); }
+a.text-fuschia:hover { color:var(--fuschia-light)!important; }

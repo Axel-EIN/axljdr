@@ -1,6 +1,6 @@
-/* ---------------------------------- */
-/* ----- BTN LINE : ICON + TEXT ----- */
-/* ---------------------------------- */
+/* -------------------- */
+/* ----- BTN ICON ----- */
+/* -------------------- */
 
 .btn-icon {
     &.text-light-alpha:hover { color: var(--white); }
@@ -8,9 +8,9 @@
     &.text-accent-alpha:hover { color: var(--accent); }
 }
 
-/* ---------------------------------- */
-/* ----- BTN LINE : ICON + TEXT ----- */
-/* ---------------------------------- */
+/* --------------------------- */
+/* ----- BTN ICON + TEXT ----- */
+/* --------------------------- */
 
 .btn-icon-text {
     padding: 0.125rem;
@@ -43,20 +43,12 @@
 /* BOXED */
 
 .btn-primary-style {
-    background-color: var(--primary);
+    border-image: url('../assets/img/ui/primary-button-red-stroke.png') 16 16 16 16 fill repeat;
     font-weight: bold;
     color: var(--white);
-    border-radius: 4px;
-    border-top: 1px solid var(--primary);
-    border-left: 1px solid var(--primary);
-    border-right: 1px solid var(--primary-darker);
-    border-bottom: 1px solid var(--primary-darker);
-    box-shadow:
-        inset 1px 1px 0px var(--primary-lighter),
-        inset -2px -2px 0px var(--primary-dark),
-        0px 0px 8px rgba(0, 0, 0, .2);
+
     &:hover, &:active, &:target {
-        background-color: var(--primary-light);
+        filter: brightness(2.0);
         color: var(--white);
         text-decoration: none;    }
 }

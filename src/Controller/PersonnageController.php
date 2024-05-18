@@ -21,14 +21,14 @@ class PersonnageController extends AbstractController
         $sections[0]['name'] = "PJs";
         $sections[0]['entity'] = 'personnage';
         $sections[0]['label_one'] = "un personnage";
-        $sections[0]['titleLight'] = 'Personnages ';
-        $sections[0]['titleStrong'] = 'Joueurs';
+        $sections[0]['titleLight'] = '';
+        $sections[0]['titleStrong'] = 'Personnages Joueurs';
 
         $sections[1]['name'] = "PNJs";
         $sections[1]['entity'] = 'personnage';
         $sections[1]['label_one'] = "un personnage";
-        $sections[1]['titleLight'] = 'Personnages ';
-        $sections[1]['titleStrong'] = 'Non-Joueurs';
+        $sections[1]['titleLight'] = '';
+        $sections[1]['titleStrong'] = 'Autres Personnages';
 
         $header_classname = 'characters';
         $header_up = "Les Héros de l'Aventure";

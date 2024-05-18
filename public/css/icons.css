@@ -115,12 +115,6 @@
     width: 156px;
 }
 
-.characters-icons-container {
-    z-index: 10;
-    top: -12px;
-    left: 8px;
-}
-
 .character-icon-medium {
     width: 48px;
     border-radius: 4px;

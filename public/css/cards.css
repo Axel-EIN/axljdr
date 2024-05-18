@@ -10,6 +10,15 @@
     padding-bottom: 8px;
     margin-bottom: 1rem;
 
+    .character-box {
+        position: absolute;
+        z-index: 10;
+        top: -1.5rem;
+        left: 1.5rem;
+        display: flex;
+        flex-direction: column;
+    }
+
     .card-inner {
         position: relative;
         display: flex;
@@ -62,7 +71,7 @@
             }
         }
 
-        a.btn-medium {
+        button.btn-medium {
             margin-top: auto;
             margin-bottom: 0.5rem;
             align-self: center;

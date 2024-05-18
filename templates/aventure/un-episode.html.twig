@@ -95,22 +95,13 @@
                 <!-- CLASSEMENT -->
                 {% if classement_episode %}
                     <hr class="mt-5">
-                    <h2 class="text-center my-3">Classement de la Session</h2>
+                    <h2 class="text-center my-3 title-h2">Classement</h2>
                     <div class="d-flex justify-content-center">
                         <div class="list-group list-group-flush">
                             {% for un_personnage in classement_episode %}
-                                <div class="list-group-item d-flex align-items-center hover-zoom bg-transparent ranking">
-                                    <a href="{{path('personnage_profil',{id:un_personnage.id})}}">
-                                        <img class="img-96 mr-4" src="{{ asset(un_personnage.icone|default(NA_PERSO_ICO)) }}" alt="Portrait du Personnage" title="Voir le profil de {{un_personnage.prenom}}"/>
-                                    </a>
-                                    <a class="display-4 mr-4    {% if un_personnage.xp >= 7 %}text-fuschia
-                                                                {% elseif un_personnage.xp >= 6 %}text-primary
-                                                                {% elseif un_personnage.xp >= 5 %}text-success
-                                                                {% elseif un_personnage.xp >= 4 %}text-secondary
-                                                                {% elseif un_personnage.xp >= 3 %}text-accent
-                                                                {% elseif un_personnage.xp >= 2 %}text-gray
-                                                                {% elseif un_personnage.xp >= 1 %}text-light
-                                                                {% endif %}" href="{{path('personnage_profil',{id:un_personnage.id})}}">{{un_personnage.prenom}}</a>
+                                <a class="list-group-item d-flex align-items-center hover-zoom bg-transparent ranking" href="{{path('personnage_profil',{id:un_personnage.id})}}">
+                                    <img class="img-96 mr-4 rounder-portrait" src="{{ asset(un_personnage.icone|default(NA_PERSO_ICO)) }}" alt="Portrait du Personnage" title="Voir le profil de {{un_personnage.prenom}}"/>
+                                    <span class="text-fat mr-4 text-gray">{{un_personnage.prenom}}</span>
                                     <span class="ml-auto badge  {% if un_personnage.xp >= 7 %}bg-fuschia text-white
                                                                 {% elseif un_personnage.xp >= 6 %}bg-primary text-white
                                                                 {% elseif un_personnage.xp >= 5 %}badge-success
@@ -119,7 +110,7 @@
                                                                 {% elseif un_personnage.xp >= 2 %}badge-secondary
                                                                 {% elseif un_personnage.xp >= 1 %}badge-light
                                                                 {% endif %} badge-pill text-large">{{un_personnage.xp}}xp</span>
-                                </div>
+                                </a>
                             {% endfor %}
                         </div>
                     </div>

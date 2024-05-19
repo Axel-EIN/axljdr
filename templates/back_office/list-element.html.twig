@@ -74,7 +74,11 @@
                 <tr>
                     <td>{{ un_element.id }}</td>
 
-                    <td><img class="img-{{img_size}}" src="{{ asset(image|default(na_image)) }}" alt="Image {{label}}" /></td>
+                    <td>
+                        <a href="{{ path('admin_' ~ element ~ '_edit', {id: un_element.id} ) }}">
+                            <img class="img-{{img_size}}" src="{{ asset(image|default(na_image)) }}" alt="Image {{label}}" />
+                        </a>
+                    </td>
 
                     <td><strong>{{nom}}</strong></td>
 

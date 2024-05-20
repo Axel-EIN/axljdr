@@ -59,8 +59,14 @@
         </div>
 
         <!-- TITRE EPISODE -->
-        <div class="relative red-stroke-effect">
-            <h2 class="title-display-h2 mb-0 mt-3 py-3">{{episode.titre}}</h2>
+        <div class="relative red-stroke-effect relative">
+            <h2 class="title-display-h2 mb-0 mt-3 py-3">
+                {{episode.titre}}
+                {% if app.user and is_granted("ROLE_MJ") %} <!-- MJ - BTN ICON - Edit -->
+                    {% set color, position, redirect, entity, un_element, size = 'text-light-alpha', '', 'aventure', 'episode', episode, 'btn-icon-medium' %}
+                    {{ include('/parts/btn-icon-edit.html.twig') }}
+                {% endif %}
+            </h2>
         </div>
         <div class="relative col-12 col-sm-12 offset-xl-1 col-xl-10 justify-content-center session-page">
             <div class="card justify-content-center {% if app.user and is_granted("ROLE_MJ") %}pt-5{% else %}pt-3{% endif %} session-page-body">

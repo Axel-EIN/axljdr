@@ -29,6 +29,15 @@
     font-size: 2rem;
 }
 
+.btn-icon-big {
+    display: inline-block;
+    text-align: center;
+    cursor: pointer;
+    width: 96px;
+    height: 96px;
+    font-size: 3rem;
+}
+
 .btn-icon-text {
     font-size: 1rem;
     font-weight: bold;

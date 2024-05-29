@@ -22,14 +22,13 @@
     </div>
 </header>
 
-<!-- CHAPITRES de la SAISON -->
+<!-- AFFICHAGE DES CHAPITRES de la SAISON -->
 <main>
-{% set numero = 0 %}
-
+{% set numero_chapitre = 0 %}
 {% for un_chapitre in saison.chapitres|reverse %}
-    {% set numero = un_chapitre.numero %}
-    {{ include('/parts/separateur-chapitre.html.twig') }}
-    {{ include('/aventure/un-chapitre.html.twig', {numero}) }}
+    {% set numero_chapitre = un_chapitre.numero %}
+    {{ include('/parts/inserer-chapitre.html.twig', {numero_chapitre}) }}
+    {{ include('/aventure/un-chapitre.html.twig') }}
 {% else %}
     <div class="separator-chapter text-center">
         <div class="alert alert-light mx-auto alert-persist mt-3 mb-3">
@@ -38,8 +37,8 @@
     </div>
 {% endfor %}
 
-    {% set numero = numero + 1 %}
-    {{ include('/parts/separateur-chapitre.html.twig', {numero}) }}
+    {% set numero_chapitre = numero_chapitre + 1 %}
+    {{ include('/parts/inserer-chapitre.html.twig', {numero_chapitre}) }}
 
 </main>
 {% endblock %}

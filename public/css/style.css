@@ -115,17 +115,28 @@ html, body {    font-size: 16px; }
 .text-dead { color: rgb(100, 0, 0); text-shadow: 1px 1px 0 #f00, -1px -1px 0 #f00, 1px -1px 0 #f00, -1px 1px 0 #f00; }
 
 
+
+/* ----------------------- */
+/* ----- TITLE STYLE ----- */
+/* ----------------------- */
+
 .big-title-effect { font-family: "Shogun"; color:#fff; text-align: center; margin: 0; text-shadow: 4px 4px 2rem black; }
 
 .session-title-container-effect {       position: relative; z-index: 2;
                                         color: white; font-family: "Present"; font-weight: 300; text-shadow: 4px 4px 2rem black; text-align: center;
                                         background-image: url('../assets/img/ui/back-title.png'); background-size: 100% 130%; background-repeat: no-repeat; background-position: 50% 50%; }
 
-.plus-petit {   font-size: 2rem; }
-                @media (max-width: 1200px) { .plus-petit { font-size: 2rem; } }
-                @media (max-width: 992px) { .plus-petit { font-size: 1.75rem; } }
-                @media (max-width: 576px) { .plus-petit { font-size: 1.5rem; } }
-                @media (max-width: 480px) { .plus-petit { font-size: 1.25rem; } }
+.grand {        font-size: 9rem; }
+                @media (max-width: 1200px) { .grand { font-size: 9rem; } }
+                @media (max-width: 992px) { .grand { font-size: 8rem; } }
+                @media (max-width: 576px) { .grand { font-size: 6rem; } }
+                @media (max-width: 480px) { .grand { font-size: 4.5rem; } }
+                
+.moyen {        font-size: 6rem; }
+                @media (max-width: 1200px) { .moyen { font-size: 7rem; } }
+                @media (max-width: 992px) { .moyen { font-size: 6rem; } }
+                @media (max-width: 576px) { .moyen { font-size: 5rem; } }
+                @media (max-width: 480px) { .moyen { font-size: 4rem; } }
 
 .petit {        font-size: 3rem; }
                 @media (max-width: 1200px) { .petit { font-size: 3rem; } }
@@ -133,11 +144,11 @@ html, body {    font-size: 16px; }
                 @media (max-width: 576px) { .petit { font-size: 2rem; } }
                 @media (max-width: 480px) { .petit { font-size: 1.75rem; } }
 
-.moyen {        font-size: 6rem; }
-                @media (max-width: 1200px) { .moyen { font-size: 7rem; } }
-                @media (max-width: 992px) { .moyen { font-size: 6rem; } }
-                @media (max-width: 576px) { .moyen { font-size: 5rem; } }
-                @media (max-width: 480px) { .moyen { font-size: 4rem; } }
+.plus-petit {   font-size: 2rem; }
+                @media (max-width: 1200px) { .plus-petit { font-size: 2rem; } }
+                @media (max-width: 992px) { .plus-petit { font-size: 1.75rem; } }
+                @media (max-width: 576px) { .plus-petit { font-size: 1.5rem; } }
+                @media (max-width: 480px) { .plus-petit { font-size: 1.25rem; } }
 
 .text-daytime-overtop-container { position: absolute; color: white; top: -5rem; }
 .text-daytime-overtop-container h3, .text-daytime-overtop-container h5 { margin-bottom: 0; }

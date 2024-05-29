@@ -19,7 +19,7 @@
             <section class="mt-5 mb-5"> 
 
                 <!-- H1 TITLE -->
-                <h1 class="relative display-4"><strong>{{ nom }}</strong>
+                <h1 class="title-h2 relative"><strong>{{ nom }}</strong>
 
                     {% if app.user and is_granted("ROLE_MJ") %}
                         <!-- MJ - BTN ICON EDIT - RIGHT SNAP -->
@@ -28,10 +28,10 @@
                     {% endif %}
 
                 </h1>
-                <hr>
+                <hr class="mt-2 mb-4">
 
                 <!-- ELEMENT CONTENT -->
-                <article class="row mt-4">
+                <article class="row">
 
                     {% block element_content %}{% endblock %}
                     

@@ -12,7 +12,7 @@
                     </strong>
                 </div>
                 <hr class="w-50">     
-                <h1 class="big-title-effect title-large">
+                <h1 class="title-display-h1">
                     {{header_down|relief|raw}}
                 </h1>
             </div>
@@ -27,15 +27,15 @@
                 {% set entity, label_one = une_section['entity'], une_section['label_one'] %}
 
                 <!-- SECTION {{une_section['name']}} -->
-                <section id="{{une_section['entity']}}" class="mb-5"> 
+                <section id="{{une_section['entity']}}" class="mb-5 pb-5"> 
 
                     <!--TITRE DE LA SECTION -->
-                    <h2 class="display-4 relative">
-                        {{une_section['titleLight']}}&nbsp;<strong>{{une_section['titleStrong']}}</strong>
+                    <h2 class="title-h2">
+                        <span class="title-small">{{une_section['titleLight']}}</span><strong>{{une_section['titleStrong']}}</strong>
                         <!-- BTN MJ ADD ELEMENT -->
                         {{ include('/parts/btn-box-add-element.html.twig', {entity}) }}
                     </h2>
-                    <hr>
+                    <hr class="mt-2 mb-4">
                     <div class="row mt-3">
 
                         <!--CONTENU DE LA SECTION -->

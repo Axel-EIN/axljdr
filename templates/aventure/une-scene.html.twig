@@ -12,9 +12,9 @@
                     <div class="mb-2" style="display: inline-block; position: relative;">
                         <a href="{{path('personnage_profil',{id: une_participation.personnage.id})}}" >
                             {% if une_participation.estMort == 1 %}
-                                <img src="{{asset('assets/img/icons/mort.png')}}" alt="est mort" style="width: 72px; position: absolute; top: -4px; left: -2px; z-index: 1;" />
+                                <img class="character-icon-dead" src="{{asset('assets/img/icons/mort.png')}}" alt="est mort" />
                             {% endif %}
-                            <img class="ombre-img character-icon-64 {% if une_participation.estMort == 1 %}dead{% else %}hover-shine{% endif %}"
+                            <img class="shadowed character-icon-large {% if une_participation.estMort == 1 %}dead{% else %}hover-shine{% endif %}"
                                 src="{{asset(une_participation.personnage.icone)}}" alt="Icone du Personnage" title="{{une_participation.personnage.prenom}}" />
                         </a>
                     </div>
@@ -41,7 +41,7 @@
                                     {% if une_participation.estMort == 1 %}
                                         <img src="{{asset('assets/img/icons/mort.png')}}" alt="est mort" style="width: 72px; position: absolute; top: -4px; left: -2px; z-index: 1;" />
                                     {% endif %}
-                                    <img class="character-icon-64 {% if une_participation.personnage.joueur == app.user %}outlined{% endif %} {% if une_participation.estMort == 1 %}dead{% elseif une_participation.xpGagne == 0 %}grayscale{% else %}hover-shine{% endif %}"
+                                    <img class="character-icon-large {% if une_participation.personnage.joueur == app.user %}outlined{% endif %} {% if une_participation.estMort == 1 %}dead{% elseif une_participation.xpGagne == 0 %}grayscale{% else %}hover-shine{% endif %}"
                                          src="{{asset(une_participation.personnage.icone)}}" alt="Icone du Personnage" title="{{une_participation.personnage.prenom}}" />
                                 </a>
                             </div>

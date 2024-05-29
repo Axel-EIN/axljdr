@@ -14,7 +14,7 @@
             <!-- CONTAINER IMAGE -->
             <div class="relative">
 
-                <!-- SURIMPRESSION DROITE : CONTROLE PAR  -->
+                <!-- MON -->
                 <a id="banner-icon-clan" class="hover-zoom" href="{{ path('empire_clan', {id:ecole.clan.id} ) }}" >
                     <img class="img-96 filter-shadow" src="{{ asset(ecole.clan.mon|default(NA_ICON_MON)) }}" alt="Mon d'une faction" title="Voir la faction {{ecole.clan.nom}}" />
                 </a>
@@ -23,24 +23,26 @@
                 <text id="text-zone" class="col-10 row p-0 m-0 mb-3 justify-content-end" >
 
                     <div class="col-4 m-0 p-0 text-center text-shadow on-top">
-                        <h2>Bonus</h2>
+                        <h2 class="title-h3">Bonus</h2>
                         <span class="text-zone-blur text-xp text-big">{{ ecole.bonus }}</span>
                     </div>
 
                     <div class="col-4 m-0 p-0 on-top">
-                        <h2>Compétences</h2>
+                        <h2 class="title-h3">Compétences</h2>
                         <p class="text-zone-blur ml-4 mt-2">{{ ecole.competences|lister|raw }}</p>
                     </div>
 
                     <div class="col-4 m-0 p-0 on-top">
-                        <h2>Équipement</h2>
+                        <h2 class="title-h3">Équipement</h2>
                         <p class="text-zone-blur ml-4 mt-2">{{ ecole.equipements|lister|raw }}</p>
                     </div>
 
                 </text>
 
                 <!-- IMAGE -->
-                <div class="gradient-after"><img class="img-fluid" src="{{ asset(ecole.image|default('assets/img/placeholders/na_' ~ ecole.classe.nom|lower ~ '.jpg')) }}" alt="Image de l'École"  /></div>
+                <div class="gradient-after">
+                    <img class="img-fluid" src="{{ asset(ecole.image|default('assets/img/placeholders/na_' ~ ecole.classe.nom|lower ~ '.jpg')) }}" alt="Image de l'École"  />
+                </div>
 
             </div>
 
@@ -62,7 +64,7 @@
             <!-- TECHNIQUES -->
             <section class="col-12 p-1 m-0">
                 <div class="card card-body pt-4 h-100">
-                    <h2 class="card-title"><strong>Techniques</strong></h2>
+                    <h2 class="title-h3">Techniques</h2>
                     <hr>
 
                     {% for i in 1..5 %}
@@ -73,7 +75,7 @@
                                     <span class="number-skillrank-effect display-1" >{{ i|relief|raw }}</span>
                                 </div>
                                 <div class="col-10 ml-n2">
-                                    <strong>{{ attribute(ecole, 'tech' ~ i ~ 'Nom')|upper }}</strong>
+                                    <h3 class="title-h4 mb-2">{{ attribute(ecole, 'tech' ~ i ~ 'Nom')|upper }}</h3>
                                     <p class="text-justify text-regular">{{ attribute(ecole, 'tech' ~ i ~ 'Desc')|raw|nl2br }}</p>
                                 </div>
                             </div>
@@ -81,8 +83,8 @@
                     {% endfor %}
 
                     {% if ecole.techSpecialNom is not empty %}
-                        <strong>{{ ecole.techSpecialNom|upper }}</strong>
-                        <p class="text-justify text-medium">{{ ecole.techSpecialDesc|raw|nl2br }}</p>
+                        <h3 class="title-h4 mx-3 mb-2">{{ ecole.techSpecialNom|upper }}</h3>
+                        <p class="mx-3 text-justify text-medium">{{ ecole.techSpecialDesc|raw|nl2br }}</p>
                     {% endif %}
 
                 </div>
@@ -92,7 +94,7 @@
             <!-- MAGIE -->
             <section class="col-12 p-1 m-0">
                 <div class="card card-body pt-4 h-100">
-                    <h2 class="card-title"><strong>Magie</strong></h2>
+                    <h2 class="title-h3">Magie</h2>
                     <hr>
 
                     <div class="d-flex justify-content-around align-items-start">
@@ -142,7 +144,7 @@
     <!-- AUTRES ECOLES DU CLAN -->
     <aside class="col-12 p-1">
         <div class="card card-body h-100 pb-1">
-            <h2 class="card-title">Autres écoles {{preposition}} <strong>{{ecole.clan.nom}}</strong></h2>
+            <h2 class="title-h3">Autres écoles {{preposition}} {{ecole.clan.nom}}</h2>
             <hr>
             <div class="row p-0 m-0 pt-2">
                 {% for autreEcole in autresEcoles %}

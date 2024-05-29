@@ -54,7 +54,7 @@
                         {% set label, element, nbr, last, nom, image = 'Archives', 'archive', nbrArchives, derniereArchive, derniereArchive.titre, derniereArchive.image|default(NA_IMG_ARCHIVE) %}
                         {{ include('back_office/card-element-resume.html.twig') }}
 
-                        {% set label, element, nbr, last, nom, image = 'Lieux', 'lieu', nbrLieux, dernierLieu, dernierLieu.nom, dernierLieu.image|default('non-définie') %}
+                        {% set label, element, nbr, last, nom, image = 'Lieux', 'lieu', nbrLieux, dernierLieu, dernierLieu.nom, dernierLieu.image|default(NA_IMG_LIEU) %}
                         {{ include('back_office/card-element-resume.html.twig') }}
                     </section>
 

@@ -24,7 +24,7 @@
         <hr class="col-12 mb-3">
         <section id="{{i}}" class="col-8 p-1 mt-3 mb-3">
             <card class="card card-body">
-                <h2>{{ attribute(rule, 'part' ~ i ~ 'titre') }}</h2>
+                <h2 class="title-h3">{{ attribute(rule, 'part' ~ i ~ 'titre') }}</h2>
                 <hr>
                 <p class="text-justify text-regular p-2">{{ attribute(rule, 'part' ~ i)|raw|nl2br }}</p>
             </card>
@@ -45,7 +45,7 @@
     <!-- AUTRES BASIC RULES -->
     <aside class="col-12 p-1">
         <div class="card card-body h-100 pb-1">
-            <h2 class="card-title">Autres <strong>Règles</strong></h2>
+            <h2 class="title-h3">Autres Règles {% if rule.base %}de Bases{% else %}Annexes{% endif %}</h2>
             <hr>
             <div class="row p-0 m-0 pt-2">
                 {% for autreRule in autresRules %}

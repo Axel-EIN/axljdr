@@ -54,6 +54,8 @@
 .link-gray:hover { color: rgba(255,255,255,0.9) !important; text-decoration: none !important; }
 .link-gray.active { color: rgba(255,255,255, 1) !important; }
 
+.scene-text a { font-weight: bold; }
+
 
 /* -------------------------- */
 /* --------- TEXT ----------- */

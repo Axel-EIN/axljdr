@@ -43,7 +43,7 @@ class AdminArchiveController extends AbstractController
             if (!empty($nouvelleImage)) {
                 $prefix = 'archive-' . $archive->getTitre() . '-image';
                 $archive->setImage($fileHandler->handle($nouvelleImage, null, $prefix, 'archives'));
-            } else { $archive->setImage('assets/img/placeholders/1280x720.png'); }
+            }
 
             $em->persist($archive);
             $em->flush();

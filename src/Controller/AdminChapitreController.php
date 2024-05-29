@@ -57,7 +57,7 @@ class AdminChapitreController extends AbstractController
             if (!empty($nouvelleImage)) {
                 $prefix = 'chapitre-s' . $chapitre->getSaisonParent()->getNumero() . '-ch' . $chapitre->getNumero();
                 $chapitre->setImage($fileHandler->handle($nouvelleImage, null, $prefix, 'chapitres'));
-            } else { $chapitre->setImage('assets/img/placeholders/1920x1080.jpg'); }
+            }
 
             $em->persist($chapitre);
             $em->flush();

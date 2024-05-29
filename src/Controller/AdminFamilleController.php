@@ -53,7 +53,7 @@ class AdminFamilleController extends AbstractController
             if (!empty($nouveauMon)) {
                 $prefix = 'famille-' . $famille->getNom() . '-mon';
                 $famille->setMon($fileHandler->handle($nouveauMon, null, $prefix, 'familles'));
-            } else { $famille->setMon('assets/img/placeholders/na_mon.png'); }
+            }
 
             $em->persist($famille);
             $em->flush();

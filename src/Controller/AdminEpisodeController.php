@@ -59,7 +59,7 @@ class AdminEpisodeController extends AbstractController
                 $prefix = 'episode-s' . $episode->getChapitreParent()->getSaisonParent()->getNumero()
                 . '-ch' . $episode->getChapitreParent()->getNumero() . '-ep' . $episode->getNumero();
                 $episode->setImage($fileHandler->handle($nouvelleImage, null, $prefix, 'episodes'));
-            } else { $episode->setImage('assets/img/placeholders/960x540.jpg'); }
+            }
 
             $em->persist($episode);
             $em->flush();

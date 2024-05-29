@@ -41,7 +41,7 @@
                 {{ form_label(form.video) }}
                 {% if type == 'Modifier' %}
                     <video class="img-fluid" controls muted>
-                        <source src="{{asset(clan.video|default('assets/img/placeholders/1280x720.jpg'))}}" type="video/mp4">
+                        <source src="{{ asset(clan.video|default(NA_IMG_169)) }}" type="video/mp4">
                     </video>
                 {% endif %}
                 {{ form_widget(form.video) }}
@@ -57,7 +57,7 @@
 
             <div class="col-12 mt-3 text-center">
                 {% if type == 'Modifier' %}
-                    <img class="img-fluid" src="{{ asset( clan.territoireCarte|default( 'assets/img/placeholders/na_map.jpg' ) ) }}" />
+                    <img class="img-fluid" src="{{ asset( clan.territoireCarte|default( NA_IMG_MAP ) ) }}" />
                 {% endif %}
             </div>
 

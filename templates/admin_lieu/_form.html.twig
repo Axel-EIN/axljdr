@@ -18,7 +18,7 @@
                     {% if type == 'Modifier' and lieu.icone is defined and lieu.icone is not empty %}
                         <img class="img-fluid" src="{{ asset(lieu.icone) }}" />
                     {% else %}
-                        <img class="img-fluid" src="{{ asset('assets/img/placeholders/na_mon.png') }}" />
+                        <img class="img-fluid" src="{{ asset(NA_ICON_MON) }}" />
                     {% endif %}
                 </div>
                 

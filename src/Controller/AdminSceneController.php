@@ -71,7 +71,7 @@ class AdminSceneController extends AbstractController
                 . '-ch' . $scene->getEpisodeParent()->getChapitreParent()->getNumero()
                 . '-ep' . $scene->getEpisodeParent()->getNumero() . '-scn' . $scene->getNumero();
                 $scene->setImage($fileHandler->handle($nouvelleImage, null, $prefix, 'scenes'));
-            } else { $scene->setImage('assets/img/placeholders/1280x720.jpg'); }
+            }
 
             // Format and Fusion Participants POST data
             $participants_a_ajoutes = $participationHandler->fusionnerParticipants($request->get('participants'), $request->get('participants_xp'),

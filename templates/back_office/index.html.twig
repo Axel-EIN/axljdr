@@ -45,10 +45,10 @@
                     <hr>
                     <p class="mb-4 text-muted">Récapitulatif des éléments ajoutés pour le descriptif de l'univers de jeu.</p>
                     <section class="row">
-                        {% set label, element, nbr, last, nom, image = 'Factions', 'clan', nbrClans, dernierClan, dernierClan.nom, dernierClan.image|default('non-définie') %}
+                        {% set label, element, nbr, last, nom, image = 'Factions', 'clan', nbrClans, dernierClan, dernierClan.nom, dernierClan.mon|default(NA_ICON_MON) %}
                         {{ include('back_office/card-element-resume.html.twig') }}
 
-                        {% set label, element, nbr, last, nom, image = 'Familles', 'famille', nbrFamilles, derniereFamille, derniereFamille.nom, derniereFamille.mon|default('non-définie') %}
+                        {% set label, element, nbr, last, nom, image = 'Familles', 'famille', nbrFamilles, derniereFamille, derniereFamille.nom, derniereFamille.mon|default(NA_ICON_MON) %}
                         {{ include('back_office/card-element-resume.html.twig') }}
 
                         {% set label, element, nbr, last, nom, image = 'Archives', 'archive', nbrArchives, derniereArchive, derniereArchive.titre, derniereArchive.image|default(NA_IMG_ARCHIVE) %}

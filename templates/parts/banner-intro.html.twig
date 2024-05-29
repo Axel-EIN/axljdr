@@ -22,7 +22,7 @@
                     background-blend-mode: multiply, multiply;"></overlay>
 
             <!-- VIDEO -->
-            <video id="banner-video" autoplay loop controls muted poster="{{ asset( un_element.image|default('assets/img/placeholders/1280x720.jpg') ) }}">
+            <video id="banner-video" autoplay loop controls muted poster="{{ asset( un_element.image|default(NA_IMG_169) ) }}">
                 <source src="{{asset(un_element.video)}}" type="video/mp4">
             </video>
 

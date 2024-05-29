@@ -51,7 +51,7 @@
                         {% set label, element, nbr, last, nom, image = 'Familles', 'famille', nbrFamilles, derniereFamille, derniereFamille.nom, derniereFamille.mon|default('non-définie') %}
                         {{ include('back_office/card-element-resume.html.twig') }}
 
-                        {% set label, element, nbr, last, nom, image = 'Archives', 'archive', nbrArchives, derniereArchive, derniereArchive.titre, derniereArchive.image|default('non-définie') %}
+                        {% set label, element, nbr, last, nom, image = 'Archives', 'archive', nbrArchives, derniereArchive, derniereArchive.titre, derniereArchive.image|default(NA_IMG_ARCHIVE) %}
                         {{ include('back_office/card-element-resume.html.twig') }}
 
                         {% set label, element, nbr, last, nom, image = 'Lieux', 'lieu', nbrLieux, dernierLieu, dernierLieu.nom, dernierLieu.image|default('non-définie') %}

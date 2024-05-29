@@ -51,7 +51,7 @@ class AdminSaisonController extends AbstractController
             if (!empty($nouvelleImage)) {
                 $prefix = 'saison-' . $saison->getNumero();
                 $saison->setImage($fileHandler->handle($nouvelleImage, null, $prefix, 'saisons'));
-            } else { $saison->setImage('assets/img/placeholders/1920x1080.jpg'); }
+            }
 
             $em->persist($saison);
             $em->flush();

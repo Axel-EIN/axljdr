@@ -31,7 +31,7 @@ class AdminEcoleType extends AbstractType
             ])
 
             // Nullables Fields
-            ->add('image', FileType::class, [ 'required' => false, 'mapped' => false, 'data_class' => null ])
+            ->add('image', FileType::class, [ 'required' => false, 'mapped' => false, 'data_class' => null, 'label' => 'Image (facultative)' ])
             ->add('description', TextareaType::class, [ 'required' => false, 'constraints' => [ new Length( [ 'max' => 2000 ] ) ] ])
             ->add('bonus', TextType::class, [ 'required' => false, 'constraints' => [ new Length( [ 'max' => 20 ] ) ] ])
             ->add('competences', TextareaType::class, [ 'required' => false, 'constraints' => [ new Length( [ 'max' => 600 ] ) ] ])

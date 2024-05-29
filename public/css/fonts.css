@@ -20,3 +20,15 @@
     font-family: "Present";
     src: url("../assets/fonts/Present-LT-Black-Condensed.otf");
 }
+
+/* H3 DISPLAY TITLES */
+@font-face {
+    font-family: "Avenir";
+    src: url("../assets/fonts/Avenir-Black.ttf");
+}
+
+/* H4 DISPLAY TITLES */
+@font-face {
+    font-family: "Amerigo";
+    src: url("../assets/fonts/Amerigo-Bold-BT.ttf");
+}

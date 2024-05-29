@@ -2,9 +2,26 @@
 /* ----- POSITIONS ----- */
 /* --------------------- */
 
+/* SNAPS */
+
+.corner-bottom-left-snap {
+        position: absolute;
+        z-index: 10;
+        bottom: 2rem;
+        left: 0.75rem;
+}
+
 .relative { position: relative; }
 
 .absolute { position: absolute; }
+
+.center-snap {
+        position: absolute;
+        z-index: 10;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+}
 
 .left-overflow {
         position: absolute;

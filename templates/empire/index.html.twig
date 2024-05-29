@@ -25,7 +25,7 @@ style="background-image: linear-gradient(rgb(40,0,0,0.5),rgb(40,0,0,0.5)),url('{
                 Les <strong>Archives</strong>
 
                 <!-- BTN - MJ - AJOUTER UNE ARCHIVE -->
-                {% if is_granted("ROLE_MJ") %}
+                {% if app.user and is_granted("ROLE_MJ") %}
                 <div class="btn-mj-h2-create">
                     <a href="{{ path('admin_archive_create') }}?redirect=archive" class="btn btn-primary">
                         <i class="fas fa-plus-square"></i>&nbsp;&nbsp;Ajouter une archive

@@ -11,6 +11,10 @@
 .relative { position: relative; }
 .right-corner-snap { position: absolute; top: 0px; right: 0px; z-index: 10}
 .right-corner-8 { position: absolute; right:16px; top:8px; z-index: 10}
+.overtop-36 { position: relative; top: -36px; }
+
+@media (max-width: 576px) { .icons-char-collapse { visibility: collapse; } }
+@media (max-width: 480px) { .icons-char-collapse { visibility: collapse; } }
 
 
 
@@ -122,21 +126,8 @@ html, body {    font-size: 16px; }
                 @media (max-width: 576px) { .moyen { font-size: 5rem; } }
                 @media (max-width: 480px) { .moyen { font-size: 4rem; } }
 
-.grand {        font-size: 9rem; }
-                @media (max-width: 1200px) { .grand { font-size: 9rem; } }
-                @media (max-width: 992px) { .grand { font-size: 8rem; } }
-                @media (max-width: 576px) { .grand { font-size: 6rem; } }
-                @media (max-width: 480px) { .grand { font-size: 4.5rem; } }
-
-
-
-/* ---------------------------- */
-/* -------- NAVIGATION -------- */
-/* ---------------------------- */                  
-
-#navigation-bar { position: relative; z-index: 10; box-shadow: 0px 2px 8px black; }
-nav .active { font-weight: bold; }
-.connected { color: white; text-align: right; }
+.text-daytime-overtop-container { position: absolute; color: white; top: -5rem; }
+.text-daytime-overtop-container h3, .text-daytime-overtop-container h5 { margin-bottom: 0; }
 
 
 

@@ -1,6 +1,6 @@
-/* -------------------------- */
-/* -------- LAYOUT ---------- */
-/* -------------------------- */
+/* -------------------------------------- */
+/* -------- LAYOUT & POSITIONING -------- */
+/* -------------------------------------- */
 
 @media (max-width: 1200px) { .container { padding-left: 1rem; padding-right: 1rem; } }
 @media (max-width: 992px) { .container { padding-left: 1rem; padding-right: 1rem; } }
@@ -8,7 +8,9 @@
 @media (max-width: 480px) { .container { padding-left: 0.5rem; padding-right: 0.5rem; } }
 
 .page-min { min-height: 60vh; }
+
 .relative { position: relative; }
+
 .right-corner-snap { position: absolute; top: 0px; right: 0px; z-index: 10}
 .right-corner-8 { position: absolute; right:16px; top:8px; z-index: 10}
 .right-corner-16 { top: 1rem; right: 1rem; }
@@ -133,7 +135,7 @@ html, body {    font-size: 16px; }
                 @media (max-width: 992px) { .grand { font-size: 8rem; } }
                 @media (max-width: 576px) { .grand { font-size: 6rem; } }
                 @media (max-width: 480px) { .grand { font-size: 4.5rem; } }
-                
+
 .moyen {        font-size: 6rem; }
                 @media (max-width: 1200px) { .moyen { font-size: 7rem; } }
                 @media (max-width: 992px) { .moyen { font-size: 6rem; } }
@@ -157,9 +159,9 @@ html, body {    font-size: 16px; }
 
 
 
-/* --------------------------------------- */
-/* ------- HEADERS BG & CONTAINERS ------- */
-/* --------------------------------------- */
+/* ----------------------------------------------- */
+/* ------- HEADERS BG & HEADERS CONTAINERS ------- */
+/* ----------------------------------------------- */
 
 .header-bg-img { background-size: 100% auto; background-position: top; background-repeat: no-repeat;
                 /* background-color: var(--b); voir doc sur le variable CSS */ }
@@ -310,56 +312,56 @@ a.character-icon { display: inline-block; font-weight: bold; }
 /* ------------------- */
 
 .session-card-spacing { padding-right: 8px;
-                        padding-left: 8px;
-                        padding-top: 8px;
-                        padding-bottom: 8px; }
+        padding-left: 8px;
+        padding-top: 8px;
+        padding-bottom: 8px; }
 
 .session-card-body {    background-color: #eee;
-                        min-width: 265px;
-                        min-height: 380px;
-                        max-height: 380px;
-                        box-shadow: 6px 6px 4px black;
-                        border: 0; }
-   
+        min-width: 265px;
+        min-height: 380px;
+        max-height: 380px;
+        box-shadow: 6px 6px 4px black;
+        border: 0; }
+
 .session-card-image-container { background-color: black; }
 
 .session-card-number {   position: absolute;
-                        left: 16px;
-                        top: 54px;
-                        color: white;
-                        font-size:3rem;
-                        font-weight: bold;
-                        text-shadow: 0px 2px 8px black;
-                        z-index: 10 }
+        left: 16px;
+        top: 54px;
+        color: white;
+        font-size:3rem;
+        font-weight: bold;
+        text-shadow: 0px 2px 8px black;
+        z-index: 10 }
 
 .session-card-text-container { position: relative; padding: 0.75rem; }
 
 .session-card-title {   position: absolute;
-                        top: -30px;
-                        left: 16px;
-                        font-size: 1rem;
-                        color: white;
-                        font-weight: bold;
-                        text-shadow: 0px 2px 8px black; }
+        top: -30px;
+        left: 16px;
+        font-size: 1rem;
+        color: white;
+        font-weight: bold;
+        text-shadow: 0px 2px 8px black; }
 
 .session-card-text {    font-size: 1rem;
-                        color: gray; }
+        color: gray; }
 
 .session-card-long { position: relative; top: -36px; z-index: 1; }
-/* @media (max-width: 1200px) { .session-card-long { padding-left: unset; padding-right: unset; } }
-@media (max-width: 992px) { .session-card-long { padding-left: unset; padding-right: unset; } } */
-@media (max-width: 576px) { .session-card-long { padding-left: unset; padding-right: unset; } }
-@media (max-width: 480px) { .session-card-long { padding-left: unset; padding-right: unset; } }
+        /* @media (max-width: 1200px) { .session-card-long { padding-left: unset; padding-right: unset; } }
+        @media (max-width: 992px) { .session-card-long { padding-left: unset; padding-right: unset; } } */
+        @media (max-width: 576px) { .session-card-long { padding-left: unset; padding-right: unset; } }
+        @media (max-width: 480px) { .session-card-long { padding-left: unset; padding-right: unset; } }
 
 .session-card-long-body { min-height: 500px; }
 
 .character-card { border: unset; }
 
 .scene-body {   padding-left: 4rem; padding-right: 4rem; padding-top: 3rem; padding-bottom: 1rem; }
-@media (max-width: 1200px) { .scene-body { padding-left: 4rem; padding-right: 4rem; padding-top: 3rem; padding-bottom: 1rem; } }
-@media (max-width: 992px) { .scene-body { padding-left: 4rem; padding-right: 4rem; padding-top: 3rem; padding-bottom: 1rem; } }
-@media (max-width: 576px) { .scene-body { padding-left: 1rem; padding-right: 1rem; padding-top: 1.5rem; padding-bottom: 0.5rem; } }
-@media (max-width: 480px) { .scene-body { padding-left: 1rem; padding-right: 1rem; padding-top: 1.5rem; padding-bottom: 0.5rem; } }
+                @media (max-width: 1200px) { .scene-body { padding-left: 4rem; padding-right: 4rem; padding-top: 3rem; padding-bottom: 1rem; } }
+                @media (max-width: 992px) { .scene-body { padding-left: 4rem; padding-right: 4rem; padding-top: 3rem; padding-bottom: 1rem; } }
+                @media (max-width: 576px) { .scene-body { padding-left: 1rem; padding-right: 1rem; padding-top: 1.5rem; padding-bottom: 0.5rem; } }
+                @media (max-width: 480px) { .scene-body { padding-left: 1rem; padding-right: 1rem; padding-top: 1.5rem; padding-bottom: 0.5rem; } }
 
 
 

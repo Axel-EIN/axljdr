@@ -30,20 +30,20 @@ class EmpireController extends AbstractController
         $sections[0]['name'] = "Archives";
         $sections[0]['entity'] = 'archive';
         $sections[0]['label_one'] = "une archive";
-        $sections[0]['titleLight'] = 'Les';
+        $sections[0]['titleLight'] = 'Les ';
         $sections[0]['titleStrong'] = 'Archives';
 
 
         $sections[1]['name'] = "Factions";
         $sections[1]['entity'] = 'clan';
         $sections[1]['label_one'] = "une faction";
-        $sections[1]['titleLight'] = 'Les';
+        $sections[1]['titleLight'] = 'Les ';
         $sections[1]['titleStrong'] = 'Factions';
 
         $sections[2]['name'] = "Lieux";
         $sections[2]['entity'] = 'lieu';
         $sections[2]['label_one'] = "un lieu";
-        $sections[2]['titleLight'] = 'Les';
+        $sections[2]['titleLight'] = 'Les ';
         $sections[2]['titleStrong'] = 'Lieux';
 
         $header_classname = 'empire';

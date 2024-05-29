@@ -21,11 +21,9 @@
                 {{ include('/parts/btn-ajouter-personnage.html.twig') }}
             </h2>
             <hr>
-
-            <br/>
-            <div class="row">
-{# {% for un_pj in personnages|filter(p=>p.estPj) %} #}
-{% for un_pj in pjs %}
+            <div class="row mt-5">
+            {# {% for un_pj in personnages|filter(p=>p.estPj) %} #}
+            {% for un_pj in pjs %}
 
                 <!-- UN PERSONNAGE JOUEUR -->
                 <article class="col-xl-2 col-lg-3 col-md-4 col-sm-6 py-3 hover-shine">
@@ -48,7 +46,7 @@
                     </a>
                 </article>
 
-{% endfor %}
+            {% endfor %}
             </div>
         </section>
 
@@ -58,20 +56,17 @@
                 {{ include('/parts/btn-ajouter-personnage.html.twig') }}
             </h2>
             <hr>
+            <div class="row mt-5">
+            {% for un_pnj in pnjs %}
 
-            <br/>
-            <div class="row">
-{# {% for un_pnj in personnages|filter(p=> not p.estPj) %} #}
-{% for un_pnj in pnjs %}
-                
                 <!-- UN PERSONNAGE NON-JOUEUR -->
                 <article class="col-xl-2 col-lg-3 col-md-4 col-sm-6 py-3 hover-shine">
                     <a href="{{ path('personnage_profil', {id: un_pnj.id} ) }}" alt="Carte d'un personnage" title="Voir le profil de {{un_pnj.prenom}}">
                         <div class="card character-card text-white shadowed">
                             <img class="corner-badge" src="{{ asset(un_pnj.clan.mon) }}" alt="Mon du clan" />
-                            {% if un_pnj.estMort is not empty and un_pnj.estMort == 1 %}
-                                <img class="icon-dead-big" src="{{asset('assets/img/icons/mort.png')}}" alt="est mort" title="est mort" />
-                            {% endif %}
+                                {% if un_pnj.estMort is not empty and un_pnj.estMort == 1 %}
+                                    <img class="icon-dead-big" src="{{asset('assets/img/icons/mort.png')}}" alt="est mort" title="est mort" />
+                                {% endif %}
                             <div class="mask-bg-dark">
                                 <img class="card-img {% if un_pnj.estMort is not empty and un_pnj.estMort == 1 %}dead{% endif %}"
                                     src="{{ asset(un_pnj.illustration) }}" alt="Illustration d'un personnage" />
@@ -84,7 +79,7 @@
                     </a>
                 </article>
 
-{% endfor %}
+            {% endfor %}
             </div>
         </section>
     </div>

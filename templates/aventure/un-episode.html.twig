@@ -38,12 +38,13 @@
         <!-- TITRE EPISODE -->
         <h2 class="display-3 session-title-h mb-0 mt-3 py-3">{{ episode.titre }}</h2>
         <div class="col-12 col-sm-12 offset-xl-1 col-xl-10 justify-content-center session-card-long">
-            <div class="card justify-content-center pt-5 session-card-long-body">
+            <div class="card justify-content-center {% if is_granted("ROLE_MJ") %}pt-5{% else %}pt-3{% endif %} session-card-long-body">
 
-                <!-- AFFICHAGE DES SCENES -->
+                <!-- AFFICHAGE DES SCENES DE LA SESSION -->
                 {% set numero_scene = 0 %}
                 {% for une_scene in episode.scenes %}
-                    {% set numero_scene = une_scene.numero %}
+                    {% set numero_scene, label = une_scene.numero, 'Insérer' %}
+                    {{ include('/parts/inserer-scene.html.twig', {numero_scene}) }}
                     {{ include('/aventure/une-scene.html.twig', {une_scene}) }}
                 {% else %}
                     <div class="text-center">
@@ -52,9 +53,10 @@
                     </div>
                 {% endfor %}
 
-                {% set numero_scene = numero_scene + 1 %}
+                {% set numero_scene, label = numero_scene + 1, 'Ajouter' %}
                 {{ include('/parts/inserer-scene.html.twig', {numero_scene}) }}
 
+                <hr class="mt-5">
                 <h2 class="text-center">Classement de la Session</h2>
                 <div class="d-flex justify-content-center">
                     <ol class="text-center">

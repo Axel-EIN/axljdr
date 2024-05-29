@@ -37,14 +37,12 @@
                     {% if un_episode.scenes|length > 0 or is_granted("ROLE_MJ") %}
                         <div>
                         {% if un_episode.id == episode.id %}
-                            <div class="vignette-caroussel active">         
-                                <span class="absolute number-session-caroussel active">{{ un_episode.numero }}</span>
+                            <div class="vignette-caroussel active">
                                 <img class="img-160 border border-4 border-danger shadow" src="{{ asset(un_episode.image|default(NA_SESSION)) }}" alt="image de l'episode {{un_episode.titre}}" title="{{un_episode.titre}}"/>
                                 <i class="absolute arrow-down fa-sharp fa-solid fa-sort-down fa-bounce fa-2xl text-primary"></i>
                             </div>
                         {% else %}
                             <div class="relative darken hover-bright bg-dark vignette-caroussel">         
-                                <span class="absolute number-session-caroussel">{{ un_episode.numero }}</span>
                                 <a href="{{ path('aventure_episode', { id : un_episode.id, '_fragment': 'read-head' } ) }}" >
                                     <img class="img-fluid img-128" src="{{ asset(un_episode.image|default(NA_SESSION)) }}" alt="image de l'episode {{un_episode.titre}}" title="{{un_episode.titre}}"/>
                                 </a>
@@ -124,14 +122,26 @@
                                 <a class="list-group-item d-flex align-items-center hover-zoom bg-transparent ranking" href="{{path('personnage_profil',{id:un_personnage.id})}}">
                                     <img class="img-96 mr-4 rounder-portrait" src="{{ asset(un_personnage.icone|default(NA_PERSO_ICO)) }}" alt="Portrait du Personnage" title="Voir le profil de {{un_personnage.prenom}}"/>
                                     <span class="text-fat mr-4 text-gray">{{un_personnage.prenom}}</span>
-                                    <span class="ml-auto badge  {% if un_personnage.xp >= 7 %}bg-fuschia text-white
-                                                                {% elseif un_personnage.xp >= 6 %}bg-primary text-white
-                                                                {% elseif un_personnage.xp >= 5 %}badge-success
-                                                                {% elseif un_personnage.xp >= 4 %}bg-secondary text-white
-                                                                {% elseif un_personnage.xp >= 3 %}bg-accent text-white
-                                                                {% elseif un_personnage.xp >= 2 %}badge-secondary
-                                                                {% elseif un_personnage.xp >= 1 %}badge-light
-                                                                {% endif %} badge-pill text-large">{{un_personnage.xp}}xp</span>
+                                    <span class="ml-auto badge badge-pill text-large
+                                        {% if un_personnage.xp >= 7 %}
+                                            bg-fuschia text-white
+                                        {% elseif un_personnage.xp >= 6 %}
+                                            bg-primary text-white
+                                        {% elseif un_personnage.xp >= 5 %}
+                                            badge-success
+                                        {% elseif un_personnage.xp >= 4 %}
+                                            bg-secondary text-white
+                                        {% elseif un_personnage.xp >= 3 %}
+                                            bg-accent text-white
+                                        {% elseif un_personnage.xp >= 2 %}
+                                            badge-secondary text-white
+                                        {% elseif un_personnage.xp >= 1 %}
+                                            badge-light text-black
+                                        {% else %}
+                                            badge-light text-light
+                                        {% endif %} ">
+                                        {{un_personnage.xp}}xp
+                                    </span>
                                 </a>
                             {% endfor %}
                         </div>

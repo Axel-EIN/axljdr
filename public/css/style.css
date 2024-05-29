@@ -365,34 +365,7 @@ a.character-icon { display: inline-block; font-weight: bold; }
 @media (max-width: 576px) { .scene-body { padding-left: 1rem; padding-right: 1rem; padding-top: 1.5rem; padding-bottom: 0.5rem; } }
 @media (max-width: 480px) { .scene-body { padding-left: 1rem; padding-right: 1rem; padding-top: 1.5rem; padding-bottom: 0.5rem; } }
 
-.scene-text a { font-weight: bold; }
-
-.division { width: 30%; }
-.division-motif { width: 36px; height: auto; }
-.division hr { background-color: #ffbbbb; height: 1px; width: 100%; }
-
-.ligne-icones { position: relative; top: -36px; }
-.ligne-pnjs { position: relative; top: -36px; }
-@media (max-width: 576px) { .ligne-pnjs { visibility: collapse; } }
-@media (max-width: 480px) { .ligne-pnjs { visibility: collapse; } }
-
-@media (max-width: 576px) { .ligne-pjs { visibility: collapse; } }
-@media (max-width: 480px) { .ligne-pjs { visibility: collapse; } }
-
-.xp { color: rgb(0, 100, 100); text-shadow: 1px 1px 0 #0ff, -1px -1px 0 #0ff, 1px -1px 0 #0ff, -1px 1px 0 #0ff; }
-.votre-xp { color: rgb(0, 100, 0); text-shadow: 1px 1px 0 #0f0, -1px -1px 0 #0f0, 1px -1px 0 #0f0, -1px 1px 0 #0f0; }
-.text-mort { color: rgb(100, 0, 0); text-shadow: 1px 1px 0 #f00, -1px -1px 0 #f00, 1px -1px 0 #f00, -1px 1px 0 #f00; }
-
-
-
-/* ------------------------------- */
-/* ------ PAGE : PERSONNAGE ------ */
-/* ------------------------------- */
-
-#personnages {
-        background-image: linear-gradient(rgb(40,0,0,0.5),rgb(40,0,0,0.5)),url('../assets/img/rubriques/personnages.jpg');
-        background-position: center;
-}
+.separator-chapter {    display: block; color: #fff; min-height:0.4rem; background-color: rgb(40, 0, 0); }
 
 .divider-40 { width: 40%; }
 .divider-40 hr { background-color: #ffbbbb; height: 1px; width: 100%; }

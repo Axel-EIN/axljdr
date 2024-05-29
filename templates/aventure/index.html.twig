@@ -7,7 +7,9 @@
         <div class="d-flex justify-content-center align-items-center p-2">
             <div class="arrow-left">
                 {% if saison_suivante is not empty %}
-                    <a class="text-danger" href="{{ path('aventure_saison', {id : (saison_suivante.id) } ) }}">{{ source('icons/chevron-left-solid.svg') }}</a>
+                    <a class="text-danger" href="{{ path('aventure_saison', {id : (saison_suivante.id) } ) }}" alt="Icône flèche gauche Saison suivante" title="Voir Saison suivante">
+                        {{ source('icons/chevron-left-solid.svg') }}
+                    </a>
                 {% endif %}
             </div>
             <h1 class="text-light text-center">
@@ -15,7 +17,9 @@
             </h1>
             <div class="arrow-right">
                 {% if saison_precedente is not empty %}
-                    <a class="text-danger" href="{{ path('aventure_saison', {id : (saison_precedente.id) } ) }}">{{ source('icons/chevron-right-solid.svg') }}</a>
+                    <a class="text-danger" href="{{ path('aventure_saison', {id : (saison_precedente.id) } ) }}" alt="Icône flèche droite Saison précédente" title="Voir Saison précédente">
+                        {{ source('icons/chevron-right-solid.svg') }}
+                    </a>
                 {% endif %}
             </div>
         </div>

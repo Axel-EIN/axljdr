@@ -60,7 +60,7 @@ class AdminClanController extends AbstractController
             if (!empty($nouvelleImage)) {
                 $prefix = 'clan-' . $clan->getNom() . '-image';
                 $clan->setImage($fileHandler->handle($nouvelleImage, null, $prefix, 'clans'));
-            } else { $clan->setImage('assets/img/placeholders/na_clan.jpg'); }
+            }
 
             // Map Image Handling
             $nouvelleCarte = $form->get('territoireCarte')->getData();

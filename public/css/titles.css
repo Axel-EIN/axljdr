@@ -2,47 +2,54 @@
 /* ----- TITLES ----- */
 /* ------------------ */
 
-h1 > strong, h2 > strong {
-    color: var(--black-1);
-    font-weight: bold;
+.title-display-h1 {
+    font-family: "Shogun";
+    color: var(--white);
+    font-size: 9rem;
+    text-align: center;
+    text-shadow: 4px 4px 1rem var(--dark);
+    margin: 0;
 }
 
-.title-mini {
+.title-display-h2 {
+    font-family: "Present";
+    color: var(--white);
+    font-size: 4rem;
+    text-shadow: 4px 4px 1rem var(--dark);
+    margin: 0;
+}
+
+.title-h2 {
+    font-family: "Present";
+    font-size: 4rem;
+    margin: 0;
+    padding: 0;
+    line-height: 1;
+}
+
+.title-h3 {
+    font-family: "Avenir";
+    font-size: 2rem;
+    margin: 0;
+    padding: 0;
+    line-height: 1;
+}
+
+.title-h4 {
+    font-family: "Amerigo";
+    font-size: 1.25rem;
+    margin: 0;
+    padding: 0;
+}
+
+.title-small {
     font-size: 2rem;
 }
 
-@media (max-width: 1200px) { .title-mini { font-size: 2rem; } }
-@media (max-width: 992px) { .title-mini { font-size: 1.75rem; } }
-@media (max-width: 576px) { .title-mini { font-size: 1.5rem; } }
-@media (max-width: 480px) { .title-mini { font-size: 1.25rem; } }
-
-.title-small {
-    font-size: 3rem;
-}
-
-@media (max-width: 1200px) { .title-small { font-size: 3rem; } }
-@media (max-width: 992px) { .title-small { font-size: 2.5rem; } }
-@media (max-width: 576px) { .title-small { font-size: 2rem; } }
-@media (max-width: 480px) { .title-small { font-size: 1.75rem; } }
-
-.title-medium {
-    font-size: 6rem;
-}
-
-@media (max-width: 1200px) { .title-medium { font-size: 7rem; } }
-@media (max-width: 992px) { .title-medium { font-size: 6rem; } }
-@media (max-width: 576px) { .title-medium { font-size: 5rem; } }
-@media (max-width: 480px) { .title-medium { font-size: 4rem; } }
-
-.title-large {
-    font-size: 9rem;
-}
-
-@media (max-width: 1200px) { .title-large { font-size: 9rem; } }
-@media (max-width: 992px) { .title-large { font-size: 8rem; } }
-@media (max-width: 576px) { .title-large { font-size: 6rem; } }
-@media (max-width: 480px) { .title-large { font-size: 4.5rem; } }
-
+@media (max-width: 1200px) { .title-small { font-size: 2rem; } }
+@media (max-width: 992px) { .title-small { font-size: 1.75rem; } }
+@media (max-width: 576px) { .title-small { font-size: 1.5rem; } }
+@media (max-width: 480px) { .title-small { font-size: 1.5rem; } }
 
 
 /* ------------------- */

@@ -28,7 +28,7 @@
 
                         {% if app.user and is_granted("ROLE_MJ") %}
                         <!-- MJ BTN ICON EDIT -->
-                            {% set redirect, entity, un_element, size, color, position = 'clan', 'famille', une_famille, 'medium', 'text-accent', 'right-corner-snap' %}
+                            {% set redirect, entity, un_element, size, color, position = 'clan', 'famille', une_famille, 'btn-icon-small', 'link-accent', 'right-corner-snap' %}
                             {{ include('/parts/btn-icon-edit.html.twig') }}
                         {% endif %}
 
@@ -100,13 +100,6 @@
             {% endif %}
 
         </div>
-
-        {# <!-- Carte Zoomed Modal -->
-        <div id="carteZoomModal" class="modalCarte">
-            <span class="closeModal">&times;</span>
-            <img class="modalCarte-content" id="carteModal">
-        </div> #}
-
     </section>
     {% endif %}
 

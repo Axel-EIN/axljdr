@@ -5,7 +5,7 @@
         <card class="card pb-5">
         
             <!-- ILLUSTRATION -->
-            <img class="img-fluid" src="{{ asset(un_element.image|default('assets/img/placeholders/1280x720.jpg')) }}" alt="Image de {{ nom }}" />
+            <img class="img-fluid" src="{{ asset(un_element.image|default(NA_IMG_ARCHIVE)) }}" alt="Image de {{ nom }}" />
 
             <!-- TEXTE -->
             <p class="p-5 mx-5 text-justify text-medium">{{ un_element.contenu|raw|nl2br }}</p>

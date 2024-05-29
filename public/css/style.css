@@ -360,6 +360,7 @@ a.character-icon { display: inline-block; font-weight: bold; }
 
 .character-card { border: unset; }
 
+.scene-body {   padding-left: 4rem; padding-right: 4rem; padding-top: 3rem; padding-bottom: 1rem; }
 @media (max-width: 1200px) { .scene-body { padding-left: 4rem; padding-right: 4rem; padding-top: 3rem; padding-bottom: 1rem; } }
 @media (max-width: 992px) { .scene-body { padding-left: 4rem; padding-right: 4rem; padding-top: 3rem; padding-bottom: 1rem; } }
 @media (max-width: 576px) { .scene-body { padding-left: 1rem; padding-right: 1rem; padding-top: 1.5rem; padding-bottom: 0.5rem; } }

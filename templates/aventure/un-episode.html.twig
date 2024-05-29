@@ -36,7 +36,9 @@
         </div>
 
         <!-- TITRE EPISODE -->
-        <h2 class="relative display-3 session-title-container-effect mb-0 mt-3 py-3">{{episode.titre}}</h2>
+        <div class="relative red-stroke-effect">
+            <h2 class="title-display-h2 mb-0 mt-3 py-3">{{episode.titre}}</h2>
+        </div>
         <div class="relative col-12 col-sm-12 offset-xl-1 col-xl-10 justify-content-center session-card-long">
             <div class="card justify-content-center {% if app.user and is_granted("ROLE_MJ") %}pt-5{% else %}pt-3{% endif %} session-card-long-body">
 

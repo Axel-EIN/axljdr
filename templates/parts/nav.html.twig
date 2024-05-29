@@ -17,7 +17,7 @@
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark bg-primary">
             <div id="logo">
                 <a class="navbar-brand" href="{{ path('aventure') }}">
-                    <img src="{{ asset('assets/img/logo-axl.png') }}" alt="Logo AXL" class="img-fluid" />
+                    <img src="{{ asset('assets/img/logo-axl.png') }}" alt="Logo AXL-JDR" title="AXL-JDR" class="img-fluid" />
                 </a>
             </div>
             <button class="navbar-toggler btn-primary" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -50,7 +50,7 @@
                     </div>
 {% else %}
                     <div class="text-right">
-                        <button type="button" class="btn-style btn-medium nav-item" data-toggle="modal" data-target="#connexion">Se connecter</button><br/>
+                        <button type="button" class="btn-style btn-medium nav-item" data-toggle="modal" data-target="#connexion" alt="Boutton se connecter" title="Se connecter">Se connecter</button><br/>
                         <small class="text-muted">Pas encore de compte ?</small><br/>
                         <a class="link-gray" href="{{ path('app_register') }}"><i class="fas fa-user-plus couleur-primaire"></i>&nbsp;&nbsp;Enregistrez-vous !</a>
                     </div>

@@ -288,7 +288,7 @@ nav .active { font-weight: bold; }
 
 .btn-disabled { background-color: #b4b4b4; border-color: #9f9f9f; }
 
-.btn-large { font-size: 1.2rem; padding: 1rem 1rem; }
+.btn-large { font-size: 1.2rem; padding: 0.70rem 1rem; }
 .btn-medium { font-size: 1rem; padding: 0.5rem 1rem; }
 
 .btn-mj-h2-edit-delete {        font-size: 1.5rem;

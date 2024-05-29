@@ -15,7 +15,7 @@
                 <img class="img-fluid w-100 mt-3" src="{{ asset(rule.image|default(asset('assets/img/placeholders/na_rule.jpg'))) }}" />
             </a>
         {% else %}
-            <img class="img-fluid w-100 mt-3" src="{{ asset(rule.image) }}" />
+            <img class="img-fluid w-100 mt-3" src="{{ asset(rule.image|default(asset('assets/img/placeholders/na_rule.jpg'))) }}" />
         {% endif %}
     </section>
 

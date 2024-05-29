@@ -9,13 +9,13 @@
     font-weight: 400;
 }
 
-/* ULTRA DISPLAY TITLES */
+/* H1 DISPLAY TITLES */
 @font-face {
     font-family: "Shogun";
     src: url("../assets/fonts/Shoguns-Clan-Edited-Accentued.otf");
 }
 
-/* BIG DISPLAY TITLES */
+/* H2 DISPLAY TITLES */
 @font-face {
     font-family: "Present";
     src: url("../assets/fonts/Present-LT-Black-Condensed.otf");

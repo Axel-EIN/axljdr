@@ -25,8 +25,20 @@
 
 .primary-color { color: #EA2027; }
 .primary-color-light { color: #ff4147; }
-.primary-color-shadow { color: #b6252f; }
-.primary-color-bg { background-color: #EA2027; }
+.primary-color-dark { color: #b6252f; }
+
+.primary-bg-color { background-color: #EA2027; }
+.primary-bg-color-light { background-color: #ff4147; }
+.primary-bg-color-dark { background-color: #b6252f; }
+
+.secondary-color { color: #ff7f00; }
+.secondary-color-light { color: #ffcc66; }
+.secondary-color-dark { color: #cc6600; }
+
+.secondary-bg-color { background-color: #ff7f00; }
+.secondary-bg-color-light { background-color: #ffcc66; }
+.secondary-bg-color-dark { background-color: #cc6600; }
+
 .bg-light-gray { background-color: #eee; }
 
 

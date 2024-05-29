@@ -19,7 +19,7 @@
             {% set redirect, entity, position, label_one, options = 'clan', 'famille', 'right-corner-16', 'une famille', 'clanID=' ~ clan.id %}
             {{ include('/parts/btn-box-add-element.html.twig', {entity}) }}
 
-            <h2 class="card-title"><strong>Familles</strong></h2>
+            <h2 class="title-h3">Familles</h2>
             <div class="card-text">
 
                 {% for une_famille in clan.familles %}
@@ -67,7 +67,7 @@
             {% set redirect, entity, position, label_one, options = 'clan', 'ecole', 'right-corner-16', 'une école', 'clanID=' ~ clan.id %}
             {{ include('/parts/btn-box-add-element.html.twig', {entity}) }}
 
-            <h2 class="card-title"><strong>Écoles</strong></h2>
+            <h2 class="title-h3">Écoles</h2>
             <hr>
 
             {% for une_ecole in clan.ecoles %}
@@ -86,7 +86,7 @@
     {% if clan.territoireDesc is defined and clan.territoireDesc is not empty %}
     <section class="col-12 p-1">
         <div class="card card-body pt-4 h-100">
-            <h2 class="card-title"><strong>Territoires</strong></h2>
+            <h2 class="title-h3">Territoires</h2>
             <hr>
 
             {% if clan.territoireCarte %}
@@ -110,7 +110,7 @@
         {% set col_perso = "col-6" %}  
         <section class="col-8 p-1">
             <div class="card card-body pt-4 h-100">
-                <h2 class="card-title"><strong>Autres</strong></h2>
+                <h2 class="title-h3">Autres</h2>
                 <hr>
                 <p class="card-text text-justify px-5 py-3 text-medium">
                     {{ clan.longDescription|raw|nl2br }}

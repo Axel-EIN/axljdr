@@ -39,7 +39,7 @@
 {# {% for un_pj in personnages|filter(p=>p.estPj) %} #}
 {% for un_pj in pjs %}
                 <article class="col-xl-2 col-lg-3 col-md-4 col-sm-6 py-3 ">
-                    <a href="{{ path('personnage_profil', {id: un_pj.id} ) }}">
+                    <a href="{{ path('personnage_profil', {id: un_pj.id} ) }}" alt="Carte du personnage {{un_pj.prenom}}" title="Voir profil {{un_pj.prenom}}">
                         <div class="card bg-dark text-white">    
                             <img class="badge-coin" src="{{ asset(un_pj.clan.mon) }}" alt="Mon du clan" />
                             {# {% if un_pj.est_mort is not empty and un_pj.est_mort == 1 %}
@@ -84,10 +84,11 @@
 {# {% for un_pnj in personnages|filter(p=> not p.estPj) %} #}
 {% for un_pnj in pnjs %}
                 <article class="col-xl-2 col-lg-3 col-md-4 col-sm-6 py-3 ">
-                    <a href="{{ path('personnage_profil', {id: un_pnj.id} ) }}">
+                    <a href="{{ path('personnage_profil', {id: un_pnj.id} ) }}" alt="Carte du personnage {{un_pnj.prenom}}" title="Voir profil {{un_pnj.prenom}}">
                         <div class="card bg-dark text-white">
+                            {# {{dump(un_pnj)}} #}
                                 <img class="badge-coin" src="{{ asset(un_pnj.clan.mon) }}" alt="Mon du clan" />
-                            {# {% if un_pnj.est_mort is not empty and un_pnj.est_mort == 1 %}
+                            {# {% if un_pnj.estMort is not empty and un_pnj.estMort == 1 %}
                                 <img src="{{ asset('img/icones/mort.png') }}" alt="est mort" style="width: 156px; position: absolute; top: 4rem; left: 0.20rem; z-index: 1;" />
                             {% endif %} #}
                             <div class="fond-masque-fonce">

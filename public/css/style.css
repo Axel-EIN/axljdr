@@ -8,7 +8,6 @@
 @media (max-width: 480px) { .container { padding-left: 0.5rem; padding-right: 0.5rem; } }
 
 .page-min { min-height: 60vh; }
-
 .relative { position: relative; }
 
 
@@ -41,7 +40,7 @@
 /* --------- TEXT ----------- */
 /* -------------------------- */
 
-html, body { font-size: 16px; }
+html, body {    font-size: 16px; }
 @media (max-width: 1200px) { html, body { font-size: 16px; } }
 @media (max-width: 992px) { html, body { font-size: 15px; } }
 @media (max-width: 576px) { html, body { font-size: 14px; } }
@@ -50,6 +49,26 @@ html, body { font-size: 16px; }
 @font-face { font-family: "Shogun"; src: url("../assets/fonts/shoguns-clan-accentued.otf"); }
 @font-face { font-family: "Hirosh"; src: url("../assets/fonts/hirosh.otf"); }
 @font-face { font-family: "Present"; src: url("../assets/fonts/present-it-black.otf"); }
+
+@media (max-width: 1200px) { .display-1 { font-size: 4.25rem; } }
+@media (max-width: 992px) { .display-1 { font-size: 4rem; } }
+@media (max-width: 576px) { .display-1 { font-size: 3.75rem; } }
+@media (max-width: 480px) { .display-1 { font-size: 3.5rem; } }
+
+@media (max-width: 1200px) { .display-2 { font-size: 4rem; } }
+@media (max-width: 992px) { .display-2 { font-size: 3.75rem; } }
+@media (max-width: 576px) { .display-2 { font-size: 3.5rem; } }
+@media (max-width: 480px) { .display-2 { font-size: 3.25rem; } }
+
+@media (max-width: 1200px) { .display-3 { font-size: 4rem; } }
+@media (max-width: 992px) { .display-3 { font-size: 3.5rem; } }
+@media (max-width: 576px) { .display-3 { font-size: 3.25rem; } }
+@media (max-width: 480px) { .display-3 { font-size: 3rem; } }
+
+@media (max-width: 1200px) { .display-4 { font-size: 3.5rem; } }
+@media (max-width: 992px) { .display-4 { font-size: 3.25rem; } }
+@media (max-width: 576px) { .display-4 { font-size: 3rem; } }
+@media (max-width: 480px) { .display-4 { font-size: 2.75rem; } }
 
 
 

@@ -41,10 +41,10 @@
 /* -------------------------- */
 
 html, body {    font-size: 16px; }
-@media (max-width: 1200px) { html, body { font-size: 16px; } }
-@media (max-width: 992px) { html, body { font-size: 15px; } }
-@media (max-width: 576px) { html, body { font-size: 14px; } }
-@media (max-width: 480px) { html, body { font-size: 13px; } }
+                @media (max-width: 1200px) { html, body { font-size: 16px; } }
+                @media (max-width: 992px) { html, body { font-size: 15px; } }
+                @media (max-width: 576px) { html, body { font-size: 14px; } }
+                @media (max-width: 480px) { html, body { font-size: 13px; } }
 
 @font-face { font-family: "Shogun"; src: url("../assets/fonts/shoguns-clan-accentued.otf"); }
 @font-face { font-family: "Hirosh"; src: url("../assets/fonts/hirosh.otf"); }
@@ -84,12 +84,12 @@ html, body {    font-size: 16px; }
                                 color: white; font-size:2.5rem; font-weight: bold; text-shadow: 0px 2px 8px black; }
 
 .quote { font-size: 1.25rem; font-style: italic;
-                margin-bottom: 1rem;
-                text-shadow: 2px 2px 6px black, 0px 0px 2rem black; }
-@media (max-width: 1200px) { .quote { font-size: 1.25rem; } }
-@media (max-width: 992px) { .quote { font-size: 1.25rem; } }
-@media (max-width: 576px) { .quote { font-size: 1rem; } }
-@media (max-width: 480px) { .quote { font-size: 1rem; } }
+        margin-bottom: 1rem;
+        text-shadow: 2px 2px 6px black, 0px 0px 2rem black; }
+        @media (max-width: 1200px) { .quote { font-size: 1.25rem; } }
+        @media (max-width: 992px) { .quote { font-size: 1.25rem; } }
+        @media (max-width: 576px) { .quote { font-size: 1rem; } }
+        @media (max-width: 480px) { .quote { font-size: 1rem; } }
 
 
 
@@ -104,28 +104,28 @@ html, body {    font-size: 16px; }
                                         background-image: url('../assets/img/ui/back-title.png'); background-size: 100% 130%; background-repeat: no-repeat; background-position: 50% 50%; }
 
 .plus-petit {   font-size: 2rem; }
-@media (max-width: 1200px) { .plus-petit { font-size: 2rem; } }
-@media (max-width: 992px) { .plus-petit { font-size: 1.75rem; } }
-@media (max-width: 576px) { .plus-petit { font-size: 1.5rem; } }
-@media (max-width: 480px) { .plus-petit { font-size: 1.25rem; } }
+                @media (max-width: 1200px) { .plus-petit { font-size: 2rem; } }
+                @media (max-width: 992px) { .plus-petit { font-size: 1.75rem; } }
+                @media (max-width: 576px) { .plus-petit { font-size: 1.5rem; } }
+                @media (max-width: 480px) { .plus-petit { font-size: 1.25rem; } }
 
 .petit {        font-size: 3rem; }
-@media (max-width: 1200px) { .petit { font-size: 3rem; } }
-@media (max-width: 992px) { .petit { font-size: 2.5rem; } }
-@media (max-width: 576px) { .petit { font-size: 2rem; } }
-@media (max-width: 480px) { .petit { font-size: 1.75rem; } }
+                @media (max-width: 1200px) { .petit { font-size: 3rem; } }
+                @media (max-width: 992px) { .petit { font-size: 2.5rem; } }
+                @media (max-width: 576px) { .petit { font-size: 2rem; } }
+                @media (max-width: 480px) { .petit { font-size: 1.75rem; } }
 
 .moyen {        font-size: 6rem; }
-@media (max-width: 1200px) { .moyen { font-size: 7rem; } }
-@media (max-width: 992px) { .moyen { font-size: 6rem; } }
-@media (max-width: 576px) { .moyen { font-size: 5rem; } }
-@media (max-width: 480px) { .moyen { font-size: 4rem; } }
+                @media (max-width: 1200px) { .moyen { font-size: 7rem; } }
+                @media (max-width: 992px) { .moyen { font-size: 6rem; } }
+                @media (max-width: 576px) { .moyen { font-size: 5rem; } }
+                @media (max-width: 480px) { .moyen { font-size: 4rem; } }
 
 .grand {        font-size: 9rem; }
-@media (max-width: 1200px) { .grand { font-size: 9rem; } }
-@media (max-width: 992px) { .grand { font-size: 8rem; } }
-@media (max-width: 576px) { .grand { font-size: 6rem; } }
-@media (max-width: 480px) { .grand { font-size: 4.5rem; } }
+                @media (max-width: 1200px) { .grand { font-size: 9rem; } }
+                @media (max-width: 992px) { .grand { font-size: 8rem; } }
+                @media (max-width: 576px) { .grand { font-size: 6rem; } }
+                @media (max-width: 480px) { .grand { font-size: 4.5rem; } }
 
 
 
@@ -144,7 +144,7 @@ nav .active { font-weight: bold; }
 /* --------------------------------------- */
 
 .header-bg-img { background-size: 100% auto; background-position: top; background-repeat: no-repeat;
-                        /* background-color: var(--b); voir doc sur le variable CSS */ }
+                /* background-color: var(--b); voir doc sur le variable CSS */ }
                 @media (max-width: 1200px) { .header-bg-img { background-size: 150% auto; } }
                 @media (max-width: 992px) { .header-bg-img { background-size: 200% auto; } }
                 @media (max-width: 576px) { .header-bg-img { background-size: 250% auto; } }
@@ -157,10 +157,10 @@ nav .active { font-weight: bold; }
 .header-session { min-height: unset; }
 
 .chapter-number { font-size: 2.5rem; color: #fff; margin: 0; }
-@media (max-width: 1200px) { .chapter-number { font-size: 2.5rem; } }
-@media (max-width: 992px) { .chapter-number { font-size: 2.5rem; } }
-@media (max-width: 576px) { .chapter-number { font-size: 1.5rem; } }
-@media (max-width: 480px) { .chapter-number { font-size: 1.5rem; } }
+                @media (max-width: 1200px) { .chapter-number { font-size: 2.5rem; } }
+                @media (max-width: 992px) { .chapter-number { font-size: 2.5rem; } }
+                @media (max-width: 576px) { .chapter-number { font-size: 1.5rem; } }
+                @media (max-width: 480px) { .chapter-number { font-size: 1.5rem; } }
 
 .header hr {    background-color: #fff; height: 1px; margin-top: 0.5rem; margin-bottom: 0.5rem; }
 
@@ -313,36 +313,30 @@ a.character-icon { display: inline-block; font-weight: bold; }
 /* ----- IMAGES EFFECTS ----- */
 /* -------------------------- */
 
+.bg-black { background-color: black; }
 .shadowed { box-shadow: 2px 2px 4px black; }
 .rounded-8 { border-radius: 0.5rem; }
+.rounded-16 { border-radius: 1rem; }
+
+.semi-opaque { filter: opacity(0.50); }
+.grayscale { filter: grayscale(100%); }
 .darken { filter: brightness(0.5); }
 .dead { filter: grayscale(100%) brightness(40%) sepia(100%) hue-rotate(-50deg) saturate(600%) contrast(0.8); }
+
+.hover-shine:hover { filter: brightness(1.3); transition: 0.5s; }
+.hover-darked:hover { filter: brightness(0.7);  transition: 0.5s; }
+.hover-opaque:hover { filter: opacity(1); transition: 0.5s; }
 .hover-bright { filter: brightness(1); transition: 0.5s; }
-
-
-.mask { mask-image: linear-gradient(to top, rgba(0,0,0,0.2),rgba(0,0,0,1),rgba(0,0,0,1),rgba(0,0,0,1));
-        -webkit-mask-image: linear-gradient(to top, rgba(0,0,0,0.2),rgba(0,0,0,1),rgba(0,0,0,1),rgba(0,0,0,1)); }
 
 .outlined { box-shadow: 2px 2px 0 #0f0, -2px -2px 0 #0f0, 2px -2px 0 #0f0, -2px 2px 0 #0f0; }
 
+.mask { mask-image: linear-gradient(to top, rgba(0,0,0,0.2),rgba(0,0,0,1),rgba(0,0,0,1),rgba(0,0,0,1));
+        -webkit-mask-image: linear-gradient(to top, rgba(0,0,0,0.2),rgba(0,0,0,1),rgba(0,0,0,1),rgba(0,0,0,1)); }
 .fond-masque-fonce { background-color: black; }
 .fond-masque-fonce img { mask-image: linear-gradient(to top, rgba(0,0,0,0.25),rgba(0,0,0,0.50),rgba(0,0,0,1),rgba(0,0,0,1)); -webkit-mask-image: linear-gradient(to top, rgba(0,0,0,0.25),rgba(0,0,0,0.50),rgba(0,0,0,1),rgba(0,0,0,1)); }
 
 .card-img-overlay { top: unset; padding: 0.5rem; }
 .card-img-overlay h4 { margin-bottom: 0; }
-
-.translucide { filter: opacity(0.50); }
-.translucide:hover { filter: opacity(1); transition-duration: 0.5s; }
-
-.assombrit { filter: brightness(0.5); }
-.assombrit:hover { filter: brightness(1); transition-duration: 0.5s; }
-
-.ombre-txt { text-shadow: 4px 4px 2rem black; }
-
-.ombre-img { box-shadow: 2px 2px 4px black; }
-
-.rounded-16 { border-radius: 1rem; }
-.rounded-8 { border-radius: 0.5rem; }
 
 
 

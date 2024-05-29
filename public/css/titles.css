@@ -82,20 +82,8 @@
 /* --------- TITLE EFFECTS  ---------- */
 /* ----------------------------------- */
 
-.big-title-effect {
-    font-family: "Shogun";
-    color: var(--white);
-    text-align: center;
-    margin: 0;
-    text-shadow: 4px 4px 2rem black;
-}
-
-.session-title-container-effect {
+.red-stroke-effect {
     z-index: 2;
-    color: var(--white);
-    font-family: "Present";
-    font-weight: 300;
-    text-shadow: 4px 4px 2rem black;
     text-align: center;
     background-image: url('../assets/img/ui/back-title.png');
     background-size: 100% 130%;

@@ -40,7 +40,7 @@
                 </text>
 
                 <!-- IMAGE -->
-                <div class="gradient-after"><img class="img-fluid" src="{{ asset(ecole.image) }}" alt="Image de l'École"  /></div>
+                <div class="gradient-after"><img class="img-fluid" src="{{ asset(ecole.image|default('assets/img/placeholders/na_' ~ ecole.classe.nom|lower ~ '.jpg')) }}" alt="Image de l'École"  /></div>
 
             </div>
 
@@ -147,7 +147,7 @@
             <div class="row p-0 m-0 pt-2">
                 {% for autreEcole in autresEcoles %}
                     <a class="col-2 m-0 p-2 text-center hover-zoom relative hover-span-visible" href="{{ path('regles_ecole', {id: autreEcole.id} ) }}" title="{{autreEcole.nom}}">
-                        <img class="img-fluid" src="{{ asset(autreEcole.image) }}" alt="Image d'une école" title="{{autreEcole.nom}}"/>
+                        <img class="img-fluid" src="{{ asset(autreEcole.image|default('assets/img/placeholders/na_' ~ autreEcole.classe.nom|lower ~ '.jpg')) }}" alt="Image d'une école" title="{{autreEcole.nom}}"/>
                         <span class="text-small"><strong>{{autreEcole.nom}}</strong></span>
                     </a>
                 {% endfor %}

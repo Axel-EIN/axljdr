@@ -71,7 +71,9 @@
                         {% set label, element, nbr, last, nom, image = 'Classes', 'classe', nbrClasses, dernierClasse, dernierClasse.nom, dernierClasse.icone|default('non-définie') %}
                         {{ include('back_office/card-element-resume.html.twig') }}
 
-                        {% set label, element, nbr, last, nom, image = 'Écoles', 'ecole', nbrEcoles, dernierEcole, dernierEcole.nom, dernierEcole.image|default('non-définie') %}
+                        {% set label, element, nbr, last, nom, image = 'Écoles', 'ecole', nbrEcoles, dernierEcole, dernierEcole.nom, dernierEcole.image|default('assets/img/placeholders/na_' ~ dernierEcole.classe.nom|lower ~ '.jpg') %}
+                        {{ include('back_office/card-element-resume.html.twig') }}
+
                         {{ include('back_office/card-element-resume.html.twig') }}
                     </section>
 

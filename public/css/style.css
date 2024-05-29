@@ -309,26 +309,6 @@ a.character-icon { display: inline-block; font-weight: bold; }
 .img-540 { min-width: 320px; max-width: 540px; }
 .img-640 { min-width: 320px; max-width: 640px; }
 
-.bg-black { background-color: black; }
-
-.characters-icons-container {   position: absolute;
-                                top: -12px;
-                                left: 8px;
-                                z-index: 100; }
-
-.character-icon-small { width: 26px; }
-a.character-icon { display: inline-block; font-weight: bold; }
-.character-icon-48 { width: 48px; border-radius: 4px; }
-.character-icon-64 { width: 64px; border-radius: 5px; }
-
-.mort-icone { width: 72px; position: absolute; top: -6px; left: -2px; z-index: 1; }
-
-.mini-mort-icone { width: 64px; position: absolute; top: 24px; left: -8px; z-index: 1; }
-
-
-
-
-
 /* -------------------------- */
 /* ----- IMAGES EFFECTS ----- */
 /* -------------------------- */

@@ -32,8 +32,8 @@
                 {% set image = un_element.icone %}
             {% elseif un_element.personnage is defined and un_element.personnage is not empty %}
                 {% set image = un_element.personnage.icone %}
-            {% elseif un_element.pdf is defined and un_element.pdf is not empty %}
-                {% set image = 'assets/img/placeholders/na_rule.jpg' %}
+            {% elseif un_element.pdf is defined and un_element.pdf is not empty and un_element.part1 is empty %}
+                {% set image = NA_IMG_PDF %}
             {% else %}
                 {% set image = NA_IMG_43 %}
             {% endif %}

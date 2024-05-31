@@ -24,7 +24,9 @@
             <hr>
             <div class="row mt-3 justify-content-center">
             {% for une_classe in classes %}
-                <article class="col-xl-2 col-lg-3 col-md-4 col-sm-6 py-3 text-center">
+
+                <!--- UNE CLASSE -->
+                <article class="col-xl-2 col-lg-3 col-md-4 col-sm-6 py-3 text-center hover-zoom">
                     <a href="{{ path('regles_classe', {id: une_classe.id} ) }}">
                         <img class="img-160" src="{{ asset(une_classe.icone) }}" alt="Icône de la classe" title="{{une_classe.nom}}" />
                     </a>
@@ -47,8 +49,10 @@
             </h2>
             <hr>
             <div class="row mt-3">
-{% for une_ecole in ecoles %}
-                <article class="col-lg-3 col-md-4 col-sm-6 py-3 text-center">
+            {% for une_ecole in ecoles %}
+
+                <!-- UNE ECOLE -->
+                <article class="col-lg-3 col-md-4 col-sm-6 py-3 text-center hover-zoom">
                     <div class="inline-block ">
                         <a href="{{ path('regles_ecole', {id: une_ecole.id} ) }}">
                             <img class="img-fluid relative" src="{{ asset(une_ecole.image) }}" alt="Image de l'école" />
@@ -60,9 +64,9 @@
                     </div>
                 </article>
 
-{% else %}
+            {% else %}
                 <small class="text-muted">Désolé ! Il n'y a pas encore d'école disponible !</a>
-{% endfor %}
+            {% endfor %}
             </div>
         </section>
 

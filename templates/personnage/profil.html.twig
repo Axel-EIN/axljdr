@@ -33,10 +33,10 @@
                     {% endif %}
                 {% endif %}
 
-                <!-- BTN - MJ - EDIT -->
+                <!-- MJ - ICON BTN - Edit -->
                 {% if app.user and is_granted("ROLE_MJ") %}
                 <div class="btn-icons-medium-right-container">
-                    <a class="text-danger mx-2" href="{{ path('admin_personnage_edit', {id:personnage.id}) }}?redirect=personnage"><i class="fas fa-edit" title="Modifier"></i></a>
+                    <a class="text-danger mx-2" href="{{ path('admin_personnage_edit', {id:personnage.id}) }}?redirect=personnage"><i class="fas fa-edit" alt="Icône Modifier" title="Modifier"></i></a>
                 </div>
                 {% endif %}
                 

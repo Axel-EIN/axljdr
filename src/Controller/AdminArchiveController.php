@@ -19,7 +19,7 @@ class AdminArchiveController extends AbstractController
     /**
      * @Route("/admin/archive", name="admin_archive")
      */
-    public function afficherAdminArchives(ArchiveRepository $archiveRepository): Response {
+    public function viewAdminArchives(ArchiveRepository $archiveRepository): Response {
         $archives = $archiveRepository->findAll();
         return $this->render('admin_archive/index.html.twig', [
             'archives' => $archives
@@ -30,7 +30,7 @@ class AdminArchiveController extends AbstractController
      * @Route("/admin/archive/create", name="admin_archive_create")
      * @IsGranted("ROLE_MJ")
      */
-    public function ajouterArchive(Request $request, EntityManagerInterface $em, FileHandler $fileHandler) {
+    public function addArchive(Request $request, EntityManagerInterface $em, FileHandler $fileHandler) {
 
         $archive = new Archive;
         $form = $this->createForm(AdminArchiveType::class, $archive);
@@ -38,6 +38,7 @@ class AdminArchiveController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
 
+            // IMAGE FILE HANDLING
             $nouvelleImage = $form->get('image')->getData();
             if (!empty($nouvelleImage)) {
                 $prefix = 'archive-' . $archive->getTitre() . '-image';
@@ -46,35 +47,33 @@ class AdminArchiveController extends AbstractController
 
             $em->persist($archive);
             $em->flush();
-
             $this->addFlash('success', 'L\'Archive a bien été ajoutée.');
 
             // REDIRECTION
-            // -----------
             if (!empty($request->query->get('redirect')) && $request->query->get('redirect') == 'archive')
                 return $this->redirectToRoute('empire_archive', ['id' => $archive->getId()]);
-            return $this->redirectToRoute('admin_archive');
 
-        } else {
-            return $this->render('admin_archive/create.html.twig', [
-                'type' => 'Créer',
-                'form' => $form->createView()
-            ]);
+            return $this->redirectToRoute('admin_archive');
         }
+
+        return $this->render('admin_archive/create.html.twig', [
+            'type' => 'Créer',
+            'form' => $form->createView()
+        ]);
     }
 
      /**
      * @Route("/admin/archive/{id}/edit", name="admin_archive_edit")
      * @IsGranted("ROLE_MJ")
      */
-    public function editerArchive(Request $request, Archive $archive, FileHandler $fileHandler): Response {
+    public function editArchive(Request $request, Archive $archive, FileHandler $fileHandler): Response {
 
         $form = $this->createForm(AdminArchiveType::class, $archive);
-        
         $form->handleRequest($request);
 
         if($form->isSubmitted() && $form->isValid()) {
 
+            // IMAGE FILE HANDLING
             $nouvelleImage = $form->get('image')->getData();
             if (!empty($nouvelleImage)) {
                 $prefix = 'archive-' . $archive->getTitre() . '-image';
@@ -85,9 +84,9 @@ class AdminArchiveController extends AbstractController
             $this->addFlash('success', 'L\'Archive a bien été modifiée.');
 
             // REDIRECTION
-            // -----------
             if (!empty($request->query->get('redirect')) && $request->query->get('redirect') == 'archive')
                 return $this->redirectToRoute('empire_archive', ['id' => $archive->getId()]);
+            
             return $this->redirectToRoute('admin_archive');
         }
 
@@ -103,24 +102,24 @@ class AdminArchiveController extends AbstractController
      * @Route("/admin/archive/{id}/delete", name="admin_archive_delete", methods={"GET"})
      * @IsGranted("ROLE_MJ")
      */
-    public function supprimerArchive(Request $request, Archive $archive, FileHandler $fileHandler): Response {
+    public function deleteArchive(Request $request, Archive $archive, FileHandler $fileHandler): Response {
 
         if ($this->isCsrfTokenValid('delete' . $archive->getId(), $request->query->get('csrf'))) {
 
             $entityManager = $this->getDoctrine()->getManager();
 
+            // IMAGE FILE HANDLING
             $fileHandler->handle(null, $archive->getImage(), null, 'archives');
 
             $entityManager->remove($archive);
             $entityManager->flush();
-
             $this->addFlash('success', 'L\'archive a bien été supprimée.');
         }
 
         // REDIRECTION
-        // -----------
         if (!empty($request->query->get('redirect')) && $request->query->get('redirect') == 'archive')
             return $this->redirectToRoute('empire');
+        
         return $this->redirectToRoute('admin_archive');
     }
 }

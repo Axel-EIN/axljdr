@@ -375,10 +375,11 @@ h5 a:hover, h4 a:hover, h3 a:hover, h2 a:hover, h1 a:hover { text-decoration: no
 
 .character-icon-medium { width: 48px; border-radius: 4px; }
 .character-icon-large { width: 64px; border-radius: 5px; }
-.character-icon-small { width: 26px; }
+.character-icon-small, .location-icon-small { width: 26px; }
 .character-icon-dead { position: absolute; top: -4px; left: -2px; width: 72px;  z-index: 1; }
 
-a.character-icon { display: inline-block; font-weight: bold; }
+a.character-icon, a.location-icon { display: inline-block; font-weight: bold; }
+a.location-icon { color: purple; }
 
 /* IMAGES SIZING */
 

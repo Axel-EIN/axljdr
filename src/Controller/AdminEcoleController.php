@@ -21,7 +21,7 @@ class AdminEcoleController extends AbstractController
     /**
      * @Route("/admin/ecole", name="admin_ecole")
      */
-    public function afficherAdminEcoles(EcoleRepository $ecoleRepository): Response {
+    public function viewAdminEcoles(EcoleRepository $ecoleRepository): Response {
 
         $ecoles = $ecoleRepository->findBy(array(), array('id' => 'DESC'));
         
@@ -34,12 +34,11 @@ class AdminEcoleController extends AbstractController
      * @Route("/admin/ecole/create", name="admin_ecole_create")
      * @IsGranted("ROLE_MJ")
      */
-    public function ajouterEcole(Request $request, EntityManagerInterface $em, ClanRepository $clanRepository, FileHandler $fileHandler) {
+    public function addEcole(Request $request, EntityManagerInterface $em, ClanRepository $clanRepository, FileHandler $fileHandler) {
 
         $ecole = new Ecole;
 
-        // PRE-REMPLISSAGE DU CHAMP CLAN PAR LE LIEN URL
-        // -------------------------------------
+        // URL PARAMS PRE-FILL
         if ( !empty($request->query->get('clanID')) && $request->query->get('clanID') > 0 )
         {
             $clan = $clanRepository->find($request->query->get('clanID'));
@@ -47,13 +46,12 @@ class AdminEcoleController extends AbstractController
                 $ecole->setClan($clan);
         }
 
-        // FORM VIEW
-        //----------
         $form = $this->createForm(AdminEcoleType::class, $ecole);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
 
+            // File Image Handling
             $nouvelleImage = $form->get('image')->getData();
             if (!empty($nouvelleImage)) {
                 $prefix = 'ecole-' . $ecole->getClan()->getNom() . '-' . $ecole->getNom();
@@ -80,27 +78,26 @@ class AdminEcoleController extends AbstractController
 
             $em->persist($ecole);
             $em->flush();
-
             $this->addFlash('success', 'L\'école a bien été ajoutée.');
 
             // REDIRECTION
             if (!empty($request->query->get('redirect')) && $request->query->get('redirect') == 'ecole')
                 return $this->redirectToRoute('regles_ecole', ['id' => $ecole->getId()]);
-            return $this->redirectToRoute('admin_ecole');
-            
-        } else {
-            return $this->render('admin_ecole/create.html.twig', [
-                'type' => 'Créer',
-                'form' => $form->createView()
-            ]);
+                
+            return $this->redirectToRoute('admin_ecole');    
         }
+
+        return $this->render('admin_ecole/create.html.twig', [
+            'type' => 'Créer',
+            'form' => $form->createView()
+        ]);
     }
 
     /**
      * @Route("/admin/ecole/{id}/edit", name="admin_ecole_edit")
      * @IsGranted("ROLE_MJ")
      */
-    public function editerEcole(Request $request, Ecole $ecole, FileHandler $fileHandler): Response {
+    public function editEcole(Request $request, Ecole $ecole, FileHandler $fileHandler): Response {
 
         $form = $this->createForm(AdminEcoleType::class, $ecole);
         
@@ -108,6 +105,7 @@ class AdminEcoleController extends AbstractController
 
         if($form->isSubmitted() && $form->isValid()) {
 
+            // File Image Handling
             $nouvelleImage = $form->get('image')->getData();
             if (!empty($nouvelleImage)) {
                 $prefix = 'ecole' . '-' . $ecole->getClan()->getNom() . '-' . $ecole->getNom();
@@ -118,10 +116,8 @@ class AdminEcoleController extends AbstractController
             $this->addFlash('success', 'L\'école a bien été modifiée.');
 
             // REDIRECTION
-            // -----------
             if (!empty($request->query->get('redirect')) && $request->query->get('redirect') == 'ecole')
                 return $this->redirectToRoute('regles_ecole', ['id' => $ecole->getId()]);
-            return $this->redirectToRoute('admin_ecole');
 
             return $this->redirectToRoute('admin_ecole');
         }
@@ -131,29 +127,28 @@ class AdminEcoleController extends AbstractController
             'form' => $form,
             'type' => 'Modifier',
         ]);
-        
     }
 
     /**
      * @Route("/admin/ecole/{id}/delete", name="admin_ecole_delete", methods={"GET"})
      * @IsGranted("ROLE_MJ")
      */
-    public function supprimerEcole(Request $request, Ecole $ecole, FileHandler $fileHandler): Response {
+    public function deleteEcole(Request $request, Ecole $ecole, FileHandler $fileHandler): Response {
 
         if ($this->isCsrfTokenValid('delete' . $ecole->getId(), $request->query->get('csrf'))) {
 
+            // CHECK if child exists
             if (!$ecole->getPersonnages()->isEmpty()) {
                 $this->addFlash('warning', 'Veuillez supprimer les personnages enfants au prélable !');
                 return $this->redirectToRoute('admin_ecole');
             }
 
-            $entityManager = $this->getDoctrine()->getManager();
-
+            // Image File Handling
             $fileHandler->handle(null, $ecole->getImage(), null, 'ecoles');
 
+            $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($ecole);
             $entityManager->flush();
-
             $this->addFlash('success', 'L\'école a bien été supprimée.');
         }
 

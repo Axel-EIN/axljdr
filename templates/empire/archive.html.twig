@@ -1,7 +1,5 @@
 {% extends 'base.html.twig' %}
-
 {% block title %}Archive {{ parent() }}{% endblock %}
-
 {% block body %}
 
     <main class="container-fluid bg-light">
@@ -30,9 +28,11 @@
                 {% endif %}
                 
             </h1>
-
             <hr>
+
+            <!-- CONTENU -->
             <article class="row">
+                <!-- IMAGE -->
                 <div class="col-12 text-center">
                     <img class="img-fluid" src="{{ asset(archive.image) }}" alt="Image de l'Archive" />
                 </div>

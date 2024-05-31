@@ -47,7 +47,7 @@
                         <h2 class="card-title py-3">Ecoles de <strong>{{ classe.nom }}</strong> :</h2>
                         <div class="card-text row text-center justify-content-center align-items-center">
                             {% for une_ecole in classe.ecoles %}
-                                <div class="mb-4">
+                                <div class="mb-4 hover-shine">
                                     <a href="{{ path('regles_ecole', {id: une_ecole.id} ) }}">
                                         <img class="img-480" src="{{ asset(une_ecole.image) }}" alt="Image d'une école" />
                                     </a><br/>
@@ -65,7 +65,7 @@
                         <h2 class="card-title py-3">Personnages <strong>{{ classe.nom }}</strong> :</h2>
                         <div class="card-text ml-lg-3 row text-center justify-content-center align-items-center">
                             {% for un_personnage in classe.personnages %}
-                                <div class="p-1">
+                                <div class="p-1 hover-zoom-twice">
                                     <a href="{{ path('personnage_profil', {id: un_personnage.id} ) }}">
                                         <img class="img-128" src="{{ asset(un_personnage.icone) }}" alt="Icône du personnage" />
                                     </a>

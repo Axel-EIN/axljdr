@@ -1,20 +1,25 @@
+<!-- NAV -->
+
+<!-- BAND ADMIN -->
 {% if app.user and is_granted('ROLE_ADMIN') %}
-    <div class="container-fluid bg-secondary-color text-right">
+    <div class="container-fluid bg-accent-color text-right">
         <a href="{{ path('back_office') }}" class="link-white">
             <i class="fas fa-tools"></i>&nbsp;&nbsp;Panneau d'Administration
         </a>
     </div>
 {% elseif app.user and is_granted('ROLE_MJ') %}
-    <div class="container-fluid bg-secondary-color text-right">
+<!-- BAND MJ -->
+    <div class="container-fluid bg-accent-color text-right">
         <a href="{{ path('back_office') }}" class="link-white">
             <i class="fas fa-scroll"></i>&nbsp;&nbsp;Panneau du Maître du Jeu
         </a>
     </div>
 {% endif %}
 
-<div id="navigation-bar" class="container-fluid bg-dark">
+<!-- NAV BAR -->
+<div id="navigation-bar" class="container-fluid">
     <div class="container">
-        <nav class="navbar navbar-expand-lg navbar-dark bg-dark bg-primary">
+        <nav class="navbar navbar-expand-lg navbar-dark">
             <div id="logo">
                 <a class="navbar-brand" href="{{ path('aventure') }}">
                     <img src="{{ asset('assets/img/logo-axl.png') }}" alt="Logo AXL-JDR" title="AXL-JDR" class="img-fluid" />
@@ -31,7 +36,10 @@
                         <li class="nav-item"><a class="nav-link link-gray {% if app.request.get('_route') == 'empire' or app.request.get('_route') == 'empire_clan' or app.request.get('_route') == 'empire_lieu' or app.request.get('_route') == 'empire_archive' %}active{% endif %}" href="{{ path('empire')}}">EMPIRE</a></li>
                         <li class="nav-item"><a class="nav-link link-gray {% if app.request.get('_route') == 'regles' or app.request.get('_route') == 'regles_classe' or app.request.get('_route') == 'regles_ecole' %}active{% endif %}" href="{{ path('regles')}}">REGLES</a></li>
                     </ul>
-{% if app.user %}
+
+                    <!-- TOP BAR USER ZONE -->
+                    {% if app.user %}
+                    <!-- USER CONNECTED -->
                     <div class="row align-items-center justify-content-end">
                         <div class="connected">
                             <strong>{{ app.user.pseudo }}</strong><br/>
@@ -41,20 +49,22 @@
                             </small>
                         </div>
                         <div class="ml-3 bg-secondary rounded-8 border border-secondary">
-{% if app.user.avatar is not empty %}
+                        {% if app.user.avatar is not empty %}
                                 <img class="img-96 rounded-8" src="{{ asset(app.user.avatar) }}" alt="Avatar de l'utilisateur" title="{{app.user.pseudo}}" />
-{% else %}
+                        {% else %}
                                 <img class="img-96 rounded-8" src="https://i.pravatar.cc/300" alt="Avatar de l'utilisateur" title="{{app.user.pseudo}}" />
-{% endif %}
+                        {% endif %}
                         </div>
                     </div>
-{% else %}
+                    {% else %}
+                    <!-- USER NOT CONNECTED -->
                     <div class="text-right">
                         <button type="button" class="btn-primary-style btn-medium nav-item" data-toggle="modal" data-target="#connexion" alt="Boutton se connecter">Se connecter</button><br/>
                         <small class="text-muted">Pas encore de compte ?</small><br/>
                         <a class="link-gray" href="{{ path('app_register') }}"><i class="fas fa-user-plus couleur-primaire"></i>&nbsp;&nbsp;Enregistrez-vous !</a>
                     </div>
-{% endif %}
+                    {% endif %}
+                    
                 </div>
             </div>
         </nav>

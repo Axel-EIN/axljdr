@@ -20,7 +20,7 @@ class AdminSaisonController extends AbstractController
      * @Route("/admin/saison", name="admin_saison")
      * @IsGranted("ROLE_MJ")
      */
-    public function afficherAdminSaisons(SaisonRepository $saisonRepository): Response {
+    public function viewAdminSaisons(SaisonRepository $saisonRepository): Response {
 
         $saisons = $saisonRepository->findBy(array(), array('numero' => 'ASC'));
         return $this->render('admin_saison/index.html.twig', [
@@ -33,90 +33,70 @@ class AdminSaisonController extends AbstractController
      * @Route("/admin/saison/create", name="admin_saison_create")
      * @IsGranted("ROLE_MJ")
      */
-    public function creerSaison(Request $request, EntityManagerInterface $em, FileHandler $fileHandler, SaisonRepository $saisonRepository, Numeroteur $numeroteur) {
+    public function addSaison(Request $request, EntityManagerInterface $em, FileHandler $fileHandler, SaisonRepository $saisonRepository, Numeroteur $numeroteur) {
 
         $saison = new Saison;
 
-        // PRE-REMPLISSAGE FROM FRONT PAGE LINKS
-        // -------------------------------------
+        // URL PARAMS PRE-FILL
         if (!empty($request->query->get('numero')) && $request->query->get('numero') > 0)
             $saison->setNumero($request->query->get('numero'));
 
-        // FORM VIEW
-        //-----------
         $form = $this->createForm(AdminSaisonType::class, $saison);
         $form->handleRequest($request);
 
-        // GESTION FORMULAIRE VALIDE
-        // -------------------------
         if ($form->isSubmitted() && $form->isValid()) {
 
-            // CREATION FICHIER IMAGE
-            // ----------------------
+            // File Image Handling
             $nouvelleImage = $form->get('image')->getData();
             if (!empty($nouvelleImage)) {
                 $prefix = 'saison-' . $saison->getNumero();
                 $saison->setImage($fileHandler->handle($nouvelleImage, null, $prefix, 'saisons'));
             } else { $saison->setImage('assets/img/placeholders/1920x1080.jpg'); }
 
-            // CREATION ENTITE
-            // ---------------
             $em->persist($saison);
             $em->flush();
             $this->addFlash('success', 'La saison a bien été créee.');
 
-            // NUMEROTEUR
-            // ----------
+            // RE-ORDERING
             $fratrieArrivee = $saisonRepository->findAll();
             $numeroteur->reordonnerNumero($saison->getId(), -1, $saison->getNumero(), [], $fratrieArrivee);
 
             // REDIRECTION
-            // -----------
             if (!empty($request->query->get('redirect')) && $request->query->get('redirect') == 'aventure')
                 return $this->redirectToRoute('aventure_saison', ['id' => $saison->getId()]);
 
             return $this->redirectToRoute('admin_saison');
 
-        } else {
-            // AFFICHAGE FORMULAIRE
-            // --------------------
-            return $this->render('admin_saison/create.html.twig', [
-                'type' => 'Créer',
-                'form' => $form->createView()
-            ]);
         }
+        return $this->render('admin_saison/create.html.twig', [
+            'type' => 'Créer',
+            'form' => $form->createView()
+        ]);
     }
 
     /**
      * @Route("/admin/saison/{id}/edit", name="admin_saison_edit")
      * @IsGranted("ROLE_MJ")
      */
-    public function editerSaison(Request $request, Saison $saison, FileHandler $fileHandler, Numeroteur $numeroteur, SaisonRepository $saisonRepository): Response {
+    public function editSaison(Request $request, Saison $saison, FileHandler $fileHandler, Numeroteur $numeroteur, SaisonRepository $saisonRepository): Response {
 
-        // Stockage du numéro et de l'ID de l'episode avant édition
+        // Saving Number and ID for later RE-Ordering
         $numeroDepart = $saison->getNumero();
         $fratrieDepart = $saisonRepository->findAll();
 
-        // FORM VIEW
-        //-----------
         $form = $this->createForm(AdminSaisonType::class, $saison);
         $form->handleRequest($request);
 
-        // GESTION FORMULAIRE VALIDE
-        // -------------------------
         if($form->isSubmitted() && $form->isValid()) {
 
-            // EDITION FICHIER IMAGE
-            // ---------------------
+            // File Image Handling
             $nouvelleImage = $form->get('image')->getData();
             if (!empty($nouvelleImage)) {
                 $prefix = 'saison-' . $saison->getNumero();
                 $saison->setImage($fileHandler->handle($nouvelleImage, $saison->getImage(), $prefix, 'saisons'));
             }
 
-            // NUMEROTEUR
-            // ----------
-            // Si numero change ou parent change
+            // RE-ORDERING : if Number or Parent has changed
             if ($numeroDepart != $saison->getNumero())
             {
                 $fratrieDepart = $saisonRepository->findAll();
@@ -124,57 +104,44 @@ class AdminSaisonController extends AbstractController
                 $numeroteur->reordonnerNumero($saison->getId(), $numeroDepart, $saison->getNumero(), $fratrieDepart, $fratrieArrivee);
             }
 
-            // EDITION ENTITE
-            // --------------
             $this->getDoctrine()->getManager()->flush();
             $this->addFlash('success', 'La saison a bien été modifiée.');
 
             // REDIRECTION
-            // -----------
             if (!empty($request->query->get('redirect')) && $request->query->get('redirect') == 'aventure')
                 return $this->redirectToRoute('aventure_saison', ['id' => $saison->getId()]);
             
             return $this->redirectToRoute('admin_saison');
         }
 
-        // AFFICHAGE FORMULAIRE
-        // --------------------
         return $this->renderForm('admin_saison/edit.html.twig', [
             'saison' => $saison,
             'form' => $form,
             'type' => 'Modifier',
-        ]);
-        
+        ]);   
     }
 
     /**
      * @Route("/admin/saison/{id}/delete", name="admin_saison_delete", methods={"GET"})
      * @IsGranted("ROLE_MJ")
      */
-    public function supprimerSaison(Request $request, Saison $saison, Numeroteur $numeroteur, SaisonRepository $saisonRepository, FileHandler $fileHandler): Response {
+    public function deleteSaison(Request $request, Saison $saison, Numeroteur $numeroteur, SaisonRepository $saisonRepository, FileHandler $fileHandler): Response {
 
-        // GESTION FORMULAIRE VALIDE
-        // -------------------------
         if ($this->isCsrfTokenValid('delete' . $saison->getId(), $request->query->get('csrf'))) {
 
-            // VERIFICATION ENFANTS
-            // --------------------
+            // CHECK if child exists
             if (!$saison->getChapitres()->isEmpty()) {
                 $this->addFlash('warning', 'Veuillez supprimer les chapitres enfants au prélable !');
                 return $this->redirectToRoute('admin_saison');
             }
 
-            // SUPPRESSION FICHIER IMAGE
-            // -------------------------
+            // File Image Handling
             $fileHandler->handle(null, $saison->getImage(), null, 'saisons');
 
-            // NUMEROTEUR
-            // ----------
+            // RE-ORDERING
             $fratrieDepart = $saisonRepository->findAll();
             $numeroteur->reordonnerNumero($saison->getId(), $saison->getNumero(), -1, $fratrieDepart, []);
 
-            // SUPPRESSION ENTITE
-            // ------------------
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($saison);
             $entityManager->flush();
@@ -183,7 +150,6 @@ class AdminSaisonController extends AbstractController
             $this->addFlash('danger', 'Token de protection invalide !');
 
         // REDIRECTION
-        // -----------
         if (!empty($request->query->get('redirect')) && $request->query->get('redirect') == 'aventure')
             return $this->redirectToRoute('aventure');
 

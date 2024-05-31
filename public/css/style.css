@@ -250,7 +250,7 @@ html, body {    font-size: 16px; }
 /* ------ PIXEL ICONS ------ */
 /* ------------------------- */
 
-.icon-lock { position: absolute;  top: 32px; left: 76px; width: 40px; z-index: 1 }
+.icon-lock { position: absolute;  top: 32px; left: 76px; width: 36px; z-index: 1 }
 .icon-ornament-container { width: 36px; height: auto; }
 .icon-dead-big { position: absolute; top: 4rem; left: 0.20rem; z-index: 1; width: 156px; }
 

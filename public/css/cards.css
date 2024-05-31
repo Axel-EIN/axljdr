@@ -23,7 +23,7 @@
         position: relative;
         display: flex;
         flex-direction: column;
-        border-radius: 1rem;
+        border-radius: 0.75rem;
         background-color: var(--white);
         min-width: 265px;
         min-height: 390px;
@@ -44,14 +44,22 @@
 
         .image-container {
             position: relative;
-            border-radius: 1rem 1rem 0px 0px;
+            border-radius: 0.75rem 0.75rem 0px 0px;
             background-color:var(--black);
             overflow: hidden;
+            display: flex;
+
+            .card-image {
+                width: 100%;
+                object-fit: cover;
+            }
         }
 
         .text-container {
             position: relative;
             padding: 0.75rem;
+            min-height: 186px;
+            max-height: 186px;
 
             .card-title {
                 position: absolute;

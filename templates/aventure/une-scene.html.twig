@@ -73,7 +73,10 @@
             {% endfor %}
         </div>
 
-        <img class="card-img-top img-fluid mask" src="{{ asset(une_scene.image|default(NA_SCENE)) }}"  alt="Image d'une scène">
+        <div class="ratio-169 gradient-after">
+            <img class="ratio-cropped" src="{{ asset(une_scene.image|default(NA_SCENE)) }}"  alt="Image d'une scène">
+        </div>
+        
 
     </div>
 

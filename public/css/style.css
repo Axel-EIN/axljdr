@@ -355,7 +355,7 @@ h5 a:hover, h4 a:hover, h3 a:hover, h2 a:hover, h1 a:hover { text-decoration: no
 .btn-icons-small-right-container { position: absolute; top: 4px; right: 12px; font-size: 1.5rem; z-index: 10; }
 .btn-icons-small-right-container a { color: white; }
 
-.btn-icons-medium-right-container { position: absolute; top: 8px; right: 8px; font-size: 2rem; z-index: 10; }
+.btn-icons-medium-right-container { position: absolute; top: 8px; right: 0px; font-size: 2rem; z-index: 10; }
 .btn-icons-medium-right-container a { color: white; }
 
 .btn-icon-display { position: absolute; right: -160px; top: 96px; font-size: 8rem; text-decoration: none; display: flex; justify-content: center; align-items: center; text-align: center; }

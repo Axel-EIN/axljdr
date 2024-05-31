@@ -45,8 +45,13 @@
         {% for uneRuleDivers in rulesDivers %}
 
             <!--- UNE REGLE DIVERS -->
-            <a class="col-2 text-center hover-zoom" href="{{ path('regles_rule', {id: uneRuleDivers.id} ) }}">
-                <img class="img-fluid" src="{{ asset(uneRuleDivers.image) }}" alt="Image de la Règle" title="{{uneRuleDivers.nom}}" />
+            <a class="col-2 text-center hover-zoom"
+                href="{% if uneRuleDivers.pdf is defined and uneRuleDivers.part1 is empty %}
+                            {{ asset(uneRuleDivers.pdf) }}
+                      {% else %}
+                            {{ path('regles_rule', {id: uneRuleDivers.id} ) }}
+                    {% endif %}">
+                <img class="img-fluid" src="{{ asset(uneRuleDivers.image|default(asset('assets/img/placeholders/na_rule.jpg'))) }}" alt="Image de la Règle" title="{{uneRuleDivers.nom}}" />
                 <br>
                 <h3 class="text-small my-2">
                     <strong>{{ uneRuleDivers.nom }}</strong>

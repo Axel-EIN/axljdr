@@ -32,14 +32,7 @@
 
         {% if attribute(rule, 'part' ~ i ~ 'aside') is not empty %}
             <section class="col-4 p-1 mt-3 mb-3">
-                {# <aside class="h-100" style="background-image: url({{asset('assets/img/ui/bg-aside.png')}}); background-size: contain; background-repeat: no-repeat;">
-                    <p class="p-3 text-small text-justify">{{ attribute(rule, 'part' ~ i ~ 'aside')|raw|nl2br }}</p>
-                </aside> #}
-                <aside style="border-color: transparent;
-                                            border-style: double;
-                                            border-width: 24px 24px 120px 24px;
-                                            border-image: url({{asset('assets/img/ui/bg-aside.png')}}) 24 24 120 24 fill repeat;
-                                            padding: 10px;" >
+                <aside class="aside">
                     <p class="p-1 text-small text-justify">{{ attribute(rule, 'part' ~ i ~ 'aside')|raw|nl2br }}</p>
                 </aside>
             </section>

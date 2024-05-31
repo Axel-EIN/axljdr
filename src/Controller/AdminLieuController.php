@@ -58,6 +58,9 @@ class AdminLieuController extends AbstractController
 
             $this->addFlash('success', 'Le Lieu a bien été ajouté !');
 
+            // REDIRECTION
+            if (!empty($request->query->get('redirect')) && $request->query->get('redirect') == 'lieu')
+                return $this->redirectToRoute('empire_lieu', ['id' => $lieu->getId()]);
             return $this->redirectToRoute('admin_lieu');
         } else {
             return $this->render('admin_lieu/create.html.twig', [
@@ -109,6 +112,9 @@ class AdminLieuController extends AbstractController
             $this->getDoctrine()->getManager()->flush();
             $this->addFlash('success', 'Le Lieu a bien été modifié !');
 
+            // REDIRECTION
+            if (!empty($request->query->get('redirect')) && $request->query->get('redirect') == 'lieu')
+                return $this->redirectToRoute('empire_lieu', ['id' => $lieu->getId()]);
             return $this->redirectToRoute('admin_lieu');
         }
 

@@ -2,25 +2,9 @@
 {% block title %}L'Univers de l'Aventure {{ parent() }}{% endblock %}
 
 {% block section_content1 %}
-    {% for une_archive in archives %}
+    {% for un_element in archives %}
 
-        <!-- UNE ARCHIVE -->
-        <article class="col-xl-2 col-lg-3 col-md-4 col-sm-6 py-3 text-center {% if une_archive.locked == 1 %}translucide{% else %}hover-zoom-X2{% endif %}">
-            {% if une_archive.locked == 1 %}
-            <div class="relative">
-                <img class="icon-lock grayscale fa-beat-fade" src="{{asset('assets/img/icons/locked.png')}}" alt="Icône cadena" title="Archive à débloquer !" />
-                <img class="img-fluid grayscale" src="{{ asset(une_archive.image) }}" alt="Image d'une Archive" title="Archive à débloquer !"/>
-                <h5 class="text-center"><strong>???</strong></h5>
-            </div>
-            {% else %}
-            <div class="relative">
-                <a href="{{ path('empire_archive', {id: une_archive.id} ) }}">
-                    <img class="img-fluid" src="{{ asset(une_archive.image) }}" alt="Image d'une Archive" title="Lire {{une_archive.titre}}" />
-                </a>
-                <h5 class="text-center"><strong><a href="{{ path('empire_archive', {id: une_archive.id} ) }}">{{ une_archive.titre }}</a></strong></h5>
-            </div>
-        {% endif %}
-        </article>
+        {{ include('/parts/element-vignette.html.twig', {un_element}) }}
 
     {% endfor %}
 {% endblock %}
@@ -59,20 +43,9 @@
 {% endblock %}
 
 {% block section_content3 %}
-    {% for un_lieu in lieux %}
+    {% for un_element in lieux %}
 
-        <!-- UN LIEU -->
-        <article class="col-xl-2 col-lg-3 col-md-4 col-sm-6 py-3 text-center hover-zoom-X2">
-            <a href="{{ path('empire_lieu', {id: un_lieu.id} ) }}">
-                <img class="img-160" src="{{ asset(un_lieu.image) }}" alt="Image du Lieu" title="Voir {{un_lieu.nom}}" />
-            </a>
-            <br/>
-            <h5 class="text-center">
-                <strong>
-                    <a href="{{ path('empire_lieu', {id: un_lieu.id} ) }}">{{ un_lieu.nom }}</a>
-                </strong>
-            </h5>
-        </article>
-
+        {{ include('/parts/element-vignette.html.twig', {un_element}) }}
+        
     {% endfor %}
 {% endblock %}

@@ -32,7 +32,7 @@ class AdminPersonnageController extends AbstractController
      * @Route("/admin/personnage/create", name="admin_personnage_create")
      * @IsGranted("ROLE_MJ")
      */
-    public function ajouterPersonnage(Request $request, EntityManagerInterface $em, Uploader $uploadeur) {
+    public function ajouterPersonnage(Request $request, EntityManagerInterface $em, Uploader $uploadeur, Baliseur $baliseur) {
 
         $personnage = new Personnage;
         $form = $this->createForm(AdminPersonnageType::class, $personnage);

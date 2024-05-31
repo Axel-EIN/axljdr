@@ -4,20 +4,17 @@
             <h2 class="chapter-number text-left">CHAPITRE {{ un_chapitre.numero }}</h2>
             <div><hr></div>
 
-            <!-- DEBUT HORS FLUX -->
-            <!-- BTN - MODIFIER / SUPPRIMER -->
+            <!-- MJ - ICON BTN - Edit | Delete -->
             {% if app.user and is_granted("ROLE_MJ") %}
                 <div class="btn-icons-medium-right-container">
                     <a href="{{ path('admin_chapitre_edit', {id:un_chapitre.id}) }}?redirect=aventure">
-                        <i class="fas fa-edit fa-bounce" alt="Icône Modifier" title"Modifier"></i></a>
+                        <i class="fas fa-edit fa-bounce" alt="Icône Modifier" title="Modifier"></i></a>
                     &nbsp;
                     <a href="{{ path('admin_chapitre_delete', {id:un_chapitre.id}) }}?csrf={{ csrf_token('delete' ~ un_chapitre.id) }}&redirect=aventure"
                     onclick="return confirm('Êtes-vous sûr de vouloir supprimer le chapitre : {{ un_chapitre.titre }} ?')">
-                        <i class="fas fa-trash-alt fa-bounce" alt"Icône Supprimer" title="Supprimer"></i>
-                    </a>
+                        <i class="fas fa-trash-alt fa-bounce" alt"Icône Supprimer" title="Supprimer"></i></a>
                 </div>
             {% endif %}
-            <!-- FIN HORS FLUX -->
 
             <div class="mt-auto mb-3">
                 <h2 id="read-head-ch-id{{ un_chapitre.id }}" class="big-title-effect grand">{{ un_chapitre.titre|relief|raw }}</h2>
@@ -35,7 +32,7 @@
                         <strong>Il n'y a pas encore d'épisode disponible !</strong>&nbsp;&nbsp;
                         {% if app.user and is_granted("ROLE_MJ") %}
                             <a class="text-light" href="{{path('admin_episode_create')}}?numero=1&chapitreID={{un_chapitre.id}}&redirect=aventure">
-                                <i class="fas fa-plus-square fa-bounce" alt="Icône Ajouter" title="Ajouter une Session"></i>&nbsp;&nbsp;<strong>Ajouter une Session</strong>
+                                <i class="fas fa-plus-square fa-bounce" alt="Icône Ajouter"></i>&nbsp;&nbsp;<strong>Ajouter une Session</strong>
                             </a>
                         {% endif %}
                     </div>
@@ -70,8 +67,7 @@
                                     </a>
                                 </div>
 
-                                <!-- START OUT OF FLUX -->
-                                <!-- USER'S PARTICIPATING CHARACTER'S ICON -->
+                                <!-- ICON PERSONAGE JOUEUR PARTICIPANT -->
                                 {% if app.user %}
                                     
                                     {% for un_cumul_personnage in user_personnages_cumul_episodes %}
@@ -96,25 +92,23 @@
                                         {% endfor %}
                                     {% endfor %}
 
-                                    <!-- MJ'S EDIT DELETE BUTTONS -->
+                                    <!-- MJ - ICON BTN - Edit | Delete -->
                                     {% if app.user and is_granted("ROLE_MJ") %}
                                         <div class="btn-icons-small-right-container">
-                                            <a href="{{ path('admin_episode_edit', {id:un_episode.id}) }}?redirect=aventure"><i class="fas fa-edit" alt="Icône Modifier" title="Modifier cette Session"></i></a>&nbsp;
+                                            <a href="{{ path('admin_episode_edit', {id:un_episode.id}) }}?redirect=aventure"><i class="fas fa-edit" alt="Icône Modifier" title="Modifier"></i></a>&nbsp;
                                             <a href="{{ path('admin_episode_delete', {id:un_episode.id}) }}?csrf={{ csrf_token('delete' ~ un_episode.id) }}&redirect=aventure"
-                                                onclick="return confirm('Êtes-vous sûr de vouloir supprimer l'épisode : {{ un_episode.titre }} ?')"><i class="fas fa-trash-alt" alt="Icône Supprimer" title="Supprimer cette Session"></i></a>
+                                                onclick="return confirm('Êtes-vous sûr de vouloir supprimer l'épisode : {{ un_episode.titre }} ?')"><i class="fas fa-trash-alt" alt="Icône Supprimer" title="Supprimer"></i></a>
                                         </div>
                                     {% endif %}
 
                                 {% endif %}
-                                <!-- END OUT OF FLUX -->
 
                             </div>
                         </article>
                     {% endif %}
                 {% endfor %}
 
-                <!-- START OUT OF FLUX -->
-                <!-- MJ'S ADD SESSION BUTTON -->
+                <!-- MJ - BIG ICON BTN - ADD -->
                 {% if app.user and is_granted("ROLE_MJ") %}
                     <div class="btn-icon-display">
                         <a href="{{path('admin_episode_create')}}?numero={{(un_chapitre.episodes|length)+1}}&chapitreID={{un_chapitre.id}}&redirect=aventure">
@@ -122,7 +116,6 @@
                         </a>
                     </div>
                 {% endif %}
-                <!-- END OUT OF FLUX -->
 
                 </div>
             </div>

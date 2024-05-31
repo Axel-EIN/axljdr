@@ -45,6 +45,7 @@ class EmpireController extends AbstractController
         $header_classname = 'empire';
         $header_up = "Univers du Jeu";
         $header_down = "L'Empire de Rokugan";
+        $category = 'empire';
 
         return $this->render('empire/index.html.twig', [
             'clansMajeurs' => $clansMajeurs,
@@ -55,6 +56,7 @@ class EmpireController extends AbstractController
             'header_classname' => $header_classname,
             'header_up' => $header_up,
             'header_down' => $header_down,
+            'category' => $category
         ]);
     }
 

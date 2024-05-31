@@ -314,7 +314,7 @@ html, body {    font-size: 16px; }
 .icon-lock { position: absolute;  top: 18%; left: 40%; width: 22%; z-index: 10 }
 .icon-lock-character { position: absolute;  top: 35%; left: 35%; width: 30%; z-index: 10; filter: grayscale(100%); }
 .icon-ornament-container { width: 36px; height: auto; }
-.icon-dead-big { position: absolute; top: 4rem; left: 0.20rem; z-index: 1; width: 156px; }
+.icon-dead-big { position: absolute; top: 4rem; left: 0.20rem; z-index: 10; width: 156px; }
 
 .characters-icons-container { position: absolute; top: -12px; left: 8px; z-index: 10; }
 

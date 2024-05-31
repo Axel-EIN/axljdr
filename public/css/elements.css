@@ -2,6 +2,14 @@
 /* ----- UI ELEMENTS ----- */
 /* ----------------------- */
 
+.aside {
+    border-color: transparent;
+    border-style: double;
+    border-width: 24px 24px 120px 24px;
+    border-image: url('/assets/img/ui/bg-aside.png') 24 24 120 24 fill repeat;
+    padding: 10px;
+}
+
 .vignette-aside {
     position: relative;
     display: block;

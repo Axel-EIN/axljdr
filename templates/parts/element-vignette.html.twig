@@ -1,0 +1,54 @@
+<!-- UN ELEMENT -->
+{# force_image (optionnel) : impose l'illustration meme si l'element a une
+   icone (ex. Lieux sur empire/index.html.twig, pour matcher le rendu des
+   Archives). #}
+{% if un_element.nom is defined %}
+    {% set nom = un_element.nom %}
+{% else %}
+    {% set nom = un_element.titre %}
+{% endif %}
+
+{% if un_element.pdf is defined and un_element.pdf is not empty %}
+    {% set href = asset(un_element.pdf) %}
+    {% set na_image = NA_PDF %}
+{% else %}
+    {% set href = path(category ~ '_' ~ entity, {id: un_element.id} ) %}
+{% endif %}
+
+{% set is_locked_raw = un_element.locked|default(0) == 1 %}
+{% set is_locked = is_locked_raw and not is_granted("ROLE_MJ") %}
+<a {% if not is_locked %}href="{{href}}"{% endif %} class="{{col}} mb-3 vignette {% if is_locked %}translucide vignette-locked{% else %}hover-zoom{% endif %}"{% if is_locked %} aria-disabled="true"{% endif %}>
+    <div class="relative">
+
+        {% if is_locked %}
+            <!-- LOCKED -->
+            {% set grayscale, tooltip, nom = 'grayscale', 'À débloquer', '???' %}
+            <img class="absolute icon-lock grayscale fa-beat-fade" src="{{ asset(LOCKED_ICO) }}" alt="Cadena" />
+            <span class="hover-tooltip">À débloquer</span>
+        {% elseif is_locked_raw %}
+            <!-- LOCKED (vue MJ : badge discret signalant que l'element est cache pour les joueurs) -->
+            <img class="absolute icon-lock-corner" src="{{ asset(LOCKED_ICO) }}" alt="Verrouille" title="Verrouille pour les joueurs" />
+        {% endif %}
+
+        {% if not force_image|default(false) and un_element.icone is defined and un_element.icone is not empty %}
+            <div class="ratio-{{ratio|default('1610')}}">
+                <!-- CENTERED ICON -->
+                <img class="badge-center img-128 {{grayscale|default('')}}" src="{{ asset(un_element.icone|default(NA_ICON)) }}" alt="Icône" />
+            </div>
+        {% else %}
+
+            <!-- PDF TOP RIGHT CORNER ICON -->
+            {% if un_element.pdf is defined and un_element.pdf is not empty %}
+                <img class="badge-corner" src="{{ asset(PDF) }}" alt="Icône PDF" />
+            {% endif %}
+
+            <!-- CROPPED RATIO IMG -->
+            <div class="ratio-{{ratio|default('1610')}}">
+                <img class="ratio-cropped {{grayscale|default('')}}" src="{{ asset(un_element.image|default(na_image)) }}" alt="Image {{entity}}" title="{{tooltip|default('') }}"/>
+            </div>
+
+        {% endif %}
+
+    </div>
+    <div class="label text-{{size}} mt-1">{{ nom }}</div>
+</a>

@@ -69,7 +69,7 @@
 
                             <!-- UN PERSONNAGE -->
                             {% for un_personnage in classe.personnages %}
-                                <div class="p-1 hover-zoom-twice">
+                                <div class="p-1 hover-zoom-X2">
                                     <a href="{{ path('personnage_profil', {id: un_personnage.id} ) }}">
                                         <img class="img-128" src="{{ asset(un_personnage.icone) }}" alt="Icône d'un personnage" title="Voir profil de {{un_personnage.prenom}}" />
                                     </a>

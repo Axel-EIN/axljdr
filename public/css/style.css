@@ -13,7 +13,7 @@
 
 .right-corner-snap { position: absolute; top: 0px; right: 0px; z-index: 10}
 .right-corner-8 { position: absolute; right:16px; top:8px; z-index: 10}
-.right-corner-16 { top: 1rem; right: 1rem; }
+.right-corner-16 { position: absolute; top: 1rem; right: 1rem; }
 .overtop-36 { position: relative; top: -36px; }
 
 @media (max-width: 576px) { .icons-char-collapse { visibility: collapse; } }
@@ -197,7 +197,7 @@ html, body {    font-size: 16px; }
 /* --------------------------- */
 
 .btn-primary-style {    display: inline-block;
-                color: white; font-weight: bold; text-align: center; vertical-align: middle; line-height: 1.5;
+                        color: white; font-weight: bold; text-align: center; vertical-align: middle; line-height: 1.5;
                         background-color: #EA2027;
                         border-radius: 4px; border-top: 1px solid #EA2027; border-left: 1px solid #EA2027; border-right: 1px solid #9b1921; border-bottom: 1px solid #9b1921;
                         box-shadow: inset 1px 1px 0px #ff8084, inset -2px -2px 0px #b6252f, 0px 0px 8px rgba(0, 0, 0, .2); }
@@ -207,8 +207,8 @@ html, body {    font-size: 16px; }
 .btn-secondary-style {  display: inline-block;
                         color: #ff8084; font-weight: bold;
                         background-color: transparent;      
-                text-align: center; vertical-align: middle; line-height: 1.5;
-                border-radius: 4px; border: 2px solid #ff8084; }
+                        text-align: center; vertical-align: middle; line-height: 1.5;
+                        border-radius: 4px; border: 2px solid #ff8084; }
 
 .btn-secondary-style:hover, .btn-secondary-style:active, .btn-secondary-style:target { color: white; background-color: #ff8084; text-decoration: none; }
 

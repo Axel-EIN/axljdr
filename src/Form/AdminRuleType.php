@@ -22,7 +22,7 @@ class AdminRuleType extends AbstractType
             ->add('base', CheckboxType::class, ['required' => false])
             ->add('numero', IntegerType::class)
             ->add('image', FileType::class, array('mapped' => false, 'data_class' => null, 'required' => false))
-            ->add('pdf', FileType::class, ['required' => false])
+            ->add('pdf', FileType::class, array('mapped' => false, 'data_class' => null, 'required' => false))
             ->add('part1titre', TextType::class, ['required' => false, 'constraints' => [ new Length( [ 'max' => 100 ] ) ] ] )
             ->add('part1', TextareaType::class, ['required' => false])
             ->add('part1aside', textareaType::class, ['required' => false])

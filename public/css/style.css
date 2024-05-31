@@ -182,7 +182,7 @@ h5 a:hover, h4 a:hover, h3 a:hover, h2 a:hover, h1 a:hover { text-decoration: no
 
 .header-bg-characters { background-image: linear-gradient(rgb(40,0,0,0.5),rgb(40,0,0,0.5)),url('../assets/img/rubriques/personnages.jpg'); background-position: center; }
 .header-bg-empire { background-image: linear-gradient(rgb(40,0,0,0.5),rgb(40,0,0,0.5)),url('../assets/img/rubriques/empire.jpg'); background-position: center; }
-.header-bg-regles { background-image: linear-gradient(rgb(40,0,0,0.5),rgb(40,0,0,0.5)),url('../assets/img/rubriques/regles.jpg'); background-position: center; }
+.header-bg-rules { background-image: linear-gradient(rgb(40,0,0,0.5),rgb(40,0,0,0.5)),url('../assets/img/rubriques/regles.jpg'); background-position: center; }
 
 .header {       position: relative; min-height: 60vh;
                 color: #fff; text-align: center;
@@ -382,6 +382,12 @@ a.character-icon { display: inline-block; font-weight: bold; }
 .hover-shine:hover { filter: brightness(1.3); transition: 0.5s; }
 .hover-darked:hover { filter: brightness(0.7);  transition: 0.5s; }
 .hover-bright:hover { filter: brightness(1); transition: 0.5s; }
+
+.hover-blue:hover { filter: invert(40%) sepia(100%) saturate(1000%) hue-rotate(180deg) brightness(0.9); transition: 0.25s;}
+.hover-red:hover { filter: invert(40%) sepia(100%) saturate(1000%) hue-rotate(-45deg) brightness(0.9); transition: 0.25s;}
+.hover-orange:hover { filter: invert(40%) sepia(100%) saturate(1000%) hue-rotate(0deg) brightness(0.9); transition: 0.25s;}
+.hover-violet:hover { filter: invert(40%) sepia(100%) saturate(1000%) hue-rotate(-120deg) brightness(0.9); transition: 0.25s;}
+.hover-green:hover { filter: invert(40%) sepia(100%) saturate(1000%) hue-rotate(60deg) brightness(0.9); transition: 0.25s;}
 
 .fa-animation-delay { --fa-animation-delay: 0.67s; }
 

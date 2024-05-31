@@ -19,7 +19,7 @@ class AdminPersonnageController extends AbstractController
     /**
      * @Route("/admin/personnage", name="admin_personnage")
      */
-    public function afficherAdminPersonnages(PersonnageRepository $personnageRepository): Response
+    public function viewAdminPersonnages(PersonnageRepository $personnageRepository): Response
     {
         $personnages = $personnageRepository->findBy(array(), array('clan' => 'ASC'));
         return $this->render('admin_personnage/index.html.twig', [
@@ -31,7 +31,7 @@ class AdminPersonnageController extends AbstractController
      * @Route("/admin/personnage/create", name="admin_personnage_create")
      * @IsGranted("ROLE_MJ")
      */
-    public function ajouterPersonnage(Request $request, EntityManagerInterface $em, FileHandler $fileHandler, Baliseur $baliseur) {
+    public function addPersonnage(Request $request, EntityManagerInterface $em, FileHandler $fileHandler, Baliseur $baliseur) {
 
         $personnage = new Personnage;
         $form = $this->createForm(AdminPersonnageType::class, $personnage);
@@ -39,87 +39,87 @@ class AdminPersonnageController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
 
+            // File Icon Image Handling
             $nouvelleIcone = $form->get('icone')->getData();
             if (!empty($nouvelleIcone)) {
                 $prefix = 'personnage-' . $personnage->getNom() . '-' . $personnage->getPrenom() . '-icone';
                 $personnage->setIcone($fileHandler->handle($nouvelleIcone, null, $prefix, 'personnages'));
             } else { $personnage->setIcone('assets/img/placeholders/na_personnage_icone.jpg'); }
 
+            // File Illustration Image Handling
             $nouvelleIllustration = $form->get('illustration')->getData();
             if (!empty($nouvelleIllustration)) {
                 $prefix = 'personnage-' . $personnage->getNom() . '-' . $personnage->getPrenom() . '-illustration';
                 $personnage->setIllustration($fileHandler->handle($nouvelleIllustration, null, $prefix, 'personnages'));
             } else { $personnage->setIllustration('assets/img/placeholders/na_personnage_illustration.jpg'); }
 
-            // BALISAGE : capture les mots entre [], vérifie si un prénom personnage correspondant existe, remplace par un lien personnage HTML
+            // CHARACTER TAGGER : capture words between [], check if character exist, replace by a link
             $personnage->setDescription($baliseur->baliserPersonnages($personnage->getDescription()));
 
-            // BALISAGE des LIEUX : capture les mots entre {}, vérifie si un nom de lieu correspondant existe, remplace par un lien vers la fiche du lieu en HTML
+            // LOCATION TAGGER: capture words between {}, check if location exist, replace by a link
             $personnage->setDescription($baliseur->baliserLieux($personnage->getDescription()));
 
             $em->persist($personnage);
             $em->flush();
-
             $this->addFlash('success', 'Le personnage a bien été ajouté.');
 
             // REDIRECTION
-            // -----------
             if (!empty($request->query->get('redirect')) && $request->query->get('redirect') == 'personnages')
                 return $this->redirectToRoute('personnages');
-            return $this->redirectToRoute('admin_personnage');
 
             return $this->redirectToRoute('admin_personnage');
-        } else {
-            return $this->render('admin_personnage/create.html.twig', [
-                'type' => 'Créer',
-                'form' => $form->createView()
-            ]);
         }
+
+        return $this->render('admin_personnage/create.html.twig', [
+            'type' => 'Créer',
+            'form' => $form->createView()
+        ]);
     }
 
     /**
      * @Route("/admin/personnage/{id}/edit", name="admin_personnage_edit")
      * @IsGranted("ROLE_MJ")
      */
-    public function editerPersonnage(Request $request, Personnage $personnage, FileHandler $fileHandler, Baliseur $baliseur): Response {
+    public function editPersonnage(Request $request, Personnage $personnage, FileHandler $fileHandler, Baliseur $baliseur): Response {
 
-        // DEBALISEUR : dans le texte, capture les prénoms entre balises <a><img>, vérifie si le personnage existe, remplace les balises par des crochets []
+        // CHARACTER UNTAGGER : capture words in character-links, check if character exist and replace with []
         $personnage->setDescription($baliseur->debaliserPersonnages($personnage->getDescription()));
 
-        // DEBALISEUR des LIEUX {}
+        // LOCATION UNTAGGER : capture words in location-links, check if location exist and replace with {}
         $personnage->setDescription($baliseur->debaliserLieux($personnage->getDescription()));
 
         $form = $this->createForm(AdminPersonnageType::class, $personnage);
-        
         $form->handleRequest($request);
 
         if($form->isSubmitted() && $form->isValid()) {
 
+            // File Icon Image Handling
             $nouvelleIcone = $form->get('icone')->getData();
             if (!empty($nouvelleIcone)) {
                 $prefix = 'personnage-' . $personnage->getNom() . '-' . $personnage->getPrenom() . '-icone';
                 $personnage->setIcone($fileHandler->handle($nouvelleIcone, $personnage->getIcone(), $prefix, 'personnages'));
             }
 
+            // File Illustration Image Handling
             $nouvelleIllustration = $form->get('illustration')->getData();
             if (!empty($nouvelleIllustration)) {
                 $prefix = 'personnage-' . $personnage->getNom() . '-' . $personnage->getPrenom() . '-illustration';
                 $personnage->setIllustration($fileHandler->handle($nouvelleIllustration, $personnage->getIllustration(), $prefix, 'personnages'));
             }
 
-            // BALISAGE : capture les mots entre [], vérifie si un prénom personnage correspondant existe, remplace par un lien personnage HTML
+            // CHARACTER TAGGER : capture words between [], check if character exist, replace by a link
             $personnage->setDescription($baliseur->baliserPersonnages($personnage->getDescription()));
 
-            // BALISAGE des LIEUX : capture les mots entre {}, vérifie si un nom de lieu correspondant existe, remplace par un lien vers la fiche du lieu en HTML
+            // LOCATION TAGGER: capture words between {}, check if location exist, replace by a link
             $personnage->setDescription($baliseur->baliserLieux($personnage->getDescription()));
 
             $this->getDoctrine()->getManager()->flush();
             $this->addFlash('success', 'Le personnage a bien été modifié.');
 
             // REDIRECTION
-            // -----------
             if (!empty($request->query->get('redirect')) && $request->query->get('redirect') == 'personnage')
                 return $this->redirectToRoute('personnage_profil', ['id' => $personnage->getId()]);
+
             return $this->redirectToRoute('admin_personnage');
         }
 
@@ -135,18 +135,18 @@ class AdminPersonnageController extends AbstractController
      * @Route("/admin/personnage/{id}/delete", name="admin_personnage_delete", methods={"GET"})
      * @IsGranted("ROLE_MJ")
      */
-    public function supprimerPersonnage(Request $request, Personnage $personnage, FileHandler $fileHandler): Response {
+    public function deletePersonnage(Request $request, Personnage $personnage, FileHandler $fileHandler): Response {
 
         if ($this->isCsrfTokenValid('delete' . $personnage->getId(), $request->query->get('csrf'))) {
 
             $entityManager = $this->getDoctrine()->getManager();
 
+            // Image Files Handling
             $fileHandler->handle(null, $personnage->getIcone(), null, 'personnages');
             $fileHandler->handle(null, $personnage->getIllustration(), null, 'personnages');
 
             $entityManager->remove($personnage);
             $entityManager->flush();
-
             $this->addFlash('success', 'Le personnage a bien été supprimé.');
         }
 

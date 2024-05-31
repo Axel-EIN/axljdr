@@ -119,7 +119,7 @@
                                     {% endif %}
                                         lors de la scène <a href="{{path('aventure_episode', {id: une_participation.scene.episodeParent.id, '_fragment': 'scn' ~  une_participation.scene.numero  })}}" ><strong>{{une_participation.scene.titre}}</strong></a><br/>
                                 {% else %}
-                                    <strong style="color: red">est mort</strong> dans la scène <a href="{{path('aventure_episode', {id: une_participation.scene.episodeParent.id, '_fragment': 'scn' ~  une_participation.scene.numero  })}}" ><strong>{{une_participation.scene.titre}}</strong></a><br/>
+                                    <strong class="text-danger">est mort</strong> dans la scène <a href="{{path('aventure_episode', {id: une_participation.scene.episodeParent.id, '_fragment': 'scn' ~  une_participation.scene.numero  })}}" ><strong>{{une_participation.scene.titre}}</strong></a><br/>
                                 {% endif %}
                                 </span>
                                 

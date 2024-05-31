@@ -17,7 +17,7 @@ class ReglesController extends AbstractController
     /**
      * @Route("/regles", name="regles")
      */
-    public function afficherRegles(RuleRepository $ruleRepository,  ClasseRepository $classeRepository): Response
+    public function viewRegles(RuleRepository $ruleRepository,  ClasseRepository $classeRepository): Response
     {
         $rules = $ruleRepository->findAllTypeSorted(true);
         $rulesDivers = $ruleRepository->findAllTypeSorted(false);
@@ -63,7 +63,7 @@ class ReglesController extends AbstractController
     /**
      * @Route("/regles/rule/{id}", name="regles_rule")
      */
-    public function afficherRule(Rule $rule, RuleRepository $ruleRepository): Response
+    public function viewRule(Rule $rule, RuleRepository $ruleRepository): Response
     {
         $autresRules = $ruleRepository->findAllTypeExceptOneSorted($rule->getId(), $rule->getBase());
 
@@ -80,7 +80,7 @@ class ReglesController extends AbstractController
     /**
      * @Route("/regles/classe/{id}", name="regles_classe")
      */
-    public function afficherClasse(Classe $classe, EcoleRepository $ecoleRepository, ClasseRepository $classeRepository): Response
+    public function viewClasse(Classe $classe, EcoleRepository $ecoleRepository, ClasseRepository $classeRepository): Response
     {
         $autresClasses = $classeRepository->findAllExceptOne($classe->getId());
         $classes = $classeRepository->FindAll();
@@ -104,7 +104,7 @@ class ReglesController extends AbstractController
     /**
      * @Route("/regles/ecole/{id}", name="regles_ecole")
      */
-    public function afficherEcole(Ecole $ecole, EcoleRepository $ecoleRepository): Response
+    public function viewEcole(Ecole $ecole, EcoleRepository $ecoleRepository): Response
     {
         $autresEcoles = $ecoleRepository->findAllByClanExceptOne($ecole->getClan()->getId(), $ecole->getId());
 

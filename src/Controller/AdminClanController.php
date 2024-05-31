@@ -32,7 +32,7 @@ class AdminClanController extends AbstractController
      * @Route("/admin/clan/create", name="admin_clan_create")
      * @IsGranted("ROLE_MJ")
      */
-    public function ajouterClan(Request $request, EntityManagerInterface $em, FileHandler $fileHandler) {
+    public function addClan(Request $request, EntityManagerInterface $em, FileHandler $fileHandler) {
 
         // // TIPS Première manière de faire : DENYACCESS redirige vers page erreur 500 automatiquement
         // $this->denyAccessUnlessGranted('ROLE_MJ'); // Test si Admin sinon affiche 500
@@ -48,28 +48,28 @@ class AdminClanController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
 
-            // Mon (blason)
+            // Symbol Image Handling
             $nouveauMon = $form->get('mon')->getData();
             if (!empty($nouveauMon)) {
                 $prefix = 'clan-' . $clan->getNom() . '-mon';
                 $clan->setMon($fileHandler->handle($nouveauMon, null, $prefix, 'clans'));
             } else { $clan->setMon('assets/img/placeholders/na_mon.png'); }
 
-            // Banner
+            // Banner Image Handling
             $nouvelleImage = $form->get('image')->getData();
             if (!empty($nouvelleImage)) {
                 $prefix = 'clan-' . $clan->getNom() . '-image';
                 $clan->setImage($fileHandler->handle($nouvelleImage, null, $prefix, 'clans'));
             } else { $clan->setImage('assets/img/placeholders/na_clan.jpg'); }
 
-            // Map
+            // Map Image Handling
             $nouvelleCarte = $form->get('territoireCarte')->getData();
             if (!empty($nouvelleCarte)) {
                 $prefix = 'clan-' . $clan->getNom() . '-territoire';
                 $clan->setTerritoireCarte($fileHandler->handle($nouvelleCarte, null, $prefix, 'clans'));
             } else { $clan->setTerritoireCarte('assets/img/placeholders/na_map.jpg'); }
 
-            // Video
+            // Video Handling
             $nouvelleVideo = $form->get('video')->getData();
             if (!empty($nouvelleVideo)) {
                 $prefix = 'clan-' . $clan->getNom() . '-video';
@@ -78,31 +78,29 @@ class AdminClanController extends AbstractController
 
             $em->persist($clan);
             $em->flush();
-
             $this->addFlash('success', 'Le clan a bien été ajouté.');
 
             return $this->redirectToRoute('admin_clan');
-        } else {
-            return $this->render('admin_clan/create.html.twig', [
-                'type' => 'Créer',
-                'form' => $form->createView()
-            ]);
-        } 
+        }
+        
+        return $this->render('admin_clan/create.html.twig', [
+            'type' => 'Créer',
+            'form' => $form->createView()
+        ]);
     }
 
     /**
      * @Route("/admin/clan/{id}/edit", name="admin_clan_edit")
      * @IsGranted("ROLE_MJ")
      */
-    public function editerClan(Request $request, Clan $clan, FileHandler $fileHandler): Response {
+    public function editClan(Request $request, Clan $clan, FileHandler $fileHandler): Response {
 
         $form = $this->createForm(AdminClanType::class, $clan);
-        
         $form->handleRequest($request);
 
         if($form->isSubmitted() && $form->isValid()) {
 
-            // Icon
+            // Icon Image Handling
             $nouveauMon = $form->get('mon')->getData();
             dump($nouveauMon);
             if (!empty($nouveauMon)) {
@@ -110,21 +108,21 @@ class AdminClanController extends AbstractController
                 $clan->setMon($fileHandler->handle($nouveauMon, $clan->getMon(), $prefix, 'clans'));
             }
 
-            // Image
+            // Image Handling
             $nouvelleImage = $form->get('image')->getData();
             if (!empty($nouvelleImage)) {
                 $prefix = 'clan-' . $clan->getNom() . '-image';
                 $clan->setImage($fileHandler->handle($nouvelleImage, $clan->getImage(), $prefix, 'clans'));
             }
 
-            // Map
+            // Map Image Handling
             $nouvelleCarte = $form->get('territoireCarte')->getData();
             if (!empty($nouvelleCarte)) {
                 $prefix = 'clan-' . $clan->getNom() . '-territoire';
                 $clan->setTerritoireCarte($fileHandler->handle($nouvelleCarte, $clan->getTerritoireCarte(), $prefix, 'clans'));
             }
 
-            // Video
+            // Video Handling
             $nouvelleVideo = $form->get('video')->getData();
             if (!empty($nouvelleVideo)) {
                 $prefix = 'clan-' . $clan->getNom() . '-video';
@@ -135,9 +133,9 @@ class AdminClanController extends AbstractController
             $this->addFlash('success', 'Le clan a bien été modifié.');
 
             // REDIRECTION
-            // -----------
             if (!empty($request->query->get('redirect')) && ($request->query->get('redirect') == 'clan' || $request->query->get('redirect') == 'empire'))
                 return $this->redirectToRoute('empire_clan', ['id' => $clan->getId()]);
+            
             return $this->redirectToRoute('admin_clan');
         }
 
@@ -153,7 +151,7 @@ class AdminClanController extends AbstractController
      * @Route("/admin/clan/{id}/delete", name="admin_clan_delete", methods={"GET"})
      * @IsGranted("ROLE_MJ")
      */
-    public function supprimerClan(Request $request, Clan $clan, FileHandler $fileHandler): Response {
+    public function deleteClan(Request $request, Clan $clan, FileHandler $fileHandler): Response {
 
         if ($this->isCsrfTokenValid('delete' . $clan->getId(), $request->query->get('csrf'))) {
 
@@ -164,6 +162,7 @@ class AdminClanController extends AbstractController
 
             $entityManager = $this->getDoctrine()->getManager();
 
+            // Files Handling
             $fileHandler->handle(null, $clan->getMon(), null, 'clans');
             $fileHandler->handle(null, $clan->getImage(), null, 'clans');
             $fileHandler->handle(null, $clan->getTerritoireCarte(), null, 'clans');
@@ -171,7 +170,6 @@ class AdminClanController extends AbstractController
 
             $entityManager->remove($clan);
             $entityManager->flush();
-
             $this->addFlash('success', 'La faction a bien été supprimée.');
         }
 

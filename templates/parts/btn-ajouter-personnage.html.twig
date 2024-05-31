@@ -1,8 +1,0 @@
-<!-- HORS FLUX - BTN - MJ - AJOUTER UN PERSONNAGE -->
-{% if app.user and is_granted("ROLE_MJ") %}
-    <div class="right-corner-snap">
-        <a href="{{ path('admin_personnage_create') }}?redirect=personnages" class="btn-style btn-medium" >
-            <i class="fas fa-plus-square fa-bounce" alt="Icône Ajouter"></i>&nbsp;&nbsp;Ajouter un personnage
-        </a>
-    </div>
-{% endif %}

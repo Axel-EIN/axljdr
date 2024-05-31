@@ -370,16 +370,16 @@ a.character-icon { display: inline-block; font-weight: bold; }
 
 /* ANIMATIONS */
 
+.hover-zoom { transition: 0.5s; }
+.hover-zoom-X2 { transition: 0.33s; }
+
+.hover-zoom:hover {  transform: scale(1.05); transition: 0.5s; }
+.hover-zoom-X2:hover { transform: scale(1.125); transition: 0.33s; }
+
+.hover-opaque:hover { filter: opacity(1); transition: 0.5s; }
 .hover-shine:hover { filter: brightness(1.3); transition: 0.5s; }
 .hover-darked:hover { filter: brightness(0.7);  transition: 0.5s; }
-.hover-opaque:hover { filter: opacity(1); transition: 0.5s; }
 .hover-bright:hover { filter: brightness(1); transition: 0.5s; }
-
-.hover-zoom {  transition: transform 0.5s ease; }
-.hover-zoom:hover {  transform: scale(1.05); }
-
-.hover-zoom-twice {  transition: transform 0.25s ease; }
-.hover-zoom-twice:hover {  transform: scale(1.125); }
 
 .fa-animation-delay { --fa-animation-delay: 0.67s; }
 

@@ -21,7 +21,7 @@ class AdminChapitreController extends AbstractController
      * @Route("/admin/chapitre", name="admin_chapitre")
      * @IsGranted("ROLE_MJ")
      */
-    public function afficherAdminChapitres(ChapitreRepository $chapitreRepository): Response {
+    public function viewAdminChapitres(ChapitreRepository $chapitreRepository): Response {
         $chapitres = $chapitreRepository->findBy(array(), array('saisonParent' => 'ASC'));
         return $this->render('admin_chapitre/index.html.twig', [
             'controller_name' => 'AdminChapitreController',
@@ -33,12 +33,11 @@ class AdminChapitreController extends AbstractController
      * @Route("/admin/chapitre/create", name="admin_chapitre_create")
      * @IsGranted("ROLE_MJ")
      */
-    public function creerChapitre(Request $request, EntityManagerInterface $em, FileHandler $fileHandler, SaisonRepository $saisonRepository, Numeroteur $numeroteur, ChapitreRepository $chapitreRepository) {
+    public function addChapitre(Request $request, EntityManagerInterface $em, FileHandler $fileHandler, SaisonRepository $saisonRepository, Numeroteur $numeroteur, ChapitreRepository $chapitreRepository) {
 
         $chapitre = new Chapitre;
 
-        // PRE-REMPLISSAGE FROM FRONT PAGE LINKS
-        // -------------------------------------
+        // URL PARAM PRE-FILL
         if ( !empty($request->query->get('numero')) && $request->query->get('numero') > 0
           && !empty($request->query->get('saisonID')) && $request->query->get('saisonID') > 0 )
         {
@@ -48,82 +47,62 @@ class AdminChapitreController extends AbstractController
                     $chapitre->setSaisonParent($saisonParent);
         }
 
-        // FORM VIEW
-        //-----------
         $form = $this->createForm(AdminChapitreType::class, $chapitre);
         $form->handleRequest($request);
 
-        // GESTION FORMULAIRE VALIDE
-        // -------------------------
         if ($form->isSubmitted() && $form->isValid()) {
 
-            // CREATION FICHIER IMAGE
-            // ----------------------
+            // FILE IMAGE HANDLING
             $nouvelleImage = $form->get('image')->getData();
             if (!empty($nouvelleImage)) {
                 $prefix = 'chapitre-s' . $chapitre->getSaisonParent()->getNumero() . '-ch' . $chapitre->getNumero();
                 $chapitre->setImage($fileHandler->handle($nouvelleImage, null, $prefix, 'chapitres'));
             } else { $chapitre->setImage('assets/img/placeholders/1920x1080.jpg'); }
 
-            // CREATION ENTITE
-            // ---------------
             $em->persist($chapitre);
             $em->flush();
             $this->addFlash('success', 'Le chapitre a bien été crée.');
 
-            // NUMEROTEUR
-            // ----------
+            // RE-ORDERING
             $fratrieArrivee = $chapitreRepository->findBy(['saisonParent' => $chapitre->getSaisonParent()->getId()]);
             $numeroteur->reordonnerNumero($chapitre->getId(), -1, $chapitre->getNumero(), [], $fratrieArrivee);
 
             // REDIRECTION
-            // -----------
             if (!empty($request->query->get('redirect')) && $request->query->get('redirect') == 'aventure')
                 return $this->redirectToRoute('aventure_saison', ['id' => $chapitre->getSaisonParent()->getId(),'_fragment' => 'read-head-ch-id' . $chapitre->getId()]);
             
             return $this->redirectToRoute('admin_chapitre');
-
-        } else {
-            // AFFICHAGE FORMULAIRE
-            // --------------------
-            return $this->render('admin_chapitre/create.html.twig', [
-                'type' => 'Créer',
-                'form' => $form->createView()
-            ]);
         }
+        
+        return $this->render('admin_chapitre/create.html.twig', [
+            'type' => 'Créer',
+            'form' => $form->createView()
+        ]);
     }
 
     /**
      * @Route("/admin/chapitre/{id}/edit", name="admin_chapitre_edit")
      * @IsGranted("ROLE_MJ")
      */
-    public function editerChapitre(Request $request, Chapitre $chapitre, FileHandler $fileHandler, Numeroteur $numeroteur, ChapitreRepository $chapitreRepository): Response {
+    public function editChapitre(Request $request, Chapitre $chapitre, FileHandler $fileHandler, Numeroteur $numeroteur, ChapitreRepository $chapitreRepository): Response {
 
-        // Stockage du numéro et de l'ID de l'episode avant édition
+        // Number and ID saves for RE-ORDERING
         $numeroDepart = $chapitre->getNumero();
         $fratrieDepartId = $chapitre->getSaisonParent()->getId();
 
-        // FORM VIEW
-        //-----------
         $form = $this->createForm(AdminChapitreType::class, $chapitre);
         $form->handleRequest($request);
 
-        // GESTION FORMULAIRE VALIDE
-        // -------------------------
         if($form->isSubmitted() && $form->isValid()) {
 
-            // EDITION FICHIER IMAGE
-            // ---------------------
-
+            // FILE IMAGE HANDLING
             $nouvelleImage = $form->get('image')->getData();
             if (!empty($nouvelleImage)) {
                 $prefix = 'chapitre-s' . $chapitre->getSaisonParent()->getNumero() . '-ch' . $chapitre->getNumero();
                 $chapitre->setImage($fileHandler->handle($nouvelleImage, $chapitre->getImage(), $prefix, 'chapitres'));
             }
 
-            // NUMEROTEUR
-            // ----------
-            // Si numero change ou parent change
+            // RE-ORDERING : If Order Number has changed OR ParentID have changed, then it needs RE-ORDERING
             if ($numeroDepart != $chapitre->getNumero() || $fratrieDepartId != $chapitre->getSaisonParent()->getId())
             {
                 $fratrieDepart = $chapitreRepository->findBy(['saisonParent' => $fratrieDepartId]);
@@ -131,21 +110,16 @@ class AdminChapitreController extends AbstractController
                 $numeroteur->reordonnerNumero($chapitre->getId(), $numeroDepart, $chapitre->getNumero(), $fratrieDepart, $fratrieArrivee);
             }
 
-            // EDITION ENTITE
-            // --------------
             $this->getDoctrine()->getManager()->flush();
             $this->addFlash('success', 'Le chapitre a bien été modifié.');
 
             // REDIRECTION
-            // -----------
             if (!empty($request->query->get('redirect')) && $request->query->get('redirect') == 'aventure')
                 return $this->redirectToRoute('aventure_saison', ['id' => $chapitre->getSaisonParent()->getId(),'_fragment' => 'read-head-ch-id' . $chapitre->getId()]);
             
             return $this->redirectToRoute('admin_chapitre');
         }
 
-        // AFFICHAGE FORMULAIRE
-        // --------------------
         return $this->renderForm('admin_chapitre/edit.html.twig', [
             'chapitre' => $chapitre,
             'form' => $form,
@@ -157,33 +131,26 @@ class AdminChapitreController extends AbstractController
      * @Route("/admin/chapitre/{id}/delete", name="admin_chapitre_delete", methods={"GET"})
      * @IsGranted("ROLE_MJ")
      */
-    public function supprimerChapitre(Request $request, Chapitre $chapitre, Numeroteur $numeroteur, FileHandler $fileHandler, ChapitreRepository $chapitreRepository): Response {
+    public function deleteChapitre(Request $request, Chapitre $chapitre, Numeroteur $numeroteur, FileHandler $fileHandler, ChapitreRepository $chapitreRepository): Response {
 
-        $saisonParent = $chapitre->getSaisonParent(); // Stocké pour la redirection
+        $saisonParent = $chapitre->getSaisonParent(); // Saving Parent before deletion to be able to redirect after
 
-        // GESTION FORMULAIRE VALIDE
-        // -------------------------
         if ($this->isCsrfTokenValid('delete' . $chapitre->getId(), $request->query->get('csrf'))) {
 
-            // VERIFICATION ENFANTS
-            // --------------------
+            // CHECKING if child exists
             if (!$chapitre->getEpisodes()->isEmpty()) {
                 $this->addFlash('warning', 'Veuillez supprimer les épisodes enfants au prélable !');
                 return $this->redirectToRoute('admin_chapitre');
             }
 
-            // SUPPRESSION FICHIER IMAGE
-            // -------------------------
+            // FILE IMAGE HANDLING
             $fileHandler->handle(null, $chapitre->getImage(), null, 'chapitres');
 
-            // NUMEROTEUR
-            // ----------
+            // RE-ORDERING
             $fratrieDepartId = $chapitre->getSaisonParent()->getId();
             $fratrieDepart = $chapitreRepository->findBy(['saisonParent' => $fratrieDepartId]);
             $numeroteur->reordonnerNumero($chapitre->getId(), $chapitre->getNumero(), -1, $fratrieDepart, []);
 
-            // SUPPRESSION ENTITE
-            // ------------------
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($chapitre);
             $entityManager->flush();
@@ -193,7 +160,6 @@ class AdminChapitreController extends AbstractController
             $this->addFlash('danger', 'Token de protection invalide !');
 
         // REDIRECTION
-        // -----------
         if (!empty($request->query->get('redirect')) && $request->query->get('redirect') == 'aventure')
             return $this->redirectToRoute('aventure_saison', ['id' => $saisonParent->getId()], Response::HTTP_SEE_OTHER);
         

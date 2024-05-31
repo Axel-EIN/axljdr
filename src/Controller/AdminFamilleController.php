@@ -19,7 +19,7 @@ class AdminFamilleController extends AbstractController
     /**
      * @Route("/admin/famille", name="admin_famille")
      */
-    public function afficherAdminFamilles(FamilleRepository $familleRepository): Response {
+    public function viewAdminFamilles(FamilleRepository $familleRepository): Response {
         $familles = $familleRepository->findBy(array(), array('id' => 'DESC'));
 
         return $this->render('admin_famille/index.html.twig', [
@@ -31,12 +31,11 @@ class AdminFamilleController extends AbstractController
      * @Route("/admin/famille/create", name="admin_famille_create")
      * @IsGranted("ROLE_MJ")
      */
-    public function ajouterFamille(Request $request, EntityManagerInterface $em, ClanRepository $clanRepository, FileHandler $fileHandler) {
+    public function addFamille(Request $request, EntityManagerInterface $em, ClanRepository $clanRepository, FileHandler $fileHandler) {
 
         $famille = new Famille;
 
-        // PRE-REMPLISSAGE DU CHAMP CLAN PAR LE LIEN URL
-        // -------------------------------------
+        // URL PARAM PRE-FILL
         if ( !empty($request->query->get('clanID')) && $request->query->get('clanID') > 0 )
         {
             $clan = $clanRepository->find($request->query->get('clanID'));
@@ -49,6 +48,7 @@ class AdminFamilleController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
 
+            // Emblem Image Handling
             $nouveauMon = $form->get('mon')->getData();
             if (!empty($nouveauMon)) {
                 $prefix = 'famille-' . $famille->getNom() . '-mon';
@@ -57,33 +57,33 @@ class AdminFamilleController extends AbstractController
 
             $em->persist($famille);
             $em->flush();
-
             $this->addFlash('success', 'Le Famille a bien été ajoutée.');
 
             // REDIRECTION
             if (!empty($request->query->get('redirect')) && $request->query->get('redirect') == 'famille')
                 return $this->redirectToRoute('empire_clan', ['id' => $famille->getClan()->getId()]);
+            
             return $this->redirectToRoute('admin_famille');
-        } else {
-            return $this->render('admin_famille/create.html.twig', [
-                'type' => 'Créer',
-                'form' => $form->createView()
-            ]);
         }
+        
+        return $this->render('admin_famille/create.html.twig', [
+            'type' => 'Créer',
+            'form' => $form->createView()
+        ]);
     }
 
     /**
      * @Route("/admin/famille/{id}/edit", name="admin_famille_edit")
      * @IsGranted("ROLE_MJ")
      */
-    public function editerFamille(Request $request, Famille $famille, FileHandler $fileHandler): Response {
+    public function editFamille(Request $request, Famille $famille, FileHandler $fileHandler): Response {
 
         $form = $this->createForm(AdminFamilleType::class, $famille);
-        
         $form->handleRequest($request);
 
         if($form->isSubmitted() && $form->isValid()) {
 
+            // Emblem Image Handling
             $nouveauMon = $form->get('mon')->getData();
             if (!empty($nouveauMon)) {
                 $prefix = 'famille-' . $famille->getNom() . '-image';
@@ -96,6 +96,7 @@ class AdminFamilleController extends AbstractController
             // REDIRECTION
             if (!empty($request->query->get('redirect')) && $request->query->get('redirect') == 'clan')
                 return $this->redirectToRoute('empire_clan', ['id' => $famille->getClan()->getId()]);
+
             return $this->redirectToRoute('admin_famille');
         }
 
@@ -111,17 +112,17 @@ class AdminFamilleController extends AbstractController
      * @Route("/admin/famille/{id}/delete", name="admin_famille_delete", methods={"GET"})
      * @IsGranted("ROLE_MJ")
      */
-    public function supprimerFamille(Request $request, Famille $famille, FileHandler $fileHandler): Response {
+    public function deleteFamille(Request $request, Famille $famille, FileHandler $fileHandler): Response {
 
         if ($this->isCsrfTokenValid('delete' . $famille->getId(), $request->query->get('csrf'))) {
 
             $entityManager = $this->getDoctrine()->getManager();
 
+            // Emblem Image Handling
             $fileHandler->handle(null, $famille->getMon(), null, 'familles');
 
             $entityManager->remove($famille);
             $entityManager->flush();
-
             $this->addFlash('success', 'La Famille a bien été supprimée.');
         }
 

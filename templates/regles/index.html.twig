@@ -3,26 +3,26 @@
 
 {% block section_content1 %}
 <div class="w-100 row justify-content-center">
-            {% for une_classe in classes %}
-                <!--- UNE CLASSE -->
-                <article class="col-xl-2 col-lg-3 col-md-4 col-sm-6 py-3 text-center hover-zoom">
-                    <a href="{{ path('regles_classe', {id: une_classe.id} ) }}">
-                        <img class="img-160" src="{{ asset(une_classe.icone) }}" alt="Icône de la classe" title="{{une_classe.nom}}" />
-                    </a>
-                    <br/>
-                    <h3 class="text-center my-3">
-                        <strong><a href="{{ path('regles_classe', {id: une_classe.id} ) }}">{{ une_classe.nom }}</a></strong>
-                    </h3>
-                </article>
-            {% endfor %}
-            </div>
+    {% for une_classe in classes %}
+        <!--- UNE CLASSE -->
+        <article class="col-xl-2 col-lg-3 col-md-4 col-sm-6 py-3 text-center hover-zoom">
+            <a href="{{ path('regles_classe', {id: une_classe.id} ) }}">
+                <img class="img-160 hover-{{une_classe.color}}" src="{{ asset(une_classe.icone) }}" alt="Icône de la classe" title="{{une_classe.nom}}" />
+            </a>
+            <br/>
+            <h3 class="text-center my-3">
+                <strong><a href="{{ path('regles_classe', {id: une_classe.id} ) }}">{{ une_classe.nom }}</a></strong>
+            </h3>
+        </article>
+    {% endfor %}
+</div>
 {% endblock %}
 
 {% block section_content2 %}
     {% set col_xl, col_lg, col_md, col_sm = 3, 4, 6, 12 %}
     {% for un_element in ecoles %}
         {{ include('/parts/element-vignette.html.twig', {un_element}) }}
-            {% else %}
-                <small class="text-muted">Désolé ! Il n'y a pas encore d'école disponible !</a>
-            {% endfor %}
+    {% else %}
+        <small class="text-muted">Désolé ! Il n'y a pas encore d'école disponible !</a>
+    {% endfor %}
 {% endblock %}

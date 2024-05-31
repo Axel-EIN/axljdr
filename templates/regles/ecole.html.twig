@@ -18,10 +18,10 @@
 
             <h1 class="mt-5 relative">
                 L'École <strong>{{ ecole.nom }}</strong>
-                <!-- BTN - MJ - EDITER -->
+                <!-- MJ - ICON BTN - Edit -->
                 {% if app.user and is_granted("ROLE_MJ") %}
                 <div class="btn-icons-medium-right-container">
-                    <a class="text-danger mx-2" href="{{ path('admin_ecole_edit', {id:ecole.id}) }}?redirect=ecole"><i class="fas fa-edit" title="Modifier" ></i></a>
+                    <a class="text-danger mx-2" href="{{ path('admin_ecole_edit', {id:ecole.id}) }}?redirect=ecole"><i class="fas fa-edit" alt="Icône Modifier" title="Modifier" ></i></a>
                 </div>
                 {% endif %}
             </h1>

@@ -19,7 +19,7 @@ class AdminRuleController extends AbstractController
     /**
      * @Route("/admin/rule", name="admin_rule")
      */
-    public function afficherAdminRules(RuleRepository $ruleRepository): Response
+    public function viewAdminRules(RuleRepository $ruleRepository): Response
     {
         $rules = $ruleRepository->findAll();
 
@@ -32,7 +32,7 @@ class AdminRuleController extends AbstractController
      * @Route("/admin/rule/create", name="admin_rule_create")
      * @IsGranted("ROLE_MJ")
      */
-    public function ajouterRule(Request $request, EntityManagerInterface $em, FileHandler $fileHandler, RuleRepository $ruleRepository, Numeroteur $numeroteur): Response
+    public function addRule(Request $request, EntityManagerInterface $em, FileHandler $fileHandler, RuleRepository $ruleRepository, Numeroteur $numeroteur): Response
     {
         $rule = new Rule;
         $form = $this->createForm(AdminRuleType::class, $rule);
@@ -40,14 +40,14 @@ class AdminRuleController extends AbstractController
 
         if ( $form->isSubmitted() && $form->isValid() ) {
 
-            // IMAGE
+            // IMAGE file handling
             $image = $form->get('image')->getData();
             if (!empty($image)) {
                 $prefix = 'rule-' . $rule->getNom() . '-image';
                 $rule->setImage($fileHandler->handle($image, null, $prefix, 'rules'));
             }
 
-            // PDF
+            // PDF file handling
             $pdf = $form->get('pdf')->getData();
             if (!empty($pdf)) {
                 $prefix = 'rule-' . $rule->getNom() . '-pdf';
@@ -56,11 +56,9 @@ class AdminRuleController extends AbstractController
 
             $em->persist($rule);
             $em->flush();
-
             $this->addFlash('success', 'La Règle a bien été ajoutée.');
 
-            // NUMEROTEUR
-            // ----------
+            // RE-ORDERING
             $fratrieArrivee = $ruleRepository->findBy(['base' => $rule->getBase()]);
             $numeroteur->reordonnerNumero($rule->getId(), -1, $rule->getNumero(), [], $fratrieArrivee);
 
@@ -82,9 +80,9 @@ class AdminRuleController extends AbstractController
      * @Route("/admin/rule/{id}/edit", name="admin_rule_edit")
      * @IsGranted("ROLE_MJ")
      */
-    public function modifierRule(Request $request, Rule $rule, FileHandler $fileHandler, RuleRepository $ruleRepository, Numeroteur $numeroteur): Response
+    public function editRule(Request $request, Rule $rule, FileHandler $fileHandler, RuleRepository $ruleRepository, Numeroteur $numeroteur): Response
     {
-        // Stockage du numéro et de l'ID de l'episode avant édition
+        // Saving numbler and ID for re-ordering later
         $numeroDepart = $rule->getNumero();
         $fratrieDepartId = $rule->getBase();
 
@@ -93,23 +91,21 @@ class AdminRuleController extends AbstractController
 
         if ( $form->isSubmitted() && $form->isValid() ) {
 
-            // IMAGE
+            // IMAGE File Handling
             $nouvelleImage = $form->get('image')->getData();
             if (!empty($nouvelleImage)) {
                 $prefix = 'rule-' . $rule->getNom() . '-image';
                 $rule->setImage($fileHandler->handle($nouvelleImage, $rule->getImage(), $prefix, 'rules'));
             }
 
-            // PDF
+            // PDF File Handling
             $nouveauPDF = $form->get('pdf')->getData();
             if (!empty($nouveauPDF)) {
                 $prefix = 'rule-' . $rule->getNom() . '-pdf';
                 $rule->setPdf($fileHandler->handle($nouveauPDF, $rule->getPdf(), $prefix, 'rules-pdfs'));
             }
 
-            // NUMEROTEUR
-            // ----------
-            // Si numero change ou parent change
+            // RE-ORDERING : if number has changed or if parent has changed
             if ($numeroDepart != $rule->getNumero() || $fratrieDepartId != $rule->getBase())
             {
                 $fratrieDepart = $ruleRepository->findBy(['base' => $fratrieDepartId]);
@@ -138,22 +134,21 @@ class AdminRuleController extends AbstractController
      * @Route("/admin/rule/{id}/delete", name="admin_rule_delete")
      * @IsGranted("ROLE_MJ")
      */
-    public function supprimerRule(Request $request, Rule $rule, FileHandler $fileHandler, EntityManagerInterface $em, RuleRepository $ruleRepository, Numeroteur $numeroteur): Response
+    public function deleteRule(Request $request, Rule $rule, FileHandler $fileHandler, EntityManagerInterface $em, RuleRepository $ruleRepository, Numeroteur $numeroteur): Response
     {
         if ( $this->isCsrfTokenValid('delete' . $rule->getId(), $request->query->get('csrf')))
         {
+            // File Image and PDF handling
             $fileHandler->handle(null, $rule->getImage(), null, 'rules');
             $fileHandler->handle(null, $rule->getPdf(), null, 'rules-pdfs');
 
-            // NUMEROTEUR
-            // ----------
+            // RE-ORDERING
             $fratrieDepartId = $rule->getBase();
             $fratrieDepart = $ruleRepository->findBy(['base' => $fratrieDepartId]);
             $numeroteur->reordonnerNumero($rule->getId(), $rule->getNumero(), -1, $fratrieDepart, []);
 
             $em->remove($rule);
             $em->flush();
-
             $this->addFlash('success', 'La Règle a bien été supprimée.');    
         }
 

@@ -24,14 +24,16 @@
 
         {% for un_element in elements %}
 
-            {% if un_element.image is defined %}
+            {% if un_element.image is defined and un_element.image is not empty %}
                 {% set image = un_element.image %}
-            {% elseif un_element.mon is defined %}
+            {% elseif un_element.mon is defined and un_element.mon is not empty %}
                 {% set image = un_element.mon %}
-            {% elseif un_element.icone is defined %}
+            {% elseif un_element.icone is defined and un_element.icone is not empty %}
                 {% set image = un_element.icone %}
-            {% elseif un_element.personnage is defined %}
+            {% elseif un_element.personnage is defined and un_element.personnage is not empty %}
                 {% set image = un_element.personnage.icone %}
+            {% elseif un_element.pdf is defined and un_element.pdf is not empty %}
+                {% set image = 'assets/img/placeholders/na_rule.jpg' %}
             {% else %}
                 {% set image = "pas d'image" %}
             {% endif %}

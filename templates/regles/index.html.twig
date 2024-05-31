@@ -14,41 +14,15 @@
                         <strong><a href="{{ path('regles_classe', {id: une_classe.id} ) }}">{{ une_classe.nom }}</a></strong>
                     </h3>
                 </article>
-            {% else %}
-                <small class="text-muted">Désolé ! Il n'y a pas encore de classe disponible !</a>
             {% endfor %}
             </div>
-        </section>
+{% endblock %}
 
-        <!-- SECTION LES ECOLES -->
-        {% set element = 'Ecole' %}
-        <section id="ecoles">
-            <h2 class="display-4 mt-5 relative">Les <strong>Écoles</Strong>
-                {{ include('/parts/btn-ajouter-element.html.twig', {element}) }}
-            </h2>
-            <hr>
-            <div class="row mt-3">
-            {% for une_ecole in ecoles %}
-
-                <!-- UNE ECOLE -->
-                <article class="col-lg-3 col-md-4 col-sm-6 py-3 text-center hover-zoom">
-                    <div class="inline-block ">
-                        <a href="{{ path('regles_ecole', {id: une_ecole.id} ) }}">
-                            <img class="img-fluid relative" src="{{ asset(une_ecole.image) }}" alt="Image de l'école" />
-                        </a>
-                        <br/>
-                        <h5 class="text-center my-3">
-                            <strong><a href="{{ path('regles_ecole', {id: une_ecole.id} ) }}">{{ une_ecole.nom }}</a></strong>
-                        </h5>
-                    </div>
-                </article>
-
+{% block section_content2 %}
+    {% set col_xl, col_lg, col_md, col_sm = 3, 4, 6, 12 %}
+    {% for un_element in ecoles %}
+        {{ include('/parts/element-vignette.html.twig', {un_element}) }}
             {% else %}
                 <small class="text-muted">Désolé ! Il n'y a pas encore d'école disponible !</a>
             {% endfor %}
-            </div>
-        </section>
-
-    </div>
-</main>
 {% endblock %}

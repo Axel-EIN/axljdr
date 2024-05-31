@@ -147,34 +147,27 @@
 
 /* ----- IMAGE RATIO ----- */
 
-.ratio-43 {
-    position: relative;
-    width: 100%;
-    height: 0;
-    padding-top: calc(100% * (3 / 4));
-}
-
-.ratio-169 {
-    position: relative;
-    width: 100%;
-    height: 0;
-    padding-top: calc(100% * (9 / 16));
-}
-
+.ratio-43,
+.ratio-169,
 .ratio-1610 {
     position: relative;
     width: 100%;
     height: 0;
-    padding-top: calc(100% * (10 / 16));
+
+    .ratio-cropped {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        object-fit: cover;
+        object-position: center;
+    }
 }
 
-.ratio-cropped {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    top: 0;
-    object-fit:cover
-}
+.ratio-43 { padding-top: calc(100% * (3 / 4)); }
+.ratio-169 { padding-top: calc(100% * (9 / 16)); }
+.ratio-1610 { padding-top: calc(100% * (10 / 16)); }
+
 
 /* TEXT ZONE BLURRED */
 

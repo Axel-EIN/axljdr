@@ -1,0 +1,21 @@
+<!-- UN {{element}} -->
+{% if un_element.nom is defined %}
+    {% set nom, btn = un_element.nom, 'Voir' %}
+{% else %}
+    {% set nom, btn = un_element.titre, 'Lire' %}
+{% endif %}
+{% set path = category ~ '_' ~ element %}
+<article class="col-xl-2 col-lg-3 col-md-4 col-sm-6 py-3 text-center {% if un_element.locked|default(0) == 1 %}translucide{% else %}hover-zoom-X2{% endif %}">
+    <div class="relative">
+    {% if un_element.locked|default(0) == 1 %}
+        <img class="icon-lock grayscale fa-beat-fade" src="{{asset('assets/img/icons/locked.png')}}" alt="Icône cadena" title="À débloquer !" />
+        <img class="img-fluid grayscale" src="{{ asset(un_element.image) }}" alt="Image {{element}}" title="{{element}} à débloquer !"/>
+        <h5 class="text-center mt-1"><strong>???</strong></h5>
+    {% else %}
+        <a href="{{ path(path, {id: un_element.id} ) }}">
+            <img class="img-fluid" src="{{ asset(un_element.image) }}" alt="Image {{element}}" title="{{btn}} {{nom}}" />
+        </a>
+        <h5 class="text-center mt-1"><strong><a href="{{ path(path, {id: un_element.id} ) }}">{{nom}}</a></strong></h5>
+    {% endif %}
+    </div>
+</article>

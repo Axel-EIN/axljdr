@@ -21,11 +21,8 @@
             <h2 class="display-4 relative">Les <strong>Archives</strong>
                 {{ include('/parts/btn-ajouter-element.html.twig', {element}) }}
             </h2>
-
             <hr>
-            
-            <br/>
-            <div class="row">
+            <div class="row mt-3">
             {% for une_archive in archives %}
                 <article class="col-xl-2 col-lg-3 col-md-4 col-sm-6 py-3 text-center">
                     {% if une_archive.locked == 1 %}
@@ -43,6 +40,7 @@
                     </h3>
                 {% endif %}
                 </article>
+
             {% endfor %}
             </div>
         </section>
@@ -54,14 +52,14 @@
                 {{ include('/parts/btn-ajouter-element.html.twig', {element}) }}
             </h2>
             <hr>
-            <br/>
-            <div class="row">
+            <div class="row mt-3">
 {% for un_clan in clans %}
                 <article class="col-xl-2 col-lg-3 col-md-4 col-sm-6 py-3 text-center">
                     <a href="{{ path('empire_clan', {id: un_clan.id} ) }}"><img class="img-160" src="{{ asset(un_clan.mon) }}" alt="Mon du clan" /></a>
                     <br/>
                     <h3 class="text-center my-3"><strong><a href="{{ path('empire_clan', {id: un_clan.id} ) }}">{{ un_clan.nom }}</a></strong></h3>
                 </article>
+
 {% endfor %}
             </div>
         </section>
@@ -73,8 +71,7 @@
                 {{ include('/parts/btn-ajouter-element.html.twig', {element}) }}
             </h2>
             <hr>
-            <br/>
-            <div class="row">
+            <div class="row mt-3">
 {% for un_lieu in lieux %}
                 <article class="col-xl-2 col-lg-3 col-md-4 col-sm-6 py-3 text-center">
                     <a href="{{ path('empire_lieu', {id: un_lieu.id} ) }}">
@@ -87,6 +84,7 @@
                         </strong>
                     </h3>
                 </article>
+
 {% endfor %}
             </div>
         </section>

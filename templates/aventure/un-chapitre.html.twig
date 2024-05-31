@@ -24,7 +24,7 @@
                 <p class="quote">{{ un_chapitre.citation|nl2br }}</p>
                 {% if un_chapitre.episodes is not empty %}
                     <div class="mx-auto mb-2">
-                        <a class="btn-style btn-large" href="#read-head-ch-id{{ un_chapitre.numero }}" data-toggle="collapse"
+                        <a class="btn-primary-style btn-large" href="#read-head-ch-id{{ un_chapitre.numero }}" data-toggle="collapse"
                            data-target="#ch{{ un_chapitre.numero }}-episodes" aria-controls="ch{{ un_chapitre.numero }}-episodes"
                            aria-expanded="true" aria-label="Toggle Chapitre {{ un_chapitre.numero }} Episodes" alt="Bouton Voir Les Sessions" title="Voir les Sessions">
                             Voir les Sessions
@@ -65,7 +65,7 @@
                                     <p class="session-card-text">{{ un_episode.resume }}</p>
                                 </div>
                                 <div class="text-center">
-                                    <a class="btn-style btn-medium" href="{{ path('aventure_episode', {id:un_episode.id} ) }}" title="Lire la Session" >
+                                    <a class="btn-primary-style btn-medium" href="{{ path('aventure_episode', {id:un_episode.id} ) }}" title="Lire la Session" >
                                         <i class="fab fa-readme fa-bounce" alt="Icône Lire"></i>&nbsp;&nbsp;Lire
                                     </a>
                                 </div>

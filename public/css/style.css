@@ -112,10 +112,6 @@ h5 a:hover, h4 a:hover, h3 a:hover, h2 a:hover, h1 a:hover { text-decoration: no
 
 .clip-text-main {
         position: relative;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        background-color: #ff0000;
 }
       
 .clip-text {
@@ -128,7 +124,9 @@ h5 a:hover, h4 a:hover, h3 a:hover, h2 a:hover, h1 a:hover { text-decoration: no
                 color: transparent;
                 background-clip: text;
                 -webkit-background-clip: text;
-                background-image: url(https://scitechdaily.com/images/Fire-Flame.gif);
+                /* background-image: url(https://scitechdaily.com/images/Fire-Flame.gif); */
+                background-image: url(https://media.tenor.com/8psp5NTb-yMAAAAC/fire-burning.gif);
+                /* background-image: url(https://www.gifcen.com/wp-content/uploads/2021/10/galaxy-gif-15.gif); */
                 background-size: cover;
                 background-position: center;
         }

@@ -42,15 +42,15 @@
                         </div>
                         <div class="ml-3 bg-secondary rounded-8 border border-secondary">
 {% if app.user.avatar is not empty %}
-                                <img class="img-96 rounded-8" src="{{ asset(app.user.avatar) }}" alt="Avatar de l'utilisateur" title="Avatar de l'utilisateur" />
+                                <img class="img-96 rounded-8" src="{{ asset(app.user.avatar) }}" alt="Avatar de l'utilisateur" title="{{app.user.pseudo}}" />
 {% else %}
-                                <img class="img-96 rounded-8" src="https://i.pravatar.cc/300" alt="Avatar de l'utilisateur" title="Avatar de l'utilisateur" />
+                                <img class="img-96 rounded-8" src="https://i.pravatar.cc/300" alt="Avatar de l'utilisateur" title="{{app.user.pseudo}}" />
 {% endif %}
                         </div>
                     </div>
 {% else %}
                     <div class="text-right">
-                        <button type="button" class="btn-primary-style btn-medium nav-item" data-toggle="modal" data-target="#connexion" alt="Boutton se connecter" title="Se connecter">Se connecter</button><br/>
+                        <button type="button" class="btn-primary-style btn-medium nav-item" data-toggle="modal" data-target="#connexion" alt="Boutton se connecter">Se connecter</button><br/>
                         <small class="text-muted">Pas encore de compte ?</small><br/>
                         <a class="link-gray" href="{{ path('app_register') }}"><i class="fas fa-user-plus couleur-primaire"></i>&nbsp;&nbsp;Enregistrez-vous !</a>
                     </div>

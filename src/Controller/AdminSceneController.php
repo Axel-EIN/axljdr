@@ -5,7 +5,7 @@ namespace App\Controller;
 use App\Entity\Scene;
 use App\Service\Uploader;
 use App\Service\Numeroteur;
-use App\Service\BaliseurPersonnage;
+use App\Service\Baliseur;
 use App\Service\ParticipationHandler;
 use App\Form\AdminSceneType;
 use App\Entity\Participation;
@@ -40,7 +40,7 @@ class AdminSceneController extends AbstractController
      * @Route("/admin/scene/create", name="admin_scene_create")
      * @IsGranted("ROLE_MJ")
      */
-    public function creerScene(Request $request, EntityManagerInterface $em, Uploader $uploadeur, BaliseurPersonnage $baliseur,
+    public function creerScene(Request $request, EntityManagerInterface $em, Uploader $uploadeur, Baliseur $baliseur,
                             ParticipationHandler $participationHandler, PersonnageRepository $personnageRepository,
                             EpisodeRepository $episodeRepository, Numeroteur $numeroteur, SceneRepository $sceneRepository) {
 
@@ -87,7 +87,7 @@ class AdminSceneController extends AbstractController
             $participationHandler->ajouterParticipations($participants_a_ajoutes, $scene);
 
             // BALISAGE : capture les mots entre [], vérifie si un prénom personnage correspondant existe, remplace par un lien personnage HTML
-            $scene->setTexte($baliseur->baliserPersonnage($scene->getTexte()));
+            $scene->setTexte($baliseur->baliserPersonnages($scene->getTexte()));
             
             // CREATION ENTITE
             $em->persist($scene);
@@ -119,7 +119,7 @@ class AdminSceneController extends AbstractController
      * @Route("/admin/scene/{id}/edit", name="admin_scene_edit")
      * @IsGranted("ROLE_MJ")
      */
-    public function editerScene(Request $request, Scene $scene, Uploader $uploadeur, Numeroteur $numeroteur, BaliseurPersonnage $baliseur,
+    public function editerScene(Request $request, Scene $scene, Uploader $uploadeur, Numeroteur $numeroteur, Baliseur $baliseur,
                                 ParticipationHandler $participationHandler, PersonnageRepository $personnageRepository,
                                 ParticipationRepository $participationRepository, SceneRepository $sceneRepository): Response {
 
@@ -133,8 +133,11 @@ class AdminSceneController extends AbstractController
         $participations_pjs = $participationRepository->findBy(array('scene' => $scene, 'estPj' => true));
         $participations_pnjs = $participationRepository->findBy(array('scene' => $scene, 'estPj' => false));
 
-        // DEBALISEUR : dans le texte, capture les prénoms entre balises <a><img>, vérifie si le personnage existe, remplace les balises par des crochets []
-        $scene->setTexte($baliseur->debaliserPersonnage($scene->getTexte()));
+        // DEBALISEUR des PERSONNAGES : dans le texte, capture les prénoms entre balises <a><img>, vérifie si le personnage existe, remplace les balises par des crochets []
+        $scene->setTexte($baliseur->debaliserPersonnages($scene->getTexte()));
+
+        // DEBALISEUR des LIEUX {}
+        $scene->setTexte($baliseur->debaliserLieux($scene->getTexte()));
 
         // FORM VIEW
         $form = $this->createForm(AdminSceneType::class, $scene);
@@ -220,7 +223,10 @@ class AdminSceneController extends AbstractController
             }
 
             // BALISAGE : capture les mots entre [], vérifie si un prénom personnage correspondant existe, remplace par un lien personnage HTML
-            $scene->setTexte($baliseur->baliserPersonnage($scene->getTexte()));
+            $scene->setTexte($baliseur->baliserPersonnages($scene->getTexte()));
+
+            // BALISAGE des LIEUX : capture les mots entre {}, vérifie si un nom de lieu correspondant existe, remplace par un lien vers la fiche du lieu en HTML
+            $scene->setTexte($baliseur->baliserLieux($scene->getTexte()));
 
             // NUMEROTAGE : augmente ou réduit le numéro de la scène si une scne a été supprimée ou intercalée
             if ($numeroDepart != $scene->getNumero() || $fratrieDepartId != $scene->getEpisodeParent()->getId())

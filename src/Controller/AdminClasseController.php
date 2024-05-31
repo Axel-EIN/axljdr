@@ -18,7 +18,7 @@ class AdminClasseController extends AbstractController
     /**
      * @Route("/admin/classe", name="admin_classe")
      */
-    public function afficherAdminClasses(ClasseRepository $classeRepository): Response
+    public function viewAdminClasses(ClasseRepository $classeRepository): Response
     {
         $classes = $classeRepository->findBy(array(), array('id' => 'DESC'));
         return $this->render('admin_classe/index.html.twig', [
@@ -30,7 +30,7 @@ class AdminClasseController extends AbstractController
      * @Route("/admin/classe/create", name="admin_classe_create")
      * @IsGranted("ROLE_MJ")
      */
-    public function ajouterClasse(Request $request, EntityManagerInterface $em, FileHandler $fileHandler) {
+    public function addClasse(Request $request, EntityManagerInterface $em, FileHandler $fileHandler) {
 
         $classe = new Classe;
         $form = $this->createForm(AdminClasseType::class, $classe);
@@ -38,12 +38,14 @@ class AdminClasseController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
 
+            // Icon Handling
             $nouvelleIcone = $form->get('icone')->getData();
             if (!empty($nouvelleIcone)) {
                 $prefix = 'classe-' . $classe->getNom() . '-icon';
                 $classe->setIcone($fileHandler->handle($nouvelleIcone, null, $prefix, 'classes'));
             } else { $classe->setIcone('assets/img/placeholders/na_class.png'); }
 
+            // Image Handling
             $nouvelleImage = $form->get('image')->getData();
             if (!empty($nouvelleImage)) {
                 $prefix = 'classe-' . $classe->getNom() . '-image';
@@ -52,36 +54,36 @@ class AdminClasseController extends AbstractController
 
             $em->persist($classe);
             $em->flush();
-
             $this->addFlash('success', 'La classe a bien été ajoutée.');
 
             return $this->redirectToRoute('admin_classe');
-        } else {
-            return $this->render('admin_classe/create.html.twig', [
-                'type' => 'Créer',
-                'form' => $form->createView()
-            ]);
         }
+        
+        return $this->render('admin_classe/create.html.twig', [
+            'type' => 'Créer',
+            'form' => $form->createView()
+        ]);
     }
 
     /**
      * @Route("/admin/classe/{id}/edit", name="admin_classe_edit")
      * @IsGranted("ROLE_MJ")
      */
-    public function editerClasse(Request $request, Classe $classe, FileHandler $fileHandler): Response {
+    public function editClasse(Request $request, Classe $classe, FileHandler $fileHandler): Response {
 
         $form = $this->createForm(AdminClasseType::class, $classe);
-        
         $form->handleRequest($request);
 
         if($form->isSubmitted() && $form->isValid()) {
 
+            // Icon Handling
             $nouvelleIcone = $form->get('icone')->getData();
             if (!empty($nouvelleIcone)) {
                 $prefix = 'classe-' . $classe->getNom() . '-icon';
                 $classe->setIcone($fileHandler->handle($nouvelleIcone, $classe->getIcone(), $prefix, 'classes'));
             }
 
+            // Image Handling
             $nouvelleImage = $form->get('image')->getData();
             if (!empty($nouvelleImage)) {
                 $prefix = 'classe-' . $classe->getNom() . '-image';
@@ -92,9 +94,9 @@ class AdminClasseController extends AbstractController
             $this->addFlash('success', 'La classe a bien été modifiée.');
 
             // REDIRECTION
-            // -----------
             if (!empty($request->query->get('redirect')) && $request->query->get('redirect') == 'classe')
                 return $this->redirectToRoute('regles_classe', ['id' => $classe->getId()]);
+
             return $this->redirectToRoute('admin_classe');
         }
 
@@ -110,7 +112,7 @@ class AdminClasseController extends AbstractController
      * @Route("/admin/classe/{id}/delete", name="admin_classe_delete", methods={"GET"})
      * @IsGranted("ROLE_MJ")
      */
-    public function supprimerClasse(Request $request, Classe $classe, FileHandler $fileHandler): Response {
+    public function deleteClasse(Request $request, Classe $classe, FileHandler $fileHandler): Response {
 
         if ($this->isCsrfTokenValid('delete' . $classe->getId(), $request->query->get('csrf'))) {
 
@@ -121,12 +123,12 @@ class AdminClasseController extends AbstractController
 
             $entityManager = $this->getDoctrine()->getManager();
 
+            // Files Handling
             $fileHandler->handle(null, $classe->getIcone(), null, 'classes');
             $fileHandler->handle(null, $classe->getImage(), null, 'classes');
 
             $entityManager->remove($classe);
             $entityManager->flush();
-
             $this->addFlash('success', 'La classe a bien été supprimée.');
         }
 

@@ -37,10 +37,10 @@
                         {% endfor %}
                     {% endif %}
                 {% endif %}
-                <button class="btn mt-2" style="background: #e9ecef;" id="add-participants">Ajouter un PJ</button>
+                <button class="btn btn-medium btn-secondary-style mt-3" id="add-participants">Ajouter un PJ</button>
                 {% if type != 'Créer' %}
                     {% if participations_pjs is not empty %}
-                        <button class="remove-participants btn mt-2 ml-2">Retirer</button>
+                        <br/><button class="remove-participants btn mt-1 btn-tertiary-style">Retirer</button>
                     {% endif %}
                 {% endif %}
             </div>
@@ -68,10 +68,10 @@
                         {% endfor %}
                     {% endif %}
                 {% endif %}
-                <button class="btn mt-2" style="background: #e9ecef;" id="add-participants_pnjs">Ajouter un PNJ</button>
+                <button class="btn btn-medium btn-secondary-style mt-3" id="add-participants_pnjs">Ajouter un PNJ</button>
                 {% if type != 'Créer' %}
                     {% if participations_pnjs is not empty %}
-                        <button class="remove-participants_pnjs btn mt-2 ml-2">Retirer</button>
+                        <br/><button class="remove-participants_pnjs btn mt-1 btn-tertiary-style">Retirer</button>
                     {% endif %}
                 {% endif %}
             </div>
@@ -80,7 +80,7 @@
 
             {{ form_widget(form) }}
             <div class="text-center">
-                <button class="btn btn-primary">{{ button_label|default('Save') }}</button>
+                <button class="btn btn-large btn-primary-style">{{ button_label|default('Save') }}</button>
             </div>
     {{ form_end(form) }}
 </main>

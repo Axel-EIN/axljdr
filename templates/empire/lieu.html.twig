@@ -1,12 +1,11 @@
 {% extends 'base.html.twig' %}
-
 {% block title %}Lieu {{ parent() }}{% endblock %}
-
 {% block body %}
 
     <main class="container-fluid bg-light">
-        <section class="container">
+        <section class="container pb-5">
 
+            <!-- FIL D'ARIANE -->
             <nav class="pt-3">
                 <span class="text-muted">
                     <a href="{{ path('aventure') }}"><i class="fas fa-home"></i></a>
@@ -16,15 +15,17 @@
                 </span>
             </nav>
 
-            <h1 class="pt-5">Lieu <strong>{{ lieu.nom }}</strong></h1>
-            <hr>
-
+            <!-- TITRE -->
+            <h1 class="pt-5 relative">
+                Lieu <strong>{{ lieu.nom }}</strong>
+            <!-- CONTENU -->
             <article class="row">
-
+                <!-- IMAGE -->
                 <div class="col-12 text-center">
                     <img class="img-fluid" src="{{ asset(lieu.image) }}" alt="Image du Lieu" />
                 </div>
                 
+                <!-- CARD CHAMPS 1 -->
                 <div class="col-12">
                     <div class="card">
                         <div class="card-body">
@@ -43,6 +44,7 @@
                     </div>
                 </div>
 
+                <!-- CARD CHAMPS 2 -->
                 <div class="col-12 my-5">
                     <h2>Localisation</h2>
                     <hr>

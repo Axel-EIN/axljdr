@@ -20,7 +20,7 @@ class AdminUtilisateurController extends AbstractController
      * @Route("/admin/utilisateur", name="admin_utilisateur")
      * @IsGranted("ROLE_ADMIN")
      */
-    public function afficherUtilisateurs(UtilisateurRepository $utilisateurRepository): Response
+    public function viewUtilisateurs(UtilisateurRepository $utilisateurRepository): Response
     {
         $utilisateurs = $utilisateurRepository->findBy(array(), array('id' => 'ASC'));
 
@@ -34,7 +34,7 @@ class AdminUtilisateurController extends AbstractController
      * @Route("/admin/utilisateur/create", name="admin_utilisateur_create")
      * @IsGranted("ROLE_ADMIN")
      */
-    public function ajouterUtilisateur(Request $request, EntityManagerInterface $em, FileHandler $fileHandler, UserPasswordHasherInterface $userPasswordHasherInterface) {
+    public function addUtilisateur(Request $request, EntityManagerInterface $em, FileHandler $fileHandler, UserPasswordHasherInterface $userPasswordHasherInterface) {
 
         $utilisateur = new Utilisateur;
         $form = $this->createForm(AdminUtilisateurType::class, $utilisateur);
@@ -42,6 +42,7 @@ class AdminUtilisateurController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
 
+            // Password Handling
             $utilisateur->setPassword(
                 $userPasswordHasherInterface->hashPassword(
                     $utilisateur,
@@ -49,42 +50,40 @@ class AdminUtilisateurController extends AbstractController
                 )
             );
 
+            // File Image Avatar Handling
             $nouvelleAvatar = $form->get('avatar')->getData();
             if (!empty($nouvelleAvatar)) {
                 $prefix = 'avatar-' . $utilisateur->getPseudo();
                 $utilisateur->setAvatar($fileHandler->handle($nouvelleAvatar, null, $prefix, 'avatars'));
-            } else { $utilisateur->setAvatar('assets/img/placeholders/na_mon.png'); }
+            }
 
             $em->persist($utilisateur);
             $em->flush();
-
             $this->addFlash('success', 'L\'utilisateur a bien été crée.');
 
             return $this->redirectToRoute('admin_utilisateur');
-        } else {
-            return $this->render('admin_utilisateur/create.html.twig', [
-                'type' => 'Créer',
-                'form' => $form->createView()
-            ]);
         }
+        
+        return $this->render('admin_utilisateur/create.html.twig', [
+            'type' => 'Créer',
+            'form' => $form->createView()
+        ]);
     }
 
     /**
      * @Route("/admin/utilisateur/{id}/edit", name="admin_utilisateur_edit")
      * @IsGranted("ROLE_ADMIN")
      */
-    public function editerUtilisateur(Request $request, Utilisateur $utilisateur, FileHandler $fileHandler, UserPasswordHasherInterface $userPasswordHasherInterface): Response {
+    public function editUtilisateur(Request $request, Utilisateur $utilisateur, FileHandler $fileHandler, UserPasswordHasherInterface $userPasswordHasherInterface): Response {
 
         $ancien_mdp = $utilisateur->getPassword();
-
         $utilisateur->setPassword('******');
-
         $form = $this->createForm(AdminUtilisateurType::class, $utilisateur);
-        
         $form->handleRequest($request);
 
         if($form->isSubmitted() && $form->isValid()) {
 
+            // Password Handling
             if ($form->get('password')->getData() != '******') {
                 $utilisateur->setPassword(
                     $userPasswordHasherInterface->hashPassword(
@@ -96,6 +95,7 @@ class AdminUtilisateurController extends AbstractController
                 $utilisateur->setPassword($ancien_mdp);
             }
 
+            // File Image Avatar Handling
             $nouvelleAvatar = $form->get('avatar')->getData();
             if (!empty($nouvelleAvatar)) {
                 $prefix = 'avatar-' . $utilisateur->getPseudo();
@@ -104,7 +104,6 @@ class AdminUtilisateurController extends AbstractController
 
             $this->getDoctrine()->getManager()->flush();
             $this->addFlash('success', 'L\'utilisateur a bien été modifié.');
-
             return $this->redirectToRoute('admin_utilisateur');
         }
 
@@ -119,20 +118,19 @@ class AdminUtilisateurController extends AbstractController
      * @Route("/admin/utilisateur/{id}/delete", name="admin_utilisateur_delete", methods={"GET"})
      * @IsGranted("ROLE_ADMIN")
      */
-    public function supprimerUtilisateur(Request $request, Utilisateur $utilisateur, FileHandler $fileHandler): Response {
+    public function deleteUtilisateur(Request $request, Utilisateur $utilisateur, FileHandler $fileHandler): Response {
         if ($this->isCsrfTokenValid('delete' . $utilisateur->getId(), $request->query->get('csrf'))) {
 
             $entityManager = $this->getDoctrine()->getManager();
 
+            // File Image Avatar Handling
             $fileHandler->handle(null, $utilisateur->getAvatar(), null, 'avatars');
 
             $entityManager->remove($utilisateur);
             $entityManager->flush();
-
-            $this->addFlash('success', 'L\'utilisateur a bien été supprimé !');
+            $this->addFlash('success', 'L\'utilisateur a bien été supprimé.');
         }
 
         return $this->redirectToRoute('admin_utilisateur');
-        // return $this->redirectToRoute('admin_utilisateur', [], Response::HTTP_SEE_OTHER);
     }
 }

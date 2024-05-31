@@ -194,22 +194,33 @@ html, body {    font-size: 16px; }
 /* --------- BUTTONS --------- */
 /* --------------------------- */
 
-.btn-style {    display: inline-block;
-                color: white;
-                font-weight: bold;
+.btn-primary-style {    display: inline-block;
+                color: white; font-weight: bold; text-align: center; vertical-align: middle; line-height: 1.5;
+                        background-color: #EA2027;
+                        border-radius: 4px; border-top: 1px solid #EA2027; border-left: 1px solid #EA2027; border-right: 1px solid #9b1921; border-bottom: 1px solid #9b1921;
+                        box-shadow: inset 1px 1px 0px #ff8084, inset -2px -2px 0px #b6252f, 0px 0px 8px rgba(0, 0, 0, .2); }
+
+.btn-primary-style:hover, .btn-primary-style:active, .btn-primary-style:target { color: white; background-color: #ff4147; text-decoration: none; }
+
+.btn-secondary-style {  display: inline-block;
+                        color: #ff8084; font-weight: bold;
+                        background-color: transparent;      
                 text-align: center; vertical-align: middle; line-height: 1.5;
-                background-color: #EA2027;
-                border-radius: 4px;
-                border-top: 1px solid #EA2027;
-                border-left: 1px solid #EA2027;
-                border-right: 1px solid #9b1921;
-                border-bottom: 1px solid #9b1921; }
-.btn-style:hover, .btn-style:active, .btn-style:target { color: white; background-color: #ff4147; text-decoration: none; }
+                border-radius: 4px; border: 2px solid #ff8084; }
+
+.btn-secondary-style:hover, .btn-secondary-style:active, .btn-secondary-style:target { color: white; background-color: #ff8084; text-decoration: none; }
+
+.btn-tertiary-style {   display: inline-block;
+                        color: #ff8084;
+                        background-color: transparent;      
+                        text-align: center; vertical-align: middle; line-height: 1.5; }
+
+.btn-tertiary-style:hover, .btn-tertiary-style:active, .btn-tertiary-style:target { color: #ff8084; text-decoration: underline; }
 
 .btn-disabled { background-color: #b4b4b4; border-color: #9f9f9f; }
 
-.btn-large { font-size: 1.2rem; padding: 0.70rem 1rem; box-shadow: inset 1px 1px 0px #ff8084, inset -2px -2px 0px #b6252f, 0px 0px 8px rgba(0, 0, 0, .4); }
-.btn-medium { font-size: 1rem; padding: 0.5rem 1rem; box-shadow: inset 1px 1px 0px #ff8084, inset -2px -2px 0px #b6252f, 0px 0px 8px rgba(0, 0, 0, .2); }
+.btn-large { font-size: 1.2rem; padding: 0.70rem 1rem; }
+.btn-medium { font-size: 1rem; padding: 0.5rem 1rem; }
 
 
 

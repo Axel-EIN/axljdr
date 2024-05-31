@@ -19,13 +19,6 @@ class ClasseRepository extends ServiceEntityRepository
         parent::__construct($registry, Classe::class);
     }
 
-    public function countClasses() {
-        return $this->createQueryBuilder('c')
-            ->select('count(c.id)')
-            ->getQuery()
-            ->getSingleScalarResult();
-    }
-
     public function findAllExceptOne($id)
     {
         return $this->createQueryBuilder('c')
@@ -33,5 +26,12 @@ class ClasseRepository extends ServiceEntityRepository
             ->setParameter('value_id', $id)
             ->getQuery()
             ->getResult();
+    }
+
+    public function countClasses() {
+        return $this->createQueryBuilder('c')
+            ->select('count(c.id)')
+            ->getQuery()
+            ->getSingleScalarResult();
     }
 }

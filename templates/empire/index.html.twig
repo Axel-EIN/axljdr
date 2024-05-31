@@ -1,119 +1,78 @@
-{% extends 'base.html.twig' %}
+{% extends 'category.html.twig' %}
 {% block title %}L'Univers de l'Aventure {{ parent() }}{% endblock %}
-{% block body %}
 
-<header class="header-bg-img header-bg-empire">
-    <div class="container">
-        <div class="header d-flex flex-column justify-content-center align-items-center">
-            <div class="text-center d-flex justify-content-center"><strong class="h1">Univers du Jeu</strong></div>
-            <hr class="w-50">     
-            <h1 class="big-title-effect grand">{{ 'L\'Empire<br/> de Rokugan'|relief|raw }}</h1>
+{% block section_content1 %}
+    {% for une_archive in archives %}
+
+        <!-- UNE ARCHIVE -->
+        <article class="col-xl-2 col-lg-3 col-md-4 col-sm-6 py-3 text-center {% if une_archive.locked == 1 %}translucide{% else %}hover-zoom-X2{% endif %}">
+            {% if une_archive.locked == 1 %}
+            <div class="relative">
+                <img class="icon-lock grayscale fa-beat-fade" src="{{asset('assets/img/icons/locked.png')}}" alt="Icône cadena" title="Archive à débloquer !" />
+                <img class="img-fluid grayscale" src="{{ asset(une_archive.image) }}" alt="Image d'une Archive" title="Archive à débloquer !"/>
+                <h4 class="text-center h5"><strong>???</strong></h4>
+            </div>
+            {% else %}
+            <div class="relative">
+                <a href="{{ path('empire_archive', {id: une_archive.id} ) }}">
+                    <img class="img-fluid" src="{{ asset(une_archive.image) }}" alt="Image d'une Archive" title="Lire {{une_archive.titre}}" />
+                </a>
+                <h5 class="text-center"><strong><a href="{{ path('empire_archive', {id: une_archive.id} ) }}">{{ une_archive.titre }}</a></strong></h5>
+            </div>
+        {% endif %}
+        </article>
+
+    {% endfor %}
+{% endblock %}
+
+{% block section_content2 %}
+    <div class="col-9">
+        <h4 class="text-secondary">Clans Majeurs</h4>
+        <div class="row mt-3">
+        {% for un_clan_majeur in clansMajeurs %}
+
+            <!-- UN CLAN MAJEUR -->
+            <article class="col-lg-3 col-md-4 col-sm-6 py-3 text-center hover-zoom hover-shine">
+                <a href="{{ path('empire_clan', {id: un_clan_majeur.id} ) }}"><img class="img-160" src="{{ asset(un_clan_majeur.mon) }}" alt="Mon du clan" /></a>
+                <br/>
+                <h3 class="text-center my-3"><strong><a href="{{ path('empire_clan', {id: un_clan_majeur.id} ) }}">{{ un_clan_majeur.nom }}</a></strong></h3>
+            </article>
+
+        {% endfor %}
         </div>
     </div>
-</header>
+    <div class="col-3 border-left">
+    <h4 class="text-secondary text-center">Autres</h4>
+        <div class="row mt-3">
+        {% for un_clan_autre in clansAutres %}
 
-<main class="container-fluid bg-light pt-5">
-    <div class="container">
+            <!-- UN CLAN AUTRE -->
+            <article class="col-lg-6 col-md-12 col-sm-12 py-3 text-center hover-zoom hover-shine">
+                <a href="{{ path('empire_clan', {id: un_clan_autre.id} ) }}"><img class="img-96" src="{{ asset(un_clan_autre.mon) }}" alt="Mon du clan" /></a>
+                <br/>
+                <h5 class="text-center my-3"><strong><a href="{{ path('empire_clan', {id: un_clan_autre.id} ) }}">{{ un_clan_autre.nom }}</a></strong></h5>
+            </article>
 
-        <!-- LES ARCHIVES -->
-        {% set element = 'Archive' %}
-        <section id="archives">
-            <h2 class="display-4 relative">Les <strong>Archives</strong>
-                {{ include('/parts/btn-ajouter-element.html.twig', {element}) }}
-            </h2>
-            <hr>
-            <div class="row mt-3">
-            {% for une_archive in archives %}
-
-                <!-- UNE ARCHIVE -->
-                <article class="col-xl-2 col-lg-3 col-md-4 col-sm-6 py-3 text-center {% if une_archive.locked == 1 %}translucide{% else %}hover-zoom{% endif %}">
-                    {% if une_archive.locked == 1 %}
-                    <div class="relative">
-                        <img class="icon-lock grayscale fa-beat-fade" src="{{asset('assets/img/icons/locked.png')}}" alt="Icône cadena" title="A débloquer !" />
-                        <img class="img-fluid grayscale" src="{{ asset(une_archive.image) }}" alt="Image d'une Archive" />
-                        <h3 class="text-center h5"><strong>???</strong></h3>
-                    </div>
-                    {% else %}
-                    <div class="relative">
-                        <a href="{{ path('empire_archive', {id: une_archive.id} ) }}">
-                            <img class="img-fluid" src="{{ asset(une_archive.image) }}" alt="Image d'une Archive" />
-                        </a>
-                        <h3 class="text-center h5"><strong><a href="{{ path('empire_archive', {id: une_archive.id} ) }}">{{ une_archive.titre }}</a></strong></h3>
-                    </div>
-                {% endif %}
-                </article>
-
-            {% endfor %}
-            </div>
-        </section>
-
-        <!-- LES CLANS -->
-        {% set element = 'Clan' %}
-        <section id="clans" class="mt-4">
-            <h2 class="display-4 relative">Les <strong>Factions</strong>
-                {{ include('/parts/btn-ajouter-element.html.twig', {element}) }}
-            </h2>
-            <hr>
-            <div class="row">
-                <div class="col-9">
-                    <h4 class="text-secondary">Clans Majeurs</h4>
-                    <div class="row mt-3">
-                    {% for un_clan_majeur in clansMajeurs %}
-
-                        <!-- UN CLAN MAJEUR -->
-                        <article class="col-lg-3 col-md-4 col-sm-6 py-3 text-center hover-zoom hover-shine">
-                            <a href="{{ path('empire_clan', {id: un_clan_majeur.id} ) }}"><img class="img-160" src="{{ asset(un_clan_majeur.mon) }}" alt="Mon du clan" /></a>
-                            <br/>
-                            <h3 class="text-center my-3"><strong><a href="{{ path('empire_clan', {id: un_clan_majeur.id} ) }}">{{ un_clan_majeur.nom }}</a></strong></h3>
-                        </article>
-
-                    {% endfor %}
-                    </div>
-                </div>
-                <div class="col-3 border-left">
-                <h4 class="text-secondary text-center">Autres</h4>
-                    <div class="row mt-3">
-                    {% for un_clan_autre in clansAutres %}
-
-                        <!-- UN CLAN MAJEUR -->
-                        <article class="col-lg-6 col-md-12 col-sm-12 py-3 text-center hover-zoom hover-shine">
-                            <a href="{{ path('empire_clan', {id: un_clan_autre.id} ) }}"><img class="img-96" src="{{ asset(un_clan_autre.mon) }}" alt="Mon du clan" /></a>
-                            <br/>
-                            <h5 class="text-center my-3"><strong><a href="{{ path('empire_clan', {id: un_clan_autre.id} ) }}">{{ un_clan_autre.nom }}</a></strong></h5>
-                        </article>
-
-                    {% endfor %}
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- LES LIEUX -->
-        {% set element = 'Lieu' %}
-        <section id="lieux" class="mt-4">
-            <h2 class="display-4 relative">Les <strong>Lieux</strong>
-                {{ include('/parts/btn-ajouter-element.html.twig', {element}) }}
-            </h2>
-            <hr>
-            <div class="row mt-3">
-            {% for un_lieu in lieux %}
-
-                <!-- UN LIEU -->
-                <article class="col-xl-2 col-lg-3 col-md-4 col-sm-6 py-3 text-center hover-zoom">
-                    <a href="{{ path('empire_lieu', {id: un_lieu.id} ) }}">
-                        <img class="img-160" src="{{ asset(un_lieu.image) }}" alt="Image du Lieu" />
-                    </a>
-                    <br/>
-                    <h3 class="text-center my-3">
-                        <strong>
-                            <a href="{{ path('empire_lieu', {id: un_lieu.id} ) }}">{{ un_lieu.nom }}</a>
-                        </strong>
-                    </h3>
-                </article>
-
-            {% endfor %}
-            </div>
-        </section>
+        {% endfor %}
+        </div>
     </div>
-</main>
+{% endblock %}
+
+{% block section_content3 %}
+    {% for un_lieu in lieux %}
+
+        <!-- UN LIEU -->
+        <article class="col-xl-2 col-lg-3 col-md-4 col-sm-6 py-3 text-center hover-zoom-X2">
+            <a href="{{ path('empire_lieu', {id: un_lieu.id} ) }}">
+                <img class="img-160" src="{{ asset(un_lieu.image) }}" alt="Image du Lieu" title="Voir {{un_lieu.nom}}" />
+            </a>
+            <br/>
+            <h3 class="text-center my-3">
+                <strong>
+                    <a href="{{ path('empire_lieu', {id: un_lieu.id} ) }}">{{ un_lieu.nom }}</a>
+                </strong>
+            </h3>
+        </article>
+
+    {% endfor %}
 {% endblock %}

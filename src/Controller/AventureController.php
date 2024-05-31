@@ -16,7 +16,7 @@ class AventureController extends AbstractController
     /**
      * @Route("/", name="aventure")
      */
-    public function afficherAventure(SaisonRepository $saisonRepository): Response
+    public function viewAventure(SaisonRepository $saisonRepository): Response
     {
         $premiereSaison = $saisonRepository->findOneBy(array(), array('numero' => 'ASC'));
         return $this->redirectToRoute('aventure_saison', [ 'id' => $premiereSaison->getId() ]);
@@ -25,7 +25,7 @@ class AventureController extends AbstractController
     /**
      * @Route("/aventure/{id}", name="aventure_saison")
      */
-    public function afficherSaison(Saison $saison, SaisonRepository $saisonRepository, ClasseurXP $classeurXP): Response
+    public function viewSaison(Saison $saison, SaisonRepository $saisonRepository, ClasseurXP $classeurXP): Response
     {
         $precedent = $saisonRepository->findPrevious($saison->getNumero());
         $suivant = $saisonRepository->findNext($saison->getNumero());
@@ -57,7 +57,7 @@ class AventureController extends AbstractController
     /**
      * @Route("/aventure/episode/{id}", name="aventure_episode")
      */
-    public function afficherEpisode(Episode $episode, EpisodeRepository $episodeRepository, ClasseurXP $classeurXP): Response
+    public function viewEpisode(Episode $episode, EpisodeRepository $episodeRepository, ClasseurXP $classeurXP): Response
     {
         $precedent = $episodeRepository->findPrevious($episode->getChapitreParent()->getId(), $episode->getNumero());
         $suivant = $episodeRepository->findNext($episode->getChapitreParent()->getId(), $episode->getNumero());

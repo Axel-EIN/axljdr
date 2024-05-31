@@ -31,6 +31,7 @@ class PersonnageController extends AbstractController
         $header_classname = 'characters';
         $header_up = "Les Héros de l'Aventure";
         $header_down = 'Les Personnages';
+        $category = 'personnage';
 
         return $this->render('personnage/index.html.twig', [
             'pjs' => $pjs,
@@ -39,6 +40,7 @@ class PersonnageController extends AbstractController
             'header_classname' => $header_classname,
             'header_up' => $header_up,
             'header_down' => $header_down,
+            'category' => $category
         ]);
     }
 

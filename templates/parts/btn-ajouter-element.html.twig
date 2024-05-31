@@ -1,4 +1,4 @@
-<!-- HORS FLUX - BTN - MJ - AJOUTER UN ELEMENT -->
+<!-- MJ - ICON TEXT BTN - Add -->
 {% if app.user and is_granted("ROLE_MJ") %}
     <div class="right-corner-snap">
         <a href="{{ path('admin_' ~ element|lower ~ '_create') }}?redirect={{element|lower}}" class="btn-primary-style btn-medium" >

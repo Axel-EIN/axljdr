@@ -13,7 +13,7 @@ class PersonnageController extends AbstractController
     /**
      * @Route("/personnages", name="personnages")
      */
-    public function afficherPersonnages(PersonnageRepository $personnageRepository): Response {
+    public function viewPersonnages(PersonnageRepository $personnageRepository): Response {
         $pjs = $personnageRepository->findAllPJsSorted();
         $pnjs = $personnageRepository->findAllPNJsSorted();
 
@@ -49,7 +49,7 @@ class PersonnageController extends AbstractController
     /**
      * @Route("/personnages/profil/{id}", name="personnage_profil")
      */
-    public function afficherPersonnageProfil(Personnage $personnage, PersonnageRepository $personnageRepository): Response {
+    public function viewPersonnageProfil(Personnage $personnage, PersonnageRepository $personnageRepository): Response {
 
         $autresPersonnages = $personnageRepository->findAllExceptOne($personnage->getId());
         shuffle($autresPersonnages);

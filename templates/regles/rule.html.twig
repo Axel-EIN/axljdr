@@ -10,7 +10,13 @@
                 {% endif %}
             {% endfor %}
         </div>
-        <img class="img-fluid w-100 mt-3" src="{{asset(rule.image)}}" />
+        {% if rule.pdf is defined and rule.pdf is not empty %}
+            <a href="{{ asset(rule.pdf) }}" >
+                <img class="img-fluid w-100 mt-3" src="{{ asset(rule.image|default(asset('assets/img/placeholders/na_rule.jpg'))) }}" />
+            </a>
+        {% else %}
+            <img class="img-fluid w-100 mt-3" src="{{ asset(rule.image) }}" />
+        {% endif %}
     </section>
 
     {% for i in 1..5 %}

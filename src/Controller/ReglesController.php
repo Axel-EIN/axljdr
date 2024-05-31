@@ -63,14 +63,17 @@ class ReglesController extends AbstractController
     /**
      * @Route("/regles/rule/{id}", name="regles_rule")
      */
-    public function afficherRule(Rule $rule): Response
+    public function afficherRule(Rule $rule, RuleRepository $ruleRepository): Response
     {
+        $autresRules = $ruleRepository->findAllTypeExceptOneSorted($rule->getId(), $rule->getBase());
+
         return $this->render('regles/rule.html.twig', [
             'rule' => $rule,
             'nom' => $rule->getNom(),
             'entity' => 'rule',
             'category' => 'regles',
             'un_element' => $rule,
+            'autresRules' => $autresRules
         ]);
     }
 

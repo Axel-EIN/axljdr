@@ -17,7 +17,7 @@ class AdminFicheController extends AbstractController
     /**
      * @Route("/admin/fiche", name="admin_fiche")
      */
-    public function afficherAdminFiches(FichePersonnageRepository $fichePersonnageRepository): Response {
+    public function viewAdminFiches(FichePersonnageRepository $fichePersonnageRepository): Response {
         $fiches = $fichePersonnageRepository->findAll();
         return $this->render('admin_fiche/index.html.twig', [
             'fiches' => $fiches
@@ -28,7 +28,7 @@ class AdminFicheController extends AbstractController
      * @Route("/admin/fiche/create", name="admin_fiche_create")
      * @IsGranted("ROLE_MJ")
      */
-    public function ajouterFiche(Request $request, EntityManagerInterface $em) {
+    public function addFiche(Request $request, EntityManagerInterface $em) {
 
         $fiche = new FichePersonnage;
         $form = $this->createForm(AdminFichePersonnageType::class, $fiche);
@@ -38,32 +38,30 @@ class AdminFicheController extends AbstractController
 
             $em->persist($fiche);
             $em->flush();
-
-            $this->addFlash('success', 'La Fiche a bien été ajoutée !');
+            $this->addFlash('success', 'La Fiche a bien été ajoutée.');
 
             return $this->redirectToRoute('admin_fiche');
-        } else {
-            return $this->render('admin_fiche/create.html.twig', [
-                'type' => 'Créer',
-                'form' => $form->createView()
-            ]);
-        } 
+        }
+
+        return $this->render('admin_fiche/create.html.twig', [
+            'type' => 'Créer',
+            'form' => $form->createView()
+        ]);
     }
 
     /**
      * @Route("/admin/fiche/{id}/edit", name="admin_fiche_edit")
      * @IsGranted("ROLE_MJ")
      */
-    public function editerFiche(Request $request, FichePersonnage $fiche): Response {
+    public function editFiche(Request $request, FichePersonnage $fiche): Response {
 
         $form = $this->createForm(AdminFichePersonnageType::class, $fiche);
-        
         $form->handleRequest($request);
 
         if($form->isSubmitted() && $form->isValid()) {
 
             $this->getDoctrine()->getManager()->flush();
-            $this->addFlash('success', 'La fiche a bien été modifiée !');
+            $this->addFlash('success', 'La fiche a bien été modifiée.');
 
             return $this->redirectToRoute('admin_fiche');
         }
@@ -79,7 +77,7 @@ class AdminFicheController extends AbstractController
      * @Route("/admin/fiche/{id}/delete", name="admin_fiche_delete", methods={"GET"})
      * @IsGranted("ROLE_MJ")
      */
-    public function supprimerClan(Request $request, FichePersonnage $fiche): Response {
+    public function deleteFiche(Request $request, FichePersonnage $fiche): Response {
 
         if ($this->isCsrfTokenValid('delete' . $fiche->getId(), $request->query->get('csrf'))) {
 
@@ -87,7 +85,7 @@ class AdminFicheController extends AbstractController
             $entityManager->remove($fiche);
             $entityManager->flush();
 
-            $this->addFlash('success', 'La fiche a bien été supprimée !');
+            $this->addFlash('success', 'La fiche a bien été supprimée.');
         }
 
         return $this->redirectToRoute('admin_fiche');

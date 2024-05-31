@@ -74,3 +74,9 @@
         right: 24px; }
 
 .flex-2 { flex-grow: 2 }
+
+/* Z-INDEX */
+
+.z-100 {
+        z-index: 100;
+}

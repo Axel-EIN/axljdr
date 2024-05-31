@@ -3,7 +3,7 @@
 namespace App\Controller;
 
 use App\Service\Uploader;
-use App\Service\BaliseurPersonnage;
+use App\Service\Baliseur;
 use App\Entity\Personnage;
 use App\Form\AdminPersonnageType;
 use App\Repository\PersonnageRepository;
@@ -88,10 +88,10 @@ class AdminPersonnageController extends AbstractController
      * @Route("/admin/personnage/{id}/edit", name="admin_personnage_edit")
      * @IsGranted("ROLE_MJ")
      */
-    public function editerPersonnage(Request $request, Personnage $personnage, Uploader $uploadeur, BaliseurPersonnage $baliseur): Response {
+    public function editerPersonnage(Request $request, Personnage $personnage, Uploader $uploadeur, Baliseur $baliseur): Response {
 
         // DEBALISEUR : dans le texte, capture les prénoms entre balises <a><img>, vérifie si le personnage existe, remplace les balises par des crochets []
-        $personnage->setDescription($baliseur->debaliserPersonnage($personnage->getDescription()));
+        $personnage->setDescription($baliseur->debaliserPersonnages($personnage->getDescription()));
 
         $form = $this->createForm(AdminPersonnageType::class, $personnage);
         
@@ -137,7 +137,7 @@ class AdminPersonnageController extends AbstractController
             }
 
             // BALISAGE : capture les mots entre [], vérifie si un prénom personnage correspondant existe, remplace par un lien personnage HTML
-            $personnage->setDescription($baliseur->baliserPersonnage($personnage->getDescription()));
+            $personnage->setDescription($baliseur->baliserPersonnages($personnage->getDescription()));
 
             $this->getDoctrine()->getManager()->flush();
             $this->addFlash('success', 'Le personnage a bien été modifié !');

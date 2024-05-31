@@ -242,7 +242,7 @@ html, body {    font-size: 16px; }
 
 .session-card-long-body { min-height: 500px; }
 
-.character-card { border: unset; transition: 0.5s;}
+.character-card { border: unset; transition: 0.5s; }
 
 .scene-body {   padding-left: 4rem; padding-right: 4rem; padding-top: 3rem; padding-bottom: 1rem; }
                 @media (max-width: 1200px) { .scene-body { padding-left: 4rem; padding-right: 4rem; padding-top: 3rem; padding-bottom: 1rem; } }

@@ -26,7 +26,7 @@ class AdminSceneController extends AbstractController
      * @Route("/admin/scene", name="admin_scene")
      * @IsGranted("ROLE_MJ")
      */
-    public function afficherAdminScenes(SceneRepository $sceneRepository): Response {
+    public function viewAdminScenes(SceneRepository $sceneRepository): Response {
         $scenes = $sceneRepository->findBy(array(), array('episodeParent' => 'ASC'));
 
         return $this->render('admin_scene/index.html.twig', [
@@ -39,17 +39,17 @@ class AdminSceneController extends AbstractController
      * @Route("/admin/scene/create", name="admin_scene_create")
      * @IsGranted("ROLE_MJ")
      */
-    public function creerScene(Request $request, EntityManagerInterface $em, FileHandler $fileHandler, Baliseur $baliseur,
+    public function addScene(Request $request, EntityManagerInterface $em, FileHandler $fileHandler, Baliseur $baliseur,
                             ParticipationHandler $participationHandler, PersonnageRepository $personnageRepository,
                             EpisodeRepository $episodeRepository, Numeroteur $numeroteur, SceneRepository $sceneRepository) {
 
         $scene = new Scene;
 
-        // Création de liste pour l'affichage des listes déroulantes dynamiques en JS
+        // List of Character for Adding them as Participants in JS
         $tout_pjs = $personnageRepository->findBy(array('estPj' => true));
         $tout_pnjs = $personnageRepository->findBy(array('estPj' => false));
 
-        // Gestion du pré-remplissage des champs
+        // URL PARAMS PRE-FILL
         if ( !empty($request->query->get('numero')) && $request->query->get('numero') > 0
         && !empty($request->query->get('episodeID')) && $request->query->get('episodeID') > 0 )
         {
@@ -59,13 +59,12 @@ class AdminSceneController extends AbstractController
                 $scene->setEpisodeParent($episodeParent);
         }
 
-        // Création du Formulaire
         $form = $this->createForm(AdminSceneType::class, $scene);
         $form->handleRequest($request);
 
-        // Gestion du Formulaire posté et valide
         if ($form->isSubmitted() && $form->isValid()) {
 
+            // File Image Handling
             $nouvelleImage = $form->get('image')->getData();
             if (!empty($nouvelleImage)) {
                 $prefix = 'scene-s' . $scene->getEpisodeParent()->getChapitreParent()->getSaisonParent()->getNumero()
@@ -74,78 +73,73 @@ class AdminSceneController extends AbstractController
                 $scene->setImage($fileHandler->handle($nouvelleImage, null, $prefix, 'scenes'));
             } else { $scene->setImage('assets/img/placeholders/1280x720.jpg'); }
 
-            // Formatage et fusion des données formulaire postées concernant les Participants
+            // Format and Fusion Participants POST data
             $participants_a_ajoutes = $participationHandler->fusionnerParticipants($request->get('participants'), $request->get('participants_xp'),
                                                                                     $request->get('participants_mort'), $request->get('participants_pnjs'),
                                                                                     $request->get('participants_pnjs_mort'));
 
-            // Ajout des Participations
+            // Create and Add Participations Entity from Participants
             $participationHandler->ajouterParticipations($participants_a_ajoutes, $scene);
 
-            // BALISAGE : capture les mots entre [], vérifie si un prénom personnage correspondant existe, remplace par un lien personnage HTML
+            // CHARACTER TAGGER : capture words between [], check if character exists, replace with Link
             $scene->setTexte($baliseur->baliserPersonnages($scene->getTexte()));
 
-            // BALISAGE des LIEUX : capture les mots entre {}, vérifie si un nom de lieu correspondant existe, remplace par un lien vers la fiche du lieu en HTML
+            // LOCATION TAGGER : capture words between {}, check if location exists, replace with Link
             $scene->setTexte($baliseur->baliserLieux($scene->getTexte()));
             
-            // CREATION ENTITE
             $em->persist($scene);
             $em->flush();
             $this->addFlash('success', 'La scène a bien été crée.');
 
-            // NUMEROTAGE : ajuste le numéro si des scènes ont été supprimés ou intercalés
+            // RE-ORDERING
             $fratrieArrivee = $sceneRepository->findBy(['episodeParent' => $scene->getEpisodeParent()->getId()]);
             $numeroteur->reordonnerNumero($scene->getId(), -1, $scene->getNumero(), [], $fratrieArrivee);
 
             // REDIRECTION
             if (!empty($request->query->get('redirect')) && $request->query->get('redirect') == 'episode')
                 return $this->redirectToRoute('aventure_episode', ['id' => $scene->getEpisodeParent()->getId(),'_fragment' => 'scn' . $scene->getId()]);
-        
-            return $this->redirectToRoute('admin_scene');
 
-        } else {
-            // AFFICHAGE FORMULAIRE si formulaire pas soumis ou pas valide
-            return $this->render('admin_scene/create.html.twig', [
-                'type' => 'Créer',
-                'form' => $form->createView(),
-                'tout_pjs' => $tout_pjs,
-                'tout_pnjs' => $tout_pnjs,
-            ]);
+            return $this->redirectToRoute('admin_scene');
         }
+
+        return $this->render('admin_scene/create.html.twig', [
+            'type' => 'Créer',
+            'form' => $form->createView(),
+            'tout_pjs' => $tout_pjs,
+            'tout_pnjs' => $tout_pnjs,
+        ]);
     }
 
     /**
      * @Route("/admin/scene/{id}/edit", name="admin_scene_edit")
      * @IsGranted("ROLE_MJ")
      */
-    public function editerScene(Request $request, Scene $scene, FileHandler $fileHandler, Numeroteur $numeroteur, Baliseur $baliseur,
+    public function editScene(Request $request, Scene $scene, FileHandler $fileHandler, Numeroteur $numeroteur, Baliseur $baliseur,
                                 ParticipationHandler $participationHandler, PersonnageRepository $personnageRepository,
                                 ParticipationRepository $participationRepository, SceneRepository $sceneRepository): Response {
 
-        // Stockage du numéro et de l'ID de l'episode avant édition
+        // Saving Number and ID of Parent for later RE-ORDERING
         $numeroDepart = $scene->getNumero();
         $fratrieDepartId = $scene->getEpisodeParent()->getId();
         
-        // Personnages & Participations pour Affichage & JS
+        // Preparing all Characters for JS lists
         $tout_pjs = $personnageRepository->findBy(array('estPj' => true));
         $tout_pnjs = $personnageRepository->findBy(array('estPj' => false));
         $participations_pjs = $participationRepository->findBy(array('scene' => $scene, 'estPj' => true));
         $participations_pnjs = $participationRepository->findBy(array('scene' => $scene, 'estPj' => false));
 
-        // DEBALISEUR des PERSONNAGES : dans le texte, capture les prénoms entre balises <a><img>, vérifie si le personnage existe, remplace les balises par des crochets []
+        // CHARACTER UNTAGGER
         $scene->setTexte($baliseur->debaliserPersonnages($scene->getTexte()));
 
-        // DEBALISEUR des LIEUX {}
+        // LOCATION UNTAGGER
         $scene->setTexte($baliseur->debaliserLieux($scene->getTexte()));
 
-        // FORM VIEW
         $form = $this->createForm(AdminSceneType::class, $scene);
         $form->handleRequest($request);
 
-        // GESTION FORMULAIRE VALIDE
         if($form->isSubmitted() && $form->isValid()) {
 
-            // EDITION FICHIER IMAGE & UPLOAD
+            // File Image Handling
             $nouvelleImage = $form->get('image')->getData();
             if (!empty($nouvelleImage)) {
                 $prefix = 'scene-s' . $scene->getEpisodeParent()->getChapitreParent()->getSaisonParent()->getNumero()
@@ -154,14 +148,14 @@ class AdminSceneController extends AbstractController
                 $scene->setImage($fileHandler->handle($nouvelleImage, $scene->getImage(), $prefix, 'scenes'));
             }
 
-            // Formatage et fusion des données formulaire postées concernant les Participants
+            // Formating and Fusioning Data from Meta from Participants
             $participants_modifies = $participationHandler->fusionnerParticipants($request->get('participants'), $request->get('participants_xp'),
                                                                                     $request->get('participants_mort'), $request->get('participants_pnjs'),
                                                                                     $request->get('participants_pnjs_mort'));
 
             $toutes_participations = array_merge($participations_pjs, $participations_pnjs);
 
-            // Modification des Participations correspondante trouvée sinon suppression
+            // If Participants from Data exists, edit them or delete them
             foreach ($toutes_participations as $une_participation) {
                 $trouvee = false;
 
@@ -186,7 +180,7 @@ class AdminSceneController extends AbstractController
                 }
             }
 
-            // Ajout des Participations necessaires
+            // Add New Participants
             foreach ($participants_modifies as $un_participant_modifie) {
                 $trouvee = false;
 
@@ -210,13 +204,13 @@ class AdminSceneController extends AbstractController
                 }
             }
 
-            // BALISAGE : capture les mots entre [], vérifie si un prénom personnage correspondant existe, remplace par un lien personnage HTML
+            // CHARACTER TAGGER
             $scene->setTexte($baliseur->baliserPersonnages($scene->getTexte()));
 
-            // BALISAGE des LIEUX : capture les mots entre {}, vérifie si un nom de lieu correspondant existe, remplace par un lien vers la fiche du lieu en HTML
+            // LOCATION TAGGER
             $scene->setTexte($baliseur->baliserLieux($scene->getTexte()));
 
-            // NUMEROTAGE : augmente ou réduit le numéro de la scène si une scène a été supprimée ou intercalée
+            // RE-ORDERING if Number has changed or if Parent has changed
             if ($numeroDepart != $scene->getNumero() || $fratrieDepartId != $scene->getEpisodeParent()->getId())
             {
                 $fratrieDepart = $sceneRepository->findBy(['episodeParent' => $fratrieDepartId]);
@@ -224,7 +218,6 @@ class AdminSceneController extends AbstractController
                 $numeroteur->reordonnerNumero($scene->getId(), $numeroDepart, $scene->getNumero(), $fratrieDepart, $fratrieArrivee);
             }
 
-            // EDITION ENTITE
             $this->getDoctrine()->getManager()->flush();
             $this->addFlash('success', 'La scène a bien été modifiée.');
 
@@ -235,7 +228,6 @@ class AdminSceneController extends AbstractController
             return $this->redirectToRoute('admin_scene');
         }
 
-        // AFFICHAGE FORMULAIRE si formulaire pas soumis et valide
         return $this->renderForm('admin_scene/edit.html.twig', [
             'scene' => $scene,
             'form' => $form,
@@ -251,39 +243,30 @@ class AdminSceneController extends AbstractController
      * @Route("/admin/scene/{id}/delete", name="admin_scene_delete", methods={"GET"})
      * @IsGranted("ROLE_MJ")
      */
-    public function supprimerScene(Request $request, Scene $scene, Numeroteur $numeroteur, SceneRepository $sceneRepository, FileHandler $fileHandler): Response {
+    public function deleteScene(Request $request, Scene $scene, Numeroteur $numeroteur, SceneRepository $sceneRepository, FileHandler $fileHandler): Response {
         
-        $episodeParent = $scene->getEpisodeParent(); // Pour la partie redirection
+        $episodeParent = $scene->getEpisodeParent(); // Saving Parent for later Redirection after deletion
 
-        // GESTION FORMULAIRE VALIDE
-        // -------------------------
         if ($this->isCsrfTokenValid('delete' . $scene->getId(), $request->query->get('csrf'))) {
 
-            // VERIFICATION ENFANTS
-            // --------------------
+            // CHECK CHILD
             $entityManager = $this->getDoctrine()->getManager();
             $nomImageASupprimer = basename($scene->getImage());
 
-            // SUPPRESSION FICHIER IMAGE
-            // -------------------------
+            // File Image Handling
             $fileHandler->handle(null, $scene->getImage(), null, 'scenes');
 
-            // NUMEROTEUR
-            // ----------
+            // Re-Ordering
             $fratrieDepartId = $scene->getEpisodeParent()->getId();
             $fratrieDepart = $sceneRepository->findBy(['episodeParent' => $fratrieDepartId]);
             $numeroteur->reordonnerNumero($scene->getId(), $scene->getNumero(), -1, $fratrieDepart, []);
 
-            // SUPPRESSION ENTITE
-            // ------------------
             $entityManager->remove($scene);
             $entityManager->flush();
             $this->addFlash('success', 'La scène a bien été supprimée.');
-
         }
 
         // REDIRECTION
-        // -----------
         if (!empty($request->query->get('redirect')) && $request->query->get('redirect') == 'episode')
             return $this->redirectToRoute('aventure_episode', ['id' => $episodeParent->getId()]);
 

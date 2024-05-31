@@ -1,30 +1,9 @@
-{% extends 'base.html.twig' %}
-{% block title %}L'Univers de l'Aventure {{ parent() }}{% endblock %}
-{% block body %}
+{% extends 'category.html.twig' %}
+{% block title %}Les Règles de l'Aventure {{ parent() }}{% endblock %}
 
-<header class="header-bg-img header-bg-regles">
-    <div class="container">
-        <div class="header d-flex flex-column justify-content-center align-items-center">
-            <div class="text-center d-flex justify-content-center"><strong class="h1">Mécaniques de Jeu</strong></div>
-            <hr class="w-50">     
-            <h1 class="big-title-effect grand">{{ 'Régles'|relief|raw }}</h1>
-        </div>
-    </div>
-</header>
-
-<main class="container-fluid bg-light pt-5">
-    <div class="container">
-
-        <!-- SECTION LES CLASSES -->
-        {% set element = 'Classe' %}
-        <section id="classes">
-            <h2 class="display-4 relative">Les <strong>Classes</Strong>
-                {{ include('/parts/btn-ajouter-element.html.twig', {element}) }}
-            </h2>
-            <hr>
-            <div class="row mt-3 justify-content-center">
+{% block section_content1 %}
+<div class="w-100 row justify-content-center">
             {% for une_classe in classes %}
-
                 <!--- UNE CLASSE -->
                 <article class="col-xl-2 col-lg-3 col-md-4 col-sm-6 py-3 text-center hover-zoom">
                     <a href="{{ path('regles_classe', {id: une_classe.id} ) }}">

@@ -1,0 +1,7 @@
+<div class="separator-chapter text-center">   
+    {% if app.user and is_granted("ROLE_MJ") %}
+    <a class="text-light" href="{{ path('admin_chapitre_create') }}?numero={{ numero }}&saisonID={{ saison.numero }}&redirect=aventure">
+        <i class="fas fa-plus-square fa-fade" alt="Icône Ajouter"></i>&nbsp;&nbsp;<strong>Insérer un Chapitre</strong>
+    </a>
+    {% endif %}
+</div>

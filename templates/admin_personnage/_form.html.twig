@@ -1,16 +1,40 @@
 <main class="offset-2 col-8">
     {{ form_start(form) }}
-        {% if type != 'Créer' %}
-            <img class="img-fluid" src="{{ asset(personnage.icone) }}" />
-        {% endif %}
-        {{ form_row(form.icone) }}
-        {% if type != 'Créer' %}
-            <img class="img-fluid" src="{{ asset(personnage.illustration) }}" />
-        {% endif %}
-        {{ form_row(form.illustration) }}
-            {{ form_widget(form) }}
-            <div class="text-center">
-                <button class="btn btn-primary">{{ button_label|default('Save') }}</button>
+        <div class="row justify-content-center align-items-start mt-5">
+            <div class="col-6 d-flex flex-column justify-content-center">
+                {{ form_row(form.nom) }}
+                {{ form_row(form.prenom) }}
+                {{ form_row(form.titres) }}
+                {{ form_row(form.clan) }}
+                {{ form_row(form.classe) }}
+                {{ form_row(form.ecole) }}
+                {{ form_row(form.joueur) }}
             </div>
+            <div class="col-6 text-center">
+                {% if type == 'Modifier' %}
+                    <img class="img-96" src="{{ asset(personnage.icone) }}" />
+                {% endif %}
+                {{ form_row(form.icone) }}
+                {% if type != 'Créer' %}
+                    <img class="img-240" src="{{ asset(personnage.illustration) }}" />
+                {% endif %}
+                {{ form_row(form.illustration) }}
+            </div>
+            <div class="col-12">
+                {{ form_row(form.description, {'attr': {'rows': '10'} }) }}
+            </div>
+            <div class="col-4 text-center">
+                {{ form_row(form.locked) }}
+            </div>
+            <div class="col-4 text-center">
+                {{ form_row(form.estMort) }}
+            </div>
+            <div class="col-4 text-center">
+                {{ form_row(form.est_pj) }}
+            </div>
+            <div class="col-12 text-center mt-3 mb-5">
+                <button class="btn btn-large btn-primary-style">{{ button_label|default('Save') }}</button>
+            </div>
+        </div>
     {{ form_end(form) }}
 </main>

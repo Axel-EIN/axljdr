@@ -1,0 +1,5 @@
+<a class="btn-icon-text {{color}} fa-fade hover-stop"
+    href="{{ path('admin_' ~ element ~ '_delete', {id: un_element.id} ) }}?csrf={{ csrf_token('delete' ~ un_element.id) }}&redirect={{redirect}}"
+    onclick="return confirm('Êtes-vous sûr de vouloir supprimer cet élément ?')">
+        <i class="fas fa-trash-alt" alt="Icône Supprimer"></i>&nbsp;&nbsp;Supprimer
+</a>

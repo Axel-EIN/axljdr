@@ -1,22 +1,32 @@
 <main class="offset-2 col-8">
     {{ form_start(form) }}
-        {{ form_row(form.titre) }}
-        {{ form_row(form.citation) }}
-
-        {% if type != 'Créer' %}
-            <img class="img-fluid" src="{{ asset(chapitre.image) }}" />
-        {% endif %}
-        
-        {{ form_row(form.image) }}
-        {{ form_row(form.couleur) }}
-
-        <hr></hr>
-        {{ form_row(form.saisonParent) }}
-        {{ form_row(form.numero) }}
-
-        <div class="text-center">
-            <button class="btn btn-primary">{{ button_label|default('Save') }}</button>
+        <div class="row justify-content-center align-items-start mt-5 mb-4">
+            <div class="col-12">
+                {{ form_row(form.titre) }}
+            </div> 
+            <div class="col-6">
+                {{ form_row(form.saisonParent) }}
+            </div> 
+            <div class="col-6">
+                {{ form_row(form.numero) }}
+            </div> 
+            <div class="col-12">
+                {{ form_row(form.citation,{ 'attr': {'rows': '3'} }) }}
+            </div>
+            <div class="col-12">
+                {% if type == 'Modifier' %}
+                    <img class="img-fluid" src="{{ asset(chapitre.image) }}" />
+                {% endif %}
+            </div>
+            <div class="col-12">
+                {{ form_row(form.image) }}
+            </div>
+            <div class="col-12">
+                {{ form_row(form.couleur) }}
+            </div>
+            <div class="col-12 text-center mt-5">
+                <button class="btn btn-large btn-primary-style">{{ button_label|default('Save') }}</button>
+            </div>
         </div>
-
     {{ form_end(form) }}
 </main>

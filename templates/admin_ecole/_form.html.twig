@@ -1,16 +1,65 @@
 <main class="offset-2 col-8">
     {{ form_start(form) }}
-        {% if type != 'Créer' %}
-            {% if ecole.image is not empty %}
-                <img class="img-fluid" src="{{ asset(ecole.image) }}" />
-            {% else %}
-                <img class="img-fluid" src="{{ asset('assets/img/placeholders/na_ecole.png') }}" />
-            {% endif %}
-        {% endif %}
-        {{ form_row(form.image) }}
-            {{ form_widget(form) }}
-            <div class="text-center">
-                <button class="btn btn-primary">{{ button_label|default('Save') }}</button>
+        <div class="row justify-content-center align-items-start mt-5 mb-4">
+            <div class="col-4">
+                {{ form_row(form.nom) }}
+            </div> 
+            <div class="col-4">
+                {{ form_row(form.clan) }}
+            </div> 
+            <div class="col-4">
+                {{ form_row(form.classe) }}
+            </div> 
+            <div class="col-12">
+                {% if type == 'Modifier' %}
+                    <img class="img-fluid" src="{{ asset(ecole.image) }}" />
+                {% endif %}
+            </div> 
+            <div class="col-12">
+                {{ form_row(form.image) }}
             </div>
+            <div class="col-12">
+                {{ form_row(form.description,{ 'attr': {'rows': '15'} }) }}
+            </div>
+            <div class="col-12">
+                {{ form_row(form.tech1Nom) }}
+            </div>
+            <div class="col-12">
+                {{ form_row(form.tech1Desc,{ 'attr': {'rows': '3'} }) }}
+            </div>
+            <div class="col-12">
+                {{ form_row(form.tech2Nom) }}
+            </div>
+            <div class="col-12">
+                {{ form_row(form.tech2Desc,{ 'attr': {'rows': '3'} }) }}
+            </div>
+            <div class="col-12">
+                {{ form_row(form.tech3Nom) }}
+            </div>
+            <div class="col-12">
+                {{ form_row(form.tech3Desc,{ 'attr': {'rows': '3'} }) }}
+            </div>
+            <div class="col-12">
+                {{ form_row(form.tech4Nom) }}
+            </div>
+            <div class="col-12">
+                {{ form_row(form.tech4Desc,{ 'attr': {'rows': '3'} }) }}
+            </div>
+            <div class="col-12">
+                {{ form_row(form.tech5Nom) }}
+            </div>
+            <div class="col-12">
+                {{ form_row(form.tech5Desc,{ 'attr': {'rows': '3'} }) }}
+            </div>
+            <div class="col-12">
+                {{ form_row(form.techSpecialNom) }}
+            </div>
+            <div class="col-12">
+                {{ form_row(form.techSpecialDesc,{ 'attr': {'rows': '3'} }) }}
+            </div>
+            <div class="col-12 text-center mt-5">
+                <button class="btn btn-large btn-primary-style">{{ button_label|default('Save') }}</button>
+            </div>
+        </div>
     {{ form_end(form) }}
 </main>

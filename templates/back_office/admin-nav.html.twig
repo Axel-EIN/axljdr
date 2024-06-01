@@ -10,7 +10,7 @@
 
     <a class="nav-link {% if app.request.get('_route') == 'admin_chapitre'
                           or app.request.get('_route') == 'admin_chapitre_create'
-                          or app.request.get('_route') == 'admin_saison_edit' %}active{% endif %}" href="{{ path('admin_chapitre') }}">Chapitres</a>
+                          or app.request.get('_route') == 'admin_chapitre_edit' %}active{% endif %}" href="{{ path('admin_chapitre') }}">Chapitres</a>
 
     <a class="nav-link {% if app.request.get('_route') == 'admin_saison'
                           or app.request.get('_route') == 'admin_saison_create'

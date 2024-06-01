@@ -111,6 +111,8 @@
                     <div class="text-center mt-4 mb-2">
                         {% if episode.issue == 'Win' %}
                             <img src="{{asset('assets/img/ui/outcome-success.png')}}" />
+                        {% elseif episode.issue == 'Mitigate' %}
+                            <img src="{{asset('assets/img/ui/outcome-mitigate.png')}}" />
                         {% elseif episode.issue == 'Lose' %}
                             <img src="{{asset('assets/img/ui/outcome-fail.png')}}" />
                         {% endif %}

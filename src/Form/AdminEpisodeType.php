@@ -32,7 +32,8 @@ class AdminEpisodeType extends AbstractType
             ->add('issue', ChoiceType::class, [
                 'choices'  => [
                     '' => null,
-                    'Réussite' => 'Win',
+                    'Succès' => 'Win',
+                    'Succès mitigé' => 'Mitigate',
                     "Échec" => "Lose"]
             ])
         ;

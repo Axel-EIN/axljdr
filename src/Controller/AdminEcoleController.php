@@ -49,7 +49,25 @@ class AdminEcoleController extends AbstractController
                 $nouveauChemingRelatif = 'assets/img/ecoles/' . $nouvelleImageNomFichier;
                 $ecole->setImage($nouveauChemingRelatif);
 
-            } else { $ecole->setImage('assets/img/placeholders/na_ecole.png'); }
+            } else {
+                switch ($ecole->getClasse()->getNom()) {
+                    case 'Bushi':
+                        $ecole->setImage('assets/img/placeholders/na-ecole-bushi.jpg');
+                        break;
+                    case 'Shugenja':
+                        $ecole->setImage('assets/img/placeholders/na-ecole-shugenja.jpg');
+                        break;
+                    case 'Moine':
+                        $ecole->setImage('assets/img/placeholders/na-ecole-moine.jpg');
+                        break;
+                    case 'Courtisan':
+                        $ecole->setImage('assets/img/placeholders/na-ecole-courtisan.jpg');
+                        break;
+                    case 'Artisan':
+                        $ecole->setImage('assets/img/placeholders/na-ecole-artisan.jpg');
+                        break;
+                }
+            }
 
             $em->persist($ecole);
             $em->flush();

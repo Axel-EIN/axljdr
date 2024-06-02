@@ -3,12 +3,11 @@
 namespace App\Controller;
 
 use App\Entity\Archive;
-use App\Service\Uploader;
+use App\Service\FileHandler;
 use App\Form\AdminArchiveType;
 use App\Repository\ArchiveRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
-use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -31,7 +30,7 @@ class AdminArchiveController extends AbstractController
      * @Route("/admin/archive/create", name="admin_archive_create")
      * @IsGranted("ROLE_MJ")
      */
-    public function ajouterArchive(Request $request, EntityManagerInterface $em, Uploader $uploadeur) {
+    public function ajouterArchive(Request $request, EntityManagerInterface $em, FileHandler $fileHandler) {
 
         $archive = new Archive;
         $form = $this->createForm(AdminArchiveType::class, $archive);
@@ -40,17 +39,15 @@ class AdminArchiveController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
 
             $nouvelleImage = $form->get('image')->getData();
-
             if (!empty($nouvelleImage)) {
-                $nouvelleImageNomFichier = $uploadeur->upload($nouvelleImage, 'archive-' . $archive->getTitre() . '-image', 'archives');
-                $nouveauCheminRelatif = 'assets/img/archives/' . $nouvelleImageNomFichier;
-                $archive->setImage($nouveauCheminRelatif);
+                $prefix = 'archive-' . $archive->getTitre() . '-image';
+                $archive->setImage($fileHandler->handle($nouvelleImage, null, $prefix, 'archives'));
             } else { $archive->setImage('assets/img/placeholders/1280x720.png'); }
 
             $em->persist($archive);
             $em->flush();
 
-            $this->addFlash('success', 'L\'Archive a bien été ajoutée !');
+            $this->addFlash('success', 'L\'Archive a bien été ajoutée.');
 
             // REDIRECTION
             // -----------
@@ -70,7 +67,7 @@ class AdminArchiveController extends AbstractController
      * @Route("/admin/archive/{id}/edit", name="admin_archive_edit")
      * @IsGranted("ROLE_MJ")
      */
-    public function editerArchive(Request $request, Archive $archive, Uploader $uploadeur): Response {
+    public function editerArchive(Request $request, Archive $archive, FileHandler $fileHandler): Response {
 
         $form = $this->createForm(AdminArchiveType::class, $archive);
         
@@ -79,23 +76,13 @@ class AdminArchiveController extends AbstractController
         if($form->isSubmitted() && $form->isValid()) {
 
             $nouvelleImage = $form->get('image')->getData();
-
             if (!empty($nouvelleImage)) {
-
-                $ancienneImageNomFichier = basename($archive->getImage());
-
-                $nouvelleImageNomFichier = $uploadeur->upload($nouvelleImage, 'archive-' . $archive->getTitre() . '-image', 'archives');
-                $nouveauChemingRelatif = 'assets/img/archives/' . $nouvelleImageNomFichier;
-                $archive->setImage($nouveauChemingRelatif);
-
-                $ancienneImageCheminComplet = $this->getParameter('image_directory') . '/archives/' . $ancienneImageNomFichier;
-                $filesystem = new Filesystem();
-                $filesystem->remove($ancienneImageCheminComplet);
-
+                $prefix = 'archive-' . $archive->getTitre() . '-image';
+                $archive->setImage($fileHandler->handle($nouvelleImage, $archive->getImage(), $prefix, 'archives'));
             }
 
             $this->getDoctrine()->getManager()->flush();
-            $this->addFlash('success', 'L\'Archive a bien été modifiée !');
+            $this->addFlash('success', 'L\'Archive a bien été modifiée.');
 
             // REDIRECTION
             // -----------
@@ -116,24 +103,18 @@ class AdminArchiveController extends AbstractController
      * @Route("/admin/archive/{id}/delete", name="admin_archive_delete", methods={"GET"})
      * @IsGranted("ROLE_MJ")
      */
-    public function supprimerArchive(Request $request, Archive $archive): Response {
+    public function supprimerArchive(Request $request, Archive $archive, FileHandler $fileHandler): Response {
 
         if ($this->isCsrfTokenValid('delete' . $archive->getId(), $request->query->get('csrf'))) {
 
             $entityManager = $this->getDoctrine()->getManager();
 
-            $nomImageASupprimer = basename($archive->getImage());
-            $cheminImageASupprimer = $this->getParameter('image_directory') . '/archives/' . $nomImageASupprimer;
-
-            if (file_exists($cheminImageASupprimer)) {
-                $filesystem = new Filesystem();
-                $filesystem->remove($cheminImageASupprimer);
-            }
+            $fileHandler->handle(null, $archive->getImage(), null, 'archives');
 
             $entityManager->remove($archive);
             $entityManager->flush();
 
-            $this->addFlash('success', 'L\'archive a bien été supprimée !');
+            $this->addFlash('success', 'L\'archive a bien été supprimée.');
         }
 
         // REDIRECTION

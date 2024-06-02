@@ -22,14 +22,16 @@ class ReglesController extends AbstractController
 
         $sections = [];
         $sections[0]['name'] = "Classes";
+        $sections[0]['entity'] = 'classe';
+        $sections[0]['label_one'] = 'une classe';
         $sections[0]['titleLight'] = 'Les';
         $sections[0]['titleStrong'] = 'Classes';
-        $sections[0]['element'] = 'classe';
 
         $sections[1]['name'] = "Écoles";
+        $sections[1]['entity'] = 'ecole';
+        $sections[1]['label_one'] = 'une école';
         $sections[1]['titleLight'] = 'Les';
         $sections[1]['titleStrong'] = 'Écoles';
-        $sections[1]['element'] = 'ecole';
 
         $header_classname = 'rules';
         $header_up = "Mécanique de Jeu";
@@ -54,6 +56,10 @@ class ReglesController extends AbstractController
     {
         return $this->render('regles/classe.html.twig', [
             'classe' => $classe,
+            'nom' => $classe->getNom(),
+            'entity' => 'classe',
+            'category' => 'regles',
+            'un_element' => $classe,
         ]);
     }
 
@@ -64,6 +70,10 @@ class ReglesController extends AbstractController
     {
         return $this->render('regles/ecole.html.twig', [
             'ecole' => $ecole,
+            'nom' => $ecole->getNom(),
+            'entity' => 'ecole',
+            'category' => 'regles',
+            'un_element' => $ecole,
         ]);
     }
 }

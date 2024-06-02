@@ -3,11 +3,10 @@
 namespace App\Controller;
 
 use App\Entity\Classe;
-use App\Service\Uploader;
+use App\Service\FileHandler;
 use App\Form\AdminClasseType;
 use App\Repository\ClasseRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -31,7 +30,7 @@ class AdminClasseController extends AbstractController
      * @Route("/admin/classe/create", name="admin_classe_create")
      * @IsGranted("ROLE_MJ")
      */
-    public function ajouterClasse(Request $request, EntityManagerInterface $em, Uploader $uploadeur) {
+    public function ajouterClasse(Request $request, EntityManagerInterface $em, FileHandler $fileHandler) {
 
         $classe = new Classe;
         $form = $this->createForm(AdminClasseType::class, $classe);
@@ -40,17 +39,15 @@ class AdminClasseController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
 
             $nouvelleIcone = $form->get('icone')->getData();
-
             if (!empty($nouvelleIcone)) {
-                $nouvelleIconeNomFichier = $uploadeur->upload($nouvelleIcone, 'classe-' . $classe->getNom() . '-icon', 'classes');
-                $nouveauCheminRelatif = 'assets/img/classes/' . $nouvelleIconeNomFichier;
-                $classe->setIcone($nouveauCheminRelatif);
+                $prefix = 'classe-' . $classe->getNom() . '-icon';
+                $classe->setIcone($fileHandler->handle($nouvelleIcone, null, $prefix, 'classes'));
             } else { $classe->setIcone('assets/img/placeholders/na_class.png'); }
 
             $em->persist($classe);
             $em->flush();
 
-            $this->addFlash('success', 'La classe a bien été ajoutée !');
+            $this->addFlash('success', 'La classe a bien été ajoutée.');
 
             return $this->redirectToRoute('admin_classe');
         } else {
@@ -65,7 +62,7 @@ class AdminClasseController extends AbstractController
      * @Route("/admin/classe/{id}/edit", name="admin_classe_edit")
      * @IsGranted("ROLE_MJ")
      */
-    public function editerClasse(Request $request, Classe $classe, Uploader $uploadeur): Response {
+    public function editerClasse(Request $request, Classe $classe, FileHandler $fileHandler): Response {
 
         $form = $this->createForm(AdminClasseType::class, $classe);
         
@@ -74,23 +71,13 @@ class AdminClasseController extends AbstractController
         if($form->isSubmitted() && $form->isValid()) {
 
             $nouvelleIcone = $form->get('icone')->getData();
-
             if (!empty($nouvelleIcone)) {
-
-                $ancienneIconeNomFichier = basename($classe->getIcone());
-
-                $nouvelleIconeNomFichier = $uploadeur->upload($nouvelleIcone, 'classe-' . $classe->getNom() . '-icon', 'classes');
-                $nouveauChemingRelatif = 'assets/img/classes/' . $nouvelleIconeNomFichier;
-                $classe->setIcone($nouveauChemingRelatif);
-
-                $ancienneIconeCheminComplet = $this->getParameter('image_directory') . '/classes/' . $ancienneIconeNomFichier;
-                $filesystem = new Filesystem();
-                $filesystem->remove($ancienneIconeCheminComplet);
-
+                $prefix = 'classe-' . $classe->getNom() . '-icon';
+                $classe->setIcone($fileHandler->handle($nouvelleIcone, $classe->getIcone(), $prefix, 'classes'));
             }
 
             $this->getDoctrine()->getManager()->flush();
-            $this->addFlash('success', 'La classe a bien été modifiée !');
+            $this->addFlash('success', 'La classe a bien été modifiée.');
 
             // REDIRECTION
             // -----------
@@ -111,7 +98,7 @@ class AdminClasseController extends AbstractController
      * @Route("/admin/classe/{id}/delete", name="admin_classe_delete", methods={"GET"})
      * @IsGranted("ROLE_MJ")
      */
-    public function supprimerClasse(Request $request, Classe $classe): Response {
+    public function supprimerClasse(Request $request, Classe $classe, FileHandler $fileHandler): Response {
 
         if ($this->isCsrfTokenValid('delete' . $classe->getId(), $request->query->get('csrf'))) {
 
@@ -122,19 +109,12 @@ class AdminClasseController extends AbstractController
 
             $entityManager = $this->getDoctrine()->getManager();
 
-            // Gestion de l'image
-            $nomIconeASupprimer = basename($classe->getIcone());
-            $cheminIconeASupprimer = $this->getParameter('image_directory') . '/classes/' . $nomIconeASupprimer;
-
-            if (file_exists($cheminIconeASupprimer)) {
-                $filesystem = new Filesystem();
-                $filesystem->remove($cheminIconeASupprimer);
-            }
+            $fileHandler->handle(null, $classe->getIcone(), null, 'classes');
 
             $entityManager->remove($classe);
             $entityManager->flush();
 
-            $this->addFlash('success', 'La classe a bien été supprimée !');
+            $this->addFlash('success', 'La classe a bien été supprimée.');
         }
 
         return $this->redirectToRoute('admin_classe');

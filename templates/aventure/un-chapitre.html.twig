@@ -14,7 +14,7 @@
 
             {% if app.user and is_granted("ROLE_MJ") %}
                 <!-- MJ - BTN ICON - Edit -->
-                {% set redirect, element, un_element, size, color = 'aventure', 'chapitre', un_chapitre, 'medium', 'white' %}
+                {% set redirect, element, un_element, size, color = 'aventure', 'chapitre', un_chapitre, 'medium', 'text-accent' %}
                 {{ include('/parts/btn-icon-edit.html.twig') }}
             {% endif %}
 
@@ -34,7 +34,7 @@
                     <div class="alert alert-light mx-auto alert-persist">
                         <strong>Il n'y a pas encore d'épisode disponible !</strong>&nbsp;&nbsp;
                         {% if app.user and is_granted("ROLE_MJ") %}
-                            <a class="text-light" href="{{path('admin_episode_create')}}?numero=1&chapitreID={{un_chapitre.id}}&redirect=aventure">
+                            <a class="text-lightest" href="{{path('admin_episode_create')}}?numero=1&chapitreID={{un_chapitre.id}}&redirect=aventure">
                                 <i class="fas fa-plus-square fa-bounce" alt="Icône Ajouter"></i>&nbsp;&nbsp;<strong>Ajouter une Session</strong>
                             </a>
                         {% endif %}

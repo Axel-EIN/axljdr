@@ -21,7 +21,7 @@
 
                 {% if app.user and is_granted("ROLE_MJ") %}
                     <!-- MJ - BTN ICON - Edit -->
-                    {% set redirect, element, un_element, size, color, position = 'empire', 'archive', archive, 'medium', 'accent-color', 'right-snap' %}
+                    {% set redirect, element, un_element, size, color, position = 'empire', 'archive', archive, 'medium', 'text-accent', 'right-snap' %}
                     {{ include('/parts/btn-icon-edit.html.twig') }}
                 {% endif %}
                 
@@ -51,7 +51,7 @@
                         {% if app.user and is_granted("ROLE_MJ") %}
                         <div class="mt-3 text-center">
                             <!-- MJ - BTN ICON - Delete -->
-                            {% set redirect, element, un_element, color, action = 'empire', 'archive', archive, 'accent-color', 'delete' %}
+                            {% set redirect, element, un_element, color, action = 'empire', 'archive', archive, 'text-accent', 'delete' %}
                             {{ include('/parts/btn-edit-delete.html.twig') }}
                         </div>
                         {% endif %}

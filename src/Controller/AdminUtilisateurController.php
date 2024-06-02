@@ -2,12 +2,11 @@
 
 namespace App\Controller;
 
-use App\Service\Uploader;
+use App\Service\FileHandler;
 use App\Entity\Utilisateur;
 use App\Form\AdminUtilisateurType;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\UtilisateurRepository;
-use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -35,7 +34,7 @@ class AdminUtilisateurController extends AbstractController
      * @Route("/admin/utilisateur/create", name="admin_utilisateur_create")
      * @IsGranted("ROLE_ADMIN")
      */
-    public function ajouterUtilisateur(Request $request, EntityManagerInterface $em, Uploader $uploadeur, UserPasswordHasherInterface $userPasswordHasherInterface) {
+    public function ajouterUtilisateur(Request $request, EntityManagerInterface $em, FileHandler $fileHandler, UserPasswordHasherInterface $userPasswordHasherInterface) {
 
         $utilisateur = new Utilisateur;
         $form = $this->createForm(AdminUtilisateurType::class, $utilisateur);
@@ -50,18 +49,16 @@ class AdminUtilisateurController extends AbstractController
                 )
             );
 
-            $avatar = $form->get('avatar')->getData();
-
-            if (!empty($avatar)) {
-                $avatarNomFichier = $uploadeur->upload($avatar, 'avatar-' . $utilisateur->getPseudo(), 'avatars');
-                $cheminRelatif = 'assets/img/avatars/' . $avatarNomFichier;
-                $utilisateur->setAvatar($cheminRelatif);
-            } else { $utilisateur->setAvatar(null); }
+            $nouvelleAvatar = $form->get('avatar')->getData();
+            if (!empty($nouvelleAvatar)) {
+                $prefix = 'avatar-' . $utilisateur->getPseudo();
+                $utilisateur->setAvatar($fileHandler->handle($nouvelleAvatar, null, $prefix, 'avatars'));
+            } else { $utilisateur->setAvatar('assets/img/placeholders/na_mon.png'); }
 
             $em->persist($utilisateur);
             $em->flush();
 
-            $this->addFlash('success', 'L\'utilisateur a bien été crée !');
+            $this->addFlash('success', 'L\'utilisateur a bien été crée.');
 
             return $this->redirectToRoute('admin_utilisateur');
         } else {
@@ -76,7 +73,7 @@ class AdminUtilisateurController extends AbstractController
      * @Route("/admin/utilisateur/{id}/edit", name="admin_utilisateur_edit")
      * @IsGranted("ROLE_ADMIN")
      */
-    public function editerUtilisateur(Request $request, Utilisateur $utilisateur, Uploader $uploadeur, UserPasswordHasherInterface $userPasswordHasherInterface): Response {
+    public function editerUtilisateur(Request $request, Utilisateur $utilisateur, FileHandler $fileHandler, UserPasswordHasherInterface $userPasswordHasherInterface): Response {
 
         $ancien_mdp = $utilisateur->getPassword();
 
@@ -99,25 +96,14 @@ class AdminUtilisateurController extends AbstractController
                 $utilisateur->setPassword($ancien_mdp);
             }
 
-            $nouveauAvatar = $form->get('avatar')->getData();
-
-            if (!empty($nouveauAvatar)) {
-
-                $ancienAvatarNomFichier = basename($utilisateur->getAvatar());
-
-                $nouveauAvatarNomFichier = $uploadeur->upload($nouveauAvatar, 'avatar-' . $utilisateur->getPseudo(), 'avatars');
-                $nouveauChemingRelatif = 'assets/img/avatars/' . $nouveauAvatarNomFichier;
-                $utilisateur->setAvatar($nouveauChemingRelatif);
-
-                $ancienneAvatarCheminComplet = $this->getParameter('image_directory') . '/avatars/' . $ancienAvatarNomFichier;
-                $filesystem = new Filesystem();
-                if ($ancienneAvatarCheminComplet != $this->getParameter('image_directory') . '/avatars/')
-                    $filesystem->remove($ancienneAvatarCheminComplet);
-
+            $nouvelleAvatar = $form->get('avatar')->getData();
+            if (!empty($nouvelleAvatar)) {
+                $prefix = 'avatar-' . $utilisateur->getPseudo();
+                $utilisateur->setAvatar($fileHandler->handle($nouvelleAvatar, $utilisateur->getAvatar(), $prefix, 'avatars'));
             }
 
             $this->getDoctrine()->getManager()->flush();
-            $this->addFlash('success', 'L\'utilisateur a bien été modifié !');
+            $this->addFlash('success', 'L\'utilisateur a bien été modifié.');
 
             return $this->redirectToRoute('admin_utilisateur');
         }
@@ -133,20 +119,12 @@ class AdminUtilisateurController extends AbstractController
      * @Route("/admin/utilisateur/{id}/delete", name="admin_utilisateur_delete", methods={"GET"})
      * @IsGranted("ROLE_ADMIN")
      */
-    public function supprimerUtilisateur(Request $request, Utilisateur $utilisateur): Response {
+    public function supprimerUtilisateur(Request $request, Utilisateur $utilisateur, FileHandler $fileHandler): Response {
         if ($this->isCsrfTokenValid('delete' . $utilisateur->getId(), $request->query->get('csrf'))) {
 
             $entityManager = $this->getDoctrine()->getManager();
 
-            if ( !empty($utilisateur->getAvatar()) ) {
-                $nomAvatarASupprimer = basename($utilisateur->getAvatar());
-                $cheminAvatarASupprimer = $this->getParameter('image_directory') . '/avatars/' . $nomAvatarASupprimer;
-            }
-
-            if ( file_exists($cheminAvatarASupprimer) ) {
-                $filesystem = new Filesystem();
-                $filesystem->remove($cheminAvatarASupprimer);
-            }
+            $fileHandler->handle(null, $utilisateur->getAvatar(), null, 'avatars');
 
             $entityManager->remove($utilisateur);
             $entityManager->flush();

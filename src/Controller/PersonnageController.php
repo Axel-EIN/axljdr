@@ -19,14 +19,16 @@ class PersonnageController extends AbstractController
 
         $sections = [];
         $sections[0]['name'] = "PJs";
+        $sections[0]['entity'] = 'personnage';
+        $sections[0]['label_one'] = "un personnage";
         $sections[0]['titleLight'] = 'Personnages';
         $sections[0]['titleStrong'] = 'Joueurs';
-        $sections[0]['element'] = 'personnage';
 
         $sections[1]['name'] = "PNJs";
+        $sections[1]['entity'] = 'personnage';
+        $sections[1]['label_one'] = "un personnage";
         $sections[1]['titleLight'] = 'Personnages';
         $sections[1]['titleStrong'] = 'Non-Joueurs';
-        $sections[1]['element'] = 'personnage';
 
         $header_classname = 'characters';
         $header_up = "Les Héros de l'Aventure";
@@ -50,6 +52,10 @@ class PersonnageController extends AbstractController
     public function afficherPersonnageProfil(Personnage $personnage): Response {
         return $this->render('personnage/profil.html.twig', [
             'personnage' => $personnage,
+            'nom' => $personnage->getNom() . ' ' . $personnage->getPrenom(),
+            'entity' => 'personnage',
+            'category' => 'personnages',
+            'un_element' => $personnage,
         ]);
     }
 }

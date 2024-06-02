@@ -47,7 +47,7 @@
                     {% if app.user and is_granted("ROLE_MJ") %}
                         <div class="text-center mb-4">
                             <!-- MJ BTN ICON+TEXT Insert or Add -->
-                            {% set color, element, numero, parent, parentID, redirect, label = 'accent-color', 'scene', une_scene.numero, 'episode', episode.id, 'episode', 'Insérer' %}
+                            {% set color, element, numero, parent, parentID, redirect, label = 'text-accent', 'scene', une_scene.numero, 'episode', episode.id, 'episode', 'Insérer' %}
                             {{ include('/parts/btn-line-insert-add.html.twig') }}
                         </div>
                     {% endif %}
@@ -65,7 +65,7 @@
                 {% if app.user and is_granted("ROLE_MJ") %}
                     <!-- MJ BTN ICON+TEXT Insert or Add -->
                     <div class="text-center mt-1 mb-3">
-                        {% set color, element, numero, parent, parentID, redirect, label = 'accent-color', 'scene', (numero + 1), 'episode', episode.id, 'episode', 'Ajouter' %}
+                        {% set color, element, numero, parent, parentID, redirect, label = 'text-accent', 'scene', (numero + 1), 'episode', episode.id, 'episode', 'Ajouter' %}
                         {{ include('/parts/btn-line-insert-add.html.twig') }}
                     </div>
                 {% endif %}

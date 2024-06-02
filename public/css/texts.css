@@ -1,0 +1,179 @@
+/* -------------------------- */
+/* ------- BODY TEXT  ------- */
+/* -------------------------- */
+
+:root {
+    --mini : 0.6rem;
+    --small : 0.8rem;
+    --normal : 1rem;
+    --regular : 1.1rem;
+    --medium : 1.2rem;
+    --large : 1.5rem;
+    --big : 1.75rem;
+    --fat : 2rem;
+}
+
+html, body {
+    font-size: 18px;
+    font-family: 'Barlow';
+    line-height: 1.4;
+    color: var(--dark);
+}
+
+@media (max-width: 1200px) { html, body { font-size: 16px; } }
+@media (max-width: 992px) { html, body { font-size: 15px; } }
+@media (max-width: 576px) { html, body { font-size: 14px; } }
+@media (max-width: 480px) { html, body { font-size: 13px; } }
+
+.text-mini { font-size: var(--mini); }
+.text-small { font-size: var(--small); }
+.text-normal { font-size: var(--normal); }
+.text-regular { font-size: var(--regular); }
+.text-medium { font-size: var(--medium); }
+.text-large { font-size: var(--large); }
+.text-big { font-size: var(--big); }
+.text-fat { font-size: var(--fat); }
+
+/* --- PARAGRAPHS --- */
+
+p.text-small {
+    line-height: 1.6;
+}
+
+p.text-regular, .paragraph.text-regular {
+    line-height: 1.60;
+}
+
+p.text-medium, .paragraph.text-medium {
+    line-height: 1.70;
+}
+
+p.text-medium {
+    line-height: 1.75;
+}
+
+/* --------------------- */
+/* ----- PARAGRAPH ----- */
+/* --------------------- */
+
+p > mark {
+    color: unset;
+}
+
+/* ---------------------------------- */
+/* --------- TEXT EFFECTS  ---------- */
+/* ---------------------------------- */
+
+.text-shadow {
+    text-shadow: 2px 2px 8px black !important;
+}
+      
+.clip-text {
+        font-size: 1rem;
+        font-weight: 700;
+}
+          
+@supports(background-clip:text) or (-webkit-background-clip:text) {
+        .clip-text {
+                color: transparent;
+                background-clip: text;
+                -webkit-background-clip: text;
+                background-image: url('../assets/img/ui/back-text-fire-burning.gif');
+                background-size: cover;
+                background-position: center;
+        }
+}
+
+.number-skillrank-effect {
+    font-family: "Shogun";
+}
+
+.quote {
+    font-size: 1.25rem;
+    font-style: italic;
+    margin-bottom: 1rem;
+    color: var(--light-alpha);
+    text-shadow:
+        2px 2px 6px black,
+        0px 0px 2rem black;
+}
+
+@media (max-width: 1200px) { .quote { font-size: 1.25rem; } }
+@media (max-width: 992px) { .quote { font-size: 1.25rem; } }
+@media (max-width: 576px) { .quote { font-size: 1rem; } }
+@media (max-width: 480px) { .quote { font-size: 1rem; } }
+
+.text-xp {
+    color: var(--flash-blue);
+    text-shadow:
+        0px 0px 8px var(--black);
+}
+
+.text-your-xp {
+    color: var(--green);
+    text-shadow:
+        1px 1px 0 var(--flash-green),
+        -1px -1px 0 var(--flash-green),
+        1px -1px 0 var(--flash-green),
+        -1px 1px 0 var(--flash-green);
+}
+
+.text-dead {
+    color: var(--primary-darker);
+    text-shadow:
+        1px 1px 0 var(--flash-red),
+        -1px -1px 0 var(--flash-red),
+        1px -1px 0 var(--flash-red),
+        -1px 1px 0 var(--flash-red);
+}
+
+/* ---------------------- */
+/* ----- FONT FACES ----- */
+/* ---------------------- */
+
+/* BODY */
+@font-face {
+    font-family: 'Barlow';
+    src: url("../assets/fonts/Barlow-Regular-Semi-Condensed.ttf") format("truetype");
+}
+
+.font-barlow { font-family: 'Barlow'; }
+
+/* H1 */
+@font-face {
+    font-family: "Shogun";
+    src: url("../assets/fonts/Shoguns-Clan-Edited-Accentued.otf") format("opentype");
+}
+
+.font-shogun { font-family: 'Shogun'; }
+
+@font-face {
+    font-family: "Misaki";
+    src: url("../assets/fonts/Misaki-Regular.otf") format("opentype");
+}
+
+.font-misaki { font-family: 'Misaki'; }
+
+/* H2 DISPLAY TITLES */
+@font-face {
+    font-family: "Present";
+    src: url("../assets/fonts/Present-LT-Black-Condensed.otf") format("opentype");
+}
+
+.font-present { font-family: 'Present'; }
+
+/* H3 DISPLAY TITLES */
+@font-face {
+    font-family: "Avenir";
+    src: url("../assets/fonts/Avenir-Black.ttf") format("truetype");
+}
+
+.font-avenir { font-family: 'Avenir'; }
+
+/* H4 DISPLAY TITLES */
+@font-face {
+    font-family: "Amerigo";
+    src: url("../assets/fonts/Amerigo-Bold-BT.ttf") format("truetype");
+}
+
+.font-amerigo { font-family: 'Amerigo'; }

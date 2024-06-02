@@ -15,11 +15,11 @@
 
             <div class="card character-card text-white shadowed {{zoom}} {{translucide}} {{hover_opaque}} relative">
                 {% if perso.locked == 1 %}
-                    <img class="icon-lock-character fa-beat" src="{{asset('assets/img/icons/locked.png')}}" alt="Icône cadena" title="A débloquer !" />
+                    <img class="absolute icon-lock-character fa-beat" src="{{asset('assets/img/icons/locked.png')}}" alt="Icône cadena" title="A débloquer !" />
                 {% elseif perso.estMort == 1 %}
-                    <img class="icon-dead-big" src="{{asset('assets/img/icons/mort.png')}}" alt="Icône est mort" />
+                    <img class="absolute icon-dead-big" src="{{asset('assets/img/icons/mort.png')}}" alt="Icône est mort" />
                 {% endif %}
-                <img class="corner-badge {{grayscale}} {{dead}}" src="{{ asset(perso.clan.mon) }}" alt="Mon d'un clan"/>
+                <img class="absolute corner-badge {{grayscale}} {{dead}}" src="{{ asset(perso.clan.mon) }}" alt="Mon d'un clan"/>
                 <div class="mask-bg-dark"><img class="card-img {{grayscale}} {{dead}}" src="{{ asset(perso.illustration) }}" alt="Illustration d'un personnage" title="Voir le profil de {{perso.prenom}}" /></div>
                 <div class="card-img-overlay">
                     <h4 class="card-title {{text}}">{{ perso.nom }} {{ perso.prenom }}</h4>

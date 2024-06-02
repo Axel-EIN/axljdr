@@ -1,5 +1,13 @@
 <section class="header-bg-img" style="background-color: {{ un_chapitre.couleur }}; background-image:linear-gradient( rgb( 0,0,0,0.6 ), rgb( 0,0,0,0), rgb( 0,0,0,0.3), rgb( 0,0,0,0.6) ), url( {{ asset(un_chapitre.image) }} );" >
     <div class="container">
+
+        {% if app.user and is_granted("ROLE_MJ") %}
+            <div class="text-center">
+                <!-- MJ BTN ICON+TEXT Insert or Add -->
+                {{ include('/parts/btn-line-insert-add.html.twig') }}
+            </div>
+        {% endif %}
+
         <div class="header header-chapter d-flex flex-column justify-content-end" >
             <span class="chapter-number text-left">CHAPITRE {{ un_chapitre.numero }}</span>
             <div><hr></div>
@@ -36,7 +44,7 @@
             
         </div>
 
-         <!-- EPISODES / SESSIONS -->
+         <!-- SESSIONS -->
         <div id="ch{{ un_chapitre.numero }}-episodes" class="collapse py-5">
             <div class="container">
                 <div class="row justify-content-center relative">
@@ -44,7 +52,7 @@
                 {% for un_episode in un_chapitre.episodes %}
                     {% if un_episode.scenes|length > 0 or is_granted("ROLE_MJ") %}
 
-                        <!-- UN EPISODE -->
+                        <!-- ONE SESSION -->
                         <article class="col-lg-3 col-md-4 col-sm-6 session-card-spacing hover-zoom">
                             <div class="card session-card-body">
                                 <div class="session-card-number">{{ un_episode.numero }}</div>
@@ -64,7 +72,7 @@
                                     </a>
                                 </div>
 
-                                <!-- ICON PERSONAGE JOUEUR PARTICIPANT -->
+                                <!-- ICON PLAYERS CHARACTER PLAYED SESSION -->
                                 {% if app.user %}
                                     
                                     {% for un_cumul_personnage in user_personnages_cumul_episodes %}
@@ -89,7 +97,7 @@
                                         {% endfor %}
                                     {% endfor %}
 
-                                    {% endif %}
+                                {% endif %}
 
                                 {% if app.user and is_granted("ROLE_MJ") %}
                                     <!-- MJ - BTN ICON - Edit -->

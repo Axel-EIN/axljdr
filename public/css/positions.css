@@ -1,0 +1,40 @@
+.relative {
+        position: relative;
+}
+
+.absolute {
+        position: absolute;
+}
+
+.topleft-overflow {
+        position: absolute;
+        z-index: 10;
+        left: -2.5rem;
+        top: 0.5rem;
+}
+
+.topright-overflow {
+        position: absolute;
+        z-index: 10;
+        right: -2.5rem;
+        top: 0.5rem;
+}
+
+.topright-corner-snap {
+        position: absolute;
+        z-index: 10;
+        top: 0px;
+        right: 0px;
+}
+
+.topright-corner-inside {
+        position: absolute;
+        z-index: 10;
+        top:8px;
+        right:8px; }
+
+.topright-corner-inside-more {
+        position: absolute;
+        z-index: 10;
+        top: 1rem;
+        right: 1rem; }

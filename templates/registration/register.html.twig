@@ -3,7 +3,7 @@
 {% block title %}Créer un compte{% endblock %}
 
 {% block body %}
-<main class="container-fluid bg-light">
+<main class="container-fluid bg-lightest">
     <section class="container py-5">
         {% for flashError in app.flashes('verify_email_error') %}
             <div class="alert alert-danger" role="alert">{{ flashError }}</div>

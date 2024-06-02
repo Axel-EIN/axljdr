@@ -3,13 +3,12 @@
 namespace App\Controller;
 
 use App\Entity\Chapitre;
-use App\Service\Uploader;
+use App\Service\FileHandler;
 use App\Service\Numeroteur;
 use App\Form\AdminChapitreType;
 use App\Repository\SaisonRepository;
 use App\Repository\ChapitreRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -34,7 +33,7 @@ class AdminChapitreController extends AbstractController
      * @Route("/admin/chapitre/create", name="admin_chapitre_create")
      * @IsGranted("ROLE_MJ")
      */
-    public function creerChapitre(Request $request, EntityManagerInterface $em, Uploader $uploadeur, SaisonRepository $saisonRepository, Numeroteur $numeroteur, ChapitreRepository $chapitreRepository) {
+    public function creerChapitre(Request $request, EntityManagerInterface $em, FileHandler $fileHandler, SaisonRepository $saisonRepository, Numeroteur $numeroteur, ChapitreRepository $chapitreRepository) {
 
         $chapitre = new Chapitre;
 
@@ -62,17 +61,15 @@ class AdminChapitreController extends AbstractController
             // ----------------------
             $nouvelleImage = $form->get('image')->getData();
             if (!empty($nouvelleImage)) {
-                $nouvelleImageNomFichier = $uploadeur->upload($nouvelleImage, 'chapitre-s' . $chapitre->getSaisonParent()->getNumero() . '-ch' . $chapitre->getNumero(), 'chapitres');
-                $nouveauCheminRelatif = 'assets/img/chapitres/' . $nouvelleImageNomFichier;
-                $chapitre->setImage($nouveauCheminRelatif);
-            } else
-                $chapitre->setImage('assets/img/placeholders/1920x1080.jpg');
+                $prefix = 'chapitre-s' . $chapitre->getSaisonParent()->getNumero() . '-ch' . $chapitre->getNumero();
+                $chapitre->setImage($fileHandler->handle($nouvelleImage, null, $prefix, 'chapitres'));
+            } else { $chapitre->setImage('assets/img/placeholders/1920x1080.jpg'); }
 
             // CREATION ENTITE
             // ---------------
             $em->persist($chapitre);
             $em->flush();
-            $this->addFlash('success', 'Le chapitre a bien été crée !');
+            $this->addFlash('success', 'Le chapitre a bien été crée.');
 
             // NUMEROTEUR
             // ----------
@@ -100,7 +97,7 @@ class AdminChapitreController extends AbstractController
      * @Route("/admin/chapitre/{id}/edit", name="admin_chapitre_edit")
      * @IsGranted("ROLE_MJ")
      */
-    public function editerChapitre(Request $request, Chapitre $chapitre, Uploader $uploadeur, Numeroteur $numeroteur, ChapitreRepository $chapitreRepository): Response {
+    public function editerChapitre(Request $request, Chapitre $chapitre, FileHandler $fileHandler, Numeroteur $numeroteur, ChapitreRepository $chapitreRepository): Response {
 
         // Stockage du numéro et de l'ID de l'episode avant édition
         $numeroDepart = $chapitre->getNumero();
@@ -117,17 +114,11 @@ class AdminChapitreController extends AbstractController
 
             // EDITION FICHIER IMAGE
             // ---------------------
+
             $nouvelleImage = $form->get('image')->getData();
             if (!empty($nouvelleImage)) {
-                $AncienneImageNomFichier = basename($chapitre->getImage());
-
-                $nouvelleImageNomFichier = $uploadeur->upload($nouvelleImage, 'chapitre-s' . $chapitre->getSaisonParent()->getNumero() . '-ch' . $chapitre->getNumero(), 'chapitres');
-                $nouveauChemingRelatif = 'assets/img/chapitres/' . $nouvelleImageNomFichier;
-                $chapitre->setImage($nouveauChemingRelatif);
-
-                $ancienneImageCheminComplet = $this->getParameter('image_directory') . '/chapitres/' . $AncienneImageNomFichier;
-                $filesystem = new Filesystem();
-                $filesystem->remove($ancienneImageCheminComplet);
+                $prefix = 'chapitre-s' . $chapitre->getSaisonParent()->getNumero() . '-ch' . $chapitre->getNumero();
+                $chapitre->setImage($fileHandler->handle($nouvelleImage, $chapitre->getImage(), $prefix, 'chapitres'));
             }
 
             // NUMEROTEUR
@@ -143,7 +134,7 @@ class AdminChapitreController extends AbstractController
             // EDITION ENTITE
             // --------------
             $this->getDoctrine()->getManager()->flush();
-            $this->addFlash('success', 'Le chapitre a bien été modifié !');
+            $this->addFlash('success', 'Le chapitre a bien été modifié.');
 
             // REDIRECTION
             // -----------
@@ -166,7 +157,7 @@ class AdminChapitreController extends AbstractController
      * @Route("/admin/chapitre/{id}/delete", name="admin_chapitre_delete", methods={"GET"})
      * @IsGranted("ROLE_MJ")
      */
-    public function supprimerChapitre(Request $request, Chapitre $chapitre, Numeroteur $numeroteur, ChapitreRepository $chapitreRepository): Response {
+    public function supprimerChapitre(Request $request, Chapitre $chapitre, Numeroteur $numeroteur, FileHandler $fileHandler, ChapitreRepository $chapitreRepository): Response {
 
         $saisonParent = $chapitre->getSaisonParent(); // Stocké pour la redirection
 
@@ -183,13 +174,7 @@ class AdminChapitreController extends AbstractController
 
             // SUPPRESSION FICHIER IMAGE
             // -------------------------
-            $nomImageASupprimer = basename($chapitre->getImage());
-            $cheminImageASupprimer = $this->getParameter('image_directory') . '/chapitres/' . $nomImageASupprimer;
-
-            if (file_exists($cheminImageASupprimer)) {
-                $filesystem = new Filesystem();
-                $filesystem->remove($cheminImageASupprimer);
-            }
+            $fileHandler->handle(null, $chapitre->getImage(), null, 'chapitres');
 
             // NUMEROTEUR
             // ----------
@@ -202,7 +187,7 @@ class AdminChapitreController extends AbstractController
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($chapitre);
             $entityManager->flush();
-            $this->addFlash('success', 'Le chapitre a bien été supprimé !');
+            $this->addFlash('success', 'Le chapitre a bien été supprimé.');
 
         } else
             $this->addFlash('danger', 'Token de protection invalide !');

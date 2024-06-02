@@ -70,7 +70,13 @@
 
                         {% for une_famille in clan.familles %}
                             <hr>
-                            <div class="my-4 row align-items-start relative">
+                            <article class="my-4 row align-items-start relative">
+
+                                {% if app.user and is_granted("ROLE_MJ") %}
+                                <!-- MJ BTN ICON EDIT -->
+                                    {% set redirect, element, un_element, size, color, position = 'clan', 'famille', une_famille, 'medium', 'text-accent', 'right-corner-snap' %}
+                                    {{ include('/parts/btn-icon-edit.html.twig') }}
+                                {% endif %}
 
                                 <div class="col-lg-3 text-center">
 

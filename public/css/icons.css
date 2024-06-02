@@ -1,0 +1,166 @@
+/* -------------------------------- */
+/* ------ FLAT VECTOR ICONS  ------ */
+/* -------------------------------- */
+
+.btn-icon-mini {
+    display: inline-block;
+    text-align: center;
+    cursor: pointer;
+    width: 32px;
+    height: 32px;
+    font-size: 1rem;
+}
+
+.btn-icon-small {
+    display: inline-block;
+    text-align: center;
+    cursor: pointer;
+    width: 40px;
+    height: 40px;
+    font-size: 1.5rem;
+}
+
+.btn-icon-medium {
+    display: inline-block;
+    text-align: center;
+    cursor: pointer;
+    width: 48px;
+    height: 48px;
+    font-size: 2rem;
+}
+
+.btn-icon-big {
+    display: inline-block;
+    text-align: center;
+    cursor: pointer;
+    width: 96px;
+    height: 96px;
+    font-size: 3rem;
+}
+
+.btn-mj:hover {
+    color: var(--accent) !important;
+    text-decoration: none;
+}
+
+.localisator-icon {
+    z-index: 10;
+    text-align: center;
+    color: var(--primary);
+    width: 48px;
+    max-height: 48px;
+    font-size: 2rem;
+    transform:
+            translate(-50%, -50%)
+            translate(0px, -48px);
+    text-shadow: 1px 1px var(--primary-darker-more);
+}
+
+/* -------------------------- */
+/* ------ PIXEL ICONS  ------ */
+/* -------------------------- */
+
+.icon-lock {
+    z-index: 10;
+    top: 18%;
+    left: 40%;
+    width: 22%;
+}
+
+.icon-lock-character {
+    z-index: 10;
+    top: 35%;
+    left: 35%;
+    width: 30%;
+    filter: grayscale(100%);
+}
+
+.corner-badge {
+    z-index: 20;
+    top: -12px;
+    left: -12px;
+    width: 48px;
+}
+
+.badge-top {
+    position: absolute;
+    z-index: 10;
+    top: -4px;
+    left: 50%;
+    width: 64px;
+    transform: translate(-50%, -50%);
+    filter: drop-shadow(0px 4px 2px);
+}
+
+.badge-corner {
+    position: absolute;
+    z-index: 10;
+    top: -14px;
+    right: -14px;
+    width: 48px;
+    filter: drop-shadow(0px 0px 4px #00000080);
+}
+
+.badge-center {
+    position: absolute;
+    z-index: 10;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.icon-ornament {
+    width: 36px;
+    height: auto;
+}
+
+.icon-dead-big {
+    z-index: 10;
+    top: 4rem;
+    left: 0.20rem;
+    width: 156px;
+}
+
+.location-icon-small {
+    width: 28px;
+}
+
+.character-icon-dead {
+    position: absolute;
+    z-index: 10;
+    left: -2px;
+    width: 72px;
+}
+
+
+/* --------------------------- */
+/* ------ IMAGE RESIZE  ------ */
+/* --------------------------- */
+
+#logo { width: 120px; height: auto; }
+
+.img-14 { min-width: 12px; max-width: 14px; }
+.img-18 { min-width: 14px; max-width: 18px; }
+.img-24 { min-width: 16px; max-width: 24px; }
+.img-32 { min-width: 16px; max-width: 32px; }
+.img-48 { min-width: 24px; max-width: 48px; }
+.img-56 { min-width: 28px; max-width: 56px; }
+.img-64 { min-width: 32px; max-width: 64px; }
+.img-96 { min-width: 48px; max-width: 96px; }
+.img-128 { min-width: 64px; max-width: 128px; }
+.img-160 { min-width: 80px; max-width: 160px; }
+.img-240 { min-width: 120px; max-width: 240px; }
+.img-320 { min-width: 160px; max-width: 320px; }
+.img-360 { min-width: 180px; max-width: 360px; }
+.img-480 { min-width: 240px; max-width: 480px; }
+.img-540 { min-width: 320px; max-width: 540px; }
+.img-640 { min-width: 320px; max-width: 640px; }
+
+
+/* ------------------------- */
+/* ------ IMAGE CROP  ------ */
+/* ------------------------- */
+
+.circle-crop {
+    border-radius: 1000px;
+}

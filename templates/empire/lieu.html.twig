@@ -1,88 +1,81 @@
-{% extends 'base.html.twig' %}
-{% block title %}Lieu {{ parent() }}{% endblock %}
-{% block body %}
+{% extends 'element.html.twig' %}
+{% block element_content %}
+<!-- IMAGE -->
+<div class="col-12 text-center">
+    <img class="img-fluid" src="{{ asset(un_element.image|default('assets/img/placeholders/1280x720.jpg')) }}" alt="Image de {{un_element.nom}}" />
+</div>
 
-    <main class="container-fluid bg-light">
-        <section class="container pb-5">
-
-            <!-- FIL D'ARIANE -->
-            <nav class="pt-3">
-                <span class="text-muted">
-                    <a href="{{ path('aventure') }}"><i class="fas fa-home"></i></a>
-                    > <a href="{{ path('empire') }}"><strong>Empire</strong></a>
-                    > <a href="{{ path('empire', {'_fragment': 'lieux'} ) }}"><strong>Lieux</strong></a>
-                    > <strong>{{ lieu.nom }}</strong>
-                </span>
-            </nav>
-
-            <!-- TITRE -->
-            <h1 class="mt-5 relative">
-                Lieu <strong>{{ lieu.nom }}</strong>
-            
-                {% if app.user and is_granted("ROLE_MJ") %}
-                    <!-- MJ - BTN ICON - Edit -->
-                    {% set redirect, element, un_element, size, color, position = 'empire', 'lieu', lieu, 'medium', 'accent-color', 'right-snap' %}
-                    {{ include('/parts/btn-icon-edit.html.twig') }}
-                {% endif %}
-            
-            </h1>
+<!-- CARD -->
+<div class="col-12 mb-5">
+    <div class="card">
+        <div class="card-body px-5 py-0">
+            <p class="card-text mx-5 mt-4 mb-5 text-justify">{{ un_element.description|raw|nl2br }}</p>
             <hr>
 
-            <!-- CONTENU -->
-            <article class="row">
-                <!-- IMAGE -->
-                <div class="col-12 text-center">
-                    <img class="img-fluid" src="{{ asset(lieu.image) }}" alt="Image du Lieu" />
+            <div class="mx-5 my-5">
+                <h2><strong>Localisation</strong></strong></h2>
+                <div class="relative" style="overflow: hidden;">
+
+
+                    {# <!-- ZOOM REGION -->
+                    <img class="img-fluid absolute d-block" style="z-index: 100;" src="{{ asset(un_element.region|default('assets/img/placeholders/1280x720.jpg')) }}" /> #}
+
+                    <!-- LOCALISATOR -->
+                    <span class="localisator-icon" style="left: {{un_element.locX}}%; top: {{un_element.locY}}%">
+                        <i class="fa-solid fa-location-dot fa-bounce fa-2xl text-shadow"></i>
+                    </span>
+                    <img class="localisator-ui" style="left: {{un_element.locX}}%; top: {{un_element.locY}}%" src="http://localhost:8000/assets/img/ui/localisator.png" />
+
+                    {# <!-- ZOOMED -->
+                    <img style="position: absolute; z-index: 4; transform-origin: 77% 35.5%; transform: scale(2);" class="img-fluid" src="{{ asset('assets/img/lieux/map_rokugan.jpg') }}" alt="Localisation dans l'Empire" /> #}
+
+                    <!-- MAP OF ROKUGAN -->
+                    <img class="img-fluid" src="{{ asset('assets/img/lieux/rokugan-map.jpg') }}" alt="La Carte de Rokugan" />
                 </div>
-                
-                <!-- CARD CHAMPS 1 -->
-                <div class="col-12">
-                    <div class="card">
-                        <div class="card-body">
-                            <p class="card-text">{{ lieu.description|raw|nl2br }}</p>
-                        </div>
-                        <ul class="list-group list-group-flush">
-                            <li class="list-group-item">
-                                <strong>Clan&nbsp;:</strong>
-                                    {% if lieu.clan is not empty %}
-                                        <strong>{{ lieu.clan.nom }}</strong>
-                                    {% else %}
-                                        n/a
-                                    {% endif %}
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="mt-3 text-center">
-                    {% if app.user and is_granted("ROLE_MJ") %}
-                        <!-- MJ - BTN ICON - Delete -->
-                        {% set redirect, element, un_element, color, action = 'empire', 'lieu', lieu, 'accent-color', 'delete' %}
-                        {{ include('/parts/btn-edit-delete.html.twig') }}
-                    {% endif %}
-                    </div>
+            </div>
+
+            {# <div class="mx-5 my-5">
+                <h2 class="mb-3"><strong>Carte</strong></h2>
+                <a href="{{ asset(un_element.carte|default('assets/img/placeholders/1280x720.jpg')) }}"><img class="img-fluid" src="{{ asset(un_element.carte|default('assets/img/placeholders/1280x720.jpg')) }}" alt="Carte du Lieu" /></a>
+            </div> #}
+
+
+            {# <div class="mx-5 my-5">
+                <h2><strong>Region</strong></strong></h2>
+                <div>
+                    <img class="img-fluid" src="{{ asset(un_element.region|default('assets/img/placeholders/1280x720.jpg')) }}" />
                 </div>
-
-                <!-- CARD CHAMPS 2 -->
-                <div class="col-12 my-5">
-                    <h2>Localisation</h2>
-                    <hr>
-                    <div class="row">
-                        <div class="col-6">
-                            Zoom :
-                            <img class="img-fluid" src="{{ asset(lieu.carte) }}" alt="Carte du Lieu" />
-                        </div>
-                        <div class="col-6">
-                            Coordonnées Rokugan : <strong>{{ lieu.coordinates }}</strong>
-                            <img class="img-fluid" src="{{ asset('assets/img/placeholders/1280x720.png') }}" alt="Localisation sur Rokugan du Lieu" />
-                        </div>
-                    </div>
-                </div>
+            </div> #}
 
 
-            </article>
 
-        </section>
-    </main>
+        </div>
+        <ul class="list-group list-group-flush">
+            {% if un_element.clan is not empty %}
+            <li class="list-group-item px-5">
+                <strong class="ml-5">Clan</strong> : <img class="ml-2 img-48" src="{{ asset(un_element.clan.mon) }}" />
+                <strong>
+                    <a href="{{ path('empire_clan', {id:un_element.clan.id} ) }}" >
+                        {{ un_element.clan.nom }}
+                    </a>
+                </strong>
+            </li>
+            {% endif %}
+            {% if un_element.clan is not empty %}
+            <li class="list-group-item px-5">
+                <strong class="ml-5">Coordonnées&nbsp;:</strong>&nbsp;<strong>{{ un_element.coordinates }}</strong>
+            </li>
+            {% endif %}
+        </ul>
+    </div>
 
-{{ include('/parts/modal.html.twig') }}
+    {% if app.user and is_granted("ROLE_MJ") %}
+    <div class="mt-3 text-center">
+        <!-- MJ - BTN LINE - Delete -->
+        {% set redirect, color, action = category, 'accent-color', 'delete' %}
+        {{ include('/parts/btn-edit-delete.html.twig') }}
+    </div>
+    {% endif %}
 
+</div>
 {% endblock %}

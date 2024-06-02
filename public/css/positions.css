@@ -1,0 +1,40 @@
+/* ----- POSITIONS ----- */
+
+/* SNAPS */
+
+.relative { position: relative; }
+
+.absolute { position: absolute; }
+
+.left-overflow {
+        position: absolute;
+        z-index: 10;
+        left: -2.5rem;
+        top: 0.5rem;
+}
+
+.right-overflow {
+        position: absolute;
+        z-index: 10;
+        right: -2.5rem;
+        top: 0.5rem;
+}
+
+.right-snap,
+.right-corner-snap {
+        position: absolute;
+        z-index: 10;
+        top: 0px;
+        right: 0px; }
+
+.right-corner-8 {
+        position: absolute;
+        z-index: 10;
+        top:8px;
+        right:8px; }
+
+.right-corner-16 {
+        position: absolute;
+        z-index: 10;
+        top: 1rem;
+        right: 1rem; }

@@ -2,17 +2,17 @@
 {% block title %}Les Règles de l'Aventure {{ parent() }}{% endblock %}
 
 {% block section_content1 %}
-    <!--- LES REGLES DE BASES -->
+    <!--- REGLES DE BASES -->
     <div class="w-100 row justify-content-center">
         {% for uneRule in rules %}
 
             <!--- UNE REGLE DE BASE -->
             <a class="col-3 text-center hover-zoom" href="{{ path('regles_rule', {id: uneRule.id} ) }}">
-                <img class="img-160" src="{{ asset(uneRule.image) }}" alt="Image de la Règle" title="{{uneRule.nom}}" />
+                <img class="img-fluid" src="{{ asset(uneRule.image) }}" alt="Image de la Règle" title="{{uneRule.nom}}" />
                 <br>
-                <h4 class="text-center my-2">
+                <h3 class="text-regular my-2">
                     <strong>{{ uneRule.nom }}</strong>
-                </h4>
+                </h3>
             </a>
 
         {% endfor %}
@@ -53,6 +53,6 @@
                 </h3>
             </a>
 
-    {% endfor %}
+        {% endfor %}
     </div>
 {% endblock %}

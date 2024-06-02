@@ -19,12 +19,10 @@
             <h1 class="mt-5 relative">
                 Lieu <strong>{{ lieu.nom }}</strong>
             
-                <!-- MJ - ICON BTN - Edit | Delete -->
                 {% if app.user and is_granted("ROLE_MJ") %}
-                    <div class="btn-icons-medium-right-container">
-                        <a class="text-danger mx-2" href="{{ path('admin_lieu_edit', {id:lieu.id}) }}?redirect=lieu"><i class="fas fa-edit" alt="Icône Modifier" title="Modifier"></i></a>
-                        <a class="text-danger mx-2" href="{{ path('admin_lieu_delete', {id:lieu.id}) }}?csrf={{ csrf_token('delete' ~ lieu.id) }}&redirect=lieu" onclick="return confirm('Êtes-vous sûr de vouloir supprimer le lieu : {{ lieu.nom }} ?')"><i class="fas fa-trash-alt" alt="Icône Supprimer" title="Supprimer"></i></a>
-                    </div>
+                    <!-- MJ - BTN ICON - Edit -->
+                    {% set redirect, element, un_element, size, color, position = 'empire', 'lieu', lieu, 'medium', 'accent-color', 'right-snap' %}
+                    {{ include('/parts/btn-icon-edit.html.twig') }}
                 {% endif %}
             
             </h1>

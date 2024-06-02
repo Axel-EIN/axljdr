@@ -45,7 +45,7 @@
 {% set numero = 0 %}
 {% for un_chapitre in saison.chapitres|reverse %}
 
-    {% set color, element, numero, parent, parentID, redirect, label = 'text-accent', 'chapitre', un_chapitre.numero, 'saison', saison.id, 'aventure', 'Insérer' %}
+    {% set color, entity, numero, parent, parentID, redirect, label = 'text-accent', 'chapitre', un_chapitre.numero, 'saison', saison.id, 'aventure', 'Insérer' %}
     {{ include('/aventure/un-chapitre.html.twig', {numero}) }}
 
 {% else %}
@@ -66,8 +66,8 @@
 {% if app.user and is_granted("ROLE_MJ") %}
     <div class="text-center bg-primary-darkest p-1">
         <!-- MJ BTN ICON+TEXT Insert or Add -->
-        {% set color, element, numero, parent, parentID, redirect, label = 'text-accent', 'chapitre', (numero + 1), 'saison', saison.id, 'aventure', 'Ajouter' %}
-        {{ include('/parts/btn-line-insert-add.html.twig') }}
+        {% set color, entity, numero, parent, parentID, redirect, label = 'text-accent', 'chapitre', (numero + 1), 'saison', saison.id, 'aventure', 'Ajouter' %}
+        {{ include('/parts/btn-line-insert.html.twig') }}
     </div>
 {% endif %}
 

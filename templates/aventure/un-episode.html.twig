@@ -80,9 +80,7 @@
                                 <a href="{{path('personnage_profil',{id:un_personnage.id})}}">
                                     <img class="img-96 mr-4" src="{{ asset(un_personnage.icone) }}" alt="Portrait du Personnage" title="Voir le profil de {{un_personnage.prenom}}"/>
                                 </a>
-                                <a href="{{path('personnage_profil',{id:un_personnage.id})}}">
-                                    <span class="display-4 mr-4">{{un_personnage.prenom}}</span>
-                                </a>
+                                <a class="display-4 mr-4" href="{{path('personnage_profil',{id:un_personnage.id})}}">{{un_personnage.prenom}}</a>
                                 <span class="ml-auto badge badge-success badge-pill">{{un_personnage.xp}}xp</span>
                             </div>
                         {% else %}

@@ -20,24 +20,29 @@
     <main class="container-fluid bg-lightest py-5">    
         <div class="container">
 
-            {% set count = 1 %}
-            {% for one_section in sections %}
-                {% set element = one_section['element'] %}
-                <!-- SECTION {{count}} {{one_section['name']}} -->
-                <section id="{{one_section['name']}}" class="mb-5"> 
+            {% set compteur = 1 %}
+            {% for une_section in sections %}
+                {% set entity, label_one = une_section['entity'], une_section['label_one'] %}
+
+                <!-- SECTION {{une_section['name']}} -->
+                <section id="{{une_section['entity']}}" class="mb-5"> 
+
+                    <!--TITRE DE LA SECTION -->
                     <h2 class="display-4 relative">
-                        {{one_section['titleLight']}}&nbsp;<strong>{{one_section['titleStrong']}}</strong>
+                        {{une_section['titleLight']}}&nbsp;<strong>{{une_section['titleStrong']}}</strong>
                         <!-- BTN MJ ADD ELEMENT -->
-                        {{ include('/parts/btn-box-add-element.html.twig', {element}) }}
+                        {{ include('/parts/btn-box-add-element.html.twig', {entity}) }}
                     </h2>
                     <hr>
                     <div class="row mt-3">
 
-                        {{ block('section_content' ~ count) }}
+                        <!--CONTENU DE LA SECTION -->
+                        {{ block('section_content' ~ compteur) }}
                         
                     </div>
                 </section>
-            {% set count = count + 1 %}
+
+                {% set compteur = compteur + 1 %}
             {% endfor %}
             
         </div>

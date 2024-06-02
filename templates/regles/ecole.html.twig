@@ -18,12 +18,13 @@
 
             <h1 class="mt-5 relative">
                 L'École <strong>{{ ecole.nom }}</strong>
-                <!-- MJ - ICON BTN - Edit -->
+
                 {% if app.user and is_granted("ROLE_MJ") %}
-                <div class="btn-icons-medium-right-container">
-                    <a class="text-danger mx-2" href="{{ path('admin_ecole_edit', {id:ecole.id}) }}?redirect=ecole"><i class="fas fa-edit" alt="Icône Modifier" title="Modifier" ></i></a>
-                </div>
+                    <!-- MJ - BTN ICON - Edit -->
+                    {% set redirect, element, un_element, size, color, position = 'regles', 'ecole', ecole, 'medium', 'accent-color', 'right-snap' %}
+                    {{ include('/parts/btn-icon-edit.html.twig') }}
                 {% endif %}
+
             </h1>
             <hr>
 

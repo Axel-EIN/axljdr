@@ -30,7 +30,7 @@ class AdminPersonnageType extends AbstractType
             ->add('icone', FileType::class, array('mapped' => false, 'data_class' => null, 'required' => false))
             ->add('illustration', FileType::class, array('mapped' => false, 'data_class' => null, 'required' => false))
             ->add('description', TextareaType::class)
-            ->add('est_pj', CheckboxType::class, [
+            ->add('estPj', CheckboxType::class, [
                 'required' => false,
             ])
             ->add('estMort', CheckboxType::class, [

@@ -21,7 +21,7 @@
 
                 {% if app.user and is_granted("ROLE_MJ") %}
                     <!-- MJ - BTN ICON - Edit -->
-                    {% set redirect, element, un_element, size, color, position = 'regles', 'ecole', ecole, 'medium', 'accent-color', 'right-snap' %}
+                    {% set redirect, element, un_element, size, color, position = 'regles', 'ecole', ecole, 'medium', 'text-accent', 'right-snap' %}
                     {{ include('/parts/btn-icon-edit.html.twig') }}
                 {% endif %}
 

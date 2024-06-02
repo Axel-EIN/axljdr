@@ -1,0 +1,183 @@
+/* -------------------------------- */
+/* ------ FLAT VECTOR ICONS  ------ */
+/* -------------------------------- */
+
+.btn-icon-mini {
+    display: inline-block;
+    text-align: center;
+    cursor: pointer;
+    width: 32px;
+    height: 32px;
+    font-size: 1rem;
+}
+
+.btn-icon-small {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    width: 40px;
+    height: 40px;
+    font-size: 1.5rem;
+}
+
+.wrapper-icon-btn-small {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    width: 40px;
+    height: 40px;
+}
+
+.btn-icon-medium {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    width: 48px;
+    height: 48px;
+    font-size: 2rem;
+}
+
+.btn-mj:hover {
+    color: var(--accent) !important;
+    text-decoration: none;
+}
+
+.localisator-icon {
+    z-index: 10;
+    text-align: center;
+    color: var(--primary);
+    width: 48px;
+    max-height: 48px;
+    font-size: 2rem;
+    transform:
+            translate(-50%, -50%)
+            translate(0px, -48px);
+    text-shadow: 1px 1px var(--primary-darker-more);
+}
+
+/* -------------------------- */
+/* ------ PIXEL ICONS  ------ */
+/* -------------------------- */
+
+.icon-lock {
+    z-index: 30;
+    top: 18%;
+    left: 40%;
+    width: 22%;
+}
+
+.icon-lock-corner {
+    z-index: 30;
+    top: 4%;
+    right: 4%;
+    width: 14%;
+    opacity: 0.85;
+    filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.8));
+}
+
+.badge-top {
+    position: absolute;
+    z-index: 10;
+    top: -4px;
+    left: 50%;
+    width: 64px;
+    transform: translate(-50%, -50%);
+    filter: drop-shadow(0px 4px 2px);
+}
+
+.badge-corner {
+    position: absolute;
+    z-index: 10;
+    top: -14px;
+    right: -14px;
+    width: 48px;
+    filter: drop-shadow(0px 0px 4px #00000080);
+}
+
+.badge-center {
+    position: absolute;
+    z-index: 10;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    /* .img-* pose un plafond fixe en px, indépendant de la largeur réelle
+       de la vignette : sur une colonne mobile étroite l'icône garde sa
+       taille et déborde de la boîte .ratio-*. On la plafonne aussi en
+       relatif pour qu'elle rétrécisse avec sa vignette. */
+    &.img-40 { max-width: min(40px, 60%); }
+    &.img-48 { max-width: min(48px, 60%); }
+    &.img-64 { max-width: min(64px, 60%); }
+    &.img-96 { max-width: min(96px, 60%); }
+    &.img-128 { max-width: min(128px, 60%); }
+}
+
+.icon-ornament {
+    width: 36px;
+    height: auto;
+}
+
+.location-icon-small {
+    width: 28px;
+}
+
+.character-icon-dead {
+    position: absolute;
+    z-index: 10;
+    left: -2px;
+    width: 72px;
+}
+
+
+/* --------------------------- */
+/* ------ IMAGE RESIZE  ------ */
+/* --------------------------- */
+
+/* Le plafond est double : la valeur en px, et 100% du conteneur. Sans le
+   second, une image plus large que sa colonne deborde — elle parait alors
+   decalee par rapport au texte centre sous elle, et le debordement de la
+   derniere colonne fait scroller la page horizontalement. */
+
+#logo { width: 120px; height: auto; }
+@media (max-width: 991.98px) { #logo { width: 48px; } }
+
+.img-14 { min-width: 8px; max-width: min(14px, 100%); }
+.img-18 { min-width: 10px; max-width: min(18px, 100%); }
+.img-20 { min-width: 10px; max-width: min(20px, 100%); }
+.img-24 { min-width: 12px; max-width: min(24px, 100%); }
+.img-32 { min-width: 16px; max-width: min(32px, 100%); }
+.img-36 { min-width: 18px; max-width: min(36px, 100%); }
+.img-40 { min-width: 20px; max-width: min(40px, 100%); }
+.img-48 { min-width: 24px; max-width: min(48px, 100%); }
+.img-56 { min-width: 28px; max-width: min(56px, 100%); }
+.img-64 { min-width: 32px; max-width: min(64px, 100%); }
+.img-72 { min-width: 36px; max-width: min(72px, 100%); }
+.img-96 { min-width: 48px; max-width: min(96px, 100%); }
+.img-128 { min-width: 64px; max-width: min(128px, 100%); }
+.img-160 { min-width: 80px; max-width: min(160px, 100%); }
+.img-240 { min-width: 120px; max-width: min(240px, 100%); }
+.img-320 { min-width: 160px; max-width: min(320px, 100%); }
+.img-360 { min-width: 180px; max-width: min(360px, 100%); }
+.img-480 { min-width: 240px; max-width: min(480px, 100%); }
+.img-540 { min-width: 320px; max-width: min(540px, 100%); }
+.img-640 { min-width: 320px; max-width: min(640px, 100%); }
+
+
+/* ------------------------------ */
+/* ------ FIXED ICON SIZE  ------ */
+/* ------------------------------ */
+
+.icon-16 { min-width: 16px; min-height: 16px; width: 16px; height: 16px; }
+.icon-18 { min-width: 18px; min-height: 18px; width: 18px; height: 18px; }
+.icon-20 { min-width: 20px; min-height: 20px; width: 20px; height: 20px; }
+
+/* ------------------------- */
+/* ------ IMAGE CROP  ------ */
+/* ------------------------- */
+
+.circle-crop {
+    border-radius: 1000px;
+}

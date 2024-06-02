@@ -28,19 +28,23 @@ class EmpireController extends AbstractController
 
         $sections = [];
         $sections[0]['name'] = "Archives";
+        $sections[0]['entity'] = 'archive';
+        $sections[0]['label_one'] = "une archive";
         $sections[0]['titleLight'] = 'Les';
         $sections[0]['titleStrong'] = 'Archives';
-        $sections[0]['element'] = 'archive';
+
 
         $sections[1]['name'] = "Factions";
+        $sections[1]['entity'] = 'clan';
+        $sections[1]['label_one'] = "une faction";
         $sections[1]['titleLight'] = 'Les';
         $sections[1]['titleStrong'] = 'Factions';
-        $sections[1]['element'] = 'clan';
 
         $sections[2]['name'] = "Lieux";
+        $sections[2]['entity'] = 'lieu';
+        $sections[2]['label_one'] = "un lieu";
         $sections[2]['titleLight'] = 'Les';
         $sections[2]['titleStrong'] = 'Lieux';
-        $sections[2]['element'] = 'lieu';
 
         $header_classname = 'empire';
         $header_up = "Univers du Jeu";
@@ -67,6 +71,10 @@ class EmpireController extends AbstractController
     {
         return $this->render('empire/clan.html.twig', [
             'clan' => $clan,
+            'nom' => $clan->getNom(),
+            'entity' => 'clan',
+            'category' => 'empire',
+            'un_element' => $clan,
         ]);
     }
 
@@ -76,7 +84,10 @@ class EmpireController extends AbstractController
     public function afficherArchive(Archive $archive): Response
     {
         return $this->render('empire/archive.html.twig', [
-            'archive' => $archive,
+            'un_element' => $archive,
+            'nom' => $archive->getTitre(),
+            'entity' => 'archive',
+            'category' => 'empire',
         ]);
     }
 
@@ -87,6 +98,9 @@ class EmpireController extends AbstractController
     {
         return $this->render('empire/lieu.html.twig', [
             'un_element' => $lieu,
+            'nom' => $lieu->getNom(),
+            'entity' => 'lieu',
+            'category' => 'empire',
         ]);
     }
 }

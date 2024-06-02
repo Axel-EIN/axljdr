@@ -25,14 +25,19 @@
             <div class="col-12 mt-3">
                 {{ form_row(form.description,{ 'attr': {'rows': '7'} }) }}
             </div>
-            <div class="col-12 mt-3">
-                {{ form_row(form.longDescription,{ 'attr': {'rows': '20'} }) }}
+            <div class="col-12 mt-3 text-center">
+                {% if type == 'Modifier' %}
+                    <img class="img-fluid" src="{{ asset(clan.territoireCarte) }}" />
+                {% endif %}
             </div>
             <div class="col-12 mt-3">
                 {{ form_row(form.territoireCarte)}}
             </div>
             <div class="col-12 mt-3">
                 {{ form_row(form.territoireDesc,{ 'attr': {'rows': '7'} }) }}
+            </div>
+            <div class="col-12 mt-3">
+                {{ form_row(form.longDescription,{ 'attr': {'rows': '20'} }) }}
             </div>
             <div class="col-12 text-center mt-5">
                 <button class="btn btn-large btn-primary-style">{{ button_label|default('Save') }}</button>

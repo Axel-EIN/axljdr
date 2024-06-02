@@ -3,7 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Scene;
-use App\Service\Uploader;
+use App\Service\FileHandler;
 use App\Service\Numeroteur;
 use App\Service\Baliseur;
 use App\Service\ParticipationHandler;
@@ -14,7 +14,6 @@ use App\Repository\ParticipationRepository;
 use App\Repository\SceneRepository;
 use App\Repository\PersonnageRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -40,7 +39,7 @@ class AdminSceneController extends AbstractController
      * @Route("/admin/scene/create", name="admin_scene_create")
      * @IsGranted("ROLE_MJ")
      */
-    public function creerScene(Request $request, EntityManagerInterface $em, Uploader $uploadeur, Baliseur $baliseur,
+    public function creerScene(Request $request, EntityManagerInterface $em, FileHandler $fileHandler, Baliseur $baliseur,
                             ParticipationHandler $participationHandler, PersonnageRepository $personnageRepository,
                             EpisodeRepository $episodeRepository, Numeroteur $numeroteur, SceneRepository $sceneRepository) {
 
@@ -67,15 +66,12 @@ class AdminSceneController extends AbstractController
         // Gestion du Formulaire posté et valide
         if ($form->isSubmitted() && $form->isValid()) {
 
-            // CREATION FICHIER IMAGE & UPLOAD
             $nouvelleImage = $form->get('image')->getData();
             if (!empty($nouvelleImage)) {
                 $prefix = 'scene-s' . $scene->getEpisodeParent()->getChapitreParent()->getSaisonParent()->getNumero()
-                            . '-ch' . $scene->getEpisodeParent()->getChapitreParent()->getNumero()
-                            . '-ep' . $scene->getEpisodeParent()->getNumero() . '-scn' . $scene->getNumero();
-                $nouvelleImageNomFichier = $uploadeur->upload($nouvelleImage,$prefix , 'scenes');
-                $nouveauCheminRelatif = 'assets/img/scenes/' . $nouvelleImageNomFichier;
-                $scene->setImage($nouveauCheminRelatif);
+                . '-ch' . $scene->getEpisodeParent()->getChapitreParent()->getNumero()
+                . '-ep' . $scene->getEpisodeParent()->getNumero() . '-scn' . $scene->getNumero();
+                $scene->setImage($fileHandler->handle($nouvelleImage, null, $prefix, 'scenes'));
             } else { $scene->setImage('assets/img/placeholders/1280x720.jpg'); }
 
             // Formatage et fusion des données formulaire postées concernant les Participants
@@ -92,7 +88,7 @@ class AdminSceneController extends AbstractController
             // CREATION ENTITE
             $em->persist($scene);
             $em->flush();
-            $this->addFlash('success', 'La scène a bien été crée !');
+            $this->addFlash('success', 'La scène a bien été crée.');
 
             // NUMEROTAGE : ajuste le numéro si des scènes ont été supprimés ou intercalés
             $fratrieArrivee = $sceneRepository->findBy(['episodeParent' => $scene->getEpisodeParent()->getId()]);
@@ -119,7 +115,7 @@ class AdminSceneController extends AbstractController
      * @Route("/admin/scene/{id}/edit", name="admin_scene_edit")
      * @IsGranted("ROLE_MJ")
      */
-    public function editerScene(Request $request, Scene $scene, Uploader $uploadeur, Numeroteur $numeroteur, Baliseur $baliseur,
+    public function editerScene(Request $request, Scene $scene, FileHandler $fileHandler, Numeroteur $numeroteur, Baliseur $baliseur,
                                 ParticipationHandler $participationHandler, PersonnageRepository $personnageRepository,
                                 ParticipationRepository $participationRepository, SceneRepository $sceneRepository): Response {
 
@@ -148,22 +144,11 @@ class AdminSceneController extends AbstractController
 
             // EDITION FICHIER IMAGE & UPLOAD
             $nouvelleImage = $form->get('image')->getData();
-
             if (!empty($nouvelleImage)) {
-
-                $AncienneImageNomFichier = basename($scene->getImage());
-
-                $nouvelleImageNomFichier = $uploadeur->upload($nouvelleImage, 'scene-s'
-                    . $scene->getEpisodeParent()->getChapitreParent()->getSaisonParent()->getNumero()
-                    . '-ch' . $scene->getEpisodeParent()->getChapitreParent()->getNumero()
-                    . '-ep' . $scene->getEpisodeParent()->getNumero()
-                    . '-scn' . $scene->getNumero(), 'scenes');
-                $nouveauChemingRelatif = 'assets/img/scenes/' . $nouvelleImageNomFichier;
-                $scene->setImage($nouveauChemingRelatif);
-
-                $ancienneImageCheminComplet = $this->getParameter('image_directory') . '/scenes/' . $AncienneImageNomFichier;
-                $filesystem = new Filesystem();
-                $filesystem->remove($ancienneImageCheminComplet);
+                $prefix = 'scene-s' . $scene->getEpisodeParent()->getChapitreParent()->getSaisonParent()->getNumero()
+                . '-ch' . $scene->getEpisodeParent()->getChapitreParent()->getNumero()
+                . '-ep' . $scene->getEpisodeParent()->getNumero() . '-scn' . $scene->getNumero();
+                $scene->setImage($fileHandler->handle($nouvelleImage, $scene->getImage(), $prefix, 'scenes'));
             }
 
             // Formatage et fusion des données formulaire postées concernant les Participants
@@ -228,7 +213,7 @@ class AdminSceneController extends AbstractController
             // BALISAGE des LIEUX : capture les mots entre {}, vérifie si un nom de lieu correspondant existe, remplace par un lien vers la fiche du lieu en HTML
             $scene->setTexte($baliseur->baliserLieux($scene->getTexte()));
 
-            // NUMEROTAGE : augmente ou réduit le numéro de la scène si une scne a été supprimée ou intercalée
+            // NUMEROTAGE : augmente ou réduit le numéro de la scène si une scène a été supprimée ou intercalée
             if ($numeroDepart != $scene->getNumero() || $fratrieDepartId != $scene->getEpisodeParent()->getId())
             {
                 $fratrieDepart = $sceneRepository->findBy(['episodeParent' => $fratrieDepartId]);
@@ -238,7 +223,7 @@ class AdminSceneController extends AbstractController
 
             // EDITION ENTITE
             $this->getDoctrine()->getManager()->flush();
-            $this->addFlash('success', 'La scène a bien été modifiée !');
+            $this->addFlash('success', 'La scène a bien été modifiée.');
 
             // REDIRECTION
             if (!empty($request->query->get('redirect')) && $request->query->get('redirect') == 'episode')
@@ -263,7 +248,7 @@ class AdminSceneController extends AbstractController
      * @Route("/admin/scene/{id}/delete", name="admin_scene_delete", methods={"GET"})
      * @IsGranted("ROLE_MJ")
      */
-    public function supprimerScene(Request $request, Scene $scene, Numeroteur $numeroteur, SceneRepository $sceneRepository): Response {
+    public function supprimerScene(Request $request, Scene $scene, Numeroteur $numeroteur, SceneRepository $sceneRepository, FileHandler $fileHandler): Response {
         
         $episodeParent = $scene->getEpisodeParent(); // Pour la partie redirection
 
@@ -278,14 +263,7 @@ class AdminSceneController extends AbstractController
 
             // SUPPRESSION FICHIER IMAGE
             // -------------------------
-            if ($nomImageASupprimer != '1280x720.png') {
-                $cheminImageASupprimer = $this->getParameter('image_directory') . '/scenes/' . $nomImageASupprimer;
-
-                if (file_exists($cheminImageASupprimer)) {
-                    $filesystem = new Filesystem();
-                    $filesystem->remove($cheminImageASupprimer);
-                }
-            }
+            $fileHandler->handle(null, $scene->getImage(), null, 'scenes');
 
             // NUMEROTEUR
             // ----------
@@ -297,7 +275,7 @@ class AdminSceneController extends AbstractController
             // ------------------
             $entityManager->remove($scene);
             $entityManager->flush();
-            $this->addFlash('success', 'La scène a bien été supprimée !');
+            $this->addFlash('success', 'La scène a bien été supprimée.');
 
         }
 

@@ -14,7 +14,6 @@
         <h2 id="read-head" class="big-title-effect grand">{{ episode.chapitreParent.titre|relief|raw }}</h2>
         <p class="quote">{{ episode.chapitreParent.citation|nl2br }}</p>
     </header>
-
     <main class="container pt-3">
     
         <!-- LIGNE D'EPISODES -->
@@ -37,26 +36,41 @@
         </div>
 
         <!-- TITRE EPISODE -->
-        <h2 class="display-3 session-title-container-effect mb-0 mt-3 py-3">{{ episode.titre }}</h2>
+        <h2 class="display-3 session-title-container-effect mb-0 mt-3 py-3">{{episode.titre}}</h2>
         <div class="col-12 col-sm-12 offset-xl-1 col-xl-10 justify-content-center session-card-long">
             <div class="card justify-content-center {% if app.user and is_granted("ROLE_MJ") %}pt-5{% else %}pt-3{% endif %} session-card-long-body">
 
                 <!-- AFFICHAGE DES SCENES DE LA SESSION -->
-                {% set numero_scene = 0 %}
+                {% set numero = 0 %}
                 {% for une_scene in episode.scenes %}
-                    {% set numero_scene, label = une_scene.numero, 'Insérer' %}
-                    {{ include('/parts/inserer-scene.html.twig', {numero_scene}) }}
+
+                    {% if app.user and is_granted("ROLE_MJ") %}
+                        <div class="text-center mb-4">
+                            <!-- MJ BTN ICON+TEXT Insert or Add -->
+                            {% set color, element, numero, parent, parentID, redirect, label = 'accent-color', 'scene', une_scene.numero, 'episode', episode.id, 'episode', 'Insérer' %}
+                            {{ include('/parts/btn-line-insert-add.html.twig') }}
+                        </div>
+                    {% endif %}
+
+                    <!-- UNE SCENE -->
                     {{ include('/aventure/une-scene.html.twig', {une_scene}) }}
+
                 {% else %}
                     <div class="text-center">
                         <img class="img-fluid" src="{{ asset('assets/img/placeholders/pas-de-scenes.png') }}" alt="Image pas encore de scènes" title="Il n'y a pas encore de scènes"/>
-                        <h5>Il n'y a pas encore de scènes pour cette épisode !</h5>
+                        <h5>Il n'y a pas encore de scènes pour cette épisode.</h5>
                     </div>
                 {% endfor %}
 
-                {% set numero_scene, label = numero_scene + 1, 'Ajouter' %}
-                {{ include('/parts/inserer-scene.html.twig', {numero_scene}) }}
+                {% if app.user and is_granted("ROLE_MJ") %}
+                    <!-- MJ BTN ICON+TEXT Insert or Add -->
+                    <div class="text-center mt-1 mb-3">
+                        {% set color, element, numero, parent, parentID, redirect, label = 'accent-color', 'scene', (numero + 1), 'episode', episode.id, 'episode', 'Ajouter' %}
+                        {{ include('/parts/btn-line-insert-add.html.twig') }}
+                    </div>
+                {% endif %}
 
+                <!-- CLASSEMENT -->
                 <hr class="mt-5">
                 <h2 class="text-center my-3">Classement de la Session</h2>
                 <div class="d-flex justify-content-center">
@@ -66,7 +80,9 @@
                                 <a href="{{path('personnage_profil',{id:un_personnage.id})}}">
                                     <img class="img-96 mr-4" src="{{ asset(un_personnage.icone) }}" alt="Portrait du Personnage" title="Voir le profil de {{un_personnage.prenom}}"/>
                                 </a>
-                                <span class="display-4 mr-4">{{un_personnage.prenom}}</span>
+                                <a href="{{path('personnage_profil',{id:un_personnage.id})}}">
+                                    <span class="display-4 mr-4">{{un_personnage.prenom}}</span>
+                                </a>
                                 <span class="ml-auto badge badge-success badge-pill">{{un_personnage.xp}}xp</span>
                             </div>
                         {% else %}

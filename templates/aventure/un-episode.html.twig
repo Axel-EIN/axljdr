@@ -22,9 +22,9 @@
                 {% if un_episode.scenes|length > 0 or is_granted("ROLE_MJ") %}
                     {% if un_episode.id == episode.id %}         
                         <div class="relative">
-                            <div class="number-session-caroussel">{{ un_episode.numero }}</div>
+                            <div class="absolute number-session-caroussel">{{ un_episode.numero }}</div>
                             <img class="img-160 border border-4 border-danger shadow" src="{{ asset(un_episode.image) }}" alt="image de l'episode {{un_episode.titre}}" title="{{un_episode.titre}}"/>
-                            <i class="fa-sharp fa-solid fa-sort-down fa-bounce fa-2xl arrow-down primary-color"></i>
+                            <i class="absolute arrow-down fa-sharp fa-solid fa-sort-down fa-bounce fa-2xl text-primary"></i>
                         </div>
                     {% else %}
                         <a class="bg-dark" href="{{ path('aventure_episode', { id : un_episode.id, '_fragment': 'read-head' } ) }}" >
@@ -36,8 +36,8 @@
         </div>
 
         <!-- TITRE EPISODE -->
-        <h2 class="display-3 session-title-container-effect mb-0 mt-3 py-3">{{episode.titre}}</h2>
-        <div class="col-12 col-sm-12 offset-xl-1 col-xl-10 justify-content-center session-card-long">
+        <h2 class="relative display-3 session-title-container-effect mb-0 mt-3 py-3">{{episode.titre}}</h2>
+        <div class="relative col-12 col-sm-12 offset-xl-1 col-xl-10 justify-content-center session-card-long">
             <div class="card justify-content-center {% if app.user and is_granted("ROLE_MJ") %}pt-5{% else %}pt-3{% endif %} session-card-long-body">
 
                 <!-- AFFICHAGE DES SCENES DE LA SESSION -->

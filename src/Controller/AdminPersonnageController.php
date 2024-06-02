@@ -2,13 +2,12 @@
 
 namespace App\Controller;
 
-use App\Service\Uploader;
+use App\Service\FileHandler;
 use App\Service\Baliseur;
 use App\Entity\Personnage;
 use App\Form\AdminPersonnageType;
 use App\Repository\PersonnageRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -32,7 +31,7 @@ class AdminPersonnageController extends AbstractController
      * @Route("/admin/personnage/create", name="admin_personnage_create")
      * @IsGranted("ROLE_MJ")
      */
-    public function ajouterPersonnage(Request $request, EntityManagerInterface $em, Uploader $uploadeur, Baliseur $baliseur) {
+    public function ajouterPersonnage(Request $request, EntityManagerInterface $em, FileHandler $fileHandler, Baliseur $baliseur) {
 
         $personnage = new Personnage;
         $form = $this->createForm(AdminPersonnageType::class, $personnage);
@@ -40,34 +39,22 @@ class AdminPersonnageController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
 
-            $newIcon = $form->get('icone')->getData();
-            $newIllu = $form->get('illustration')->getData();
-
-            // // Gestion de l'image d'icône portrait
-            if (!empty($newIcon)) {
-                $newIconName = $uploadeur->upload($newIcon, 'personnage-'
-                                            . $personnage->getNom()
-                                            . '-' . $personnage->getPrenom()
-                                            . '-icone', 'personnages');
-                $newIconePath = 'assets/img/personnages/' . $newIconName;
-                $personnage->setIcone($newIconePath);
+            $nouvelleIcone = $form->get('icone')->getData();
+            if (!empty($nouvelleIcone)) {
+                $prefix = 'personnage-' . $personnage->getNom() . '-' . $personnage->getPrenom() . '-icone';
+                $personnage->setIcone($fileHandler->handle($nouvelleIcone, null, $prefix, 'personnages'));
             } else { $personnage->setIcone('assets/img/placeholders/na_personnage_icone.jpg'); }
 
-            // Gestion de l'image d'illustration
-            
-            if (!empty($newIllu)) {
-                $newIlluName = $uploadeur->upload($newIllu, 'personnage-'
-                                            . $personnage->getNom()
-                                            . '-' . $personnage->getPrenom()
-                                            . '-illustration', 'personnages');
-                $newIlluPath = 'assets/img/personnages/' . $newIlluName;
-                $personnage->setIllustration($newIlluPath);
+            $nouvelleIllustration = $form->get('illustration')->getData();
+            if (!empty($nouvelleIllustration)) {
+                $prefix = 'personnage-' . $personnage->getNom() . '-' . $personnage->getPrenom() . '-illustration';
+                $personnage->setIllustration($fileHandler->handle($nouvelleIllustration, null, $prefix, 'personnages'));
             } else { $personnage->setIllustration('assets/img/placeholders/na_personnage_illustration.jpg'); }
 
             $em->persist($personnage);
             $em->flush();
 
-            $this->addFlash('success', 'Le personnage a bien été ajouté !');
+            $this->addFlash('success', 'Le personnage a bien été ajouté.');
 
             // REDIRECTION
             // -----------
@@ -88,7 +75,7 @@ class AdminPersonnageController extends AbstractController
      * @Route("/admin/personnage/{id}/edit", name="admin_personnage_edit")
      * @IsGranted("ROLE_MJ")
      */
-    public function editerPersonnage(Request $request, Personnage $personnage, Uploader $uploadeur, Baliseur $baliseur): Response {
+    public function editerPersonnage(Request $request, Personnage $personnage, FileHandler $fileHandler, Baliseur $baliseur): Response {
 
         // DEBALISEUR : dans le texte, capture les prénoms entre balises <a><img>, vérifie si le personnage existe, remplace les balises par des crochets []
         $personnage->setDescription($baliseur->debaliserPersonnages($personnage->getDescription()));
@@ -100,47 +87,22 @@ class AdminPersonnageController extends AbstractController
         if($form->isSubmitted() && $form->isValid()) {
 
             $nouvelleIcone = $form->get('icone')->getData();
-            $nouvelleIllustration = $form->get('illustration')->getData();
-
             if (!empty($nouvelleIcone)) {
-
-                $ancienIconeNomFichier = basename($personnage->getIcone());
-
-                $nouvelleIconeNomFichier = $uploadeur->upload($nouvelleIcone, 'personnage-'
-                                            . $personnage->getNom()
-                                            . '-' . $personnage->getPrenom()
-                                            . '-icone', 'personnages');
-                $nouveauChemingRelatif = 'assets/img/personnages/' . $nouvelleIconeNomFichier;
-                $personnage->setIcone($nouveauChemingRelatif);
-
-                $ancienneIconeCheminComplet = $this->getParameter('image_directory') . '/personnages/' . $ancienIconeNomFichier;
-                $filesystem = new Filesystem();
-                $filesystem->remove($ancienneIconeCheminComplet);
-
+                $prefix = 'personnage-' . $personnage->getNom() . '-' . $personnage->getPrenom() . '-icone';
+                $personnage->setIcone($fileHandler->handle($nouvelleIcone, $personnage->getIcone(), $prefix, 'personnages'));
             }
 
+            $nouvelleIllustration = $form->get('illustration')->getData();
             if (!empty($nouvelleIllustration)) {
-
-                $ancienIllustrationNomFichier = basename($personnage->getIllustration());
-
-                $nouvelleIllustrationNomFichier = $uploadeur->upload($nouvelleIllustration, 'personnage-'
-                                                    . $personnage->getNom()
-                                                    . '-' . $personnage->getPrenom()
-                                                    . '-illustration', 'personnages');
-                $nouveauChemingRelatif = 'assets/img/personnages/' . $nouvelleIllustrationNomFichier;
-                $personnage->setIllustration($nouveauChemingRelatif);
-
-                $ancienneIllustrationCheminComplet = $this->getParameter('image_directory') . '/personnages/' . $ancienIllustrationNomFichier;
-                $filesystem = new Filesystem();
-                $filesystem->remove($ancienneIllustrationCheminComplet);
-
+                $prefix = 'personnage-' . $personnage->getNom() . '-' . $personnage->getPrenom() . '-illustration';
+                $personnage->setIllustration($fileHandler->handle($nouvelleIllustration, $personnage->getIllustration(), $prefix, 'personnages'));
             }
 
             // BALISAGE : capture les mots entre [], vérifie si un prénom personnage correspondant existe, remplace par un lien personnage HTML
             $personnage->setDescription($baliseur->baliserPersonnages($personnage->getDescription()));
 
             $this->getDoctrine()->getManager()->flush();
-            $this->addFlash('success', 'Le personnage a bien été modifié !');
+            $this->addFlash('success', 'Le personnage a bien été modifié.');
 
             // REDIRECTION
             // -----------
@@ -161,31 +123,19 @@ class AdminPersonnageController extends AbstractController
      * @Route("/admin/personnage/{id}/delete", name="admin_personnage_delete", methods={"GET"})
      * @IsGranted("ROLE_MJ")
      */
-    public function supprimerPersonnage(Request $request, Personnage $personnage): Response {
+    public function supprimerPersonnage(Request $request, Personnage $personnage, FileHandler $fileHandler): Response {
 
         if ($this->isCsrfTokenValid('delete' . $personnage->getId(), $request->query->get('csrf'))) {
 
             $entityManager = $this->getDoctrine()->getManager();
 
-            $nomIconeASupprimer = basename($personnage->getIcone());
-            $nomIllustrationASupprimer = basename($personnage->getIllustration());
-            $cheminIconeASupprimer = $this->getParameter('image_directory') . '/personnages/' . $nomIconeASupprimer;
-            $cheminIllustrationASupprimer = $this->getParameter('image_directory') . '/personnages/' . $nomIllustrationASupprimer;
-
-            if (file_exists($cheminIconeASupprimer)) {
-                $filesystem = new Filesystem();
-                $filesystem->remove($cheminIconeASupprimer);
-            }
-
-            if (file_exists($cheminIllustrationASupprimer)) {
-                $filesystem = new Filesystem();
-                $filesystem->remove($cheminIllustrationASupprimer);
-            }
+            $fileHandler->handle(null, $personnage->getIcone(), null, 'personnages');
+            $fileHandler->handle(null, $personnage->getIllustration(), null, 'personnages');
 
             $entityManager->remove($personnage);
             $entityManager->flush();
 
-            $this->addFlash('success', 'Le personnage a bien été supprimé !');
+            $this->addFlash('success', 'Le personnage a bien été supprimé.');
         }
 
         return $this->redirectToRoute('admin_personnage');

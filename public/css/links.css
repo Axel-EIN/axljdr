@@ -1,0 +1,59 @@
+/* ----------------- */
+/* ----- LINKS ----- */
+/* ----------------- */
+
+:root a:hover { text-decoration: none; }
+
+.link-disabled {
+    pointer-events: none;
+    cursor: pointer;
+}
+
+.hover-no-under:hover { text-decoration: none; }
+
+/* --------------------------- */
+/* --------- PAGES  ---------- */
+/* --------------------------- */
+
+h5 a:hover,
+h4 a:hover,
+h3 a:hover,
+h2 a:hover,
+h1 a:hover,
+a.display-4:hover,
+a.display-3:hover,
+a.display-2:hover,
+a.display-1:hover
+{
+    text-decoration: none;
+    color: var(--secondary);
+}
+
+
+/* ---- TEXT BLOCKS CHAR LINKS  ---- */
+
+a.scene-text {
+    font-weight: bold;
+    &:hover { text-decoration: none; }
+}
+
+a.character-icon, a.location-icon {
+    display: inline-block;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+a.character-icon { color: var(--secondary); }
+a.location-icon { color: var(--purple); }
+
+/* BACK OFFICE MJ LINKS TABS */
+
+.mj-link {
+    color: var(--primary-lighter) !important;
+    font-weight: bold;
+    &:hover {
+        color: var(--primary) !important;
+        text-decoration: none;
+    }
+    &.active { color: var(--primary) !important; }
+}

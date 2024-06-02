@@ -1,0 +1,267 @@
+:root {
+  --shadow-text: 1px 1px 2px var(--color-black-80);
+}
+
+/* ------------------- */
+/* ----- GENERAL ----- */
+/* ------------------- */
+
+.rounded-8 { border-radius: 0.5rem; }
+
+.rounded-circle { border-radius: 50%; }
+
+/* ----- OPACITY & VISIBILITY ----- */
+
+.invisible {
+    opacity: 0;
+    transition: 0.5s var(--ease);
+}
+
+.semi-visible {
+    opacity: 0.5;
+    transition: 0.5s var(--ease);
+}
+
+.slight-fade {
+    opacity: 0.8;
+    transition: 0.5s var(--ease);
+}
+
+.visible {
+    opacity: 1;
+    transition: 0.5s var(--ease);
+}
+
+.translucide {
+    filter: opacity(0.30);
+    transition: 0.5s var(--ease);
+}
+
+
+/* --------- BORDERS --------- */
+
+.border-base { border: 1px solid var(--color-border-base); }
+.border-soft { border: 4px solid #ccc; }
+
+/* --------- SHADOWS --------- */
+
+.shadow-more { box-shadow: 2px 2px 4px rgba(0, 0, 0, .4); }
+
+.filter-shadow { filter: drop-shadow(4px 4px 16px rgba(0,0,0,0.5)); }
+
+/* ---- GRADIENTS & MASKS ---- */  
+
+.gradient-after-down {
+    position: relative;
+    &::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-image:
+            linear-gradient(
+                rgba(0, 0, 0, 0),
+                rgba(0, 0, 0, 0),
+                rgba(0, 0, 0, 0.5),
+                rgba(0, 0, 0, 0.9));
+    }
+}
+
+/* Titre de page passe sur l'image en bas centré. Il s'ancre via height/left/right (jamais padding/margin,
+   ecrases par le m-0 p-0 !important d'element.html.twig) ; --overlay-h pilote
+   la hauteur de la seule zone du titre, redefinissable par page (pages/lieu.css).
+   :has() : le titre ne passe en surimpression que si l'image est bien la
+   (utile pour les pages a onglets, image absente hors intro). */
+@media (max-width: 991.98px) {
+    .element-page:has(.gradient-after-down) {
+        --overlay-h: 40vh;
+
+        > .container > section { position: relative; }
+
+        > .container > section > h1 {
+            position: absolute;
+            top: 0;
+            left: 1rem;
+            right: 1rem;
+            height: var(--overlay-h);
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            z-index: 4;
+            color: var(--color-white);
+        }
+    }
+
+    .gradient-after-down {
+        height: 40vh;
+        overflow: hidden;
+
+        img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+    }
+}
+
+.gradient-after-top-down {
+    position: relative;
+    &::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-image:
+            linear-gradient(
+                rgba(0, 0, 0, 0.75),
+                rgba(0, 0, 0, 0),
+                rgba(0, 0, 0, 0),
+                rgba(0, 0, 0, 0),
+                rgba(0, 0, 0, 0.5),
+                rgba(0, 0, 0, 0.9));
+    }
+}
+
+.mask {
+    mask-image:
+        linear-gradient(to top,
+        rgba(0,0,0,0.1),
+        rgba(0,0,0,0.5),
+        rgba(0,0,0,1),
+        rgba(0,0,0,1),
+        rgba(0,0,0,1),
+        rgba(0,0,0,1)
+        )
+    ;
+}
+
+.mask-bg-dark {
+    background-color: var(--color-black);
+    border-radius: 4px;
+    img {
+        mask-image:
+            linear-gradient(to top,
+                rgba(0,0,0,0.25),
+                rgba(0,0,0,0.50),
+                rgba(0,0,0,1),
+                rgba(0,0,0,1)
+            )
+        ;
+    }
+}
+
+/* Cartouche au stroke rouge, etire a la largeur de l'element. */
+.bg-stroke-container {
+    z-index: 2;
+    text-align: center;
+    background-image: url('../assets/ui/back-title.png');
+    background-size: 100% 130%;
+    background-repeat: no-repeat;
+    background-position: 50% 50%;
+}
+
+/* -------- TRANSFORM ---------- */
+
+.scale-120 { scale: 120%; }
+.scale-100 { scale: 100%; }
+.scale-80 { scale: 80%; }
+
+/* -------- FILTERS ---------- */
+
+.grayscale {
+    filter: grayscale(100%);
+    transition: 0.5s var(--ease);
+}
+
+.invert {
+    filter: invert(1);
+    transition: 0.5s var(--ease);
+}
+
+.dead {
+    filter:
+        grayscale(100%)
+        brightness(0.4)
+        sepia(100%)
+        hue-rotate(-50deg)
+        saturate(300%)
+    ;
+}
+
+.hue-gray {
+    filter:
+        grayscale(100%);
+    &:hover {
+        filter:
+            grayscale(100%)
+            brightness(125%);
+    }
+}
+
+.hue-fuschia {
+    filter:
+        hue-rotate(-45deg);
+    &:hover {
+        filter:
+            hue-rotate(-45deg)
+            brightness(125%);
+    }
+}
+
+.outlined {
+    box-shadow:
+        2px 2px 0 var(--flash-green),
+        -2px -2px 0 var(--flash-green),
+        2px -2px 0 var(--flash-green),
+        -2px 2px 0 var(--flash-green)
+    ;
+}
+
+/* ----- IMAGE RATIO ----- */
+
+.ratio-43,
+.ratio-169,
+.ratio-916,
+.ratio-1610 {
+    position: relative;
+    width: 100%;
+    height: 0;
+
+    .ratio-cropped {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        object-fit: cover;
+        object-position: center;
+    }
+}
+
+.ratio-43 { padding-top: calc(100% * (3 / 4)); }
+.ratio-169 { padding-top: calc(100% * (9 / 16)); }
+.ratio-916 { padding-top: calc(100% * (16 / 9)); }
+.ratio-1610 { padding-top: calc(100% * (10 / 16)); }
+
+
+/* TEXT ZONE BLURRED */
+
+.text-zone-blur {
+    position: relative;
+    z-index: 2;
+    color: var(--color-disabled);
+
+    &::before {
+        position: absolute;
+        z-index: -1;
+        content: "";
+        background-color: black;
+        filter: blur(1.5rem);
+        opacity: 0.5;
+        width: 100%;
+        height: 100%;
+    }
+}

@@ -4,14 +4,14 @@
     <!-- IMAGE DE LA SCENE -->
     <div class="bg-black relative">
 
-    <!-- LIGNE VERTICAL DE PNJS -->
+        <!-- LIGNE VERTICAL DE PNJS -->
         <div class="absolute pnjs-line">
-        <div class="d-flex flex-column">   
-            {% for une_participation in une_scene.participations %}
-                {% if une_participation.estPj == 0 %}
-                    <div class="mb-2 d-inline-block relative hover-zoom-X2">
-                        <a class="hover-zoom-X2" href="{{path('personnage_profil',{id: une_participation.personnage.id})}}" >
-                            {% if une_participation.estMort == 1 %}
+            <div class="d-flex flex-column">   
+                {% for une_participation in une_scene.participations %}
+                    {% if une_participation.estPj == 0 %}
+                        <div class="mb-2 d-inline-block relative hover-zoom-X2">
+                            <a class="hover-zoom-X2" href="{{path('personnage_profil',{id: une_participation.personnage.id})}}" >
+                                {% if une_participation.estMort == 1 %}
                                     <img class="absolute character-icon-dead" src="{{asset('assets/img/icons/mort.png')}}" alt="est mort" />
                             {% endif %}
                             <img class="shadowed character-icon-large {% if une_participation.estMort == 1 %}dead{% else %}hover-shine{% endif %}"
@@ -42,6 +42,23 @@
                                 {% if une_participation.estMort == 1 %}
                                     <img class="character-icon-dead" src="{{asset('assets/img/icons/mort.png')}}" alt="est mort" />
                                 {% endif %}
+                                <img class="shadowed character-icon-large {% if une_participation.estMort == 1 %}dead{% else %}hover-shine{% endif %}"
+                                    src="{{asset(une_participation.personnage.icone)}}" alt="Icone du Personnage" title="{{une_participation.personnage.prenom}}" />
+                            </a>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- LIGNE HORIZONTALE DE PJS -->
+        <div class="absolute pjs-line">
+            {% for une_participation in une_scene.participations %}
+                {% if une_participation.estPj %}
+                    <div class="d-inline-block relative hover-zoom-X2">
+                        {% if une_participation.xpGagne != 0 and une_participation.estMort != 1 %}
+                            <strong class="{% if une_participation.personnage.joueur == app.user %}text-your-xp{% else %}text-xp{% endif %}">+{{une_participation.xpGagne}}XP</strong>
+                        {% endif %}
                         <br/>
                         <a href="{{path('personnage_profil',{id:une_participation.personnage.id})}}" >
                             {% if une_participation.estMort == 1 %}
@@ -51,12 +68,23 @@
                                 class="shadowed character-icon-large
                                 {% if une_participation.personnage.joueur == app.user %} outlined{% endif %}
                                 {% if une_participation.estMort == 1 %} dead{% elseif une_participation.xpGagne == 0 %}grayscale{% endif %}"
-                                        src="{{asset(une_participation.personnage.icone)}}" alt="Icone du Personnage" title="{{une_participation.personnage.prenom}}" />
-                            </a>
-                        </div>
-                    {% endif %}
-                {% endfor %}
-            </div>
+                                src="{{asset(une_participation.personnage.icone)}}" alt="Icone du Personnage" title="{{une_participation.personnage.prenom}}" />
+                        </a>
+                    </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+
+        <img class="card-img-top img-fluid mask" src="{{ asset(une_scene.image) }}"  alt="Image d'une scène">
+
+    </div>
+
+    <div class="card-body scene-body relative mb-2">
+
+        <!-- TEMPS ET TITRE SCENE -->
+        <div class="absolute text-daytime-overtop-container">
+            <h5 class="card-title">{{ une_scene.temps }}</h5>
+            <h3 class="card-title">{{ une_scene.titre }}</h3>
         </div>
 
         <!-- TEXTE RESUME DE LA SESSION -->

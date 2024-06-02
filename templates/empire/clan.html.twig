@@ -1,31 +1,5 @@
-{% extends 'base.html.twig' %}
-{% block title %}Fiche d'un Clan {{ parent() }}{% endblock %}
-{% block body %}
-<div class="container-fluid bg-lightest">
-    <div class="container">
-    
-        <!-- FIL D'ARIANE -->
-        <nav class="pt-3">
-            <span class="text-muted">
-                <a href="{{ path('aventure') }}"><i class="fas fa-home"></i></a>
-                > <a href="{{ path('empire') }}"><strong>Empire</strong></a>
-                > <a href="{{ path('empire', {'_fragment': 'clans'} ) }}"><strong>Clans</strong></a>
-                > <strong>{{ clan.nom }}</strong>
-            </span>
-        </nav>
-
-        <!-- TITRE H1 -->
-        <h1 class="mt-5 relative">
-            Le Clan <strong>{{ clan.nom }}</strong>
-            {% if app.user and is_granted("ROLE_MJ") %}
-        <!-- MJ BTN ICON EDIT -->
-                {% set redirect, element, un_element, size, color, position = 'empire', 'clan', clan, 'medium', 'text-accent', 'right-snap' %}
-                {{ include('/parts/btn-icon-edit.html.twig') }}
-            {% endif %}
-        </h1>
-        <hr>
-
-        <main class="row p-0 m-0">
+{% extends 'element.html.twig' %}
+{% block element_content %}
 
             {# MON #}
             <div class="col-4 p-1 m-0 d-flex justify-content-center align-items-center ">
@@ -63,8 +37,8 @@
             <section class="col-8 p-2 m-0 mb-2">
                 <div class="card card-body pt-4 h-100 relative">
                     <!-- BTN MJ ADD -->
-                    {% set element, position = 'famille', 'right-corner-16' %}
-                    {{ include('/parts/btn-box-add-element.html.twig', {element}) }}
+                    {% set redirect, entity, position, label_one = 'clan', 'famille', 'right-corner-16', 'une famille' %}
+                    {{ include('/parts/btn-box-add-element.html.twig', {entity}) }}
                     <h2 class="card-title"><strong>Familles</strong></h2>
                     <div class="card-text">
 
@@ -74,7 +48,7 @@
 
                                 {% if app.user and is_granted("ROLE_MJ") %}
                                 <!-- MJ BTN ICON EDIT -->
-                                    {% set redirect, element, un_element, size, color, position = 'clan', 'famille', une_famille, 'medium', 'text-accent', 'right-corner-snap' %}
+                                    {% set redirect, entity, un_element, size, color, position = 'clan', 'famille', une_famille, 'medium', 'text-accent', 'right-corner-snap' %}
                                     {{ include('/parts/btn-icon-edit.html.twig') }}
                                 {% endif %}
 
@@ -111,7 +85,7 @@
                     <h2 class="card-title"><strong>Écoles</strong></h2>
                     <hr>
                     {% for une_ecole in clan.ecoles %}
-                        <article class="text-center mb-4">
+                        <article class="text-center mb-4 hover-zoom">
                             <a href="{{ path('regles_ecole', {id: une_ecole.id} ) }}" ><strong>{{ une_ecole.nom }}</strong></a>
                             <a href="{{ path('regles_ecole', {id: une_ecole.id} ) }}">
                                 <img class="img-fluid" src="{{ asset(une_ecole.image) }}" alt="Image d'une école" />
@@ -128,7 +102,7 @@
                 <div class="card card-body pt-4 h-100">
                     <h2 class="card-title"><strong>Territoires</strong></h2>
                         {% if clan.territoireCarte %}
-                            <a href="{{asset(clan.territoireCarte)}}" class="hover-outline" >
+                            <a href="{{asset(clan.territoireCarte)}}" class="hover-zoom" >
                                 <img class="img-fluid" src="{{asset(clan.territoireCarte)}}" alt="Carte du Territoire du clan" />
                             </a>
                         {% endif %}
@@ -145,8 +119,11 @@
                 <div class="card card-body pt-4 h-100">
                     <h2 class="card-title"><strong>Lieux</strong></h2> 
                     {% for un_lieu in clan.lieux %}
-                        <img src="{{asset(un_lieu.image)}}" />
-                        <br/><strong><a href="{{path('empire_lieu', {id: un_lieu.id} )}}">{{un_lieu.nom}}</a></strong>
+                        <article class="text-center mb-4 hover-zoom">
+                            <a href="{{path('empire_lieu', {id: un_lieu.id} )}}"><img class="img-fluid" src="{{asset(un_lieu.image)}}" /></a>
+                            <br/>
+                            <a href="{{path('empire_lieu', {id: un_lieu.id} )}}"><strong>{{un_lieu.nom}}</strong></a>
+                        </article>
                     {% else %}
                         <p class="text-muted"><i>Pas de Lieux à charger.</i></p>
                     {% endfor %}
@@ -181,9 +158,4 @@
                 </div>
             </section>
 
-        </main>
-
-    </div>
-</div>
-{{ include('/parts/modal.html.twig') }}
 {% endblock %}

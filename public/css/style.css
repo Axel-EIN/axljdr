@@ -33,6 +33,8 @@
 .bg-primary-color-light { background-color: #ff4147; }
 .bg-primary-color-lighter { background-color: #ff8084; }
 .bg-primary-color-dark { background-color: #b6252f; }
+.bg-primary-color-darker { background-color: #420509; }
+.bg-primary-color-darkness { background-color: rgb(40, 0, 0); }
 
 .bg-accent-color { background-color: #ff7f00; }
 .bg-accent-color-light { background-color: #ffcc66; }
@@ -209,12 +211,16 @@ h5 a:hover, h4 a:hover, h3 a:hover, h2 a:hover, h1 a:hover { text-decoration: no
 /* POSITIONING & VISIBILITY */
 
 .relative { position: relative; }
-
 .shift-left { position: absolute; left: -2rem; }
 
-.right-corner-snap { position: absolute; top: 0px; right: 0px; z-index: 10}
-.right-corner-8 { position: absolute; right:16px; top:8px; z-index: 10}
+.right-corner { position: absolute; top: 0px; right: 0px; z-index: 10}
+.right-corner-4 { position: absolute; right:4px; top:4px; z-index: 10}
+.right-corner-8 { position: absolute; right:8px; top:8px; z-index: 10}
 .right-corner-16 { position: absolute; top: 1rem; right: 1rem; }
+
+.right-snap { position: absolute; right:-8px; top:8px; z-index: 10}
+
+.overtop-24 { position: relative; top: -8px; }
 .overtop-36 { position: relative; top: -36px; }
 
 @media (max-width: 576px) { .icons-char-collapse { visibility: collapse; } }
@@ -360,11 +366,10 @@ h5 a:hover, h4 a:hover, h3 a:hover, h2 a:hover, h1 a:hover { text-decoration: no
 
 .arrow-down { position: absolute; left: 70px; bottom: -10px; z-index: 10; }
 
-.btn-icons-small-right-container { position: absolute; top: 4px; right: 12px; font-size: 1.5rem; z-index: 10; }
-.btn-icons-small-right-container a { color: white; }
-
-.btn-icons-medium-right-container { position: absolute; top: 8px; right: 0px; font-size: 2rem; z-index: 10; }
-.btn-icons-medium-right-container a { color: white; }
+.btn-icon-small { display: inline-block; text-align: center; width: 40px; height: 40px; font-size: 1.5rem; }
+.btn-icon-medium { display: inline-block; text-align: center; width: 48px; height: 48px; font-size: 2rem; }
+.btn-icon-text { display: inline-block; text-align: center; font-size: 1rem; font-weight: bold; }
+.btn-icon-small:hover, .btn-icon-medium:hover, .btn-icon-text:hover { color: #ff7f00; text-decoration: none; }
 
 .btn-icon-display { position: absolute; right: -160px; top: 96px; font-size: 8rem; text-decoration: none; display: flex; justify-content: center; align-items: center; text-align: center; }
 .btn-icon-display a { color: white; }

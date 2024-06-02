@@ -5,7 +5,7 @@
     {% set nom, btn = un_element.titre, 'Lire' %}
 {% endif %}
 {% set path = category ~ '_' ~ element %}
-<article class="col-xl-{{col_xl}} col-lg-{{col_lg}} col-md-{{col_md}} col-sm-{{col_sm}} py-3 text-center {% if un_element.locked|default(0) == 1 %}translucide{% else %}hover-zoom-X2{% endif %}">
+<article class="col-xl-{{col_xl}} col-lg-{{col_lg}} col-md-{{col_md}} col-sm-{{col_sm}} py-3 text-center {% if un_element.locked|default(0) == 1 %}translucide{% else %}hover-zoom-x2{% endif %}">
     <div class="relative">
     {% if un_element.locked|default(0) == 1 %}
         <img class="absolute icon-lock grayscale fa-beat-fade" src="{{asset('assets/img/icons/locked.png')}}" alt="Icône cadena" title="À débloquer !" />

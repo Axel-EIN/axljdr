@@ -47,6 +47,15 @@
                             </ul>
                         {% endif %}
                         {{ include('/parts/separateur-ornament.html.twig') }}
+
+                        {% if app.user and is_granted("ROLE_MJ") %}
+                        <div class="mt-3 text-center">
+                            <!-- MJ - BTN ICON - Delete -->
+                            {% set redirect, element, un_element, color, action = 'empire', 'archive', archive, 'accent-color', 'delete' %}
+                            {{ include('/parts/btn-edit-delete.html.twig') }}
+                        </div>
+                        {% endif %}
+                        
                     </div>
                 </div>
             </article>

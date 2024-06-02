@@ -1,0 +1,178 @@
+/* -------------------------------- */
+/* ------ FLAT VECTOR ICONS  ------ */
+/* -------------------------------- */
+
+.arrow-left,
+.arrow-right {
+    font-size: 1.25rem;
+    color: var(--primary);
+}
+
+.arrow-left:hover,
+.arrow-right:hover {
+        color: var(--primary-light);
+        animation-duration: 0s;
+}
+
+.arrow-disabled {
+    font-size: 1.25rem;
+    color: var(--gray);
+}
+
+.arrow-down {
+    z-index: 10;
+    left: 70px;
+    bottom: -10px;
+}
+
+.btn-mj:hover {
+    color: var(--accent) !important;
+    text-decoration: none;
+}
+
+.btn-icon-small,
+.btn-icon-medium,
+.btn-icon-text {
+    display: inline-block;
+    text-align: center;
+}
+
+.btn-icon-small {
+    width: 40px;
+    height: 40px;
+    font-size: 1.5rem;
+}
+
+.btn-icon-medium {
+    width: 48px;
+    height: 48px;
+    font-size: 2rem;
+}
+
+.btn-icon-text {
+    font-size: 1rem;
+    font-weight: bold;
+
+}
+
+.btn-icon-small:hover,
+.btn-icon-medium:hover,
+.btn-icon-text:hover {
+    color: var(--accent) !important;
+    text-decoration: none;
+}
+
+.btn-icon-display {
+    z-index: 10;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    top: 96px;
+    right: -160px;
+    font-size: 8rem;
+    text-decoration: none;
+}
+
+.btn-icon-display a, .btn-icon-display a:hover {
+    color: var(--accent);
+    text-decoration: none; }
+
+.localisator-icon {
+    z-index: 10;
+    text-align: center;
+    color: var(--primary);
+    width: 48px;
+    max-height: 48px;
+    font-size: 2rem;
+    transform:
+            translate(-50%, -50%)
+            translate(0px, -48px);
+    text-shadow: 1px 1px var(--primary-darker-more);
+}
+
+
+
+/* -------------------------- */
+/* ------ PIXEL ICONS  ------ */
+/* -------------------------- */
+
+.icon-lock {
+    z-index: 10;
+    top: 18%;
+    left: 40%;
+    width: 22%;
+}
+
+.icon-lock-character {
+    z-index: 10;
+    top: 35%;
+    left: 35%;
+    width: 30%;
+    filter: grayscale(100%);
+}
+
+.corner-badge {
+    z-index: 20;
+    top: -12px;
+    left: -12px;
+    width: 48px;
+}
+
+.icon-ornament {
+    width: 36px;
+    height: auto;
+}
+
+.icon-dead-big {
+    z-index: 10;
+    top: 4rem;
+    left: 0.20rem;
+    width: 156px;
+}
+
+.characters-icons-container {
+    z-index: 10;
+    top: -12px;
+    left: 8px;
+}
+
+.character-icon-medium {
+    width: 48px;
+    border-radius: 4px;
+}
+
+.character-icon-large {
+    width: 64px;
+    border-radius: 5px;
+}
+
+.character-icon-small, .location-icon-small { width: 26px; }
+
+.character-icon-dead {
+    z-index: 10;
+    top: -4px;
+    left: -2px;
+    width: 72px;
+}
+
+
+
+/* --------------------------- */
+/* ------ IMAGE RESIZE  ------ */
+/* --------------------------- */
+
+#logo { width: 120px; height: auto; }
+
+.img-32 { min-width: 16px; max-width: 32px; }
+.img-48 { min-width: 24px; max-width: 48px; }
+.img-64 { min-width: 32px; max-width: 64px; }
+.img-96 { min-width: 48px; max-width: 96px; }
+.img-128 { min-width: 64px; max-width: 128px; }
+.img-160 { min-width: 80px; max-width: 160px; }
+.img-240 { min-width: 120px; max-width: 240px; }
+.img-320 { min-width: 160px; max-width: 320px; }
+.img-360 { min-width: 180px; max-width: 360px; }
+.img-480 { min-width: 240px; max-width: 480px; }
+.img-540 { min-width: 320px; max-width: 540px; }
+.img-640 { min-width: 320px; max-width: 640px; }

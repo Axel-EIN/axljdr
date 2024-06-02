@@ -26,12 +26,12 @@ class ClanRepository extends ServiceEntityRepository
 
     public function findAllMajeurs()
     {
-        return $this->findBy(array("est_majeur" => "1"), array('nom' => 'ASC'));
+        return $this->findBy(array("estMajeur" => "1"), array('nom' => 'ASC'));
     }
 
     public function findAllAutres()
     {
-        return $this->findBy(array("est_majeur" => "0"), array('nom' => 'ASC'));
+        return $this->findBy(array("estMajeur" => "0"), array('nom' => 'ASC'));
     }
 
     public function countClans() {

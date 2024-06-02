@@ -452,6 +452,7 @@ a.location-icon { color: purple; }
 .hover-green:hover { filter: invert(40%) sepia(100%) saturate(1000%) hue-rotate(60deg) brightness(0.9); transition: 0.25s;}
 
 .fa-animation-delay { --fa-animation-delay: 0.67s; }
+.hover-stop:hover { animation-duration: 0s; }
 
 
 

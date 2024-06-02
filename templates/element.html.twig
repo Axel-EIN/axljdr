@@ -1,9 +1,6 @@
 {% extends 'base.html.twig' %}
-{% block title %}{{element|capitalize}} {{un_element.nom}} {{ parent() }}{% endblock %}
+{% block title %}{{entity|capitalize}} {{nom}} {{parent()}} {% endblock %}
 {% block body %}
-    <!-- VALEURS DE TEST -->
-    {% set category = 'empire' %}
-    {% set element = 'lieu' %}
     <main class="container-fluid bg-lightest py-3">
         <div class="container">
 
@@ -12,21 +9,21 @@
                 <span class="text-muted">
                     <a href="/"><i class="fas fa-home"></i></a>&nbsp;
                     >&nbsp;&nbsp;<a href="{{ path(category) }}"><strong>{{category|capitalize}}</strong></a>
-                    >&nbsp;&nbsp;<a href="{{ path(category, {'_fragment': element} ) }}"><strong>{{element|capitalize}}</strong></a>
-                    > <strong>{{ un_element.nom }}</strong>
+                    >&nbsp;&nbsp;<a href="{{ path(category, {'_fragment': entity} ) }}"><strong>{{entity|capitalize}}</strong></a>
+                    > <strong>{{ nom }}</strong>
                 </span>
             </nav>   
 
             <!-- MAIN SECTION -->
-            <section id="{{un_element.nom}}" class="mt-5"> 
+            <section class="mt-5 mb-5"> 
 
                 <!-- H1 TITLE -->
                 <h1 class="relative">
-                    {{element|capitalize}}&nbsp;<strong>{{un_element.nom}}</strong>
+                    {{entity|capitalize}}&nbsp;<strong>{{ nom }}</strong>
 
                     {% if app.user and is_granted("ROLE_MJ") %}
                         <!-- MJ - BTN ICON EDIT - RIGHT SNAP -->
-                        {% set redirect, size, color, position = element, 'medium', 'text-accent', 'right-snap' %}
+                        {% set redirect, size, color, position = entity, 'medium', 'text-accent', 'right-snap' %}
                         {{ include('/parts/btn-icon-edit.html.twig') }}
                     {% endif %}
 
@@ -34,7 +31,7 @@
                 <hr>
 
                 <!-- ELEMENT CONTENT -->
-                <article class="row mt-3">
+                <article class="row mt-4">
 
                     {% block element_content %}{% endblock %}
                     

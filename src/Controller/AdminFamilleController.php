@@ -82,8 +82,8 @@ class AdminFamilleController extends AbstractController
             $this->addFlash('success', 'La Famille a bien été modifiée.');
 
             // REDIRECTION
-            if (!empty($request->query->get('redirect')) && $request->query->get('redirect') == 'famille')
-                return $this->redirectToRoute('empire_famille', ['id' => $famille->getId()]);
+            if (!empty($request->query->get('redirect')) && $request->query->get('redirect') == 'clan')
+                return $this->redirectToRoute('empire_clan', ['id' => $famille->getClan()->getId()]);
             return $this->redirectToRoute('admin_famille');
         }
 

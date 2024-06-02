@@ -2,7 +2,7 @@
 {% block title %}L'Aventure Saison {{ saison.numero }} {{ parent() }}{% endblock %}
 {% block body %}
 <!-- HEADER BAND SAISON -->
-<header class="container-fluid saison">
+<header class="container-fluid relative saison">
     {{ include('/parts/messages-flashes.html.twig') }}
     <div class="container relative text-center d-flex justify-content-center align-items-center">
             <div class="ml-2">
@@ -18,7 +18,7 @@
             </div>
             <div class="ml-2">
                 {% if saison_suivante is empty %}
-                    <div class="clip-text-main">
+                    <div class="relative">
                         <div class="clip-text">SAISON {{ saison.numero }} - Saison actuellement en cours !</div>
                     </div>
                 {% else %}

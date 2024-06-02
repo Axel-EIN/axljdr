@@ -3,11 +3,10 @@
 namespace App\Controller;
 
 use App\Entity\Ecole;
-use App\Service\Uploader;
+use App\Service\FileHandler;
 use App\Form\AdminEcoleType;
 use App\Repository\EcoleRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -33,7 +32,7 @@ class AdminEcoleController extends AbstractController
      * @Route("/admin/ecole/create", name="admin_ecole_create")
      * @IsGranted("ROLE_MJ")
      */
-    public function ajouterEcole(Request $request, EntityManagerInterface $em, Uploader $uploadeur) {
+    public function ajouterEcole(Request $request, EntityManagerInterface $em, FileHandler $fileHandler) {
 
         $ecole = new Ecole;
         $form = $this->createForm(AdminEcoleType::class, $ecole);
@@ -42,13 +41,9 @@ class AdminEcoleController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
 
             $nouvelleImage = $form->get('image')->getData();
-
             if (!empty($nouvelleImage)) {
-
-                $nouvelleImageNomFichier = $uploadeur->upload($nouvelleImage, 'ecole-' . $ecole->getClan()->getNom() . '-' . $ecole->getNom(), 'ecoles');
-                $nouveauChemingRelatif = 'assets/img/ecoles/' . $nouvelleImageNomFichier;
-                $ecole->setImage($nouveauChemingRelatif);
-
+                $prefix = 'ecole-' . $ecole->getClan()->getNom() . '-' . $ecole->getNom();
+                $ecole->setImage($fileHandler->handle($nouvelleImage, null, $prefix, 'ecoles'));
             } else {
                 switch ($ecole->getClasse()->getNom()) {
                     case 'Bushi':
@@ -72,7 +67,7 @@ class AdminEcoleController extends AbstractController
             $em->persist($ecole);
             $em->flush();
 
-            $this->addFlash('success', 'L\'école a bien été ajoutée !');
+            $this->addFlash('success', 'L\'école a bien été ajoutée.');
 
             // REDIRECTION
             if (!empty($request->query->get('redirect')) && $request->query->get('redirect') == 'regles')
@@ -91,7 +86,7 @@ class AdminEcoleController extends AbstractController
      * @Route("/admin/ecole/{id}/edit", name="admin_ecole_edit")
      * @IsGranted("ROLE_MJ")
      */
-    public function editerEcole(Request $request, Ecole $ecole, Uploader $uploadeur): Response {
+    public function editerEcole(Request $request, Ecole $ecole, FileHandler $fileHandler): Response {
 
         $form = $this->createForm(AdminEcoleType::class, $ecole);
         
@@ -100,25 +95,13 @@ class AdminEcoleController extends AbstractController
         if($form->isSubmitted() && $form->isValid()) {
 
             $nouvelleImage = $form->get('image')->getData();
-
             if (!empty($nouvelleImage)) {
-
-                $ancienneImageNomFichier = basename($ecole->getImage());
-
-                $nouvelleImageNomFichier = $uploadeur->upload($nouvelleImage, 'ecole' . '-' . $ecole->getClan()->getNom() . '-' . $ecole->getNom(), 'ecoles');
-                $nouveauChemingRelatif = 'assets/img/ecoles/' . $nouvelleImageNomFichier;
-                $ecole->setImage($nouveauChemingRelatif);
-
-                $ancienneImageCheminComplet = $this->getParameter('image_directory') . '/ecoles/' . $ancienneImageNomFichier;
-                if (file_exists($ancienneImageCheminComplet)) {
-                    $filesystem = new Filesystem();
-                    $filesystem->remove($ancienneImageCheminComplet);
-                }
-
+                $prefix = 'ecole' . '-' . $ecole->getClan()->getNom() . '-' . $ecole->getNom();
+                $ecole->setImage($fileHandler->handle($nouvelleImage, $ecole->getImage(), $prefix, 'ecoles'));
             }
 
             $this->getDoctrine()->getManager()->flush();
-            $this->addFlash('success', 'L\'école a bien été modifiée !');
+            $this->addFlash('success', 'L\'école a bien été modifiée.');
 
             // REDIRECTION
             // -----------
@@ -141,7 +124,7 @@ class AdminEcoleController extends AbstractController
      * @Route("/admin/ecole/{id}/delete", name="admin_ecole_delete", methods={"GET"})
      * @IsGranted("ROLE_MJ")
      */
-    public function supprimerEcole(Request $request, Ecole $ecole): Response {
+    public function supprimerEcole(Request $request, Ecole $ecole, FileHandler $fileHandler): Response {
 
         if ($this->isCsrfTokenValid('delete' . $ecole->getId(), $request->query->get('csrf'))) {
 
@@ -152,19 +135,12 @@ class AdminEcoleController extends AbstractController
 
             $entityManager = $this->getDoctrine()->getManager();
 
-            // Gestion de l'image
-            $nomImageASupprimer = basename($ecole->getImage());
-            $cheminImageASupprimer = $this->getParameter('image_directory') . '/ecoles/' . $nomImageASupprimer;
-
-            if (file_exists($cheminImageASupprimer)) {
-                $filesystem = new Filesystem();
-                $filesystem->remove($cheminImageASupprimer);
-            }
+            $fileHandler->handle(null, $ecole->getImage(), null, 'ecoles');
 
             $entityManager->remove($ecole);
             $entityManager->flush();
 
-            $this->addFlash('success', 'L\'école a bien été supprimée !');
+            $this->addFlash('success', 'L\'école a bien été supprimée.');
         }
 
         return $this->redirectToRoute('admin_ecole');

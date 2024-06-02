@@ -1,0 +1,121 @@
+/* ----------------------------- */
+/* --------- TOP BAR  ---------- */
+/* ----------------------------- */
+
+
+/* ---- Nav Bar ---- */
+
+.nav-link {
+    color: var(--light-alpha) !important;
+
+}
+.nav-link:hover {
+    color: var(--lightest) !important;
+    text-decoration: none;
+}
+
+.nav-link:active,
+.nav-link.active {
+    color: var(--white) !important;
+}
+
+
+/* ---- User Bar ---- */
+
+.top-bar-user a {
+    color: var(--light);
+}
+
+.top-bar-user a:hover {
+    color: var(--lightest);
+    text-decoration: none;
+}
+
+.top-bar-user a:active {
+    color: var(--white);
+}
+
+
+/* ---- Administration Panel  ---- */
+
+#admin-panel a {
+    color: var(--white);
+}
+
+#admin-panel a:hover {
+    color: var(--white);
+    text-decoration: underline;
+}
+
+
+/* ---- MJ Panel  ---- */
+
+#mj-panel a {
+    color: var(--white);
+}
+
+#mj-panel a:hover {
+    color: var(--white);
+    text-decoration: underline;
+}
+
+
+
+/* --------------------------- */
+/* --------- PAGES  ---------- */
+/* --------------------------- */
+
+
+h5 a:hover,
+h4 a:hover,
+h3 a:hover,
+h2 a:hover,
+h1 a:hover,
+a.display-4:hover,
+a.display-3:hover,
+a.display-2:hover,
+a.display-1:hover
+{
+    text-decoration: none;
+    color: var(--blue);
+}
+
+
+/* ---- TEXT BLOCKS CHAR LINKS  ---- */
+
+a.character-icon,
+a.location-icon {
+    display: inline-block;
+    color: var(--blue);
+    font-weight: bold;
+    text-decoration: none;
+}
+
+a.location-icon {
+    color: var(--purple);
+}
+
+a.scene-text {
+    font-weight: bold;
+}
+
+a.scene-text a:hover {
+    text-decoration: none;
+}
+
+
+/* ---- FOOTER  ---- */
+
+.footer-link { color: var(--light-alpha) !important; }
+.footer-link:hover {
+    color: var(--white) !important;
+    text-decoration: underline;
+}
+
+#social-medias a {
+    color: var(--white) !important;
+}
+
+#social-medias a:hover {
+    color: var(--primary) !important;
+}

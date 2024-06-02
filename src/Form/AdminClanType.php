@@ -21,7 +21,7 @@ class AdminClanType extends AbstractType
     {
         $builder
             ->add('nom', TextType::class)
-            ->add('est_majeur', CheckboxType::class, ['required' => false])
+            ->add('estMajeur', CheckboxType::class, ['required' => false])
             ->add('description', TextareaType::class)
             ->add('couleur', ColorType::class)
             ->add('mon', FileType::class, array('mapped' => false, 'data_class' => null, 'required' => false))
@@ -34,7 +34,7 @@ class AdminClanType extends AbstractType
         ;
 
         $builder
-            ->get('est_majeur')
+            ->get('estMajeur')
             ->addModelTransformer(new CallbackTransformer(
                 function ($activeAsString) {
                     // transform the string to boolean

@@ -52,7 +52,7 @@ class Personnage
     /**
      * @ORM\Column(type="boolean")
      */
-    private $est_pj;
+    private $estPj;
 
     /**
      * @ORM\ManyToOne(targetEntity=Clan::class, inversedBy="personnages")
@@ -103,7 +103,6 @@ class Personnage
     public function __construct()
     {
         $this->archives = new ArrayCollection();
-        $this->personnages = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -185,12 +184,12 @@ class Personnage
 
     public function getEstPj(): ?bool
     {
-        return $this->est_pj;
+        return $this->estPj;
     }
 
-    public function setEstPj(bool $est_pj): self
+    public function setEstPj(bool $estPj): self
     {
-        $this->est_pj = $est_pj;
+        $this->estPj = $estPj;
 
         return $this;
     }

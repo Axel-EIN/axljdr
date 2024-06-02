@@ -1,0 +1,75 @@
+/* --------------------- */
+/* ----- POSITIONS ----- */
+/* --------------------- */
+
+/* SNAPS */
+
+.relative { position: relative; }
+
+.absolute { position: absolute; }
+
+.center-snap {
+        position: absolute;
+        z-index: 10;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+}
+
+.left-overflow {
+        position: absolute;
+        z-index: 10;
+        left: -2.5rem;
+        top: 0.5rem;
+}
+
+.right-overflow {
+        position: absolute;
+        z-index: 10;
+        right: -2.5rem;
+        top: 0.5rem;
+}
+
+.right-snap {
+        position: absolute;
+        z-index: 10;
+        right: 0px;
+        top: 0px; }
+
+.right-ng-snap {
+        position: absolute;
+        z-index: 10;
+        right:-8px;
+        top: 0.5rem; }
+
+.right-corner-snap {
+        position: absolute;
+        z-index: 10;
+        top: 0px;
+        right: 0px; }
+
+.right-corner-8 {
+        position: absolute;
+        z-index: 10;
+        top:8px;
+        right:8px; }
+
+.right-corner-16 {
+        position: absolute;
+        z-index: 10;
+        top: 1rem;
+        right: 1rem; }
+
+.right-corner-24 {
+        position: absolute;
+        z-index: 10;
+        top: 1rem;
+        right: 24px; }
+
+.flex-2 { flex-grow: 2 }
+
+/* Z-INDEX */
+
+.z-100 {
+        z-index: 100;
+}

@@ -19,12 +19,10 @@
             <h1 class="mt-5 relative">
                 <strong>{{ archive.titre }}</strong>
 
-                <!-- MJ - ICON BTN - Edit | Delete -->
                 {% if app.user and is_granted("ROLE_MJ") %}
-                <div class="btn-icons-medium-right-container">
-                    <a class="text-danger mx-2" href="{{ path('admin_archive_edit', {id:archive.id}) }}?redirect=archive"><i class="fas fa-edit" alt="Icône Modifier" title="Modifier"></i></a>
-                    <a class="text-danger mx-2" href="{{ path('admin_archive_delete', {id:archive.id}) }}?csrf={{ csrf_token('delete' ~ archive.id) }}&redirect=archive" onclick="return confirm('Êtes-vous sûr de vouloir supprimer l'archive : {{ archive.titre }} ?')"><i class="fas fa-trash-alt" alt="Icône Supprimer" title="Supprimer"></i></a>
-                </div>
+                    <!-- MJ - BTN ICON - Edit -->
+                    {% set redirect, element, un_element, size, color, position = 'empire', 'archive', archive, 'medium', 'accent-color', 'right-snap' %}
+                    {{ include('/parts/btn-icon-edit.html.twig') }}
                 {% endif %}
                 
             </h1>

@@ -39,15 +39,20 @@
     </div>
 {% endblock %}
 
-{# {% block section_content3 %}
-    <!--- LES ECOLES -->
-    {% set col_xl, col_lg, col_md, col_sm = 3, 4, 6, 12 %}
-    {% for un_element in ecoles %}
+{% block section_content3 %}
+    <!--- REGLES DIVERS -->
+    <div class="w-100 row justify-content-center">
+        {% for uneRuleDivers in rulesDivers %}
 
-        <!--- UNE ECOLE -->
-        {{ include('/parts/element-vignette.html.twig', {un_element}) }}
+            <!--- UNE REGLE DIVERS -->
+            <a class="col-2 text-center hover-zoom" href="{{ path('regles_rule', {id: uneRuleDivers.id} ) }}">
+                <img class="img-fluid" src="{{ asset(uneRuleDivers.image) }}" alt="Image de la Règle" title="{{uneRuleDivers.nom}}" />
+                <br>
+                <h3 class="text-small my-2">
+                    <strong>{{ uneRuleDivers.nom }}</strong>
+                </h3>
+            </a>
 
-    {% else %}
-        <small class="text-muted">Il n'y a pas encore d'école disponible.</a>
     {% endfor %}
-{% endblock %} #}
+    </div>
+{% endblock %}

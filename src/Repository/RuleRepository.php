@@ -23,6 +23,28 @@ class RuleRepository extends ServiceEntityRepository
         parent::__construct($registry, Rule::class);
     }
 
+    public function findAllTypeSorted($type)
+    {
+        return $this->createQueryBuilder('r')
+            ->andWhere('r.base = :value_type')
+            ->setParameter('value_type', $type)
+            ->addOrderBy('r.numero', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function findAllTypeExceptOneSorted($id, $type)
+    {
+        return $this->createQueryBuilder('r')
+            ->andWhere('r.base = :value_type')
+            ->andWhere('r.id != :value_id')
+            ->setParameter('value_id', $id)
+            ->setParameter('value_type', $type)
+            ->addOrderBy('r.numero', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
+
     public function countRules() {
         return $this->createQueryBuilder('r')
             ->select('count(r.id)')

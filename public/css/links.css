@@ -3,6 +3,18 @@
 /* ----------------------------- */
 
 
+/* ---- Common Links ---- */
+
+.link-accent {
+    color: var(--accent);
+}
+
+.link-accent:hover {
+    color: var(--accent-light);
+    text-decoration: none;
+}
+
+
 /* ---- Nav Bar ---- */
 
 .nav-link {

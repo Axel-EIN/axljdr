@@ -4,7 +4,7 @@
         {% if app.user and is_granted("ROLE_MJ") %}
             <div class="text-center">
                 <!-- MJ BTN ICON+TEXT Insert or Add -->
-                {{ include('/parts/btn-line-insert-add.html.twig') }}
+                {{ include('/parts/btn-line-insert.html.twig') }}
             </div>
         {% endif %}
 
@@ -14,7 +14,7 @@
 
             {% if app.user and is_granted("ROLE_MJ") %}
                 <!-- MJ - BTN ICON - Edit -->
-                {% set redirect, element, un_element, size, color = 'aventure', 'chapitre', un_chapitre, 'medium', 'text-accent' %}
+                {% set redirect, entity, un_element, size, color = 'aventure', 'chapitre', un_chapitre, 'medium', 'text-accent' %}
                 {{ include('/parts/btn-icon-edit.html.twig') }}
             {% endif %}
 
@@ -101,7 +101,7 @@
 
                                 {% if app.user and is_granted("ROLE_MJ") %}
                                     <!-- MJ - BTN ICON - Edit -->
-                                    {% set redirect, element, un_element, size = 'aventure', 'episode', un_episode, 'small' %}
+                                    {% set redirect, entity, un_element, size = 'aventure', 'episode', un_episode, 'small' %}
                                     {{ include('/parts/btn-icon-edit.html.twig') }}
                                 {% endif %}
 

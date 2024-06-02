@@ -23,7 +23,7 @@ class PersonnageRepository extends ServiceEntityRepository
     {
         return $this->createQueryBuilder('p')
             ->leftJoin('p.clan', 'c')
-            ->addOrderBy('c.est_majeur', 'DESC')
+            ->addOrderBy('c.estMajeur', 'DESC')
             ->addOrderBy('c.nom', 'ASC')
             ->getQuery()
             ->getResult();
@@ -32,11 +32,11 @@ class PersonnageRepository extends ServiceEntityRepository
     public function findAllPJsSorted()
     {
         return $this->createQueryBuilder('p')
-            ->andWhere('p.est_pj = :val')
+            ->andWhere('p.estPj = :val')
             ->setParameter('val', 1)
             ->leftJoin('p.clan', 'c')
             ->addOrderBy('p.estMort', 'ASC')
-            ->addOrderBy('c.est_majeur', 'DESC')
+            ->addOrderBy('c.estMajeur', 'DESC')
             ->addOrderBy('c.nom', 'ASC')
             ->getQuery()
             ->getResult();
@@ -45,12 +45,12 @@ class PersonnageRepository extends ServiceEntityRepository
     public function findAllPNJsSorted()
     {
         return $this->createQueryBuilder('p')
-            ->andWhere('p.est_pj = :val')
+            ->andWhere('p.estPj = :val')
             ->setParameter('val', 0)
             ->leftJoin('p.clan', 'c')
             ->addOrderBy('p.estMort', 'ASC')
             ->addOrderBy('p.locked', 'ASC')
-            ->addOrderBy('c.est_majeur', 'DESC')
+            ->addOrderBy('c.estMajeur', 'DESC')
             ->addOrderBy('c.nom', 'ASC')
             ->getQuery()
             ->getResult();
@@ -70,7 +70,7 @@ class PersonnageRepository extends ServiceEntityRepository
     public function countPJs() {
         return $this->createQueryBuilder('p')
             ->select('count(p.id)')
-            ->andWhere('p.est_pj = :val')
+            ->andWhere('p.estPj = :val')
             ->setParameter('val', 1)
             ->getQuery()
             ->getSingleScalarResult();
@@ -79,7 +79,7 @@ class PersonnageRepository extends ServiceEntityRepository
     public function countPNJs() {
         return $this->createQueryBuilder('p')
             ->select('count(p.id)')
-            ->andWhere('p.est_pj = :val')
+            ->andWhere('p.estPj = :val')
             ->setParameter('val', 0)
             ->getQuery()
             ->getSingleScalarResult();

@@ -1,0 +1,170 @@
+/* ------------------- */
+/* ----- HEADERS ----- */
+/* ------------------- */
+
+.header-bg-img {
+  background-size: 100% auto;
+  background-repeat: no-repeat;
+  overflow: hidden;
+  background-position: top;
+}
+
+@media (max-width: 1199.98px) { .header-bg-img { background-size: 150% auto; } }
+@media (max-width: 991.98px) { .header-bg-img { background-size: 200% auto; } }
+@media (max-width: 575.98px) { .header-bg-img { background-size: 250% auto; } }
+@media (max-width: 480px) { .header-bg-img { background-size: 300% auto; } }
+
+.header-bg-characters {
+  background-image:
+    linear-gradient(rgba(40,0,0,0.5),rgba(40,0,0,0.5)),
+    url('../assets/rubriques/personnages.jpg');
+  background-position: center;
+}
+
+.header-bg-empire {
+  background-image:
+    linear-gradient(rgb(40,0,0,0.5),rgb(40,0,0,0.5)),
+    url('../assets/rubriques/empire.jpg');
+  background-position: center;
+}
+
+.header-bg-rules {
+  background-image:
+    linear-gradient(rgb(40,0,0,0.5),rgb(40,0,0,0.5)),
+    url('../assets/rubriques/regles.jpg');
+  background-position: center;
+}
+
+.header {
+  position: relative;
+  color: var(--color-white);
+  text-align: center;
+  margin-bottom: 0;
+  /* Vertical uniquement : l'en-tete d'episode porte aussi .container, dont la
+     gouttiere horizontale doit s'appliquer. Un raccourci `padding: 0.5rem 0`
+     la remettrait a zero et collerait le libelle au bord de l'ecran. */
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+}
+
+/* Hauteur du bandeau, portee par .header seul : c'est lui qui centre le
+   contenu, et .header-bg-img qui l'englobe grandit pour le suivre. Le
+   :not() exclut l'en-tete d'episode, dimensionne sur son contenu. */
+.header:not(.header-session) { min-height: 60vh; }
+@media (max-width: 991.98px) { .header:not(.header-session) { min-height: 40vh; } }
+
+.header-session {
+  background-position: top;
+}
+
+.chapter-number {
+  font-size: 2rem;
+  color: var(--color-white);
+  margin: 0;
+}
+@media (max-width: 991.98px) { .chapter-number { font-size: 1.5rem; } }
+@media (max-width: 575.98px) { .chapter-number { font-size: 1.25rem; } }
+@media (max-width: 480px) { .chapter-number { font-size: 1rem; } }
+
+.header hr {
+  background-color: var(--color-white);
+  height: 1px;
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+  opacity: 0.4;
+}
+
+
+/* GRILLE DE PORTRAITS DU CHAPITRE (en header)
+   Utilisé sur la page épisode et la page aventure (chapitre). S'ancre sur
+   l'élément `.header` parent (déjà position:relative). */
+/* ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾ */
+
+.chapter-characters {
+  position: absolute;
+  top: 15rem;
+  z-index: 10;
+  padding: 2px 16px 16px;
+  border-radius: 8px;
+  /* width:max-content empêche le calcul d'absolute (parent_width - right) de
+     borner la largeur disponible — sans ça la grille ne dépasse pas la
+     largeur entre le point d'ancrage et le bord opposé du parent. */
+  width: max-content;
+  /* Ancrage : PJ par le coin top-right (s'étend vers la gauche),
+     PNJ par le coin top-left (s'étend vers la droite). */
+  &.pjs  { right: 80%; text-align: right; }
+  &.pnjs { left:  80%; text-align: left;  }
+  &.chapter-view { margin-top: 72px;}
+}
+
+.label-du-groupe {
+  font-family: 'Present';
+  color: var(--color-white-80);
+  text-shadow: var(--shadow-text);
+}
+
+/* Cadre partage avec .chapter-lieu-icon (pages/aventure.css) : seuls taille
+   et filtre distinguent un portrait de personnage d'une icone de lieu. */
+.chapter-portrait, .chapter-lieu-icon {
+  opacity: 0.4;
+  background-color: var(--color-black-80);
+  object-fit: cover;
+  border-radius: 4px;
+  box-shadow: 8px 8px 16px var(--color-black-40);
+  transition: 0.2s var(--ease);
+}
+
+.chapter-portraits-grid {
+  /* Grid avec auto-flow column : on remplit d'abord verticalement
+     (jusqu'à 4 portraits par colonne), puis on passe à la colonne suivante. */
+  display: grid;
+  grid-template-rows: repeat(4, 40px);
+  grid-auto-flow: column;
+  grid-auto-columns: 40px;
+  margin-top: 4px;
+  gap: 6px;
+  /* Borne horizontale (max 10 colonnes ici, ajustable) */
+  max-width: calc(10 * 40px + 15 * 6px);
+  backdrop-filter: blur(16px);
+
+  .chapter-portrait-link {
+    display: block;
+    line-height: 0;
+  }
+
+  .chapter-portrait {
+    width: 40px;
+    height: 40px;
+    filter: grayscale(1) brightness(0.5);
+    &.chapter-view { filter: brightness(1);}
+  }
+
+  /* Persos présents dans l'épisode en cours : contour rouge, pleine opacité.
+     N'a d'effet que là où la classe est ajoutée (page épisode). */
+  .chapter-portrait.in-episode {
+    opacity: 1;
+    filter: grayscale(0);
+  }
+
+  .chapter-portrait-link:hover .chapter-portrait {
+    border-color: var(--primary, #fff);
+  }
+}
+
+/* Zoom au survol, partage avec .chapter-lieu-link (pages/aventure.css). */
+.chapter-portrait-link:hover .chapter-portrait,
+.chapter-lieu-link:hover .chapter-lieu-icon {
+  transform: scale(1.1);
+  opacity: 1;
+}
+
+/* Direction de remplissage horizontal :
+   PJ ancré top-right → colonnes ajoutées vers la gauche (direction:rtl)
+   PNJ ancré top-left → colonnes ajoutées vers la droite (direction:ltr, défaut). */
+.chapter-characters.pjs  .chapter-portraits-grid { direction: rtl; }
+.chapter-characters.pnjs .chapter-portraits-grid { direction: ltr; }
+
+/* Masquee sous 992px, pas 576px : c'est le seuil ou .header passe en mode
+   compact (40vh), et l'ancrage absolu de la grille (top:15rem) chevauche alors
+   le titre et la citation. */
+@media (max-width: 991.98px) { .chapter-characters { display: none; } }

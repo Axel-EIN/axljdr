@@ -71,10 +71,10 @@ class BackOfficeController extends AbstractController
         $dernierEcole = $ecoleRepository->findOneBy(array(),array('id' => 'DESC'));
 
         $nbrPJs = $personnageRepository->countPJs();
-        $dernierPJ = $personnageRepository->findOneBy(array("est_pj" => "1"),array('id' => 'DESC'));
+        $dernierPJ = $personnageRepository->findOneBy(array("estPj" => "1"),array('id' => 'DESC'));
 
         $nbrPNJs = $personnageRepository->countPNJs();
-        $dernierPNJ = $personnageRepository->findOneBy(array("est_pj" => "0"),array('id' => 'DESC'));
+        $dernierPNJ = $personnageRepository->findOneBy(array("estPj" => "0"),array('id' => 'DESC'));
 
         $nbrFiches = $fichePersonnageRepository->countFiches();
         $derniereFiche = $fichePersonnageRepository->findOneBy(array(),array('id' => 'DESC'));

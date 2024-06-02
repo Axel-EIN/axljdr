@@ -114,7 +114,7 @@
                 {% if app.user and is_granted("ROLE_MJ") %}
                     <div class="absolute btn-icon-display">
                         <a href="{{path('admin_episode_create')}}?numero={{(un_chapitre.episodes|length)+1}}&chapitreID={{un_chapitre.id}}&redirect=aventure">
-                            <i class="fas fa-plus-square fa-fade" alt="Icône Ajouter" title="Ajouter une Session"></i>
+                            <i class="fas fa-plus-square fa-fade hover-stop" alt="Icône Ajouter" title="Ajouter une Session"></i>
                         </a>
                     </div>
                 {% endif %}

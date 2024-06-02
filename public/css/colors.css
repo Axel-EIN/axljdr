@@ -1,0 +1,322 @@
+:root {
+    /* ----------------------- */
+    /* ----- ROLE TOKENS ----- */
+    /* ----------------------- */
+
+    /*
+    - surface
+    - background
+    - fade
+    - disabled
+    - alternate
+    - body
+    - strong
+    - stamp
+    - border
+    */
+
+    --color-surface: var(--color-white);
+    --color-background: var(--color-gray-edge);
+    --color-fade: var(--color-white-fog);
+    --color-disabled: var(--color-gray-dust);
+    --color-alternate: var(--color-gray-boulder);
+    --color-body: var(--color-gray-slate);
+    --color-strong: var(--color-black-tar);
+    --color-stamp: var(--color-black-onyx);
+    --color-border-base: var(--color-gray-edge);
+
+
+    /* ------------------ */
+    /* ----- COLORS ----- */
+    /* ------------------ */
+
+    /* WHITES */
+    --color-white-80: #FFFFFF80;
+    --color-white-40: #FFFFFF40;
+    --color-white: #FFFFFF;
+    --color-white-flash: #FDFAFA;
+    --color-white-flake: #F8F5F5;
+    --color-white-fog: #F4F1F1;
+    
+    /* LIGHTER GRAY */
+    --color-gray-edge: #E4E1E1;
+    --color-gray-dust: #D4D1D1;
+    --color-gray-cloud: #C4C1C1;
+    --color-gray-boulder: #B4B1B1;
+    --color-gray-ash: #A4A1A1;
+    --color-gray-mist: #949191;
+
+    /* GRAY */
+    --color-gray: #848181;
+
+    /* DARKER GRAYS */
+    --color-gray-slate: #747171;
+    --color-gray-stone: #646161;
+    --color-gray-graphite: #545151;
+    --color-gray-iron: #444141;
+
+    /* BLACKS */
+    --color-black-tar: #343131;
+    --color-black-obsidian: #242121;
+    --color-black-onyx: #141111;
+    --color-black: #000000;
+    --color-black-80: #00000080;
+    --color-black-40: #00000040;
+
+    
+    /* ------------------------ */
+    /* ----- COLORS (OLD) ----- */
+    /* ------------------------ */
+
+    /* RED PRIMARY */
+    --primary-lightest: #ffd1d4;
+    --primary-lighter: #ff8084;
+    --primary-light: #ff4147;
+    --primary: #EA2027;
+    --primary-dark: #b6252f;
+    --primary-darker: #9b1921;
+    --primary-darker-more: rgb(100,0,0);
+    --primary-darkest: rgb(40,0,0);
+    --primary-alpha: #EA202780;
+    --primary-trans: #EA202740;
+
+    /* BLUE SECONDARY */
+    --secondary-light: #3399ff;
+    --secondary: #0080ff;
+    --secondary-dark: #0066cc;
+    --secondary-pastel-light: #464a4d;
+    --secondary-pastel-dark: #343a40;
+    --secondary-pastel-darker: #28323C;
+    --secondary-pastel-darkest: #1E242A;
+
+    /* YELLOW ACCENT */
+    --accent-lightest: #fcf8e3;
+    --accent-lighter: #ffcc66;
+    --accent-light: #ffaa40;
+    --color-yellow-gold: #d4a017;
+    --accent: #ff7f00;
+    --accent-dark: #cc6600;
+    --accent-alpha: #ff7f0080;
+    --accent-trans: #ff7f0040;
+
+    /* VARIOUS OTHER COLORS */
+    --purple: purple;
+    --green: rgb(0,100,0);
+    --fuschia: #FF1493;
+    --fuschia-light: #FF54C3;
+    --flash-red: #f66;
+
+    /* GREEN */
+    --flash-green: hsl(120, 100%, 50%) /* #00FF00 */;
+    --flash-green-darker: hsl(from var(--flash-green) h s calc(l - 10));
+
+    --color-green-success: #28a745;
+
+    /* REDS */
+    --color-red-danger: #dc3545;
+    --flash-blue: #4Cf;
+
+    /* ELEMENTS */
+    --TERRE: hsl(27, 21%, 52%); /* #9e816a; */
+    --AIR: #7aa9ff;
+    --EAU: #44bdc4;
+    --FEU: rgb(255, 157, 76);
+    --VIDE: #b293ff;
+}
+
+
+/* ============================== */
+/* === COLOR ROLES CLASSNAMES === */
+/* ============================== */
+
+/*
+- surface
+- background
+- fade
+- disabled
+- alternate
+- body
+- strong
+- stamp
+- border
+*/
+
+/* SURFACE */
+.text-surface { color: var(--color-surface); }
+.bg-surface { background-color: var(--color-surface); }
+
+/* BACKGROUND */
+.text-background { color: var(--color-background); }
+.bg-background { background-color: var(--color-background); }
+
+/* FADE */
+.text-fade { color: var(--color-fade); }
+.bg-fade { background-color: var(--color-fade); }
+
+/* DISABLED */
+.text-disabled { color: var(--color-disabled); }
+.bg-disabled { background-color: var(--color-disabled); }
+
+/* ALTERNATE */
+.text-alternate { color: var(--color-alternate); }
+.bg-alternate { background-color: var(--color-alternate); }
+
+/* BODY */
+.text-body-c { color: var(--color-body); }
+.bg-body { background-color: var(--color-body); }
+
+/* STRONG */
+.text-strong { color: var(--color-strong) }
+.bg-strong { background-color: var(--color-strong) }
+
+/* STAMP */
+.text-stamp { color: var(--color-stamp) }
+.bg-stamp { background-color: var(--color-stamp) }
+
+/* BORDER */
+.border-base { border: 1px solid var(--color-border-base); }
+
+
+/* ------------------------------- */
+/* ----- COLORS CLASSNAMES ------- */
+/* ------------------------------- */
+
+/* WHITES */
+.text-white-80 { color: var(--color-white-80)};
+.bg-white-80 { background-color: var(--color-white-80);}
+
+.text-white-40 { color:var(--color-white-40)};
+.bg-white-40 { background-color: var(--color-white-40);}
+
+.text-white { color: var(--color-white); }
+.bg-white { background-color: var(--color-white); }
+
+.text-white-flash { color: var(--color-white-flash); }
+.bg-white-flash { background-color: var(--color-white-flash); }
+
+.text-white-flake { color: var(--color-white-flake); }
+.bg-white-flake { background-color: var(--color-white-flake); }
+
+.text-white-fog { color: var(--color-white-fog); }
+.bg-white-fog { background-color: var(--color-white-fog); }
+
+/* GRAYS */
+.text-gray-edge { color: var(--color-gray-edge); }
+.bg-gray-edge { background-color: var(--color-gray-edge); }
+
+.text-gray-dust { color: var(--color-gray-dust); }
+.bg-gray-dust { background-color: var(--color-gray-dust); }
+
+.text-gray-cloud { color: var(--color-gray-cloud); }
+.bg-gray-cloud { background-color: var(--color-gray-cloud); }
+
+.text-gray-boulder { color: var(--color-gray-boulder); }
+.bg-gray-boulder { background-color: var(--color-gray-boulder); }
+
+.text-gray-ash { color: var(--color-gray-ash); }
+.bg-gray-ash { background-color: var(--color-gray-ash); }
+
+.text-gray-mist { color: var(--color-gray-mist); }
+.bg-gray-mist { background-color: var(--color-gray-mist); }
+
+.text-gray { color: var(--color-gray); }
+.bg-gray { background-color: var(--color-gray); }
+
+.text-gray-slate { color: var(--color-gray-slate); }
+.bg-gray-slate { background-color: var(--color-gray-slate); }
+
+.text-gray-stone { color: var(--color-gray-stone); }
+.bg-gray-stone { background-color: var(--color-gray-stone); }
+
+.text-gray-graphite { color: var(--color-gray-graphite); }
+.bg-gray-graphite { background-color: var(--color-gray-graphite); }
+
+.text-gray-iron { color: var(--color-gray-iron); }
+.bg-gray-iron { background-color: var(--color-gray-iron); }
+
+/* BLACKS */
+.text-black-tar { color: var(--color-black-tar); }
+.bg-black-tar { background-color: var(--color-black-tar); }
+
+.text-black-obsidian { color: var(--color-black-obsidian); }
+.bg-black-obsidian { background-color: var(--color-black-obsidian); }
+
+.text-black-onyx { color: var(--color-black-onyx); }
+.bg-black-onyx { background-color: var(--color-black-onyx); }
+
+.text-black { color: var(--color-black); }
+.bg-black { background-color: var(--color-black); }
+
+.text-black-80 { color: var(--color-black-80); }
+.bg-black-80 { background-color: var(--color-black-80); }
+
+.text-black-40 { color: var(--color-black-40); }
+.bg-black-40 { background-color: var(--color-black-40); }
+
+/* GREENS */
+.text-flash-green { color:var(--flash-green); }
+.bg-flash-green { background-color: var(--flash-green); }
+
+.text-flash-green-darker { color:var(--flash-green-darker); }
+.bg-flash-green-darker { background-color: var(--flash-green-darker); }
+
+/* PRIMARY */
+.text-primary-light { color: var(--primary-light);}
+
+.text-primary { color: var(--primary) !important;}
+.bg-primary { background-color: var(--primary) !important;}
+a.text-primary:hover { color: var(--primary-light); }
+
+.text-primary-dark { color: var(--primary-dark) ; }
+.bg-primary-dark { background-color: var(--primary-dark) ; }
+
+.text-primary-darker { color: var(--primary-darker) ; }
+.bg-primary-darker { background-color: var(--primary-darker); }
+
+.text-primary-darker-more { color: var(--primary-darker-more); }
+.bg-primary-darker-more { background-color: var(--primary-darker-more); }
+
+.text-primary-darkest { color: var(--primary-darkest); }
+.bg-primary-darkest { background-color: var(--primary-darkest); }
+
+
+/* SECONDARY */
+
+.text-secondary { color: var(--secondary) !important; }
+.bg-secondary { background-color: var(--secondary) !important; }
+a.text-secondary:hover { color: var(--secondary-light); }
+
+/* ACCENT */
+
+.text-accent-light { color: var(--accent-light); }
+.bg-accent-light { background-color: var(--accent-light); }
+
+.text-accent { color: var(--accent); }
+.bg-accent { background-color: var(--accent); }
+
+.text-accent-alpha { color:var(--accent-alpha); }
+.bg-accent-alpha { background-color:var(--accent-alpha); }
+
+/* OTHERS */
+
+.text-AIR { color: var(--AIR); }
+.bg-AIR { background-color: var(--AIR); }
+
+.text-EAU { color: var(--EAU); }
+.bg-EAU { background-color: var(--EAU); }
+
+.text-FEU { color: var(--FEU); }
+.bg-FEU { background-color: var(--FEU); }
+
+.text-TERRE { color: var(--TERRE); }
+.bg-TERRE { background-color: var(--TERRE); }
+
+.text-VIDE { color: var(--VIDE); }
+.bg-VIDE { background-color: var(--VIDE); }
+
+.text-green { color: var(--green); }
+.bg-green { background-color: var(--green); }
+
+.text-fuschia { color:var(--fuschia); }
+.bg-fuschia { background-color: var(--fuschia); }
+a.text-fuschia:hover { color:var(--fuschia-light); }

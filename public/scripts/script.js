@@ -25,3 +25,18 @@ function mouseEnter() {
 function mouseLeave() {
     $(this).find('.btn-primary-style').removeClass('fa-bounce');
 };
+
+// Capture
+$('#caption').click(function (e) {
+
+    const x = e.offsetX,
+    y = e.offsetY;
+
+    // alert(x + ',' + y);
+
+    const xPourcent = x / 280 * 100;
+    const yPourcent = y / 400 * 100;
+
+    alert(xPourcent + '% ,' + yPourcent + '%');
+
+});

@@ -160,8 +160,9 @@
                             <h2 class="card-title"><strong>Personnages</strong></h2>
                             <div class="card-text ml-3">
                                 {% for un_personnage in clan.personnages %}
-                                    <a href="{{ path('personnage_profil', {id: un_personnage.id} ) }}">
-                                        <img class="img-128" src="{{ asset(un_personnage.icone) }}" alt="Icône du personnage" />
+                            <article class="p-1">
+                                <a href="{{ path('personnage_profil', {id: un_personnage.id} ) }}" >
+                                    <img class="hover-zoom-x2 img-128" src="{{ asset(un_personnage.icone) }}" alt="Icône du personnage" />
                                     </a>
                                 {% else %}
                                     <span class="text-muted">Désolé ! Il n'y a pas encore de personnages disponible pour ce clan !</span>

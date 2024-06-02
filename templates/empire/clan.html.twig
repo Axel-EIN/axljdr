@@ -33,7 +33,7 @@
             </div>
 
             {# CARTE INTRO #}
-            <section class="col-8 p-1 m-0 mb-5">
+            <section class="col-8 p-2 m-0 mb-2">
                 <article calss="card card-body">
                     <ul class="list-group list-group-flush">
                         <li class="list-group-item quote mb-0 text-white text-center" style="background-color: {{ clan.couleur }}">
@@ -79,11 +79,8 @@
                                 {% endif %}
 
                                 <div class="col-lg-3 text-center">
-
                                     <div class="d-flex flex-column">
-                                        <a href="{{ path('regles_ecole', {id: une_famille.id} ) }}">
-                                            <img class="img-fluid" src="{{ asset(une_famille.mon) }}" alt="Mon Famille" />
-                                        </a>
+                                        <img class="img-fluid" src="{{ asset(une_famille.mon) }}" alt="Mon Famille" />
                                         {% if une_famille.chef is not empty %}
                                         <strong class="text-accent">Daimyo</strong>
                                         <a href="{{ path('personnage_profil', {id: une_famille.chef.id} ) }}">
@@ -92,19 +89,16 @@
                                         <strong><a href="{{ path('personnage_profil', {id: une_famille.chef.id} ) }}" >{{une_famille.chef.nom}} {{une_famille.chef.prenom}}</a></strong>
                                         {% endif %}
                                     </div>
-
                                 </div>
 
                                 <div class="col-lg-9">
-                                    <h3>
-                                        <strong><a href="{{ path('regles_ecole', {id: une_famille.id} ) }}" >{{ une_famille.nom }}</a></strong>
-                                    </h3>
+                                    <h3><strong> {{ une_famille.nom }}</strong></h3>
                                     <p class="text-justify">{{ une_famille.description|raw|nl2br }}</p>
                                 </div>
 
-                            </div>
+                            </article>
                         {% else %}
-                            <span class="text-muted">Désolé ! Il n'y a pas encore de familles disponible pour ce clan.</span>
+                            <span class="text-muted"><i>Familles à venir</i></span>
                         {% endfor %}
 
                     </div>
@@ -112,74 +106,80 @@
             </section>
 
             {# ECOLES DU CLAN #}
-            <section class="col-4 p-1 m-0">
-                <div class="card card-body pt-4">
+            <section class="col-4 p-2 m-0 mb-2">
+                <div class="card card-body pt-4 h-100">
                     <h2 class="card-title"><strong>Écoles</strong></h2>
                     <hr>
                     {% for une_ecole in clan.ecoles %}
-                        <article class="text-center mb-3">
+                        <article class="text-center mb-4">
                             <a href="{{ path('regles_ecole', {id: une_ecole.id} ) }}" ><strong>{{ une_ecole.nom }}</strong></a>
                             <a href="{{ path('regles_ecole', {id: une_ecole.id} ) }}">
                                 <img class="img-fluid" src="{{ asset(une_ecole.image) }}" alt="Image d'une école" />
                             </a>
                         </article>
                     {% else %}
-                        <span class="text-muted"><i>Pas encore d'écoles disponible.</i></span>
+                        <span class="text-muted"><i>Écoles à venir.</i></span>
+                    {% endfor %}
+                </div>
+            </section>
+                
+            {# TERRITOIRES #}
+            <section class="col-8 p-2 m-0 mb-2">
+                <div class="card card-body pt-4 h-100">
+                    <h2 class="card-title"><strong>Territoires</strong></h2>
+                        {% if clan.territoireCarte %}
+                            <a href="{{asset(clan.territoireCarte)}}" class="hover-outline" >
+                                <img class="img-fluid" src="{{asset(clan.territoireCarte)}}" alt="Carte du Territoire du clan" />
+                            </a>
+                        {% endif %}
+                        {% if clan.territoireDesc %}
+                            <p class="text-justify mt-3">{{clan.territoireDesc}}</p>
+                        {% else %}
+                            <p class="text-muted"><i>Description des Territoires à venir.</i></p>
+                        {% endif %}
+                </div>
+            </section>
+
+            {# LIEUX  #}
+            <section class="col-4 p-2 m-0 mb-2">
+                <div class="card card-body pt-4 h-100">
+                    <h2 class="card-title"><strong>Lieux</strong></h2> 
+                    {% for un_lieu in clan.lieux %}
+                        <img src="{{asset(un_lieu.image)}}" />
+                        <br/><strong><a href="{{path('empire_lieu', {id: un_lieu.id} )}}">{{un_lieu.nom}}</a></strong>
+                    {% else %}
+                        <p class="text-muted"><i>Pas de Lieux à charger.</i></p>
                     {% endfor %}
                 </div>
             </section>
 
-            <div class="row m-0 p-0">
-                <div class="col-12 m-0 p-0 row">
-                    {# TERRITOIRES #}
-                    <section class="col-12 p-1 m-0">
-                        <div class="card card-body">
-                            <h2 class="card-title"><strong>Territoires</strong></h2>
-                            {% if clan.territoireCarte %}
-                                <img src="{{asset(clan.territoireCarte)}}" alt="Carte du Territoire du clan" class="img-fluid">
-                            {% endif %}
-                            {% if clan.territoireDesc %}
-                                <p>{{clan.territoireDesc}}</p>
-                            {% else %}
-                                <p class="text-muted"><i>Description des Territoires à venir.</i></p>
-                            {% endif %}
-                            {% for un_lieu in clan.lieux %}
-                                <img src="{{asset(un_lieu.image)}}" />
-                                <br/><strong><a href="{{path('empire_lieu', {id: un_lieu.id} )}}">{{un_lieu.nom}}</a></strong>
-                            {% else %}
-                                <p class="text-muted"><i>Pas de Lieux à charger.</i></p>
-                            {% endfor %}
-                        </div>
-                    </section>
-
-                    {# LONGUE DESCRIPTION #}
-                    <section class="col-12 p-1 m-0">
-                        <div class="card card-body">
-                            <h2 class="card-title"><strong>Description</strong></h2>
-                            <p class="card-text text-justify">
-                                {{ clan.longDescription|raw|nl2br }}
-                            </p>
-                        </div>
-                    </section>
+            {# AUTRES #}
+            <section class="col-8 p-2 m-0 mb-5">
+                <div class="card card-body pt-4 h-100">
+                    <h2 class="card-title"><strong>Autres</strong></h2>
+                    <p class="card-text text-justify">
+                        {{ clan.longDescription|raw|nl2br }}
+                    </p>
                 </div>
-                <div class="col-4 m-0 p-0">
-                    {# PERSONNAGES #}
-                    <section class="col-12 p-1 m-0">
-                        <div class="card card-body">
-                            <h2 class="card-title"><strong>Personnages</strong></h2>
-                            <div class="card-text ml-3">
-                                {% for un_personnage in clan.personnages %}
+            </section>
+
+            {# PERSONNAGES #}
+            <section class="col-4 p-2 m-0 mb-5">
+                <div class="card card-body pt-4 h-100">
+                    <h2 class="card-title"><strong>Personnages</strong></h2>
+                    <div class="card-text row ml-3">
+                        {% for un_personnage in clan.personnages %}
                             <article class="p-1">
                                 <a href="{{ path('personnage_profil', {id: un_personnage.id} ) }}" >
                                     <img class="hover-zoom-x2 img-128" src="{{ asset(un_personnage.icone) }}" alt="Icône du personnage" />
-                                    </a>
-                                {% else %}
-                                    <span class="text-muted">Désolé ! Il n'y a pas encore de personnages disponible pour ce clan !</span>
-                                {% endfor %}
-                            </div>
-                        </div>
-                    </section>
+                                </a>
+                            </article>
+                        {% else %}
+                            <span class="text-muted">Pas encore de personnages disponible pour ce clan.</span>
+                        {% endfor %}
+                    </div>
                 </div>
+            </section>
 
         </main>
 

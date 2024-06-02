@@ -8,7 +8,7 @@
 <article class="col-xl-{{col_xl}} col-lg-{{col_lg}} col-md-{{col_md}} col-sm-{{col_sm}} py-3 text-center {% if un_element.locked|default(0) == 1 %}translucide{% else %}hover-zoom-X2{% endif %}">
     <div class="relative">
     {% if un_element.locked|default(0) == 1 %}
-        <img class="icon-lock grayscale fa-beat-fade" src="{{asset('assets/img/icons/locked.png')}}" alt="Icône cadena" title="À débloquer !" />
+        <img class="absolute icon-lock grayscale fa-beat-fade" src="{{asset('assets/img/icons/locked.png')}}" alt="Icône cadena" title="À débloquer !" />
         <img class="img-fluid grayscale" src="{{ asset(un_element.image) }}" alt="Image {{element}}" title="{{element}} à débloquer !"/>
         <h5 class="text-center mt-1"><strong>???</strong></h5>
     {% else %}

@@ -1,0 +1,196 @@
+/* -------------------------- */
+/* ------- BODY TEXT  ------- */
+/* -------------------------- */
+
+:root {
+  --fontsize-mini : 0.75rem;
+  --fontsize-small: 0.8rem;
+  --fontsize-regular : 1rem;
+  --fontsize-normal : 1.125rem;
+  --fontsize-medium: 1.2rem;
+  --fontsize-plus: 1.25rem;
+  --fontsize-pluser: 1.4rem;
+  --fontsize-large: 1.5rem;
+  --fontsize-big: 1.75rem;
+  --fontsize-bigger: 2rem;
+  --fontsize-huge: 3rem;
+  --fontsize-hero: 4rem;
+
+  --leading-1: 1;
+  --leading-12: 1.2;
+  --leading-14: 1.4;
+  --leading-16: 1.6;
+  --leading-17: 1.7;
+  --leading-175: 1.75;
+  --leading-18: 1.8;
+  --leading-2: 2;
+}
+
+.text-mini { font-size: var(--fontsize-mini); }
+.text-small { font-size: var(--fontsize-small); }
+.text-regular { font-size: var(--fontsize-regular); }
+.text-normal { font-size: var(--fontsize-normal); }
+.text-medium { font-size: var(--fontsize-medium); }
+.text-plus { font-size: var(--fontsize-plus); }
+.text-pluser { font-size: var(--fontsize-pluser); }
+.text-large { font-size: var(--fontsize-large); }
+.text-big { font-size: var(--fontsize-big); }
+.text-bigger { font-size: var(--fontsize-bigger); }
+.text-huge { font-size: var(--fontsize-huge); }
+.text-hero { font-size: var(--fontsize-hero); }
+
+html, body {
+  font-size: 18px;
+  font-family: 'Barlow';
+  line-height: 1.4;
+  color: var(--color-gray-slate);
+}
+
+@media (max-width: 991.98px) { html, body { font-size: 16px; } }
+@media (max-width: 575.98px) { html, body { font-size: 15px; } }
+@media (max-width: 480px) { html, body { font-size: 14px; } }
+
+
+/* --------------------- */
+/* ----- PARAGRAPH ----- */
+/* --------------------- */
+
+p.text-small {
+  line-height: 1.6;
+}
+
+p.text-regular, .paragraph.text-regular {
+  line-height: 1.60;
+}
+
+p.text-medium, .paragraph.text-medium {
+  line-height: 1.70;
+}
+
+p.text-medium {
+  line-height: 1.75;
+}
+
+p > mark {
+  color: unset;
+}
+
+/* ---------------------------------- */
+/* --------- TEXT EFFECTS  ---------- */
+/* ---------------------------------- */
+
+.first-letter-upper::first-letter { text-transform: uppercase; }
+
+label.required::after {
+  content: " *requis";
+  color: var(--primary, #c00);
+  font-size: 0.75em;
+  font-weight: normal;
+  margin-left: 0.25rem;
+}
+
+.font-regular {
+  font-weight: 500 !important;
+}
+
+strong, .extrabold {
+  font-weight: 900 !important;
+  text-shadow: 0.5px 0 0 currentColor;
+}
+
+.text-shadow {
+  text-shadow: 2px 2px 8px black !important;
+}
+
+.number-skillrank-effect {
+  font-family: "Shogun";
+}
+
+.quote {
+  font-size: 1.25rem;
+  font-style: italic;
+  margin-bottom: 1rem;
+  color: var(--color-white-80);
+  text-shadow:
+    2px 2px 6px black,
+    0px 0px 2rem black;
+}
+
+@media (max-width: 575.98px) { .quote { font-size: 1rem; } }
+
+/* Citation du bandeau de chapitre : bridée pour ne pas courir sur toute la
+   largeur. Élargie sur mobile, où la place manque. */
+.quote-chapter {
+  width: 60%;
+  margin: 16px auto;
+}
+@media (max-width: 991.98px) { .quote-chapter { width: 90%; } }
+
+.text-xp {
+  color: var(--flash-blue);
+  text-shadow:
+    0px 0px 8px var(--color-black);
+}
+
+.text-your-xp {
+  color: var(--green);
+  text-shadow:
+    1px 1px 0 var(--flash-green),
+    -1px -1px 0 var(--flash-green),
+    1px -1px 0 var(--flash-green),
+    -1px 1px 0 var(--flash-green);
+}
+
+.text-dead {
+  color: var(--primary-darker);
+  text-shadow:
+    1px 1px 0 var(--flash-red),
+    -1px -1px 0 var(--flash-red),
+    1px -1px 0 var(--flash-red),
+    -1px 1px 0 var(--flash-red);
+}
+
+/* ----------------- */
+/* ----- FONTS ----- */
+/* ----------------- */
+
+/* BODY */
+@font-face {
+  font-family: 'Barlow';
+  src: url("../assets/fonts/barlow-semi-condensed.ttf") format("truetype");
+}
+.font-barlow { font-family: 'Barlow'; }
+
+/* H1 */
+@font-face {
+  font-family: "Shogun";
+  src: url("../assets/fonts/shoguns-clan-edited.otf") format("opentype");
+}
+.font-shogun { font-family: 'Shogun'; }
+
+@font-face {
+  font-family: "Misaki";
+  src: url("../assets/fonts/misaki-regular.otf") format("opentype");
+}
+.font-misaki { font-family: 'Misaki'; }
+
+/* H2 DISPLAY TITLES */
+@font-face {
+  font-family: "Present";
+  src: url("../assets/fonts/present-lt-black-condensed.otf") format("opentype");
+}
+.font-present { font-family: 'Present'; }
+
+/* H3 DISPLAY TITLES */
+@font-face {
+  font-family: "Avenir";
+  src: url("../assets/fonts/avenir-black.ttf") format("truetype");
+}
+.font-avenir { font-family: 'Avenir'; }
+
+/* H4 DISPLAY TITLES */
+@font-face {
+  font-family: "Amerigo";
+  src: url("../assets/fonts/amerigo-bold-bt.ttf") format("truetype");
+}
+.font-amerigo { font-family: 'Amerigo'; }

@@ -1,0 +1,52 @@
+.header-bg-img {
+  background-size: 100% auto;
+  background-repeat: no-repeat;
+  overflow: hidden;
+  background-position: top;
+}
+
+@media (max-width: 1199.98px) { .header-bg-img { background-size: 150% auto; } }
+@media (max-width: 991.98px) { .header-bg-img { background-size: 200% auto; } }
+@media (max-width: 575.98px) { .header-bg-img { background-size: 250% auto; } }
+@media (max-width: 480px) { .header-bg-img { background-size: 300% auto; } }
+
+.header-bg-characters {
+  background-image:
+    linear-gradient(rgba(40,0,0,0.5),rgba(40,0,0,0.5)),
+    url('../assets/rubriques/personnages.jpg');
+  background-position: center;
+}
+
+.header-bg-empire {
+  background-image:
+    linear-gradient(rgb(40,0,0,0.5),rgb(40,0,0,0.5)),
+    url('../assets/rubriques/empire.jpg');
+  background-position: center;
+}
+
+.header-bg-rules {
+  background-image:
+    linear-gradient(rgb(40,0,0,0.5),rgb(40,0,0,0.5)),
+    url('../assets/rubriques/regles.jpg');
+  background-position: center;
+}
+
+.header {
+  position: relative;
+  color: var(--color-white);
+  text-align: center;
+  margin-bottom: 0;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+}
+
+.header:not(.header-episode) { min-height: 60vh; }
+@media (max-width: 991.98px) { .header:not(.header-episode) { min-height: 40vh; } }
+
+.header hr {
+  background-color: var(--color-white);
+  height: 1px;
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+  opacity: 0.4;
+}

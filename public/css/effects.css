@@ -88,8 +88,8 @@
 .hover-zoom, .hover-zoom:hover { transition: 0.5s; }
 .hover-zoom:hover { transform: scale(1.05); }
 
-.hover-zoom-X2, .hover-zoom-X2:hover { transition: 0.33s; }
-.hover-zoom-X2:hover { transform: scale(1.125); transition: 0.33s; }
+.hover-zoom-x2, .hover-zoom-x2:hover { transition: 0.33s; }
+.hover-zoom-x2:hover { transform: scale(1.125); transition: 0.33s; }
 
 .hover-opaque:hover {
     filter: opacity(1);

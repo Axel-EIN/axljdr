@@ -9,8 +9,8 @@
             <div class="d-flex flex-column">   
                 {% for une_participation in une_scene.participations %}
                     {% if une_participation.estPj == 0 %}
-                        <div class="mb-2 d-inline-block relative hover-zoom-X2">
-                            <a class="hover-zoom-X2" href="{{path('personnage_profil',{id: une_participation.personnage.id})}}" >
+                        <div class="mb-2 d-inline-block relative hover-zoom-x2">
+                            <a class="hover-zoom-x2" href="{{path('personnage_profil',{id: une_participation.personnage.id})}}" >
                                 {% if une_participation.estMort == 1 %}
                                     <img class="absolute character-icon-dead" src="{{asset('assets/img/icons/mort.png')}}" alt="est mort" />
                             {% endif %}
@@ -55,7 +55,7 @@
         <div class="absolute pjs-line">
             {% for une_participation in une_scene.participations %}
                 {% if une_participation.estPj %}
-                    <div class="d-inline-block relative hover-zoom-X2">
+                    <div class="d-inline-block relative hover-zoom-x2">
                         {% if une_participation.xpGagne != 0 and une_participation.estMort != 1 %}
                             <strong class="{% if une_participation.personnage.joueur == app.user %}text-your-xp{% else %}text-xp{% endif %}">+{{une_participation.xpGagne}}XP</strong>
                         {% endif %}

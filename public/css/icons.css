@@ -1,0 +1,150 @@
+:root {
+    --icon-small: 1.5rem;
+    --icon-medium: 3rem;
+    --icon-large: 6rem;
+}
+
+/* ------ FLAT VECTOR ICONS  ------ */
+
+.btn-icon-mini {
+    display: inline-block;
+    text-align: center;
+    cursor: pointer;
+    width: 32px;
+    height: 32px;
+    font-size: var(--fontsize-regular);
+}
+
+.btn-icon-small {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    width: 40px;
+    height: 40px;
+    font-size: var(--fontsize-large);
+}
+
+.wrapper-icon-btn-small {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    width: 40px;
+    height: 40px;
+}
+
+.btn-icon-medium {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    width: 48px;
+    height: 48px;
+    font-size: var(--fontsize-bigger);
+}
+
+.btn-mj:hover {
+    color: var(--accent) !important;
+    text-decoration: none;
+}
+
+.localisator-icon {
+    z-index: 10;
+    text-align: center;
+    color: var(--primary);
+    width: 48px;
+    max-height: 48px;
+    font-size: var(--fontsize-bigger);
+    transform:
+            translate(-50%, -50%)
+            translate(0px, -48px);
+    text-shadow: 1px 1px var(--primary-darker-more);
+}
+
+/* ------ PIXEL ICONS  ------ */
+
+.icon-lock {
+    z-index: 30;
+    top: 18%;
+    left: 40%;
+    width: 22%;
+}
+
+.icon-lock-corner {
+    z-index: 30;
+    top: 4%;
+    right: 4%;
+    width: 14%;
+    opacity: 0.85;
+    filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.8));
+}
+
+
+.badge-corner {
+    position: absolute;
+    z-index: 10;
+    top: -14px;
+    right: -14px;
+    width: 48px;
+    filter: drop-shadow(0px 0px 4px #00000080);
+}
+
+.badge-center {
+    position: absolute;
+    z-index: 10;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    /* Le plafond px de .img-* ignore la largeur reelle de la vignette : sur une
+       colonne etroite l'icone deborde. On la plafonne aussi en relatif. */
+    &.img-40 { max-width: min(40px, 60%); }
+    &.img-48 { max-width: min(48px, 60%); }
+    &.img-64 { max-width: min(64px, 60%); }
+    &.img-96 { max-width: min(96px, 60%); }
+    &.img-128 { max-width: min(128px, 60%); }
+}
+
+.location-icon-small {
+    width: 28px;
+}
+
+.character-icon-dead {
+    position: absolute;
+    z-index: 10;
+    left: -2px;
+    width: 72px;
+}
+
+
+/* ------ IMAGE RESIZE  ------ */
+
+/* Plafond double, px et 100% du conteneur : sans le second, une image plus
+   large que sa colonne fait scroller la page horizontalement. */
+
+#logo { width: 120px; height: auto; }
+@media (max-width: 991.98px) { #logo { width: 48px; } }
+
+.img-24 { width: 24px; min-width: 12px; max-width: 100%; }
+.img-32 { width: 32px; min-width: 16px; max-width: 100%; }
+.img-36 { width: 36px; min-width: 18px; max-width: 100%; }
+.img-48 { width: 48px; min-width: 24px; max-width: 100%; }
+.img-56 { width: 56px; min-width: 28px; max-width: 100%; }
+.img-64 { width: 64px; min-width: 32px; max-width: 100%; }
+.img-72 { width: 72px; min-width: 36px; max-width: 100%; }
+.img-96 { width: 96px; min-width: 48px; max-width: 100%; }
+.img-128 { width: 128px; min-width: 64px; max-width: 100%; }
+.img-240 { width: 240px; min-width: 120px; max-width: 100%; }
+
+
+/* ------ FIXED ICON SIZE  ------ */
+
+.icon-16 { min-width: 16px; min-height: 16px; width: 16px; height: 16px; }
+.icon-20 { min-width: 20px; min-height: 20px; width: 20px; height: 20px; }
+
+/* ------ IMAGE CROP  ------ */
+
+.circle-crop {
+    border-radius: 1000px;
+}

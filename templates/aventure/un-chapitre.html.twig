@@ -55,15 +55,15 @@
                         <!-- ONE SESSION -->
                         <article class="col-lg-3 col-md-4 col-sm-6 session-card-spacing hover-zoom">
                             <div class="card session-card-body">
-                                <div class="session-card-number">{{ un_episode.numero }}</div>
+                                <div class="absolute session-card-number">{{ un_episode.numero }}</div>
                                 <div class="session-card-image-container">
                                     <a href="{{ path('aventure_episode', {id:un_episode.id} ) }}">
                                         <img class="card-img-top img-fluid" src="{{ asset(un_episode.image) }}"
                                         alt="Image de la session {{un_episode.titre}}" title="{{un_episode.titre}}"  />
                                     </a>
                                 </div>
-                                <div class="session-card-text-container">
-                                    <h5 class="session-card-title">{{ un_episode.titre }}</h5>
+                                <div class="relative session-card-text-container">
+                                    <h5 class="absolute session-card-title">{{ un_episode.titre }}</h5>
                                     <p class="session-card-text">{{ un_episode.resume }}</p>
                                 </div>
                                 <div class="text-center">
@@ -78,7 +78,7 @@
                                     {% for un_cumul_personnage in user_personnages_cumul_episodes %}
                                         {% for keys in un_cumul_personnage|keys %}                                        
                                             {% if keys == un_episode.id %}
-                                                <div class="characters-icons-container d-flex flex-row justify-content-center align-items-center">
+                                                <div class="absolute characters-icons-container d-flex flex-row justify-content-center align-items-center">
                                                     <div class="d-flex flex-column justify-content-center align-items-center mr-2">
                                                         {% if un_cumul_personnage[keys]['xp'] != 0 and un_cumul_personnage[keys]['estMort'] != 1 %}
                                                             <strong class="text-your-xp">+{{un_cumul_personnage[keys]['xp']}}XP</strong>
@@ -112,7 +112,7 @@
 
                 <!-- MJ - BIG ICON BTN - ADD -->
                 {% if app.user and is_granted("ROLE_MJ") %}
-                    <div class="btn-icon-display">
+                    <div class="absolute btn-icon-display">
                         <a href="{{path('admin_episode_create')}}?numero={{(un_chapitre.episodes|length)+1}}&chapitreID={{un_chapitre.id}}&redirect=aventure">
                             <i class="fas fa-plus-square fa-fade" alt="Icône Ajouter" title="Ajouter une Session"></i>
                         </a>

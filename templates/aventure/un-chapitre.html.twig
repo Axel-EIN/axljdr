@@ -4,16 +4,10 @@
             <span class="chapter-number text-left">CHAPITRE {{ un_chapitre.numero }}</span>
             <div><hr></div>
 
-            <!-- MJ - ICON BTN - Edit | Delete -->
             {% if app.user and is_granted("ROLE_MJ") %}
-                <div class="btn-icons-medium-right-container">
-                    <a href="{{ path('admin_chapitre_edit', {id:un_chapitre.id}) }}?redirect=aventure">
-                        <i class="fas fa-edit fa-bounce" alt="Icône Modifier" title="Modifier"></i></a>
-                    &nbsp;
-                    <a href="{{ path('admin_chapitre_delete', {id:un_chapitre.id}) }}?csrf={{ csrf_token('delete' ~ un_chapitre.id) }}&redirect=aventure"
-                    onclick="return confirm('Êtes-vous sûr de vouloir supprimer le chapitre : {{ un_chapitre.titre }} ?')">
-                        <i class="fas fa-trash-alt fa-bounce" alt"Icône Supprimer" title="Supprimer"></i></a>
-                </div>
+                <!-- MJ - BTN ICON - Edit -->
+                {% set redirect, element, un_element, size, color = 'aventure', 'chapitre', un_chapitre, 'medium', 'white' %}
+                {{ include('/parts/btn-icon-edit.html.twig') }}
             {% endif %}
 
             <!-- TITLE + QUOTE + CTA BTN -->
@@ -95,15 +89,12 @@
                                         {% endfor %}
                                     {% endfor %}
 
-                                    <!-- MJ - ICON BTN - Edit | Delete -->
-                                    {% if app.user and is_granted("ROLE_MJ") %}
-                                        <div class="btn-icons-small-right-container">
-                                            <a href="{{ path('admin_episode_edit', {id:un_episode.id}) }}?redirect=aventure"><i class="fas fa-edit" alt="Icône Modifier" title="Modifier"></i></a>&nbsp;
-                                            <a href="{{ path('admin_episode_delete', {id:un_episode.id}) }}?csrf={{ csrf_token('delete' ~ un_episode.id) }}&redirect=aventure"
-                                                onclick="return confirm('Êtes-vous sûr de vouloir supprimer l'épisode : {{ un_episode.titre }} ?')"><i class="fas fa-trash-alt" alt="Icône Supprimer" title="Supprimer"></i></a>
-                                        </div>
                                     {% endif %}
 
+                                {% if app.user and is_granted("ROLE_MJ") %}
+                                    <!-- MJ - BTN ICON - Edit -->
+                                    {% set redirect, element, un_element, size = 'aventure', 'episode', un_episode, 'small' %}
+                                    {{ include('/parts/btn-icon-edit.html.twig') }}
                                 {% endif %}
 
                             </div>

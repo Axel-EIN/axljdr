@@ -3,13 +3,12 @@
 namespace App\Controller;
 
 use App\Entity\Episode;
-use App\Service\Uploader;
+use App\Service\FileHandler;
 use App\Service\Numeroteur;
 use App\Form\AdminEpisodeType;
 use App\Repository\EpisodeRepository;
 use App\Repository\ChapitreRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -35,7 +34,7 @@ class AdminEpisodeController extends AbstractController
      * @Route("/admin/episode/create", name="admin_episode_create")
      * @IsGranted("ROLE_MJ")
      */
-    public function creerEpisode(Request $request, EntityManagerInterface $em, Uploader $uploadeur, ChapitreRepository $chapitreRepository, Numeroteur $numeroteur, EpisodeRepository $episodeRepository) {
+    public function creerEpisode(Request $request, EntityManagerInterface $em, FileHandler $fileHandler, ChapitreRepository $chapitreRepository, Numeroteur $numeroteur, EpisodeRepository $episodeRepository) {
 
         $episode = new Episode;
 
@@ -59,22 +58,18 @@ class AdminEpisodeController extends AbstractController
         // -------------------------
         if ($form->isSubmitted() && $form->isValid()) {
 
-            // CREATION FICHIER IMAGE
-            // ---------------------
             $nouvelleImage = $form->get('image')->getData();
             if (!empty($nouvelleImage)) {
-                $nouvelleImageNomFichier = $uploadeur->upload($nouvelleImage,
-                    'episode-s' . $episode->getChapitreParent()->getSaisonParent()->getNumero()
-                    . '-ch' . $episode->getChapitreParent()->getNumero() . '-ep' . $episode->getNumero(), 'episodes');
-                $nouveauCheminRelatif = 'assets/img/episodes/' . $nouvelleImageNomFichier;
-                $episode->setImage($nouveauCheminRelatif);
+                $prefix = 'episode-s' . $episode->getChapitreParent()->getSaisonParent()->getNumero()
+                . '-ch' . $episode->getChapitreParent()->getNumero() . '-ep' . $episode->getNumero();
+                $episode->setImage($fileHandler->handle($nouvelleImage, null, $prefix, 'episodes'));
             } else { $episode->setImage('assets/img/placeholders/960x540.jpg'); }
 
             // CREATION ENTITE
             // ---------------
             $em->persist($episode);
             $em->flush();
-            $this->addFlash('success', 'L\'épisode a bien été crée !');
+            $this->addFlash('success', 'L\'épisode a bien été crée.');
 
             // NUMEROTEUR
             // ----------
@@ -102,7 +97,7 @@ class AdminEpisodeController extends AbstractController
      * @Route("/admin/episode/{id}/edit", name="admin_episode_edit")
      * @IsGranted("ROLE_MJ")
      */
-    public function editerEpisode(Request $request, Episode $episode, Uploader $uploadeur, Numeroteur $numeroteur, EpisodeRepository $episodeRepository): Response {
+    public function editerEpisode(Request $request, Episode $episode, FileHandler $fileHandler, Numeroteur $numeroteur, EpisodeRepository $episodeRepository): Response {
 
         // Stockage du numéro et de l'ID de l'episode avant édition
         $numeroDepart = $episode->getNumero();
@@ -117,22 +112,12 @@ class AdminEpisodeController extends AbstractController
         // -------------------------
         if($form->isSubmitted() && $form->isValid()) {
 
-            // EDITION FICHIER IMAGE
-            // ---------------------
             $nouvelleImage = $form->get('image')->getData();
             if (!empty($nouvelleImage)) {
-                $AncienneImageNomFichier = basename($episode->getImage());
-
-                $nouvelleImageNomFichier = $uploadeur->upload($nouvelleImage, 'episode-s'
-                    . $episode->getChapitreParent()->getSaisonParent()->getNumero()
-                    . '-ch' . $episode->getChapitreParent()->getNumero() . '-ep' . $episode->getNumero(), 'episodes');
-                $nouveauChemingRelatif = 'assets/img/episodes/' . $nouvelleImageNomFichier;
-                $episode->setImage($nouveauChemingRelatif);
-
-                $ancienneImageCheminComplet = $this->getParameter('image_directory') . '/episodes/' . $AncienneImageNomFichier;
-                $filesystem = new Filesystem();
-                $filesystem->remove($ancienneImageCheminComplet);
-
+                $prefix = 'episode-s'
+                . $episode->getChapitreParent()->getSaisonParent()->getNumero()
+                . '-ch' . $episode->getChapitreParent()->getNumero() . '-ep' . $episode->getNumero();
+                $episode->setImage($fileHandler->handle($nouvelleImage, $episode->getImage(), $prefix, 'episodes'));
             }
 
             // NUMEROTEUR
@@ -148,7 +133,7 @@ class AdminEpisodeController extends AbstractController
             // EDITION ENTITE
             // --------------
             $this->getDoctrine()->getManager()->flush();
-            $this->addFlash('success', 'L\'épisode a bien été modifié !');
+            $this->addFlash('success', 'L\'épisode a bien été modifié.');
 
             // REDIRECTION
             // -----------
@@ -172,7 +157,7 @@ class AdminEpisodeController extends AbstractController
      * @Route("/admin/episode/{id}/delete", name="admin_episode_delete", methods={"GET"})
      * @IsGranted("ROLE_MJ")
      */
-    public function supprimerEpisode(Request $request, Episode $episode, Numeroteur $numeroteur, EpisodeRepository $episodeRepository): Response {
+    public function supprimerEpisode(Request $request, Episode $episode, Numeroteur $numeroteur, EpisodeRepository $episodeRepository, FileHandler $fileHandler): Response {
         $chapitreParent = $episode->getChapitreParent(); // Stocké pour la redirection
 
         // GESTION FORMULAIRE VALIDE
@@ -188,13 +173,7 @@ class AdminEpisodeController extends AbstractController
 
             // SUPPRESSION FICHIER IMAGE
             // -------------------------
-            $nomImageASupprimer = basename($episode->getImage());
-            $cheminImageASupprimer = $this->getParameter('image_directory') . '/episodes/' . $nomImageASupprimer;
-
-            if (file_exists($cheminImageASupprimer)) {
-                $filesystem = new Filesystem();
-                $filesystem->remove($cheminImageASupprimer);
-            }
+            $fileHandler->handle(null, $episode->getImage(), null, 'episodes');
 
             // NUMEROTEUR
             // ----------
@@ -207,7 +186,7 @@ class AdminEpisodeController extends AbstractController
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($episode);
             $entityManager->flush();
-            $this->addFlash('success', 'L\'épisode a bien été supprimé !');
+            $this->addFlash('success', 'L\'épisode a bien été supprimé.');
         }
 
         // REDIRECTION

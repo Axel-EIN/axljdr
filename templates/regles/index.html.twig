@@ -7,7 +7,7 @@
         <!--- UNE CLASSE -->
         <article class="col-xl-2 col-lg-3 col-md-4 col-sm-6 py-3 text-center hover-zoom">
             <a href="{{ path('regles_classe', {id: une_classe.id} ) }}">
-                <img class="img-160 hover-{{une_classe.color}}" src="{{ asset(une_classe.icone) }}" alt="Icône de la classe" title="{{une_classe.nom}}" />
+                <img class="img-160 hover-{{une_classe.nom|lower}}" src="{{ asset(une_classe.icone) }}" alt="Icône de la classe" title="{{une_classe.nom}}" />
             </a>
             <br/>
             <h3 class="text-center my-3">

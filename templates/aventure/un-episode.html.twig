@@ -93,7 +93,7 @@
                     {{ include('/aventure/une-scene.html.twig', {une_scene}) }}
 
                 {% else %}
-                    <p class="text-center text-light">Il n'y a pas encore de scènes pour cette épisode.</p>
+                    <p class="text-center text-light py-5">Il n'y a pas encore de scènes pour cette épisode.</p>
                 {% endfor %}
 
                 {% if app.user and is_granted("ROLE_MJ") %}

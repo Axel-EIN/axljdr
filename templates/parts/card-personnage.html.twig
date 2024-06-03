@@ -13,7 +13,7 @@
         {% set zoom, translucide, hover_opaque, text, dead, grayscale = 'hover-zoom', 'translucide', 'hover-opaque', 'text-danger', 'dead', '' %}
     {% endif %}
 
-            <div class="card character-card text-white shadowed {{zoom}} {{translucide}} {{hover_opaque}} relative">
+            <div class="card character-card text-white shadow-more {{zoom}} {{translucide}} {{hover_opaque}} relative">
                 {% if perso.locked == 1 %}
                     <img class="absolute icon-lock-character fa-beat" src="{{asset('assets/img/icons/locked.png')}}" alt="Icône cadena" title="A débloquer !" />
                 {% elseif perso.estMort == 1 %}

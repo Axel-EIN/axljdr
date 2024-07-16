@@ -147,6 +147,9 @@
             bottom: -2.75rem;
             &.pj { background-color: var(--flash-blue); }
             &.pnj { background-color: var(--primary-darker-more); }
+            &.gray {
+                background-color: var(--gray-light);
+            }
             &.me {
                 visibility: visible;
                 background-color: var(--flash-green);

@@ -38,6 +38,9 @@
     --primary-darker-more: rgb(100,0,0);
     --primary-darkest: rgb(40,0,0);
 
+    --primary-alpha: #EA202780;
+    --primary-trans: #EA202740;
+
     /* BLUE SECONDARY */
     --secondary-light: #3399ff;
 

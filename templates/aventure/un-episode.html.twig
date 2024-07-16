@@ -121,11 +121,6 @@
 
                 <!-- CLASSEMENT -->
                 {% if classement_episode %}
-                    
-                    {% if episode.issue is not defined or episode.issue is empty %}
-                        <h2 class="text-center my-3 title-h2">Issue Incertaine</h2>
-                    {% endif %}
-
                     <div class="d-flex justify-content-center">
                         <div class="list-group list-group-flush">
                             {% for un_personnage in classement_episode %}

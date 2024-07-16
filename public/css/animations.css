@@ -14,7 +14,7 @@
     transition: 0.33s; }
 
 .hover-zoom-quick, .hover-zoom-quick:hover {
-    transition: 0.05s;
+    transition: 0.1s;
 }
 
 .hover-zoom:hover,

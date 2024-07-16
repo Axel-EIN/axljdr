@@ -24,6 +24,7 @@
         filter: brightness(0.66);
         transition: 0.5s;
         width: 128px;
+        border: solid var(--primary-trans) 1px;
 
         &:hover .episode-titre { visibility: visible; }
         &.active .episode-titre { visibility: hidden; }
@@ -51,7 +52,7 @@
         }
 
         &.active {
-            width: 160px;
+            width: 180px;
             border: solid var(--primary) 1px;
         }
     

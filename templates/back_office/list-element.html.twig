@@ -32,15 +32,20 @@
             </tr>
 
             {% for un_element in elements %}
-
                 {% if un_element.image is defined and un_element.image is not empty %}
                     {% set image = un_element.image %}
                 {% elseif un_element.mon is defined and un_element.mon is not empty %}
                     {% set image = un_element.mon %}
                 {% elseif un_element.icone is defined and un_element.icone is not empty %}
                     {% set image = un_element.icone %}
-                {% elseif un_element.personnage is defined and un_element.personnage is not empty %}
-                    {% set image = un_element.personnage.icone|default(NA_PERSO_ICO) %}
+                {% elseif un_element.genre is defined %}
+                    {% if un_element.genre == 'M' %}
+                        {% set image = un_element.icone|default(NA_PERSO_ICO_M) %}
+                    {% elseif un_element.genre == 'F' %}
+                        {% set image = un_element.icone|default(NA_PERSO_ICO_F) %}
+                    {% else %}
+                        {% set image = un_element.icone|default(NA_PERSO_ICO) %}
+                    {% endif %}
                 {% endif %}
 
                 {% if un_element.nom is defined %}

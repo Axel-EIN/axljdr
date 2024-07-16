@@ -30,7 +30,7 @@
                             <img class="character-portrait large pnj
                                 {% if une_participation.estMort == 1 %} dead{% endif %}"
                                 src="{{asset(une_participation.personnage.icone|default(NA_PERSO_ICO))}}"
-                                alt="Icone du Personnage" title="{{une_participation.personnage.prenom}}" />
+                                alt="Icone personnage" />
                         </a>
                     </character>
                 {% endif %}
@@ -51,14 +51,14 @@
                     <character class="character-portrait-box">
                         {% if une_participation.xpGagne != 0 and une_participation.estMort != 1 %}
                             <strong class="{% if une_participation.personnage.joueur == app.user %}text-your-xp{% else %}text-xp{% endif %}">
-                                +{{une_participation.xpGagne}} <span class="text-small">XP</span>
+                                <strong class="text-medium">+{{une_participation.xpGagne}}</strong> <span class="text-small">XP</span>
                             </strong><br/>
                         {% endif %}
                         <a class="character-portrait-link" href="{{path('personnage_profil',{id:une_participation.personnage.id})}}" >
                             {% if une_participation.estMort == 1 %}
                                 <img class="character-icon-dead" src="{{asset('assets/img/icons/mort.png')}}" alt="est mort" />
                             {% endif %}
-                            <span class="character-name pj {% if une_participation.personnage.joueur == app.user %}me{% endif %}">
+                            <span class="character-name pj {% if une_participation.personnage.joueur == app.user %}me{% endif %} {% if une_participation.xpGagne == 0 or une_participation.estMort == 1 %}gray{% endif %}">
                                 {{une_participation.personnage.prenom}}
                             </span>
                             <img

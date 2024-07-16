@@ -104,7 +104,7 @@ class AdminSceneController extends AbstractController
 
             // REDIRECTION
             if (!empty($request->query->get('redirect')) && $request->query->get('redirect') == 'episode')
-                return $this->redirectToRoute('aventure_episode', ['id' => $scene->getEpisodeParent()->getId(),'_fragment' => 'scn' . $scene->getId()]);
+                return $this->redirectToRoute('aventure_episode', ['id' => $scene->getEpisodeParent()->getId(),'_fragment' => 'scn' . $scene->getNumero()]);
 
             return $this->redirectToRoute('admin_scene');
         }
@@ -235,7 +235,7 @@ class AdminSceneController extends AbstractController
 
             // REDIRECTION
             if (!empty($request->query->get('redirect')) && $request->query->get('redirect') == 'episode')
-                return $this->redirectToRoute('aventure_episode', ['id' => $scene->getEpisodeParent()->getId(),'_fragment' => 'scn' . $scene->getId()]);
+                return $this->redirectToRoute('aventure_episode', ['id' => $scene->getEpisodeParent()->getId(),'_fragment' => 'scn' . $scene->getNumero()]);
     
             return $this->redirectToRoute('admin_scene');
         }

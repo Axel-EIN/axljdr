@@ -26,6 +26,7 @@
         width: 128px;
         border: solid var(--primary-trans) 1px;
 
+        &:hover { z-index: 100; }
         &:hover .episode-titre { visibility: visible; }
         &.active .episode-titre { visibility: hidden; }
 

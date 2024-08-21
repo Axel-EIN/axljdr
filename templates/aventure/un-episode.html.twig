@@ -27,8 +27,8 @@
     
         <!-- LIGNE D'EPISODES -->
         <div class="d-flex flex-column justify-content-center align-items-center">
-            <div>
-                <strong class="text-light-alpha">- SESSIONS DU CHAPITRE -</strong>
+            <div class="text-light">
+                Il y a <strong class="text-white">{{ episode.chapitreParent.episodes|length }} SESSIONS</strong> dans ce chapitre.
             </div>
             <div class="d-flex justify-content-center align-items-center">
 
@@ -42,8 +42,8 @@
                                 </div>
                                 <div class="ratio-169">
                                     <img class="ratio-cropped" src="{{ asset(un_episode.image|default(NA_SESSION)) }}" alt="image épisode" />
-                                    <i class="absolute arrow-down fa-sharp fa-solid fa-sort-down fa-2xl text-primary"></i>
                                 </div>
+                                <i class="absolute arrow-down fa-sharp fa-solid fa-sort-down fa-2xl text-primary"></i>
                             </div>
                             {% else %}
                             <div class="vignette-caroussel">

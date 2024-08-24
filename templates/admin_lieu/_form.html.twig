@@ -1,9 +1,16 @@
 <main class="col-12">
     {{ form_start(form) }}
-        <div class="row jalign-items-center mt-5 mb-4">
+        <div class="row mt-5 mb-4">
+
+            <div class="col-6">{{ form_row(form.nom) }}</div>
+            <div class="col-6">{{ form_row(form.surnom) }}</div>
+
+            <div class="col-4">{{ form_row(form.type) }}</div>
+            <div class="col-4">{{ form_row(form.clan) }}</div>
+            <div class="col-4">{{ form_row(form.population) }}</div>
 
             <!-- IMAGE -->
-            <div class="col-6">
+            <div class="col-6 mt-3">
                 {{ form_label(form.image) }}
                 <label id="preview-label" for="admin_lieu_image" class="hover-slight-fade hover-pointer hover-icon-visible">
                     <icon class="btn-icon-medium right-corner-16"><i class="fas fa-edit semi-visible text-white"></i></icon>
@@ -13,56 +20,42 @@
                     <span id="fileName"></span>
                     {{form_widget(form.image, {'attr': {'class': 'input-image'}}) }}
                 </browse>
-
-                <div class="text-center">
-                    {% if type == 'Modifier' and lieu.icone is defined and lieu.icone is not empty %}
-                        <img class="img-fluid" src="{{ asset(lieu.icone) }}" />
-                    {% else %}
-                        <img class="img-fluid" src="{{ asset(NA_ICON_MON) }}" />
-                    {% endif %}
-                </div>
-                
             </div>
 
-            <div class="col-6">
-                {{ form_row(form.nom) }}
-                {{ form_row(form.surnom) }}
-                {{ form_row(form.clan) }}
-                <hr>
-                {{ form_row(form.locX) }}
-                {{ form_row(form.locY) }}
-                {{ form_row(form.icone) }}
-            </div>
-
-            <div class="col-12 mt-3 mt-3">
-                {{ form_row(form.description,{ 'attr': {'rows': '16'} }) }}
-            </div>
-
-
-            <div class="col-12 mt-5">
-                <h2 class="title-h3">Intérieur et Extérieur de la Ville</h2>
-                <hr>
-            </div>
-
-            <div class="col-6">
-
-                {{ form_label(form.carte) }}
-                {% if type == 'Modifier' and lieu.carte is defined and lieu.carte is not empty %}
-                    <img class="img-fluid" src="{{ asset(lieu.carte) }}" />
+            <div class="col-6 mt-3">
+                {{ form_label(form.icone) }}
+                <br/>
+                {% if type == 'Modifier' and lieu.icone is defined and lieu.icone is not empty %}
+                    <img class="img-fluid" src="{{ asset(lieu.icone) }}" />
+                {% else %}
+                    <img class="img-fluid" src="{{ asset(NA_ICON_MON) }}" />
                 {% endif %}
-                {{ form_widget(form.carte) }}
-
+                {{ form_widget(form.icone) }}
             </div>
 
-            <div class="col-6">
-
+            <div class="col-6 mt-3">
                 {{ form_label(form.region) }}
                 {% if type == 'Modifier' and lieu.region is defined and lieu.region is not empty %}
                     <img class="img-fluid" src="{{ asset(lieu.region) }}" />
                 {% endif %}
                 {{ form_widget(form.region) }}
 
+                <div class="row mt-3">
+                    <div class="col-6">{{ form_row(form.locX) }}</div>
+                    <div class="col-6">{{ form_row(form.locY) }}</div>
+                </div>
             </div>
+
+
+            <div class="col-6 mt-3">
+                {{ form_label(form.carte) }}
+                {% if type == 'Modifier' and lieu.carte is defined and lieu.carte is not empty %}
+                    <img class="img-fluid" src="{{ asset(lieu.carte) }}" />
+                {% endif %}
+                {{ form_widget(form.carte) }}
+            </div>
+
+            <div class="col-12 mt-3 mt-3">{{ form_row(form.description,{ 'attr': {'rows': '16'} }) }}</div>
 
             <div class="col-12">
                 {{ form_row(form.quartiers,{ 'attr': {'rows': '16'} }) }}

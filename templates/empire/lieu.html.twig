@@ -14,34 +14,43 @@
             <imagezone class="bg-black relative">
 
                 <!-- SURIMPRESSION GAUCHE : ICONE + SURNOM -->
-                {% if un_element.icone is defined and un_element.icone is not empty %}
-                    <h2 class="icon-line-lieu-st">
-                        <img class="img-96 ml-5 mr-1" src="{{ asset(un_element.icone) }}" alt="Icone de {{un_element.nom}}">
-                        <i class="align-middle">{{ un_element.surnom }}</i>
-                    </h2>
-                {% endif %}
+                <h2 class="surname">
+                    <img class="img-96 ml-5 mr-3 mb-2" src="{{ asset(un_element.icone|default(NA_LIEU_ICO)) }}" alt="Icone de {{un_element.nom}}">
+                    <i class="align-middle">{{ un_element.surnom|default('') }}</i>
+                </h2>
 
-                <!-- SURIMPRESSION DROITE : CONTROLE PAR  -->
-                {% if un_element.clan is not empty %}
-                    <div class="text-center px-5 hover-zoom" style="position: absolute; z-index: 5; right: 3rem; bottom: 1rem;">
-                        <a class="text-white" href="{{ path('empire_clan', {id:un_element.clan.id} ) }}" >
-                            <img class="ml-2 img-48" src="{{ asset(un_element.clan.mon|default(NA_ICON_MON)) }}" alt="Mon d'une faction" title="{{un_element.clan.nom|default('Pas de faction')}}" />
+                <!-- SURIMPRESSION DROITE : TYPE, POPULATION, AFFILIATION  -->
+                <div class="stats">
+                    {% if un_element.clan is defined and un_element.clan is not empty %}
+                    <div>
+                        <span class="hover-tooltip">{{un_element.clan.nom|default('')}}</span>
+                        <a href="{{ path('empire_clan', {id:un_element.clan.id} ) }}" >
+                            <img class="ml-2 mb-2 img-64 circle-crop" src="{{ asset(un_element.clan.mon|default(NA_ICON_MON)) }}" alt="Mon d'une faction" title="{{un_element.clan.nom|default('')}}" />
                         </a>
                     </div>
-                {% endif %}
+                    {% endif %}
+                    {% if un_element.type is defined and un_element.type is not empty %}<span>Type : <strong>{{ un_element.type }}</strong></span>{% endif %}
+                    {% if un_element.population is defined and un_element.population is not empty %}
+                        <span>Population : <strong>{{ un_element.population|number_format(0, ',', '.') }} habitants</strong></span>
+                    {# {% elseif un_element.type == 'Région ou Royaume' and un_element.population is defined and un_element.population is empty %}
+                        <span>Population : <strong>Inconnue</strong></span> #}
+                    {% endif %}                   
+                </div>
 
                 <!-- IMAGE -->
                 <img class="img-fluid mask" src="{{ asset(un_element.image|default(NA_LIEU)) }}" alt="Image de {{un_element.nom}}" />
             </imagezone>
 
-            <!-- DESCRIPTION DE LA VILLE -->
-            <p class="p-5 mx-5 text-justify text-medium">{{ un_element.description|raw|nl2br }}</p>
-
-            <!-- LOCALISATION -->
+            {% if un_element.description is defined and un_element.description is not empty %}
+                <!-- DESCRIPTION DE LA VILLE -->
+                <p class="p-5 mx-5 text-justify text-medium">{{ un_element.description|raw|nl2br }}</p>
+            {% endif %}
+            
             {% if un_element.region is defined and un_element.region is not empty %}
+                <!-- LOCALISATION -->
                 <spacer class="my-3">{{ include('/parts/separateur-ornament.html.twig') }}</spacer>
 
-                <h2 class="text-center mb-4"><strong>Localisation</Strong></h2>
+                <h2 class="text-center mb-4"><strong>Carte</Strong></h2>
 
                 <imagezone class="relative">
 
@@ -71,26 +80,34 @@
                 </imagezone>
             {% endif %}
 
-            <!-- CARTE INTERIEUR -->
+            
             {% if un_element.carte is defined and un_element.carte is not empty %}
+                <!-- PLAN DE LA VILLE -->
                 <spacer class="my-3">{{ include('/parts/separateur-ornament.html.twig') }}</spacer>
 
-                <h2 class="text-center mb-4"><strong>Carte Intérieur</Strong></h2>
+                <h2 class="text-center mb-4"><strong>Plan</Strong></h2>
 
                <img class="img-fluid" src="{{asset(un_element.carte)}}" alt="Carte du Lieu">
             {% endif %}
 
-            <!-- QUARTIERS -->
             {% if un_element.quartiers is defined and un_element.quartiers is not empty %}
+                <!-- QUARTIERS -->
                 <p class="mx-5 my-5 px-5 py-0 text-justify text-medium">{{ un_element.quartiers|raw|nl2br }}</p>
             {% endif %}
 
-            <!-- ORNAMENT -->
-            <spacer class="my-3">{{ include('/parts/separateur-ornament.html.twig') }}</spacer>
+            {% if (un_element.description is defined and un_element.description is not empty)
+                or (un_element.region is defined and un_element.region is not empty)
+                or (un_element.carte is defined and un_element.carte is not empty)
+                or (un_element.quartiers is defined and un_element.carte is not empty)
+            %}
+                <!-- ORNAMENT -->
+                <spacer class="my-3">{{ include('/parts/separateur-ornament.html.twig') }}</spacer>
+                {% set spacer = true %}
+            {% endif %}
 
             <!-- BTN MJ DELETE-->
             {% if app.user and is_granted("ROLE_MJ") %}
-                <div class="text-center">
+                <div class="text-center {% if spacer is not defined %}mt-5{% endif %}">
                     {% set redirect, element, un_element, color, action = 'empire', 'archive', un_element, 'text-accent', 'delete' %}
                     {{ include('/parts/btn-line.html.twig') }}
                 </div>

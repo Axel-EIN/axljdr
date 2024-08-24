@@ -57,11 +57,9 @@ class Baliseur
         $tableau = [];
 
         // Capture tout les prenoms entre les balises a img
-        // preg_match_all('#<a data-type="character" .*><img class="character-icon-small" .* \/> (.*)<\/a>#Ui', $texte, $tableau);
         preg_match_all('#<a class="tag-character .*><img class="character-portrait small" .* \/> (.*)<\/a>#Ui', $texte, $tableau);
 
         // Crée un tableau de regexp au nbr de matchs
-        // $tableau_de_regexp = array_fill(0, count($tableau[1]), '#<a data="character".*><img class="character-icon-small" .* \/> (.*)<\/a>#Ui');
         $tableau_de_regexp = array_fill(0, count($tableau[1]), '#<a class="tag-character .*><img class="character-portrait small" .* \/> (.*)<\/a>#Ui');
         $tableau_remplacement = [];
 

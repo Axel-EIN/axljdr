@@ -1,18 +1,11 @@
 <main class="offset-2 col-8">
     {{ form_start(form, {'attr': {'id': 'form1'}}) }}
         <div class="row justify-content-center align-items-start mt-5 mb-4">
-            <div class="col-6">
-                {{ form_row(form.titre) }}
-            </div>
-            <div class="col-6">
-                {{ form_row(form.temps) }}
-            </div>
-            <div class="col-6">
-                {{ form_row(form.episodeParent) }}
-            </div>
-            <div class="col-6">
-                {{ form_row(form.numero) }}
-            </div>
+            <div class="col-12">{{ form_row(form.titre) }}</div>
+            <div class="col-6">{{ form_row(form.episodeParent) }}</div>
+            <div class="col-6">{{ form_row(form.numero) }}</div>
+            <div class="col-6">{{ form_row(form.lieu) }}</div>
+            <div class="col-6">{{ form_row(form.temps) }}</div>
 
             <!-- IMAGE -->
             <div class="col-12 mt-3">

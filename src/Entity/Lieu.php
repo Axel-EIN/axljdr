@@ -80,6 +80,17 @@ class Lieu
      * @ORM\OneToMany(targetEntity=Scene::class, mappedBy="lieu")
      */
     private $scenes;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $type;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $population;
+
     public function __construct()
     {
         $this->scenes = new ArrayCollection();
@@ -248,6 +259,30 @@ class Lieu
                 $scene->setLieu(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getType(): ?string
+    {
+        return $this->type;
+    }
+
+    public function setType(?string $type): self
+    {
+        $this->type = $type;
+
+        return $this;
+    }
+
+    public function getPopulation(): ?int
+    {
+        return $this->population;
+    }
+
+    public function setPopulation(?int $population): self
+    {
+        $this->population = $population;
 
         return $this;
     }

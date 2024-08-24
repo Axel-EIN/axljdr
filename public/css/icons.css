@@ -167,3 +167,12 @@
 .img-480 { min-width: 240px; max-width: 480px; }
 .img-540 { min-width: 320px; max-width: 540px; }
 .img-640 { min-width: 320px; max-width: 640px; }
+
+
+/* ------------------------- */
+/* ------ IMAGE CROP  ------ */
+/* ------------------------- */
+
+.circle-crop {
+    border-radius: 1000px;
+}

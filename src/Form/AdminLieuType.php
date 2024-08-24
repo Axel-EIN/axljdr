@@ -22,9 +22,7 @@ class AdminLieuType extends AbstractType
             ->add('surnom', TextType::class)
             ->add('icone', FileType::class, array('mapped' => false, 'data_class' => null, 'required' => false))
             ->add('image', FileType::class, array('mapped' => false, 'data_class' => null, 'required' => false))
-            ->add('carte', FileType::class, array('mapped' => false, 'data_class' => null, 'required' => false))
-            ->add('region', FileType::class, array('mapped' => false, 'data_class' => null, 'required' => false))
-            ->add('description', TextareaType::class)
+            ->add('description', TextareaType::class, array('required' => false))
             ->add('quartiers', TextareaType::class, array('required' => false))
             ->add('locX', NumberType::class, array(
                 'scale' => 3,

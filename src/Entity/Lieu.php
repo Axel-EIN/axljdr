@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\LieuRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -78,6 +80,10 @@ class Lieu
      * @ORM\OneToMany(targetEntity=Scene::class, mappedBy="lieu")
      */
     private $scenes;
+    public function __construct()
+    {
+        $this->scenes = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {

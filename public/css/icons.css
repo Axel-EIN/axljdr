@@ -135,15 +135,6 @@
     width: 72px;
 }
 
-.icon-line-lieu-st {
-    position: absolute;
-    z-index: 10;
-    left: 3rem;
-    bottom: 0;
-    color: var(--white);
-    margin: 0;
-    padding: 0;
-}
 
 /* --------------------------- */
 /* ------ IMAGE RESIZE  ------ */

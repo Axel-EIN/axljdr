@@ -103,6 +103,23 @@
     #left-part, #right-part { margin-top: auto; }
 }
 
+/* ---------------------- */
+/* ------ TOOL TIP ------ */
+/* ---------------------- */  
+
+.hover-tooltip {
+    position: absolute;
+    visibility: hidden;
+    z-index: 100;
+    white-space: nowrap;
+    color: #fff;
+    text-align: center;
+    font-size: var(--small);
+    padding: 0.2rem 0.5rem;
+    border-radius: 0.5rem;
+    background-color: var(--primary-darker-more);
+}
+
 /* -------------------------------------- */
 /* ------ CHARACTER PORTAITS ICONS ------ */
 /* -------------------------------------- */  

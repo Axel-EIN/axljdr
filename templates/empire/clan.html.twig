@@ -132,13 +132,16 @@
             {% for un_lieu in clan.lieux %}
             <div class="p-1 {{col_lieu}}">
                 <a class="vignette-aside" href="{{path('empire_lieu', {id: un_lieu.id} )}}">
+
                     <!-- ICON ON TOP -->
-                    {% if un_lieu.icone is defined and un_lieu.icone is not empty %}
-                        <img class="badge-top img-64" src="{{ asset(un_lieu.icone) }}" alt="une icône" />
+                    {% set PLACEHOLDER = NA_LIEU %}
+                    {% if un_lieu.icone is defined and un_lieu.icone is not empty and un_lieu.image is defined and un_lieu.image is empty %}
+                        <img class="badge-center img-128" src="{{ asset(un_lieu.icone) }}" alt="une icône" />
+                        {% set PLACEHOLDER = NA_LIEU_BG %}
                     {% endif %}
 
                     <strong>{{ un_lieu.nom|upper }}</strong>
-                    <img class="img-fluid" src="{{asset(un_lieu.image)}}" alt="Image d'un Lieu" /></a>
+                    <img class="img-fluid" src="{{asset(un_lieu.image|default(PLACEHOLDER))}}" alt="Image d'un Lieu" /></a>
                 </a>
             </div>
             {% endfor %}

@@ -2,21 +2,8 @@
 /* --------- PAGE SESSION --------- */
 /* -------------------------------- */
 
-.characters-line {
-    position: absolute;
-    z-index: 10;
-    right: 24px;
-    &.pnjs { top: -32px; }
-    &.pjs { bottom: -24px; }
-}
-
-@media (max-width: 576px) { .characters-line { visibility: collapse; } }
-@media (max-width: 480px) { .characters-line { visibility: collapse; } }
-
-.scene-text {
-    line-height: 1.6; }
-
-/* VIGNETTE LIGNE SESSION CAROUSSEL */
+/* LIGNE DE VIGNETTES D'EPISODES */
+/* ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾ */
 
 .vignette-caroussel {
         position: relative;
@@ -72,3 +59,66 @@
             }
         }
 }
+/* LIGNE DE PORTRAITS DE PERSONNAGE */
+/* ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾ */
+
+.characters-line {
+    position: absolute;
+    z-index: 10;
+    right: 24px;
+    &.pnjs { top: -24px; }
+    &.pjs { bottom: -24px; }
+
+    .character-portrait-box {
+        position: relative;
+        display: inline-block;
+    
+        .character-portrait-link {
+            position: relative;
+        
+            &:hover .hover-tooltip { visibility: visible; }
+        
+            .character-name {
+                overflow: hidden;
+                text-overflow: ellipsis;
+                padding-left: 0;
+                padding-right: 0;
+                width: 95%;
+                border-top-left-radius: 0;
+                border-top-right-radius: 0;
+                bottom: -2.75rem;
+                &.pj { background-color: var(--flash-blue); }
+                &.pnj { background-color: var(--primary-darker-more); }
+                &.gray { background-color: var(--gray-light); }
+                &.me {
+                    visibility: visible;
+                    background-color: var(--flash-green);
+                }
+            }
+        }
+    }
+}
+@media (max-width: 576px) { .characters-line { visibility: collapse; } }
+@media (max-width: 480px) { .characters-line { visibility: collapse; } }
+
+
+/* TITRE ET TEXTE */
+/* ‾‾‾‾‾‾‾‾‾‾‾‾‾‾ */
+
+.position-icon-edit {
+    position: absolute;
+    z-index: 10;
+    bottom: 16px;
+    left: 16px;
+}
+
+.scene-title-container {
+    z-index: 2;
+    color: var(--white);
+    top: -56px;
+    width: 90%;
+    h3, h5 { margin-bottom: 0; }
+}
+
+.scene-text {
+    line-height: 1.6; }

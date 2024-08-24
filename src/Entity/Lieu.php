@@ -36,7 +36,7 @@ class Lieu
     private $carte;
 
     /**
-     * @ORM\Column(type="text")
+     * @ORM\Column(type="text", nullable=true)
      */
     private $description;
 

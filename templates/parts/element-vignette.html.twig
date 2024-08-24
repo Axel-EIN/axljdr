@@ -12,23 +12,34 @@
     {% set href = path(category ~ '_' ~ entity, {id: un_element.id} ) %}
 {% endif %}
 
-<a href="{{href}}" class="{{col}} vignette {% if un_element.locked|default(0) == 1 %}translucide link-disabled{% else %}hover-zoom{% endif %}">
+<a href="{{href}}" class="{{col}} mt-3 vignette {% if un_element.locked|default(0) == 1 %}translucide link-disabled{% else %}hover-zoom{% endif %}">
     <div class="relative">
-    {% if un_element.locked|default(0) != 1 %}
-        <!-- TOP ICON -->
-        {% if un_element.icone is defined and un_element.icone is not empty %}
-            <img class="badge-top" src="{{ asset(un_element.icone) }}" alt="Icône" />
-        {% elseif un_element.pdf is defined and un_element.pdf is not empty %}
-            <img class="badge-corner" src="{{ asset(PDF) }}" alt="Icône PDF" />
+
+        {% if un_element.locked|default(0) == 1 %}
+            <!-- LOCKED -->
+            {% set grayscale, tooltip, nom = 'grayscale', 'À débloquer', '???' %}
+            <img class="absolute icon-lock grayscale fa-beat-fade" src="{{asset('assets/img/icons/locked.png')}}" alt="Cadena" title="À débloquer !" />
         {% endif %}
-    {% else %}
-        <!-- LOCKED -->
-        {% set grayscale, tooltip, nom = 'grayscale', 'À débloquer', '???' %}
-        <img class="absolute icon-lock grayscale fa-beat-fade" src="{{asset('assets/img/icons/locked.png')}}" alt="Icône cadena" title="À débloquer !" />
-    {% endif %}
-        <div class="ratio-{{ratio|default('1610')}}">
-            <img class="ratio-cropped {{grayscale|default('')}}" src="{{ asset(un_element.image|default(na_image)) }}" alt="Image {{entity}}" title="{{tooltip|default('') }}"/>
-        </div>
+
+        {% if un_element.icone is defined and un_element.icone is not empty %}
+            <div class="ratio-{{ratio|default('1610')}}">
+                <!-- CENTERED ICON -->
+                <img class="badge-center img-128" src="{{ asset(un_element.icone) }}" alt="Icône" />
+            </div>
+        {% else %}
+
+            <!-- PDF TOP RIGHT CORNER ICON -->
+            {% if un_element.pdf is defined and un_element.pdf is not empty %}
+                <img class="badge-corner" src="{{ asset(PDF) }}" alt="Icône PDF" />
+            {% endif %}
+
+            <!-- CROPPED RATIO IMG -->
+            <div class="ratio-{{ratio|default('1610')}}">
+                <img class="ratio-cropped {{grayscale|default('')}}" src="{{ asset(un_element.image|default(na_image)) }}" alt="Image {{entity}}" title="{{tooltip|default('') }}"/>
+            </div>
+
+        {% endif %}
+
     </div>
     <div class="label text-{{size}} mt-1">{{ nom }}</div>
 </a>

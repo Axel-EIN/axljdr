@@ -52,7 +52,7 @@ class AdminObjetType extends AbstractType
                 'required' => false,
                 'currency' => 'JPY',
                 'scale' => 0,
-                'label' => 'Prix en zeni (10 zeni = 1 bu / 50 zeni = 1 Koku = 5 bu)',
+                'label' => 'Prix zeni ( 1 koku = 5 bu = 50 zeni )',
             ])
             ->add('numero', IntegerType::class, [
                 'required' => false ] )

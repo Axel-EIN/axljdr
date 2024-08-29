@@ -12,6 +12,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use App\Service\Baliseur;
 
 class AdminLieuController extends AbstractController
 {
@@ -37,7 +38,7 @@ class AdminLieuController extends AbstractController
      * @Route("/admin/lieu/create", name="admin_lieu_create")
      * @IsGranted("ROLE_MJ")
      */
-    public function addLieu(Request $request, EntityManagerInterface $em, FileHandler $fileHandler) {
+    public function addLieu(Request $request, EntityManagerInterface $em, FileHandler $fileHandler, Baliseur $baliseur) {
 
         $lieu = new Lieu;
         $form = $this->createForm(AdminLieuType::class, $lieu);
@@ -73,6 +74,12 @@ class AdminLieuController extends AbstractController
                 $lieu->setIcone($fileHandler->handle($nouvelleIcone, null, $prefix, 'lieux'));
             }
 
+            // CHARACTER TAGGER : capture words between [], check if character exist, replace by a link
+            $lieu->setDescription($baliseur->baliserPersonnages($lieu->getDescription()));
+
+            // LOCATION TAGGER: capture words between {}, check if location exist, replace by a link
+            $lieu->setDescription($baliseur->baliserLieux($lieu->getDescription()));
+
             $em->persist($lieu);
             $em->flush();
             $this->addFlash('success', 'Le Lieu a bien été ajouté.');
@@ -99,7 +106,13 @@ class AdminLieuController extends AbstractController
      * @Route("/admin/lieu/{id}/edit", name="admin_lieu_edit")
      * @IsGranted("ROLE_MJ")
      */
-    public function editLieu(Request $request, Lieu $lieu, FileHandler $fileHandler): Response {
+    public function editLieu(Request $request, Lieu $lieu, FileHandler $fileHandler, Baliseur $baliseur): Response {
+
+        // CHARACTER UNTAGGER : capture words in character-links, check if character exist and replace with []
+        $lieu->setDescription($baliseur->debaliserPersonnages($lieu->getDescription()));
+
+        // LOCATION UNTAGGER : capture words in location-links, check if location exist and replace with {}
+        $lieu->setDescription($baliseur->debaliserLieux($lieu->getDescription()));
 
         $form = $this->createForm(AdminLieuType::class, $lieu);
         $form->handleRequest($request);
@@ -133,6 +146,12 @@ class AdminLieuController extends AbstractController
                 $prefix = 'lieu-' . $lieu->getNom() . '-icone';
                 $lieu->setIcone($fileHandler->handle($nouvelleIcone, $lieu->getIcone(), $prefix, 'lieux'));
             }
+
+            // CHARACTER TAGGER : capture words between [], check if character exist, replace by a link
+            $lieu->setDescription($baliseur->baliserPersonnages($lieu->getDescription()));
+
+            // LOCATION TAGGER: capture words between {}, check if location exist, replace by a link
+            $lieu->setDescription($baliseur->baliserLieux($lieu->getDescription()));
 
             $this->getDoctrine()->getManager()->flush();
             $this->addFlash('success', 'Le Lieu a bien été modifié.');

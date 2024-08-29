@@ -30,9 +30,11 @@ class AdminLieuType extends AbstractType
                     'Village' => 'Village',
                     "Ville" => "Ville",
                     'Cité' => 'Cité',
-                    'Région ou Royaume' => 'Région ou Royaume',
-                    'Shiro (Fort ou Château)' => 'Shiro (Fort ou Château)',
-                    'Kyuden (Palais)' => 'Kyuden (Palais)',
+                    'Région' => 'Région',
+                    'Royaume Spirituel' => 'Royaume Spirituel',
+                    'Forteresse' => 'Forteresse',
+                    'Palais' => 'Palais',
+                    'Structure' => 'Structure',
                 ],
             ])
             ->add('region', FileType::class, array(

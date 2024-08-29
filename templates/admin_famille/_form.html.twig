@@ -1,43 +1,28 @@
-<main class="offset-2 col-8">
+<main class="col-12">
     {{ form_start(form) }}
-        <div class="row justify-content-center align-items-end mt-5 mb-4">
-
-            <div class="col-12 row mb-3">
-                <div class="col-4">
-                    {% if type == 'Modifier' %}
-                        <img class="img-fluid" src="{{ asset(famille.mon|default(NA_ICON_MON)) }}" />
-                    {% endif %}
-                </div>
-                
-                <div class="col-8 row">
-                    <div class="col-6">
-                        {{ form_row(form.nom) }}
-                    </div> 
-                    <div class="col-6">
-                        <div>{{ form_row(form.clan) }}</div>
-                    </div>
-                    <div class="col-12">
-                        {{ form_row(form.mon) }}
-                    </div> 
+        <div class="row form-wrapper">
+            <div class="col-8">
+                <div class="row">
+                    <div class="col-6">{{ form_row(form.nom) }}</div>
+                    <div class="col-6">{{ form_row(form.clan) }}</div>
+                    <div class="col-6">{{ form_row(form.chef) }}</div>
+                    <div class="col-6">{{ form_row(form.bonus) }}</div>
+                    <div class="col-12">{{ form_row(form.description,{ 'attr': {'rows': '5'} }) }}</div>
                 </div>
             </div>
 
-            <div class="col-12">
-                {{ form_row(form.bonus) }}
-            </div> 
-
-            <div class="col-12">
-                {{ form_row(form.description,{ 'attr': {'rows': '5'} }) }}
+            <!-- MON -->
+            <div class="col-4 d-flex flex-column">
+                {{ form_label(form.mon) }}
+                <label for="admin_famille_mon" class="preview-label hover-slight-fade hover-pointer hover-icon-visible">
+                    <icon class="btn-icon-medium right-corner-16"><i class="fas fa-edit semi-visible text-white"></i></icon>
+                    <img id="icon-preview" class="img-fluid" src="{{ asset(famille.mon|default(NA_MON)) }}" />
+                    <span id="icon-filename" class="filename"></span>
+                </label>
+                <div class="browser">{{form_widget(form.mon, {'attr': {'class': 'input-icon'}}) }}</div>        
             </div>
 
-            <div class="col-12">
-                {{ form_row(form.chef) }}
-            </div> 
-
-            <div class="col-12 text-center mt-5">
-                <button class="btn-large btn-primary-style">{{ button_label|default('Save') }}</button>
-            </div>
-
+            {{ include('/parts/btn-form.html.twig') }}
         </div>
     {{ form_end(form) }}
 </main>

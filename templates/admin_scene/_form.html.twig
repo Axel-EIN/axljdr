@@ -1,100 +1,96 @@
-<main class="offset-2 col-8">
+<main class="col-12">
     {{ form_start(form, {'attr': {'id': 'form1'}}) }}
-        <div class="row justify-content-center align-items-start mt-5 mb-4">
-            <div class="col-12">{{ form_row(form.titre) }}</div>
-            <div class="col-6">{{ form_row(form.episodeParent) }}</div>
-            <div class="col-6">{{ form_row(form.numero) }}</div>
-            <div class="col-6">{{ form_row(form.lieu) }}</div>
-            <div class="col-6">{{ form_row(form.temps) }}</div>
+        <div class="row form-wrapper">
+            <div class="col-3">{{ form_row(form.titre) }}</div>
+            <div class="col-3">{{ form_row(form.episodeParent) }}</div>
+            <div class="col-3">{{ form_row(form.lieu) }}</div>
+            <div class="col-2">{{ form_row(form.temps) }}</div>
+            <div class="col-1">{{ form_row(form.numero) }}</div>
+
+            <div class="col-12">{{ form_row(form.texte,{ 'attr': {'rows': '15'} }) }}</div>
 
             <!-- IMAGE -->
-            <div class="col-12 mt-3">
+            <div class="offset-2 col-8 mt-3 mb-5">
                 {{ form_label(form.image) }}
-                <label id="preview-label" for="admin_scene_image" class="hover-slight-fade hover-pointer hover-icon-visible">
+                <label for="admin_scene_image" class="preview-label hover-slight-fade hover-pointer hover-icon-visible">
                     <icon class="btn-icon-medium right-corner-16"><i class="fas fa-edit semi-visible text-white"></i></icon>
                     <img id="image-preview" class="img-fluid" src="{{ asset(scene.image|default(NA_SCENE)) }}" />
+                    <span id="image-filename" class="filename"></span>
                 </label>
-                <browse id="browse-label" class="d-none">
-                    <span id="fileName"></span>
-                    {{form_widget(form.image, {'attr': {'class': 'input-image'}}) }}
-                </browse> 
+                <div class="browser">{{form_widget(form.image, {'attr': {'class': 'input-image'}}) }}</div> 
             </div>
 
-            <div class="col-12 mt-5">
-                {{ form_row(form.texte,{ 'attr': {'rows': '15'} }) }}
+            <div class="col-12">
+                Participants (facultatif) :<br/>
+                <div class="form-row">
+
+                    <!-- PARTICIPATION PJs -->
+                    <div class="col-6 text-center">
+                        <div class="text-right"><small class="mr-3">XP gagné / mort</small></div>
+                        {% if type != 'Créer' %}
+                            {% if participations_pjs is not empty %}
+                                {% set nbr_pjs = 0 %}
+                                {% for une_participation in participations_pjs %}
+                                    <div class="participants form-row">
+                                        <select class="form-control mt-1 col-8" name="participants[{{nbr_pjs}}]" required id="data[participants][{{nbr_pjs}}]" >
+                                            {% for un_pj in tout_pjs %}
+                                                <option value="{{un_pj.id}}" {% if un_pj.id == une_participation.personnage.id %}selected{% endif %}>
+                                                    {{un_pj.nom}} {{un_pj.prenom}}
+                                                </option>
+                                            {% endfor %}
+                                        </select>
+                                        <input class="form-control ml-1 mt-1 col-2" type="number" value="{{une_participation.xpGagne}}" name="participants_xp[{{nbr_pjs}}]" id="data[participants_xp][{{nbr_pjs}}]" />
+                                        <input class="mt-1 ml-1 col-1" type="checkbox" name="participants_mort[{{nbr_pjs}}]" id="data[participants_mort][{{nbr_pjs}}]" {% if une_participation.estMort == true %}checked{% endif %} />
+                                    </div>
+                                    {% set nbr_pjs = nbr_pjs + 1 %}
+                                {% else %}
+                                    Il n'y a pas encore de participants PJs
+                                {% endfor %}
+                            {% endif %}
+                        {% endif %}
+                        <button class="btn btn-medium btn-secondary-style mt-3" id="add-participants">Ajouter un PJ</button>
+                        {% if type != 'Créer' %}
+                            {% if participations_pjs is not empty %}
+                                <br/><button class="remove-participants btn mt-1 btn-tertiary-style">Retirer</button>
+                            {% endif %}
+                        {% endif %}
+                    </div>
+
+                    <!-- PARTICIPATION PNJs -->
+                    <div class="col-6 text-center">
+                        <div class="text-right"><small class="mr-4">Mort</small></div>
+                        {% if type != 'Créer' %}
+                            {% if participations_pnjs is not empty %}
+                                {% set nbr_pnjs = 0 %}
+                                {% for une_participation_pnj in participations_pnjs %}
+                                    <div class="participants_pnjs form-row">
+                                        <select class="form-control mt-1 col-10" name="participants_pnjs[{{nbr_pnjs}}]" required id="data[participants_pnjs][{{nbr_pnjs}}]" >
+                                            {% for un_pnj in tout_pnjs %}
+                                                <option value="{{un_pnj.id}}" {% if un_pnj.id == une_participation_pnj.personnage.id %}selected{% endif %}>
+                                                    {{un_pnj.nom}} {{un_pnj.prenom}}
+                                                </option>
+                                            {% endfor %}
+                                        </select>
+                                        <input class="mt-1 ml-1 col-1" type="checkbox" name="participants_pnjs_mort[{{nbr_pnjs}}]" id="data[participants_pnjs_mort][{{nbr_pnjs}}]" {% if une_participation_pnj.estMort == true %}checked{% endif %} />
+                                    </div>
+                                    {% set nbr_pnjs = nbr_pnjs + 1 %}
+                                {% else %}
+                                    Il n'y a pas encore de participants PNJs
+                                {% endfor %}
+                            {% endif %}
+                        {% endif %}
+                        <button class="btn btn-medium btn-secondary-style mt-3" id="add-participants_pnjs">Ajouter un PNJ</button>
+                        {% if type != 'Créer' %}
+                            {% if participations_pnjs is not empty %}
+                                <br/><button class="remove-participants_pnjs btn mt-1 btn-tertiary-style">Retirer</button>
+                            {% endif %}
+                        {% endif %}
+                    </div>
+                    
+                </div>
             </div>
-        </div>
 
-        Participants (facultatif) :<br/>
-        <div class="form-row">
-
-            <!-- PARTICIPATION PJs -->
-            <div class="col-6 text-center">
-                <div class="text-right"><small class="mr-3">XP gagné / mort</small></div>
-                {% if type != 'Créer' %}
-                    {% if participations_pjs is not empty %}
-                        {% set nbr_pjs = 0 %}
-                        {% for une_participation in participations_pjs %}
-                            <div class="participants form-row">
-                                <select class="form-control mt-1 col-8" name="participants[{{nbr_pjs}}]" required id="data[participants][{{nbr_pjs}}]" >
-                                    {% for un_pj in tout_pjs %}
-                                        <option value="{{un_pj.id}}" {% if un_pj.id == une_participation.personnage.id %}selected{% endif %}>
-                                            {{un_pj.nom}} {{un_pj.prenom}}
-                                        </option>
-                                    {% endfor %}
-                                </select>
-                                <input class="form-control ml-1 mt-1 col-2" type="number" value="{{une_participation.xpGagne}}" name="participants_xp[{{nbr_pjs}}]" id="data[participants_xp][{{nbr_pjs}}]" />
-                                <input class="mt-1 ml-1 col-1" type="checkbox" name="participants_mort[{{nbr_pjs}}]" id="data[participants_mort][{{nbr_pjs}}]" {% if une_participation.estMort == true %}checked{% endif %} />
-                            </div>
-                            {% set nbr_pjs = nbr_pjs + 1 %}
-                        {% else %}
-                            Il n'y a pas encore de participants PJs
-                        {% endfor %}
-                    {% endif %}
-                {% endif %}
-                <button class="btn btn-medium btn-secondary-style mt-3" id="add-participants">Ajouter un PJ</button>
-                {% if type != 'Créer' %}
-                    {% if participations_pjs is not empty %}
-                        <br/><button class="remove-participants btn mt-1 btn-tertiary-style">Retirer</button>
-                    {% endif %}
-                {% endif %}
-            </div>
-
-            <!-- PARTICIPATION PNJs -->
-            <div class="col-6 text-center">
-                <div class="text-right"><small class="mr-4">Mort</small></div>
-                {% if type != 'Créer' %}
-                    {% if participations_pnjs is not empty %}
-                        {% set nbr_pnjs = 0 %}
-                        {% for une_participation_pnj in participations_pnjs %}
-                            <div class="participants_pnjs form-row">
-                                <select class="form-control mt-1 col-10" name="participants_pnjs[{{nbr_pnjs}}]" required id="data[participants_pnjs][{{nbr_pnjs}}]" >
-                                    {% for un_pnj in tout_pnjs %}
-                                        <option value="{{un_pnj.id}}" {% if un_pnj.id == une_participation_pnj.personnage.id %}selected{% endif %}>
-                                            {{un_pnj.nom}} {{un_pnj.prenom}}
-                                        </option>
-                                    {% endfor %}
-                                </select>
-                                <input class="mt-1 ml-1 col-1" type="checkbox" name="participants_pnjs_mort[{{nbr_pnjs}}]" id="data[participants_pnjs_mort][{{nbr_pnjs}}]" {% if une_participation_pnj.estMort == true %}checked{% endif %} />
-                            </div>
-                            {% set nbr_pnjs = nbr_pnjs + 1 %}
-                        {% else %}
-                            Il n'y a pas encore de participants PNJs
-                        {% endfor %}
-                    {% endif %}
-                {% endif %}
-                <button class="btn btn-medium btn-secondary-style mt-3" id="add-participants_pnjs">Ajouter un PNJ</button>
-                {% if type != 'Créer' %}
-                    {% if participations_pnjs is not empty %}
-                        <br/><button class="remove-participants_pnjs btn mt-1 btn-tertiary-style">Retirer</button>
-                    {% endif %}
-                {% endif %}
-            </div>
-
-        </div>
-
-        <div class="text-center">
-            <button class="btn-large btn-primary-style">{{ button_label|default('Save') }}</button>
+            {{ include('/parts/btn-form.html.twig') }}
         </div>
     {{ form_end(form) }}
 </main>

@@ -1,81 +1,100 @@
 <main class="col-12">
     {{ form_start(form) }}
-        <div class="row justify-content-center align-items-start mt-5 mb-4">
+        <div class="row form-wrapper">
 
-            <div class="col-6">
-                {{ form_row(form.nom) }}
-                {{ form_row(form.genre) }}
+            <div class="col-4">{{ form_row(form.nom) }}</div>
+            <div class="col-2">{{ form_row(form.genre) }}</div>
+
+            <div class="col-3">{{ form_row(form.chef) }}</div>
+            <div class="col-1">{{ form_row(form.couleur) }}</div>
+            <div class="col-2 align-self-center">{{ form_row(form.estMajeur) }}</div>
+
+            <div class="col-12">{{ form_row(form.citation,{ 'attr': {'rows': '2'} }) }}</div>
+            <div class="col-12">{{ form_row(form.description,{ 'attr': {'rows': '7'} }) }}</div>
+
+            <!-- MON -->
+            <div class="col-4 text-center d-flex flex-column">
+                {{ form_label(form.mon) }}
+                <label for="admin_clan_mon" class="preview-label hover-slight-fade hover-pointer hover-icon-visible">
+                    <icon class="btn-icon-medium right-corner-16"><i class="fas fa-edit semi-visible text-white"></i></icon>
+                    <img id="icon-preview" class="img-fluid" src="{{ asset(clan.mon|default(NA_MON)) }}" />
+                    <span id="icon-filename" class="filename"></span>
+                </label>
+                <div class="browser">{{ form_widget(form.mon, { 'attr': { 'class' : 'input-icon' }}) }}</div>
             </div>
-
-            <div class="col-6">
-                {{ form_row(form.chef) }}
-                Statut : {{ form_row(form.estMajeur) }}
-            </div>
-
-            <div class="col-4 mt-3 text-center">
-                {% if type == 'Modifier' %}
-                    <img class="img-160" src="{{ asset(clan.mon|default(NA_ICON_MON)) }}" />
-                {% endif %}
-            </div>
-
-            <div class="col-8 mt-3">
-                {{ form_row(form.mon) }}
-                {{ form_row(form.couleur) }}
-            </div>
-
 
             <!-- IMAGE -->
-            <div class="col-6 mt-3">
+            <div class="col-8">
                 {{ form_label(form.image) }}
-                <label id="preview-label" for="admin_clan_image" class="hover-slight-fade hover-pointer hover-icon-visible">
+                <label for="admin_clan_image" class="preview-label hover-slight-fade hover-pointer hover-icon-visible">
                     <icon class="btn-icon-medium right-corner-16"><i class="fas fa-edit semi-visible text-white"></i></icon>
-                    <img id="image-preview" class="img-fluid" src="{{ asset(clan.image|default(NA_169)) }}" />
+                    <img id="image-preview" class="img-fluid" src="{{ asset(clan.image|default(NA_CLAN)) }}" />
+                    <span id="image-filename" class="filename"></span>
                 </label>
-                <browse id="browse-label" class="d-none">
-                    <span id="fileName"></span>
-                    {{form_widget(form.image, {'attr': {'class': 'input-image'}}) }}
-                </browse> 
+                <div class="browser">{{form_widget(form.image, {'attr': {'class': 'input-image'}}) }}</div> 
             </div>
 
-            <div class="col-6 mt-3">
-                {{ form_label(form.video) }}
-                {% if type == 'Modifier' %}
-                    <video class="img-fluid" controls muted>
-                        <source src="{{ asset(clan.video|default(NA_169)) }}" type="video/mp4">
-                    </video>
-                {% endif %}
-                {{ form_widget(form.video) }}
-            </div>
-
+            <!-- MORE OPTIONS -->
             <div class="col-12 mt-5">
-                {{ form_row(form.citation) }}
-            </div>
 
-            <div class="col-12 mt-3">
-                {{ form_row(form.description,{ 'attr': {'rows': '7'} }) }}
-            </div>
+                <a class="w-100" data-toggle="collapse" href="#clan-options-collapse" role="button"
+                    aria-expanded="
+                        {% if type == 'Modifier' and
+                            ( (clan.longDescription is defined and clan.longDescription is not empty)
+                            or (clan.territoireCarte is defined and clan.territoireCarte is not empty)
+                            or (clan.territoireDesc is defined and clan.territoireDesc is not empty) ) %}true{% else %}false{% endif %}"
+                    aria-controls="clan-options-collapse">
+                    <h2 class="title-h3">Plus d'options ...</h2>
+                </a>
+                <hr>
 
-            <div class="col-12 mt-3 text-center">
-                {% if type == 'Modifier' %}
-                    <img class="img-fluid" src="{{ asset( clan.territoireCarte|default( NA_MAP ) ) }}" />
-                {% endif %}
-            </div>
+                <!-- COLLAPSING -->
+                <div id="clan-options-collapse" class="collapse
+                    {% if type == 'Modifier'and
+                            ( (clan.longDescription is defined and clan.longDescription is not empty)
+                            or (clan.territoireCarte is defined and clan.territoireCarte is not empty)
+                            or (clan.territoireDesc is defined and clan.territoireDesc is not empty) ) %} show{% endif %}">
 
-            <div class="col-12 mt-3">
-                {{ form_row(form.territoireCarte)}}
-            </div>
+                    
+                    <!-- MAP -->
+                    <div class="col-12 mt-3 mb-5">
+                        {{ form_label(form.territoireCarte) }}
+                        <label for="admin_clan_territoireCarte" class="preview-label hover-slight-fade hover-pointer hover-icon-visible">
+                            <icon class="btn-icon-medium right-corner-16"><i class="fas fa-edit semi-visible text-white"></i></icon>
+                            <img id="map-preview" class="img-fluid" src="{{ asset(clan.territoireCarte|default(NA_MAP)) }}" />
+                            <span id="map-filename" class="filename"></span>
+                        </label>
+                        <div class="browser">{{form_widget(form.territoireCarte, {'attr': {'class': 'input-map'}}) }}</div> 
+                    </div>
 
-            <div class="col-12 mt-3">
-                {{ form_row(form.territoireDesc,{ 'attr': {'rows': '7'} }) }}
-            </div>
+                    <div class="col-12">{{ form_row(form.territoireDesc,{ 'attr': {'rows': '7'} }) }}</div>
 
-            <div class="col-12 mt-3">
-                {{ form_row(form.longDescription,{ 'attr': {'rows': '20'} }) }}
+                    <!-- VIDEO -->
+                    <div class="col-12 mt-3 mb-5">
+                        {{ form_label(form.video) }}
+                        <label id="video-preview-label" for="admin_clan_video" class="preview-label hover-slight-fade hover-pointer hover-icon-visible">
+                            <icon class="btn-icon-medium right-corner-16"><i class="fas fa-edit semi-visible text-white"></i></icon>
+                            <video id="video" class="img-fluid" muted
+                                {% if clan.video is defined and clan.video is empty %}
+                                    poster="{{ asset(NA_CLAN) }}"
+                                {% else %}
+                                    controls src="{{ asset(clan.video|default('')) }}"
+                                {% endif %} >
+                            </video>
+                            <span id="video-filename" class="filename"></span>
+                        </label>
+                        <div class="browser">
+                            {{form_widget(form.video, {'attr': {'class': 'input-video'}}) }}
+                        </div> 
+                    </div>
+
+                    <div class="col-12">{{ form_row(form.longDescription,{ 'attr': {'rows': '20'} }) }}</div>
+                    
+                </div>
+                
             </div>
             
-            <div class="col-12 text-center mt-5">
-                <button class="btn-large btn-primary-style">{{ button_label|default('Save') }}</button>
-            </div>
+            {{ include('/parts/btn-form.html.twig') }}
         </div>
     {{ form_end(form) }}
 </main>

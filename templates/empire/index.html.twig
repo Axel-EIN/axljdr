@@ -35,7 +35,7 @@
         {% for un_clan_autre in clansAutres %}
             <!-- UN CLAN AUTRE -->
             <a class="col-6 m-0 p-1 hover-zoom" href="{{ path('empire_clan', {id: un_clan_autre.id} ) }}">
-                <img class="img-96" src="{{ asset(un_clan_autre.mon|default(NA_ICON_MON)) }}" alt="Mon du clan" title="{{un_clan_autre.nom}}" /></a>
+                <img class="img-96 circle-crop" src="{{ asset(un_clan_autre.mon|default(NA_ICON_MON)) }}" alt="Mon du clan" title="{{un_clan_autre.nom}}" /></a>
             </a>
         {% endfor %}
         </div>

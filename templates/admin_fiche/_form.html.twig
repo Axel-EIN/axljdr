@@ -1,8 +1,25 @@
-<main class="offset-2 col-8">
+<main class="col-12">
     {{ form_start(form) }}
-            {{ form_widget(form) }}
-            <div class="text-center">
-                <button class="btn btn-primary">{{ button_label|default('Save') }}</button>
-            </div>
+        <div class="row form-wrapper">
+            <div class="col-6">{{ form_row(form.personnage) }}</div>
+            <div class="col-6">{{ form_row(form.creationExp) }}</div>
+            <div class="col-6">{{ form_row(form.avantages) }}</div>
+            <div class="col-6">{{ form_row(form.desavantages) }}</div>
+
+            <div class="col-2">{{ form_row(form.constitution) }}</div>
+            <div class="col-2">{{ form_row(form.volonte) }}</div>
+
+            <div class="col-2">{{ form_row(form.reflexes) }}</div>
+            <div class="col-2">{{ form_row(form.intuition) }}</div>
+
+            <div class="col-2">{{ form_row(form.agilite) }}</div>
+            <div class="col-2">{{ form_row(form.intelligence) }}</div>
+
+            <div class="col-2">{{ form_row(form.forceStat) }}</div>
+            <div class="col-2">{{ form_row(form.perception) }}</div>
+
+            <div class="col-2">{{ form_row(form.vide) }}</div>
+
+            {{ include('/parts/btn-form.html.twig') }}
     {{ form_end(form) }}
 </main>

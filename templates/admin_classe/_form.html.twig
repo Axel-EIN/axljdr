@@ -1,47 +1,38 @@
-<main class="offset-2 col-8">
+<main class="col-12">
     {{ form_start(form) }}
-        <div class="row justify-content-center align-items-center mt-5 mb-4">
+        <div class="row form-wrapper">
 
-            <div class="col-8">
-                {{ form_row(form.nom) }}
-                {{ form_row(form.icone) }}
-            </div>    
+            <div class="col-10">{{ form_row(form.nom) }}</div>
+            <div class="col-2">{{ form_row(form.couleur) }}</div>
 
-            <div class="col-4">
-                {% if type == 'Modifier' %}
-                    <img class="img-fluid" src="{{ asset(classe.icone|default(NA_ICON_CLASS)) }}" />
-                {% endif %}
-            </div>
+            <div class="col-12">{{ form_row(form.citation) }}</div>
+            <div class="col-12">{{ form_row(form.description,{ 'attr': {'rows': '6'} }) }}</div>   
 
             <!-- IMAGE -->
-            <div class="col-12 mt-3">
+            <div class="col-8 mt-3 mb-4">
                 {{ form_label(form.image) }}
-                <label id="preview-label" for="admin_classe_image" class="hover-slight-fade hover-pointer hover-icon-visible">
+                <label for="admin_classe_image" class="preview-label hover-slight-fade hover-pointer hover-icon-visible">
                     <icon class="btn-icon-medium right-corner-16"><i class="fas fa-edit semi-visible text-white"></i></icon>
                     <img id="image-preview" class="img-fluid" src="{{ asset(classe.image|default(NA_169)) }}" />
+                    <span id="image-filename" class="filename"></span>
                 </label>
-                <browse id="browse-label" class="d-none">
-                    <span id="fileName"></span>
-                    {{form_widget(form.image, {'attr': {'class': 'input-image'}}) }}
-                </browse> 
+                <div class="browser">{{form_widget(form.image, {'attr': {'class': 'input-image'}}) }}</div> 
             </div>
 
-            <div class="col-12 mt-5">
-                {{ form_row(form.citation) }}
-            </div>
-
-            <div class="col-12">
-                {{ form_row(form.description,{ 'attr': {'rows': '6'} }) }}
+            <!-- SYMBOL -->
+            <div class="col-4 mt-3 mb-4">
+                <div class="d-flex flex-column mb-4"> 
+                    {{ form_label(form.icone) }}
+                    <label for="admin_classe_icone" class="preview-label hover-slight-fade hover-pointer hover-icon-visible">
+                        <icon class="btn-icon-medium right-corner-16"><i class="fas fa-edit semi-visible text-white"></i></icon>
+                        <img id="icon-preview" class="img-fluid" src="{{ asset(classe.icone|default(NA_CLASS_ICO)) }}" />
+                        <span id="icon-filename" class="filename"></span>
+                    </label>
+                    <div class="browser">{{ form_widget(form.icone, { 'attr': { 'class' : 'input-icon' }}) }}</div>
+                </div>
             </div>   
 
-            <div class="col-12">
-                {{ form_row(form.couleur) }}
-            </div> 
-
-            <div class="col-12 text-center mt-5">
-                <button class="btn-large btn-primary-style">{{ button_label|default('Save') }}</button>
-            </div>
-
+            {{ include('/parts/btn-form.html.twig') }}
         </div>
     {{ form_end(form) }}
 </main>

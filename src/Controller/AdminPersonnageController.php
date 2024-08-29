@@ -75,7 +75,7 @@ class AdminPersonnageController extends AbstractController
             $this->addFlash('success', 'Le personnage a bien été ajouté.');
 
             // REDIRECTION
-            if (!empty($request->query->get('redirect')) && $request->query->get('redirect') == 'personnages')
+            if (!empty($request->query->get('redirect')) && $request->query->get('redirect') == 'personnage')
                 return $this->redirectToRoute('personnages');
 
             return $this->redirectToRoute('admin_personnage');

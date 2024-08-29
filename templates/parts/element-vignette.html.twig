@@ -12,7 +12,7 @@
     {% set href = path(category ~ '_' ~ entity, {id: un_element.id} ) %}
 {% endif %}
 
-<a href="{{href}}" class="{{col}} mt-3 vignette {% if un_element.locked|default(0) == 1 %}translucide link-disabled{% else %}hover-zoom{% endif %}">
+<a href="{{href}}" class="{{col}} mb-3 vignette {% if un_element.locked|default(0) == 1 %}translucide link-disabled{% else %}hover-zoom{% endif %}">
     <div class="relative">
 
         {% if un_element.locked|default(0) == 1 %}

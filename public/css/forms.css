@@ -2,21 +2,33 @@
 /* ----- FORMS ----- */
 /* ----------------- */  
 
-#preview-label, #preview-label-icon {
+.form-wrapper{
+    margin-top: 3rem;
+    margin-bottom: 2rem;
+
+    .form-btn {
+        margin: 2rem auto;
+    }
+}
+
+.preview-label {
     display: block;
     position: relative;
-    background-color: gray;
+    margin: 0 auto;
+    background-color: var(--lighter-plus);
     text-align: center;
 }
 
-.browse-label {
-    display: block;
+.browser {
+    display: none;
     position: relative;
 }
 
-#filename, #filename_icon {
+.filename {
     position: absolute;
     z-index: 10;
-    left: 16px;
-    top: 8px;
+    right: 0;
+    bottom: -1.5rem;
+    overflow: hidden;
+    white-space: nowrap;
 }

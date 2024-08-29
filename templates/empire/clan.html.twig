@@ -37,9 +37,9 @@
 
                             <!-- DAIMYO -->
                             {% if une_famille.chef is not empty %}
-                                <a class="mt-3 hover-no-under hover-zoom" href="{{ path('personnage_profil', {id: une_famille.chef.id} ) }}" title="{{une_famille.chef.nom}} {{une_famille.chef.prenom}}">
-                                    <img class="character-portrait medium" src="{{ asset(une_famille.chef.icone) }}" alt="Icône du personnage" />
+                                <a class="d-flex flex-column justify-center align-items-center mt-3 hover-no-under hover-zoom" href="{{ path('personnage_profil', {id: une_famille.chef.id} ) }}" title="{{une_famille.chef.nom}} {{une_famille.chef.prenom}}">
                                     <span class="text-muted align-middle">Daimyo</span>
+                                    <img class="character-portrait medium" src="{{ asset(une_famille.chef.icone) }}" alt="Icône du personnage" />
                                 </a>                                 
                             {% endif %}
 

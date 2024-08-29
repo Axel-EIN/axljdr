@@ -8,7 +8,107 @@
 {% endblock %}
 
 {% block section_content2 %}
-    {% for perso in pnjs %}
-        {{ include('/personnage/card-personnage.html.twig', {perso}) }}
-    {% endfor %}
+    <div class="col-12">
+
+        <h3 class="title-h3 mt-5 mb-2">Familles Impériales</h3>
+        <div class="row">
+            {% for perso in pnjs %}
+                {% if perso.clan is defined and perso.clan is not empty and perso.clan.nom == 'Imperial' %}
+                    {{ include('/personnage/card-personnage.html.twig', {perso}) }}
+                {% endif %}
+            {% endfor %}
+        </div>
+
+        <h3 class="title-h3 mt-5 mb-2">Clan du Crabe</h3>
+        <div class="row">
+            {% for perso in pnjs %}
+                {% if perso.clan is defined and perso.clan is not empty and perso.clan.nom == 'Crabe' %}
+                    {{ include('/personnage/card-personnage.html.twig', {perso}) }}
+                {% endif %}
+            {% endfor %}
+        </div>
+
+        <h3 class="title-h3 mt-5 mb-2">Clan du Dragon</h3>
+        <div class="row">
+            {% for perso in pnjs %}
+                {% if perso.clan is defined and perso.clan is not empty and perso.clan.nom == 'Dragon' %}
+                    {{ include('/personnage/card-personnage.html.twig', {perso}) }}
+                {% endif %}
+            {% endfor %}
+        </div>
+
+        <h3 class="title-h3 mt-5 mb-2">Clan de la Grue</h3>
+        <div class="row">
+            {% for perso in pnjs %}
+                {% if perso.clan is defined and perso.clan is not empty and perso.clan.nom == 'Grue' %}
+                    {{ include('/personnage/card-personnage.html.twig', {perso}) }}
+                {% endif %}
+            {% endfor %}
+        </div>
+
+        <h3 class="title-h3 mt-5 mb-2">Clan de la Licorne</h3>
+        <div class="row">
+            {% for perso in pnjs %}
+                {% if perso.clan is defined and perso.clan is not empty and perso.clan.nom == 'Licorne' %}
+                    {{ include('/personnage/card-personnage.html.twig', {perso}) }}
+                {% endif %}
+            {% endfor %}
+        </div>
+
+        <h3 class="title-h3 mt-5 mb-2">Clan du Lion</h3>
+        <div class="row">
+            {% for perso in pnjs %}
+                {% if perso.clan is defined and perso.clan is not empty and perso.clan.nom == 'Lion' %}
+                    {{ include('/personnage/card-personnage.html.twig', {perso}) }}
+                {% endif %}
+            {% endfor %}
+        </div>
+
+        <h3 class="title-h3 mt-5 mb-2">Clan du Phénix</h3>
+        <div class="row">
+            {% for perso in pnjs %}
+                {% if perso.clan is defined and perso.clan is not empty and perso.clan.nom == 'Phénix' %}
+                    {{ include('/personnage/card-personnage.html.twig', {perso}) }}
+                {% endif %}
+            {% endfor %}
+        </div>
+
+        <h3 class="title-h3 mt-5 mb-2">Clan du Scorpion</h3>
+        <div class="row">
+            {% for perso in pnjs %}
+                {% if perso.clan is defined and perso.clan is not empty and perso.clan.nom == 'Scorpion' %}
+                    {{ include('/personnage/card-personnage.html.twig', {perso}) }}
+                {% endif %}
+            {% endfor %}
+        </div>
+
+        <h3 class="title-h3 mt-5 mb-2">Clan Mineur du Lièvre</h3>
+        <div class="row">
+            {% for perso in pnjs %}
+                {% if perso.clan is defined and perso.clan is not empty and perso.clan.nom == 'Lièvre' %}
+                    {{ include('/personnage/card-personnage.html.twig', {perso}) }}
+                {% endif %}
+            {% endfor %}
+        </div>
+
+        <h3 class="title-h3 mt-5 mb-2">Adeptes du Sang</h3>
+        <div class="row">
+            {% for perso in pnjs %}
+                {% if perso.clan is defined and perso.clan is not empty and perso.clan.nom == 'Adeptes du Sang' %}
+                    {{ include('/personnage/card-personnage.html.twig', {perso}) }}
+                {% endif %}
+            {% endfor %}
+        </div>
+
+        <h3 class="title-h3 mt-5 mb-2">Autres</h3>
+        <div class="row">
+            {% for perso in pnjs %}
+                {% if perso.clan is defined and perso.clan is empty %}
+                    {{ include('/personnage/card-personnage.html.twig', {perso}) }}
+                {% endif %}
+            {% endfor %}
+        </div>
+
+
+    </div>
 {% endblock %}

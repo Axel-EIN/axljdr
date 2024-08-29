@@ -73,6 +73,7 @@ class AdminPersonnageType extends AbstractType
             ->add('ecole', EntityType::class, [
                 'class' => Ecole::class,
                 'choice_label' => 'nom',
+                'group_by' => 'clan.nom',
                 'required' => false
             ])
             ->add('joueur', EntityType::class, [

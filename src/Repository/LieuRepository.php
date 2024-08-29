@@ -19,6 +19,16 @@ class LieuRepository extends ServiceEntityRepository
         parent::__construct($registry, Lieu::class);
     }
 
+    public function findAllSorted()
+    {
+        return $this->createQueryBuilder('l')
+            ->leftJoin('l.clan', 'c')
+            ->addOrderBy('c.estMajeur', 'DESC')
+            ->addOrderBy('c.nom', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
+
     public function countLieux() {
         return $this->createQueryBuilder('l')
             ->select('count(l.id)')

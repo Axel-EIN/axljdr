@@ -8,7 +8,7 @@
 {% block element_content %} 
 
     {# BANNER INTRO #}
-    {% set category, entity, un_element, icone, invert , all_elements = 'empire', 'clan' , clan, clan.mon|default(NA_ICON_MON), '' , toutClans %}
+    {% set category, entity, un_element, icone, invert , all_elements = 'empire', 'clan' , clan, clan.mon|default(NA_MON), '' , toutClans %}
     {{ include('parts/banner-intro.html.twig') }}
 
     {# FAMILLES #}
@@ -33,7 +33,7 @@
                         {% endif %}
 
                         <div class="col-lg-3 text-center d-flex flex-column">
-                            <img class="img-fluid circle-crop" src="{{ asset(une_famille.mon|default(NA_ICON_MON)) }}" alt="Mon Famille" />
+                            <img class="img-fluid circle-crop" src="{{ asset(une_famille.mon|default(NA_MON)) }}" alt="Mon Famille" />
 
                             <!-- DAIMYO -->
                             {% if une_famille.chef is not empty %}

@@ -14,6 +14,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\ColorType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
 use Symfony\Component\Validator\Constraints\Length;
 
@@ -23,7 +24,14 @@ class AdminClanType extends AbstractType
     {
         $builder
             ->add('nom', TextType::class, [ 'constraints' => [ new Length( [ 'max' => 30 ] ) ] ] )
-            ->add('genre', TextType::class, [ 'constraints' => [ new Length( [ 'max' => 1 ] ) ] ] )
+            ->add('genre', ChoiceType::class, [
+                'placeholder' => 'Pas de genre défini',
+                'required' => false,
+                'choices'  => [
+                    'Masculin' => 'M',
+                    'Féminin' => 'F'
+                ],
+            ])
             ->add('estMajeur', CheckboxType::class, ['required' => false])
             ->add('citation', TextType::class, [ 'required' => false, 'constraints' => [ new Length( [ 'max' => 100 ] ) ] ] )
             ->add('description', TextareaType::class, ['required' => false, 'constraints' => [ new Length( [ 'max' => 600 ] ) ] ] )

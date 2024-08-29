@@ -14,7 +14,7 @@
     {% for une_classe in classes %}
         <!-- CLASSE -->
         <a href="{{ path('regles_classe', {id: une_classe.id} ) }}" class="col-2 text-center hover-zoom">
-            <img src="{{ asset(une_classe.icone|default(NA_ICON_CLASS)) }}"  class="img-fluid" alt="Icône de la classe" title="{{une_classe.nom}}" />
+            <img src="{{ asset(une_classe.icone|default(NA_CLASS_ICO)) }}"  class="img-fluid" alt="Icône de la classe" title="{{une_classe.nom}}" />
             <br>
             <h3 class="text-center my-2 text-primary-darker-more">
                 <strong>{{ une_classe.nom }}</strong>

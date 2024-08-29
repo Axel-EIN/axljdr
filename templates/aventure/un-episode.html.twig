@@ -8,11 +8,11 @@
 
 {% block body %}
 
-<div    class="header-bg-img-session p-md-4"
-        style=" background-image:
+<div class="header-bg-img-session p-md-4"
+     style=" background-image:
                     linear-gradient( rgb( 0,0,0,0.4 ), rgb( 0,0,0,0.4) ),
                     url('{{ asset(episode.chapitreParent.image) }}');
-                background-color: {{ episode.chapitreParent.couleur }}">
+             background-color: {{ episode.chapitreParent.couleur }}">
     <header class="container header header-session">
         {{ include('/parts/messages-flashes.html.twig') }}
         <h2 class="chapter-number display-5 text-left">CHAPITRE {{ episode.chapitreParent.numero }} </h2>
@@ -26,41 +26,22 @@
     <main class="container pt-3 pb-5 mb-5">
     
         <!-- LIGNE D'EPISODES -->
-        <div class="d-flex flex-column justify-content-center align-items-center">
-            <div class="text-light">
-                Il y a <strong class="text-white">{{ episode.chapitreParent.episodes|length }} SESSIONS</strong> dans ce chapitre.
-            </div>
-            <div class="d-flex justify-content-center align-items-center">
-
+        <div class="episodes-line">
+            <span class="text-light">Il y a <strong class="text-white">{{ episode.chapitreParent.episodes|length }} SESSIONS</strong> dans ce chapitre.</span>
+            <div class="carrousel mt-2">
                 {% for un_episode in episode.chapitreParent.episodes %}
-
                     {% if un_episode.scenes|length > 0 or is_granted("ROLE_MJ") %}
-                        {% if un_episode.id == episode.id %}
-                            <div class="vignette-caroussel active">
-                                <div class="episode-titre">
-                                    {{un_episode.titre}}
-                                </div>
-                                <div class="ratio-169">
-                                    <img class="ratio-cropped" src="{{ asset(un_episode.image|default(NA_SESSION)) }}" alt="image épisode" />
-                                </div>
-                                <i class="absolute arrow-down fa-sharp fa-solid fa-sort-down fa-2xl text-primary"></i>
+                        <div class="vignette-episode {% if un_episode.id == episode.id %}active{% endif %}">
+                            <span class="titre">{{un_episode.titre}}</span>
+                            <div class="ratio-169">
+                                <a class="{% if un_episode.id == episode.id %}link-disabled{% endif %}" href="{{ path('aventure_episode', { id : un_episode.id, '_fragment': 'read-head' } ) }}" >
+                                    <img class="ratio-cropped" src="{{ asset(un_episode.image|default(NA_SESSION)) }}" alt="image d'une session" />
+                                </a>
                             </div>
-                            {% else %}
-                            <div class="vignette-caroussel">
-                                <div class="episode-titre">
-                                    {{un_episode.titre}}
-                                </div>
-                                <div class="ratio-169 vignette-caroussel">         
-                                    <a href="{{ path('aventure_episode', { id : un_episode.id, '_fragment': 'read-head' } ) }}" >
-                                        <img class="ratio-cropped" src="{{ asset(un_episode.image|default(NA_SESSION)) }}" alt="image épisode" />
-                                    </a>
-                                </div>
-                            </div>
-                        {% endif %}
+                            {% if un_episode.id == episode.id %}<i class="absolute arrow-down fa-sharp fa-solid fa-sort-down fa-2xl text-primary"></i>{% endif %}
+                        </div>
                     {% endif %}
-
                 {% endfor %}
-
             </div>
         </div>
 

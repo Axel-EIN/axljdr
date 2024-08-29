@@ -1,92 +1,69 @@
 <main class="col-12">
     {{ form_start(form) }}
-        <div class="row justify-content-center align-items-start mt-5 mb-4">
+        <div class="row form-wrapper">
+
+            <div class="col-3">{{ form_row(form.nom) }}</div>
+            <div class="col-3">{{ form_row(form.clan) }}</div>
+            <div class="col-3">{{ form_row(form.classe) }}</div>
+            <div class="col-3">{{ form_row(form.bonus) }}</div>
+
+            <div class="col-12 mt-4">{{ form_row(form.description,{ 'attr': {'rows': '8'} }) }}</div>
+
+            <div class="col-6 mt-3">{{ form_row(form.competences,{ 'attr': {'rows': '8'} }) }}</div>
+            <div class="col-6 mt-3">{{ form_row(form.equipements,{ 'attr': {'rows': '8'} }) }}</div>
 
             <!-- IMAGE -->
-            <div class="col-6">
+            <div class="col-12 mt-3 mb-4">
                 {{ form_label(form.image) }}
-                <label id="preview-label" for="admin_ecole_image" class="hover-slight-fade hover-pointer hover-icon-visible">
+                <label for="admin_ecole_image" class="preview-label hover-slight-fade hover-pointer hover-icon-visible">
                     <icon class="btn-icon-medium right-corner-16"><i class="fas fa-edit semi-visible text-white"></i></icon>
                     <img id="image-preview" class="img-fluid" src="{{ asset(ecole.image|default(NA_169)) }}" />
+                    <span id="image-filename" class="filename"></span>
                 </label>
-                <browse id="browse-label" class="d-none">
-                    <span id="fileName"></span>
-                    {{form_widget(form.image, {'attr': {'class': 'input-image'}}) }}
-                </browse> 
+                <div class="browser">{{form_widget(form.image, {'attr': {'class': 'input-image'}}) }}</div> 
             </div>
 
-            <div class="col-6">
-                {{ form_row(form.nom) }}
-
-                {{ form_row(form.clan) }}
-
-                {{ form_row(form.classe) }}
-
-                {{ form_row(form.bonus) }}
-            </div> 
-
-            <div class="col-12 mt-4">
-                {{ form_row(form.description,{ 'attr': {'rows': '8'} }) }}
-            </div>
-
-            <div class="col-6 mt-3">
-                {{ form_row(form.competences,{ 'attr': {'rows': '8'} }) }}
-            </div>
-
-            <div class="col-6 mt-3">
-                {{ form_row(form.equipements,{ 'attr': {'rows': '8'} }) }}
-            </div>
-
+            <!-- TECH 1 -->
             <div class="col-12 mt-5">
                 <h2 class="title-h3">Technique #1</h2>
                 <hr>
                 {{ form_row(form.tech1Nom) }}
             </div>
+            <div class="col-12">{{ form_row(form.tech1Desc,{ 'attr': {'rows': '6'} }) }}</div>
 
-            <div class="col-12">
-                {{ form_row(form.tech1Desc,{ 'attr': {'rows': '6'} }) }}
-            </div>
-
+            <!-- TECH 3 -->
             <div class="col-12 mt-5">
                 <h2 class="title-h3">Technique #2</h2>
                 <hr>
                 {{ form_row(form.tech2Nom) }}
             </div>
+            <div class="col-12">{{ form_row(form.tech2Desc,{ 'attr': {'rows': '6'} }) }}</div>
 
-            <div class="col-12">
-                {{ form_row(form.tech2Desc,{ 'attr': {'rows': '6'} }) }}
-            </div>
-
+            <!-- TECH 3 -->
             <div class="col-12 mt-5">
                 <h2 class="title-h3">Technique #3</h2>
                 <hr>
                 {{ form_row(form.tech3Nom) }}
             </div>
+            <div class="col-12">{{ form_row(form.tech3Desc,{ 'attr': {'rows': '6'} }) }}</div>
 
-            <div class="col-12">
-                {{ form_row(form.tech3Desc,{ 'attr': {'rows': '6'} }) }}
-            </div>
-
+            <!-- TECH 4 -->
             <div class="col-12 mt-5">
                 <h2 class="title-h3">Technique #4</h2>
                 <hr>
                 {{ form_row(form.tech4Nom) }}
             </div>
+            <div class="col-12">{{ form_row(form.tech4Desc,{ 'attr': {'rows': '6'} }) }}</div>
 
-            <div class="col-12">
-                {{ form_row(form.tech4Desc,{ 'attr': {'rows': '6'} }) }}
-            </div>
-
+            <!-- TECH 5 -->
             <div class="col-12 mt-5">
                 <h2 class="title-h3">Technique #5</h2>
                 <hr>
                 {{ form_row(form.tech5Nom) }}
             </div>
+            <div class="col-12 mt-3">{{ form_row(form.tech5Desc,{ 'attr': {'rows': '6'} }) }}</div>
 
-            <div class="col-12 mt-3">
-                {{ form_row(form.tech5Desc,{ 'attr': {'rows': '6'} }) }}
-            </div>
-
+            <!-- MAGIE -->
             <div class="col-12 mt-5">
                 <h2 class="title-h3">Magie</h2>
                 <hr>
@@ -103,9 +80,7 @@
                 {{ form_row(form.techSpecialDesc,{ 'attr': {'rows': '9'} }) }}
             </div>
 
-            <div class="col-12 text-center mt-5">
-                <button class="btn-large btn-primary-style">{{ button_label|default('Save') }}</button>
-            </div>
+            {{ include('/parts/btn-form.html.twig') }}
         </div>
     {{ form_end(form) }}
 </main>

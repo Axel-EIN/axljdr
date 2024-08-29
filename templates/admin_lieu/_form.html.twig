@@ -1,6 +1,6 @@
 <main class="col-12">
     {{ form_start(form) }}
-        <div class="row mt-5 mb-4">
+        <div class="row form-wrapper">
 
             <div class="col-6">{{ form_row(form.nom) }}</div>
             <div class="col-6">{{ form_row(form.surnom) }}</div>
@@ -9,61 +9,76 @@
             <div class="col-4">{{ form_row(form.clan) }}</div>
             <div class="col-4">{{ form_row(form.population) }}</div>
 
+            <div class="col-12 mt-3 mt-3">{{ form_row(form.description,{ 'attr': {'rows': '7'} }) }}</div>
+
+
+            <!-- ICONE -->
+            <div class="col-4 mt-3 mb-5 d-flex flex-column text-center">
+                {{ form_label(form.icone) }}
+                <label for="admin_lieu_icone" class="preview-label hover-slight-fade hover-pointer hover-icon-visible">
+                    <icon class="btn-icon-medium right-corner-16"><i class="fas fa-edit semi-visible text-white"></i></icon>
+                    <img id="icon-preview" class="img-fluid" src="{{ asset(lieu.icone|default(NA_LIEU_ICO)) }}" />
+                    <span id="icon-filename" class="filename"></span>
+                </label>
+                <div class="browser">{{ form_widget(form.icone, { 'attr': { 'class' : 'input-icon' }}) }}</div>
+            </div>
+
             <!-- IMAGE -->
-            <div class="col-6 mt-3">
+            <div class="col-8 mt-3 mb-5">
                 {{ form_label(form.image) }}
-                <label id="preview-label" for="admin_lieu_image" class="hover-slight-fade hover-pointer hover-icon-visible">
+                <label for="admin_lieu_image" class="preview-label hover-slight-fade hover-pointer hover-icon-visible">
                     <icon class="btn-icon-medium right-corner-16"><i class="fas fa-edit semi-visible text-white"></i></icon>
                     <img id="image-preview" class="img-fluid" src="{{ asset(lieu.image|default(NA_LIEU)) }}" />
+                    <span id="image-filename" class="filename"></span>
                 </label>
-                <browse id="browse-label" class="d-none">
-                    <span id="fileName"></span>
-                    {{form_widget(form.image, {'attr': {'class': 'input-image'}}) }}
-                </browse>
+                <div class="browser">{{form_widget(form.image, {'attr': {'class': 'input-image'}}) }}</div>
             </div>
 
-            <div class="col-6 mt-3">
-                {{ form_label(form.icone) }}
-                <br/>
-                {% if type == 'Modifier' and lieu.icone is defined and lieu.icone is not empty %}
-                    <img class="img-fluid" src="{{ asset(lieu.icone) }}" />
-                {% else %}
-                    <img class="img-fluid" src="{{ asset(NA_ICON_MON) }}" />
-                {% endif %}
-                {{ form_widget(form.icone) }}
-            </div>
-
-            <div class="col-6 mt-3">
+            <!-- CARTE DE LA REGION -->
+            <div class="col-12 mt-3 mb-3">
                 {{ form_label(form.region) }}
-                {% if type == 'Modifier' and lieu.region is defined and lieu.region is not empty %}
-                    <img class="img-fluid" src="{{ asset(lieu.region) }}" />
-                {% endif %}
-                {{ form_widget(form.region) }}
+                <label for="admin_lieu_region" class="preview-label hover-slight-fade hover-pointer hover-icon-visible">
+                    <icon class="btn-icon-medium right-corner-16"><i class="fas fa-edit semi-visible text-white"></i></icon>
+                    <img id="map-preview" class="img-fluid" src="{{ asset(lieu.region|default(NA_MAP)) }}" />
+                    <span id="map-filename" class="filename"></span>
+                </label>
+                <div class="browser">{{ form_widget(form.region, { 'attr': { 'class' : 'input-map' }}) }}</div>
+            </div>
 
-                <div class="row mt-3">
-                    <div class="col-6">{{ form_row(form.locX) }}</div>
-                    <div class="col-6">{{ form_row(form.locY) }}</div>
+            <div class="col-6">{{ form_row(form.locX) }}</div>
+            <div class="col-6">{{ form_row(form.locY) }}</div>
+
+            <!-- PLUS D'OPTIONS -->
+            <div class="col-12 mt-5">
+
+                <a class="w-100" data-toggle="collapse" href="#part-lieu-collapse" role="button"
+                    aria-expanded="{% if type == 'Modifier' and lieu.quartiers is defined and lieu.quartiers is not empty %}true{% else %}false{% endif %}"
+                    aria-controls="part-lieu-collapse">
+                    <h2 class="title-h3">Plus d'options ...</h2>
+                </a>
+                <hr>
+
+                <!-- COLLAPSING -->
+                <div id="part-lieu-collapse" class="collapse {% if type == 'Modifier' and lieu.quartiers is defined and lieu.quartiers is not empty %} show{% endif %}">
+
+                    <!-- PLAN INTERIEUR -->
+                    <div class="col-12 mt-3 mb-5">
+                        {{ form_label(form.carte) }}
+                        <label for="admin_lieu_carte" class="preview-label hover-slight-fade hover-pointer hover-icon-visible">
+                            <icon class="btn-icon-medium right-corner-16"><i class="fas fa-edit semi-visible text-white"></i></icon>
+                            <img id="plan-preview" class="img-fluid" src="{{ asset(lieu.carte|default(NA_MAP)) }}" />
+                            <span id="plan-filename" class="filename"></span>
+                        </label>
+                        <div class="browser">{{ form_widget(form.carte, { 'attr': { 'class' : 'input-plan' }}) }}</div>
+                    </div>
+
+                    <div class="col-12">{{ form_row(form.quartiers,{ 'attr': {'rows': '16'} }) }}</div>
+
                 </div>
+
             </div>
 
-
-            <div class="col-6 mt-3">
-                {{ form_label(form.carte) }}
-                {% if type == 'Modifier' and lieu.carte is defined and lieu.carte is not empty %}
-                    <img class="img-fluid" src="{{ asset(lieu.carte) }}" />
-                {% endif %}
-                {{ form_widget(form.carte) }}
-            </div>
-
-            <div class="col-12 mt-3 mt-3">{{ form_row(form.description,{ 'attr': {'rows': '16'} }) }}</div>
-
-            <div class="col-12">
-                {{ form_row(form.quartiers,{ 'attr': {'rows': '16'} }) }}
-            </div>
-
-            <div class="col-12 text-center mt-5">
-                <button class="btn-large btn-primary-style">{{ button_label|default('Save') }}</button>
-            </div>
+            {{ include('/parts/btn-form.html.twig') }}
         </div>
     {{ form_end(form) }}
 </main>

@@ -28,10 +28,11 @@ class AdminPersonnageType extends AbstractType
                 'required' => false,
             ])
             ->add('genre', ChoiceType::class, [
+                'placeholder' => 'Pas de genre défini',
+                'required' => false,
                 'choices'  => [
                     'Homme' => 'M',
-                    'Femme' => 'F',
-                    "Inconnu" => "U",
+                    'Femme' => 'F'
                 ],
             ])
             ->add('titres', TextType::class, [

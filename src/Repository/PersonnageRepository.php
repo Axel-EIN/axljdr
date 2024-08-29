@@ -49,9 +49,10 @@ class PersonnageRepository extends ServiceEntityRepository
             ->setParameter('val', 0)
             ->leftJoin('p.clan', 'c')
             ->addOrderBy('p.estMort', 'ASC')
-            ->addOrderBy('p.locked', 'ASC')
+            // ->addOrderBy('p.locked', 'ASC')
             ->addOrderBy('c.estMajeur', 'DESC')
             ->addOrderBy('c.nom', 'ASC')
+            ->addOrderBy('p.nom', 'ASC')
             ->getQuery()
             ->getResult();
     }

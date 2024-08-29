@@ -3,9 +3,9 @@
         <div class="row form-wrapper">
         
             <div class="col-5">{{ form_row(form.nom) }}</div>
-            <div class="col-2">{{ form_row(form.numero) }}</div> 
-            <div class="col-4">{{ form_row(form.pdf) }}</div>
-            <div class="col-1">{{ form_row(form.base) }}</div>
+            <div class="col-5">{{ form_row(form.pdf) }}</div>
+            <div class="col-1">{{ form_row(form.numero) }}</div> 
+            <div class="col-1 align-self-center">{{ form_row(form.base) }}</div>
 
             <div class="col-3">{{ form_row(form.entity) }}</div>
             <div class="col-3">{{ form_row(form.tabField) }}</div>
@@ -15,7 +15,11 @@
             <div class="col-3">{{ form_row(form.keyword1Field) }}</div>
             <div class="col-3">{{ form_row(form.keyword2Field) }}</div>
             <div class="col-3">{{ form_row(form.keyword3Field) }}</div>
-            <div class="col-3">{{ form_row(form.mixable) }}</div>
+            <div class="col-3 align-self-center">{{ form_row(form.mixable) }}</div>
+
+            <!-- TEXTS -->
+            <div class="col-8">{{ form_row(form.description,{ 'attr': {'rows': '16'} }) }}</div>
+            <div class="col-4">{{ form_row(form.aside,{ 'attr': {'rows': '16'} }) }}</div>
 
             <!-- IMAGE -->
             <div class="col-12 mt-3 mb-4">
@@ -27,10 +31,6 @@
                 </label>
                 <div class="browser">{{form_widget(form.image, {'attr': {'class': 'input-image'}}) }}</div> 
             </div>
-
-            <!-- TEXTS -->
-            <div class="col-8">{{ form_row(form.description,{ 'attr': {'rows': '16'} }) }}</div>
-            <div class="col-4">{{ form_row(form.aside,{ 'attr': {'rows': '16'} }) }}</div>
 
             {{ include('/parts/btn-form.html.twig') }}
         </div>

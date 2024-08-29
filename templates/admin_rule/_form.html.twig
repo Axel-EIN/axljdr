@@ -1,52 +1,42 @@
 <main class="col-12">
     {{ form_start(form) }}
-        <div class="row justify-content-center align-items-end mt-5 mb-4">
-        
+        <div class="row form-wrapper">
+
             <div class="col-4">{{ form_row(form.nom) }}</div>
-            <div class="col-1">{{ form_row(form.numero) }}</div> 
-            <div class="col-1">{{ form_row(form.base) }}</div>
             <div class="col-4">{{ form_row(form.pdf) }}</div>
+            <div class="col-2">{{ form_row(form.numero) }}</div>
+            <div class="col-2 align-self-center">{{ form_row(form.base) }}</div>
 
             <!-- IMAGE -->
-            <section id="image" class="col-10 mt-3 mb-5">
+            <div class="col-12">
                 {{ form_label(form.image) }}
-                <label id="preview-label" for="admin_rule_image" class="hover-slight-fade hover-pointer hover-icon-visible">
+                <label for="admin_rule_image" class="preview-label hover-slight-fade hover-pointer hover-icon-visible">
                     <icon class="btn-icon-medium right-corner-16"><i class="fas fa-edit semi-visible text-white"></i></icon>
                     <img id="image-preview" class="img-fluid" src="{{ asset(rule.image|default(NA_RULE)) }}" />
+                    <span id="image-filename" class="filename"></span>
                 </label>
-                <browse id="browse-label" class="d-none">
-                    <span id="fileName"></span>
-                    {{form_widget(form.image, {'attr': {'class': 'input-image'}}) }}
-                </browse> 
-            </section>
+                <div class="browser">{{form_widget(form.image, {'attr': {'class': 'input-image'}}) }}</div> 
+            </div>
 
             {% for i in 1..5 %}
                 <!-- PART {{i}} -->
-                <section id="part{{i}}" class="col-12 mt-3">
+                <section id="part{{i}}" class="col-12 mt-5">
                     <a class="w-100" data-toggle="collapse" href="#part{{i}}collapse" role="button" aria-expanded="{% if type == 'Modifier' and attribute(rule,'part' ~ i) is defined and attribute(rule,'part' ~ i) is not empty %}true{% else %}false{% endif %}" aria-controls="part{{i}}collapse">
                         <h2 class="title-h3">Part {{i}}</h2>
                     </a>
                     <hr>
-                    <collapse id="part{{i}}collapse" class="collapse{% if type == 'Modifier' and attribute(rule,'part' ~ i) is defined and attribute(rule,'part' ~ i) is not empty %} show{% endif %} row">
-                        <div class="col-12">
-                            {{ form_row(attribute(form,'part' ~ i ~ 'titre')) }}
-                        </div>
-                        <div class="col-8">
-                            {{ form_row(attribute(form,'part' ~ i),{ 'attr': {'rows': '20'} }) }}
-                        </div>
 
-                        <div class="col-4">
-                            {{ form_row(attribute(form,'part' ~ i ~ 'aside'),{ 'attr': {'rows': '20'} }) }}
-                        </div>
-                    </collapse>
+                    <!-- COLAPSABLE -->
+                    <div id="part{{i}}collapse" class="collapse{% if type == 'Modifier' and attribute(rule,'part' ~ i) is defined and attribute(rule,'part' ~ i) is not empty %} show{% endif %} row">
+                        <div class="col-12">{{ form_row(attribute(form,'part' ~ i ~ 'titre')) }}</div>
+                        <div class="col-8">{{ form_row(attribute(form,'part' ~ i),{ 'attr': {'rows': '20'} }) }}</div>
+                        <div class="col-4">{{ form_row(attribute(form,'part' ~ i ~ 'aside'),{ 'attr': {'rows': '20'} }) }}</div>
+                    </div>
+
                 </section>
             {% endfor %}
 
-            <!-- SAVE -->
-            <div class="col-12 text-center mt-5">
-                <button class="btn-large btn-primary-style">{{ button_label|default('Save') }}</button>
-            </div>
-
+            {{ include('/parts/btn-form.html.twig') }}
         </div>
     {{ form_end(form) }}
 </main>

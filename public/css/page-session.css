@@ -5,60 +5,66 @@
 /* LIGNE DE VIGNETTES D'EPISODES */
 /* ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾ */
 
-.vignette-caroussel {
-    position: relative;
-    z-index: 20;
-    filter: brightness(0.66);
-    transition: 0.5s;
-    width: 128px;
-    border: solid var(--primary-trans) 1px;
 
-    &:hover { z-index: 100; }
-    &:hover .episode-titre { visibility: visible; }
-    &.active .episode-titre { visibility: hidden; }
+.episodes-line {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 
-    .episode-titre {
-        visibility: hidden;
-        position: absolute;
-        z-index: 100;
-        bottom: -1.75rem;
-        left: 50%;
-        transform: translate(-50%);
-        overflow-x: visible;
-        white-space: nowrap;
-        color: var(--white);
-        font-weight: bold;
-        font-size: var(--small);
-        background-color: var(--primary);
-        border-radius: 4px;
-        padding: 4px 8px;         
-    }
+    .carrousel {
+        position: relative;
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
 
-    &:hover, &.active {
-        filter: brightness(1);
-        transition: 0.5s;
-    }
+        .vignette-episode {
+            filter: brightness(0.66) saturate(0);
+            transition: 0.5s;
+            width: 128px;
+            border: solid var(--primary-trans) 1px;
 
-    &.active {
-        width: 180px;
-        border: solid var(--primary) 1px;
-    }
-
-    .number-session-caroussel {
-        z-index: 10;
-        right: 4px;
-        bottom: -4px;
-        font-size: 2rem;
-        font-weight: bold;
-        color: var(--white);
-        text-shadow: 0px 2px 8px black;
+            &.active {
+                width: 240px;
+                border: solid var(--primary) 1px;
+            }
         
-        &.active {
-            font-size: 3rem;
-            right: 8px;
+            &:hover { z-index: 100; }
+            &:hover .titre { visibility: visible; }
+            &.active .titre { visibility: hidden; }
+        
+            .titre {
+                visibility: hidden;
+                position: absolute;
+                z-index: 100;
+                bottom: -1.75rem;
+                left: 50%;
+                transform: translate(-50%);
+                overflow-x: visible;
+                white-space: nowrap;
+                color: var(--white);
+                font-weight: bold;
+                font-size: var(--small);
+                background-color: var(--primary);
+                border-radius: 4px;
+                padding: 4px 8px;         
+            }
+        
+            &:hover, &.active {
+                filter: brightness(1);
+                transition: 0.5s;
+            }
+
+            .arrow-down {
+                left: 50%;
+                transform: translate(-50%, 0%);
+            }
         }
     }
 }
+
+
 
 /* LIGNE ICÔNE DU TEMPS ET LIEU */
 /* ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾ */
@@ -74,10 +80,10 @@
         position: absolute;
         z-index: 1;
         top: 4px;
-        left: 0px;
+        left: 2px;
         img { width: 84px; }
         .hover-tooltip {
-            bottom: -18px;
+            bottom: -24px;
             left: 50%;
             transform: translate(-50%, -50%);
             color: var(--primary-lighter);

@@ -63,8 +63,17 @@ class AventureController extends AbstractController
         $precedent = $episodeRepository->findPrevious($episode->getChapitreParent()->getId(), $episode->getNumero());
         $suivant = $episodeRepository->findNext($episode->getChapitreParent()->getId(), $episode->getNumero());
         $classement_episode = $classeurXP->classerPersosEpisode($episode);
+
+        $chapitre_suivant = [];
         $chapitre_suivant = $chapitreRepository->findNext($episode->getChapitreParent()->getSaisonParent()->getId(), $episode->getChapitreParent()->getNumero());
-        $episode_chapitre_suivant = $chapitre_suivant->getEpisodes()[0];
+
+        if (empty($chapitre_suivant))
+            $chapitre_suivant = [];
+
+        if (!empty($chapitre_suivant) && !empty($chapitre_suivant->getEpisodes()[0]))
+            $episode_chapitre_suivant = $chapitre_suivant->getEpisodes()[0];
+        else
+            $episode_chapitre_suivant = [];
 
         return $this->render('aventure/un-episode.html.twig', [
             'episode' => $episode,

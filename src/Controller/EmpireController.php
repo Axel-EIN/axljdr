@@ -27,7 +27,7 @@ class EmpireController extends AbstractController
         $clansMajeurs = $clanRepository->findAllMajeurs();
         $clansAutres = $clanRepository->findAllAutres();
         $archives = $archiveRepository->findall();
-        $lieux = $lieuRepository->findall();
+        $lieux = $lieuRepository->findAllSorted();
         $lores = $loreRepository->findall();
 
         $sections = [];
@@ -125,8 +125,10 @@ class EmpireController extends AbstractController
      */
     public function afficherLieu(Lieu $lieu, LieuRepository $lieuRepository): Response
     {
-        $lieux = $lieuRepository->findall();
+        $lieux = $lieuRepository->findAllSorted();
         $autresLieux = $lieuRepository->findAllExceptOne($lieu->getId());
+        shuffle($autresLieux);
+        $autresLieux = array_slice($autresLieux, 0, 12);
 
         return $this->render('empire/lieu.html.twig', [
             'un_element' => $lieu,

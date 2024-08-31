@@ -71,8 +71,6 @@
 
 .time-and-location-line {
     position: absolute;
-    display: block;
-    min-width: 84px;
     z-index: 10;
     left: 24px;
     top: -28px;
@@ -87,8 +85,6 @@
     &:hover .hover-tooltip { visibility: visible; }
 
     .location {
-        display: block;
-        min-width: 84px;
         position: absolute;
         z-index: 1;
         top: 4px;

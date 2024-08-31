@@ -53,21 +53,21 @@ class AdminLieuController extends AbstractController
                 $lieu->setImage($fileHandler->handle($nouvelleImage, null, $prefix, 'lieux'));
             }
 
-            // File Map Image Handling
+            // File Intérior Plan Image Handling
             $nouvelleCarte = $form->get('carte')->getData();
             if (!empty($nouvelleCarte)) {
-                $prefix = 'lieu-' . $lieu->getNom() . '-carte';
+                $prefix = 'lieu-' . $lieu->getNom() . '-plan';
                 $lieu->setCarte($fileHandler->handle($nouvelleCarte, null, $prefix, 'lieux'));
             }
 
-            // File Region Image Handling
+            // File Region Map Image Handling
             $nouvelleRegion = $form->get('region')->getData();
             if (!empty($nouvelleRegion)) {
-                $prefix = 'lieu-' . $lieu->getNom() . '-region';
+                $prefix = 'lieu-' . $lieu->getNom() . '-map';
                 $lieu->setRegion($fileHandler->handle($nouvelleRegion, null, $prefix, 'lieux'));
             }
 
-            // File Icon Image Handling
+            // File Icon Handling
             $nouvelleIcone = $form->get('icone')->getData();
             if (!empty($nouvelleIcone)) {
                 $prefix = 'lieu-' . $lieu->getNom() . '-icone';

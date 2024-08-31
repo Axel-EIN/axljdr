@@ -21,22 +21,36 @@
             <div class="location">
                 {% if une_scene.lieu is not empty %}
                     <a href="{{path('empire_lieu', {id: une_scene.lieu.id} ) }}" >
-                {% endif %}
-                    <img src="{{asset(une_scene.lieu.icone|default(NA_LIEU_ICO))}}" alt="icône du lieu" />
-                {% if une_scene.lieu is not empty %}
+                        <img src="{{asset(une_scene.lieu.icone|default(NA_LIEU_ICO))}}" alt="icône du lieu" />
                     </a>
                 {% endif %}
             </div>
 
             <div class="time" >
                 {% if une_scene.temps == 'Aube' or une_scene.temps == 'Matinée' %}
-                    {% set TIME_ICO = MORNING %}
+                    {% if une_scene.lieu is not empty %}
+                        {% set TIME_ICO = MORNING_BG %}
+                    {% else %}
+                        {% set TIME_ICO = MORNING %}
+                    {% endif %}
                 {% elseif une_scene.temps == 'Midi' or une_scene.temps == 'Après-midi' or une_scene.temps == 'Journée' %}
-                    {% set TIME_ICO = NOON %}
+                    {% if une_scene.lieu is not empty %}
+                        {% set TIME_ICO = NOON_BG %}
+                    {% else %}
+                        {% set TIME_ICO = NOON %}
+                    {% endif %}
                 {% elseif une_scene.temps == 'Soirée' or une_scene.temps == 'Crépuscule' or une_scene.temps == 'Tombée de la nuit' %}
-                    {% set TIME_ICO = EVENING %}
+                    {% if une_scene.lieu is not empty %}
+                        {% set TIME_ICO = EVENING_BG %}
+                    {% else %}
+                        {% set TIME_ICO = EVENING %}
+                    {% endif %}
                 {% elseif une_scene.temps == 'Minuit' or une_scene.temps == 'Nuit' %}
-                    {% set TIME_ICO = NIGHT %}
+                    {% if une_scene.lieu is not empty %}
+                        {% set TIME_ICO = NIGHT_BG %}
+                    {% else %}
+                        {% set TIME_ICO = NIGHT %}
+                    {% endif %}
                 {% elseif une_scene.temps == 'Intemporel' %}
                     {% set TIME_ICO = INTEMPOREL %}
                 {% endif %}

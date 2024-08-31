@@ -82,6 +82,15 @@
             {% endfor %}
         </div>
 
+        <h3 class="title-h3 mt-5 mb-2">Confrérie de Shinsei</h3>
+        <div class="row">
+            {% for perso in pnjs %}
+                {% if perso.clan is defined and perso.clan is not empty and perso.clan.nom == 'Confrérie' %}
+                    {{ include('/personnage/card-personnage.html.twig', {perso}) }}
+                {% endif %}
+            {% endfor %}
+        </div>
+
         <h3 class="title-h3 mt-5 mb-2">Clan Mineur du Lièvre</h3>
         <div class="row">
             {% for perso in pnjs %}

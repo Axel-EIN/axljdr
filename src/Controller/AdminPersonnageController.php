@@ -53,14 +53,30 @@ class AdminPersonnageController extends AbstractController
             // File Icon Image Handling
             $nouvelleIcone = $form->get('icone')->getData();
             if (!empty($nouvelleIcone)) {
-                $prefix = 'personnage-' . $personnage->getNom() . '-' . $personnage->getPrenom() . '-icone';
+                $prefix = 'personnage';
+
+                if (!empty($personnage->getNom()))
+                    $prefix = $prefix . '-' . $personnage->getNom();
+
+                if (!empty($personnage->getPrenom()))
+                    $prefix = $prefix . '-' . $personnage->getPrenom();
+
+                $prefix = $prefix . '-portrait';
                 $personnage->setIcone($fileHandler->handle($nouvelleIcone, null, $prefix, 'personnages'));
             }
 
             // File Illustration Image Handling
             $nouvelleIllustration = $form->get('illustration')->getData();
             if (!empty($nouvelleIllustration)) {
-                $prefix = 'personnage-' . $personnage->getNom() . '-' . $personnage->getPrenom() . '-illustration';
+                $prefix = 'personnage';
+
+                if (!empty($personnage->getNom()))
+                    $prefix = $prefix . '-' . $personnage->getNom();
+
+                if (!empty($personnage->getPrenom()))
+                    $prefix = $prefix . '-' . $personnage->getPrenom();
+
+                $prefix = $prefix . '-illustration';
                 $personnage->setIllustration($fileHandler->handle($nouvelleIllustration, null, $prefix, 'personnages'));
             }
 
@@ -112,14 +128,30 @@ class AdminPersonnageController extends AbstractController
             // File Icon Image Handling
             $nouvelleIcone = $form->get('icone')->getData();
             if (!empty($nouvelleIcone)) {
-                $prefix = 'personnage-' . $personnage->getNom() . '-' . $personnage->getPrenom() . '-icone';
+                $prefix = 'personnage';
+
+                if (!empty($personnage->getNom()))
+                    $prefix = $prefix . '-' . $personnage->getNom();
+
+                if (!empty($personnage->getPrenom()))
+                    $prefix = $prefix . '-' . $personnage->getPrenom();
+
+                $prefix = $prefix . '-portrait';
                 $personnage->setIcone($fileHandler->handle($nouvelleIcone, $personnage->getIcone(), $prefix, 'personnages'));
             }
 
             // File Illustration Image Handling
             $nouvelleIllustration = $form->get('illustration')->getData();
             if (!empty($nouvelleIllustration)) {
-                $prefix = 'personnage-' . $personnage->getNom() . '-' . $personnage->getPrenom() . '-illustration';
+                $prefix = 'personnage';
+
+                if (!empty($personnage->getNom()))
+                    $prefix = $prefix . '-' . $personnage->getNom();
+
+                if (!empty($personnage->getPrenom()))
+                    $prefix = $prefix . '-' . $personnage->getPrenom();
+
+                $prefix = $prefix . '-illustration';
                 $personnage->setIllustration($fileHandler->handle($nouvelleIllustration, $personnage->getIllustration(), $prefix, 'personnages'));
             }
 

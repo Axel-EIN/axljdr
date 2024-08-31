@@ -149,6 +149,7 @@
 
 .ratio-43,
 .ratio-169,
+.ratio-916,
 .ratio-1610 {
     position: relative;
     width: 100%;
@@ -166,6 +167,7 @@
 
 .ratio-43 { padding-top: calc(100% * (3 / 4)); }
 .ratio-169 { padding-top: calc(100% * (9 / 16)); }
+.ratio-916 { padding-top: calc(100% * (16 / 9)); }
 .ratio-1610 { padding-top: calc(100% * (10 / 16)); }
 
 

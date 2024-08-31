@@ -49,7 +49,12 @@ class AdminSceneType extends AbstractType
                     'Intemporel' => 'Intemporel',
                 ], ])
             ->add('texte', TextareaType::class)
-            ->add('image', FileType::class, array('mapped' => false, 'data_class' => null, 'required' => false))
+            ->add('image', FileType::class, [
+                'label' => "Image ( idéal 1280x720 )",
+                'mapped' => false,
+                'data_class' => null,
+                'required' => false
+            ])
         ;
     }
 

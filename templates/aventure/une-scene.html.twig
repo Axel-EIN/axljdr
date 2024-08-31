@@ -14,6 +14,10 @@
         <!-- par dessus ICON TEMPS et ICON LIEU -->
         <div class="time-and-location-line">
 
+            <span class="hover-tooltip">
+                {% if une_scene.lieu is not empty %}{{une_scene.lieu.nom}}, {% endif %}{{une_scene.temps|default('Temps inconnu')}}
+            </span>
+
             <div class="location">
                 {% if une_scene.lieu is not empty %}
                     <a href="{{path('empire_lieu', {id: une_scene.lieu.id} ) }}" >
@@ -22,11 +26,6 @@
                 {% if une_scene.lieu is not empty %}
                     </a>
                 {% endif %}
-
-                <span class="hover-tooltip">
-                    {{une_scene.lieu.nom|default('Lieu inconnu')}}, {{une_scene.temps|default('Temps inconnu')}}
-                </span>
-
             </div>
 
             <div class="time" >

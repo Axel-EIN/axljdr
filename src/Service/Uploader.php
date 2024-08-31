@@ -28,7 +28,8 @@ class Uploader extends AbstractController
         $prefix = strtr( $prefix, $accents );
         $prefix = strtolower($prefix);
 
-        $nouveau_nomFichier = $prefix . '-' . uniqid() . '.' . $fichierForm->guessExtension();
+        // $nouveau_nomFichier = $prefix . '-' . uniqid() . '.' . $fichierForm->guessExtension();
+        $nouveau_nomFichier = $prefix . '.' . $fichierForm->guessExtension();
 
         try
         {

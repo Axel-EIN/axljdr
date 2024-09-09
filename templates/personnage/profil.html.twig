@@ -63,14 +63,30 @@
                                 <img class="img-48" src="{{ asset(personnage.classe.icone) }}" alt="Classe {{personnage.classe.nom}}" title="Classe {{personnage.classe.nom}}" />
                                 &nbsp;<strong><a href="{{ path('regles_ecole', {id: personnage.ecole.id} ) }}">{{ personnage.ecole.nom }}</a></strong>
                         </li>
-                        <li class="list-group-item"><strong>XP :</strong> </li>
-                        <li class="list-group-item"><strong>Rang :</strong> </li>
-                        <li class="list-group-item"><strong>Joueur :</strong>
-                            {% if personnage.joueur is not empty %}
-                                {{ personnage.joueur.pseudo }}</li>
-                            {% else %}
-                                <small class="text-muted">Personnage Non-Joueur</small>
+
+                        {% set xp = 0 %}
+                        {% for une_participation in personnage.participations|sortByField('scene') %}
+                            {% set xp = xp + une_participation.xpGagne %}
+                        {% endfor %}
+
+                        {% if xp > 0 %}
+                            {% set rang = 1 %}
+                            {% if xp >= 100 %}
+                                {% set rang = 2 %}
+                            {% elseif xp >= 150 %}
+                                {% set rang = 3 %}
+                            {% elseif xp >= 200 %}
+                                {% set rang = 4 %}
+                            {% elseif xp >= 250 %}
+                                {% set rang = 5 %}
                             {% endif %}
+                            <li class="list-group-item"><strong>XP :</strong> <span class="petit">{{xp}}</span></li>
+                            <li class="list-group-item"><strong>Rang :</strong> <span class="petit">{{rang}}</span></li>
+                        {% endif %}
+
+                        {% if personnage.joueur is not empty %}
+                            <li class="list-group-item"><strong>Joueur :</strong> {{ personnage.joueur.pseudo }}</li>
+                        {% endif %}
                     </ul>
                 </div>
                 <div class="col-12 px-0">

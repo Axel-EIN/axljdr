@@ -51,7 +51,7 @@
                                     <a href="{{ path('regles_ecole', {id: une_ecole.id} ) }}">
                                         <img class="img-480" src="{{ asset(une_ecole.image) }}" alt="Image d'une école" />
                                     </a><br/>
-                                    Nom : <strong><a href="{{ path('regles_ecole', {id: une_ecole.id} ) }}" >{{ une_ecole.nom }}</a></strong>
+                                    <strong><a href="{{ path('regles_ecole', {id: une_ecole.id} ) }}" >{{ une_ecole.nom }}</a></strong>
                                 </div>
                             {% else %}
                                 <span class="text-muted">Désolé ! Il n'y a pas encore d'école disponible pour cette classe !</span>

@@ -69,19 +69,24 @@
 /* LIGNE ICÔNE DU TEMPS ET LIEU */
 /* ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾ */
 
-.time-and-location-line {
-    position: absolute;
+.time-and-location {
+    position: relative;
+    width: 84px;
     z-index: 10;
     left: 24px;
     top: -28px;
     filter: drop-shadow(2px 2px 4px var(--dark-alpha));
     
     .hover-tooltip {
-        bottom: -24px;
+        position: absolute;
+        display: block;
+        z-index: 100;
+        top: -1rem;
         left: 50%;
-        transform: translate(-50%, -50%);
+        transform: translateX(-50%);
         color: var(--primary-lighter);
     }
+
     &:hover .hover-tooltip { visibility: visible; }
 
     .location {

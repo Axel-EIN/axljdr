@@ -60,38 +60,39 @@
                     {% endfor %}
 
                     {% set dernierEpisodeNumero = un_episode.numero %}
-                    <article class="col-lg-3 col-md-4 col-sm-6 episode-card">
 
+                    <article class="col-lg-3 col-md-4 col-sm-6 episode-card">
                         <div class="card episode-card-liste">
 
-                        <div class="mini-portrait d-flex flex-row justify-content-center align-items-center">
-                        {% if app.user %}
-                            {% for un_personnage in cette_episode_personnages.participationsDeEpisode %}
-                                {% for un_personnage_user in app.user.personnages %}
-                                    {% if un_personnage.personnageId == un_personnage_user.id %}
-                                        <div class="d-flex flex-column justify-content-center align-items-center mr-2">
-                                            {% if un_personnage.xp != 0 and un_personnage.estMort != 1 %}
-                                                <strong class="votre-xp">+{{un_personnage.xp}}XP</strong>
-                                            {% else %}
-                                                <strong class="text-mort">MORT</strong>
-                                            {% endif %}
-                                            <br/>
-                                            <a href="{{path('personnage_profil',{id:un_personnage.personnageId})}}" >
-                                                <img class="mini-perso-icone {% if un_personnage.estMort == 1 %}mort{% elseif un_personnage.xp == 0 %}disabled{% else %}survol{% endif %}" src="{{asset(un_personnage_user.icone)}}" alt="Icone du Personnage" />
-                                            </a>
-                                        </div>
-                                    {% endif %}
+                            <!-- ICON PORTRAIT PARTICPANTS JOUEUR -->
+                            <div class="mini-portrait d-flex flex-row justify-content-center align-items-center">
+                            {% if app.user %}
+                                {% for un_personnage in cette_episode_personnages.participationsDeEpisode %}
+                                    {% for un_personnage_user in app.user.personnages %}
+                                        {% if un_personnage.personnageId == un_personnage_user.id %}
+                                            <div class="d-flex flex-column justify-content-center align-items-center mr-2">
+                                                {% if un_personnage.xp != 0 and un_personnage.estMort != 1 %}
+                                                    <strong class="votre-xp">+{{un_personnage.xp}}XP</strong>
+                                                {% else %}
+                                                    <strong class="text-mort">MORT</strong>
+                                                {% endif %}
+                                                <br/>
+                                                <a href="{{path('personnage_profil',{id:un_personnage.personnageId})}}" >
+                                                    <img class="mini-perso-icone {% if un_personnage.estMort == 1 %}mort{% elseif un_personnage.xp == 0 %}disabled{% else %}survol{% endif %}" src="{{asset(un_personnage_user.icone)}}" alt="Icone du Personnage" />
+                                                </a>
+                                            </div>
+                                        {% endif %}
+                                    {% endfor %}
                                 {% endfor %}
-                            {% endfor %}
-                        {% endif %}
-                        </div>
+                            {% endif %}
+                            </div>
 
                             <!-- BTN - MJ -->
                             {% if is_granted("ROLE_MJ") %}
-                                <div class="btn-mj-episode">
+                            <div class="btn-mj-episode">
                                 <a class="text-light mx-2 shadow" href="{{ path('admin_episode_edit', {id:un_episode.id}) }}?redirect=aventure"><i class="fas fa-edit"></i></a>
                                 <a class="text-light mx-2 shadow" href="{{ path('admin_episode_delete', {id:un_episode.id}) }}?csrf={{ csrf_token('delete' ~ un_episode.id) }}&redirect=aventure" onclick="return confirm('Êtes-vous sûr de vouloir supprimer l'épisode : {{ un_episode.titre }} ?')"><i class="fas fa-trash-alt"></i></a>
-                                </div>
+                            </div>
                             {% endif %}
 
                             <div class="episode-card-numero">{{ un_episode.numero }}</div>

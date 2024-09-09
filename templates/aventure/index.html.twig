@@ -48,12 +48,6 @@
 
 <!-- AFFICHAGE DES CHAPITRES DE LA SAISON -->
 <main>
-    <div class="container-fluid" style="background-color: {{ saison.couleur }}">
-        <div class="container py-3">
-            <h2 class="display-4 text-center text-light">Liste des Chapitres</h2>
-        </div>
-    </div>
-
 {% set numero = 0 %}
 {% set ce_chapitre_personnages = [] %}
 {% for un_chapitre in saison.chapitres %}

@@ -159,6 +159,7 @@
 }
 
 .scene-title-container {
+    position: absolute;
     z-index: 2;
     color: var(--white);
     top: -56px;

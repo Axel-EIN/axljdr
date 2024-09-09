@@ -17,47 +17,42 @@
                 </span>
             </nav>
 
-            <!-- DEBUT DE l'ARTICLE -->
+            <!-- ARTICLE -->
             <h1 class="mt-5 ancre-relatif">
                 <strong>{{ archive.titre }}</strong>
 
-                <!-- BTN - MJ -->
+                <!-- BTN - MJ - EDIT - DELETE -->
                 {% if is_granted("ROLE_MJ") %}
                 <div class="btn-mj-h2-edit-delete">
-                    <a class="text-danger mx-2" href="{{ path('admin_archive_edit', {id:archive.id}) }}?redirect=archive"><i class="fas fa-edit"></i></a>
-                    <a class="text-danger mx-2" href="{{ path('admin_archive_delete', {id:archive.id}) }}?csrf={{ csrf_token('delete' ~ archive.id) }}&redirect=archive" onclick="return confirm('Êtes-vous sûr de vouloir supprimer l'archive : {{ archive.titre }} ?')"><i class="fas fa-trash-alt"></i></a>
+                    <a class="text-danger mx-2" href="{{ path('admin_archive_edit', {id:archive.id}) }}?redirect=archive"><i class="fas fa-edit" title="Modifier"></i></a>
+                    <a class="text-danger mx-2" href="{{ path('admin_archive_delete', {id:archive.id}) }}?csrf={{ csrf_token('delete' ~ archive.id) }}&redirect=archive" onclick="return confirm('Êtes-vous sûr de vouloir supprimer l'archive : {{ archive.titre }} ?')"><i class="fas fa-trash-alt" title="Supprimer"></i></a>
                 </div>
                 {% endif %}
                 
             </h1>
 
             <hr>
-
             <article class="row">
-
                 <div class="col-12 text-center">
                     <img class="img-fluid" src="{{ asset(archive.image) }}" alt="Image de l'Archive" />
                 </div>
-                
                 <div class="col-12">
-                    <div class="card">
+                    <div class="card pb-4">
                         <div class="card-body">
-                            <p class="card-text">{{ archive.contenu|raw|nl2br }}</p>
+                            <p class="card-text mt-3 mx-5 text-justify">{{ archive.contenu|raw|nl2br }}</p>
                         </div>
-                        <ul class="list-group list-group-flush">
-                            <li class="list-group-item">
-                                <strong>Auteur&nbsp;:</strong>
-                                    {% if archive.auteur is not empty %}
-                                        {{ archive.auteur.nom }} <strong>{{ archive.auteur.prenom }}</strong>
-                                    {% else %}
-                                        n/a
-                                    {% endif %}
-                            </li>
-                        </ul>
+                        {% if archive.auteur is not empty %}
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item">
+                                    <strong>Auteur&nbsp;:</strong> {{ archive.auteur.nom }} <strong>{{ archive.auteur.prenom }}</strong> 
+                                </li>
+                            </ul>
+                        {% endif %}
+                        {{ include('/parts/separateur-ornament.html.twig') }}
                     </div>
                 </div>
-
             </article>
+
 
         </section>
     </main>

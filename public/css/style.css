@@ -297,19 +297,15 @@ nav .active { font-weight: bold; }
                         right: 0px;
                         z-index: 100; }
 
-.btn-arrow-down-pulse { position: absolute;
-                        left: 70px;
-                        bottom: -10px;
-                        z-index: 100; }
-
 
 
 /* ------------------- */
 /* ------ ICONS ------ */
 /* ------------------- */
 
-.arrow-left { position: relative; left: -40px; width: 20px; }
-.arrow-right { position: relative; left: 40px; width: 20px; }
+.arrow-left {   position: relative; left: -40px; width: 20px; }
+.arrow-right {  position: relative; left: 40px; width: 20px; }
+.arrow-down {   position: absolute; left: 70px; bottom: -10px; z-index: 100; }
 
 .btn-icon-big { position: absolute;
                 right: -160px;

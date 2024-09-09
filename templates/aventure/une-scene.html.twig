@@ -4,12 +4,7 @@
     <!-- CONTENEUR IMAGE DE LA SCENE -->
     <div class="bg-black relative">
 
-        <!-- par dessus BOUTON D'EDITION POUR MJ -->
-        {% if app.user and is_granted("ROLE_MJ") %}
-            <a class="text-light-alpha btn-icon-medium position-icon-edit" href="{{path('admin_scene_edit',{id:une_scene.id})}}?redirect=episode">
-                <i class="fas fa-edit"></i>
-            </a>
-        {% endif %}
+        <img class="icon-aventure" src="{{ asset(AVENTURE_SCENE_ICO) }}" alt="Icône scène">
 
         <!-- par dessus ICON TEMPS et ICON LIEU -->
         <div class="time-and-location-line">

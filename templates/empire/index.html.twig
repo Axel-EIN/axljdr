@@ -24,7 +24,7 @@ style="background-image: linear-gradient(rgb(40,0,0,0.5),rgb(40,0,0,0.5)),url('{
             <h2 class="display-4 ancre-relatif">
                 Les <strong>Archives</strong>
 
-                <!-- BTN - MJ - AJOUTER -->
+                <!-- BTN - MJ - AJOUTER UNE ARCHIVE -->
                 {% if is_granted("ROLE_MJ") %}
                 <div class="btn-mj-h2-create">
                     <a href="{{ path('admin_archive_create') }}?redirect=archive" class="btn btn-primary">
@@ -36,6 +36,7 @@ style="background-image: linear-gradient(rgb(40,0,0,0.5),rgb(40,0,0,0.5)),url('{
             </h2>
 
             <hr>
+            
             <br/>
             <div class="row">
             {% for une_archive in archives %}

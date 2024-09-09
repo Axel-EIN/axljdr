@@ -1,6 +1,6 @@
-/* -------------------- */
-/* ----- BTN ICON ----- */
-/* -------------------- */
+/* --------------- */
+/* ----- BTN ----- */
+/* --------------- */
 
 button {
     background: none;
@@ -9,23 +9,14 @@ button {
     box-shadow: none;
 }
 
-.btn-icon, .btn-icon-text {
-    &.text-light-alpha:hover { color: var(--white); }
-    &.text-accent:hover { color: var(--accent-light); }
-    &.text-accent-alpha:hover { color: var(--accent); }
+.btn-primary-style,
+.btn-secondary-style,
+.btn-tertiary-style,
+.btn-quaternary-style,
+.btn-icon,
+.btn-display-icon {
+    transition: all 0.33s ease;
 }
-
-/* --------------------------- */
-/* ----- BTN ICON + TEXT ----- */
-/* --------------------------- */
-
-.btn-icon-text {
-    padding: 0.125rem;
-}
-
-/* ------------------------------------------------------- */
-/* ----- BTN BASE : BOXED, OUTLINED, TRANSPARENT CTA ----- */
-/* ------------------------------------------------------- */    
 
 .btn-medium {
     font-size: 1rem;
@@ -37,10 +28,33 @@ button {
     padding: 0.70rem 1rem;
 }
 
+.btn-disabled {
+    background-color: var(--lighter);
+    border-color: var(--light-alpha);
+}
+
 .btn-unstyled {
     border: 0;
     background: none;
 }
+
+.btn-display-icon {
+    z-index: 10;
+    top: 96px;
+    right: -160px;
+    font-size: 8rem;
+    text-decoration: none;
+    color: var(--light-alpha);
+    transition: 0.25s;
+    &:hover {
+        color: var(--white);
+        transition: 0.25s;
+    }
+}
+
+.btn-primary-style,
+.btn-secondary-style,
+.btn-tertiary-style {
     display: inline-block;
     text-align: center;
     vertical-align: middle;
@@ -50,20 +64,18 @@ button {
     }
 }
 
-/* BOXED */
-
 .btn-primary-style {
     border-image: url('../assets/img/ui/primary-button-red-stroke.png') 16 16 16 16 fill repeat;
     font-weight: bold;
-    color: var(--white) !important;
+    color: var(--white);
 
     &:hover, &:active, &:target {
-        filter: brightness(2.0);
+        filter: contrast(200%) saturate(0%);
         color: var(--white);
         text-decoration: none;    }
 }
 
-/* OUTLINED */
+/* SECONDARY - OUTLINED */
 
 .btn-secondary-style {
     background-color: transparent;      
@@ -77,7 +89,7 @@ button {
         text-decoration: none;    }
 }
 
-/* TRANSPARENT */
+/* TERTIARY - TRANSPARENT */
 
 .btn-tertiary-style {
     background-color: transparent;     
@@ -88,38 +100,19 @@ button {
         text-decoration: underline;    }
 }
 
-/* DISABLED */
+/* QUATERNARY - ICON + TEXT */
 
-.btn-disabled {
-    background-color: var(--lighter);
-    border-color: var(--light-alpha);
-}
-
-
-/* UNSTYLED */
-
-.btn-unstyle {
-    border: 0;
-    background: none;
-}
-
-/* ---------------------------- */
-/* ----- BTN DISPLAY ICON ----- */
-/* ---------------------------- */  
-
-.btn-display-icon-light-alpha {
-    z-index: 10;
-    top: 96px;
-    right: -160px;
-    font-size: 8rem;
-    text-decoration: none;
-    color: var(--light-alpha);
-    transition: 0.25s;
+.btn-quaternary-style {
+    font-size: 1rem;
+    font-weight: bold;
+    padding: 4px 8px;
+    border-radius: 8px;
     &:hover {
-        color: var(--white);
-        transition: 0.25s;
+        color: white;
+        background-color: var(--accent-light);
     }
 }
+
 
 /* ---------------- */
 /* ----- TABS ----- */

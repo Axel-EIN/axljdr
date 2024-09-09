@@ -3,47 +3,25 @@
 {% block title %}L'Aventure Saison {{ saison.numero }} {{ parent() }}{% endblock %}
 
 {% block body %}
-
-<header class="en-tete-fond" style="background-image: linear-gradient(rgb(40,0,0,0.5),rgb(40,0,0,0.5)),url('{{ asset(saison.image) }}');">
-    <div class="container">
-        <div class="en-tete">
-            <div class="volatile">
-                {{ include('/parts/messages-flashes.html.twig') }}
+<header>
+    <div class="volatile">{{ include('/parts/messages-flashes.html.twig') }}</div>
+    <div class="container-fluid" style="background-image: linear-gradient(rgb(40,0,0,1),rgb(40,0,0,0.9)),url('{{ asset(saison.image) }}'); background-position: 50% 20%;">
+        <div class="d-flex justify-content-center align-items-center p-2">
+            <div class="fleche fleche-gauche">
+                {% if saison_suivante is not empty %}
+                    <a class="text-danger" href="{{ path('aventure_saison', {id : (saison_suivante.id) } ) }}">{{ source('icons/chevron-left-solid.svg') }}</a>
+                {% endif %}
             </div>
-            <div class="text-center d-flex justify-content-center">
-                <!-- PRECEDENT -->
-                <div class="flex-grow-1 my-auto">
-                    <div class="fleche text-center mr-2 ml-auto">
+            <h1 class="text-light text-center">
+                <i><strong>SAISON {{ saison.numero }}</strong> - {{ saison.titre }}</i>
+            </h1>
+            <div class="text-light fleche fleche-droite">
                     {% if saison_precedente is not empty %}
-                        <a class="text-light" href="{{ path('aventure_saison', {id : (saison_precedente.id) } ) }}">{{ source('icons/chevron-left-solid.svg') }}</a>
-                    {% endif %}
-                    </div>
-                </div>
-                <!-- EN COURS -->
-                <h2 class="pre-titre-saison mx-2">SAISON&nbsp;{{ saison.numero }}</h2>
-                <!-- SUIVANTE -->
-                <div class="flex-grow-1 my-auto">
-                    <div class="fleche text-center mr-auto">
-                    {% if saison_suivante is not empty %}
-                        <a class="text-light" href="{{ path('aventure_saison', {id : (saison_suivante.id) } ) }}">{{ source('icons/chevron-right-solid.svg') }}</a>
+                    <a class="text-danger" href="{{ path('aventure_saison', {id : (saison_precedente.id) } ) }}">{{ source('icons/chevron-right-solid.svg') }}</a>
                     {% endif %}
                     </div>
                 </div>
             </div>
-            <hr class="w-50">     
-            <h1 class="stylise grand">{{ saison.titre|stylise|raw }}</h1>
-
-            <!-- ADMIN : MODIFIER / SUPPRIMER -->
-            {% if is_granted("ROLE_MJ") %}
-                <div class="btn-mj">
-                    <a class="text-light mx-2" href="{{ path('admin_saison_edit', {id:saison.id}) }}?redirect=aventure"><i class="fas fa-edit"></i></a>
-                    <a class="text-light mx-2" href="{{ path('admin_saison_create') }}?numero={{(last_numero)+1}}&redirect=aventure"><i class="fas fa-plus-square"></i></a>
-                    <a class="text-light mx-2" href="{{ path('admin_saison_delete', {id:saison.id}) }}?csrf={{ csrf_token('delete' ~ saison.id) }}&redirect=aventure" onclick="return confirm('Êtes-vous sûr de vouloir supprimer la saison : {{ saison.titre }} ?')"><i class="fas fa-trash-alt"></i></a>
-                </div>
-            {% endif %}
-
-        </div>
-    </div>
 </header>
 
 <!-- AFFICHAGE DES CHAPITRES DE LA SAISON -->

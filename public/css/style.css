@@ -273,15 +273,23 @@ nav .active { font-weight: bold; }
 /* --------- BUTTONS --------- */
 /* --------------------------- */
 
-.btn-primary { background-color: #EA2027 !important;
-        border-color: #b6252f !important; }
+.btn-style {    display: inline-block;
+                color: white;
+                font-weight: bold;
+                text-align: center; vertical-align: middle; line-height: 1.5;
+                background-color: #EA2027;
+                border-radius: 4px;
+                box-shadow: inset 1px 1px 0px #ff8084, inset -2px -2px 0px #b6252f, 0px 0px 8px rgba(0, 0, 0, .4);
+                border-top: 1px solid #EA2027;
+                border-left: 1px solid #EA2027;
+                border-right: 1px solid #9b1921;
+                border-bottom: 1px solid #9b1921; }
+.btn-style:hover, .btn-style:active, .btn-style:target { color: white; background-color: #ff4147; text-decoration: none; }
 
-.btn-primary:hover, .btn-primary:active, .btn-primary:target {
- background-color: #ff4147 !important;
- border-color: #EA2027 !important;}
+.btn-disabled { background-color: #b4b4b4; border-color: #9f9f9f; }
 
-.btn-primary.disabled { background-color: #b4b4b4;
-                 border-color: #9f9f9f; }
+.btn-large { font-size: 1.2rem; padding: 1rem 1rem; }
+.btn-medium { font-size: 1rem; padding: 0.5rem 1rem; }
 
 .btn-mj-h2-edit-delete {        font-size: 1.5rem;
                                 position: absolute;

@@ -74,10 +74,26 @@
                     </ul>
                 </div>
                 <div class="col-12 px-0">
-                    <div class="card my-3 ml-lg-2 card-body">
+                    <div class="card my-3 card-body">
                         <h2 class="card-title">Historique</h2>
-                        <div class="card-text ml-lg-3">
-                            {% for une_participation in personnage.participations %}
+                        <div class="card-text">
+                            {% set current_chapitre = 0 %}
+                            {% set current_episode = 0 %}
+                            {% for une_participation in personnage.participations|sortByField('scene') %}
+
+                                {% if une_participation.scene.episodeParent.chapitreParent.id != current_chapitre %}
+                                    <hr>
+                                    <h4 class="mb-3"><strong>{{une_participation.scene.episodeParent.chapitreParent.titre}}</strong></h4>
+                                {% endif %}
+                                {% set current_chapitre = une_participation.scene.episodeParent.chapitreParent.id %}
+
+                                {% if une_participation.scene.episodeParent.id != current_episode %}
+                                    <h5 class="ml-3"><a href="{{path('aventure_episode', {id: une_participation.scene.episodeParent.id})}}">{{une_participation.scene.episodeParent.titre}}</a></h5>
+                                {% endif %}
+                                {% set current_episode = une_participation.scene.episodeParent.id %}
+
+                                <span class="ml-3">
+                                {{personnage.prenom}}
                                 {% if une_participation.estMort == 0 %}
                                     a
                                     {% if une_participation.xpGagne == 0 %}
@@ -85,10 +101,12 @@
                                     {% else %}
                                         gagné <strong>{{une_participation.xpGagne}}xp</strong> 
                                     {% endif %}
-                                        dans la scène <a href="{{path('aventure_episode', {id: une_participation.scene.episodeParent.id, '_fragment': 'scn' ~  une_participation.scene.numero  })}}" ><strong>{{une_participation.scene.titre}}</strong></a> de la session <strong>{{une_participation.scene.episodeParent.titre}}</strong><br/>
+                                        lors de la scène <a href="{{path('aventure_episode', {id: une_participation.scene.episodeParent.id, '_fragment': 'scn' ~  une_participation.scene.numero  })}}" ><strong>{{une_participation.scene.titre}}</strong></a><br/>
                                 {% else %}
-                                    <strong style="color: red">est mort</strong> dans la scène <a href="{{path('aventure_episode', {id: une_participation.scene.episodeParent.id, '_fragment': 'scn' ~  une_participation.scene.numero  })}}" ><strong>{{une_participation.scene.titre}}</strong></a> de la session <strong>{{une_participation.scene.episodeParent.titre}}</strong><br/>
+                                    <strong style="color: red">est mort</strong> dans la scène <a href="{{path('aventure_episode', {id: une_participation.scene.episodeParent.id, '_fragment': 'scn' ~  une_participation.scene.numero  })}}" ><strong>{{une_participation.scene.titre}}</strong></a><br/>
                                 {% endif %}
+                                </span>
+                                
                             {% endfor %}
                         </div>
                     </div>

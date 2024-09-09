@@ -37,7 +37,10 @@ button {
     padding: 0.70rem 1rem;
 }
 
-.btn-primary-style, .btn-secondary-style, .btn-tertiary-style {
+.btn-unstyled {
+    border: 0;
+    background: none;
+}
     display: inline-block;
     text-align: center;
     vertical-align: middle;

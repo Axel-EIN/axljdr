@@ -3,8 +3,8 @@
 /* ---------------------------- */
 
 :root {
-    --white: white !important;
-    --black: black !important;
+    --white: white;
+    --black: black;
 
     --gray-light: gray;
     --gray: #464a4d;
@@ -31,7 +31,7 @@
     --primary-lighter: #ff8084;
     --primary-light: #ff4147;
 
-    --primary: #EA2027 !important;
+    --primary: #EA2027;
 
     --primary-dark: #b6252f;
     --primary-darker: #9b1921;
@@ -44,7 +44,7 @@
     /* BLUE SECONDARY */
     --secondary-light: #3399ff;
 
-    --secondary: #0080ff !important;
+    --secondary: #0080ff;
 
     --secondary-dark: #0066cc;
 
@@ -66,8 +66,8 @@
     --accent-trans: #ff7f0040;
 
     /* VARIOUS OTHER COLORS */
-    --purple: purple !important;
-    --green: rgb(0,100,0) !important;
+    --purple: purple;
+    --green: rgb(0,100,0);
     --fuschia: #FF1493;
     --fuschia-light: #FF54C3;
     --flash-red: #f66;
@@ -87,22 +87,22 @@
 
 /* WHITE, BLACK, GRAY */
 
-.text-white { color: var(--white) !important; }
-.bg-white { background-color: var(--white) !important; }
+.text-white { color: var(--white); }
+.bg-white { background-color: var(--white); }
 
-.text-black { color: var(--black) !important; }
-.bg-black { background-color: var(--black) !important; }
+.text-black { color: var(--black); }
+.bg-black { background-color: var(--black); }
 
 .text-gray { color: var(--gray) !important }
-.bg-gray { background-color: var(--gray) !important; }
+.bg-gray { background-color: var(--gray); }
 
 /* LIGHT */
 
 .text-lightest { color: var(--lightest); }
 .bg-lightest { background-color: var(--lightest); }
 
-.text-light { color: var(--light) !important; }
-.bg-light { background-color: var(--light) !important;}
+.text-light { color: var(--light); }
+.bg-light { background-color: var(--light);}
 
 .text-light-alpha { color: var(--light-alpha); }
 a.text-light-alpha:hover { color: var(--white); }
@@ -113,9 +113,9 @@ a.text-light-alpha:hover { color: var(--white); }
 
 /* PRIMARY */
 
-.text-primary { color: var(--primary) !important; }
-.bg-primary { background-color: var(--primary) !important; }
-a.text-primary:hover { color: var(--primary-light) !important; }
+.text-primary { color: var(--primary) !important;}
+.bg-primary { background-color: var(--primary) !important;}
+a.text-primary:hover { color: var(--primary-light); }
 
 .text-primary-dark { color: var(--primary-dark) ; }
 .bg-primary-dark { background-color: var(--primary-dark) ; }
@@ -134,13 +134,12 @@ a.text-primary:hover { color: var(--primary-light) !important; }
 
 .text-secondary { color: var(--secondary) !important; }
 .bg-secondary { background-color: var(--secondary) !important; }
-a.text-secondary:hover { color: var(--secondary-light) !important; }
+a.text-secondary:hover { color: var(--secondary-light); }
 
 /* ACCENT */
 
-.text-accent { color: var(--accent) !important; }
-.bg-accent { background-color: var(--accent) !important; }
-a.text-accent:hover { color: var(--accent-light) !important; }
+.text-accent { color: var(--accent); }
+.bg-accent { background-color: var(--accent); }
 
 .text-accent-alpha { color:var(--accent-alpha); }
 .bg-accent-alpha { background-color:var(--accent-alpha); }
@@ -170,4 +169,4 @@ a.text-accent:hover { color: var(--accent-light) !important; }
 
 .text-fuschia { color:var(--fuschia); }
 .bg-fuschia { background-color: var(--fuschia); }
-a.text-fuschia:hover { color:var(--fuschia-light)!important; }
+a.text-fuschia:hover { color:var(--fuschia-light; }

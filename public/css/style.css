@@ -404,7 +404,7 @@ img.disabled { filter:grayscale(100%); }
         top: -30px; }
 
 .episode-card-liste {
-        background: rgba(0, 0, 0, .4);
+        background: rgba(80, 80, 80, .4);
         min-height: 380px;
         max-height: 380px;
         border-radius: 4px;

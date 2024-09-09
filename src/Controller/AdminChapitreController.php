@@ -82,7 +82,7 @@ class AdminChapitreController extends AbstractController
             // REDIRECTION
             // -----------
             if (!empty($request->query->get('redirect')) && $request->query->get('redirect') == 'aventure')
-                return $this->redirectToRoute('aventure_saison', ['id' => $chapitre->getSaisonParent()->getId(),'_fragment' => 'tete-lecture-ch-id' . $chapitre->getId()]);
+                return $this->redirectToRoute('aventure_saison', ['id' => $chapitre->getSaisonParent()->getId(),'_fragment' => 'read-head-ch-id' . $chapitre->getId()]);
             
             return $this->redirectToRoute('admin_chapitre');
 
@@ -148,7 +148,7 @@ class AdminChapitreController extends AbstractController
             // REDIRECTION
             // -----------
             if (!empty($request->query->get('redirect')) && $request->query->get('redirect') == 'aventure')
-                return $this->redirectToRoute('aventure_saison', ['id' => $chapitre->getSaisonParent()->getId(),'_fragment' => 'tete-lecture-ch-id' . $chapitre->getId()]);
+                return $this->redirectToRoute('aventure_saison', ['id' => $chapitre->getSaisonParent()->getId(),'_fragment' => 'read-head-ch-id' . $chapitre->getId()]);
             
             return $this->redirectToRoute('admin_chapitre');
         }

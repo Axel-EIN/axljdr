@@ -68,6 +68,12 @@ class AdminPersonnageController extends AbstractController
 
             $this->addFlash('success', 'Le personnage a bien été ajouté !');
 
+            // REDIRECTION
+            // -----------
+            if (!empty($request->query->get('redirect')) && $request->query->get('redirect') == 'personnages')
+                return $this->redirectToRoute('personnages');
+            return $this->redirectToRoute('admin_personnage');
+
             return $this->redirectToRoute('admin_personnage');
         } else {
             return $this->render('admin_personnage/create.html.twig', [
@@ -129,6 +135,10 @@ class AdminPersonnageController extends AbstractController
             $this->getDoctrine()->getManager()->flush();
             $this->addFlash('success', 'Le personnage a bien été modifié !');
 
+            // REDIRECTION
+            // -----------
+            if (!empty($request->query->get('redirect')) && $request->query->get('redirect') == 'personnage')
+                return $this->redirectToRoute('personnage_profil', ['id' => $personnage->getId()]);
             return $this->redirectToRoute('admin_personnage');
         }
 

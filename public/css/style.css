@@ -136,6 +136,13 @@ nav .active { font-weight: bold; }
         z-index: 100;
 }
 
+.btn-arrow-down-pulse {
+        position: absolute;
+        left: 70px;
+        bottom: -10px;
+        z-index: 100;
+}
+
 /* -------------------------------  */
 /* HEADERS                          */
 /* -------------------------------- */
@@ -350,9 +357,10 @@ mask-image: linear-gradient(to top, rgba(0,0,0,0.25),rgba(0,0,0,0.50),rgba(0,0,0
 .ancre-relatif { position:relative; }
 
 .translucide { filter: opacity(0.50); }
+.translucide:hover { filter: opacity(1); transition-duration: 0.5s; }
 
-.translucide:hover { filter: opacity(1);
-             transition-duration: 0.5s; }
+.assombrit { filter: brightness(0.5); }
+.assombrit:hover { filter: brightness(1); transition-duration: 0.5s; }
 
 .ombre-txt { text-shadow: 4px 4px 2rem black; }
 
@@ -418,6 +426,16 @@ img.disabled { filter:grayscale(100%); }
         position: absolute;
         left: 16px;
         top: 54px;
+        text-shadow: 0px 2px 8px black;
+        z-index: 100 }
+
+.episode-caroussel-numero{
+        position: absolute;
+        right: 8px;
+        bottom: 0px;
+        font-size:2.5rem;
+        font-weight: bold;
+        color: white;
         text-shadow: 0px 2px 8px black;
         z-index: 100 }
 

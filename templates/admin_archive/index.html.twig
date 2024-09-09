@@ -2,7 +2,7 @@
 
 {% block title %}Administrer les Archives {{ parent() }}{% endblock %}
 
-{% block h1 %}Administrer les Archives{% endblock %}
+{% block h1 %}Administrer les <strong>Archives</strong>{% endblock %}
 
 {% block child %}
 
@@ -21,6 +21,7 @@
                 <th class="p-2 text-center">ID</th>
                 <th class="p-2 text-center">Titre</th>
                 <th class="p-2 text-center">Auteur</th>
+                <th class="p-2 text-center">Cachée</th>
                 <th class="p-2 text-center"></th>
                 <th class="p-2 text-center"></th>
                 <th class="p-2 text-center"></th>
@@ -43,7 +44,13 @@
                             <small class="text-muted">n/a</small>
                         {% endif %}
                     </td>
-
+                    <td class="p-2 border text-center">
+                        {% if une_archive.locked == 1 %}
+                            <span class="text-warning"><strong>Oui</strong></span>
+                        {% else %}
+                            <small class="text-muted">Non</small>
+                        {% endif %}
+                    </td>
                     <td class="p-2 border text-center"><a href="{{ path('empire_archive', { id: une_archive.id }) }}"><i class="fas fa-eye"></i></a></td>
                     <td class="p-2 border text-center"><a href="{{ path('admin_archive_edit', {id: une_archive.id} ) }}"><i class="fas fa-edit"></i></a></td>
                     <td class="p-2 border text-center">

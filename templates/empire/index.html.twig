@@ -18,6 +18,8 @@ style="background-image: linear-gradient(rgb(40,0,0,0.5),rgb(40,0,0,0.5)),url('{
 </header>
 <main class="container-fluid bg-light pt-5">
     <div class="container">
+
+        <!-- LES ARCHIVES -->
         <section id="archives">
             <h2 class="display-4">Les Archives de l'<strong>Histoire</strong> :</h2>
             <hr>
@@ -25,6 +27,11 @@ style="background-image: linear-gradient(rgb(40,0,0,0.5),rgb(40,0,0,0.5)),url('{
             <div class="row">
 {% for une_archive in archives %}
                 <article class="col-xl-2 col-lg-3 col-md-4 col-sm-6 py-3 text-center">
+                {% if une_archive.locked == 1 %}
+                    <img src="{{asset('assets/img/icons/locked.png')}}" alt="Vérrouillée" style="width: 40px; position: absolute; top: 32px; left: 76px; z-index: 1;" />
+                    <img class="img-160" src="{{ asset(une_archive.image) }}" alt="Image de l'Archive" style="filter: brightness(0.3)" />
+                    <h3 class="text-center h5"><strong>???</strong></h3>
+                {% else %}
                     <a href="{{ path('empire_archive', {id: une_archive.id} ) }}">
                         <img class="img-160" src="{{ asset(une_archive.image) }}" alt="Image de l'Archive" />
                     </a>
@@ -34,6 +41,7 @@ style="background-image: linear-gradient(rgb(40,0,0,0.5),rgb(40,0,0,0.5)),url('{
                             <a href="{{ path('empire_archive', {id: une_archive.id} ) }}">{{ une_archive.titre }}</a>
                         </strong>
                     </h3>
+                {% endif %}
                 </article>
 {% endfor %}
             </div>

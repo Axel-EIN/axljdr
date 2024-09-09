@@ -56,14 +56,16 @@
 
         <!-- PAR DESSUS LIGNE DE PNJS -->
         <div class="characters-line pnjs">
-            {% for une_participation in une_scene.participations %}
-                {% if une_participation.estPj == 0 %}
+            {% for une_participation in une_scene.participations|filter( (une_participation) => une_participation.estPj == 0) %}
+
+                <!-- GESTION PORTRAIT NON-DISPONIBLE -->
                     {% if une_participation.personnage.icone is null and une_participation.personnage.genre == 'F' %}
-                        {% set NA_PERSO_ICO = NA_PERSO_ICO_F %}
+                    {% set gender_variable_sufix ='_F' %}
                     {% elseif une_participation.personnage.icone is null and une_participation.personnage.genre == 'M' %}
-                        {% set NA_PERSO_ICO = NA_PERSO_ICO_M %}
+                    {% set gender_variable_sufix = '_M' %}
                     {% endif %}
-                    <character class="character-portrait-box">
+
+                <div class="character-portrait-box">
                         <a class="character-portrait-link" href="{{path('personnage_profil',{id: une_participation.personnage.id})}}" >
                             {% if une_participation.estMort == 1 %}
                                 <img class="character-icon-dead" src="{{asset('assets/img/icons/mort.png')}}" alt="est mort" />
@@ -73,35 +75,35 @@
                             </span>
                             <img class="character-portrait large pnj
                                 {% if une_participation.estMort == 1 %} dead{% endif %}"
-                                src="{{asset(une_participation.personnage.icone|default(NA_PERSO_ICO))}}"
+                            src="{{ asset(une_participation.personnage.icone|default( attribute(_context, 'NA_PERSO_ICO' ~ gender_variable_sufix|default ) ) ) }}"
                                 alt="Icone personnage" />
                         </a>
-                    </character>
-                {% endif %}
+                </div>
             {% endfor %}
         </div>
 
         <!-- PAR DESSUS LIGNE DE PJS -->
         <div class="characters-line pjs">
-            {% for une_participation in une_scene.participations|sort( (a, b) => a.xpGagne <=> b.xpGagne)|reverse %}
-                {% if une_participation.estPj %}
+            {% for une_participation in une_scene.participations|filter( (une_participation) => une_participation.estPj == 1)|sort( (a, b) => a.xpGagne <=> b.xpGagne)|reverse %}
+                
+                <!-- GESTION PORTRAIT NON-DISPONIBLE -->
+                {% if une_participation.personnage.icone is null and une_participation.personnage.genre == 'F' %}
+                    {% set gender_variable_sufix ='_F' %}
+                {% elseif une_participation.personnage.icone is null and une_participation.personnage.genre == 'M' %}
+                    {% set gender_variable_sufix = '_M' %}
+                {% endif %}
 
-                    {% if une_participation.icone is not defined and une_participation.genre is defined and une_participation.genre == 'F' %}
-                        {% set NA_PERSO_ICO = NA_PERSO_ICO_F %}
-                    {% elseif une_participation.icone is not defined and une_participation.genre is defined and une_participation.genre == 'M' %}
-                        {% set NA_PERSO_ICO = NA_PERSO_ICO_M %}
+                <div class="character-portrait-box">
+
+                    <!-- AFFICHAGE XP -->
+                    {% if une_participation.xpGagne != 0 and une_participation.estMort != 1 %}
+                        <div class="d-inline-block {% if une_participation.personnage.joueur == app.user %}text-your-xp{% else %}text-xp{% endif %}">
+                            <strong class="text-medium">+{{une_participation.xpGagne}}</strong> <span class="text-small">XP</span>
+                        </div><br/>
                     {% endif %}
 
-                    <character class="character-portrait-box">
-                        {% if une_participation.xpGagne != 0 and une_participation.estMort != 1 %}
-                            <strong class="{% if une_participation.personnage.joueur == app.user %}text-your-xp{% else %}text-xp{% endif %}">
-                                <strong class="text-medium">+{{une_participation.xpGagne}}</strong> <span class="text-small">XP</span>
-                            </strong><br/>
-                        {% endif %}
                         <a class="character-portrait-link" href="{{path('personnage_profil',{id:une_participation.personnage.id})}}" >
-                            {% if une_participation.estMort == 1 %}
-                                <img class="character-icon-dead" src="{{asset('assets/img/icons/mort.png')}}" alt="est mort" />
-                            {% endif %}
+                        {% if une_participation.estMort == 1 %}<img class="character-icon-dead" src="{{asset('assets/img/icons/mort.png')}}" alt="est mort" />{% endif %}
                             <span class="hover-tooltip character-name pj {% if une_participation.personnage.joueur == app.user %}me{% endif %} {% if une_participation.xpGagne == 0 or une_participation.estMort == 1 %}gray{% endif %}">
                                 {{une_participation.personnage.prenom}}
                             </span>
@@ -109,11 +111,10 @@
                                 class="character-portrait large pj 
                                 {% if une_participation.personnage.joueur == app.user %} me outlined{% endif %}
                                 {% if une_participation.estMort == 1 %} dead{% elseif une_participation.xpGagne == 0 %}grayscale{% endif %}"
-                                src="{{asset(une_participation.personnage.icone|default(NA_PERSO_ICO))}}"
+                            src="{{asset(une_participation.personnage.icone|default( attribute(_context, 'NA_PERSO_ICO' ~ gender_variable_sufix|default ) ) ) }}"
                                 alt="Icone personnage" />
                         </a>
-                    </character>
-                {% endif %}
+                </div>
             {% endfor %}
         </div>
 

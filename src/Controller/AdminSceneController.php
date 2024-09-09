@@ -6,6 +6,7 @@ use App\Entity\Scene;
 use App\Service\Uploader;
 use App\Service\Numeroteur;
 use App\Service\BaliseurPersonnage;
+use App\Service\ParticipationHandler;
 use App\Form\AdminSceneType;
 use App\Entity\Participation;
 use App\Repository\EpisodeRepository;
@@ -39,14 +40,9 @@ class AdminSceneController extends AbstractController
      * @Route("/admin/scene/create", name="admin_scene_create")
      * @IsGranted("ROLE_MJ")
      */
-    public function creerScene(Request $request,
-                            EntityManagerInterface $em,
-                            Uploader $uploadeur,
-                            BaliseurPersonnage $baliseur,
-                            PersonnageRepository $personnageRepository,
-                            EpisodeRepository $episodeRepository,
-                            Numeroteur $numeroteur,
-                            SceneRepository $sceneRepository) {
+    public function creerScene(Request $request, EntityManagerInterface $em, Uploader $uploadeur, BaliseurPersonnage $baliseur,
+                            ParticipationHandler $participationHandler, PersonnageRepository $personnageRepository,
+                            EpisodeRepository $episodeRepository, Numeroteur $numeroteur, SceneRepository $sceneRepository) {
 
         $scene = new Scene;
 
@@ -74,89 +70,21 @@ class AdminSceneController extends AbstractController
             // CREATION FICHIER IMAGE & UPLOAD
             $nouvelleImage = $form->get('image')->getData();
             if (!empty($nouvelleImage)) {
-                $nouvelleImageNomFichier = $uploadeur->upload($nouvelleImage,
-                    'scene-s' . $scene->getEpisodeParent()->getChapitreParent()->getSaisonParent()->getNumero()
-                    . '-ch' . $scene->getEpisodeParent()->getChapitreParent()->getNumero()
-                    . '-ep' . $scene->getEpisodeParent()->getNumero() . '-scn' . $scene->getNumero(), 'scenes');
+                $prefix = 'scene-s' . $scene->getEpisodeParent()->getChapitreParent()->getSaisonParent()->getNumero()
+                            . '-ch' . $scene->getEpisodeParent()->getChapitreParent()->getNumero()
+                            . '-ep' . $scene->getEpisodeParent()->getNumero() . '-scn' . $scene->getNumero();
+                $nouvelleImageNomFichier = $uploadeur->upload($nouvelleImage,$prefix , 'scenes');
                 $nouveauCheminRelatif = 'assets/img/scenes/' . $nouvelleImageNomFichier;
                 $scene->setImage($nouveauCheminRelatif);
             } else { $scene->setImage('assets/img/placeholders/1280x720.jpg'); }
 
-            // Récupération des données liées à la participation des PJs
-            if(!empty($request->get('participants'))) {
-                $participants_pjs = $request->get('participants');
-                $participants_pjs_xp = $request->get('participants_xp');
-                if(!empty($request->get('participants_mort')))
-                    $participants_pjs_mort = $request->get('participants_mort');
-                else
-                    $participants_pjs_mort = [];
-            } else {
-                $participants_pjs = [];
-                $participants_pjs_xp = [];
-                $participants_pjs_mort = [];
-            }
+            // Formatage et fusion des données formulaire postées concernant les Participants
+            $participants_a_ajoutes = $participationHandler->fusionnerParticipants($request->get('participants'), $request->get('participants_xp'),
+                                                                                    $request->get('participants_mort'), $request->get('participants_pnjs'),
+                                                                                    $request->get('participants_pnjs_mort'));
 
-            // Récupération des données liées à la participation des PNJs
-            if(!empty($request->get('participants_pnjs'))) {
-                $participants_pnjs = $request->get('participants_pnjs');
-                if(!empty($request->get('participants_pnjs_mort')))
-                    $participants_pnjs_mort = $request->get('participants_pnjs_mort');
-                else
-                    $participants_pnjs_mort = [];
-            } else {
-                $participants_pnjs = [];
-                $participants_pnjs_mort = [];
-            }
-
-            // Fusion des données liées aux participations à ajouter
-            $participants_a_ajoutes = [];
-            $compteur = 0;
-            
-            if(!empty($participants_pjs)) {
-                foreach($participants_pjs as $key => $un_participant_pj) {
-                    $participants_a_ajoutes[$compteur]['id'] = $participants_pjs[$key];
-                    $participants_a_ajoutes[$compteur]['xp'] = $participants_pjs_xp[$key];
-                    if (!empty($participants_pjs_mort[$key]))
-                        $participants_a_ajoutes[$compteur]['mort'] = 1;
-                    else
-                        $participants_a_ajoutes[$compteur]['mort'] = 0;
-                    $participants_a_ajoutes[$compteur]['estPj'] = 1;
-                    $compteur++;
-                }
-            }
-            
-            if(!empty($participants_pnjs)) {
-                foreach($participants_pnjs as $cle => $un_participant_pnj) {
-                    $participants_a_ajoutes[$compteur]['id'] = $participants_pnjs[$cle];
-                    $participants_a_ajoutes[$compteur]['xp'] = 0;
-                    if (!empty($participants_pnjs_mort[$cle]))
-                        $participants_a_ajoutes[$compteur]['mort'] = 1;
-                    else
-                        $participants_a_ajoutes[$compteur]['mort'] = 0;
-                    $participants_a_ajoutes[$compteur]['estPj'] = 0;
-                    $compteur++;
-                }
-            }
-
-            // Ajout des participations
-            if (!empty($participants_a_ajoutes)) {
-                foreach ($participants_a_ajoutes as $cle => $un_participant_a_ajoute) {
-                    // Ajoute un participant à une scène et renvoi le dernier ID inséré dans la table ou false
-                    if ( !empty($personnageRepository->find($participants_a_ajoutes[$cle]['id'])) ) {
-                        $personnage = $personnageRepository->find($participants_a_ajoutes[$cle]['id']);
-                        $nouvelle_participation = new Participation;
-                        $nouvelle_participation->setScene($scene);
-                        $nouvelle_participation->setPersonnage($personnage);
-                        $nouvelle_participation->setXpGagne($participants_a_ajoutes[$cle]['xp']);
-                        $nouvelle_participation->setEstMort($participants_a_ajoutes[$cle]['mort']);
-                        $nouvelle_participation->setEstPj($participants_a_ajoutes[$cle]['estPj']);
-                        $em->persist($nouvelle_participation);
-                        $this->addFlash('success', 'Le personnage ' . $personnage->getPrenom() . ' a bien été ajouté en participant !');
-                    } else {
-                        $this->addFlash('danger', 'Le personnage n\'a pu être ajouté en participant !');
-                    }
-                }
-            }
+            // Ajout des Participations
+            $participationHandler->ajouterParticipations($participants_a_ajoutes, $scene);
 
             // BALISAGE : capture les mots entre [], vérifie si un prénom personnage correspondant existe, remplace par un lien personnage HTML
             $scene->setTexte($baliseur->baliserPersonnage($scene->getTexte()));
@@ -191,7 +119,9 @@ class AdminSceneController extends AbstractController
      * @Route("/admin/scene/{id}/edit", name="admin_scene_edit")
      * @IsGranted("ROLE_MJ")
      */
-    public function editerScene(Request $request, Scene $scene, Uploader $uploadeur, Numeroteur $numeroteur, BaliseurPersonnage $baliseur, PersonnageRepository $personnageRepository, ParticipationRepository $participationRepository, SceneRepository $sceneRepository): Response {
+    public function editerScene(Request $request, Scene $scene, Uploader $uploadeur, Numeroteur $numeroteur, BaliseurPersonnage $baliseur,
+                                ParticipationHandler $participationHandler, PersonnageRepository $personnageRepository,
+                                ParticipationRepository $participationRepository, SceneRepository $sceneRepository): Response {
 
         // Stockage du numéro et de l'ID de l'episode avant édition
         $numeroDepart = $scene->getNumero();
@@ -233,65 +163,14 @@ class AdminSceneController extends AbstractController
                 $filesystem->remove($ancienneImageCheminComplet);
             }
 
-            // PARTICIPATIONS CRUD
-            //--------------------
-            if(!empty($request->get('participants'))) {
-                $participants_pjs = $request->get('participants');
-                $participants_pjs_xp = $request->get('participants_xp');
-                if(!empty($request->get('participants_mort')))
-                    $participants_pjs_mort = $request->get('participants_mort');
-                else
-                    $participants_pjs_mort = [];
-            } else {
-                $participants_pjs = [];
-                $participants_pjs_xp = [];
-                $participants_pjs_mort = [];
-            }
-
-            if(!empty($request->get('participants_pnjs'))) {
-                $participants_pnjs = $request->get('participants_pnjs');
-                if(!empty($request->get('participants_pnjs_mort')))
-                    $participants_pnjs_mort = $request->get('participants_pnjs_mort');
-                else
-                    $participants_pnjs_mort = [];
-            } else {
-                $participants_pnjs = [];
-                $participants_pnjs_mort = [];
-            }
-
-            // Regroupement des données Participations POST PJS (ID, XP, MORT) & PNJS (ID, MORT)
-            $participants_modifies = [];
-            $compteur = 0;
-            
-            if(!empty($participants_pjs)) {
-                foreach($participants_pjs as $key => $un_participant_pj) {
-                    $participants_modifies[$compteur]['id'] = $participants_pjs[$key];
-                    $participants_modifies[$compteur]['xp'] = $participants_pjs_xp[$key];
-                    if (!empty($participants_pjs_mort[$key]))
-                        $participants_modifies[$compteur]['mort'] = 1;
-                    else
-                        $participants_modifies[$compteur]['mort'] = 0;
-                    $participants_modifies[$compteur]['estPj'] = 1;
-                    $compteur++;
-                }
-            }
-            
-            if(!empty($participants_pnjs)) {
-                foreach($participants_pnjs as $cle => $un_participant_pnj) {
-                    $participants_modifies[$compteur]['id'] = $participants_pnjs[$cle];
-                    $participants_modifies[$compteur]['xp'] = 0;
-                    if (!empty($participants_pnjs_mort[$cle]))
-                        $participants_modifies[$compteur]['mort'] = 1;
-                    else
-                        $participants_modifies[$compteur]['mort'] = 0;
-                    $participants_modifies[$compteur]['estPj'] = 0;
-                    $compteur++;
-                }
-            }
+            // Formatage et fusion des données formulaire postées concernant les Participants
+            $participants_modifies = $participationHandler->fusionnerParticipants($request->get('participants'), $request->get('participants_xp'),
+                                                                                    $request->get('participants_mort'), $request->get('participants_pnjs'),
+                                                                                    $request->get('participants_pnjs_mort'));
 
             $toutes_participations = array_merge($participations_pjs, $participations_pnjs);
 
-            // Suppression & Modification des Participations
+            // Modification des Participations correspondante trouvée sinon suppression
             foreach ($toutes_participations as $une_participation) {
                 $trouvee = false;
 

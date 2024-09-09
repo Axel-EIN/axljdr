@@ -38,11 +38,6 @@
     font-size: 3rem;
 }
 
-.btn-icon-text {
-    font-size: 1rem;
-    font-weight: bold;
-}
-
 .btn-mj:hover {
     color: var(--accent) !important;
     text-decoration: none;

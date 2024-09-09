@@ -7,7 +7,7 @@
         <img class="icon-aventure" src="{{ asset(AVENTURE_SCENE_ICO) }}" alt="Icône scène">
 
         <!-- par dessus ICON TEMPS et ICON LIEU -->
-        <div class="time-and-location-line">
+        <div class="time-and-location">
 
             <span class="hover-tooltip">
                 {% if une_scene.lieu is not empty %}{{une_scene.lieu.nom}}, {% endif %}{{une_scene.temps|default('Temps inconnu')}}

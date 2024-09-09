@@ -37,6 +37,11 @@ class Archive
      */
     private $contenu;
 
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $locked;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -86,6 +91,18 @@ class Archive
     public function setContenu(string $contenu): self
     {
         $this->contenu = $contenu;
+
+        return $this;
+    }
+
+    public function getLocked(): ?bool
+    {
+        return $this->locked;
+    }
+
+    public function setLocked(bool $locked): self
+    {
+        $this->locked = $locked;
 
         return $this;
     }

@@ -62,7 +62,13 @@ nav .active { font-weight: bold; }
 #logo { width: 120px;
         height: auto; }
 
-.fleche { width: 28px; }
+.fleche { width: 20px; }
+
+.fleche-gauche { position: relative;
+                 left: -40px; }
+
+.fleche-droite { position: relative;
+                 left: 40px; }
 
 @font-face { font-family: "Shogun"; src: url("../assets/fonts/shoguns-clan-accentued.otf"); }
 @font-face { font-family: "Hirosh"; src: url("../assets/fonts/hirosh.otf"); }
@@ -110,8 +116,6 @@ nav .active { font-weight: bold; }
         top: 0px;
         right: 0px;
         z-index: 100;
-        background-color: rgba(180, 0, 0, 0.67);
-        border-radius: 0px 2px 0px 8px;
 }
 
 /* -------------------------------  */
@@ -147,11 +151,6 @@ nav .active { font-weight: bold; }
         padding-top: 0.5rem;
         padding-bottom: 0.5rem;
         text-align: center; }
-
-.pre-titre-saison {
-        font-size: 3rem;
-        color:#fff;
-        margin: 0; }
 
 @media (max-width: 1200px) { .pre-titre-saison { font-size: 3rem; } }
 @media (max-width: 992px) { .pre-titre-saison { font-size: 3rem; } }

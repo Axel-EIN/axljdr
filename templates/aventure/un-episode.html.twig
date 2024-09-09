@@ -145,13 +145,13 @@
                     <div class="col text-right pr-0">
                         {% if episode_suivant is not empty %}
                             {% if episode_suivant.scenes|length > 0 or is_granted("ROLE_MJ") %}
-                                <a class="btn-primary-style btn-medium hover-zoom" href="{{ path('aventure_episode', {id: episode_suivant.id}) }}">
+                                <a class="btn-primary-style btn-medium" href="{{ path('aventure_episode', {id: episode_suivant.id}) }}">
                                     Session suivante
                                 </a>
                             {% endif %}
                         {% else %}
                             {% if episode_chapitre_suivant is not empty %}
-                                <a class="btn-primary-style btn-medium hue-fuschia hover-zoom" href="{{ path('aventure_episode', {id: episode_chapitre_suivant.id}) }}">
+                                <a class="btn-primary-style btn-medium hue-fuschia" href="{{ path('aventure_episode', {id: episode_chapitre_suivant.id}) }}">
                                     Chapitre suivant&nbsp;<i class="fa-solid fa-book-open" alt="Icône livre"></i>
                                 </a>
                             {% endif %}

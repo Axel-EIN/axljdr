@@ -70,29 +70,26 @@
                 {# ECOLES DU CLAN #}
                 <section class="col-12 my-3">
                     <div class="card card-body h-100">
-                        <h2 class="card-title py-3"><strong>Écoles</strong> du clan {{ clan.nom }} :</h2>
+                        <h2 class="card-title"><strong>Écoles</strong> du clan {{ clan.nom }} :</h2>
+                        <hr>
                         <div class="card-text ml-3">
                             {% for une_ecole in clan.ecoles %}
-                                <div class="mb-2 row align-items-center ancre-relatif">
+                                <div class="mb-5 row align-items-start ancre-relatif">
                                     <div class="col-12 col-lg-4">
                                         <a href="{{ path('regles_ecole', {id: une_ecole.id} ) }}">
                                             <img class="img-fluid" src="{{ asset(une_ecole.image) }}" alt="Image d'une école" />
                                         </a>
                                     </div>
                                     <div class="col row">
-                                        <div class="col-6">
-                                            <strong>Nom :</strong>
-                                            <h3><strong><a href="{{ path('regles_ecole', {id: une_ecole.id} ) }}" >{{ une_ecole.nom }}</a></strong></h3>
-                                        </div>
-                                        <div class="col-6">
-                                            <strong>Classe :</strong><br/>
+                                        <h3>
                                             <a href="{{ path('regles_classe', {id: une_ecole.classe.id} ) }}" >
-                                                <img class="img-96" src="{{ asset(une_ecole.classe.icone) }}" alt="Icône de la Classe" />
+                                                <img class="img-64" src="{{ asset(une_ecole.classe.icone) }}" alt="Icône {{une_ecole.classe.nom}}" title="{{une_ecole.classe.nom}}" />
                                             </a>
-                                        </div>
-                                        <div class="col-12"><strong>Description :</strong><br/>{{ une_ecole.description|raw|nl2br }}</div>
+                                            <strong><a href="{{ path('regles_ecole', {id: une_ecole.id} ) }}" >{{ une_ecole.nom }}</a></strong>
+                                        </h3>
+                                        <div class="col-12">{{ une_ecole.description|raw|nl2br }}</div>
                                     </div>
-                                    <a class="btn btn-primary coin-droit" href="{{ path('regles_ecole', {id: une_ecole.id} ) }}" >Voir les techniques</a>
+                                    <a class="btn border coin-droit" href="{{ path('regles_ecole', {id: une_ecole.id} ) }}" >Voir les techniques</a>
                                 </div>
                                 <hr>
                             {% else %}

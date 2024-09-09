@@ -135,7 +135,4 @@
         border-radius: 5px;
         box-shadow: 1px 1px 8px 2px var(--dark-alpha);
     }
-    &.pj { border: solid 1px var(--flash-blue); }
-    &.pnj { border: solid 1px var(--primary-darker-more); }
-    &.me { border: solid 1px var(--flash-green); }
 }

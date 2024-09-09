@@ -150,11 +150,12 @@
 /* TITRE ET TEXTE */
 /* ‾‾‾‾‾‾‾‾‾‾‾‾‾‾ */
 
-.position-icon-edit {
+.icon-aventure {
     position: absolute;
     z-index: 10;
-    bottom: 16px;
-    left: 16px;
+    width: 48px;
+    bottom: 12px;
+    left: 14px; 
 }
 
 .scene-title-container {

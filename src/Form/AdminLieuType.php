@@ -20,7 +20,7 @@ class AdminLieuType extends AbstractType
     {
         $builder
             ->add('nom', TextType::class)
-            ->add('surnom', TextType::class)
+            ->add('surnom', TextType::class, [ 'required' => false ])
             ->add('icone', FileType::class, array('mapped' => false, 'data_class' => null, 'required' => false))
             ->add('image', FileType::class, array('mapped' => false, 'data_class' => null, 'required' => false))
             ->add('type', ChoiceType::class, [

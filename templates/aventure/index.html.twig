@@ -67,37 +67,29 @@
 
     <!-- SEPARATEUR -->
     <div class="chapitre-separateur text-center">
-
         <!-- BTN MJ | INSERER CHAPITRE -->
         {% if is_granted("ROLE_MJ") %}
             {% set numero = un_chapitre.numero %}
             {{ include('/parts/btn-inserer-chapitre.html.twig', {ce_chapitre_personnages}) }}
         {% endif %}
-        
     </div>
 
     {{ include('/aventure/un-chapitre.html.twig') }}
 
 {% else %}
-
     <div class="chapitre-separateur text-center">
         <div class="alert alert-light mx-auto persistante mt-3 mb-3">
             <strong>Désolé il n'y a pas encore de Chapitre dans cette Saison !</strong>
         </div>
     </div>
-
 {% endfor %}
-
     <div class="chapitre-separateur text-center">
-
         <!-- BTN MJ | INSERER CHAPITRE -->
         {% if is_granted("ROLE_MJ") %}
             {% set numero = numero + 1 %}
             {{ include('/parts/btn-inserer-chapitre.html.twig') }}
         {% endif %}
-
     </div>
 
 </main>
-
 {% endblock %}

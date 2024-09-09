@@ -223,6 +223,13 @@ nav .active { font-weight: bold; }
 @media (max-width: 576px) { .petit { font-size: 2rem; } }
 @media (max-width: 480px) { .petit { font-size: 1.75rem; } }
 
+.moyen { font-size: 6rem; }
+
+@media (max-width: 1200px) { .moyen { font-size: 7rem; } }
+@media (max-width: 992px) { .moyen { font-size: 6rem; } }
+@media (max-width: 576px) { .moyen { font-size: 5rem; } }
+@media (max-width: 480px) { .moyen { font-size: 4rem; } }
+
 .grand { font-size: 9rem; }
 
 @media (max-width: 1200px) { .grand { font-size: 9rem; } }

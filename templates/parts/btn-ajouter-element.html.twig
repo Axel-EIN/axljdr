@@ -1,0 +1,8 @@
+{% set path = 'admin_' ~ entity|lower ~ '_create' %}
+{% set url = '?redirect=' ~ entity|lower ~ '&' ~ options|default('') %}
+
+{% if app.user and is_granted("ROLE_MJ") %}
+    <a href="{{ path(path) }}{{url}}" class="btn-primary-style btn-medium {{position|default('right-snap')}}" >
+        <i class="fas fa-plus-square" aria-hidden="true"></i><span class="btn-add-label">&nbsp;&nbsp;Ajouter {{label_one}}</span>
+    </a>
+{% endif %}

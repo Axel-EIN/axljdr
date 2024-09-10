@@ -10,7 +10,7 @@
         <div class="d-flex flex-column">   
             {% for une_participation in une_scene.participations %}
                 {% if une_participation.estPj == 0 %}
-                    <div class="mb-2" style="display: inline-block; position: relative;">
+                    <div class="mb-2 d-inline-block relative">
                         <a href="{{path('personnage_profil',{id: une_participation.personnage.id})}}" >
                             {% if une_participation.estMort == 1 %}
                                 <img class="character-icon-dead" src="{{asset('assets/img/icons/mort.png')}}" alt="est mort" />
@@ -33,7 +33,7 @@
                 <div class="text-right overtop-36 icons-char-collapse">
                     {% for une_participation in une_scene.participations %}
                         {% if une_participation.estPj %}
-                            <div style="display: inline-block; position: relative;">
+                            <div class="d-inline-block relative">
                                 {% if une_participation.xpGagne != 0 and une_participation.estMort != 1 %}
                                     <strong class="{% if une_participation.personnage.joueur == app.user %}text-your-xp{% else %}text-xp{% endif %}">+{{une_participation.xpGagne}}XP</strong>
                                 {% endif %}

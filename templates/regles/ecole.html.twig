@@ -154,19 +154,23 @@
                     </div>
                 </section>
 
+                <!-- PERSONNAGES DE CETTE ECOLE -->
                 <section class="col-12 my-3">
                     <div class="card card-body h-100">
                         <h2 class="card-title py-3 mx-lg-5">Personnages de l'école <strong>{{ ecole.nom }}</strong> :</h2>
                         <div class="card-text ml-lg-5 mb-3 row text-center">
+
+                            <!-- UN PERSONNAGE -->
                             {% for un_personnage in ecole.personnages %}
-                                <div class="p-1">
+                                <div class="p-1 hover-zoom-twice">
                                     <a href="{{ path('personnage_profil', {id: un_personnage.id} ) }}">
-                                        <img class="img-128" src="{{ asset(un_personnage.icone) }}" alt="Icône du personnage" />
+                                        <img class="img-128" src="{{ asset(un_personnage.icone) }}" alt="Icône d'un personnage" title="Voir le profil de {{un_personnage.prenom}}" />
                                     </a>
                                 </div>
                             {% else %}
                                 <span class="text-muted">Désolé ! Il n'y a pas encore de personnages disponible pour cette école !</span>
                             {% endfor %}
+
                         </div>
                     </div>
                 </section>

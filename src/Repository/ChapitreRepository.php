@@ -19,6 +19,18 @@ class ChapitreRepository extends ServiceEntityRepository
         parent::__construct($registry, Chapitre::class);
     }
 
+    public function findNext($saisonParentID, $numeroChapitreCourant) {
+        return $this->createQueryBuilder('c')
+            ->andWhere('c.saisonParent = :value_saisonParent')
+            ->andWhere('c.numero = :value_numero')
+            ->setParameter('value_saisonParent', $saisonParentID)
+            ->setParameter('value_numero', $numeroChapitreCourant+1)
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
+    }
+
     public function countChapitres() {
         return $this->createQueryBuilder('c')
             ->select('count(c.id)')

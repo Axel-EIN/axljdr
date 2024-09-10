@@ -19,18 +19,11 @@
 
 <main class="container-fluid bg-light pt-5">
     <div class="container">
-        <section id="pjs"> 
 
-            <h2 class="display-4 relative">
-                Personnages <strong>Joueur</strong>
-                <!-- BTN - MJ - AJOUTER UN PERSONNAGE -->
-                {% if is_granted("ROLE_MJ") %}
-                <div class="btn-mj-h2-create">
-                    <a href="{{ path('admin_personnage_create') }}?redirect=personnages" class="btn btn-primary">
-                        <i class="fas fa-plus-square"></i>&nbsp;&nbsp;Ajouter un personnage
-                    </a>
-                </div>
-                {% endif %}
+        <!-- PERSONNAGES JOUEURS -->
+        <section id="pjs"> 
+            <h2 class="display-4 relative">Personnages <strong>Joueur</strong>
+                {{ include('/parts/btn-ajouter-personnage.html.twig') }}
             </h2>
             <hr>
 
@@ -64,18 +57,11 @@
 {% endfor %}
             </div>
         </section>
-        <section id="pnjs">
 
-            <h2 class="display-4 mt-5 relative">
-                Personnages <strong>Non-Joueur</strong>
-                <!-- BTN - MJ - AJOUTER UN PERSONNAGE -->
-                {% if is_granted("ROLE_MJ") %}
-                <div class="btn-mj-h2-create">
-                    <a href="{{ path('admin_personnage_create') }}?redirect=personnages" class="btn btn-primary">
-                        <i class="fas fa-plus-square"></i>&nbsp;&nbsp;Ajouter un personnage
-                    </a>
-                </div>
-                {% endif %}
+        <!-- PERSONNAGES NON-JOUEURS -->
+        <section id="pnjs">
+            <h2 class="display-4 mt-5 relative">Personnages <strong>Non-Joueur</strong>
+                {{ include('/parts/btn-ajouter-personnage.html.twig') }}
             </h2>
             <hr>
 

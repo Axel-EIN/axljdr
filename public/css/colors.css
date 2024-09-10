@@ -102,6 +102,7 @@
 .bg-light { background-color: var(--light) !important;}
 
 .text-light-alpha { color: var(--light-alpha); }
+a.text-light-alpha:hover { color: var(--white); }
 .bg-light-alpha { background-color: var(--light-alpha) }
 
 .text-light-trans { color: var(--light-trans); }

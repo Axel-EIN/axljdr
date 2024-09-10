@@ -432,22 +432,9 @@ a.character-icon { display: inline-block; font-weight: bold; }
 /* ---------- FOOTERS --------- */
 /* ---------------------------- */
 
-#pied-de-page1 {
-        min-height: 24vh;
-        background-color: #28323C;
-        color:#b4b4b4; }
-
-#pied-de-page2 {
-        min-height: 8vh;
-        background-color: #1E242A;
-        color: #aaa; }
-
+#footer1 { min-height: 24vh; background-color: #28323C; color:#b4b4b4; }
+#footer2 { min-height: 8vh; background-color: #1E242A; color: #aaa; }
 .footer-link { color:#a0a0a0; }
-
 .footer-link:hover { color:#fff; text-decoration: underline; }
-
-#pied-de-page1 ul, #pied-de-page2 ul {
-        list-style:outside none none;
-        padding: 0; }
-
-#reseaux-sociaux { font-size: 2rem; }
+#footer1 ul, #footer2 ul { list-style:outside none none; padding: 0; }
+#social-medias { font-size: 2rem; }

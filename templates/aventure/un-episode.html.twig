@@ -22,7 +22,7 @@
                 {% if un_episode.scenes|length > 0 or is_granted("ROLE_MJ") %}
                     {% if un_episode.id == episode.id %}         
                         <div class="relative">
-                            <div class="session-caroussel-number">{{ un_episode.numero }}</div>
+                            <div class="number-session-caroussel">{{ un_episode.numero }}</div>
                             <img class="img-160 border border-4 border-danger shadow" src="{{ asset(un_episode.image) }}" alt="image de l'episode {{un_episode.titre}}" title="{{un_episode.titre}}"/>
                             <i class="fa-sharp fa-solid fa-sort-down fa-bounce fa-2xl arrow-down" style="color: red;"></i>
                         </div>

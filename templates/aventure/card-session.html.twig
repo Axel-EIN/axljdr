@@ -20,7 +20,7 @@
                         {% endif %}
                             <br/>
                             <a href="{{path('personnage_profil',{id:un_cumul_personnage[keys]['id']})}}" >
-                                <img class="character-icon-medium outlined {% if un_cumul_personnage[keys]['estMort'] == 1 %}dead{% elseif un_cumul_personnage[keys]['xp'] == 0 %}grayscale{% else %}hover-shine{% endif %}"
+                                <img class="character-portrait medium outlined {% if un_cumul_personnage[keys]['estMort'] == 1 %}dead{% elseif un_cumul_personnage[keys]['xp'] == 0 %}grayscale{% else %}hover-shine{% endif %}"
                                     src="{{asset(un_cumul_personnage[keys]['icone'])}}" alt="Icone de {{un_cumul_personnage[keys]['prenom']}}"
                                     title="{{un_cumul_personnage[keys]['prenom']}}" />
                             </a>

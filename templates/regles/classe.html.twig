@@ -65,7 +65,7 @@
                         <h2 class="card-title py-3">Personnages <strong>{{ classe.nom }}</strong> :</h2>
                         <div class="card-text ml-lg-3 row text-center justify-content-center align-items-center">
                             {% for un_personnage in classe.personnages %}
-                                <div class="p-1">
+                                <div class="p-1 hover-zoom-twice">
                                     <a href="{{ path('personnage_profil', {id: un_personnage.id} ) }}">
                                         <img class="img-128" src="{{ asset(un_personnage.icone) }}" alt="Icône du personnage" />
                                     </a>

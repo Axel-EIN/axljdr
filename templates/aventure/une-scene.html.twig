@@ -5,7 +5,8 @@
         <img class="card-img-top img-fluid mask" src="{{ asset(une_scene.image) }}"  alt="Image d'une scène">
     </div>
 
-    <div class="text-right ligne-pnjs" style="position: absolute; top: 1rem; right: 1rem;">
+    <!-- LIGNE VERTICAL DE PNJS -->
+    <div class="text-right right-corner-16 icons-char-collapse">
         <div class="d-flex flex-column">   
             {% for une_participation in une_scene.participations %}
                 {% if une_participation.estPj == 0 %}

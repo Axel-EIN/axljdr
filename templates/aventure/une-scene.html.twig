@@ -22,33 +22,24 @@
             </div>
 
             <div class="time" >
+
+                <!-- GESTION DE L'ICONE DU TEMPS -->
+                {% if une_scene.lieu is not empty %}
+                    {% set bg = '_BG' %}
+                {% endif %}
+
                 {% if une_scene.temps == 'Aube' or une_scene.temps == 'Matinée' %}
-                    {% if une_scene.lieu is not empty %}
-                        {% set TIME_ICO = MORNING_BG %}
-                    {% else %}
-                        {% set TIME_ICO = MORNING %}
-                    {% endif %}
+                    {% set TIME_ICO = attribute(_context, 'MORNING' ~ time_variable_sufix|default) %}
                 {% elseif une_scene.temps == 'Midi' or une_scene.temps == 'Après-midi' or une_scene.temps == 'Journée' %}
-                    {% if une_scene.lieu is not empty %}
-                        {% set TIME_ICO = NOON_BG %}
-                    {% else %}
-                        {% set TIME_ICO = NOON %}
-                    {% endif %}
+                    {% set TIME_ICO = attribute(_context, 'NOON' ~ time_variable_sufix|default) %}
                 {% elseif une_scene.temps == 'Soirée' or une_scene.temps == 'Crépuscule' or une_scene.temps == 'Tombée de la nuit' %}
-                    {% if une_scene.lieu is not empty %}
-                        {% set TIME_ICO = EVENING_BG %}
-                    {% else %}
-                        {% set TIME_ICO = EVENING %}
-                    {% endif %}
+                    {% set TIME_ICO = attribute(_context, 'EVENING' ~ time_variable_sufix|default) %}
                 {% elseif une_scene.temps == 'Minuit' or une_scene.temps == 'Nuit' %}
-                    {% if une_scene.lieu is not empty %}
-                        {% set TIME_ICO = NIGHT_BG %}
-                    {% else %}
-                        {% set TIME_ICO = NIGHT %}
-                    {% endif %}
+                    {% set TIME_ICO = attribute(_context, 'NIGHT' ~ time_variable_sufi|default) %}
                 {% elseif une_scene.temps == 'Intemporel' %}
                     {% set TIME_ICO = INTEMPOREL %}
                 {% endif %}
+
                 <img src="{{asset(TIME_ICO|default(NA_TIME))}}" alt="icône du temps" />
             </div>
             
@@ -59,25 +50,25 @@
             {% for une_participation in une_scene.participations|filter( (une_participation) => une_participation.estPj == 0) %}
 
                 <!-- GESTION PORTRAIT NON-DISPONIBLE -->
-                    {% if une_participation.personnage.icone is null and une_participation.personnage.genre == 'F' %}
+                {% if une_participation.personnage.icone is null and une_participation.personnage.genre == 'F' %}
                     {% set gender_variable_sufix ='_F' %}
-                    {% elseif une_participation.personnage.icone is null and une_participation.personnage.genre == 'M' %}
+                {% elseif une_participation.personnage.icone is null and une_participation.personnage.genre == 'M' %}
                     {% set gender_variable_sufix = '_M' %}
-                    {% endif %}
+                {% endif %}
 
                 <div class="character-portrait-box">
-                        <a class="character-portrait-link" href="{{path('personnage_profil',{id: une_participation.personnage.id})}}" >
-                            {% if une_participation.estMort == 1 %}
-                                <img class="character-icon-dead" src="{{asset('assets/img/icons/mort.png')}}" alt="est mort" />
-                            {% endif %}
-                            <span class="hover-tooltip character-name pnj">
-                                {{une_participation.personnage.prenom}}
-                            </span>
-                            <img class="character-portrait large pnj
-                                {% if une_participation.estMort == 1 %} dead{% endif %}"
+                    <a class="character-portrait-link" href="{{path('personnage_profil',{id: une_participation.personnage.id})}}" >
+                        {% if une_participation.estMort == 1 %}
+                            <img class="character-icon-dead" src="{{asset('assets/img/icons/mort.png')}}" alt="est mort" />
+                        {% endif %}
+                        <span class="hover-tooltip character-name pnj">
+                            {{une_participation.personnage.prenom}}
+                        </span>
+                        <img class="character-portrait large pnj
+                            {% if une_participation.estMort == 1 %} dead{% endif %}"
                             src="{{ asset(une_participation.personnage.icone|default( attribute(_context, 'NA_PERSO_ICO' ~ gender_variable_sufix|default ) ) ) }}"
-                                alt="Icone personnage" />
-                        </a>
+                            alt="Icone personnage" />
+                    </a>
                 </div>
             {% endfor %}
         </div>
@@ -102,18 +93,18 @@
                         </div><br/>
                     {% endif %}
 
-                        <a class="character-portrait-link" href="{{path('personnage_profil',{id:une_participation.personnage.id})}}" >
+                    <a class="character-portrait-link" href="{{path('personnage_profil',{id:une_participation.personnage.id})}}" >
                         {% if une_participation.estMort == 1 %}<img class="character-icon-dead" src="{{asset('assets/img/icons/mort.png')}}" alt="est mort" />{% endif %}
-                            <span class="hover-tooltip character-name pj {% if une_participation.personnage.joueur == app.user %}me{% endif %} {% if une_participation.xpGagne == 0 or une_participation.estMort == 1 %}gray{% endif %}">
-                                {{une_participation.personnage.prenom}}
-                            </span>
-                            <img
-                                class="character-portrait large pj 
-                                {% if une_participation.personnage.joueur == app.user %} me outlined{% endif %}
-                                {% if une_participation.estMort == 1 %} dead{% elseif une_participation.xpGagne == 0 %}grayscale{% endif %}"
+                        <span class="hover-tooltip character-name pj {% if une_participation.personnage.joueur == app.user %}me{% endif %} {% if une_participation.xpGagne == 0 or une_participation.estMort == 1 %}gray{% endif %}">
+                            {{une_participation.personnage.prenom}}
+                        </span>
+                        <img
+                            class="character-portrait large pj 
+                            {% if une_participation.personnage.joueur == app.user %} me outlined{% endif %}
+                            {% if une_participation.estMort == 1 %} dead{% elseif une_participation.xpGagne == 0 %}grayscale{% endif %}"
                             src="{{asset(une_participation.personnage.icone|default( attribute(_context, 'NA_PERSO_ICO' ~ gender_variable_sufix|default ) ) ) }}"
-                                alt="Icone personnage" />
-                        </a>
+                            alt="Icone personnage" />
+                    </a>
                 </div>
             {% endfor %}
         </div>

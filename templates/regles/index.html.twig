@@ -14,8 +14,13 @@
 
 <main class="container-fluid bg-light pt-5">
     <div class="container">
+
+        <!-- LES CLASSES -->
+        {% set element = 'Classe' %}
         <section id="classes">
-            <h2 class="display-4">Les <strong>Classes</Strong></h2>
+            <h2 class="display-4 relative">Les <strong>Classes</Strong>
+                {{ include('/parts/btn-ajouter-element.html.twig', {element}) }}
+            </h2>
             <hr>
             <br/>
             <div class="row mb-5 justify-content-center">
@@ -37,19 +42,11 @@
             </div>
         </section>
 
+        <!-- LES ECOLES -->
+        {% set element = 'Ecole' %}
         <section id="ecoles">
-            <h2 class="display-4 mt-5 relative">
-                Les <strong>Écoles</Strong>
-
-                <!-- BTN - MJ - AJOUTER UNE ECOLE -->
-                {% if app.user and is_granted("ROLE_MJ") %}
-                    <div class="right-corner-snap">
-                        <a href="{{ path('admin_ecole_create') }}?redirect=regles" class="btn btn-primary">
-                            <i class="fas fa-plus-square" title="Ajouter une école"></i>&nbsp;&nbsp;Ajouter une école
-                        </a>
-                    </div>
-                {% endif %}
-
+            <h2 class="display-4 mt-5 relative">Les <strong>Écoles</Strong>
+                {{ include('/parts/btn-ajouter-element.html.twig', {element}) }}
             </h2>
             <hr>
             <br/>

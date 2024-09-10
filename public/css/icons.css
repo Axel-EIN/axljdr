@@ -124,21 +124,12 @@
     width: 156px;
 }
 
-.character-icon-medium {
-    width: 48px;
-    border-radius: 4px;
-}
-
-.character-icon-large {
-    width: 64px;
-    border-radius: 5px;
-}
-
-.character-icon-small, .location-icon-small {
+.location-icon-small {
     width: 28px;
 }
 
 .character-icon-dead {
+    position: absolute;
     z-index: 10;
     left: -2px;
     width: 72px;

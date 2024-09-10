@@ -80,9 +80,9 @@
                                                 <div class="characters-icons-container d-flex flex-row justify-content-center align-items-center">
                                                     <div class="d-flex flex-column justify-content-center align-items-center mr-2">
                                                         {% if un_cumul_personnage[keys]['xp'] != 0 and un_cumul_personnage[keys]['estMort'] != 1 %}
-                                                            <strong class="votre-xp">+{{un_cumul_personnage[keys]['xp']}}XP</strong>
+                                                            <strong class="text-your-xp">+{{un_cumul_personnage[keys]['xp']}}XP</strong>
                                                         {% else %}
-                                                            <strong class="text-mort">MORT</strong>
+                                                            <strong class="text-dead">MORT</strong>
                                                         {% endif %}
                                                         <br/>
                                                         <a href="{{path('personnage_profil',{id:un_cumul_personnage[keys]['id']})}}" >

@@ -132,77 +132,30 @@ nav .active { font-weight: bold; }
 
 
 
-/* -------------------------------- */
-/* ------- HEADERS & TITLES ------- */
-/* -------------------------------- */
+/* --------------------------------------- */
+/* ------- HEADERS BG & CONTAINERS ------- */
+/* --------------------------------------- */
 
-.header {       min-height: 60vh;
-                position: relative;
-                color: #fff;
-                margin-bottom: 0;
-                padding-top: 0.5rem;
-                padding-bottom: 0.5rem;
-                text-align: center; }
-
-.header-bg {    background-size: cover; background-position: top; }
-
-.sub-header {   min-height: 50vh;
-        position: relative;
-        color: #fff;
-        margin-bottom: 0;
-        padding-top: 0.5rem;
-        padding-bottom: 0.5rem;
-        text-align: center; }
-
-.header-session {       position: relative;
-                color: #fff;
-                margin-bottom: 0;
-                padding-top: 0.5rem;
-                padding-bottom: 0.5rem;
-                text-align: center; }
-
-.bg-chapter, .header-session-bg {    min-height: 60vh;
-                        background-size: 100% auto;
-                        background-repeat: no-repeat;
-                        background-position: top;
+.header-bg-img { background-size: 100% auto; background-position: top; background-repeat: no-repeat;
                         /* background-color: var(--b); voir doc sur le variable CSS */ }
-@media (max-width: 1200px) { .bg-chapter, .header-session-bg { background-size: 150% auto; } }
-@media (max-width: 992px) { .bg-chapter, .header-session-bg { background-size: 200% auto; } }
-@media (max-width: 576px) { .bg-chapter, .header-session-bg { background-size: 250% auto; } }
-@media (max-width: 480px) { .bg-chapter, .header-session-bg { background-size: 300% auto; } }
+                @media (max-width: 1200px) { .header-bg-img { background-size: 150% auto; } }
+                @media (max-width: 992px) { .header-bg-img { background-size: 200% auto; } }
+                @media (max-width: 576px) { .header-bg-img { background-size: 250% auto; } }
+                @media (max-width: 480px) { .header-bg-img { background-size: 300% auto; } }
 
-@media (max-width: 1200px) { .pre-titre-saison { font-size: 3rem; } }
-@media (max-width: 992px) { .pre-titre-saison { font-size: 3rem; } }
-@media (max-width: 576px) { .pre-titre-saison { font-size: 2rem; } }
-@media (max-width: 480px) { .pre-titre-saison { font-size: 2rem; }}
+.header {       position: relative; min-height: 60vh;
+                color: #fff; text-align: center;
+                margin-bottom: 0; padding-top: 0.5rem; padding-bottom: 0.5rem; }
+.header-chapter { min-height: 40vh; }
+.header-session { min-height: unset; }
 
-.chapter-number {       font-size: 2.5rem;
-                        color: #fff;
-                        margin: 0; }
+.chapter-number { font-size: 2.5rem; color: #fff; margin: 0; }
 @media (max-width: 1200px) { .chapter-number { font-size: 2.5rem; } }
 @media (max-width: 992px) { .chapter-number { font-size: 2.5rem; } }
 @media (max-width: 576px) { .chapter-number { font-size: 1.5rem; } }
 @media (max-width: 480px) { .chapter-number { font-size: 1.5rem; } }
 
-.header hr, .sub-header hr, .header-session hr {        background-color: #fff;
-                                                        height: 1px;
-                                                        margin-top: 0.5rem;
-                                                        margin-bottom: 0.5rem; }
-
-@media (max-width: 1200px) { .display-4 { font-size: 3.5rem; } }
-@media (max-width: 992px) { .display-4 { font-size: 3rem; } }
-@media (max-width: 576px) { .display-4 { font-size: 2.5rem; } }
-@media (max-width: 480px) { .display-4 { font-size: 2rem; } }
-
-@media (max-width: 1200px) { .display-3 { font-size: 4.5rem; } }
-@media (max-width: 992px) { .display-3 { font-size: 4rem; } }
-@media (max-width: 576px) { .display-3 { font-size: 3.5rem; } }
-@media (max-width: 480px) { .display-3 { font-size: 3rem; } }
-
-@media (max-width: 1200px) { .display-1 { font-size: 6rem; } }
-@media (max-width: 992px) { .display-1 { font-size: 5rem; } }
-@media (max-width: 576px) { .display-1 { font-size: 4rem; } }
-@media (max-width: 480px) { .display-1 { font-size: 3rem; } }
+.header hr {    background-color: #fff; height: 1px; margin-top: 0.5rem; margin-bottom: 0.5rem; }
 
 
 

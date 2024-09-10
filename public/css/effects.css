@@ -116,6 +116,26 @@
     ;
 }
 
+.hue-gray {
+    filter:
+        grayscale(100%);
+    &:hover {
+        filter:
+            grayscale(100%)
+            brightness(125%);
+    }
+}
+
+.hue-fuschia {
+    filter:
+        hue-rotate(-45deg);
+    &:hover {
+        filter:
+            hue-rotate(-45deg)
+            brightness(125%);
+    }
+}
+
 .outlined {
     box-shadow:
         2px 2px 0 var(--flash-green),

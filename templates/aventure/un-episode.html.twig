@@ -35,20 +35,28 @@
                 {% for un_episode in episode.chapitreParent.episodes %}
 
                     {% if un_episode.scenes|length > 0 or is_granted("ROLE_MJ") %}
-                        <div>
                         {% if un_episode.id == episode.id %}
                             <div class="vignette-caroussel active">
-                                <img class="img-160 border border-4 border-danger shadow" src="{{ asset(un_episode.image|default(NA_SESSION)) }}" alt="image de l'episode {{un_episode.titre}}" title="{{un_episode.titre}}"/>
-                                <i class="absolute arrow-down fa-sharp fa-solid fa-sort-down fa-bounce fa-2xl text-primary"></i>
+                                <div class="episode-titre">
+                                    {{un_episode.titre}}
+                                </div>
+                                <div class="ratio-169">
+                                    <img class="ratio-cropped" src="{{ asset(un_episode.image|default(NA_SESSION)) }}" alt="image épisode" />
+                                    <i class="absolute arrow-down fa-sharp fa-solid fa-sort-down fa-2xl text-primary"></i>
+                                </div>
                             </div>
-                        {% else %}
-                            <div class="relative darken hover-bright bg-dark vignette-caroussel">         
-                                <a href="{{ path('aventure_episode', { id : un_episode.id, '_fragment': 'read-head' } ) }}" >
-                                    <img class="img-fluid img-128" src="{{ asset(un_episode.image|default(NA_SESSION)) }}" alt="image de l'episode {{un_episode.titre}}" title="{{un_episode.titre}}"/>
-                                </a>
+                            {% else %}
+                            <div class="vignette-caroussel">
+                                <div class="episode-titre">
+                                    {{un_episode.titre}}
+                                </div>
+                                <div class="ratio-169 vignette-caroussel">         
+                                    <a href="{{ path('aventure_episode', { id : un_episode.id, '_fragment': 'read-head' } ) }}" >
+                                        <img class="ratio-cropped" src="{{ asset(un_episode.image|default(NA_SESSION)) }}" alt="image épisode" />
+                                    </a>
+                                </div>
                             </div>
                         {% endif %}
-                        </div>
                     {% endif %}
 
                 {% endfor %}

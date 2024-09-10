@@ -384,7 +384,8 @@ a.character-icon { display: inline-block; font-weight: bold; }
                 @media (max-width: 576px) { .scene-body { padding-left: 1rem; padding-right: 1rem; padding-top: 1.5rem; padding-bottom: 0.5rem; } }
                 @media (max-width: 480px) { .scene-body { padding-left: 1rem; padding-right: 1rem; padding-top: 1.5rem; padding-bottom: 0.5rem; } }
 
-
+.hover-zoom-twice {  transition: transform 0.25s ease; }
+.hover-zoom-twice:hover {  transform: scale(1.125); }
 
 .fa-animation-delay { --fa-animation-delay: 0.67s; }
 

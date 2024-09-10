@@ -16,19 +16,10 @@
     <div class="container">
 
         <!-- LES ARCHIVES -->
+        {% set element = 'Archive' %}
         <section id="archives">
-            <h2 class="display-4 relative">
-                Les <strong>Archives</strong>
-
-                <!-- BTN - MJ - AJOUTER UNE ARCHIVE -->
-                {% if app.user and is_granted("ROLE_MJ") %}
-                <div class="right-corner-snap">
-                    <a href="{{ path('admin_archive_create') }}?redirect=archive" class="btn btn-primary">
-                        <i class="fas fa-plus-square"></i>&nbsp;&nbsp;Ajouter une archive
-                    </a>
-                </div>
-                {% endif %}
-
+            <h2 class="display-4 relative">Les <strong>Archives</strong>
+                {{ include('/parts/btn-ajouter-element.html.twig', {element}) }}
             </h2>
 
             <hr>
@@ -56,8 +47,12 @@
             </div>
         </section>
 
+        <!-- LES CLANS -->
+        {% set element = 'Clan' %}
         <section id="clans" class="mt-4">
-            <h2 class="display-4">Les <strong>Factions</strong></h2>
+            <h2 class="display-4 relative">Les <strong>Factions</strong>
+                {{ include('/parts/btn-ajouter-element.html.twig', {element}) }}
+            </h2>
             <hr>
             <br/>
             <div class="row">
@@ -71,8 +66,12 @@
             </div>
         </section>
 
+        <!-- LES LIEUX -->
+        {% set element = 'Lieu' %}
         <section id="lieux" class="mt-4">
-            <h2 class="display-4">Les <strong>Lieux</strong></h2>
+            <h2 class="display-4 relative">Les <strong>Lieux</strong>
+                {{ include('/parts/btn-ajouter-element.html.twig', {element}) }}
+            </h2>
             <hr>
             <br/>
             <div class="row">

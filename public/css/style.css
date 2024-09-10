@@ -91,11 +91,10 @@ html, body {    font-size: 16px; }
         @media (max-width: 576px) { .quote { font-size: 1rem; } }
         @media (max-width: 480px) { .quote { font-size: 1rem; } }
 
+.text-xp { color: rgb(0, 100, 100); text-shadow: 1px 1px 0 #0ff, -1px -1px 0 #0ff, 1px -1px 0 #0ff, -1px 1px 0 #0ff; }
+.text-your-xp { color: rgb(0, 100, 0); text-shadow: 1px 1px 0 #0f0, -1px -1px 0 #0f0, 1px -1px 0 #0f0, -1px 1px 0 #0f0; }
+.text-dead { color: rgb(100, 0, 0); text-shadow: 1px 1px 0 #f00, -1px -1px 0 #f00, 1px -1px 0 #f00, -1px 1px 0 #f00; }
 
-
-/* ------------------------- */
-/* ----- TITLE EFFECTS ----- */
-/* ------------------------- */
 
 .big-title-effect { font-family: "Shogun"; color:#fff; text-align: center; margin: 0; text-shadow: 4px 4px 2rem black; }
 

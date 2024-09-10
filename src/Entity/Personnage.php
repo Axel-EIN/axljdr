@@ -90,6 +90,11 @@ class Personnage
      */
     private $participations;
 
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $estMort;
+
     public function __construct()
     {
         $this->archives = new ArrayCollection();
@@ -306,6 +311,18 @@ class Personnage
                 $une_participation->setPersonnage(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getEstMort(): ?bool
+    {
+        return $this->estMort;
+    }
+
+    public function setEstMort(bool $estMort): self
+    {
+        $this->estMort = $estMort;
 
         return $this;
     }

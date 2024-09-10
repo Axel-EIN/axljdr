@@ -79,7 +79,19 @@ html, body { font-size: 16px; }
 @media (max-width: 576px) { .quote { font-size: 1rem; } }
 @media (max-width: 480px) { .quote { font-size: 1rem; } }
 
-.plus-petit { font-size: 2rem; }
+
+
+/* ------------------------- */
+/* ----- TITLE EFFECTS ----- */
+/* ------------------------- */
+
+.big-title-effect { font-family: "Shogun"; color:#fff; text-align: center; margin: 0; text-shadow: 4px 4px 2rem black; }
+
+.session-title-container-effect {       position: relative; z-index: 2;
+                                        color: white; font-family: "Present"; font-weight: 300; text-shadow: 4px 4px 2rem black; text-align: center;
+                                        background-image: url('../assets/img/ui/back-title.png'); background-size: 100% 130%; background-repeat: no-repeat; background-position: 50% 50%; }
+
+.plus-petit {   font-size: 2rem; }
 @media (max-width: 1200px) { .plus-petit { font-size: 2rem; } }
 @media (max-width: 992px) { .plus-petit { font-size: 1.75rem; } }
 @media (max-width: 576px) { .plus-petit { font-size: 1.5rem; } }

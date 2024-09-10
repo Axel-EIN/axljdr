@@ -2,20 +2,16 @@
 /* --------- PAGE SESSION --------- */
 /* -------------------------------- */
 
-.pnjs-line {
-        position: absolute;
-        z-index: 10;
-        top: -32px;
-        right: 24px; }
+.characters-line {
+    position: absolute;
+    z-index: 10;
+    right: 24px;
+    &.pnjs { top: -32px; }
+    &.pjs { bottom: -24px; }
+}
 
-.pjs-line {
-        position: absolute;
-        z-index: 10;
-        bottom: -28px;
-        right: 24px; }
-
-@media (max-width: 576px) { .pnjs-line, .pjs-line { visibility: collapse; } }
-@media (max-width: 480px) { .pnjs-line, .pjs-line { visibility: collapse; } }
+@media (max-width: 576px) { .characters-line { visibility: collapse; } }
+@media (max-width: 480px) { .characters-line { visibility: collapse; } }
 
 .scene-text {
     line-height: 1.6; }

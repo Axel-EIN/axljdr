@@ -4,20 +4,16 @@
     <!-- IMAGE DE LA SCENE -->
     <div class="bg-black relative">
 
-        <!-- LIGNE VERTICAL DE PNJS -->
-        <div class="absolute pnjs-line">
-            <div class="d-flex flex-column">   
+        <div class="characters-line pnjs">
                 {% for une_participation in une_scene.participations %}
-                    
+                {% if une_participation.estPj == 0 %}
                     {% if une_participation.personnage.icone is null and une_participation.personnage.genre == 'F' %}
                         {% set NA_PERSO_ICO = NA_PERSO_ICO_F %}
                     {% elseif une_participation.personnage.icone is null and une_participation.personnage.genre == 'M' %}
                         {% set NA_PERSO_ICO = NA_PERSO_ICO_M %}
                     {% endif %}
-
-                    {% if une_participation.estPj == 0 %}
-                        <div class="mb-2 d-inline-block relative hover-zoom">
-                            <a class="hover-zoom" href="{{path('personnage_profil',{id: une_participation.personnage.id})}}" >
+                    <character class="character-portrait-box">
+                        <a class="character-portrait-link" href="{{path('personnage_profil',{id: une_participation.personnage.id})}}" >
                                 {% if une_participation.estMort == 1 %}
                                     <img class="absolute character-icon-dead" src="{{asset('assets/img/icons/mort.png')}}" alt="est mort" />
                             {% endif %}
@@ -49,18 +45,23 @@
                                 {% if une_participation.estMort == 1 %}
                                     <img class="character-icon-dead" src="{{asset('assets/img/icons/mort.png')}}" alt="est mort" />
                                 {% endif %}
-                                <img class="shadow-more character-icon-large {% if une_participation.estMort == 1 %}dead{% else %}hover-shine{% endif %}"
-                                    src="{{asset(une_participation.personnage.icone|default(NA_PERSO_ICO))}}" alt="Icone du Personnage" title="{{une_participation.personnage.prenom}}" />
+                            <span class="character-name pnj">
+                                {{une_participation.personnage.prenom}}
+                            </span>
+                            <img class="character-portrait large pnj
+                                {% if une_participation.estMort == 1 %} dead{% endif %}"
+                                src="{{asset(une_participation.personnage.icone|default(NA_PERSO_ICO))}}"
+                                alt="Icone du Personnage" title="{{une_participation.personnage.prenom}}" />
                             </a>
-                        </div>
+                    </character>
                     {% endif %}
                 {% endfor %}
-            </div>
         </div>
 
-        <!-- LIGNE HORIZONTALE DE PJS -->
-        <div class="absolute pjs-line">
+        <!-- PJS -->
+        <div class="characters-line pjs">
             {% for une_participation in une_scene.participations|sort( (a, b) => a.xpGagne <=> b.xpGagne)|reverse %}
+                {% if une_participation.estPj %}
 
                 {% if une_participation.icone is not defined and une_participation.genre is defined and une_participation.genre == 'F' %}
                     {% set NA_PERSO_ICO = NA_PERSO_ICO_F %}
@@ -68,25 +69,27 @@
                     {% set NA_PERSO_ICO = NA_PERSO_ICO_M %}
                 {% endif %}
 
-                {% if une_participation.estPj %}
-                    <div class="d-inline-block relative hover-zoom">
+                    <character class="character-portrait-box">
                         {% if une_participation.xpGagne != 0 and une_participation.estMort != 1 %}
                             <strong class="{% if une_participation.personnage.joueur == app.user %}text-your-xp{% else %}text-xp{% endif %}">
                                 +{{une_participation.xpGagne}} <span class="text-small">XP</span>
-                            </strong>
+                            </strong><br/>
                         {% endif %}
-                        <br/>
-                        <a class="relative" href="{{path('personnage_profil',{id:une_participation.personnage.id})}}" >
+                        <a class="character-portrait-link" href="{{path('personnage_profil',{id:une_participation.personnage.id})}}" >
                             {% if une_participation.estMort == 1 %}
-                                <img class="absolute character-icon-dead" src="{{asset('assets/img/icons/mort.png')}}" alt="est mort" />
+                                <img class="character-icon-dead" src="{{asset('assets/img/icons/mort.png')}}" alt="est mort" />
                             {% endif %}
+                            <span class="character-name pj {% if une_participation.personnage.joueur == app.user %}me{% endif %}">
+                                {{une_participation.personnage.prenom}}
+                            </span>
                             <img
-                                class="shadow-more character-icon-large
-                                {% if une_participation.personnage.joueur == app.user %} outlined{% endif %}
+                                class="character-portrait large pj 
+                                {% if une_participation.personnage.joueur == app.user %} me outlined{% endif %}
                                 {% if une_participation.estMort == 1 %} dead{% elseif une_participation.xpGagne == 0 %}grayscale{% endif %}"
-                                src="{{asset(une_participation.personnage.icone|default(NA_PERSO_ICO))}}" alt="Icone du Personnage" title="{{une_participation.personnage.prenom}}" />
+                                src="{{asset(une_participation.personnage.icone|default(NA_PERSO_ICO))}}"
+                                alt="Icone personnage" />
                         </a>
-                    </div>
+                    </character>
                 {% endif %}
             {% endfor %}
         </div>

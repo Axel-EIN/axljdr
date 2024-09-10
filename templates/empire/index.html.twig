@@ -1,21 +1,17 @@
 {% extends 'base.html.twig' %}
-
 {% block title %}L'Univers de l'Aventure {{ parent() }}{% endblock %}
-
 {% block body %}
-<header class="header-bg-img"
-style="background-image: linear-gradient(rgb(40,0,0,0.5),rgb(40,0,0,0.5)),url('{{ asset('assets/img/rubriques/empire.jpg') }}');">
+
+<header class="header-bg-img header-bg-empire">
     <div class="container">
         <div class="header d-flex flex-column justify-content-center align-items-center">
-
             <div class="text-center d-flex justify-content-center"><strong class="h1">Univers du Jeu</strong></div>
-
             <hr class="w-50">     
             <h1 class="big-title-effect grand">{{ 'L\'Empire<br/> de Rokugan'|relief|raw }}</h1>
-
         </div>
     </div>
 </header>
+
 <main class="container-fluid bg-light pt-5">
     <div class="container">
 

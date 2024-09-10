@@ -1,9 +1,8 @@
 {% extends 'base.html.twig' %}
-
 {% block title %}L'Univers de l'Aventure {{ parent() }}{% endblock %}
-
 {% block body %}
-<header class="header-bg-img" style="background-image: linear-gradient(rgb(40,0,0,0.5),rgb(40,0,0,0.5)),url('{{ asset('assets/img/rubriques/regles.jpg') }}');">
+
+<header class="header-bg-img header-bg-regles">
     <div class="container">
         <div class="header d-flex flex-column justify-content-center align-items-center">
             <div class="text-center d-flex justify-content-center"><strong class="h1">Mécaniques de Jeu</strong></div>
@@ -73,6 +72,7 @@
 {% endfor %}
             </div>
         </section>
+
     </div>
 </main>
 {% endblock %}

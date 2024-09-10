@@ -20,11 +20,39 @@
 
 .vignette-caroussel {
         position: relative;
-        filter: brightness(0.5);
+        z-index: 20;
+        filter: brightness(0.66);
         transition: 0.5s;
+        width: 128px;
+
+        &:hover .episode-titre { visibility: visible; }
+        &.active .episode-titre { visibility: hidden; }
+
+        .episode-titre {
+            visibility: hidden;
+            position: absolute;
+            z-index: 100;
+            bottom: -1.75rem;
+            left: 50%;
+            transform: translate(-50%);
+            overflow-x: visible;
+            white-space: nowrap;
+            color: var(--white);
+            font-weight: bold;
+            font-size: var(--small);
+            background-color: var(--primary);
+            border-radius: 4px;
+            padding: 4px 8px;         
+        }
+
         &:hover, &.active {
             filter: brightness(1);
             transition: 0.5s;
+        }
+
+        &.active {
+            width: 160px;
+            border: solid var(--primary) 1px;
         }
     
         .number-session-caroussel {
@@ -35,6 +63,7 @@
             font-weight: bold;
             color: var(--white);
             text-shadow: 0px 2px 8px black;
+            
             &.active {
                 font-size: 3rem;
                 right: 8px;

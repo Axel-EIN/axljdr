@@ -272,7 +272,7 @@ nav .active { font-weight: bold; }
                 align-items: center;
                 text-align: center; }
 .btn-icon-big a { color: white; }
-.btn-icon-big a:hover { text-decoration: none; }
+.icon-lock { position: absolute;  top: 32px; left: 76px; width: 40px; z-index: 1 }
 
 a.character-icon { display: inline-block; font-weight: bold; }
 .characters-icons-container { position: absolute; top: -12px; left: 8px; z-index: 10; }

@@ -33,6 +33,9 @@ class AdminPersonnageType extends AbstractType
             ->add('est_pj', CheckboxType::class, [
                 'required' => false,
             ])
+            ->add('estMort', CheckboxType::class, [
+                'required' => false,
+            ])
             ->add('clan', EntityType::class, [
                 'class' => Clan::class,
                 'choice_label' => 'nom'])

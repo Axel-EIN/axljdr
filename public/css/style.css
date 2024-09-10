@@ -143,6 +143,8 @@ html, body {    font-size: 16px; }
                 @media (max-width: 576px) { .header-bg-img { background-size: 250% auto; } }
                 @media (max-width: 480px) { .header-bg-img { background-size: 300% auto; } }
 
+.header-bg-characters { background-image: linear-gradient(rgb(40,0,0,0.5),rgb(40,0,0,0.5)),url('../assets/img/rubriques/personnages.jpg'); background-position: center; }
+
 .header {       position: relative; min-height: 60vh;
                 color: #fff; text-align: center;
                 margin-bottom: 0; padding-top: 0.5rem; padding-bottom: 0.5rem; }

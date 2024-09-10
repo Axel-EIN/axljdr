@@ -61,14 +61,8 @@ html, body { font-size: 16px; }
 
 .number-skillrank-effect { font-family: "Shogun"; }
 
-.session-caroussel-number{      position: absolute;
-                        right: 8px;
-                        bottom: 0px;
-                        font-size:2.5rem;
-                        font-weight: bold;
-                        color: white;
-                        text-shadow: 0px 2px 8px black;
-                        z-index: 100 }
+.number-session-caroussel{      position: absolute; right: 8px; bottom: 0px; z-index: 10;
+                                color: white; font-size:2.5rem; font-weight: bold; text-shadow: 0px 2px 8px black; }
 
 .quote {        font-size: 1.25rem;
                 font-style: italic;

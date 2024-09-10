@@ -307,7 +307,7 @@ a.character-icon { display: inline-block; font-weight: bold; }
 .hover-shine:hover { filter: brightness(1.3); transition: 0.5s; }
 .hover-darked:hover { filter: brightness(0.7);  transition: 0.5s; }
 .hover-opaque:hover { filter: opacity(1); transition: 0.5s; }
-.hover-bright { filter: brightness(1); transition: 0.5s; }
+.hover-bright:hover { filter: brightness(1); transition: 0.5s; }
 
 .hover-zoom {  transition: transform 0.5s ease; }
 .hover-zoom:hover {  transform: scale(1.05); }

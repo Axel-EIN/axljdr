@@ -6,6 +6,7 @@ use App\Entity\Saison;
 use App\Entity\Episode;
 use App\Service\ClasseurXP;
 use App\Repository\SaisonRepository;
+use App\Repository\ChapitreRepository;
 use App\Repository\EpisodeRepository;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -57,16 +58,19 @@ class AventureController extends AbstractController
     /**
      * @Route("/aventure/episode/{id}", name="aventure_episode")
      */
-    public function viewEpisode(Episode $episode, EpisodeRepository $episodeRepository, ClasseurXP $classeurXP): Response
+    public function viewEpisode(Episode $episode, EpisodeRepository $episodeRepository, ClasseurXP $classeurXP, ChapitreRepository $chapitreRepository): Response
     {
         $precedent = $episodeRepository->findPrevious($episode->getChapitreParent()->getId(), $episode->getNumero());
         $suivant = $episodeRepository->findNext($episode->getChapitreParent()->getId(), $episode->getNumero());
         $classement_episode = $classeurXP->classerPersosEpisode($episode);
+        $chapitre_suivant = $chapitreRepository->findNext($episode->getChapitreParent()->getSaisonParent()->getId(), $episode->getChapitreParent()->getNumero());
+        $episode_chapitre_suivant = $chapitre_suivant->getEpisodes()[0];
 
         return $this->render('aventure/un-episode.html.twig', [
             'episode' => $episode,
             'episode_precedent' => $precedent,
             'episode_suivant' => $suivant,
+            'episode_chapitre_suivant' => $episode_chapitre_suivant,
             'classement_episode' => $classement_episode,
         ]);
     }

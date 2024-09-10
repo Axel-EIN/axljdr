@@ -63,21 +63,7 @@ html, body { font-size: 16px; }
         margin: 0;
         text-shadow: 4px 4px 2rem black; }
 
-.session-title-h {
-position: relative;
-z-index: 2;
-font-weight: 300;
-color: white;
-background-image: url('../assets/img/ui/back-title.png');
-background-size: 100% 130%;
-background-repeat: no-repeat;
-background-position: 50% 50%;
-text-shadow: 4px 4px 2rem black;
-text-align: center;
-font-family: "Present"; }
-        
-
-.number-effect { font-family: "Shogun"; }
+.number-skillrank-effect { font-family: "Shogun"; }
 
 .session-caroussel-number{      position: absolute;
                         right: 8px;

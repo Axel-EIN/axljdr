@@ -102,11 +102,3 @@
     background-repeat: no-repeat;
     background-position: 50% 50%;
 }
-
-.text-daytime-overtop-container {
-    z-index: 2;
-    color: var(--white);
-    top: -5rem;
-    width: 90%;
-    h3, h5 { margin-bottom: 0; }
-}

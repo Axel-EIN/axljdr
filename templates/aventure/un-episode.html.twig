@@ -11,7 +11,7 @@
             <a class="btn-style btn-large"
                 href="{{ path('aventure_saison', {id: episode.chapitreParent.saisonParent.id, '_fragment': 'read-head-ch-id' ~ episode.chapitreParent.id } ) }}">Retour</a>
         </div>
-        <h2 id="read-head" class="title-effect grand">{{ episode.chapitreParent.titre|relief|raw }}</h2>
+        <h2 id="read-head" class="big-title-effect grand">{{ episode.chapitreParent.titre|relief|raw }}</h2>
         <p class="quote">{{ episode.chapitreParent.citation|nl2br }}</p>
     </header>
 

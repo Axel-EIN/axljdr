@@ -27,10 +27,12 @@
 
 .primary-color { color: #EA2027; }
 .primary-color-light { color: #ff4147; }
+.primary-color-lighter { color: #ff8084; }
 .primary-color-dark { color: #b6252f; }
 
 .primary-bg-color { background-color: #EA2027; }
 .primary-bg-color-light { background-color: #ff4147; }
+.primary-bg-color-lighter { background-color: #ff8084; }
 .primary-bg-color-dark { background-color: #b6252f; }
 
 .secondary-color { color: #ff7f00; }

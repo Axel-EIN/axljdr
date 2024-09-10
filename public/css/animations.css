@@ -2,17 +2,27 @@
 /* --------- ANIMATIONS --------- */
 /* ------------------------------ */
 
-/* ----- GENERAL HOVERS ----- */
+/* GENERAL */
 
-.hover-pointer:hover { cursor: pointer; }
+.hover-pointer:hover {
+    cursor: pointer; }
 
-/* ----- ZOOM ----- */
+/* ZOOM */
 
-.hover-zoom, .hover-zoom-half, .hover-zoom:hover, .hover-zoom-half:hover { transition: 0.33s; }
+.hover-zoom, .hover-zoom:hover,
+.hover-zoom-half, .hover-zoom-half:hover {
+    transition: 0.33s; }
 
-.hover-zoom:hover { transform: scale(1.125); }
+.hover-zoom-quick, .hover-zoom-quick:hover {
+    transition: 0.05s;
+}
 
-.hover-zoom-half:hover { transform: scale(1.0625); }
+.hover-zoom:hover,
+.hover-zoom-quick:hover {
+    transform: scale(1.125); }
+
+.hover-zoom-half:hover {
+    transform: scale(1.0625); }
 
 /* ----- OPACITY ----- */
 

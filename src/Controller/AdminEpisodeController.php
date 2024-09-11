@@ -34,6 +34,7 @@ class AdminEpisodeController extends AbstractController
             'determinant' => 'un',
             'img_size' => '64',
             'extra_col1' => 'numero',
+            'extra_col2' => 'numeroSaison',
         ]);
     }
 

@@ -56,6 +56,11 @@ class Episode
      */
     private $numeroSaison;
 
+    /**
+     * @ORM\Column(type="string", length=128, nullable=true)
+     */
+    private $issue;
+
     public function __construct()
     {
         $this->scenes = new ArrayCollection();
@@ -164,6 +169,18 @@ class Episode
     public function setNumeroSaison(int $numeroSaison): self
     {
         $this->numeroSaison = $numeroSaison;
+
+        return $this;
+    }
+
+    public function getIssue(): ?string
+    {
+        return $this->issue;
+    }
+
+    public function setIssue(?string $issue): self
+    {
+        $this->issue = $issue;
 
         return $this;
     }

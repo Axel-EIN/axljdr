@@ -104,31 +104,40 @@
                 {% if classement_episode %}
                     <div class="d-flex justify-content-center">
                         <div class="list-group list-group-flush">
+
+                            {% set mvp = true %}
                             {% for un_personnage in classement_episode %}
-                                <a class="list-group-item d-flex align-items-center hover-zoom bg-transparent ranking" href="{{path('personnage_profil',{id:un_personnage.id})}}">
+                                {% if un_personnage != classement_episode|first and un_personnage.xp == classement_episode|first.xp %}
+                                    {% set mvp = false %}
+                                {% endif %}
+                            {% endfor %}
+
+                            {% set previous_xp = null %}
+                            {% set rank = 0 %}
+
+                            {% for un_personnage in classement_episode %}
+
+                                {% if previous_xp != un_personnage.xp %}
+                                    {% set rank = rank + 1 %}
+                                {% endif %}
+
+                                {% if mvp == true and rank == 1 %}
+                                    {% set scale_class = 'scale-1st' %}
+                                {% elseif mvp == true and rank != 1 %}
+                                    {% set scale_class = 'scale-other' %}
+                                {% endif %}
+
+                                <a class="list-group-item d-flex align-items-center hover-zoom bg-transparent ranking {{scale_class|default()}}" href="{{path('personnage_profil',{id:un_personnage.id})}}">
                                     <img class="img-96 mr-4 rounder-portrait" src="{{ asset(un_personnage.icone|default(NA_PERSO_ICO)) }}" alt="Portrait du Personnage" title="Voir le profil de {{un_personnage.prenom}}"/>
-                                    <span class="text-fat mr-4 text-gray">{{un_personnage.prenom}}</span>
-                                    <span class="ml-auto badge badge-pill text-large
-                                        {% if un_personnage.xp >= 7 %}
-                                            bg-fuschia text-white
-                                        {% elseif un_personnage.xp >= 6 %}
-                                            bg-primary text-white
-                                        {% elseif un_personnage.xp >= 5 %}
-                                            badge-success
-                                        {% elseif un_personnage.xp >= 4 %}
-                                            bg-secondary text-white
-                                        {% elseif un_personnage.xp >= 3 %}
-                                            bg-accent text-white
-                                        {% elseif un_personnage.xp >= 2 %}
-                                            badge-secondary text-white
-                                        {% elseif un_personnage.xp >= 1 %}
-                                            badge-light text-black
-                                        {% else %}
-                                            badge-light text-light
-                                        {% endif %} ">
-                                        {{un_personnage.xp}}xp
-                                    </span>
+                                    <div class="relative inlineblock mr-4">
+                                        {% if mvp == true and rank == 1 %}<i class="crown fa-solid fa-crown fa-2xl text-primary mr-4"></i>{% endif %}
+                                        <span class="text-fat text-gray">{{un_personnage.prenom}}</span>
+                                    </div>
+                                    <span class="ml-auto badge badge-pill text-large text-gray">{{un_personnage.xp}}xp</span>
                                 </a>
+
+                                {% set previous_xp = un_personnage.xp %}
+
                             {% endfor %}
                         </div>
                     </div>

@@ -95,6 +95,11 @@ class Personnage
      */
     private $estMort;
 
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $locked;
+
     public function __construct()
     {
         $this->archives = new ArrayCollection();
@@ -323,6 +328,18 @@ class Personnage
     public function setEstMort(bool $estMort): self
     {
         $this->estMort = $estMort;
+
+        return $this;
+    }
+
+    public function getLocked(): ?bool
+    {
+        return $this->locked;
+    }
+
+    public function setLocked(bool $locked): self
+    {
+        $this->locked = $locked;
 
         return $this;
     }

@@ -1,0 +1,3 @@
+<a class="{{btnStyle|default('btn-icon-text')}} {{btnSize|default('')}} {{color}}" href="{{ path('admin_' ~ entity ~ '_create')}}?numero={{numero}}&{{parent}}ID={{parentID}}&redirect={{redirect}}">
+    <i class="fas fa-plus-square" alt="Icône {{label}}"></i>&nbsp;&nbsp;{{label}} {{entity == 'scene' ? 'une' : 'un'}} {{entity|capitalize}}
+</a>

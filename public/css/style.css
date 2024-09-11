@@ -57,11 +57,7 @@ html, body { font-size: 16px; }
 /* ----- TEXT EFFECTS ----- */
 /* ------------------------ */
 
-.title-effect { font-family: "Shogun";
-        color:#fff;
-        text-align: center;
-        margin: 0;
-        text-shadow: 4px 4px 2rem black; }
+.text-shadowed { text-shadow: 4px 4px 2rem black; }
 
 .number-skillrank-effect { font-family: "Shogun"; }
 
@@ -371,11 +367,8 @@ a.character-icon { display: inline-block; font-weight: bold; }
 /* ----- IMAGES EFFECTS ----- */
 /* -------------------------- */
 
-.hover-shine:hover { filter: brightness(1.3); transition: .5s; }
-.hover-darked:hover { filter: brightness(0.7);  transition: .5s; }
-
-.grayscale { filter:grayscale(100%); }
-
+.shadowed { box-shadow: 2px 2px 4px black; }
+.rounded-8 { border-radius: 0.5rem; }
 .dead { filter: grayscale(100%) brightness(40%) sepia(100%) hue-rotate(-50deg) saturate(600%) contrast(0.8); }
 
 .mask { mask-image: linear-gradient(to top, rgba(0,0,0,0.2),rgba(0,0,0,1),rgba(0,0,0,1),rgba(0,0,0,1));

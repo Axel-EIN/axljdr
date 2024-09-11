@@ -19,6 +19,40 @@ class PersonnageRepository extends ServiceEntityRepository
         parent::__construct($registry, Personnage::class);
     }
 
+    public function findAllSorted()
+    {
+        return $this->createQueryBuilder('p')
+            ->leftJoin('p.clan', 'c')
+            ->addOrderBy('c.est_majeur', 'DESC')
+            ->addOrderBy('c.nom', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function findAllPJsSorted()
+    {
+        return $this->createQueryBuilder('p')
+            ->andWhere('p.est_pj = :val')
+            ->setParameter('val', 1)
+            ->leftJoin('p.clan', 'c')
+            ->addOrderBy('c.est_majeur', 'DESC')
+            ->addOrderBy('c.nom', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function findAllPNJsSorted()
+    {
+        return $this->createQueryBuilder('p')
+            ->andWhere('p.est_pj = :val')
+            ->setParameter('val', 0)
+            ->leftJoin('p.clan', 'c')
+            ->addOrderBy('c.est_majeur', 'DESC')
+            ->addOrderBy('c.nom', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
+
 
     // SQL COUNT CHARACTERS
 

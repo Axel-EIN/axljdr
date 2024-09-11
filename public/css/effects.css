@@ -89,6 +89,11 @@
     }
 }
 
+/* -------- TRANSFORM ---------- */
+
+.scale-1st { scale: 120%; }
+.scale-other { scale: 80%; }
+
 /* -------- FILTERS ---------- */
 
 .grayscale {

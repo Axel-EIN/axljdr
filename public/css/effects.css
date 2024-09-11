@@ -6,6 +6,8 @@
 
 .rounded-top { border-radius: 1rem 1rem 0px 0px !important; }
 
+.rounder-portrait { border-radius: 50%; }
+
 /* ----- OPACITY & VISIBILITY ----- */
 
 .invisible {

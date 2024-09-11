@@ -20,6 +20,7 @@ class AdminEpisodeType extends AbstractType
     {
         $builder
             ->add('numero', IntegerType::class)
+            ->add('numeroSaison', IntegerType::class)
             ->add('titre', TextType::class)
             ->add('resume', TextareaType::class, ['required' => false, 'constraints' => [ new Length( [ 'max' => 200 ] ) ]])
             ->add('image', FileType::class, array('mapped' => false, 'data_class' => null, 'required' => false))

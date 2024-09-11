@@ -309,18 +309,12 @@ nav .active { font-weight: bold; }
 .btn-icon-big a { color: white; }
 .btn-icon-big a:hover { text-decoration: none; }
 
-.btn-icons-32-right-container { position: absolute;
-                                top: 8px;
-                                right: 0px;
-                                font-size: 2rem; }
-.btn-icons-32-right-container a { color: white; }
-
-.btn-icons-24-right-container { position: absolute;
-                                top: 4px;
-                                right: 12px;
-                                font-size: 1.5rem;
-                                z-index: 100; }
-.btn-icons-24-right-container a { color: white; }
+a.character-icon { display: inline-block; font-weight: bold; }
+.characters-icons-container { position: absolute; top: -12px; left: 8px; z-index: 10; }
+.character-icon-medium { width: 48px; border-radius: 4px; }
+.character-icon-large { width: 64px; border-radius: 5px; }
+.character-icon-small { width: 26px; }
+.character-icon-dead { position: absolute; top: -4px; left: -2px; width: 72px;  z-index: 1; }
 
 /* ------------------------ */
 /* -------- IMAGES -------- */

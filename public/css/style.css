@@ -386,9 +386,8 @@ a.character-icon { display: inline-block; font-weight: bold; }
 
 
 
-/* --------------------------------------- */
-/* ----- NAVIGATION & OTHER ELEMENTS ----- */
-/* --------------------------------------- */                  
+.fa-animation-delay { --fa-animation-delay: 0.67s; }
+
 
 #navigation-bar { position: relative; z-index: 10; box-shadow: 0px 2px 8px black; }
 nav .active { font-weight: bold; border-bottom: 3px solid #EA2027; }

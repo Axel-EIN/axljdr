@@ -79,7 +79,7 @@
                         {% if app.user and is_granted("ROLE_MJ") %}
                             <!-- MJ BTN ICON+TEXT Insert or Add -->
                             {% set color, entity, numero, parent, parentID, redirect, label = 'text-accent', 'scene', une_scene.numero, 'episode', episode.id, 'episode', 'Insérer' %}
-                            {{ include('/parts/btn-line-insert.html.twig') }}
+                            {{ include('/btns/btn-line-insert.html.twig') }}
                         {% endif %}
                     </div>
 
@@ -93,6 +93,10 @@
                 {% if app.user and is_granted("ROLE_MJ") %}
                     <!-- MJ BTN ICON+TEXT Insert or Add -->
                     <div class="text-center mt-1 mb-3">
+                        {% set btnStyle, btnSize, color, entity, numero, parent, parentID, redirect, label = 'btn-primary-style', 'btn-medium', 'text-white', 'scene', (numero + 1), 'episode', episode.id, 'episode', 'Ajouter' %}
+                        {{ include('/btns/btn-line-insert.html.twig') }}
+                    </div>
+                {% endif %}
 
                 <hr class="mt-5">
 

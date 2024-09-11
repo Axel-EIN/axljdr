@@ -174,3 +174,14 @@
 
 .scene-text {
     line-height: 1.6; }
+
+    
+/* RANKING */
+/* ‾‾‾‾‾‾‾ */
+
+.crown {
+    position: absolute;
+    top: -12px;
+    left: 50%;
+    transform: translate(-50%, 0%);
+}

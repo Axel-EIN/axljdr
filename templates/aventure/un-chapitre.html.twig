@@ -49,6 +49,8 @@
 
                 {% for un_episode in un_chapitre.episodes %}
                     {% if un_episode.scenes|length > 0 or is_granted("ROLE_MJ") %}
+
+                        <!-- UN EPISODE -->
                         <article class="col-lg-3 col-md-4 col-sm-6 session-card-spacing hover-zoom">
                             <div class="card session-card-body">
                                 <div class="session-card-number">{{ un_episode.numero }}</div>
@@ -63,7 +65,7 @@
                                     <p class="session-card-text">{{ un_episode.resume }}</p>
                                 </div>
                                 <div class="text-center">
-                                    <a class="btn-primary-style btn-medium" href="{{ path('aventure_episode', {id:un_episode.id} ) }}">
+                                    <a class="btn-primary-style btn-medium fa-animation-delay" href="{{ path('aventure_episode', {id:un_episode.id} ) }}">
                                         <i class="fab fa-readme" alt="Icône Lire"></i>&nbsp;&nbsp;Lire
                                     </a>
                                 </div>

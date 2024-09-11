@@ -93,15 +93,27 @@
                 {% if app.user and is_granted("ROLE_MJ") %}
                     <!-- MJ BTN ICON+TEXT Insert or Add -->
                     <div class="text-center mt-1 mb-3">
-                        {% set color, entity, numero, parent, parentID, redirect, label = 'text-accent', 'scene', (numero + 1), 'episode', episode.id, 'episode', 'Ajouter' %}
-                        {{ include('/parts/btn-line-insert.html.twig') }}
+
+                <hr class="mt-5">
+
+                <!-- ISSUE -->
+                {% if episode.issue is defined and episode.issue is not empty %}
+                    <div class="text-center mt-4 mb-2">
+                        {% if episode.issue == 'Win' %}
+                            <img src="{{asset('assets/img/ui/outcome-success.png')}}" />
+                        {% elseif episode.issue == 'Lose' %}
+                            <img src="{{asset('assets/img/ui/outcome-fail.png')}}" />
+                        {% endif %}
                     </div>
                 {% endif %}
 
                 <!-- CLASSEMENT -->
                 {% if classement_episode %}
-                    <hr class="mt-5">
-                    <h2 class="text-center my-3 title-h2">Classement</h2>
+                    
+                    {% if episode.issue is not defined or episode.issue is empty %}
+                        <h2 class="text-center my-3 title-h2">Issue Incertaine</h2>
+                    {% endif %}
+
                     <div class="d-flex justify-content-center">
                         <div class="list-group list-group-flush">
                             {% for un_personnage in classement_episode %}

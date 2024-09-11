@@ -13,6 +13,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Validator\Constraints\Length;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
 class AdminEpisodeType extends AbstractType
 {
@@ -27,6 +28,12 @@ class AdminEpisodeType extends AbstractType
             ->add('chapitreParent', EntityType::class, [
                 'class' => Chapitre::class,
                 'choice_label' => 'titre'
+            ])
+            ->add('issue', ChoiceType::class, [
+                'choices'  => [
+                    '' => null,
+                    'Réussite' => 'Win',
+                    "Échec" => "Lose"]
             ])
         ;
     }

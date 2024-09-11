@@ -51,6 +51,11 @@ class Episode
      */
     private $scenes;
 
+    /**
+     * @ORM\Column(type="smallint")
+     */
+    private $numeroSaison;
+
     public function __construct()
     {
         $this->scenes = new ArrayCollection();
@@ -147,6 +152,18 @@ class Episode
                 $scene->setEpisodeParent(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getNumeroSaison(): ?int
+    {
+        return $this->numeroSaison;
+    }
+
+    public function setNumeroSaison(int $numeroSaison): self
+    {
+        $this->numeroSaison = $numeroSaison;
 
         return $this;
     }

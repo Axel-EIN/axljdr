@@ -27,9 +27,14 @@
                 </browse> 
             </div>
 
-            <div class="col-12 mt-5">
+            <div class="col-12">
                 {{ form_row(form.resume,{ 'attr': {'rows': '2'} }) }}
             </div>
+
+            <div class="col-12">
+                {{ form_row(form.issue) }}
+            </div>
+
             <div class="col-12 text-center mt-5">
                 <button class="btn-large btn-primary-style">{{ button_label|default('Save') }}</button>
             </div>

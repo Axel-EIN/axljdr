@@ -406,6 +406,7 @@ a.character-icon { display: inline-block; font-weight: bold; }
 /* NAV */
 
 #navigation-bar { position: relative; z-index: 10; box-shadow: 0px 2px 8px black; }
+.navbar { padding: 0.5rem 0 }
 nav .active { font-weight: bold; border-bottom: 3px solid #EA2027; }
 .connected { color: white; text-align: right; }
 

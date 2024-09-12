@@ -2,10 +2,10 @@
 $('.cacher, .voir').click(function(){
 
         if ($(this).hasClass('voir')) {
-            $(this).removeClass('voir').addClass('cacher').parents('section').removeClass('header-bg-img').addClass('header-bg-img-session');
+            $(this).removeClass('voir').addClass('cacher');
             $(this).removeClass('btn-primary-style').addClass('btn-tertiary-style').html('<i class="fa-solid fa-eye-slash" alt="Icône cacher" aria-hidden="true"></i>&nbsp;&nbsp;Cacher');
         } else {
-            $(this).removeClass('cacher').addClass('voir').parents('section').removeClass('header-bg-img-session').addClass('header-bg-img');
+            $(this).removeClass('cacher').addClass('voir');
             $(this).removeClass('btn-tertiary-style').addClass('btn-primary-style').html('<i class="fa-solid fa-scroll fa-bounce" alt="Icône Voir" aria-hidden="true"></i>&nbsp;&nbsp;Voir les Sessions');
         }
 

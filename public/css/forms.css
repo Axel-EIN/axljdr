@@ -2,19 +2,19 @@
 /* ----- FORMS ----- */
 /* ----------------- */  
 
-#preview-label {
+#preview-label, #preview-label-icon {
     display: block;
     position: relative;
     background-color: gray;
     text-align: center;
 }
 
-#browse-label {
+.browse-label {
     display: block;
     position: relative;
 }
 
-#fileName {
+#filename, #filename_icon {
     position: absolute;
     z-index: 10;
     left: 16px;

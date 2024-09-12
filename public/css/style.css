@@ -300,8 +300,9 @@ h5 a:hover, h4 a:hover, h3 a:hover, h2 a:hover, h1 a:hover { text-decoration: no
 
 /* FLAT ICONS */
 
-.arrow-left { position: relative; left: -40px; width: 20px; }
-.arrow-right { position: relative; left: 40px; width: 20px; }
+.arrow-left, .arrow-right { color: #EA2027; }
+.arrow-left:hover, .arrow-right:hover { color: #ff7f00 }
+
 .arrow-down { position: absolute; left: 70px; bottom: -10px; z-index: 10; }
 
 .btn-icons-small-right-container { position: absolute; top: 4px; right: 12px; font-size: 1.5rem; z-index: 10; }

@@ -416,7 +416,7 @@ nav .active { font-weight: bold; border-bottom: 3px solid #EA2027; }
 
 /* SEPARATOR & DIVIDER */
 
-.separator-chapter {    display: block; color: #fff; min-height:0.4rem; background-color: rgb(40, 0, 0); }
+.separator-chapter {    display: block; color: #fff; background-color: rgb(40, 0, 0); }
 .divider-40 { width: 40%; }
 .divider-40 hr { background-color: #ffbbbb; height: 1px; width: 100%; }
 

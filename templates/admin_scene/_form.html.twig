@@ -17,11 +17,11 @@
             <!-- IMAGE -->
             <div class="col-12 mt-3">
                 {{ form_label(form.image) }}
-                <label id="preview-label" for="admin_scene_image" class="{% if type != 'Modifier' %}d-none{% endif %} hover-slight-fade hover-pointer hover-icon-visible">
+                <label id="preview-label" for="admin_scene_image" class="hover-slight-fade hover-pointer hover-icon-visible">
                     <icon class="btn-icon-medium right-corner-16"><i class="fas fa-edit semi-visible text-white"></i></icon>
-                    <img id="image-preview" class="img-fluid" src="{% if type == 'Modifier' %}{{ asset(scene.image|default(NA_SCENE)) }}{% endif %}" />
+                    <img id="image-preview" class="img-fluid" src="{{ asset(scene.image|default(NA_SCENE)) }}" />
                 </label>
-                <browse id="browse-label">
+                <browse id="browse-label" class="d-none">
                     <span id="fileName"></span>
                     {{form_widget(form.image, {'attr': {'class': 'input-image'}}) }}
                 </browse> 

@@ -1,0 +1,55 @@
+{% extends 'base.html.twig' %}
+{% set col_xl, col_lg, col_md, col_sm = 2, 3, 4, 6 %}
+{% block body %}
+
+    <!-- HEADER TITLE ONLY -->
+    <header class="header-bg-img header-bg-{{header_classname}}">
+        <div class="container">
+            <div class="header d-flex flex-column justify-content-center align-items-center">
+                <div class="text-center d-flex justify-content-center">
+                    <strong class="h1">
+                        {{header_up}}
+                    </strong>
+                </div>
+                <hr class="w-50">     
+                <h1 class="title-display-h1">
+                    {{header_down|relief|raw}}
+                </h1>
+            </div>
+        </div>
+    </header>
+
+    <main class="container-fluid mt-5 pb-5 mb-5">    
+        <div class="container">
+
+            {% set compteur = 1 %}
+            {% for une_section in sections %}
+                {% set entity, label_one = une_section['entity'], une_section['label_one'] %}
+
+                <!-- SECTION {{une_section['name']}} -->
+                <section id="{{une_section['entity']}}" class="mb-5 pb-5"> 
+
+                    <!--TITRE DE LA SECTION -->
+                    <div class="relative">
+                        <h2 class="title-h2">
+                            <span class="title-small">{{une_section['titleLight']}}</span><strong>{{une_section['titleStrong']}}</strong>
+                        </h2>
+                        <hr class="mt-2 mb-4">
+                        <!-- BTN MJ ADD ELEMENT -->
+                        {{ include('/parts/btn-box-add-element.html.twig', {element: entity}) }}
+                    </div>
+                    <div class="row mt-3">
+
+                        <!--CONTENU DE LA SECTION -->
+                        {{ block('section_content' ~ compteur) }}
+                        
+                    </div>
+                </section>
+
+                {% set compteur = compteur + 1 %}
+            {% endfor %}
+            
+        </div>
+    </main>
+
+{% endblock %}

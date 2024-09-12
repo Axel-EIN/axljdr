@@ -1,0 +1,66 @@
+{% extends 'base.html.twig' %}
+{% set col_xl, col_lg, col_md, col_sm = 2, 3, 4, 6 %}
+{% block body %}
+
+    <!-- HEADER TITLE ONLY -->
+    <header class="header-bg-img header-bg-{{header_classname}}">
+        <div class="container">
+            <div class="header d-flex flex-column justify-content-center align-items-center">
+                <div class="text-center d-flex justify-content-center">
+                    <strong class="h1 text-white">
+                        {{header_up}}
+                    </strong>
+                </div>
+                <hr class="w-50">
+                {% set has_long_word = false %}
+                {% for mot in header_down|split(' ') %}
+                    {% if mot|length > 9 %}{% set has_long_word = true %}{% endif %}
+                {% endfor %}
+                <h1 class="category-title{% if has_long_word %} reduced{% endif %}">
+                    {{header_down|relief|raw}}
+                </h1>
+            </div>
+        </div>
+    </header>
+
+    <main class="container-fluid mt-3 mt-lg-5 pb-0 pb-lg-5 mb-0 mb-lg-5">
+        <div class="container">
+
+            {# Contenu optionnel place avant le titre de la premiere section
+               (filtres de la rubrique Personnages). Vide ailleurs. #}
+            {% block content_top %}{% endblock %}
+
+            {% set compteur = 1 %}
+            {% for une_section in sections %}
+                {% set entity, label_one = une_section['entity'], une_section['label_one'] %}
+
+                <!-- SECTION {{une_section['name']}} -->
+                {# pb-5 + mb-5 font doublon (6rem) : on garde le seul pb-5 sur mobile #}
+                <section id="{{une_section['entity']}}" class="pb-5 mb-0 mb-lg-5">
+
+                    <!--TITRE DE LA SECTION -->
+                    <div class="relative">
+                        <h2 class="section-title">
+                            <span class="small-word">{{une_section['titleLight']}}</span><strong>{{une_section['titleStrong']}}</strong>
+                        </h2>
+                        {# le filet n'a plus lieu d'etre sur mobile : les cartes
+                           et images empilees separent deja les sections #}
+                        <hr class="mt-2 mb-4 d-none d-lg-block">
+                        <!-- BTN MJ ADD ELEMENT -->
+                        {{ include('/parts/btn-box-add-element.html.twig', {element: entity}) }}
+                    </div>
+                    <div class="row mt-3">
+
+                        <!--CONTENU DE LA SECTION -->
+                        {{ block('section_content' ~ compteur) }}
+                        
+                    </div>
+                </section>
+
+                {% set compteur = compteur + 1 %}
+            {% endfor %}
+            
+        </div>
+    </main>
+
+{% endblock %}

@@ -1,22 +1,24 @@
 <cardspace class="col-lg-3 col-md-4 col-sm-6 hover-zoom-half card-session-space">
-    <card class="card-inner">
+
+    {% if app.user and is_granted("ROLE_MJ") %}
+        <!-- MJ - BTN ICON - Edit -->
+        {% set position, redirect, entity, un_element, size = 'right-corner-16', 'aventure', 'episode', un_episode, 'small' %}
+        {{ include('/parts/btn-icon-edit.html.twig') }}
+    {% endif %}
+
+    <a class="card-inner" href="{{ path('aventure_episode', {id:un_episode.id} ) }}">
 
         <span class="card-number">{{ un_episode.numero }}</span>
         <div class="image-container">
-            {% if app.user and is_granted("ROLE_MJ") %}
-                <!-- MJ - BTN ICON - Edit -->
-                {% set redirect, entity, un_element, size = 'aventure', 'episode', un_episode, 'small' %}
-                {{ include('/parts/btn-icon-edit.html.twig') }}
-            {% endif %}
             <img class="img-fluid mask" src="{{ asset(un_episode.image|default(NA_SESSION)) }}" alt="Image de la session {{un_episode.titre}}" title="{{un_episode.titre}}"  />
         </div>
         <div class="text-container">
             <h5 class="card-title">{{ un_episode.titre }}</h5>
             <p class="card-text">{{ un_episode.resume|default('Résumé à venir...') }}</p>
         </div>
-        <a class="btn-primary-style btn-medium" href="{{ path('aventure_episode', {id:un_episode.id} ) }}">
+        <button class="btn-primary-style btn-medium align-self-center mt-auto mb-2">
             <i class="fab fa-readme" alt="Icône Lire"></i>&nbsp;&nbsp;Lire le résumé
-        </a>
+        </button>
 
         <!-- ICON PLAYERS CHARACTER PLAYED SESSION -->
         {% if app.user %}
@@ -43,5 +45,5 @@
             {% endfor %}
         {% endif %}
 
-    </card>
+    </a>
 </cardspace>

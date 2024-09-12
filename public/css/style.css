@@ -85,6 +85,8 @@ html, body {    font-size: 16px; }
 
 .scene-text a { font-weight: bold; }
 
+h5 a:hover, h4 a:hover, h3 a:hover, h2 a:hover, h1 a:hover { text-decoration: none; color: #007bff };
+
 /* TEXT EFFECTS */
 
 .text-shadowed { text-shadow: 4px 4px 2rem black; }

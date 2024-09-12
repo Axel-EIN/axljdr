@@ -90,6 +90,30 @@ h5 a:hover, h4 a:hover, h3 a:hover, h2 a:hover, h1 a:hover { text-decoration: no
 
 /* TEXT EFFECTS */
 
+.clip-text-main {
+        position: relative;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: #ff0000;
+}
+      
+.clip-text {
+        font-size: 1rem;
+        font-weight: 700;
+}
+          
+@supports(background-clip:text) or (-webkit-background-clip:text) {
+        .clip-text {
+                color: transparent;
+                background-clip: text;
+                -webkit-background-clip: text;
+                background-image: url(https://scitechdaily.com/images/Fire-Flame.gif);
+                background-size: cover;
+                background-position: center;
+        }
+}
+
 .text-shadowed { text-shadow: 4px 4px 2rem black; }
 
 .number-skillrank-effect { font-family: "Shogun"; }
@@ -200,6 +224,10 @@ h5 a:hover, h4 a:hover, h3 a:hover, h2 a:hover, h1 a:hover { text-decoration: no
                 @media (max-width: 480px) { .chapter-number { font-size: 1rem; } }
 
 .header hr {    background-color: #fff; height: 1px; margin-top: 0.5rem; margin-bottom: 0.5rem; }
+
+.saison {       position: relative;
+                background-image: url('../assets/img/ui/banner_back_title.jpg');  background-size: cover; background-repeat: no-repeat; background-position: 20% 50%;
+                box-shadow: 0px 4px 8px rgba(0, 0, 0, .4); }
 
 /* CARD CONTAINERS */
 

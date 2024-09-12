@@ -1,104 +1,71 @@
-{% extends 'base.html.twig' %}
+{% extends 'category.html.twig' %}
 {% block title %}Personnages de l'Aventure {{ parent() }}{% endblock %}
-{% block body %}
 
-<header class="header-bg-img header-bg-characters">
-    <div class="container">
-        <div class="header d-flex flex-column justify-content-center align-items-center">
-            <div class="text-center d-flex justify-content-center"><strong class="h1">Les Héros de l'Aventure</strong></div>
-            <hr class="w-50">     
-            <h1 class="big-title-effect grand">{{ 'Les Personnages'|relief|raw }}</h1>
-        </div>
-    </div>
-</header>
-
-<main class="container-fluid bg-light pt-5">
-    <div class="container">
-
-        <!-- LES PERSONNAGES JOUEURS -->
-        {% set element = 'Personnage' %}
-        <section id="pjs"> 
-            <h2 class="display-4 relative">Personnages <strong>Joueur</strong>
-                {{ include('/parts/btn-ajouter-element.html.twig', {element}) }}
-            </h2>
-            <hr>
-            <div class="row mt-3">
-            {# {% for un_pj in personnages|filter(p=>p.estPj) %} #}
-            {% for un_pj in pjs %}
-
-                <!-- UN PERSONNAGE JOUEUR -->
-                <article class="col-xl-2 col-lg-3 col-md-4 col-sm-6 py-3">
-                    <a href="{{ path('personnage_profil', {id: un_pj.id} ) }}" alt="Carte d'un personnage" title="Voir le profil de {{un_pj.prenom}}">
-                        <div class="card character-card text-white shadowed hover-zoom {% if un_pj.estMort is not empty and un_pj.estMort == 1 %}translucide{% endif %} hover-opaque">  
-                            <img class="corner-badge {% if un_pj.estMort is not empty and un_pj.estMort == 1 %}dead{% endif %}" src="{{ asset(un_pj.clan.mon) }}" alt="Mon d'un clan"/>
-                                {% if un_pj.estMort is not empty and un_pj.estMort == 1 %}
-                                    <img class="icon-dead-big" src="{{asset('assets/img/icons/mort.png')}}" alt="Icône est mort" />
-                                {% endif %}
-                            <div class="mask-bg-dark">
-                                <img class="card-img {% if un_pj.estMort is not empty and un_pj.estMort == 1 %}dead{% endif %}"
-                                    src="{{ asset(un_pj.illustration) }}" alt="Illustration d'un personnage" />
-                            </div>
-                            <div class="card-img-overlay">
-                                <h4 class="card-title {% if un_pj.estMort is not empty and un_pj.estMort == 1 %}text-danger{% else %}text-white{% endif %}">{{ un_pj.nom }} {{ un_pj.prenom }}</h4>
-                                <p class="card-text {% if un_pj.estMort is not empty and un_pj.estMort == 1 %}text-danger{% else %}text-white{% endif %}"><small>{{ un_pj.joueur.pseudo }}</small></p>
-                                <p class="card-text {% if un_pj.estMort is not empty and un_pj.estMort == 1 %}text-danger{% else %}text-white{% endif %}"><small>{{ un_pj.titres }}</small></p>
-                            </div>
-                        </div>
-                    </a>
-                </article>
-
-            {% endfor %}
-            </div>
-        </section>
-
-        <!-- PERSONNAGES NON-JOUEURS -->
-        <section id="pnjs">
-            <h2 class="display-4 mt-5 relative">Personnages <strong>Non-Joueur</strong>
-                {{ include('/parts/btn-ajouter-element.html.twig', {element}) }}
-            </h2>
-            <hr>
-            <div class="row mt-3">
-            {% for un_pnj in pnjs %}
-
-                <!-- UN PERSONNAGE NON-JOUEUR -->
-                <article class="col-xl-2 col-lg-3 col-md-4 col-sm-6 py-3">
-                    {% if un_pnj.locked == 1 %}
-                        <div class="card character-card text-white shadowed relative translucide">
-                            <img class="icon-lock-character fa-beat" src="{{asset('assets/img/icons/locked.png')}}" alt="Icône cadena" title="A débloquer !" />
-                            <img class="corner-badge grayscale" src="{{ asset(un_pnj.clan.mon) }}" alt="Mon du clan" />
-                            <div class="mask-bg-dark">
-                                <img class="card-img grayscale" src="{{ asset(un_pnj.illustration) }}" alt="Illustration d'un personnage" />
-                            </div>
-                            <div class="card-img-overlay">
-                                <h4 class="card-title">???</h4>
-                                <p class="card-text text-white"><small>???</small></p>
-                            </div>
-                        </div>
-                    {% else %}
-                        <a href="{{ path('personnage_profil', {id: un_pnj.id} ) }}" alt="Carte d'un personnage" title="Voir le profil de {{un_pnj.prenom}}">
-                            <div class="card character-card text-white shadowed hover-zoom {% if un_pnj.estMort is not empty and un_pnj.estMort == 1 %}translucide{% endif %} hover-opaque">
-                                <img class="corner-badge {% if un_pnj.estMort is not empty and un_pnj.estMort == 1 %}dead{% endif %}" src="{{ asset(un_pnj.clan.mon) }}" alt="Mon du clan" />
-                                    {% if un_pnj.estMort is not empty and un_pnj.estMort == 1 %}
-                                        <img class="icon-dead-big" src="{{asset('assets/img/icons/mort.png')}}" alt="est mort" title="est mort" />
-                                    {% endif %}
-                                <div class="mask-bg-dark">
-                                    <img class="card-img {% if un_pnj.estMort is not empty and un_pnj.estMort == 1 %}dead{% endif %}"
-                                        src="{{ asset(un_pnj.illustration) }}" alt="Illustration d'un personnage" />
-                                </div>
-                                <div class="card-img-overlay">
-                                    <h4 class="card-title {% if un_pnj.estMort is not empty and un_pnj.estMort == 1 %}text-danger{% endif %}">{{ un_pnj.nom }} {{ un_pnj.prenom }}</h4>
-                                    <p class="card-text {% if un_pnj.estMort is not empty and un_pnj.estMort == 1 %}text-danger{% else %}text-white{% endif %}"><small>{{ un_pnj.titres }}</small></p>
-                                </div>
-                            </div>
-                        </a>
-                    {% endif %}
-                        
-                </article>
-
-            {% endfor %}
-            </div>
-        </section>
-
-    </div>
-</main>
+{% block section_content1 %}
+    {% for un_pj in pjs %}
+        <!-- UN PERSONNAGE JOUEUR -->
+        <article class="col-xl-2 col-lg-3 col-md-4 col-sm-6 py-3">
+            <a href="{{ path('personnage_profil', {id: un_pj.id} ) }}" alt="Carte d'un personnage" title="Voir le profil de {{un_pj.prenom}}">
+                <div class="card character-card text-white shadowed hover-zoom {% if un_pj.estMort is not empty and un_pj.estMort == 1 %}translucide{% endif %} hover-opaque">  
+                    <img class="corner-badge {% if un_pj.estMort is not empty and un_pj.estMort == 1 %}dead{% endif %}" src="{{ asset(un_pj.clan.mon) }}" alt="Mon d'un clan"/>
+                        {% if un_pj.estMort is not empty and un_pj.estMort == 1 %}
+                            <img class="icon-dead-big" src="{{asset('assets/img/icons/mort.png')}}" alt="Icône est mort" />
+                        {% endif %}
+                    <div class="mask-bg-dark">
+                        <img class="card-img {% if un_pj.estMort is not empty and un_pj.estMort == 1 %}dead{% endif %}"
+                            src="{{ asset(un_pj.illustration) }}" alt="Illustration d'un personnage" />
+                    </div>
+                    <div class="card-img-overlay">
+                        <h4 class="card-title {% if un_pj.estMort is not empty and un_pj.estMort == 1 %}text-danger{% else %}text-white{% endif %}">{{ un_pj.nom }} {{ un_pj.prenom }}</h4>
+                        <p class="card-text {% if un_pj.estMort is not empty and un_pj.estMort == 1 %}text-danger{% else %}text-white{% endif %}"><small>{{ un_pj.joueur.pseudo }}</small></p>
+                        <p class="card-text {% if un_pj.estMort is not empty and un_pj.estMort == 1 %}text-danger{% else %}text-white{% endif %}"><small>{{ un_pj.titres }}</small></p>
+                    </div>
+                </div>
+            </a>
+        </article>
+    {% endfor %}
 {% endblock %}
+
+{% block section_content2 %}
+    {% for un_pnj in pnjs %}
+        <!-- UN PERSONNAGE NON-JOUEUR -->
+        <article class="col-xl-2 col-lg-3 col-md-4 col-sm-6 py-3">
+            {% if un_pnj.locked == 1 %}
+                <div class="card character-card text-white shadowed relative translucide">
+                    <img class="icon-lock-character fa-beat" src="{{asset('assets/img/icons/locked.png')}}" alt="Icône cadena" title="A débloquer !" />
+                    <img class="corner-badge grayscale" src="{{ asset(un_pnj.clan.mon) }}" alt="Mon du clan" />
+                    <div class="mask-bg-dark">
+                        <img class="card-img grayscale" src="{{ asset(un_pnj.illustration) }}" alt="Illustration d'un personnage" />
+                    </div>
+                    <div class="card-img-overlay">
+                        <h4 class="card-title">???</h4>
+                        <p class="card-text text-white"><small>???</small></p>
+                    </div>
+                </div>
+            {% else %}
+                <a href="{{ path('personnage_profil', {id: un_pnj.id} ) }}" alt="Carte d'un personnage" title="Voir le profil de {{un_pnj.prenom}}">
+                    <div class="card character-card text-white shadowed hover-zoom {% if un_pnj.estMort is not empty and un_pnj.estMort == 1 %}translucide{% endif %} hover-opaque">
+                        <img class="corner-badge {% if un_pnj.estMort is not empty and un_pnj.estMort == 1 %}dead{% endif %}" src="{{ asset(un_pnj.clan.mon) }}" alt="Mon du clan" />
+                            {% if un_pnj.estMort is not empty and un_pnj.estMort == 1 %}
+                                <img class="icon-dead-big" src="{{asset('assets/img/icons/mort.png')}}" alt="est mort" title="est mort" />
+                            {% endif %}
+                        <div class="mask-bg-dark">
+                            <img class="card-img {% if un_pnj.estMort is not empty and un_pnj.estMort == 1 %}dead{% endif %}"
+                                src="{{ asset(un_pnj.illustration) }}" alt="Illustration d'un personnage" />
+                        </div>
+                        <div class="card-img-overlay">
+                            <h4 class="card-title {% if un_pnj.estMort is not empty and un_pnj.estMort == 1 %}text-danger{% endif %}">{{ un_pnj.nom }} {{ un_pnj.prenom }}</h4>
+                            <p class="card-text {% if un_pnj.estMort is not empty and un_pnj.estMort == 1 %}text-danger{% else %}text-white{% endif %}"><small>{{ un_pnj.titres }}</small></p>
+                        </div>
+                    </div>
+                </a>
+            {% endif %}
+        </article>
+    {% endfor %}
+{% endblock %}
+
+{% block section_content3 %}{% endblock %}
+
+{% block section_content4 %}{% endblock %}
+
+{% block section_content5 %}{% endblock %}

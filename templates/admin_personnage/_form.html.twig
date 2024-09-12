@@ -1,9 +1,11 @@
 <main class="offset-2 col-8">
     {{ form_start(form) }}
         <div class="row justify-content-center align-items-start mt-5">
+
+            <div class="col-6">{{ form_row(form.nom) }}</div>
+            <div class="col-6">{{ form_row(form.prenom) }}</div>
+
             <div class="col-6 d-flex flex-column justify-content-center">
-                {{ form_row(form.nom) }}
-                {{ form_row(form.prenom) }}
                 {{ form_row(form.genre) }}
                 {{ form_row(form.titres) }}
                 {{ form_row(form.clan) }}
@@ -11,16 +13,34 @@
                 {{ form_row(form.ecole) }}
                 {{ form_row(form.joueur) }}
             </div>
+
+            <!-- IMAGES -->
             <div class="col-6 text-center">
-                {% if type == 'Modifier' %}
-                    <img class="img-96" src="{{ asset(personnage.icone|default(NA_PERSO_ICO)) }}" />
-                {% endif %}
-                {{ form_row(form.icone) }}
-                {% if type != 'Créer' %}
-                    <img class="img-240" src="{{ asset(personnage.illustration|default(NA_PERSO_ILLU)) }}" />
-                {% endif %}
-                {{ form_row(form.illustration) }}
+
+                <!-- PORTRAIT -->
+                {{ form_label(form.icone) }}
+                <label id="preview-label" for="admin_personnage_icone" class="mx-auto img-96 hover-slight-fade hover-pointer hover-icon-visible">
+                    <icon class="btn-icon-medium right-corner-16"><i class="fas fa-edit semi-visible text-white"></i></icon>
+                    <img id="icon-preview" class="img-fluid" src="{{ asset(personnage.icone|default(NA_PERSO_ICO)) }}" />
+                </label>
+                <browse class="browse-label d-none">
+                    <span id="filename_icon"></span>
+                    {{ form_widget(form.icone, {'attr': {'class': 'input-icon'}}) }}
+                </browse>
+
+                <!-- ILLUSTRATION -->
+                {{ form_label(form.illustration) }}
+                <label id="preview-label-icon" for="admin_personnage_illustration" class="mx-auto img-240 hover-slight-fade hover-pointer hover-icon-visible">
+                    <icon class="btn-icon-medium right-corner-16"><i class="fas fa-edit semi-visible text-white"></i></icon>
+                    <img id="image-preview" class="img-fluid" src="{{ asset(personnage.illustration|default(NA_PERSO_ILLU)) }}" />
+                </label>
+                <browse class="browse-label d-none">
+                    <span id="filename"></span>
+                    {{ form_widget(form.illustration, {'attr': {'class': 'input-image'}}) }}
+                </browse>
+
             </div>
+
             <div class="col-12">
                 {{ form_row(form.description, {'attr': {'rows': '10'} }) }}
             </div>

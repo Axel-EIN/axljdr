@@ -10,7 +10,7 @@
             <div class="relative">
                 <img class="icon-lock grayscale fa-beat-fade" src="{{asset('assets/img/icons/locked.png')}}" alt="Icône cadena" title="Archive à débloquer !" />
                 <img class="img-fluid grayscale" src="{{ asset(une_archive.image) }}" alt="Image d'une Archive" title="Archive à débloquer !"/>
-                <h4 class="text-center h5"><strong>???</strong></h4>
+                <h5 class="text-center"><strong>???</strong></h5>
             </div>
             {% else %}
             <div class="relative">
@@ -67,11 +67,11 @@
                 <img class="img-160" src="{{ asset(un_lieu.image) }}" alt="Image du Lieu" title="Voir {{un_lieu.nom}}" />
             </a>
             <br/>
-            <h3 class="text-center my-3">
+            <h5 class="text-center">
                 <strong>
                     <a href="{{ path('empire_lieu', {id: un_lieu.id} ) }}">{{ un_lieu.nom }}</a>
                 </strong>
-            </h3>
+            </h5>
         </article>
 
     {% endfor %}

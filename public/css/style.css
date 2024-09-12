@@ -193,11 +193,11 @@ h5 a:hover, h4 a:hover, h3 a:hover, h2 a:hover, h1 a:hover { text-decoration: no
 .header-chapter { min-height: 40vh; }
 .header-session { min-height: unset; }
 
-.chapter-number { font-size: 2.5rem; color: #fff; margin: 0; }
-                @media (max-width: 1200px) { .chapter-number { font-size: 2.5rem; } }
-                @media (max-width: 992px) { .chapter-number { font-size: 2.5rem; } }
-                @media (max-width: 576px) { .chapter-number { font-size: 1.5rem; } }
-                @media (max-width: 480px) { .chapter-number { font-size: 1.5rem; } }
+.chapter-number { font-size: 2rem; color: #fff; margin: 0; }
+                @media (max-width: 1200px) { .chapter-number { font-size: 2rem; } }
+                @media (max-width: 992px) { .chapter-number { font-size: 1.5rem; } }
+                @media (max-width: 576px) { .chapter-number { font-size: 1.25rem; } }
+                @media (max-width: 480px) { .chapter-number { font-size: 1rem; } }
 
 .header hr {    background-color: #fff; height: 1px; margin-top: 0.5rem; margin-bottom: 0.5rem; }
 

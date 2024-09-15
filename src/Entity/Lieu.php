@@ -64,11 +64,6 @@ class Lieu
      */
     private $locY;
 
-    /**
-     * @ORM\Column(type="decimal", precision=5, scale=2, nullable=true)
-     */
-    private $testDecimal;
-
     public function getId(): ?int
     {
         return $this->id;
@@ -178,18 +173,6 @@ class Lieu
     public function setLocY(?string $locY): self
     {
         $this->locY = $locY;
-
-        return $this;
-    }
-
-    public function getTestDecimal(): ?string
-    {
-        return $this->testDecimal;
-    }
-
-    public function setTestDecimal(?string $testDecimal): self
-    {
-        $this->testDecimal = $testDecimal;
 
         return $this;
     }

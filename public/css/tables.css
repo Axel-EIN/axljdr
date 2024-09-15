@@ -1,0 +1,19 @@
+.admin-element-list {
+    width: 100%;
+}
+
+.admin-element-list th,
+.admin-element-list td {
+    text-align: center;
+    padding: 0.5rem;
+}
+
+.admin-element-list th {
+    background-color: var(--secondary-pastel-darker);
+    color: var(--lightest);
+}
+
+.admin-element-list td {
+    background-color: var(--white);
+    border: 1px solid var(--lightest);
+}

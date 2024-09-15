@@ -1,6 +1,6 @@
 <section>
     <div class="ml-auto text-center my-3">
-        <a href="{{ path('admin_scene_create') }}" class="btn-medium btn-primary-style"><i class="fas fa-plus-square"></i>&nbsp;&nbsp;Créer {{label}}</a>
+        <a href="{{ path('admin_' ~ element ~ '_create') }}" class="btn-medium btn-primary-style"><i class="fas fa-plus-square"></i>&nbsp;&nbsp;Créer {{label}}</a>
     </div>
 
     <table class="admin-element-list">
@@ -57,10 +57,7 @@
 
         {% else %}
             <tr>
-                <td class="p-2" colspan="4"></td>
-            </tr>
-            <tr>
-                <td colspan="4">Désolé ! Il n'y a pas encore de scènes !</td>
+                <td colspan="5">Il n'y a pas encore de {{element}}s.</td>
             </tr>
         {% endfor %}
 

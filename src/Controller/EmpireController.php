@@ -86,7 +86,7 @@ class EmpireController extends AbstractController
     public function afficherLieu(Lieu $lieu): Response
     {
         return $this->render('empire/lieu.html.twig', [
-            'lieu' => $lieu,
+            'un_element' => $lieu,
         ]);
     }
 }

@@ -18,7 +18,7 @@ class AdminLieuType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('Nom', TextType::class)
+            ->add('nom', TextType::class)
             ->add('image', FileType::class, array('mapped' => false, 'data_class' => null, 'required' => false))
             ->add('carte', FileType::class, array('mapped' => false, 'data_class' => null, 'required' => false))
             ->add('region', FileType::class, array('mapped' => false, 'data_class' => null, 'required' => false))

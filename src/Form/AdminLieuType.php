@@ -25,12 +25,7 @@ class AdminLieuType extends AbstractType
             ->add('description', TextareaType::class)
             ->add('coordinates', TextType::class)
             ->add('locX', NumberType::class, array(
-                'scale' => 2,
-                'attr' => array(
-                    'min' => 1,
-                    'max' => 99,
-                    'step' => '.05',
-                ),
+                'scale' => 3,
                 'label' => 'Coordinate (Horizontal % of the map)',
                 'required' => false,
             ))

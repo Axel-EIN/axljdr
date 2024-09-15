@@ -1,0 +1,7 @@
+{% extends 'back_office/index.html.twig' %}
+{% block title %}Administrer les Familles {{ parent() }}{% endblock %}
+{% block h1 %}Administrer les <strong>Familles</strong>{% endblock %}
+{% block child %}
+    {% set label, element, elements, img_size = 'famille', 'famille', familles, '96' %}
+    {{ include('back_office/list-element.html.twig') }}
+{% endblock %}

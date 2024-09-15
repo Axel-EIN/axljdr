@@ -29,9 +29,19 @@ class AdminPersonnageType extends AbstractType
             ->add('titres', TextType::class, [
                 'required' => false,
             ])
-            ->add('icone', FileType::class, array('mapped' => false, 'data_class' => null, 'required' => false))
-            ->add('illustration', FileType::class, array('mapped' => false, 'data_class' => null, 'required' => false))
-            ->add('description', TextareaType::class)
+            ->add('icone', FileType::class, [
+                'mapped' => false,
+                'data_class' => null,
+                'required' => false
+            ])
+            ->add('illustration', FileType::class, [
+                'mapped' => false,
+                'data_class' => null,
+                'required' => false
+            ])
+            ->add('description', TextareaType::class, [
+                'required' => false
+            ])
             ->add('estPj', CheckboxType::class, [
                 'required' => false,
             ])
@@ -44,21 +54,24 @@ class AdminPersonnageType extends AbstractType
             ->add('clan', EntityType::class, [
                 'class' => Clan::class,
                 'choice_label' => 'nom',
-                'required' => false])
+                'required' => false
+            ])
             ->add('classe', EntityType::class, [
                 'class' => Classe::class,
                 'choice_label' => 'nom',
-                'required' => false])
+                'required' => false
+            ])
             ->add('ecole', EntityType::class, [
                 'class' => Ecole::class,
                 'choice_label' => 'nom',
-                'required' => false])
+                'required' => false
+            ])
             ->add('joueur', EntityType::class, [
                 'class' => Utilisateur::class,
                 'choice_label' => 'pseudo',
                 'placeholder' => 'PNJ / Aucun Joueur-Défini',
                 'required' => false,
-                ])
+            ])
         ;
     }
 

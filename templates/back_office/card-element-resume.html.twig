@@ -1,0 +1,28 @@
+<div class="col-lg-3 col-12 px-1">
+    <article class="border p-3 bg-white d-flex flex-column h-100 relative">
+
+        <a class="absolute right-corner-16" href="{{ path('admin_' ~ element) }}">
+            <strong>Liste</strong>
+            <i class="fa-solid fa-table-list ml-1"></i>
+        </a>
+
+        <h5 class="m-0 mt-n3" ><span class="display-4">{{nbr}}</span> &nbsp; <strong>{{label}}</strong></h5>
+
+        <div class="mb-3">
+            {% if last is not empty %}
+                <small class="text-muted">Dernier ajout
+                    <strong><a href="{{ path('admin_' ~ element ~ '_edit', {id: last.id} ) }}" >
+                        <i class="fa-solid fa-edit ml-1"></i></a>
+                    </strong>
+                </small><br/>
+                <a href="{{ path('admin_' ~ element ~ '_edit', {id: last.id} ) }}" >
+                    <img class="img-fluid" src="{{ asset(image|default('assets/img/placeholders/1280x720.png')) }}" alt="Image {{element}}" />
+                </a><br/>
+                <strong class="d-block text-center">{{nom}}</strong>
+            {% else %}
+                <p class="my-5">Il n'y a pas encore de {{element}}</p>
+            {% endif %}
+        </div>
+        <a href="{{ path('admin_' ~ element ~ '_create') }}" class="btn btn-primary mt-auto">Ajouter</a>
+    </article>
+</div>

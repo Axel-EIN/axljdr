@@ -7,24 +7,36 @@
             <div class="col-6">
                 {{ form_row(form.clan) }}
             </div> 
-            <div class="col-6">
-                {% if type == 'Modifier' %}
+            <div class="col-12">
+                {% if type == 'Modifier' and lieu.image is not empty %}
                     <img class="img-fluid" src="{{ asset(lieu.image) }}" />
                 {% endif %}
-            </div> 
-            <div class="col-6">
-                {% if type == 'Modifier' %}
-                    <img class="img-fluid" src="{{ asset(lieu.carte) }}" />
-                {% endif %}
-            </div> 
-            <div class="col-6">
+            </div>
+            <div class="col-12">
                 {{ form_row(form.image) }}
             </div> 
             <div class="col-6">
+                {% if type == 'Modifier' and lieu.carte is not empty %}
+                    <img class="img-fluid" src="{{ asset(lieu.carte) }}" />
+                {% endif %}
+            </div>
+            <div class="col-6">
+                {% if type == 'Modifier' and lieu.region is not empty %}
+                    <img class="img-fluid" src="{{ asset(lieu.region) }}" />
+                {% endif %}
+            </div> 
+
+            <div class="col-6">
                 {{ form_row(form.carte) }}
             </div> 
-            <div class="col-12">
-                {{ form_row(form.coordinates) }}
+            <div class="col-6">
+                {{ form_row(form.region) }}
+            </div>
+            <div class="col-6">
+                {{ form_row(form.locX) }}
+            </div>
+            <div class="col-6">
+                {{ form_row(form.locY) }}
             </div> 
             <div class="col-12">
                 {{ form_row(form.description,{ 'attr': {'rows': '10'} }) }}

@@ -1,0 +1,122 @@
+{% extends 'back_office/index.html.twig' %}
+{% block title %}Administrer les {{labels}} | {{ parent() }}{% endblock %}
+{% block h1 %}Administrer les {{labels}}{% endblock %}
+{% block child %}
+
+    {% if genre is defined %}
+        {% if genre == 'M' %}
+            {% set create_label = "Créer un nouveau" %}
+        {% elseif genre == 'F' %}
+            {% set create_label = "Créer une nouvelle" %}
+        {% endif %}
+    {% else %}
+        {% set create_label = "Créer un nouvel élément" %}
+    {% endif %}
+
+    {# Colonnes decrites en chaines par le controleur, cf. .claude/design.md. #}
+    {% set table_cols = table_cols|default([])|filter(c => c is not empty) %}
+
+    <section>
+        <div class="text-right my-3">
+            <a href="{{ path('admin_' ~ element ~ '_create') }}" class="btn-medium btn-primary-style">
+                <i class="fas fa-plus-square"></i>&nbsp;&nbsp;{{create_label}} {{label}}
+            </a>
+        </div>
+
+        <table class="admin-element-list">
+            <tr>
+                {% for col in table_cols %}
+                    {% set parts = col|split(':') %}
+                    {% set format = parts[2]|default(null) %}
+                    <th class="first-letter-upper {% if format == 'number' %}text-right{% elseif format in ['symbol','image','bool','color'] %}text-center{% else %}text-left{% endif %}">{{ parts[1]|default(parts[0]) }}</th>
+                {% endfor %}
+                <th>Edit</th>
+                <th>Delete</th>
+            </tr>
+
+            {% for un_element in elements %}
+                <tr>
+                    {% for col in table_cols %}
+                        {% set parts = col|split(':') %}
+                        {% set path = parts[0] %}
+                        {% set format = parts[2]|default(null) %}
+                        {% set extra = parts[3]|default(null) %}
+                        {% set bold_class = (format not in ['symbol','image'] and extra == 'bold') ? ' extrabold' : '' %}
+                        {% set val = un_element %}
+                        {% for prop in path|split('.') %}
+                            {% if val is not null %}{% set val = attribute(val, prop) %}{% endif %}
+                        {% endfor %}
+
+                        {% if format == 'bool' %}
+                            <td class="text-center align-middle{{ bold_class }}">
+                                {% if val is not empty %}<i class="fas fa-check text-success"></i>{% endif %}
+                            </td>
+                        {% elseif format == 'boolInt' %}
+                            <td class="text-center align-middle{{ bold_class }}">
+                                {% if val == 1 %}<span class="text-success">Oui</span>{% elseif val == 0 %}<span class="text-muted">Non</span>{% endif %}
+                            </td>
+                        {% elseif format == 'number' %}
+                            <td class="text-right align-middle{{ bold_class }}">{{ val }}</td>
+                        {% elseif format == 'symbol' %}
+                            {% set extra_resolved = extra %}
+                            {% if extra_resolved is not empty and '{' in extra_resolved %}
+                                {% if un_element.genre is defined %}{% set extra_resolved = extra_resolved|replace({'{genre}': un_element.genre|default('')}) %}{% endif %}
+                                {% if un_element.anneau is defined %}{% set extra_resolved = extra_resolved|replace({'{anneau}': un_element.anneau|default('')}) %}{% endif %}
+                                {% if extra_resolved ends with '_' %}{% set extra_resolved = extra_resolved|slice(0, -1) %}{% endif %}
+                            {% endif %}
+                            {% set placeholder = (extra_resolved is not empty and _context[extra_resolved] is defined) ? _context[extra_resolved] : NA_ICON %}
+                            <td class="text-center align-middle">
+                                <a href="{{ path('admin_' ~ element ~ '_edit', {id: un_element.id}) }}">
+                                    <img class="border-soft" src="{{ asset(val|default(placeholder)) }}" alt="{{ parts[1]|default(parts[0]) }}" style="width: 48px; height: 48px; object-fit: cover;" />
+                                </a>
+                            </td>
+                        {% elseif format == 'image' %}
+                            {% set extra_resolved = extra %}
+                            {% if extra_resolved is not empty and '{' in extra_resolved %}
+                                {% if un_element.genre is defined %}{% set extra_resolved = extra_resolved|replace({'{genre}': un_element.genre|default('')}) %}{% endif %}
+                                {% if un_element.anneau is defined %}{% set extra_resolved = extra_resolved|replace({'{anneau}': un_element.anneau|default('')}) %}{% endif %}
+                                {% if extra_resolved ends with '_' %}{% set extra_resolved = extra_resolved|slice(0, -1) %}{% endif %}
+                            {% endif %}
+                            {% set placeholder = (extra_resolved is not empty and _context[extra_resolved] is defined) ? _context[extra_resolved] : NA_169 %}
+                            <td class="text-center align-middle">
+                                <a href="{{ path('admin_' ~ element ~ '_edit', {id: un_element.id}) }}">
+                                    <img class="border-soft" src="{{ asset(val|default(placeholder)) }}" alt="{{ parts[1]|default(parts[0]) }}" style="height: 64px; width: auto; max-width: 160px; object-fit: cover;" />
+                                </a>
+                            </td>
+                        {% elseif format == 'color' %}
+                            <td class="text-center align-middle{{ bold_class }}">
+                                {{ val }}
+                                {% if val is not empty %}
+                                    <div class="border-soft" style="margin: 4px auto 0; width: 64px; height: 32px; background-color: {{ val starts with '#' ? val : '#' ~ val }};"></div>
+                                {% endif %}
+                            </td>
+                        {% else %}
+                            <td class="text-left align-middle{{ bold_class }}">{{ val }}</td>
+                        {% endif %}
+                    {% endfor %}
+
+                    <td class="text-center align-middle">
+                        <a class="wrapper-icon-btn-small" href="{{ path('admin_' ~ element ~ '_edit', {id: un_element.id}) }}">
+                            <i class="fas fa-edit"></i>
+                        </a>
+                    </td>
+                    <td class="text-center align-middle">
+                        <form method="post" action="{{ path('admin_' ~ element ~ '_delete', {'id': un_element.id}) }}"
+                              onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cet élément ?');"
+                              style="display:inline;">
+                            <input type="hidden" name="_csrf_token" value="{{ csrf_token('delete' ~ un_element.id) }}" />
+                            <button type="submit" class="wrapper-icon-btn-small" style="background:transparent; border:0; padding:0;">
+                                <i class="fas fa-trash-alt"></i>
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="{{ table_cols|length + 2 }}">Il n'y a pas encore de {{labels}}.</td>
+                </tr>
+            {% endfor %}
+        </table>
+    </section>
+
+{% endblock %}

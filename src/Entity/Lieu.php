@@ -47,6 +47,21 @@ class Lieu
      */
     private $coordinates;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $region;
+
+    /**
+     * @ORM\Column(type="decimal", precision=5, scale=2, nullable=true)
+     */
+    private $locX;
+
+    /**
+     * @ORM\Column(type="decimal", precision=5, scale=2, nullable=true)
+     */
+    private $locY;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -120,6 +135,42 @@ class Lieu
     public function setCoordinates(?string $coordinates): self
     {
         $this->coordinates = $coordinates;
+
+        return $this;
+    }
+
+    public function getRegion(): ?string
+    {
+        return $this->region;
+    }
+
+    public function setRegion(?string $region): self
+    {
+        $this->region = $region;
+
+        return $this;
+    }
+
+    public function getLocX(): ?int
+    {
+        return $this->locX;
+    }
+
+    public function setLocX(?int $locX): self
+    {
+        $this->locX = $locX;
+
+        return $this;
+    }
+
+    public function getLocY(): ?int
+    {
+        return $this->locY;
+    }
+
+    public function setLocY(?int $locY): self
+    {
+        $this->locY = $locY;
 
         return $this;
     }

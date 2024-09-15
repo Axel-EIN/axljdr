@@ -4,7 +4,7 @@
 
 {% block body %}
 
-<main class="container-fluid bg-lightest page-min">
+<main class="container-fluid page-min">
     <div class="container py-5 relative">
         <h1 class="text-center">{% block h1 %}Bienvenue dans le Panneau {% if app.user and is_granted("ROLE_ADMIN") %}d'Administration{% else %}du Maître du Jeu{% endif %} !{% endblock %}</h1>
 

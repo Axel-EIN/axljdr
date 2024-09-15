@@ -76,7 +76,7 @@ class Baliseur
 
         // Remplace par un lien HTML vers la fiche du Lieu
         foreach ($tableau[1] as $key => $un_match) {
-            $lieu_trouve = $this->lieuRepo->findOneBy(array('Nom' => $un_match));
+            $lieu_trouve = $this->lieuRepo->findOneBy(array('nom' => $un_match));
 
             if ($lieu_trouve != null) {
                 $tableau_remplacement[] =
@@ -101,7 +101,7 @@ class Baliseur
 
         // Remplace par des crochets
         foreach ($tableau[1] as $key => $un_match) {
-            $lieu_trouve = $this->lieuRepo->findOneBy(array('Nom' => $un_match));
+            $lieu_trouve = $this->lieuRepo->findOneBy(array('nom' => $un_match));
             if ($lieu_trouve != null) {
                 $tableau_remplacement[] = '{' . $lieu_trouve->getNom() . '}';
             } else

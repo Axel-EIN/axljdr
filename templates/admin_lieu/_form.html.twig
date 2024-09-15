@@ -16,22 +16,21 @@
                 {{ form_row(form.image) }}
             </div> 
             <div class="col-6">
+                {% if type == 'Modifier' and lieu.region is not empty %}
+                    <img class="img-fluid" src="{{ asset(lieu.region) }}" />
+                {% endif %}
+            </div> 
+            <div class="col-6">
                 {% if type == 'Modifier' and lieu.carte is not empty %}
                     <img class="img-fluid" src="{{ asset(lieu.carte) }}" />
                 {% endif %}
             </div>
             <div class="col-6">
-                {% if type == 'Modifier' and lieu.region is not empty %}
-                    <img class="img-fluid" src="{{ asset(lieu.region) }}" />
-                {% endif %}
-            </div> 
-
+                {{ form_row(form.region) }}
+            </div>
             <div class="col-6">
                 {{ form_row(form.carte) }}
             </div> 
-            <div class="col-6">
-                {{ form_row(form.region) }}
-            </div>
             <div class="col-6">
                 {{ form_row(form.locX) }}
             </div>

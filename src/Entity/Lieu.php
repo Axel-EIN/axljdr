@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\LieuRepository;
+use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -59,8 +60,14 @@ class Lieu
 
     /**
      * @ORM\Column(type="decimal", precision=5, scale=2, nullable=true)
+     * @Assert\Range(min=1, max=99)
      */
     private $locY;
+
+    /**
+     * @ORM\Column(type="decimal", precision=5, scale=2, nullable=true)
+     */
+    private $testDecimal;
 
     public function getId(): ?int
     {
@@ -151,26 +158,38 @@ class Lieu
         return $this;
     }
 
-    public function getLocX(): ?int
+    public function getLocX(): ?string
     {
         return $this->locX;
     }
 
-    public function setLocX(?int $locX): self
+    public function setLocX(?string $locX): self
     {
         $this->locX = $locX;
 
         return $this;
     }
 
-    public function getLocY(): ?int
+    public function getLocY(): ?string
     {
         return $this->locY;
     }
 
-    public function setLocY(?int $locY): self
+    public function setLocY(?string $locY): self
     {
         $this->locY = $locY;
+
+        return $this;
+    }
+
+    public function getTestDecimal(): ?string
+    {
+        return $this->testDecimal;
+    }
+
+    public function setTestDecimal(?string $testDecimal): self
+    {
+        $this->testDecimal = $testDecimal;
 
         return $this;
     }

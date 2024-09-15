@@ -18,13 +18,10 @@
 .secondary-color-pastel-light { color: #464a4d }
 .secondary-color-pastel-dark { color: #343a40 }
 .secondary-color-pastel-darker { color: #1E242A }
-<<<<<<< HEAD
-=======
 
 .accent-color { color: #ff7f00; }
 .accent-color-light { color: #ffcc66; }
 .accent-color-dark { color: #cc6600; }
->>>>>>> 7d9e1b0 (css: edit secondary colors & links)
 
 .accent-color { color: #ff7f00; }
 .accent-color-light { color: #ffcc66; }
@@ -220,10 +217,9 @@ h5 a:hover, h4 a:hover, h3 a:hover, h2 a:hover, h1 a:hover { text-decoration: no
 .relative { position: relative; }
 .shift-left { position: absolute; left: -2rem; }
 
-.shift-left { position: absolute; left: -2rem; }
-
-.right-corner-snap { position: absolute; top: 0px; right: 0px; z-index: 10}
-.right-corner-8 { position: absolute; right:16px; top:8px; z-index: 10}
+.right-corner { position: absolute; top: 0px; right: 0px; z-index: 10}
+.right-corner-4 { position: absolute; right:4px; top:4px; z-index: 10}
+.right-corner-8 { position: absolute; right:8px; top:8px; z-index: 10}
 .right-corner-16 { position: absolute; top: 1rem; right: 1rem; }
 
 .right-snap { position: absolute; right:-8px; top:8px; z-index: 10}

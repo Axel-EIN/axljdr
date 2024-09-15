@@ -74,6 +74,11 @@ class Lieu
      */
     private $quartiers;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Scene::class, mappedBy="lieu")
+     */
+    private $scenes;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -207,6 +212,36 @@ class Lieu
     public function setQuartiers(?string $quartiers): self
     {
         $this->quartiers = $quartiers;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Scene>
+     */
+    public function getScenes(): Collection
+    {
+        return $this->scenes;
+    }
+
+    public function addScene(Scene $scene): self
+    {
+        if (!$this->scenes->contains($scene)) {
+            $this->scenes[] = $scene;
+            $scene->setLieu($this);
+        }
+
+        return $this;
+    }
+
+    public function removeScene(Scene $scene): self
+    {
+        if ($this->scenes->removeElement($scene)) {
+            // set the owning side to null (unless already changed)
+            if ($scene->getLieu() === $this) {
+                $scene->setLieu(null);
+            }
+        }
 
         return $this;
     }

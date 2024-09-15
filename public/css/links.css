@@ -36,17 +36,6 @@
 }
 
 
-/* ---- Administration and MJ Band  ---- */
-
-#admin-panel a {
-    color: var(--white);
-}
-
-#admin-panel a:hover {
-    color: var(--white);
-    text-decoration: underline;
-}
-
 /* ---- Extreme Top Admin/MJ Panel link Band  ---- */
 
 #admin-panel a {

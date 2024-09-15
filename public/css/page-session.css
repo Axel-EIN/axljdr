@@ -17,6 +17,9 @@
 @media (max-width: 576px) { .pnjs-line, .pjs-line { visibility: collapse; } }
 @media (max-width: 480px) { .pnjs-line, .pjs-line { visibility: collapse; } }
 
+.scene-text {
+    line-height: 1.6; }
+
 /* VIGNETTE LIGNE SESSION CAROUSSEL */
 
 .vignette-caroussel {

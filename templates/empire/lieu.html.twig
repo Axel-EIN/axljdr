@@ -8,48 +8,45 @@
 <!-- CARD -->
 <div class="col-12 mb-5">
     <div class="card">
-        <div class="card-body px-5 py-0">
+        <div class="card-body px-5 py-0 relative">
             <p class="card-text mx-5 mt-4 mb-5 text-justify">{{ un_element.description|raw|nl2br }}</p>
             <hr>
-
-            <div class="mx-5 my-5">
+            <div class="mt-5">
                 <h2><strong>Localisation</strong></strong></h2>
-                <div class="relative" style="overflow: hidden;">
-
-
-                    {# <!-- ZOOM REGION -->
-                    <img class="img-fluid absolute d-block" style="z-index: 100;" src="{{ asset(un_element.region|default('assets/img/placeholders/1280x720.jpg')) }}" /> #}
-
-                    <!-- LOCALISATOR -->
-                    <span class="localisator-icon" style="left: {{un_element.locX}}%; top: {{un_element.locY}}%">
-                        <i class="fa-solid fa-location-dot fa-bounce fa-2xl text-shadow"></i>
-                    </span>
-                    <img class="localisator-ui" style="left: {{un_element.locX}}%; top: {{un_element.locY}}%" src="http://localhost:8000/assets/img/ui/localisator.png" />
-
-                    {# <!-- ZOOMED -->
-                    <img style="position: absolute; z-index: 4; transform-origin: 77% 35.5%; transform: scale(2);" class="img-fluid" src="{{ asset('assets/img/lieux/map_rokugan.jpg') }}" alt="Localisation dans l'Empire" /> #}
-
-                    <!-- MAP OF ROKUGAN -->
-                    <img class="img-fluid" src="{{ asset('assets/img/lieux/rokugan-map.jpg') }}" alt="La Carte de Rokugan" />
-                </div>
             </div>
 
-            {# <div class="mx-5 my-5">
-                <h2 class="mb-3"><strong>Carte</strong></h2>
-                <a href="{{ asset(un_element.carte|default('assets/img/placeholders/1280x720.jpg')) }}"><img class="img-fluid" src="{{ asset(un_element.carte|default('assets/img/placeholders/1280x720.jpg')) }}" alt="Carte du Lieu" /></a>
-            </div> #}
+            <!-- CARTE REGION -->
+            <div class="relative">
 
+                <!-- MINI CARTE -->
+                <div id="minimap" class="absolute">
+                    <div class="relative overflow-hidden">
 
-            {# <div class="mx-5 my-5">
-                <h2><strong>Region</strong></strong></h2>
-                <div>
-                    <img class="img-fluid" src="{{ asset(un_element.region|default('assets/img/placeholders/1280x720.jpg')) }}" />
+                        <!-- UI LOCALISATOR -->
+                        <img class="absolute localisator-ui" style="left:{{un_element.locX}}%; top:{{un_element.locY}}%" src="{{asset('assets/img/ui/mini-localisator.png')}}" />
+
+                        <img class="img-fluid" src="{{asset('assets/img/lieux/minimap.jpg')}}" alt="Carte de Rokugan">
+                    </div>
                 </div>
-            </div> #}
+
+                <!-- ICON ANIMEE -->
+                <span class="absolute localisator-icon" style="left:50%; top:50%">
+                    <i class="fa-solid fa-caret-down fa-2xl fa-bounce"></i>
+                </span>
+
+                <img class="img-fluid" src="{{asset(un_element.region)}}" alt="Carte de la Région">
+            </div>
+
+            <br/>
+            <!-- CARTE LIEU -->
+            <img class="img-fluid" src="{{asset(un_element.carte)}}" alt="Carte du Lieu">
 
 
-
+            
         </div>
+        <!-- END CARD-BODY -->
+
+        <!-- CARD LIST ITEMS -->
         <ul class="list-group list-group-flush">
             {% if un_element.clan is not empty %}
             <li class="list-group-item px-5">
@@ -65,9 +62,14 @@
             <li class="list-group-item px-5">
                 <strong class="ml-5">Coordonnées&nbsp;:</strong>&nbsp;<strong>{{ un_element.coordinates }}</strong>
             </li>
+            <li class="list-group-item px-5">
+                <strong class="ml-5">LocX&nbsp;:</strong>&nbsp;<strong>{{ un_element.locX }}</strong>
+                <strong class="ml-5">LocY&nbsp;:</strong>&nbsp;<strong>{{ un_element.locY }}</strong>
+            </li>
             {% endif %}
         </ul>
     </div>
+    <!-- END CARD -->
 
     {% if app.user and is_granted("ROLE_MJ") %}
     <div class="mt-3 text-center">

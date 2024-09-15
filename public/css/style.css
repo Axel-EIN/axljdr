@@ -210,7 +210,7 @@ h5 a:hover, h4 a:hover, h3 a:hover, h2 a:hover, h1 a:hover { text-decoration: no
 
 .relative { position: relative; }
 
-.shift-left { position: absolute; left: -1rem; }
+.shift-left { position: absolute; left: -2rem; }
 
 .right-corner-snap { position: absolute; top: 0px; right: 0px; z-index: 10}
 .right-corner-8 { position: absolute; right:16px; top:8px; z-index: 10}
@@ -252,6 +252,7 @@ h5 a:hover, h4 a:hover, h3 a:hover, h2 a:hover, h1 a:hover { text-decoration: no
 .saison {       position: relative;
                 background-image: url('../assets/img/ui/banner_back_title.jpg');  background-size: cover; background-repeat: no-repeat; background-position: 20% 50%;
                 border-bottom: 1px solid #7a1118;
+                text-align: center;
                 box-shadow: 0px 4px 8px rgba(0, 0, 0, .4); }
 
 /* CARD CONTAINERS */
@@ -353,8 +354,9 @@ h5 a:hover, h4 a:hover, h3 a:hover, h2 a:hover, h1 a:hover { text-decoration: no
 
 /* FLAT ICONS */
 
-.arrow-left, .arrow-right { color: #EA2027; }
-.arrow-left:hover, .arrow-right:hover { color: #ff7f00 }
+.arrow-left, .arrow-right { font-size: 1.25rem; color: #EA2027; }
+.arrow-left:hover, .arrow-right:hover { color: #EA2027; animation-duration: 0s;}
+.arrow-disabled { font-size: 1.25rem; color: #464a4d; }
 
 .arrow-down { position: absolute; left: 70px; bottom: -10px; z-index: 10; }
 

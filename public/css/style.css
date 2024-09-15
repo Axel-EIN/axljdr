@@ -487,6 +487,11 @@ nav .active { font-weight: bold; border-bottom: 3px solid #EA2027; }
 .divider-40 { width: 40%; }
 .divider-40 hr { background-color: #ffbbbb; height: 1px; width: 100%; }
 
+/* MAP UI LOCALISATOR */
+
+.localisator-ui { position: absolute; width: 200%; transform: translate(-50%, -50%); z-index: 5;}
+.localisator-icon { position: absolute; z-index: 10;; color: red; transform: translate(-50%, -50%) translate(0, -20px);  }
+
 /* FOOTER */
 
 #footer1 { min-height: 24vh; background-color: #28323C; border-top: 1px solid #464a4d; color:#b4b4b4; }

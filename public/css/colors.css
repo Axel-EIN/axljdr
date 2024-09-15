@@ -70,7 +70,7 @@
 .bg-white {
     background-color: var(--white) !important; }
 
-.bg-light-gray {
+.bg-lightest {
     background-color: var(--lightest); }
 
 .bg-primary {

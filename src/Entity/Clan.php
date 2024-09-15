@@ -64,11 +64,17 @@ class Clan
      */
     private $lieux;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Famille::class, mappedBy="clan")
+     */
+    private $familles;
+
     public function __construct()
     {
         $this->ecoles = new ArrayCollection();
         $this->personnages = new ArrayCollection();
         $this->lieux = new ArrayCollection();
+        $this->familles = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -232,6 +238,36 @@ class Clan
             // set the owning side to null (unless already changed)
             if ($lieux->getClan() === $this) {
                 $lieux->setClan(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Famille>
+     */
+    public function getFamilles(): Collection
+    {
+        return $this->familles;
+    }
+
+    public function addFamille(Famille $famille): self
+    {
+        if (!$this->familles->contains($famille)) {
+            $this->familles[] = $famille;
+            $famille->setClan($this);
+        }
+
+        return $this;
+    }
+
+    public function removeFamille(Famille $famille): self
+    {
+        if ($this->familles->removeElement($famille)) {
+            // set the owning side to null (unless already changed)
+            if ($famille->getClan() === $this) {
+                $famille->setClan(null);
             }
         }
 

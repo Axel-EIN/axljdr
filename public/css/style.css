@@ -213,6 +213,7 @@ h5 a:hover, h4 a:hover, h3 a:hover, h2 a:hover, h1 a:hover { text-decoration: no
 
 /* POSITIONING & VISIBILITY */
 
+.absolute { position: absolute }
 .relative { position: relative; }
 .shift-left { position: absolute; left: -2rem; }
 

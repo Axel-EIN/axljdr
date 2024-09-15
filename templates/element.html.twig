@@ -1,0 +1,45 @@
+{% extends 'base.html.twig' %}
+{% block title %}{{element|capitalize}} {{un_element.nom}} {{ parent() }}{% endblock %}
+{% block body %}
+    <!-- VALEURS DE TEST -->
+    {% set category = 'empire' %}
+    {% set element = 'lieu' %}
+    <main class="container-fluid bg-light py-3">
+        <div class="container">
+
+            <!-- FIL D'ARIANE -->
+            <nav>
+                <span class="text-muted">
+                    <a href="/"><i class="fas fa-home"></i></a>&nbsp;
+                    >&nbsp;&nbsp;<a href="{{ path(category) }}"><strong>{{category|capitalize}}</strong></a>
+                    >&nbsp;&nbsp;<a href="{{ path(category, {'_fragment': element} ) }}"><strong>{{element|capitalize}}</strong></a>
+                    > <strong>{{ un_element.nom }}</strong>
+                </span>
+            </nav>   
+
+            <!-- MAIN SECTION -->
+            <section id="{{un_element.nom}}" class="mt-5"> 
+
+                <!-- H1 TITLE -->
+                <h1 class="relative">
+                    {{element|capitalize}}&nbsp;<strong>{{un_element.nom}}</strong>
+
+                    {% if app.user and is_granted("ROLE_MJ") %}
+                        <!-- MJ - BTN ICON EDIT - RIGHT SNAP -->
+                        {% set redirect, size, color, position = element, 'medium', 'accent-color', 'right-snap' %}
+                        {{ include('/parts/btn-icon-edit.html.twig') }}
+                    {% endif %}
+
+                </h1>
+                <hr>
+
+                <!-- ELEMENT CONTENT -->
+                <article class="row mt-3">
+
+                    {% block element_content %}{% endblock %}
+                    
+                </article>
+            </section>
+        </div>
+    </main>
+{% endblock %}

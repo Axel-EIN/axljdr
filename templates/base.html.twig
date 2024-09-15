@@ -9,23 +9,24 @@
 
     <body>
 
-    {% block nav %}
-        {{ include('parts/nav.html.twig') }}
-    {% endblock %}
+        {% block nav %}
+            {{ include('parts/nav.html.twig') }}
+        {% endblock %}
 
-    {% block body %}{% endblock %}
+        {% block body %}{% endblock %}
 
-    {% block javascripts %}
-        {{ include('scripts/scripts.twig') }}
-    {% endblock %}
+        {% block javascripts %}
+            {{ include('scripts/scripts.twig') }}
+        {% endblock %}
 
-    {% block footer %}
-        {{ include('parts/footer.html.twig') }}
-    {% endblock %}
-    
-    {% if app.user is empty %}
-        {{ include('parts/modal.html.twig') }}
-    {% endif %}
+        {% block footer %}
+            {{ include('parts/footer.html.twig') }}
+        {% endblock %}
+        
+        {% if app.user is empty %}
+            {{ include('parts/modal.html.twig') }}
+        {% endif %}
 
     </body>
+
 </html>

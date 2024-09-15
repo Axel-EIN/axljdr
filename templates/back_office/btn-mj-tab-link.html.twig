@@ -1,0 +1,10 @@
+{% if
+    app.request.get('_route') == 'admin_' ~ element
+    or app.request.get('_route') == 'admin_' ~ element ~ '_create'
+    or app.request.get('_route') == 'admin_' ~ element ~ '_edit' %}
+        {% set active = 'active' %}
+{% else %}
+    {% set active = '' %}
+{% endif %}
+
+<a class="nav-link mj-link {{active}}" href="{{ path('admin_' ~ element) }}">{{label}}</a>

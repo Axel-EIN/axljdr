@@ -1,65 +1,7 @@
 {% extends 'back_office/index.html.twig' %}
-
 {% block title %}Administrer les Classes {{ parent() }}{% endblock %}
-
-{% block h1 %}Administrer les Classes{% endblock %}
-
+{% block h1 %}Administrer les <strong>Classes</strong>{% endblock %}
 {% block child %}
-
-    <section id="classes">
-
-        <div class="ml-auto text-right my-3">
-            <a href="{{ path('admin_classe_create') }}" class="btn btn-primary"><i class="fas fa-plus-square"></i>&nbsp;&nbsp;Ajouter une nouvelle classe</a>
-        </div>
-
-        <table class="w-100">
-
-            <tr class="bg-dark text-lightest">
-                <th class="p-2">Icone</th>
-                <th class="p-2">Nom</th>
-                <th class="p-2">ID</th>
-                <th class="p-2">Description</th>
-                <th class="p-2"></th>
-                <th class="p-2"></th>
-                <th class="p-2"></th>
-            </tr>
-
-            {% for une_classe in classes %}
-
-                <tr>
-                    <td class="p-2" colspan="7"></td>
-                </tr>
-
-                <tr class="bg-white">
-                    <td class="p-2 bg-lightest text-center">
-                        <img class="img-128" src="{{ asset(une_classe.icone) }}" alt="Icone d'un Clan" />
-                    </td>
-                    <td class="p-2 border text-center"><strong>{{ une_classe.nom }}</strong></td>
-                    <td class="p-2 border text-center">{{ une_classe.id }}</td>
-                    <td class="p-2 border text-center"><small class="text-muted">{{ une_classe.description }}</small></td>
-                    <td class="p-2 border text-center">
-                        <a href="{{ path('regles_classe', { id: une_classe.id }) }}"><i class="fas fa-eye"></i></a>
-                    </td>
-                    <td class="p-2 border text-center">
-                        <a href="{{ path('admin_classe_edit', {id: une_classe.id} ) }}"><i class="fas fa-edit"></i></a>
-                    </td>
-                    <td class="p-2 border text-center">
-                        <a href="{{ path('admin_classe_delete', {'id': une_classe.id}) }}?csrf={{ csrf_token('delete' ~ une_classe.id) }}"
-                        onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce classe : {{ une_classe.nom }} ?');"><i class="fas fa-trash-alt"></i></a>
-                    </td>
-                </tr>
-
-            {% else %}
-
-                <tr>
-                    <td class="p-2" colspan="7"></td>
-                </tr>
-                <tr>
-                    <td class="text-center" colspan="7">Désolé ! Il n'y a pas encore de classe !</td>
-                </tr>
-
-            {% endfor %}
-
-        </table>
-    </section>
+    {% set label, element, elements, img_size = 'classe', 'classe', classes, '96' %}
+    {{ include('back_office/admin-element-list.html.twig') }}
 {% endblock %}

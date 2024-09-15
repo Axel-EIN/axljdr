@@ -35,6 +35,7 @@
     --purple: purple !important;
     --green: rgb(0,100,0) !important;
     --cyan: rgb(0,100,100) !important;
+    --fuschia: #FF1493;
     --flash-red: #f00;
     --flash-green: #0f0;
     --flash-cyan: #0ff;
@@ -60,6 +61,12 @@
 
 .text-accent {
     color:var(--accent); }
+
+.text-flash-green {
+    color:var(--flash-green); }
+
+.text-fuschia {
+    color:var(--fuschia); }
 
 
 

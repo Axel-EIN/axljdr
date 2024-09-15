@@ -46,11 +46,6 @@ class Lieu
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $coordinates;
-
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
     private $region;
 
     /**
@@ -125,18 +120,6 @@ class Lieu
     public function setClan(?Clan $clan): self
     {
         $this->clan = $clan;
-
-        return $this;
-    }
-
-    public function getCoordinates(): ?string
-    {
-        return $this->coordinates;
-    }
-
-    public function setCoordinates(?string $coordinates): self
-    {
-        $this->coordinates = $coordinates;
 
         return $this;
     }

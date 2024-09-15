@@ -44,13 +44,13 @@
                 {% set numero = 0 %}
                 {% for une_scene in episode.scenes %}
 
+                    <div class="text-center mb-4">&nbsp;
                     {% if app.user and is_granted("ROLE_MJ") %}
-                        <div class="text-center mb-4">
-                            <!-- MJ BTN ICON+TEXT Insert or Add -->
+                        <!-- MJ BTN ICON+TEXT Insert or Add -->
                             {% set color, element, numero, parent, parentID, redirect, label = 'text-accent', 'scene', une_scene.numero, 'episode', episode.id, 'episode', 'Insérer' %}
                             {{ include('/parts/btn-line-insert-add.html.twig') }}
-                        </div>
                     {% endif %}
+                    </div>
 
                     <!-- UNE SCENE -->
                     {{ include('/aventure/une-scene.html.twig', {une_scene}) }}

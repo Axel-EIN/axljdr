@@ -55,6 +55,11 @@ class Scene
      */
     private $participations;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=Lieu::class, inversedBy="scenes")
+     */
+    private $lieu;
+
     public function __construct()
     {
         $this->participations = new ArrayCollection();
@@ -163,6 +168,18 @@ class Scene
                 $participation->setScene(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getLieu(): ?Lieu
+    {
+        return $this->lieu;
+    }
+
+    public function setLieu(?Lieu $lieu): self
+    {
+        $this->lieu = $lieu;
 
         return $this;
     }

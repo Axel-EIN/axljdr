@@ -2,6 +2,13 @@
 /* ----- BTN ICON ----- */
 /* -------------------- */
 
+button {
+    background: none;
+    border: none;
+    outline: none;
+    box-shadow: none;
+}
+
 .btn-icon {
     &.text-light-alpha:hover { color: var(--white); }
     &.text-accent:hover { color: var(--accent-light); }
@@ -38,6 +45,9 @@
     text-align: center;
     vertical-align: middle;
     line-height: 1.5;
+    &:hover {
+        cursor: pointer;
+    }
 }
 
 /* BOXED */
@@ -45,7 +55,7 @@
 .btn-primary-style {
     border-image: url('../assets/img/ui/primary-button-red-stroke.png') 16 16 16 16 fill repeat;
     font-weight: bold;
-    color: var(--white);
+    color: var(--white) !important;
 
     &:hover, &:active, &:target {
         filter: brightness(2.0);

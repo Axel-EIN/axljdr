@@ -174,7 +174,7 @@ class AdminLieuController extends AbstractController
             $nomImageASupprimer = basename($lieu->getImage());
             $cheminImageASupprimer = $this->getParameter('image_directory') . '/lieux/' . $nomImageASupprimer;
 
-            if (file_exists($cheminImageASupprimer)) {
+            if (file_exists($cheminImageASupprimer) && is_dir($cheminImageASupprimer) == false) {
                 $filesystem = new Filesystem();
                 $filesystem->remove($cheminImageASupprimer);
             }

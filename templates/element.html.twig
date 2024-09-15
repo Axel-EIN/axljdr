@@ -1,0 +1,52 @@
+{% extends 'base.html.twig' %}
+{% block title %}{{entity|capitalize}} {{nom}} {{parent()}} {% endblock %}
+
+{% block stylesheets %}
+  {{ parent() }}
+  <link rel="stylesheet" href="{{asset('css/components/element.css')}}" />
+  <link rel="stylesheet" href="{{asset('css/components/picture-grid.css')}}" />
+{% endblock %}
+
+{% block body %}
+  <main class="container-fluid element-page">
+    <div class="container relative">
+
+      {% if category == 'personnages' and entity == 'fiche' %}
+        {% set fil = [
+          { label: category|capitalize, path: path(category) },
+          { label: nom|capitalize, path: path('personnage_profil', {id: fiche.personnage.id}) },
+          { label: 'Fiche Personnage' },
+        ] %}
+      {% else %}
+        {% set fil = [
+          { label: category|capitalize, path: path(category, {'_fragment': entity}) },
+          { label: nom },
+        ] %}
+      {% endif %}
+      {{ include('parts/breadcrumbs.html.twig', {items: fil}) }}
+
+      {{ include('parts/messages-flashes.html.twig') }}
+
+      <section>
+
+        <h1 class="heading-elementdetail relative">
+          {% if category == 'personnages' and entity == 'fiche' %}
+            <strong><i class="fas fa-address-card fiche-titre-ico mr-2"></i>Fiche de {{ nom }}</strong>
+          {% else %}
+            <strong>{{ nom }}</strong>
+          {% endif %}
+
+          {% if app.user and is_granted("ROLE_MJ") %}
+            {% set redirect, size, color, position = entity, 'btn-icon-medium', 'text-accent', 'right-snap' %}
+            {{ include('/parts/btn-icon-edit.html.twig') }}
+          {% endif %}
+        </h1>
+        <hr class="hr-title">
+
+        <article class="row">
+          {% block element_content %}{% endblock %}            
+        </article>
+      </section>
+    </div>
+  </main>
+{% endblock %}

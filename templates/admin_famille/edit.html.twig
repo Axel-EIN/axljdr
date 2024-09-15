@@ -1,0 +1,6 @@
+{% extends 'back_office/index.html.twig' %}
+{% block title %}Modifier une Famille {{ parent() }}{% endblock %}
+{% block h1 %}Modifier une Famille{% endblock %}
+{% block child %}
+    {{ include('admin_famille/_form.html.twig', {'button_label': 'Éditer'}) }}
+{% endblock %}

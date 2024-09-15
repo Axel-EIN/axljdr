@@ -27,7 +27,7 @@ class Clan
     /**
      * @ORM\Column(type="smallint", nullable=true)
      */
-    private $est_majeur;
+    private $estMajeur;
 
     /**
      * @ORM\Column(type="string", length=7)
@@ -96,12 +96,12 @@ class Clan
 
     public function getEstMajeur(): ?int
     {
-        return $this->est_majeur;
+        return $this->estMajeur;
     }
 
-    public function setEstMajeur(?int $est_majeur): self
+    public function setEstMajeur(?int $estMajeur): self
     {
-        $this->est_majeur = $est_majeur;
+        $this->estMajeur = $estMajeur;
 
         return $this;
     }

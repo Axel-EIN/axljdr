@@ -21,7 +21,6 @@
                 <th class="p-2 text-center">ID</th>
                 <th class="p-2 text-center">Nom</th>
                 <th class="p-2 text-center">Clan</th>
-                <th class="p-2 text-center">Coordonnées</th>
                 <th class="p-2 text-center"></th>
                 <th class="p-2 text-center"></th>
                 <th class="p-2 text-center"></th>
@@ -45,7 +44,6 @@
                             <small class="text-muted">n/a</small>
                         {% endif %}
                     </td>
-                    <td class="p-2 border text-center">{{ un_lieu.coordinates }}</td>
                     <td class="p-2 border text-center"><a href="{{ path('empire_lieu', { id: un_lieu.id }) }}"><i class="fas fa-eye"></i></a></td>
                     <td class="p-2 border text-center"><a href="{{ path('admin_lieu_edit', {id: un_lieu.id} ) }}"><i class="fas fa-edit"></i></a></td>
                     <td class="p-2 border text-center">
@@ -56,7 +54,10 @@
                 </tr>
 
                 <tr>
-                    <td class="p-2 text-center"><img class="img-320" src="{{ asset(un_lieu.carte) }}" alt="Carte du Lieu" /></td>
+                    <td class="p-2 text-center">
+                        <img class="img-320 mb-1" src="{{ asset(un_lieu.region) }}" alt="Carte du Lieu" />    
+                        <img class="img-320 mb-1" src="{{ asset(un_lieu.carte) }}" alt="Carte du Lieu" />
+                    </td>
                     <td class="p-2 border bg-white" colspan="7"><small class="text-muted">Description :</small><br/><small>{{ un_lieu.description }}</small></td>
                 </tr>
 

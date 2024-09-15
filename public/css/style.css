@@ -8,6 +8,7 @@
 .white { color: white; }
 .light-gray { color: #eee; }
 
+
 .primary-color { color: #EA2027; }
 .primary-color-light { color: #ff4147; }
 .primary-color-lighter { color: #ff8084; }
@@ -212,6 +213,8 @@ h5 a:hover, h4 a:hover, h3 a:hover, h2 a:hover, h1 a:hover { text-decoration: no
 .page-min { min-height: 60vh; }
 
 /* POSITIONING & VISIBILITY */
+
+.flex-2 { flex-grow: 2 }
 
 .absolute { position: absolute }
 .relative { position: relative; }
@@ -470,6 +473,13 @@ a.location-icon { color: purple; }
 .fa-animation-delay { --fa-animation-delay: 0.67s; }
 .hover-stop:hover { animation-duration: 0s; }
 
+.zoomhide { opacity: 0; scale: 0.5; transform: translate(-50%, -50%); transform-origin: center; display: none;}
+.zoomin { opacity: 1; scale: 1; transform: translate(-0%, -0%); transform-origin: center;}
+
+.recenter {  transform: translate(-50%, -50%); }
+
+.shutdown { display: none }
+.shutin { display: block }
 
 
 /* -------------------------- */
@@ -496,8 +506,14 @@ nav .active { font-weight: bold; border-bottom: 3px solid #EA2027; }
 
 /* MAP UI LOCALISATOR */
 
-.localisator-ui { position: absolute; width: 200%; transform: translate(-50%, -50%); z-index: 5;}
-.localisator-icon { position: absolute; z-index: 10;; color: red; transform: translate(-50%, -50%) translate(0, -20px);  }
+#minimap {
+        z-index: 4; top: 0.5rem; right: 0.5rem;
+        width: 240px;
+        border: 2px solid rgba(255, 255, 255, .5);
+}
+
+.localisator-ui { z-index: 5; width: 200%; transform: translate(-50%, -50%); }
+.localisator-icon { z-index: 10; text-align: center; color: red; width: 48px; max-height: 48px; font-size: 2rem; transform: translate(-50%, -50%) translate(0px, -48px); text-shadow: 1px 1px #64080e;}
 
 /* FOOTER */
 
@@ -507,3 +523,9 @@ nav .active { font-weight: bold; border-bottom: 3px solid #EA2027; }
 .footer-link:hover { color:#fff; text-decoration: underline; }
 #footer1 ul, #footer2 ul { list-style:outside none none; padding: 0; }
 #social-medias { font-size: 2rem; }
+
+/* SOME TESTS */
+/* :root {
+        --main-primary-color: #EA2027;
+      }
+.test { color: var(--main-primary-color); } */

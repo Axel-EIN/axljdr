@@ -1,33 +1,41 @@
 {% extends 'base.html.twig' %}
 {% block title %}L'Aventure Saison {{ saison.numero }} {{ parent() }}{% endblock %}
 {% block body %}
+<!-- HEADER BAND SAISON -->
 <header class="container-fluid saison">
     {{ include('/parts/messages-flashes.html.twig') }}
-    <div class="container relative" >
-
-            <!-- BOUTON FLECHE GAUCHE DROITE SAISON -->
-            <div class="shift-left">
-                {% if saison_precedente is not empty %}
-                    <a class="arrow-left" href="{{ path('aventure_saison', {id : (saison_precedente.id) } ) }}" alt="Flèche Gauche" title="Voir Saison précédente">
-                        <i class="fa-solid fa-caret-left"></i>
-                    </a>{% else %}<i class="fa-solid fa-caret-left"></i>
-                {% endif %}
-                {% if saison_suivante is not empty %}
-                    <a class="arrow-right" href="{{ path('aventure_saison', {id : (saison_suivante.id) } ) }}" alt="Flèche Droite" title="Voir Saison suivante">
-                        <i class="fa-solid fa-caret-right"></i>
-                    </a>{% else %}<i class="fa-solid fa-caret-right"></i>
+    <div class="container relative text-center d-flex justify-content-center align-items-center">
+            <div class="ml-2">
+            {% if saison_precedente is not empty %}
+                <a class="arrow-left fa-fade" href="{{ path('aventure_saison', {id : (saison_precedente.id) } ) }}" alt="Flèche Gauche" title="Voir Saison précédente">
+                    <i class="fa-solid fa-caret-left"></i>
+                </a>
+            {% else %}
+                <span class="arrow-disabled">
+                    <i class="fa-solid fa-caret-left"></i>
+                </span>
+            {% endif %}
+            </div>
+            <div class="ml-2">
+                {% if saison_suivante is empty %}
+                    <div class="clip-text-main">
+                        <div class="clip-text">SAISON {{ saison.numero }} - Saison actuellement en cours !</div>
+                    </div>
+                {% else %}
+                    <div class="primary-color"><strong>SAISON {{ saison.numero }} - {{ saison.titre }}</strong></div>
                 {% endif %}
             </div>
-
-            <!-- TEXTE DE LA SAISON -->
-            {% if saison_suivante is empty %}
-                <div class="clip-text-main">
-                    <div class="clip-text">Cette SAISON est en cours !</div>
-                </div>
-            {% else %}
-                <div class="primary-color-dark"><strong>SAISON {{ saison.numero }} - {{ saison.titre }}</strong></div>
-            {% endif %}
-    
+            <div class="ml-2">
+                {% if saison_suivante is not empty %}
+                    <a class="arrow-right fa-fade" href="{{ path('aventure_saison', {id : (saison_suivante.id) } ) }}" alt="Flèche Droite" title="Voir Saison suivante">
+                        <i class="fa-solid fa-caret-right"></i>
+                    </a>
+                {% else %}
+                    <span class="arrow-disabled">
+                        <i class="fa-solid fa-caret-right"></i>
+                    </span>
+                {% endif %}
+            </div>
     </div>
 </header>
 

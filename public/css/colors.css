@@ -52,6 +52,9 @@
 .text-white {
     color: var(--white) !important; }
 
+.text-lightest {
+    color: var(--lightest) !important; }
+
 .text-primary {
     color: var(--primary) !important; }
 

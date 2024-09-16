@@ -2,6 +2,6 @@
 {% block title %}Administrer les Personnages {{ parent() }}{% endblock %}
 {% block h1 %}Administrer les <strong>Personnages</strong>{% endblock %}
 {% block child %}
-    {% set label, element, elements, img_size = 'personnage', 'personnage', personnages, '48' %}
+    {% set label, element, elements, img_size, genre = 'personnage', 'personnage', personnages, '48', 'M' %}
     {{ include('back_office/list-element.html.twig') }}
 {% endblock %}

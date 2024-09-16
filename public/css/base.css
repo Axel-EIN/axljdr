@@ -1,0 +1,168 @@
+/* ---------------------- */
+/* ----- RESPONSIVE ----- */
+/* ---------------------- */
+/*
+   Résolutions cibles produit (référence). Les largeurs sont en pixels
+   d'interface (DP), pas en pixels physiques :
+
+     Palier                 DP     Appareil cible          Orient.  Pouces  Réels  PPI  DPR
+     Small Mobile           320    iPhone SE               portrait   4.7"    750  326  x2
+     Mobile                 360    Android 9A              portrait   6.3"   1080  422  x3
+     Large Mobile           420    iPhone Air              portrait   6.5"   1260  460  x3
+     7p Tablet              520    Galaxy Tab A7           portrait   7.0"    800  216  x1.5
+     10p Tablet             800    Pixel Tablet            portrait  10.0"   1600  276  x2
+     Laptop                1280    MacBook Air             paysage   13.6"   2560  224  x2
+     Laptop Medium         1440    Asus Zenbook 14         paysage   14.0"   2880  243  x2
+     Laptop High           1560    Huawei MateBook X Pro   paysage   14.0"   3120  264  x2
+     Desktop HD            1920    Iiyama ProLite          paysage   23.0"   1920   92  x1
+     Desktop Ultra Wide    2560    Iiyama G-Master         paysage   32.0"   3440  110  x1
+
+   Bootstrap 4.6 (chargé en CDN, non recompilable ici) n'offre que 5 paliers
+   fixes en min-width : 0 / 576 / 768 / 992 / 1200px. Correspondance réelle
+   entre ces paliers et les cibles ci-dessus :
+
+     col-*      0px     Small Mobile, Mobile, Large Mobile ET 7p Tablet (520)
+     col-sm-*   576px   aucune cible — palier vide
+     col-md-*   768px   10p Tablet (800)
+     col-lg-*   992px   aucune cible — palier vide
+     col-xl-*   1200px  Laptop 1280 → Desktop Ultra Wide 2560, confondus
+
+
+   CONVENTION @media — le versant mobile s'ecrit `min du palier suivant
+   - 0.02px`, jamais en entier, donc : 575.98 / 767.98 / 991.98 / 1199.98.
+   Bootstrap declenche .col-lg-* a 992px PILE, donc un `max-width: 992px` s'applique en
+   meme temps et c'est l'ordre de declaration qui tranche. Le 0.02 est la
+   valeur de la mixin media-breakpoint-down de Bootstrap (arrondi Safari).
+   Exception : 480px n'est pas un palier Bootstrap, n'a aucun min-width en
+   face, et reste ecrit en entier.
+*/
+
+:root {
+  --ease: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+body {
+  background-color: var(--color-background);
+  transition:
+    color 0.15s ease-in-out,
+    background-color 0.15s ease-in-out,
+    border-color 0.15s ease-in-out,
+    box-shadow 0.15s ease-in-out;
+}
+
+.bg-clouds {
+  background-image:
+    url( '../../assets/ui/bg-clouds.jpg' ),
+    linear-gradient(#FFF, #FFF);
+  background-blend-mode: multiply, normal;
+  background-color: var(--color-white);
+  box-shadow: 0px 4px 8px #00000080, inset 0 -3px #BBBBFF10;
+}
+
+/* --------------------------- */
+/* ------- CONTAINERS  ------- */
+/* --------------------------- */
+
+.container {
+  @media (max-width: 1199.98px) { padding-left: 1rem; padding-right: 1rem; }
+  @media (max-width: 575.98px) {
+    padding-left: 0.5rem; padding-right: 0.5rem;
+    /* .row de Bootstrap a -15px de marge, on le compense sur mobile vu qu'on a changé le padding du container. */
+    .row { margin-left: -0.5rem; margin-right: -0.5rem; }
+  }
+}
+
+.container-fluid:has(> .container) {
+  @media (max-width: 991.98px) {
+    padding-left: 0;
+    padding-right: 0;
+  }
+}
+
+.page-min { min-height: 60vh; }
+
+/* ------------------------------------------- */
+/* ------- CARTES EMPILEES (< laptop)  ------- */
+/* ------------------------------------------- */
+
+@media (max-width: 991.98px) {
+  /* Sur mobile on annule tout les padding latéraux.
+    On cible toute les conteneur sauf les conteneurs textuels comme card-content, card-body */
+  .element-page > .container > section > .row > *:not(.card-content):not(.card-body) {
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  /* Sur mobile on annule le divider en dessous du titre des page element */
+  .hr-title { display: none; }
+
+  /* Sur mobile, on enlève la marge basse du dernier bloc section. */
+  main > .container > section:last-of-type { padding-bottom: 0 !important; }
+
+  /* Plus de bord ni d'arrondi : les zones blanches vont d'un bord a l'autre */
+  .element-page .card,
+  .element-page .card-body,
+  .element-page .card-content,
+  .element-page #other,
+  .element-page #intro {
+    border: 0;
+    border-radius: 0;
+  }
+
+  /* Image assez grande pour occuper toute la ligne : autant deborder du
+     padding de la carte (0.5rem) plutot que la laisser inseree dedans. */
+  .element-page .img-bleed {
+    display: block;
+    width: calc(100% + 1rem);
+    max-width: none;
+    margin-left: -0.5rem;
+    margin-right: -0.5rem;
+  }
+
+}
+
+/* Le hover-zoom (transform: scale) deborde sur les vignettes voisines, qui le
+   recouvrent sans z-index puisqu'elles suivent dans le DOM. Vaut pour toute
+   grille de vignettes serrees, mobile comme desktop — diag-corner-vignette
+   (.vignette-grid) comme grid-gallery-vignette (.other-character-grid,
+   .other-school-grid). */
+.vignette-grid > *,
+.other-character-grid > *,
+.other-school-grid > * {
+  position: relative;
+}
+
+.vignette-grid > *:hover,
+.other-character-grid > *:hover,
+.other-school-grid > *:hover {
+  z-index: 1;
+}
+
+/* Meme principe que .element-page ci-dessus, pour le gabarit plus simple des
+   pages de texte (a propos, CGU, mentions legales, politique de
+   confidentialite) : une carte directement enfant du .container, sans .row
+   ni colonne. La marge negative annule le padding du .container, qui vaut
+   1rem puis 0.5rem sous 575.98px (cf. paliers en tete de fichier) — d'ou les
+   deux valeurs. */
+@media (max-width: 991.98px) {
+  .text-page .card {
+    margin-left: -1rem;
+    margin-right: -1rem;
+    border: 0;
+    border-radius: 0;
+  }
+  .text-page .card-body { padding: 0.5rem; }
+}
+@media (max-width: 575.98px) {
+  .text-page .card {
+    margin-left: -0.5rem;
+    margin-right: -0.5rem;
+  }
+}
+
+/* ---------------------------- */
+/* --------- DIVIDERS --------- */
+/* ---------------------------- */
+
+.divider-40 { width: 40%; }
+.divider-40 hr { background-color: #ffbbbb; height: 1px; width: 100%; }

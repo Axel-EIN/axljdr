@@ -62,7 +62,7 @@
                             </strong>
                         {% endif %}
                         <br/>
-                        <a href="{{path('personnage_profil',{id:une_participation.personnage.id})}}" >
+                        <a class="relative" href="{{path('personnage_profil',{id:une_participation.personnage.id})}}" >
                             {% if une_participation.estMort == 1 %}
                                 <img class="absolute character-icon-dead" src="{{asset('assets/img/icons/mort.png')}}" alt="est mort" />
                             {% endif %}

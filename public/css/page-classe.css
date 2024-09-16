@@ -1,0 +1,8 @@
+/* ----------------------- */
+/* ----- PAGE CLASSE ----- */
+/* ----------------------- */
+
+#left-part, #right-part {
+    position: relative;
+    z-index: 2;
+}

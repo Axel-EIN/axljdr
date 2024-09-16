@@ -1,13 +1,8 @@
 <!-- MJ - BTN ICON+TEXT - Add -->
-
-{% if position is not defined %}
-    {% set position = 'right-corner-snap' %}
-{% endif %}
-
 {% if app.user and is_granted("ROLE_MJ") %}
-    <div class="absolute {{position}}">
-        <a href="{{ path('admin_' ~ element|lower ~ '_create') }}?redirect={{element|lower}}" class="btn-primary-style btn-medium" >
-            <i class="fas fa-plus-square fa-fade" alt="Icône Ajouter"></i>&nbsp;&nbsp;Ajouter {{element}}
+    <div class="absolute {{position|default('right-corner-snap')}}">
+        <a href="{{ path('admin_' ~ entity|lower ~ '_create') }}?redirect={{entity|lower}}" class="btn-primary-style btn-medium" >
+            <i class="fas fa-plus-square fa-fade" alt="Icône Ajouter"></i>&nbsp;&nbsp;Ajouter {{label_one}}
         </a>
     </div>
 {% endif %}

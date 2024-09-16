@@ -33,8 +33,14 @@ class Baliseur
             if ($personnage_trouve != null) {
                 if($personnage_trouve->getIcone())
                     $icone_personnage = '../../' . $personnage_trouve->getIcone();
-                else
-                    $icone_personnage = '../../assets/img/placeholders/na_perso_icon.jpg';
+                else {
+                    if ($personnage_trouve->getGenre() == 'M')
+                        $icone_personnage = '../../assets/img/placeholders/na_perso_icon_M.jpg';
+                    else if ($personnage_trouve->getGenre() == 'F')
+                        $icone_personnage = '../../assets/img/placeholders/na_perso_icon_F.jpg';
+                    else
+                        $icone_personnage = '../../assets/img/placeholders/na_perso_icon.jpg';
+                }
                 $tableau_remplacement[] =
                     '<a class="tag-character hover-zoom character-icon bg-lightest pr-1 pt-0 pb-0 pl-0" href="../../personnages/profil/' . $personnage_trouve->getId() . '">'
                                 . '<img class="character-icon-small" src="../../' . $icone_personnage

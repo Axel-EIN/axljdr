@@ -46,7 +46,7 @@
 
     .navbar { padding: 0.5rem 0 }
 
-    .active {
+    a.active {
         color: var(--white) !important;
         font-weight: bold;
         border-bottom: 3px solid var(--primary);

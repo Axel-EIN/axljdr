@@ -102,6 +102,11 @@ class Personnage
      */
     private $locked;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $genre;
+
     public function __construct()
     {
         $this->archives = new ArrayCollection();
@@ -341,6 +346,18 @@ class Personnage
     public function setLocked(bool $locked): self
     {
         $this->locked = $locked;
+
+        return $this;
+    }
+
+    public function getGenre(): ?string
+    {
+        return $this->genre;
+    }
+
+    public function setGenre(?string $genre): self
+    {
+        $this->genre = $genre;
 
         return $this;
     }

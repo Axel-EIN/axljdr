@@ -1,0 +1,17 @@
+/* -------------------------------- */
+/* --------- PAGE LIEUX ----------- */
+/* -------------------------------- */  
+
+#minimap {
+    z-index: 4;
+    top: 0.5rem;
+    right: 0.5rem;
+    width: 280px;
+    border: 2px solid var(--light-alpha);
+}
+
+.localisator-ui {
+    z-index: 5;
+    width: 200%;
+    transform: translate(-50%, -50%);
+}

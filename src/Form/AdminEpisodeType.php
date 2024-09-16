@@ -12,6 +12,7 @@ use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Validator\Constraints\Length;
 
 class AdminEpisodeType extends AbstractType
 {
@@ -20,7 +21,7 @@ class AdminEpisodeType extends AbstractType
         $builder
             ->add('numero', IntegerType::class)
             ->add('titre', TextType::class)
-            ->add('resume', TextareaType::class)
+            ->add('resume', TextareaType::class, ['required' => false, 'constraints' => [ new Length( [ 'max' => 200 ] ) ]])
             ->add('image', FileType::class, array('mapped' => false, 'data_class' => null, 'required' => false))
             ->add('chapitreParent', EntityType::class, [
                 'class' => Chapitre::class,

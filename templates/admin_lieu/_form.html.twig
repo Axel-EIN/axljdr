@@ -6,7 +6,7 @@
             <div class="col-6">
                 {{ form_label(form.image) }}
                 <label id="preview-label" for="admin_lieu_image" class="{% if type != 'Modifier' %}d-none{% endif %} hover-slight-fade hover-pointer hover-icon-visible">
-                    <icon class="btn-icon-medium right-corner-16"><i class="fas fa-edit semi-visible link-white"></i></icon>
+                    <icon class="btn-icon-medium right-corner-16"><i class="fas fa-edit semi-visible text-white"></i></icon>
                     <img id="image-preview" class="img-fluid" src="{% if type == 'Modifier' %}{{ asset(lieu.image|default(NA_LIEU)) }}{% endif %}" />
                 </label>
                 <browse id="browse-label">

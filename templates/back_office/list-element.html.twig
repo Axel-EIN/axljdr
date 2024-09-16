@@ -1,6 +1,16 @@
+{% if genre is defined %}
+    {% if genre == 'M' %}
+        {% set create_label = "Créer un nouveau" %}
+    {% elseif genre == 'F' %}
+        {% set create_label = "Créer une nouvelle" %}
+    {% endif %}
+{% else %}
+    {% set create_label = "Créer un nouvel élément" %}
+{% endif %}
+
 <section>
-    <div class="ml-auto text-center my-3">
-        <a href="{{ path('admin_' ~ element ~ '_create') }}" class="btn-medium btn-primary-style"><i class="fas fa-plus-square"></i>&nbsp;&nbsp;Créer {{label}}</a>
+    <div class="text-right my-3">
+        <a href="{{ path('admin_' ~ element ~ '_create') }}" class="btn-medium btn-primary-style"><i class="fas fa-plus-square"></i>&nbsp;&nbsp;{{create_label}} {{label}}</a>
     </div>
 
     <table class="admin-element-list">

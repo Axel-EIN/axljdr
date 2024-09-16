@@ -104,30 +104,34 @@
                 {% if classement_episode %}
                     <div class="d-flex justify-content-center">
                         <div class="list-group list-group-flush">
-
-                            {% set mvp = true %}
-                            {% for un_personnage in classement_episode %}
-                                {% if un_personnage != classement_episode|first and un_personnage.xp == classement_episode|first.xp %}
-                                    {% set mvp = false %}
-                                {% endif %}
-                            {% endfor %}
+                            {% set mvp = false %}
+                            {% if episode.issue is not empty and episode.issue == 'Win' %}
+                                {% set mvp = true %}
+                                {% for un_personnage in classement_episode %}
+                                    {% if un_personnage != classement_episode|first and un_personnage.xp == classement_episode|first.xp %}
+                                        {% set mvp = false %}
+                                    {% endif %}
+                                {% endfor %}
+                            {% endif %}
 
                             {% set previous_xp = null %}
                             {% set rank = 0 %}
-
                             {% for un_personnage in classement_episode %}
 
                                 {% if previous_xp != un_personnage.xp %}
                                     {% set rank = rank + 1 %}
                                 {% endif %}
 
-                                {% if mvp == true and rank == 1 %}
-                                    {% set scale_class = 'scale-1st' %}
-                                {% elseif mvp == true and rank != 1 %}
-                                    {% set scale_class = 'scale-other' %}
+                                {% if episode.issue is not empty and episode.issue == 'Win' %}
+                                    {% set scale = 'scale-100' %}
+                                    {% if mvp == true and rank == 1 %}
+                                        {% set scale = 'scale-120' %}
+                                    {% endif %}
+                                {% else %}
+                                    {% set scale = 'scale-80' %}
                                 {% endif %}
 
-                                <a class="list-group-item d-flex align-items-center hover-zoom bg-transparent ranking {{scale_class|default()}}" href="{{path('personnage_profil',{id:un_personnage.id})}}">
+                                <a class="list-group-item d-flex align-items-center hover-zoom bg-transparent ranking {{scale|default('')}}" href="{{path('personnage_profil',{id:un_personnage.id})}}">
                                     <img class="img-96 mr-4 rounder-portrait" src="{{ asset(un_personnage.icone|default(NA_PERSO_ICO)) }}" alt="Portrait du Personnage" title="Voir le profil de {{un_personnage.prenom}}"/>
                                     <div class="relative inlineblock mr-4">
                                         {% if mvp == true and rank == 1 %}<i class="crown fa-solid fa-crown fa-2xl text-primary mr-4"></i>{% endif %}
@@ -135,9 +139,7 @@
                                     </div>
                                     <span class="ml-auto badge badge-pill text-large text-gray">{{un_personnage.xp}}xp</span>
                                 </a>
-
                                 {% set previous_xp = un_personnage.xp %}
-
                             {% endfor %}
                         </div>
                     </div>

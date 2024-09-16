@@ -2,11 +2,9 @@
 /* ----- POSITIONS ----- */
 /* --------------------- */
 
-.relative {
-        position: relative; }
+.relative { position: relative; }
 
-.absolute {
-        position: absolute; }
+.absolute { position: absolute; }
 
 .left-overflow {
         position: absolute;

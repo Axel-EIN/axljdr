@@ -43,7 +43,7 @@
 
                     <!-- MJ EDIT -->
                     {% if app.user and is_granted("ROLE_MJ") %}
-                        {% set position, size, color, entity, un_element, redirect, fragment = 'right-snap', 'btn-icon-medium', 'link-accent', 'rule', rule, 'rule', 'part' ~ i %}
+                        {% set position, size, color, entity, un_element, redirect, fragment = 'right-snap', 'btn-icon-medium', 'text-accent', 'rule', rule, 'rule', 'part' ~ i %}
                         {{ include('/parts/btn-icon-edit.html.twig') }}
                     {% endif %}
                     

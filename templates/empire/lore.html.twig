@@ -39,7 +39,7 @@
         <section id="part{{i}}" class="col-8 p-1 mt-3 mb-3 relative">
             <!-- MJ EDIT -->
             {% if app.user and is_granted("ROLE_MJ") %}
-                {% set position, size, color, entity, un_element, redirect, fragment = 'right-corner-16', 'btn-icon-medium', 'link-accent', 'un_element', un_element, 'un_element', 'part' ~ i %}
+                {% set position, size, color, entity, un_element, redirect, fragment = 'right-corner-16', 'btn-icon-medium', 'text-accent', 'un_element', un_element, 'un_element', 'part' ~ i %}
                 {{ include('/parts/btn-icon-edit.html.twig') }}
             {% endif %}
             <card class="card card-body">

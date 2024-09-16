@@ -2,28 +2,17 @@
 /* --------- ANIMATIONS --------- */
 /* ------------------------------ */
 
-
 /* ----- GENERAL HOVERS ----- */
 
-.hover-pointer:hover {
-    cursor: pointer;
-}
-
+.hover-pointer:hover { cursor: pointer; }
 
 /* ----- ZOOM ----- */
 
-.hover-zoom, .hover-zoom-half, .hover-zoom:hover, .hover-zoom-half:hover {
-    transition: 0.33s;
-}
+.hover-zoom, .hover-zoom-half, .hover-zoom:hover, .hover-zoom-half:hover { transition: 0.33s; }
 
-.hover-zoom:hover {
-    transform: scale(1.125);
-}
+.hover-zoom:hover { transform: scale(1.125); }
 
-.hover-zoom-half:hover {
-    transform: scale(1.0625);
-}
-
+.hover-zoom-half:hover { transform: scale(1.0625); }
 
 /* ----- OPACITY ----- */
 
@@ -59,10 +48,7 @@
     opacity: 0;
 }
 
-.hover-span-visible:hover > span {
-    opacity: 1;
-}
-
+.hover-span-visible:hover > span { opacity: 1; }
 
 /* ----- BRIGHTNESS / SHINING ----- */
 
@@ -122,13 +108,8 @@
     100% {opacity: 0;}
 }
 
-
 /* ----- ANIMATION / STOP ----- */
 
-.hover-stop:hover {
-    animation-duration: 0s;
-}
+.hover-stop:hover { animation-duration: 0s; }
 
-.fa-animation-delay {
-    --fa-animation-delay: 0.67s;
-}
+.fa-animation-delay { --fa-animation-delay: 0.67s; }

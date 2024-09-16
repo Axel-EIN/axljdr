@@ -15,6 +15,7 @@ use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 
 class AdminPersonnageType extends AbstractType
@@ -25,6 +26,13 @@ class AdminPersonnageType extends AbstractType
             ->add('prenom', TextType::class)
             ->add('nom', TextType::class, [
                 'required' => false,
+            ])
+            ->add('genre', ChoiceType::class, [
+                'choices'  => [
+                    'Homme' => 'M',
+                    'Femme' => 'F',
+                    "Inconnu" => "U",
+                ],
             ])
             ->add('titres', TextType::class, [
                 'required' => false,
@@ -40,7 +48,8 @@ class AdminPersonnageType extends AbstractType
                 'required' => false
             ])
             ->add('description', TextareaType::class, [
-                'required' => false
+                'required' => false,
+                'empty_data' => ' '
             ])
             ->add('estPj', CheckboxType::class, [
                 'required' => false,

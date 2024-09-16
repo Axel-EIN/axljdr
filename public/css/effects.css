@@ -2,14 +2,9 @@
 /* ----- GENERAL ----- */
 /* ------------------- */
 
-.rounded-8 {
-    border-radius: 0.5rem;
-}
+.rounded-8 { border-radius: 0.5rem; }
 
-.rounded-top {
-    border-radius: 1rem 1rem 0px 0px !important;
-}
-
+.rounded-top { border-radius: 1rem 1rem 0px 0px !important; }
 
 /* ----- OPACITY & VISIBILITY ----- */
 
@@ -41,14 +36,9 @@
 
 /* --------- SHADOWS --------- */
 
-.shadow-more {
-    box-shadow: 2px 2px 4px rgba(0, 0, 0, .4);
-}
+.shadow-more { box-shadow: 2px 2px 4px rgba(0, 0, 0, .4); }
 
-.filter-shadow {
-    filter: drop-shadow(4px 4px 16px rgba(0,0,0,0.5));
-}
-
+.filter-shadow { filter: drop-shadow(4px 4px 16px rgba(0,0,0,0.5)); }
 
 /* ---- GRADIENTS & MASKS ---- */  
 

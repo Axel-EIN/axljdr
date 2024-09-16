@@ -1,34 +1,48 @@
+/* ---------------------------- */
+/* ----- COLORS VARIABLES ----- */
+/* ---------------------------- */
+
 :root {
     --white: white !important;
+    --black: black !important;
+
+    --gray-light: gray;
+    --gray: #464a4d;
+
+    /* LIGHT */
     --lightest: #eee;
     --lighter-more: #ddd ;
+    --lighter-plus: #bebebe ;
     --lighter: #aaa ;
     --light: #8f8f8f;
 
-    --light-alpha: rgba(255, 255, 255, 0.5);
-    --light-trans: rgba(255, 255, 255, 0.2);
+    --light-alpha: #FFFFFF80;
+    --light-trans: #FFFFFF40;
 
-    --gray-lighter: #808080;
-    --gray-light: #606060;
-    --gray: #464a4d;
-
+    /* DARK */
     --dark: #303030;
-    --darker: #202020;
+    --darker: #151010;
     --darkest: #101010;
-    --dark-alpha: rgba(0,0,0, 0.5);
-    --black-1: #151010 !important;
-    --black: black !important;
 
+    --dark-alpha: #00000080;
+    --dark-trans: #00000040;
+
+    /* RED PRIMARY */
     --primary-lighter: #ff8084;
     --primary-light: #ff4147;
+
     --primary: #EA2027 !important;
+
     --primary-dark: #b6252f;
     --primary-darker: #9b1921;
     --primary-darker-more: rgb(100,0,0);
     --primary-darkest: rgb(40,0,0);
 
+    /* BLUE SECONDARY */
     --secondary-light: #3399ff;
+
     --secondary: #0080ff !important;
+
     --secondary-dark: #0066cc;
 
     --secondary-pastel-light: #464a4d;
@@ -36,23 +50,25 @@
     --secondary-pastel-darker: #28323C;
     --secondary-pastel-darkest: #1E242A;
 
-    --accent: #ff7f00;
-    --accent-alpha: #ff7f0080;
+    /* YELLOW ACCENT */
     --accent-lightest: #fcf8e3;
-    --accent-light: #ffcc66;
+    --accent-lighter: #ffcc66;
+    --accent-light: #ffaa40;
+
+    --accent: #ff7f00;
+
     --accent-dark: #cc6600;
 
-    --blue: #007bff !important;
-    --lightblue: rgb(128, 187, 255);
+    --accent-alpha: #ff7f0080;
+    --accent-trans: #ff7f0040;
+
+    /* VARIOUS OTHER COLORS */
     --purple: purple !important;
     --green: rgb(0,100,0) !important;
-    --cyan: rgb(0,100,100) !important;
     --fuschia: #FF1493;
     --flash-red: #f66;
     --flash-green: #0f0;
     --flash-blue: #4Cf;
-    --flash-lightblue: rgb(227, 247, 255);
-    --flash-cyan: #0ff;
 
     --AIR: #7aa9ff;
     --EAU: #44bdc4;
@@ -61,85 +77,88 @@
     --VIDE: #b293ff;
 }
 
+/* -------------------------- */
+/* ----- COLORS CLASS ----- */
+/* -------------------------- */
 
+/* WHITE, BLACK, GRAY */
 
-/* ----------------------- */
-/* ----- TEXT COLORS ----- */
-/* ----------------------- */
-
-/* BLACK & WHITE */
-.text-black { color:  var(--black) !important; }
-.text-dark { color:  var(--dark) !important; }
 .text-white { color: var(--white) !important; }
+.bg-white { background-color: var(--white) !important; }
 
-/* GRAY */
-.text-lightest { color: var(--lightest) !important; }
-.text-lighter { color: var(--lighter) !important; }
+.text-black { color: var(--black) !important; }
+.bg-black { background-color: var(--black) !important; }
+
+.text-gray { color: var(--gray) !important }
+.bg-gray { background-color: var(--gray) !important; }
+
+/* LIGHT */
+
+.text-lightest { color: var(--lightest); }
+.bg-lightest { background-color: var(--lightest); }
+
 .text-light { color: var(--light) !important; }
-.text-gray { color:  var(--gray) !important; }
+.bg-light { background-color: var(--light) !important;}
 
-/* PRIMARY, SECONDARY, ACCENT */
-.text-primary { color: var(--primary) !important; }
-.text-primary-dark { color: var(--primary-dark) ; }
-.text-primary-darker { color: var(--primary-darker) ; }
-.text-primary-darker-more { color: var(--primary-darker-more) ; }
-.text-accent { color:var(--accent); }
-.text-accent-alpha { color:var(--accent-alpha); }
-
-/* TRANSPARENT */
-.text-light-trans { color: var(--light-trans); }
 .text-light-alpha { color: var(--light-alpha); }
+.bg-light-alpha { background-color: var(--light-alpha) }
 
-/* ELEMENTS */
-.text-AIR { color: var(--AIR); }
-.text-EAU { color: var(--EAU); }
-.text-FEU { color: var(--FEU); }
-.text-TERRE { color: var(--TERRE); }
-.text-VIDE { color: var(--VIDE); }
+.text-light-trans { color: var(--light-trans); }
+.bg-light-trans { background-color: var(--light-trans) }
+
+/* PRIMARY */
+
+.text-primary { color: var(--primary) !important; }
+.bg-primary { background-color: var(--primary) !important; }
+
+.text-primary-dark { color: var(--primary-dark) ; }
+.bg-primary-dark { background-color: var(--primary-dark) ; }
+
+.text-primary-darker { color: var(--primary-darker) ; }
+.bg-primary-darker { background-color: var(--primary-darker); }
+
+.text-primary-darker-more { color: var(--primary-darker-more); }
+.bg-primary-darker-more { background-color: var(--primary-darker-more); }
+
+.text-primary-darkest { color: var(--primary-darkest); }
+.bg-primary-darkest { background-color: var(--primary-darkest); }
+
+
+/* SECONDARY */
+
+.text-secondary { color: var(--secondary) !important; }
+.bg-secondary { background-color: var(--secondary) !important; }
+
+/* ACCENT */
+
+.text-accent { color: var(--accent) !important; }
+.bg-accent { background-color: var(--accent) !important; }
+
+.text-accent-alpha { color:var(--accent-alpha); }
+.bg-accent-alpha { background-color:var(--accent-alpha); }
 
 /* OTHERS */
-.text-green { color:var(--green); }
-.text-flash-green { color:var(--flash-green); }
-.text-fuschia { color:var(--fuschia); }
 
-
-
-/* ----------------------------- */
-/* ----- BACKGROUND COLORS ----- */
-/* ----------------------------- */
-
+.text-AIR { color: var(--AIR); }
 .bg-AIR { background-color: var(--AIR); }
+
+.text-EAU { color: var(--EAU); }
 .bg-EAU { background-color: var(--EAU); }
+
+.text-FEU { color: var(--FEU); }
 .bg-FEU { background-color: var(--FEU); }
+
+.text-TERRE { color: var(--TERRE); }
 .bg-TERRE { background-color: var(--TERRE); }
+
+.text-VIDE { color: var(--VIDE); }
 .bg-VIDE { background-color: var(--VIDE); }
 
-.bg-gray {
-    background-color: var(--gray) !important; }
+.text-green { color: var(--green); }
+.bg-green { background-color: var(--green); }
 
-.bg-black {
-    background-color: var(--black) !important; }
+.text-flash-green { color:var(--flash-green); }
+.bg-flash-green { background-color: var(--flash-green); }
 
-.bg-white {
-    background-color: var(--white) !important; }
-
-.bg-lightest {
-    background-color: var(--lightest); }
-
-.bg-lighter {
-    background-color: var(--lighter); }
-
-.bg-light {
-    background-color: var(--light) !important;}
-
-.bg-primary {
-    background-color: var(--primary) !important; }
-
-.bg-primary-darker {
-    background-color: var(--primary-darker); }
-
-.bg-primary-darkest {
-    background-color: var(--primary-darkest); }
-
-.bg-accent {
-    background-color: var(--accent); }
+.text-fuschia { color:var(--fuschia); }
+.bg-fuschia { background-color: var(--fuschia); }

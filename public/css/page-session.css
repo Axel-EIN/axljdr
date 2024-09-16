@@ -1,0 +1,44 @@
+/* -------------------------------- */
+/* --------- PAGE SESSION --------- */
+/* -------------------------------- */
+
+.pnjs-line {
+        position: absolute;
+        z-index: 10;
+        top: -32px;
+        right: 24px; }
+
+.pjs-line {
+        position: absolute;
+        z-index: 10;
+        bottom: -28px;
+        right: 24px; }
+
+@media (max-width: 576px) { .pnjs-line, .pjs-line { visibility: collapse; } }
+@media (max-width: 480px) { .pnjs-line, .pjs-line { visibility: collapse; } }
+
+/* VIGNETTE LIGNE SESSION CAROUSSEL */
+
+.vignette-caroussel {
+        position: relative;
+        filter: brightness(0.5);
+        transition: 0.5s;
+        &:hover, &.active {
+            filter: brightness(1);
+            transition: 0.5s;
+        }
+    
+        .number-session-caroussel {
+            z-index: 10;
+            right: 4px;
+            bottom: -4px;
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--white);
+            text-shadow: 0px 2px 8px black;
+            &.active {
+                font-size: 3rem;
+                right: 8px;
+            }
+        }
+}

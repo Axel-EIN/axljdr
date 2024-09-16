@@ -1,0 +1,221 @@
+/* ----- LOCATION HEADER ---- */
+
+.nickname-container {
+  position: absolute;
+  z-index: 10;
+  left: 5rem;
+  bottom: 0.5rem;
+  display: flex;
+  align-items: center;
+  color: var(--color-white);
+  margin: 0;
+  padding: 0;
+}
+
+.stats {
+  position: absolute;
+  z-index: 10;
+  right: 6rem;
+  bottom: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: end;
+  color: var(--color-disabled);
+  div {
+    position: relative;
+    .hover-tooltip {
+      top: -24px;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: var(--primary-lighter);
+    }
+    &:hover .hover-tooltip { visibility: visible; }
+  }
+}
+
+@media (max-width: 991.98px) {
+  .lieu-mobile-info {
+    padding: 0 1rem 0;
+
+    .lieu-surnom {
+      margin: 0.5rem 0 1rem;
+      font-size: var(--fontsize-large);
+    }
+  }
+}
+
+/* ----- CARTE INTERACTIVE ---- */
+
+#map-frame {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  background: var(--color-black, #000);
+  cursor: grab;
+  user-select: none;
+}
+
+#map-frame.dragging {
+  cursor: grabbing;
+}
+
+.map-drag {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  user-select: none;
+  will-change: transform;
+}
+
+.map-drag .map-image {
+  display: block;
+  max-width: none;
+  user-select: none;
+  -webkit-user-drag: none;
+  pointer-events: auto;
+}
+
+
+#minimap {
+  z-index: 4;
+  top: 0.5rem;
+  right: 0.5rem;
+  width: 280px;
+  border: 2px solid var(--color-white-50);
+  pointer-events: none;
+}
+
+.localisator-ui {
+  z-index: 5;
+  width: 200%;
+  transform: translate(-50%, -50%);
+}
+
+
+.map-toggle-btn {
+  z-index: 8;
+  top: 0.5rem;
+  left: 0.5rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.4rem 0.8rem;
+  border: 2px solid var(--color-white-50);
+  background-color: rgba(0, 0, 0, 0.65);
+  color: var(--color-white);
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: var(--fontsize-small);
+  font-weight: bold;
+  transition: background-color 0.15s ease, transform 0.15s ease;
+}
+
+.map-toggle-btn:hover {
+  background-color: rgba(0, 0, 0, 0.85);
+  transform: scale(1.03);
+}
+
+.map-toggle-btn.active {
+  background-color: var(--primary-darker-more);
+  border-color: var(--primary-lighter);
+}
+
+/* --- OUTLINE COLORE PAR CLAN --- */
+/* Pile de drop-shadow : simule un contour solide autour du PNG transparent. */
+
+.lieu-pulse-icon,
+.lieu-other-icon img {
+  filter:
+    drop-shadow( 0    2px 0 var(--clan-color, #ffffff))
+    drop-shadow( 0   -2px 0 var(--clan-color, #ffffff))
+    drop-shadow( 2px  0   0 var(--clan-color, #ffffff))
+    drop-shadow(-2px  0   0 var(--clan-color, #ffffff))
+    drop-shadow(0 0 6px rgba(0, 0, 0, 0.8));
+}
+
+
+.lieu-pulse-icon {
+  z-index: 6;
+  width: 96px;
+  height: 96px;
+  object-fit: contain;
+  pointer-events: none;
+  transform-origin: center center;
+  animation: lieu-pulse 1.6s ease-in-out infinite;
+}
+
+@keyframes lieu-pulse {
+  0%, 100% { transform: translate(-50%, -50%) scale(1); }
+  50%      { transform: translate(-50%, -50%) scale(1.15); }
+}
+
+
+.lieu-current-label {
+  z-index: 7;
+  transform: translate(-50%, calc(-50% - 70px));
+  pointer-events: none;
+  background-color: var(--clan-color, var(--primary-darker-more));
+  color: #fff;
+  font-size: var(--fontsize-small);
+  font-weight: bold;
+  padding: 0.25rem 0.75rem;
+  border-radius: 0.5rem;
+  border: 2px solid var(--clan-color, #fff);
+  white-space: nowrap;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
+  box-shadow: 0 0 6px rgba(0, 0, 0, 0.6);
+}
+
+
+.lieu-other-icon {
+  z-index: 3;
+  width: 84px;
+  height: 84px;
+  transform: translate(-50%, -50%);
+  display: block;
+  cursor: pointer;
+  transition: transform 0.15s ease;
+}
+
+.lieu-other-icon img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+  pointer-events: none;
+}
+
+.lieu-other-icon:hover {
+  z-index: 7;
+  transform: translate(-50%, -50%) scale(1.15);
+}
+
+.lieu-other-icon .hover-tooltip {
+  top: 0;
+  left: 50%;
+  transform: translate(-50%, -110%);
+  background-color: var(--clan-color, var(--primary-darker-more));
+}
+
+.lieu-other-icon:hover .hover-tooltip {
+  visibility: visible;
+}
+
+/* --- LIEU VERROUILLE SUR LA CARTE (joueur non-MJ) --- */
+
+.lieu-other-icon.locked img:not(.lieu-other-lock) {
+  filter: grayscale(100%) brightness(0.6) drop-shadow(0 0 5px rgba(0, 0, 0, 0.85));
+  opacity: 0.85;
+}
+
+.lieu-other-icon .lieu-other-lock {
+  position: absolute;
+  z-index: 8;
+  top: 22%;
+  left: 22%;
+  width: 56%;
+  height: 56%;
+  object-fit: contain;
+  pointer-events: none;
+  filter: grayscale(100%) drop-shadow(0 0 4px rgba(0, 0, 0, 0.95));
+}

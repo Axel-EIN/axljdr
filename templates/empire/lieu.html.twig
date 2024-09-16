@@ -1,4 +1,10 @@
 {% extends 'element.html.twig' %}
+
+{% block stylesheets %}
+        {{parent()}}
+        <link rel="stylesheet" href="{{asset('css/page-lieu.css')}}" />
+{% endblock %}
+
 {% block element_content %}
 
     <element class="col-12 pb-1">

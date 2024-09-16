@@ -1,0 +1,68 @@
+/* ---------------------- */
+/* ----- PAGE ECOLE ----- */
+/* ---------------------- */
+
+#banner-icon-clan {
+    position: absolute;
+    z-index: 1;
+    right: 2rem;
+    top: 2rem;
+}
+
+/* Zone Trait bonus / Compétences / Équipement.
+   Desktop : posée en surimpression sur l'image de l'école.
+   Mobile : aucune règle, s'empile sous l'image. */
+@media (min-width: 992px) {
+    #text-zone {
+        position: absolute;
+        z-index: 2;
+        right: 0;
+        bottom: 0;
+        color: white;
+        text-shadow: 2px 2px 8px black;
+    }
+
+    #text-zone .element-card-title { color: var(--color-white); }
+}
+
+/* Mobile : le bloc Trait bonus / Compétences / Équipement pass sur le fond de la carte
+   On enlève donc les effets d'ombre, halo noir flouté. */
+@media (max-width: 991.98px) {
+    #text-zone {
+        .text-zone-blur {
+            color: var(--color-gray-slate);
+
+            &::before { display: none; }
+        }
+
+        .text-xp { text-shadow: none; }
+    }
+
+    #banner-icon-clan {
+        display: none;
+    }
+}
+
+@media (max-width: 991.98px) {
+    .tech-rang {
+        display: flex;
+        align-items: baseline;
+        gap: 0.5rem;
+
+        br { display: none; }
+
+        .skill-rank-number { font-size: 2rem; }
+    }
+}
+
+.skill-rank-number {
+    font-size: 6rem;
+    font-weight: 300;
+    line-height: 1.2;
+
+    @media (max-width: 1199.98px) { font-size: 4.25rem; }
+}
+
+.on-top {
+    z-index: 3;
+}

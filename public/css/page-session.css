@@ -1,0 +1,187 @@
+/* -------------------------------- */
+/* --------- PAGE EPISODE --------- */
+/* -------------------------------- */
+
+/* LIGNE DE VIGNETTES D'EPISODES */
+/* ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾ */
+
+
+.episodes-line {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    .carrousel {
+        position: relative;
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+
+        .vignette-episode {
+            filter: brightness(0.66) saturate(0);
+            transition: 0.5s;
+            width: 128px;
+            border: solid var(--primary-trans) 1px;
+
+            &.active {
+                width: 240px;
+                border: solid var(--primary) 1px;
+            }
+        
+            &:hover { z-index: 100; }
+            &:hover .titre { visibility: visible; }
+            &.active .titre { visibility: hidden; }
+        
+            .titre {
+                visibility: hidden;
+                position: absolute;
+                z-index: 100;
+                bottom: -1.75rem;
+                left: 50%;
+                transform: translate(-50%);
+                overflow-x: visible;
+                white-space: nowrap;
+                color: var(--white);
+                font-weight: bold;
+                font-size: var(--small);
+                background-color: var(--primary);
+                border-radius: 4px;
+                padding: 4px 8px;         
+            }
+        
+            &:hover, &.active {
+                filter: brightness(1);
+                transition: 0.5s;
+            }
+
+            .arrow-down {
+                left: 50%;
+                transform: translate(-50%, 0%);
+            }
+        }
+    }
+}
+
+
+
+/* LIGNE ICÔNE DU TEMPS ET LIEU */
+/* ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾ */
+
+.time-and-location {
+    position: relative;
+    width: 84px;
+    z-index: 10;
+    left: 24px;
+    top: -28px;
+    filter: drop-shadow(2px 2px 4px var(--dark-alpha));
+    
+    .hover-tooltip {
+        position: absolute;
+        display: block;
+        z-index: 100;
+        top: -1rem;
+        left: 50%;
+        transform: translateX(-50%);
+        color: var(--primary-lighter);
+    }
+
+    &:hover .hover-tooltip { visibility: visible; }
+
+    .location {
+        position: absolute;
+        z-index: 1;
+        top: 4px;
+        left: 2px;
+        img { width: 84px; }
+    }
+
+    .time {
+        position: absolute;
+        z-index: -1;
+        top: 0px;
+        left: 8px;
+        img { width: 72px; }
+        &:hover .hover-tooltip { visibility: visible; }
+    }
+
+}
+
+
+/* LIGNE DE PORTRAITS DE PERSONNAGE */
+/* ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾ */
+
+.characters-line {
+    position: absolute;
+    z-index: 10;
+    right: 24px;
+    &.pnjs { top: -24px; }
+    &.pjs { bottom: -24px; }
+
+    .character-portrait-box {
+        position: relative;
+        display: inline-block;
+    
+        .character-portrait-link {
+            position: relative;
+        
+            &:hover .hover-tooltip { visibility: visible; }
+        
+            .character-name {
+                overflow: hidden;
+                text-overflow: ellipsis;
+                padding-left: 0;
+                padding-right: 0;
+                width: 95%;
+                border-top-left-radius: 0;
+                border-top-right-radius: 0;
+                bottom: -2.75rem;
+                &.pj { background-color: var(--flash-blue); }
+                &.pnj { background-color: var(--primary-darker-more); }
+                &.gray { background-color: var(--gray-light); }
+                &.me {
+                    visibility: visible;
+                    background-color: var(--flash-green);
+                }
+            }
+        }
+    }
+}
+@media (max-width: 576px) { .characters-line { visibility: collapse; } }
+@media (max-width: 480px) { .characters-line { visibility: collapse; } }
+
+
+/* TITRE ET TEXTE */
+/* ‾‾‾‾‾‾‾‾‾‾‾‾‾‾ */
+
+.icon-aventure {
+    position: absolute;
+    z-index: 10;
+    width: 40px;
+    bottom: 16px;
+    left: 18px; 
+}
+
+.scene-title-container {
+    position: absolute;
+    z-index: 2;
+    color: var(--white);
+    top: -56px;
+    width: 90%;
+    h3, h5 { margin-bottom: 0; }
+}
+
+.scene-text {
+    line-height: 1.6; }
+
+    
+/* RANKING */
+/* ‾‾‾‾‾‾‾ */
+
+.crown {
+    position: absolute;
+    top: -12px;
+    left: 50%;
+    transform: translate(-50%, 0%);
+}

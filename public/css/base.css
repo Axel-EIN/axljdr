@@ -1,0 +1,43 @@
+:root {
+  --ease: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+body {
+  min-width: 320px;
+
+  background-color: var(--color-background);
+  transition:
+    color 0.15s ease-in-out,
+    background-color 0.15s ease-in-out,
+    border-color 0.15s ease-in-out,
+    box-shadow 0.15s ease-in-out;
+}
+
+.page-min { min-height: 60vh; }
+
+.bg-clouds {
+  background-image:
+    url( '../../assets/ui/bg-clouds.jpg' ),
+    linear-gradient(#FFF, #FFF);
+  background-blend-mode: multiply, normal;
+  background-color: var(--color-white);
+  box-shadow: 0px 4px 8px #00000080, inset 0 -3px #BBBBFF10;
+}
+
+/* ------- CONTAINERS  ------- */
+
+.container {
+  @media (max-width: 1199.98px) { padding-left: 1rem; padding-right: 1rem; }
+  @media (max-width: 575.98px) {
+    padding-left: 0.5rem; padding-right: 0.5rem;
+    /* Compense les -15px du .row de Bootstrap, le padding du container ayant change. */
+    .row { margin-left: -0.5rem; margin-right: -0.5rem; }
+  }
+}
+
+.container-fluid:has(> .container) {
+  @media (max-width: 991.98px) {
+    padding-left: 0;
+    padding-right: 0;
+  }
+}

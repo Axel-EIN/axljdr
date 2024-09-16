@@ -2,7 +2,6 @@
 /* ----- TITLES ----- */
 /* ------------------ */
 
-
 /** DISPLAY **/
 
 .title-display-h1, .title-display-h1-reduced {
@@ -13,13 +12,9 @@
     text-shadow: 4px 4px 1rem var(--dark);
 }
 
-.title-display-h1 {
-    font-size: 8rem;
-}
+.title-display-h1 { font-size: 8rem; }
 
-.title-display-h1-reduced {
-    font-size: 7rem;
-}
+.title-display-h1-reduced { font-size: 7rem; }
 
 .title-display-h2 {
     font-family: "Present";
@@ -62,9 +57,7 @@
     padding: 0;
 }
 
-.title-small {
-    font-size: 2rem;
-}
+.title-small { font-size: 2rem; }
 
 @media (max-width: 1200px) { .title-small { font-size: 2rem; } }
 @media (max-width: 992px) { .title-small { font-size: 1.75rem; } }
@@ -95,7 +88,6 @@
 @media (max-width: 992px) { .display-4 { font-size: 3.25rem; } }
 @media (max-width: 576px) { .display-4 { font-size: 3rem; } }
 @media (max-width: 480px) { .display-4 { font-size: 2.75rem; } }
-
 
 
 /* ----------------------------------- */

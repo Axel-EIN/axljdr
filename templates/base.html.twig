@@ -1,18 +1,22 @@
 <!DOCTYPE html>
 <html lang="fr">
 
-    {{ include('/parts/head.html.twig') }}
+    {% use "parts/head.html.twig" %}
+
+    {% block head %}
+        {{ parent() }}
+    {% endblock %}
 
     <body>
 
     {% block nav %}
-        {{ include('/parts/nav.html.twig') }}
+        {{ include('parts/nav.html.twig') }}
     {% endblock %}
 
     {% block body %}{% endblock %}
 
     {% block javascripts %}
-        {{ include('/scripts/scripts.twig') }}
+        {{ include('scripts/scripts.twig') }}
     {% endblock %}
 
     {% block footer %}

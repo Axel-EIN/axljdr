@@ -1,0 +1,46 @@
+<cardspace class="col-lg-3 col-md-4 col-sm-6 hover-zoom card-session-space">
+
+    {% if app.user and is_granted("ROLE_MJ") %}
+        <!-- MJ - BTN ICON - Edit -->
+        {% set position, redirect, entity, un_element, size = 'right-corner-16', 'aventure', 'episode', un_episode, 'small' %}
+        {{ include('/parts/btn-icon-edit.html.twig') }}
+    {% endif %}
+
+    
+    {% if app.user %}
+        {% for un_cumul_personnage in user_personnages_cumul_episodes %}
+            {% for keys in un_cumul_personnage|keys %}                                        
+                {% if keys == un_episode.id %}
+                    <!-- CHARACTER PORTRAIT ICON played in session -->
+                    <character class="character-box">
+                        {% if un_cumul_personnage[keys]['xp'] != 0 and un_cumul_personnage[keys]['estMort'] != 1 %}
+                            <strong class="text-your-xp">+{{un_cumul_personnage[keys]['xp']}}&nbsp;xp</strong>
+                        {% elseif un_cumul_personnage[keys]['estMort'] == 1 %}
+                            <strong class="text-dead">MORT</strong>
+                        {% endif %}
+                            <br/>
+                            <a href="{{path('personnage_profil',{id:un_cumul_personnage[keys]['id']})}}" >
+                                <img class="character-portrait medium outlined {% if un_cumul_personnage[keys]['estMort'] == 1 %}dead{% elseif un_cumul_personnage[keys]['xp'] == 0 %}grayscale{% else %}hover-shine{% endif %}"
+                                    src="{{asset(un_cumul_personnage[keys]['icone'])}}" alt="Icone de {{un_cumul_personnage[keys]['prenom']}}"
+                                    title="{{un_cumul_personnage[keys]['prenom']}}" />
+                            </a>
+                    </character>
+                {% endif %}
+            {% endfor %}
+        {% endfor %}
+    {% endif %}
+
+    <a class="card-inner" href="{{ path('aventure_episode', {id:un_episode.id} ) }}">
+        <span class="card-number"><span class="text-big">#</span>{{ un_episode.numeroSaison }}</span>
+        <div class="image-container gradient-after-down">
+            <img class="card-image" src="{{ asset(un_episode.image|default(NA_SESSION)) }}" alt="Image de la session {{un_episode.titre}}" title="{{un_episode.titre}}"  />
+        </div>
+        <div class="text-container">
+            <h5 class="card-title">{{ un_episode.titre }}</h5>
+            <p class="card-text">{{ un_episode.resume|default('Résumé à venir...') }}</p>
+        </div>
+        <button class="btn-primary-style btn-medium">
+            <i class="fab fa-readme" alt="Icône Lire"></i>&nbsp;&nbsp;Lire le résumé
+        </button>
+    </a>
+</cardspace>

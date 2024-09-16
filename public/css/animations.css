@@ -18,11 +18,10 @@
 
 .hover-slight-fade {
     transition: 0.3s;
-}
-
-.hover-slight-fade:hover {
-    opacity: 0.8;
-    transition: 0.3s;
+    &:hover {
+        opacity: 0.8;
+        transition: 0.3s;
+    }
 }
 
 .hover-visible:hover {
@@ -37,11 +36,10 @@
 
 .hover-opaque {
     transition: 0.5s;
-}
-
-.hover-opaque:hover {
-    filter: opacity(1);
-    transition: 0.5s;
+    &:hover {
+        filter: opacity(1);
+        transition: 0.5s;
+    }
 }
 
 .hover-span-visible > span {
@@ -54,20 +52,18 @@
 
 .hover-bright {
     transition: 0.5s;
-}
-
-.hover-bright:hover {
-    filter: brightness(1);
-    transition: 0.5s;
+    &:hover {
+        filter: brightness(1);
+        transition: 0.5s;
+    }
 }
 
 .hover-shine {
     transition: 0.5s;
-}
-
-.hover-shine:hover {
-    filter: brightness(1.3);
-    transition: 0.5s;
+    &:hover {
+        filter: brightness(1.3);
+        transition: 0.5s;
+    }
 }
 
 /* ----- SHINING LEFT TO RIGHT RAY ----- */
@@ -78,6 +74,19 @@
     mask-mode: luminance;
     mask-size: 100%;
     animation: animation-bright 12s ease 1.5s infinite;
+    &:before {
+        position: absolute;
+        z-index: 2;
+        content: '';
+        top: 0;
+        left: -300px;
+        width: 30%;
+        height: 100%;
+        background: rgba(255, 255, 255, 0.5);
+        transform: skewX(-30deg);
+        animation: animation-shine 12s ease 1.5s infinite;
+        opacity: 1;
+    }
 }
 
 @keyframes animation-bright {
@@ -87,20 +96,6 @@
     2.8% {filter: brightness(1);}
 }
 
-.animation-shine:before {
-    position: absolute;
-    z-index: 2;
-    content: '';
-    top: 0;
-    left: -300px;
-    width: 30%;
-    height: 100%;
-    background: rgba(255, 255, 255, 0.5);
-    transform: skewX(-30deg);
-    animation: animation-shine 12s ease 1.5s infinite;
-    opacity: 1;
-}
-  
 @keyframes animation-shine {
     from {left: -300px; opacity: 1;}
     4% {left: 300px; opacity: 1;}

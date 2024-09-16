@@ -2,6 +2,6 @@
 {% block title %}Administrer les Factions {{ parent() }}{% endblock %}
 {% block h1 %}Administrer les <strong>Factions</strong>{% endblock %}
 {% block child %}
-    {% set label, element, elements, img_size = 'faction', 'clan', clans, '48' %}
+    {% set label, element, elements, img_size, genre = 'faction', 'clan', clans, '48', 'F' %}
     {{ include('back_office/list-element.html.twig') }}
 {% endblock %}

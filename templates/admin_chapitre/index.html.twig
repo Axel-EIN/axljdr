@@ -2,6 +2,6 @@
 {% block title %}Administrer les Chapitres {{ parent() }}{% endblock %}
 {% block h1 %}Administrer les <strong>Chapitres</strong>{% endblock %}
 {% block child %}
-    {% set label, element, elements, img_size = 'chapitre', 'chapitre', chapitres, '240' %}
+    {% set label, element, elements, img_size, genre = 'chapitre', 'chapitre', chapitres, '240', 'M' %}
     {{ include('back_office/list-element.html.twig') }}
 {% endblock %}

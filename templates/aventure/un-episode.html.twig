@@ -1,5 +1,11 @@
 {% extends 'base.html.twig' %}
 {% block title %}L'épisode {{ episode.titre }} du Chapitre {{ episode.chapitreParent.titre }} {{ parent() }}{% endblock %}
+
+{% block stylesheets %}
+    {{parent()}}
+    <link rel="stylesheet" href="{{asset('css/page-session.css')}}" />
+{% endblock %}
+
 {% block body %}
 
 <div    class="header-bg-img-session p-md-4"

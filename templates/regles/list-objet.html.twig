@@ -94,7 +94,7 @@
     <heading class="col-12 row m-0 p-1 relative list-heading-short">
         <!-- MJ ADD -->
         {% if app.user and is_granted("ROLE_MJ") %}
-            {% set action, entity, redirect, position, color, size = 'create', 'objet', 'library&libraryID=' ~ library.id ~ '&tab=' ~ app.request.get('tab'), 'right-overflow', 'link-accent', 'btn-icon-small' %}
+            {% set action, entity, redirect, position, color, size = 'create', 'objet', 'library&libraryID=' ~ library.id ~ '&tab=' ~ app.request.get('tab'), 'right-overflow', 'text-accent', 'btn-icon-small' %}
             {{ include('/btns/btn-icon.html.twig') }}
         {% endif %}
 
@@ -135,7 +135,7 @@
 
             <!-- MJ EDIT -->
             {% if app.user and is_granted("ROLE_MJ") %}
-                {% set position, size, color, entity, un_element, redirect = 'left-overflow', 'btn-icon-mini', 'link-accent', 'objet', item, 'library&libraryID=' ~ library.id %}
+                {% set position, size, color, entity, un_element, redirect = 'left-overflow', 'btn-icon-mini', 'text-accent', 'objet', item, 'library&libraryID=' ~ library.id %}
                 {{ include('/parts/btn-icon-edit.html.twig') }}
             {% endif %}
 

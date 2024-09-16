@@ -5,6 +5,12 @@
     <section class="col-4 pr-1 pb-1">
         <card class="card">
 
+            {% if personnage.illustration is null and personnage.genre == 'F' %}
+                {% set NA_PERSO_ILLU = NA_PERSO_ILLU_F %}
+            {% elseif personnage.illustration is null and personnage.genre == 'M' %}
+                {% set NA_PERSO_ILLU = NA_PERSO_ILLU_M %}
+            {% endif %}
+
             <!-- ILLUSTRATION -->
             <img class="img-fluid w-100" src="{{ asset(personnage.illustration|default(NA_PERSO_ILLU)) }}" alt="{{personnage.nom}} {{personnage.prenom}}" title="{{personnage.nom}} {{personnage.prenom}}" />
 
@@ -105,6 +111,13 @@
             <div class="row justify-content-center px-3">
                 <!-- UN PERSONNAGE -->
                 {% for un_personnage in autresPersonnages|slice(0,10) %}
+
+                    {% if un_personnage.icone is null and un_personnage.genre == 'F' %}
+                        {% set NA_PERSO_ICO = NA_PERSO_ICO_F %}
+                    {% elseif un_personnage.icone is null and un_personnage.genre == 'M' %}
+                        {% set NA_PERSO_ICO = NA_PERSO_ICO_M %}
+                    {% endif %}
+
                     <article class="p-1 hover-zoom">
                         <a href="{{ path('personnage_profil', {id: un_personnage.id} ) }}">
                             <img class="img-128" src="{{ asset(un_personnage.icone|default(NA_PERSO_ICO)) }}" alt="Icône d'un personnage" title="Voir le profil de {{un_personnage.prenom}}" />

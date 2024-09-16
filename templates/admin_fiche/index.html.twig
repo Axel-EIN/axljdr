@@ -2,6 +2,6 @@
 {% block title %}Administrer les Fiches de Personnages {{ parent() }}{% endblock %}
 {% block h1 %}Administrer les <strong>Fiches de Personnages</strong>{% endblock %}
 {% block child %}
-    {% set label, element, elements, img_size = 'fiche', 'fiche', fiches, '48' %}
+    {% set label, element, elements, img_size, genre = 'fiche', 'fiche', fiches, '48', 'F' %}
     {{ include('back_office/list-element.html.twig') }}
 {% endblock %}

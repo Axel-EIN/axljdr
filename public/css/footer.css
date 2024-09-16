@@ -2,8 +2,7 @@
 /* ----- FOOTER ----- */
 /* ------------------ */
 
-footer {
-    color: var(--lighter); }
+footer { color: var(--lighter); }
 
 #footer1 {
     display: flex;

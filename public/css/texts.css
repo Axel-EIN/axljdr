@@ -125,56 +125,53 @@ p > mark {
         -1px 1px 0 var(--flash-red);
 }
 
-.text-outline-lightblue, .text-outline-1 {
-    color: var(--lightblue);
-    text-shadow:
-        1px 1px 0 var(--flash-lightblue),
-        -1px -1px 0 var(--flash-lightblue),
-        1px -1px 0 var(--flash-lightblue),
-        -1px 1px 0 var(--flash-lightblue);
+/* ---------------------- */
+/* ----- FONT FACES ----- */
+/* ---------------------- */
+
+/* BODY */
+@font-face {
+    font-family: 'Barlow';
+    src: url("../assets/fonts/Barlow-Regular-Semi-Condensed.ttf");
 }
 
-.text-outline-blue, .text-outline-2 {
-    color: var(--blue);
-    text-shadow:
-        1px 1px 0 var(--flash-blue),
-        -1px -1px 0 var(--flash-blue),
-        1px -1px 0 var(--flash-blue),
-        -1px 1px 0 var(--flash-blue);
+.font-barlow { font-family: 'Barlow'; }
+
+/* H1 */
+@font-face {
+    font-family: "Shogun";
+    src: url("../assets/fonts/Shoguns-Clan-Edited-Accentued.otf");
 }
 
-.text-outline-green, .text-outline-3 {
-    color: var(--green);
-    text-shadow:
-        1px 1px 0 var(--flash-green),
-        -1px -1px 0 var(--flash-green),
-        1px -1px 0 var(--flash-green),
-        -1px 1px 0 var(--flash-green);
+.font-shogun { font-family: 'Shogun'; }
+
+@font-face {
+    font-family: "Misaki";
+    src: url("../assets/fonts/Misaki-Regular.otf");
 }
 
-.text-outline-orange, .text-outline-4 {
-    color: var(--accent);
-    text-shadow:
-        1px 1px 0 var(--accent-light),
-        -1px -1px 0 var(--accent-light),
-        1px -1px 0 var(--accent-light),
-        -1px 1px 0 var(--accent-light);
+.font-misaki { font-family: 'Misaki'; }
+
+/* H2 DISPLAY TITLES */
+@font-face {
+    font-family: "Present";
+    src: url("../assets/fonts/Present-LT-Black-Condensed.otf");
 }
 
-.text-outline-red, .text-outline-5 {
-    color: var(--primary);
-    text-shadow:
-        1px 1px 0 var(--flash-red),
-        -1px -1px 0 var(--flash-red),
-        1px -1px 0 var(--flash-red),
-        -1px 1px 0 var(--flash-red);
+.font-present { font-family: 'Present'; }
+
+/* H3 DISPLAY TITLES */
+@font-face {
+    font-family: "Avenir";
+    src: url("../assets/fonts/Avenir-Black.ttf");
 }
 
-.text-outline-purple {
-    color: var(--purple);
-    text-shadow:
-        1px 1px 0 var(--fuschia),
-        -1px -1px 0 var(--fuschia),
-        1px -1px 0 var(--fuschia),
-        -1px 1px 0 var(--fuschia);
+.font-avenir { font-family: 'Avenir'; }
+
+/* H4 DISPLAY TITLES */
+@font-face {
+    font-family: "Amerigo";
+    src: url("../assets/fonts/Amerigo-Bold-BT.ttf");
 }
+
+.font-amerigo { font-family: 'Amerigo'; }

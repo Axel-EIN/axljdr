@@ -1,0 +1,105 @@
+/* ----- PAGE ECOLE ----- */
+
+/* Le meme --gap que la grille du gabarit, sinon l'ecart entre ces deux cartes
+   ne ressemble pas a celui entre les rangees. */
+.ecole-colonne {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap);
+}
+
+#banner-icon-clan {
+    position: absolute;
+    z-index: 3;
+    right: 2rem;
+    top: 2rem;
+}
+
+#text-zone {
+    display: grid;
+    gap: 1rem;
+    padding: 1rem;
+
+    ul { margin: 0.5rem 0 0; }
+
+    .text-xp { margin-left: 2rem; }
+
+    @media (min-width: 992px) {
+        position: absolute;
+        z-index: 2;
+        right: 0;
+        bottom: 0;
+        width: 83.33%;
+        grid-template-columns: repeat(3, 1fr);
+        padding: 0 0 1rem;
+        color: var(--color-white);
+        text-shadow: 2px 2px 8px black;
+
+        /* .heading-cardtitle pose sa propre couleur : l'heritage ne suffit pas. */
+        .heading-cardtitle { color: var(--color-white); }
+
+        ul { margin-left: 1.5rem; }
+    }
+
+    @media (max-width: 991.98px) {
+        .text-zone-blur {
+            color: var(--color-gray-slate);
+
+            &::before { display: none; }
+        }
+
+        .text-xp { text-shadow: none; }
+    }
+}
+
+@media (max-width: 991.98px) {
+    #banner-icon-clan { display: none; }
+}
+
+.technique-speciale {
+    padding: 0 1rem;
+
+    p {
+        margin-top: 0.5rem;
+        text-align: justify;
+        font-size: var(--fontsize-medium);
+    }
+}
+
+.technique {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 5fr);
+    align-items: start;
+    margin: 1rem 0;
+
+    h3 { margin-bottom: 0.5rem; }
+    p { text-align: justify; font-size: var(--fontsize-regular); }
+
+    @media (max-width: 991.98px) {
+        grid-template-columns: 1fr;
+        padding: 0 1rem;
+    }
+}
+
+.tech-rang {
+    text-align: center;
+
+    @media (max-width: 991.98px) {
+        display: flex;
+        align-items: baseline;
+        gap: 0.5rem;
+        text-align: left;
+
+        br { display: none; }
+
+        .skill-rank-number { font-size: var(--fontsize-bigger); }
+    }
+}
+
+.skill-rank-number {
+    font-size: 6rem;
+    font-weight: 300;
+    line-height: 1.2;
+
+    @media (max-width: 1199.98px) { font-size: 4.25rem; }
+}

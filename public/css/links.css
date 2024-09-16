@@ -2,53 +2,14 @@
 /* ----- LINKS ----- */
 /* ----------------- */
 
-:root a:hover {
-    text-decoration: none;
-}
+:root a:hover { text-decoration: none; }
 
 .link-disabled {
-    pointer-events: none; cursor: pointer; }
-
-/* ---- Common Links ---- */
-
-.link-accent {
-    color: var(--accent) !important;
+    pointer-events: none;
+    cursor: pointer;
 }
 
-.link-accent:hover {
-    color: var(--primary) !important;
-    text-decoration: none;
-}
-
-.link-primary {
-    color: var(--primary) !important;
-}
-
-.link-primary:hover {
-    color: var(--accent) !important;
-}
-
-.link-secondary {
-    color: var(--secondary-dark) !important;
-}
-
-.link-secondary:hover {
-    color: var(--secondary-light) !important;
-}
-
-.link-white {
-    color: var(--white);
-}
-
-.link-white:hover {
-    color: var(--white);
-    text-decoration: none;
-}
-
-.hover-no-under:hover {
-    text-decoration: none;
-}
-
+.hover-no-under:hover { text-decoration: none; }
 
 /* --------------------------- */
 /* --------- PAGES  ---------- */
@@ -65,28 +26,34 @@ a.display-2:hover,
 a.display-1:hover
 {
     text-decoration: none;
-    color: var(--blue);
+    color: var(--secondary);
 }
 
 
 /* ---- TEXT BLOCKS CHAR LINKS  ---- */
 
-a.character-icon,
-a.location-icon {
-    display: inline-block;
-    color: var(--blue);
-    font-weight: bold;
-    text-decoration: none;
-}
-
-a.location-icon {
-    color: var(--purple);
-}
-
 a.scene-text {
     font-weight: bold;
+    &:hover { text-decoration: none; }
 }
 
-a.scene-text a:hover {
+a.character-icon, a.location-icon {
+    display: inline-block;
+    font-weight: bold;
     text-decoration: none;
+}
+
+a.character-icon { color: var(--secondary); }
+a.location-icon { color: var(--purple); }
+
+/* BACK OFFICE MJ LINKS TABS */
+
+.mj-link {
+    color: var(--primary-lighter) !important;
+    font-weight: bold;
+    &:hover {
+        color: var(--primary) !important;
+        text-decoration: none;
+    }
+    &.active { color: var(--primary) !important; }
 }

@@ -8,6 +8,13 @@
         <div class="absolute pnjs-line">
             <div class="d-flex flex-column">   
                 {% for une_participation in une_scene.participations %}
+                    
+                    {% if une_participation.personnage.icone is null and une_participation.personnage.genre == 'F' %}
+                        {% set NA_PERSO_ICO = NA_PERSO_ICO_F %}
+                    {% elseif une_participation.personnage.icone is null and une_participation.personnage.genre == 'M' %}
+                        {% set NA_PERSO_ICO = NA_PERSO_ICO_M %}
+                    {% endif %}
+
                     {% if une_participation.estPj == 0 %}
                         <div class="mb-2 d-inline-block relative hover-zoom">
                             <a class="hover-zoom" href="{{path('personnage_profil',{id: une_participation.personnage.id})}}" >
@@ -43,7 +50,7 @@
                                     <img class="character-icon-dead" src="{{asset('assets/img/icons/mort.png')}}" alt="est mort" />
                                 {% endif %}
                                 <img class="shadow-more character-icon-large {% if une_participation.estMort == 1 %}dead{% else %}hover-shine{% endif %}"
-                                    src="{{asset(une_participation.personnage.icone|default(NA_PERSO_ICO)|default(NA_PERSO_ICO)|default(NA_PERSO_ICO)|default(NA_PERSO_ICO))}}" alt="Icone du Personnage" title="{{une_participation.personnage.prenom}}" />
+                                    src="{{asset(une_participation.personnage.icone|default(NA_PERSO_ICO))}}" alt="Icone du Personnage" title="{{une_participation.personnage.prenom}}" />
                             </a>
                         </div>
                     {% endif %}
@@ -54,6 +61,13 @@
         <!-- LIGNE HORIZONTALE DE PJS -->
         <div class="absolute pjs-line">
             {% for une_participation in une_scene.participations|sort( (a, b) => a.xpGagne <=> b.xpGagne)|reverse %}
+
+                {% if une_participation.icone is not defined and une_participation.genre is defined and une_participation.genre == 'F' %}
+                    {% set NA_PERSO_ICO = NA_PERSO_ICO_F %}
+                {% elseif une_participation.icone is not defined and une_participation.genre is defined and une_participation.genre == 'M' %}
+                    {% set NA_PERSO_ICO = NA_PERSO_ICO_M %}
+                {% endif %}
+
                 {% if une_participation.estPj %}
                     <div class="d-inline-block relative hover-zoom">
                         {% if une_participation.xpGagne != 0 and une_participation.estMort != 1 %}

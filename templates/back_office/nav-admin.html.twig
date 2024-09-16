@@ -1,42 +1,42 @@
-<nav class="nav justify-content-center">
+<nav class="nav justify-content-center align-items-center">
 
     {% if app.user and is_granted("ROLE_MJ") %}
     <!-- MJ NAV TABS LINKS -->
         
-        {% set element, label = 'scene', 'Scènes' %}
+        {% set element, label, genre = 'scene', 'Scènes', 'F' %}
         {{ include('/back_office/btn-mj-tab-link.html.twig') }}
 
-        {% set element, label = 'episode', 'Épisodes' %}
+        {% set element, label, genre = 'episode', 'Épisodes', 'M' %}
         {{ include('/back_office/btn-mj-tab-link.html.twig') }}
 
-        {% set element, label = 'chapitre', 'Chapitres' %}
+        {% set element, label, genre = 'chapitre', 'Chapitres', 'M' %}
         {{ include('/back_office/btn-mj-tab-link.html.twig') }}
 
-        {% set element, label = 'saison', 'Saisons' %}
+        {% set element, label, genre = 'saison', 'Saisons', 'F' %}
         {{ include('/back_office/btn-mj-tab-link.html.twig') }}
 
-        {% set element, label = 'clan', 'Factions' %}
+        {% set element, label, genre = 'clan', 'Factions', 'F' %}
         {{ include('/back_office/btn-mj-tab-link.html.twig') }}
 
-        {% set element, label = 'archive', 'Archives' %}
+        {% set element, label, genre = 'famille', 'Familles', 'F' %}
         {{ include('/back_office/btn-mj-tab-link.html.twig') }}
 
-        {% set element, label = 'lieu', 'Lieux' %}
+        {% set element, label, genre = 'archive', 'Archives', 'F' %}
         {{ include('/back_office/btn-mj-tab-link.html.twig') }}
 
-        {% set element, label = 'classe', 'Classes' %}
+        {% set element, label, genre = 'lieu', 'Lieux', 'M' %}
         {{ include('/back_office/btn-mj-tab-link.html.twig') }}
 
-        {% set element, label = 'ecole', 'Écoles' %}
+        {% set element, label, genre = 'classe', 'Classes', 'F' %}
         {{ include('/back_office/btn-mj-tab-link.html.twig') }}
 
-        {% set element, label = 'personnage', 'Personnages' %}
+        {% set element, label, genre = 'ecole', 'Écoles', 'F' %}
         {{ include('/back_office/btn-mj-tab-link.html.twig') }}
 
-        {% set element, label = 'fiche', 'Fiches' %}
+        {% set element, label, genre = 'personnage', 'Personnages', 'M' %}
         {{ include('/back_office/btn-mj-tab-link.html.twig') }}
 
-        {% set element, label = 'famille', 'Familles' %}
+        {% set element, label, genre = 'fiche', 'Fiches', 'F' %}
         {{ include('/back_office/btn-mj-tab-link.html.twig') }}
 
     {% endif %}

@@ -1,0 +1,55 @@
+<a href="{{ path('aventure_episode', {id:un_episode.id} ) }}" />
+    <article class="col-lg-3 col-md-4 col-sm-6 session-card-spacing hover-zoom-half mb-2">
+        <div class="card session-card-body">
+
+            <div class="absolute session-card-number">{{ un_episode.numero }}</div>
+
+            <div class="session-card-image-container">
+                <img class="card-img-top img-fluid mask" src="{{ asset(un_episode.image) }}" alt="Image de la session {{un_episode.titre}}" title="{{un_episode.titre}}"  />
+            </div>
+
+            <div class="relative session-card-text-container">
+                <h5 class="absolute session-card-title">{{ un_episode.titre }}</h5>
+                <p class="session-card-text">{{ un_episode.resume }}</p>
+            </div>
+
+            <div class="text-center">
+                <a class="btn-primary-style btn-medium fa-animation-delay" href="{{ path('aventure_episode', {id:un_episode.id} ) }}">
+                    <i class="fab fa-readme" alt="Icône Lire"></i>&nbsp;&nbsp;Lire
+                </a>
+            </div>
+
+            <!-- ICON PLAYERS CHARACTER PLAYED SESSION -->
+            {% if app.user %}
+                {% for un_cumul_personnage in user_personnages_cumul_episodes %}
+                    {% for keys in un_cumul_personnage|keys %}                                        
+                        {% if keys == un_episode.id %}
+                            <div class="absolute characters-icons-container d-flex flex-row justify-content-center align-items-center">
+                                <div class="d-flex flex-column justify-content-center align-items-center mr-2">
+                                    {% if un_cumul_personnage[keys]['xp'] != 0 and un_cumul_personnage[keys]['estMort'] != 1 %}
+                                        <strong class="text-your-xp">+{{un_cumul_personnage[keys]['xp']}}XP</strong>
+                                    {% else %}
+                                        <strong class="text-dead">MORT</strong>
+                                    {% endif %}
+                                    <br/>
+                                    <a href="{{path('personnage_profil',{id:un_cumul_personnage[keys]['id']})}}" >
+                                        <img class="character-icon-medium outlined {% if un_cumul_personnage[keys]['estMort'] == 1 %}dead{% elseif un_cumul_personnage[keys]['xp'] == 0 %}grayscale{% else %}hover-shine{% endif %}"
+                                            src="{{asset(un_cumul_personnage[keys]['icone'])}}" alt="Icone de {{un_cumul_personnage[keys]['prenom']}}"
+                                            title="{{un_cumul_personnage[keys]['prenom']}}" />
+                                    </a>
+                                </div>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                {% endfor %}
+            {% endif %}
+
+            {% if app.user and is_granted("ROLE_MJ") %}
+                <!-- MJ - BTN ICON - Edit -->
+                {% set redirect, entity, un_element, size = 'aventure', 'episode', un_episode, 'small' %}
+                {{ include('/parts/btn-icon-edit.html.twig') }}
+            {% endif %}
+
+        </div>
+    </article>
+</a>

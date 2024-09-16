@@ -1,5 +1,15 @@
 /* ---------------------------------- */
 /* ----- BTN LINE : ICON + TEXT ----- */
+/* ---------------------------------- */
+
+.btn-icon {
+    &.text-light-alpha:hover { color: var(--white); }
+    &.text-accent:hover { color: var(--accent-light); }
+    &.text-accent-alpha:hover { color: var(--accent); }
+}
+
+/* ---------------------------------- */
+/* ----- BTN LINE : ICON + TEXT ----- */
 /* ---------------------------------- */    
 
 .btn-icon-text {

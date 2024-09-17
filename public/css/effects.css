@@ -64,6 +64,11 @@
     transition: 0.5s;
 }
 
+.invert {
+    filter: invert(1);
+    transition: 0.5s;
+}
+
 .dead {
     filter:
         grayscale(100%)

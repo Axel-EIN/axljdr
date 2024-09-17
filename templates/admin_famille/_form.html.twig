@@ -1,29 +1,43 @@
 <main class="offset-2 col-8">
     {{ form_start(form) }}
         <div class="row justify-content-center align-items-end mt-5 mb-4">
-            <div class="col-8">
-                {{ form_row(form.nom) }}
-            </div> 
-            <div class="col-4 text-center">
-                <div>{{ form_row(form.clan) }}</div>
-            </div> 
-            <div class="col-12">
-                {% if type == 'Modifier' %}
-                    <img class="img-fluid" src="{{ asset(famille.mon) }}" />
-                {% endif %}
-            </div> 
-            <div class="col-12">
-                {{ form_row(form.mon) }}
-            </div> 
-            <div class="col-12">
-                {{ form_row(form.description,{ 'attr': {'rows': '10'} }) }}
+
+            <div class="col-12 row mb-3">
+                <div class="col-4">
+                    {% if type == 'Modifier' %}
+                        <img class="img-fluid" src="{{ asset(famille.mon) }}" />
+                    {% endif %}
+                </div>
+                
+                <div class="col-8 row">
+                    <div class="col-6">
+                        {{ form_row(form.nom) }}
+                    </div> 
+                    <div class="col-6">
+                        <div>{{ form_row(form.clan) }}</div>
+                    </div>
+                    <div class="col-12">
+                        {{ form_row(form.mon) }}
+                    </div> 
+                </div>
             </div>
+
+            <div class="col-12">
+                {{ form_row(form.description,{ 'attr': {'rows': '5'} }) }}
+            </div>
+
+            <div class="col-12">
+                {{ form_row(form.bonus) }}
+            </div> 
+
             <div class="col-12">
                 {{ form_row(form.chef) }}
             </div> 
+
             <div class="col-12 text-center mt-5">
                 <button class="btn btn-large btn-primary-style">{{ button_label|default('Save') }}</button>
             </div>
+
         </div>
     {{ form_end(form) }}
 </main>

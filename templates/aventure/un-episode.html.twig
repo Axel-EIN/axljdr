@@ -27,7 +27,7 @@
     
         <!-- LIGNE D'EPISODES -->
         <div class="episodes-line">
-            <span class="text-light">Il y a <strong class="text-white">{{ episode.chapitreParent.episodes|length }} SESSIONS</strong> dans ce chapitre.</span>
+            <span class="text-light">Il y a <strong class="text-accent-light">{{ episode.chapitreParent.episodes|length }} SESSIONS</strong> dans ce chapitre.</span>
             <div class="carrousel mt-2">
                 {% for un_episode in episode.chapitreParent.episodes %}
                     {% if un_episode.scenes|length > 0 or is_granted("ROLE_MJ") %}

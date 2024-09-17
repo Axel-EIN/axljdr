@@ -2,7 +2,9 @@
 /* --------- GENERAL EFFECTS --------- */
 /* ----------------------------------- */    
 
-.shadowed { box-shadow: 2px 2px 4px rgba(0, 0, 0, .4); }
+.shadow-more {
+    box-shadow: 2px 2px 4px rgba(0, 0, 0, .4);
+}
 
 .rounded-8 { border-radius: 0.5rem; }
 

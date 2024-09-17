@@ -124,17 +124,17 @@
     transition: 0.5s;
 }
 
-.hover-blue:hover,
-.hover-red:hover,
-.hover-orange:hover,
-.hover-violet:hover,
-.hover-green:hover { transition: 0.25s; }
+.hover-bushi:hover,
+.hover-shugenja:hover,
+.hover-moine:hover,
+.hover-courtisan:hover,
+.hover-artisan:hover { transition: 0.25s; }
 
-.hover-blue:hover { filter: invert(40%) sepia(100%) saturate(1000%) hue-rotate(180deg) brightness(0.9);}
-.hover-red:hover { filter: invert(40%) sepia(100%) saturate(1000%) hue-rotate(-45deg) brightness(0.9);}
-.hover-orange:hover { filter: invert(40%) sepia(100%) saturate(1000%) hue-rotate(0deg) brightness(0.9);}
-.hover-violet:hover { filter: invert(40%) sepia(100%) saturate(1000%) hue-rotate(-120deg) brightness(0.9);}
-.hover-green:hover { filter: invert(40%) sepia(100%) saturate(1000%) hue-rotate(60deg) brightness(0.9);}
+.hover-bushi:hover { filter: invert(40%) sepia(100%) saturate(1000%) hue-rotate(180deg) brightness(0.9);}
+.hover-shugenja:hover { filter: invert(40%) sepia(100%) saturate(1000%) hue-rotate(-45deg) brightness(0.9);}
+.hover-moine:hover { filter: invert(40%) sepia(100%) saturate(1000%) hue-rotate(0deg) brightness(0.9);}
+.hover-courtisan:hover { filter: invert(40%) sepia(100%) saturate(1000%) hue-rotate(-120deg) brightness(0.9);}
+.hover-artisan:hover { filter: invert(40%) sepia(100%) saturate(1000%) hue-rotate(60deg) brightness(0.9);}
 
 .fa-animation-delay { --fa-animation-delay: 0.67s; }
 

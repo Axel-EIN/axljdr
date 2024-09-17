@@ -80,6 +80,21 @@
     color: var(--white);
 }
 
+.vignette-caroussel {
+    position: relative;
+    filter: brightness(0.5);
+    transition: 0.5s;
+}
+
+.vignette-caroussel:hover {
+    filter: brightness(1);
+    transition: 0.5s;
+}
+
+.vignette-caroussel.active {
+    filter: brightness(1);
+}
+
 .text-zone-blur {
     position: relative;
     z-index: 2;

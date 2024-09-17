@@ -141,6 +141,9 @@ a.text-secondary:hover { color: var(--secondary-light); }
 
 /* ACCENT */
 
+.text-accent-light { color: var(--accent-light); }
+.bg-accent-light { background-color: var(--accent-light); }
+
 .text-accent { color: var(--accent); }
 .bg-accent { background-color: var(--accent); }
 

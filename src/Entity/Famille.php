@@ -44,6 +44,11 @@ class Famille
      */
     private $chef;
 
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $bonus;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -105,6 +110,18 @@ class Famille
     public function setChef(Personnage $chef): self
     {
         $this->chef = $chef;
+
+        return $this;
+    }
+
+    public function getBonus(): ?string
+    {
+        return $this->bonus;
+    }
+
+    public function setBonus(string $bonus): self
+    {
+        $this->bonus = $bonus;
 
         return $this;
     }

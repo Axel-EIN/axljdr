@@ -31,35 +31,26 @@
 </saison>
 
 <!-- AFFICHAGE DES CHAPITRES DE LA SAISON -->
-<main>
-{% set numero = 0 %}
-{% for un_chapitre in saison.chapitres|reverse %}
+<main class="relative">
 
-    {% set color, entity, numero, parent, parentID, redirect, label = 'text-light-alpha', 'chapitre', un_chapitre.numero, 'saison', saison.id, 'aventure', 'Insérer' %}
-    {{ include('/aventure/un-chapitre.html.twig', {numero}) }}
+    {% set color, entity, parent, parentID, redirect = 'text-light-alpha', 'chapitre', 'saison', saison.id, 'aventure' %}
+    {% for un_chapitre in saison.chapitres|reverse %}
+        {{ include('/aventure/un-chapitre.html.twig') }}
+    {% else %}
 
-{% else %}
-
-    <!-- PAS DE CHAPITRE -->
-    <section class="header-bg-img header-bg-no-chapter" style="background-color: #400000; background-image:linear-gradient( rgb( 0,0,0,0.6 ), rgb( 0,0,0,0), rgb( 0,0,0,0.3), rgb( 0,0,0,0.6) ), url( {{ asset(NA_169) }} );" >
-        <div class="container">
-            <div class="header header-chapter d-flex flex-column justify-content-end" >
-                <div class="alert alert-light mx-auto alert-persist mt-3 mb-3">
-                    <strong>Désolé il n'y a pas encore de Chapitre dans cette Saison.</strong>
+        <!-- PAS DE CHAPITRE -->
+        <section class="header-bg-img header-bg-no-chapter" style="background-color: #400000; background-image:linear-gradient( rgb( 0,0,0,0.6 ), rgb( 0,0,0,0), rgb( 0,0,0,0.3), rgb( 0,0,0,0.6) ), url( {{ asset(NA_169) }} );" >
+            <div class="container">
+                <div class="header header-chapter d-flex flex-column justify-content-end" >
+                    <div class="alert alert-light mx-auto alert-persist mt-3 mb-3">
+                        <strong>Désolé, il n'y a pas encore de Chapitre dans cette Saison.</strong>
+                    </div>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-{% endfor %}
-
-{% if app.user and is_granted("ROLE_MJ") %}
-    <div class="text-center bg-primary-darkest p-1">
-        <!-- MJ BTN ICON+TEXT Insert or Add -->
-        {% set color, entity, numero, parent, parentID, redirect, label = 'text-accent', 'chapitre', (numero + 1), 'saison', saison.id, 'aventure', 'Ajouter' %}
-        {{ include('/parts/btn-line-insert.html.twig') }}
-    </div>
-{% endif %}
+    {% endfor %}
 
 </main>
+
 {% endblock %}

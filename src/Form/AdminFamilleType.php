@@ -19,8 +19,9 @@ class AdminFamilleType extends AbstractType
     {
         $builder
             ->add('nom', TextType::class)
-            ->add('description', TextareaType::class)
             ->add('mon', FileType::class, array('mapped' => false, 'data_class' => null, 'required' => false))
+            ->add('description', TextareaType::class)
+            ->add('bonus', TextType::class)
             ->add('clan', EntityType::class, [
                 'class' => Clan::class,
                 'choice_label' => 'nom',

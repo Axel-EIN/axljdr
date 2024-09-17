@@ -2,7 +2,7 @@
 /* ------ COLORS ------- */
 /* --------------------- */
 
-/* TEXT COLORS */
+/* TEXT COLOR */
 
 .black { color: black; }
 .white { color: white; }
@@ -18,7 +18,7 @@
 .secondary-color-light { color: #ffcc66; }
 .secondary-color-dark { color: #cc6600; }
 
-/* BACKGROUND COLORS */
+/* BACKGROUND COLOR */
 
 .bg-black { background-color: black; }
 .bg-white { background-color: white; }
@@ -33,6 +33,25 @@
 .bg-secondary-color-light { background-color: #ffcc66; }
 .bg-secondary-color-dark { background-color: #cc6600; }
 
+/* LINK COLOR */
+
+.link-white { color: #fff; }
+.link-white:hover { color: #aaa; text-decoration: underline; }
+
+.link-gray { color: rgba(255,255,255, 0.75) !important; }
+.link-gray:hover { color: rgba(255,255,255,0.9) !important; text-decoration: none !important; }
+.link-gray.active { color: rgba(255,255,255, 1) !important; }
+
+.scene-text a { font-weight: bold; }
+.scene-text a:hover { text-decoration: none; }
+
+h5 a:hover, h4 a:hover, h3 a:hover, h2 a:hover, h1 a:hover { text-decoration: none; color: #007bff };
+
+.separator-chapter a { color: #fff; text-decoration: none;}
+.separator-chapter a:hover { color: #ff7f00; text-decoration: none; }
+
+.ranking a { color: black;}
+.ranking a:hover { color: #007bff; text-decoration: none;}
 
 
 /* -------------------------- */
@@ -85,6 +104,7 @@ html, body {    font-size: 16px; }
 .link-gray.active { color: rgba(255,255,255, 1) !important; }
 
 .scene-text a { font-weight: bold; }
+.scene-text a:hover { text-decoration: none; }
 
 h5 a:hover, h4 a:hover, h3 a:hover, h2 a:hover, h1 a:hover { text-decoration: none; color: #007bff };
 

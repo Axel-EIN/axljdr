@@ -114,6 +114,8 @@ a.text-light-alpha:hover { color: var(--white); }
 
 /* PRIMARY */
 
+.text-primary-light { color: var(--primary-light);}
+
 .text-primary { color: var(--primary) !important;}
 .bg-primary { background-color: var(--primary) !important;}
 a.text-primary:hover { color: var(--primary-light); }

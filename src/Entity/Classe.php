@@ -49,6 +49,11 @@ class Classe
      */
     private $couleur;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $image;
+
     public function __construct()
     {
         $this->ecoles = new ArrayCollection();
@@ -164,7 +169,18 @@ class Classe
     public function setCouleur(string $couleur): self
     {
         $this->couleur = $couleur;
-        $this->color = $color;
+
+        return $this;
+    }
+
+    public function getImage(): ?string
+    {
+        return $this->image;
+    }
+
+    public function setImage(?string $image): self
+    {
+        $this->image = $image;
 
         return $this;
     }

@@ -81,11 +81,3 @@
     margin-top: 0.5rem;
     margin-bottom: 0.5rem;
 }
-
-.saison {
-    display: flex;
-    padding: 0.125rem 0;
-    justify-content: space-between;
-    align-items: center;
-    color: var(--light-alpha);
-}

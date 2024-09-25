@@ -1,0 +1,153 @@
+/* ------------------------- */
+/* ----- CONTROL PANEL ----- */
+/* ------------------------- */  
+
+.control-panel-bar {
+    position: relative;
+    z-index: 100;
+    color: var(--color-white50);
+    padding: 0.125rem;
+    font-weight: bold;
+    text-align: center;
+
+    &.mj {
+        background-color: var(--color-primarydarker);
+    }
+    &.admin {
+        background-color: var(--green);
+    }
+
+    a {
+        text-decoration: none;
+        color: var(--color-white50);
+    }
+    a:hover {
+        color: var(--color-white);
+    }
+}
+
+/* ----- NAV ----- */
+/* --------------- */  
+
+:root { --nav-height: 5rem; }
+
+.navigation-bar {
+    position: relative;
+    z-index: 10;
+    background-image:
+        linear-gradient(#00002040, #EEEEFFBB),
+        url( '../../assets/ui/bg-clouds.jpg' ),
+        url( '../../assets/ui/bg-clouds.jpg' ),
+        url( '../../assets/ui/bg-clouds.jpg' );
+    background-blend-mode: overlay, multiply, multiply, multiply;
+    background-color: var(--color-secondarypasteldark);
+    box-shadow: 0px 4px 8px #00000080, inset 0 -3px #BBBBFF10;
+
+    .navbar { padding: 0.5rem 0 }
+
+    .nav-link.active {
+        color: var(--color-white) !important;
+        font-weight: bold;
+        border-bottom: 3px solid var(--color-primary);
+    }
+
+    .nav-link {
+        color: var(--color-white50) !important;
+        &:active { color: var(--color-white) !important; }
+        &:hover {
+            color: var(--color-background) !important;
+            text-decoration: none;
+        }
+    }
+}
+
+#user-zone {
+    display: flex;
+    color: var(--color-white);
+    align-items: center;
+
+    a { color: var(--color-gray); }
+    a:active { color: var(--color-white); }
+    a:hover {
+        color: var(--color-background);
+        text-decoration: none;
+    }
+
+    &.connected {
+        flex-direction: row;
+        justify-content: end;
+    }
+
+    .user-infos {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .main-character {
+        display: flex;
+        align-items: center;
+        gap: 0.35rem;
+        color: var(--color-white50);
+
+        &:hover {
+            color: var(--color-white);
+            text-decoration: underline;
+        }
+    }
+
+    .avatar-link { margin-left: 1rem; }
+
+    &.disconnected {
+        flex-direction: column;
+        justify-content: center;
+    }
+}
+
+.nav-mobile-menu {
+    display: flex;
+    align-items: center;
+
+    .nav-link {
+        font-size: 1.1rem;
+        padding: 0.5rem 0.25rem;
+    }
+}
+
+.nav-mobile-toggle-full {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    background: none;
+    border: 0;
+    line-height: var(--leading-1);
+
+    &:hover i { color: var(--color-primary); }
+}
+
+@media (max-width: 991.98px) {
+    
+    .navbar {
+        flex-wrap: nowrap;
+        justify-content: flex-start;
+    }
+
+    .navbar-collapse { display: contents; }
+
+    #user-zone {
+        margin-left: auto;
+        font-size: var(--fontsize-base);
+        text-align: right;
+        align-items: flex-end;
+    }
+    #user-zone.connected { flex-direction: column-reverse; }
+    #user-zone .user-infos { align-items: flex-end; }
+
+    
+    #user-zone.disconnected {
+        align-items: center;
+        text-align: center;
+    }
+    #user-zone .avatar-link { display: none; }
+}
+

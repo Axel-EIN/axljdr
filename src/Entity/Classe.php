@@ -47,7 +47,7 @@ class Classe
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $color;
+    private $couleur;
 
     public function __construct()
     {
@@ -156,13 +156,14 @@ class Classe
         return $this;
     }
 
-    public function getColor(): ?string
+    public function getCouleur(): ?string
     {
-        return $this->color;
+        return $this->couleur;
     }
 
-    public function setColor(string $color): self
+    public function setCouleur(string $couleur): self
     {
+        $this->couleur = $couleur;
         $this->color = $color;
 
         return $this;

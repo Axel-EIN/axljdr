@@ -1,15 +1,29 @@
 <main class="offset-2 col-8">
     {{ form_start(form) }}
         <div class="row justify-content-center align-items-center mt-5 mb-4">
+
             <div class="col-8">
                 {{ form_row(form.nom) }}
                 {{ form_row(form.icone) }}
             </div>    
+
             <div class="col-4">
                 {% if type == 'Modifier' %}
-                    <img class="img-fluid" src="{{ asset(classe.icone) }}" />
+                    <img class="img-fluid" src="{{ asset(classe.icone|default('assets/img/placeholders/na_class.png')) }}" />
+                {% endif %}
+            </div>
+
+            <div class="col-12 mt-3">
+                {% if type == 'Modifier' %}
+                    <img class="img-fluid" src="{{ asset(classe.image|default('assets/img/placeholders/1280x720.jpg')) }}" />
                 {% endif %}
             </div>    
+
+            <div class="col-12 mt-2">
+                {{ form_row(form.image) }}
+            </div>
+
+
             <div class="col-12">
                 {{ form_row(form.description,{ 'attr': {'rows': '10'} }) }}
             </div>   
@@ -21,6 +35,7 @@
             <div class="col-12 text-center mt-5">
                 <button class="btn btn-large btn-primary-style">{{ button_label|default('Save') }}</button>
             </div>
+
         </div>
     {{ form_end(form) }}
 </main>

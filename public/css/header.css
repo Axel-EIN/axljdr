@@ -1,0 +1,103 @@
+/* ------------------------- */
+/* ----- CONTROL PANEL ----- */
+/* ------------------------- */  
+
+.control-panel-bar {
+    display: block;
+    position: relative;
+    z-index: 100;
+    color: var(--light-alpha);
+    padding: 0.125rem;
+    font-weight: bold;
+    text-align: center;
+
+    &.mj {
+        background-color: var(--primary-darker);
+    }
+    &.admin {
+        background-color: var(--green);
+    }
+
+    a {
+        text-decoration: none;
+        color: var(--light-alpha);
+    }
+    a:hover {
+        color: var(--white);
+    }
+}
+
+/* --------------- */
+/* ----- NAV ----- */
+/* --------------- */  
+
+.navigation-bar {
+    display: block;
+    position: relative;
+    z-index: 10;
+    background-image:
+        linear-gradient(#00002040, #EEEEFFBB),
+        url( '../../assets/img/ui/bg-clouds.jpg' ),
+        url( '../../assets/img/ui/bg-clouds.jpg' ),
+        url( '../../assets/img/ui/bg-clouds.jpg' );
+    background-blend-mode: overlay, multiply, multiply, multiply;
+    background-color: var(--secondary-pastel-darker);
+    box-shadow: 0px 4px 8px #00000080, inset 0 -3px #BBBBFF10;
+
+    .navbar { padding: 0.5rem 0 }
+
+    .active {
+        color: var(--white) !important;
+        font-weight: bold;
+        border-bottom: 3px solid var(--primary);
+    }
+
+    .nav-link {
+        color: var(--light-alpha) !important;
+        &:active { color: var(--white) !important; }
+        &:hover {
+            color: var(--lightest) !important;
+            text-decoration: none;
+        }
+    }
+}
+
+#user-zone {
+    display: flex;
+    color: var(--white);
+    align-items: center;
+
+    a { color: var(--light); }
+    a:active { color: var(--white); }
+    a:hover {
+        color: var(--lightest);
+        text-decoration: none;
+    }
+
+    .connected {
+        flex-direction: row;
+        justify-content: end;
+    }
+
+    .disconnected {
+        flex-direction: column;
+        justify-content: center;
+    }
+}
+
+/* ----------------------- */
+/* ----- SAISON BAR ------ */
+/* ----------------------- */  
+
+.saison-bar {
+    display: block;
+    position: relative;
+    box-shadow: 0px 2px 8px #00000040;
+
+    .container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        color: var(--lighter);
+    }
+}

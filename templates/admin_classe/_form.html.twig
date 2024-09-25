@@ -17,12 +17,15 @@
                 {% if type == 'Modifier' %}
                     <img class="img-fluid" src="{{ asset(classe.image|default('assets/img/placeholders/1280x720.jpg')) }}" />
                 {% endif %}
-            </div>    
+            </div>
 
             <div class="col-12 mt-2">
                 {{ form_row(form.image) }}
             </div>
 
+            <div class="col-12">
+                {{ form_row(form.citation) }}
+            </div>
 
             <div class="col-12">
                 {{ form_row(form.description,{ 'attr': {'rows': '10'} }) }}

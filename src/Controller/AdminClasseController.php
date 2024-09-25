@@ -44,6 +44,12 @@ class AdminClasseController extends AbstractController
                 $classe->setIcone($fileHandler->handle($nouvelleIcone, null, $prefix, 'classes'));
             } else { $classe->setIcone('assets/img/placeholders/na_class.png'); }
 
+            $nouvelleImage = $form->get('image')->getData();
+            if (!empty($nouvelleImage)) {
+                $prefix = 'classe-' . $classe->getNom() . '-image';
+                $classe->setImage($fileHandler->handle($nouvelleImage, null, $prefix, 'classes'));
+            } else { $classe->setImage('assets/img/placeholders/1280x720.jpg'); }
+
             $em->persist($classe);
             $em->flush();
 
@@ -74,6 +80,12 @@ class AdminClasseController extends AbstractController
             if (!empty($nouvelleIcone)) {
                 $prefix = 'classe-' . $classe->getNom() . '-icon';
                 $classe->setIcone($fileHandler->handle($nouvelleIcone, $classe->getIcone(), $prefix, 'classes'));
+            }
+
+            $nouvelleImage = $form->get('image')->getData();
+            if (!empty($nouvelleImage)) {
+                $prefix = 'classe-' . $classe->getNom() . '-image';
+                $classe->setImage($fileHandler->handle($nouvelleImage, $classe->getImage(), $prefix, 'classes'));
             }
 
             $this->getDoctrine()->getManager()->flush();
@@ -110,6 +122,7 @@ class AdminClasseController extends AbstractController
             $entityManager = $this->getDoctrine()->getManager();
 
             $fileHandler->handle(null, $classe->getIcone(), null, 'classes');
+            $fileHandler->handle(null, $classe->getImage(), null, 'classes');
 
             $entityManager->remove($classe);
             $entityManager->flush();

@@ -50,6 +50,11 @@ class Classe
     private $couleur;
 
     /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $citation;
+
+    /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $image;
@@ -169,6 +174,18 @@ class Classe
     public function setCouleur(string $couleur): self
     {
         $this->couleur = $couleur;
+
+        return $this;
+    }
+
+    public function getCitation(): ?string
+    {
+        return $this->citation;
+    }
+
+    public function setCitation(string $citation): self
+    {
+        $this->citation = $citation;
 
         return $this;
     }

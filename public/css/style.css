@@ -210,6 +210,7 @@ h5 a:hover, h4 a:hover, h3 a:hover, h2 a:hover, h1 a:hover { text-decoration: no
 .header-bg-characters { background-image: linear-gradient(rgb(40,0,0,0.5),rgb(40,0,0,0.5)),url('../assets/img/rubriques/personnages.jpg'); background-position: center; }
 .header-bg-empire { background-image: linear-gradient(rgb(40,0,0,0.5),rgb(40,0,0,0.5)),url('../assets/img/rubriques/empire.jpg'); background-position: center; }
 .header-bg-rules { background-image: linear-gradient(rgb(40,0,0,0.5),rgb(40,0,0,0.5)),url('../assets/img/rubriques/regles.jpg'); background-position: center; }
+.header-bg-no-chapter { background-image: linear-gradient(rgb(40,0,0,0.5),rgb(40,0,0,0.5)),url('../assets/img/placeholders/na-chapter.jpg'); background-position: center; }
 
 .header {       position: relative; min-height: 60vh;
                 color: #fff; text-align: center;

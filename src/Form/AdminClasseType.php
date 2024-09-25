@@ -32,6 +32,7 @@ class AdminClasseType extends AbstractType
                 ]
             )
             ->add('description', TextareaType::class)
+            ->add('citation', TextType::class)
             ->add('couleur', ColorType::class)
 
         ;

@@ -2,9 +2,9 @@
 {% block title %}L'Aventure Saison {{ saison.numero }} {{ parent() }}{% endblock %}
 {% block body %}
 
-<!-- HEADER BAND SAISON -->
-<header class="container-fluid relative" style="background-color: {{ saison.couleur }}">
-    <div class="container saison">
+<!-- SAISON BAR -->
+<saison class="saison-bar container-fluid" style="background-color: {{ saison.couleur }}">
+    <bar class="container">
         {{ include('/parts/messages-flashes.html.twig') }}
         {% if saison_suivante is not empty %}
             <a class="btn-icon-text-light-alpha" href="{{ path('aventure_saison', {id : (saison_suivante.id) } ) }}">
@@ -27,8 +27,8 @@
         {% else %}
             <span class="text-small invisible">saison précédente <i class="fa-solid fa-caret-right"></i></span>
         {% endif %}
-    </div>
-</header>
+    </bar>
+</saison>
 
 <!-- AFFICHAGE DES CHAPITRES DE LA SAISON -->
 <main>

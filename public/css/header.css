@@ -1,0 +1,161 @@
+/* ------------------------- */
+/* ----- CONTROL PANEL ----- */
+/* ------------------------- */  
+
+.control-panel-bar {
+    display: block;
+    position: relative;
+    z-index: 100;
+    color: var(--color-white-80);
+    padding: 0.125rem;
+    font-weight: bold;
+    text-align: center;
+
+    &.mj {
+        background-color: var(--primary-darker);
+    }
+    &.admin {
+        background-color: var(--green);
+    }
+
+    a {
+        text-decoration: none;
+        color: var(--color-white-80);
+    }
+    a:hover {
+        color: var(--color-white);
+    }
+}
+
+/* --------------- */
+/* ----- NAV ----- */
+/* --------------- */  
+
+.navigation-bar {
+    display: block;
+    position: relative;
+    z-index: 10;
+    background-image:
+        linear-gradient(#00002040, #EEEEFFBB),
+        url( '../../assets/ui/bg-clouds.jpg' ),
+        url( '../../assets/ui/bg-clouds.jpg' ),
+        url( '../../assets/ui/bg-clouds.jpg' );
+    background-blend-mode: overlay, multiply, multiply, multiply;
+    background-color: var(--secondary-pastel-darker);
+    box-shadow: 0px 4px 8px #00000080, inset 0 -3px #BBBBFF10;
+
+    .navbar { padding: 0.5rem 0 }
+
+    /* .nav-link (pas juste a.active) : couvre aussi le declencheur mobile,
+       un <button>. Ne cible pas .dropdown-item.active (autre variante, plus
+       discrete, definie avec .dropdown-dark dans components.css). */
+    .nav-link.active {
+        color: var(--color-white) !important;
+        font-weight: bold;
+        border-bottom: 3px solid var(--primary);
+    }
+
+    .nav-link {
+        color: var(--color-white-80) !important;
+        &:active { color: var(--color-white) !important; }
+        &:hover {
+            color: var(--color-background) !important;
+            text-decoration: none;
+        }
+    }
+}
+
+#user-zone {
+    display: flex;
+    color: var(--color-white);
+    align-items: center;
+
+    a { color: var(--color-gray); }
+    a:active { color: var(--color-white); }
+    a:hover {
+        color: var(--color-background);
+        text-decoration: none;
+    }
+
+    &.connected {
+        flex-direction: row;
+        justify-content: end;
+    }
+
+    /* Largeur définie : sinon le max-width relatif de .img-96 est ignoré au
+       calcul max-content et le conteneur prend la taille intrinsèque du
+       fichier avatar (cf. DESIGN-SYSTEM.md, conteneur sans largeur définie). */
+    avatar {
+        flex: 0 0 auto;
+        width: 96px; /* en px, comme .img-96 : en rem le fond dépasserait */
+    }
+
+    &.disconnected {
+        flex-direction: column;
+        justify-content: center;
+    }
+}
+
+/* Menu mobile : un seul déclencheur (libellé de la section active, ou
+   "MENU") qui ouvre/ferme la liste de toutes les sections. Masqué à partir
+   de lg (d-lg-none), où la liste complète reprend la main. */
+
+.nav-mobile-menu {
+    display: flex;
+    align-items: center;
+
+    /* padding horizontal resserré : le liseré rouge de .active doit épouser
+       le libellé, pas les 1rem par défaut de .nav-link */
+    .nav-link {
+        font-size: 1.1rem;
+        padding: 0.5rem 0.25rem;
+    }
+}
+
+/* Bouton (pas un lien) : il n'ouvre/ferme que le menu, la navigation se fait
+   depuis les .dropdown-item. */
+.nav-mobile-toggle-full {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    background: none;
+    border: 0;
+    line-height: 1;
+
+    &:hover i { color: var(--primary); }
+}
+
+@media (max-width: 991.98px) {
+    /* Une seule ligne : logo, section active + chevron, puis zone utilisateur
+       repoussée à droite. */
+    .navbar {
+        flex-wrap: nowrap;
+        justify-content: flex-start;
+    }
+
+    /* .navbar-collapse ne doit plus former de boîte propre : la zone
+       utilisateur devient enfant direct de la barre, et peut donc se coller
+       au bord droit via margin-left:auto. */
+    .navbar-collapse { display: contents; }
+
+    /* align-items ici plutot que sur .connected : couvre aussi l'etat
+       deconnecte, qui heritait sinon du align-items:center par defaut */
+    #user-zone {
+        margin-left: auto;
+        font-size: 1rem;
+        text-align: right;
+        align-items: flex-end;
+    }
+    #user-zone.connected { flex-direction: column-reverse; }
+
+    /* Deconnecte : le bouton et le lien se centrent l'un sur l'autre. Le bloc,
+       lui, reste colle a droite — il se dimensionne sur son plus large enfant
+       et le margin-left:auto ci-dessus le pousse contre le bord. */
+    #user-zone.disconnected {
+        align-items: center;
+        text-align: center;
+    }
+    /* Avatar masqué sur mobile : seuls pseudo + liens restent visibles */
+    #user-zone avatar { display: none; }
+}
+

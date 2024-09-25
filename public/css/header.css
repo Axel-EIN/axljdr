@@ -1,0 +1,146 @@
+/* ------------------------- */
+/* ----- CONTROL PANEL ----- */
+/* ------------------------- */  
+
+.control-panel-bar {
+    position: relative;
+    z-index: 100;
+    color: var(--color-white-50);
+    padding: 0.125rem;
+    font-weight: bold;
+    text-align: center;
+
+    &.mj {
+        background-color: var(--primary-darker);
+    }
+    &.admin {
+        background-color: var(--green);
+    }
+
+    a {
+        text-decoration: none;
+        color: var(--color-white-50);
+    }
+    a:hover {
+        color: var(--color-white);
+    }
+}
+
+/* ----- NAV ----- */
+/* --------------- */  
+
+/* Hauteur de la nav, barre MJ comprise. Le bandeau d'intro s'en sert pour
+   remplir le reste du premier ecran : valeur a ajuster ici. */
+:root { --nav-height: 5rem; }
+
+.navigation-bar {
+    position: relative;
+    z-index: 10;
+    background-image:
+        linear-gradient(#00002040, #EEEEFFBB),
+        url( '../../assets/ui/bg-clouds.jpg' ),
+        url( '../../assets/ui/bg-clouds.jpg' ),
+        url( '../../assets/ui/bg-clouds.jpg' );
+    background-blend-mode: overlay, multiply, multiply, multiply;
+    background-color: var(--secondary-pastel-darker);
+    box-shadow: 0px 4px 8px #00000080, inset 0 -3px #BBBBFF10;
+
+    .navbar { padding: 0.5rem 0 }
+
+    /* .nav-link et non a.active : couvre le declencheur mobile, un <button>. */
+    .nav-link.active {
+        color: var(--color-white) !important;
+        font-weight: bold;
+        border-bottom: 3px solid var(--primary);
+    }
+
+    .nav-link {
+        color: var(--color-white-50) !important;
+        &:active { color: var(--color-white) !important; }
+        &:hover {
+            color: var(--color-background) !important;
+            text-decoration: none;
+        }
+    }
+}
+
+#user-zone {
+    display: flex;
+    color: var(--color-white);
+    align-items: center;
+
+    a { color: var(--color-gray); }
+    a:active { color: var(--color-white); }
+    a:hover {
+        color: var(--color-background);
+        text-decoration: none;
+    }
+
+    &.connected {
+        flex-direction: row;
+        justify-content: end;
+    }
+
+    /* Sinon le max-width de .img-96 est ignore au calcul max-content : le
+       conteneur prend la taille du fichier (cf. .claude/design.md). */
+    .avatar {
+        flex: 0 0 auto;
+        width: 96px;     }
+
+    &.disconnected {
+        flex-direction: column;
+        justify-content: center;
+    }
+}
+
+
+.nav-mobile-menu {
+    display: flex;
+    align-items: center;
+
+    .nav-link {
+        font-size: 1.1rem;
+        padding: 0.5rem 0.25rem;
+    }
+}
+
+
+.nav-mobile-toggle-full {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    background: none;
+    border: 0;
+    line-height: 1;
+
+    &:hover i { color: var(--primary); }
+}
+
+@media (max-width: 991.98px) {
+    
+    .navbar {
+        flex-wrap: nowrap;
+        justify-content: flex-start;
+    }
+
+    /* .navbar-collapse ne forme plus de boite : la zone utilisateur devient
+       enfant direct de la barre et peut se coller a droite. */
+    .navbar-collapse { display: contents; }
+
+    /* Ici et non sur .connected : couvre aussi l'etat deconnecte. */
+    #user-zone {
+        margin-left: auto;
+        font-size: var(--fontsize-regular);
+        text-align: right;
+        align-items: flex-end;
+    }
+    #user-zone.connected { flex-direction: column-reverse; }
+
+    
+    #user-zone.disconnected {
+        align-items: center;
+        text-align: center;
+    }
+        #user-zone .avatar { display: none; }
+}
+

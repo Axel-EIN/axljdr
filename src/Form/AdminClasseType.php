@@ -24,6 +24,13 @@ class AdminClasseType extends AbstractType
                     'required' => false
                 ]
             )
+            ->add('image', FileType::class,
+                [
+                    'mapped' => false,
+                    'data_class' => null,
+                    'required' => false
+                ]
+            )
             ->add('description', TextareaType::class)
             ->add('couleur', ColorType::class)
 

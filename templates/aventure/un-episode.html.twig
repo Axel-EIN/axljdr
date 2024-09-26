@@ -82,7 +82,7 @@
                 <div class="d-flex justify-content-center">
                     <div class="list-group list-group-flush">
                         {% for un_personnage in classement_episode %}
-                            <div class="list-group-item d-flex align-items-center hover-zoom-X2 bg-transparent ranking">
+                                <div class="list-group-item d-flex align-items-center hover-zoom bg-transparent ranking">
                                 <a href="{{path('personnage_profil',{id:un_personnage.id})}}">
                                         <img class="img-96 mr-4" src="{{ asset(un_personnage.icone|default(NA_PERSO_ICO)) }}" alt="Portrait du Personnage" title="Voir le profil de {{un_personnage.prenom}}"/>
                                 </a>

@@ -76,7 +76,8 @@
 
 .btn-icon-display a, .btn-icon-display a:hover {
     color: var(--accent);
-    text-decoration: none; }
+    text-decoration: none;
+}
 
 .localisator-icon {
     z-index: 10;
@@ -147,7 +148,9 @@
     border-radius: 5px;
 }
 
-.character-icon-small, .location-icon-small { width: 26px; }
+.character-icon-small, .location-icon-small {
+    width: 26px;
+}
 
 .character-icon-dead {
     z-index: 10;

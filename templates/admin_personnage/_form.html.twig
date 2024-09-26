@@ -12,7 +12,7 @@
             </div>
             <div class="col-6 text-center">
                 {% if type == 'Modifier' %}
-                    <img class="img-96" src="{{ asset(personnage.icone) }}" />
+                    <img class="img-96" src="{{ asset(personnage.icone|default(NA_PERSO_ICO)) }}" />
                 {% endif %}
                 {{ form_row(form.icone) }}
                 {% if type != 'Créer' %}

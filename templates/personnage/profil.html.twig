@@ -6,7 +6,7 @@
         <card class="card">
 
             <!-- ILLUSTRATION -->
-            <img class="img-fluid w-100" src="{{ asset(personnage.illustration) }}" alt="{{personnage.nom}} {{personnage.prenom}}" title="{{personnage.nom}} {{personnage.prenom}}" />
+            <img class="img-fluid w-100" src="{{ asset(personnage.illustration|default(NA_PERSO_ILLU)) }}" alt="{{personnage.nom}} {{personnage.prenom}}" title="{{personnage.nom}} {{personnage.prenom}}" />
 
             <!-- LIST -->
             <ul class="list-group list-group-flush">

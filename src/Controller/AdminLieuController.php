@@ -56,6 +56,12 @@ class AdminLieuController extends AbstractController
                 $lieu->setRegion($fileHandler->handle($nouvelleRegion, null, $prefix, 'lieux'));
             } else { $lieu->setRegion('assets/img/placeholders/1280x720.png'); }
 
+            $nouvelleIcone = $form->get('icone')->getData();
+            if (!empty($nouvelleIcone)) {
+                $prefix = 'lieu-' . $lieu->getNom() . '-icone';
+                $lieu->setIcone($fileHandler->handle($nouvelleIcone, null, $prefix, 'lieux'));
+            } else { $lieu->setIcone('assets/img/placeholders/na_mon.png'); }
+
             $em->persist($lieu);
             $em->flush();
 
@@ -108,6 +114,12 @@ class AdminLieuController extends AbstractController
                 $lieu->setRegion($fileHandler->handle($nouvelleRegion, $lieu->getRegion(), $prefix, 'lieux'));
             }
 
+            $nouvelleIcone = $form->get('icone')->getData();
+            if (!empty($nouvelleIcone)) {
+                $prefix = 'lieu-' . $lieu->getNom() . '-icone';
+                $lieu->setIcone($fileHandler->handle($nouvelleIcone, $lieu->getIcone(), $prefix, 'lieux'));
+            }
+
             $this->getDoctrine()->getManager()->flush();
             $this->addFlash('success', 'Le Lieu a bien été modifié.');
 
@@ -138,6 +150,7 @@ class AdminLieuController extends AbstractController
             $fileHandler->handle(null, $lieu->getImage(), null, 'lieux');
             $fileHandler->handle(null, $lieu->getCarte(), null, 'lieux');
             $fileHandler->handle(null, $lieu->getRegion(), null, 'lieux');
+            $fileHandler->handle(null, $lieu->getIcone(), null, 'lieux');
 
             $entityManager->remove($lieu);
             $entityManager->flush();

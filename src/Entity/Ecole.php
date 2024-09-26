@@ -111,6 +111,21 @@ class Ecole
      */
     private $image;
 
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $bonus;
+
+    /**
+     * @ORM\Column(type="text")
+     */
+    private $competences;
+
+    /**
+     * @ORM\Column(type="text")
+     */
+    private $Equipements;
+
     public function __construct()
     {
         $this->personnages = new ArrayCollection();
@@ -351,6 +366,42 @@ class Ecole
     public function setImage(?string $image): self
     {
         $this->image = $image;
+
+        return $this;
+    }
+
+    public function getBonus(): ?string
+    {
+        return $this->bonus;
+    }
+
+    public function setBonus(string $bonus): self
+    {
+        $this->bonus = $bonus;
+
+        return $this;
+    }
+
+    public function getCompetences(): ?string
+    {
+        return $this->competences;
+    }
+
+    public function setCompetences(string $competences): self
+    {
+        $this->competences = $competences;
+
+        return $this;
+    }
+
+    public function getEquipements(): ?string
+    {
+        return $this->Equipements;
+    }
+
+    public function setEquipements(string $Equipements): self
+    {
+        $this->Equipements = $Equipements;
 
         return $this;
     }

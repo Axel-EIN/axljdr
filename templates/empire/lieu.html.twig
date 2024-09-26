@@ -3,7 +3,18 @@
 
 <!-- IMAGE -->
 <div class="col-12 text-center">
-    <img class="img-fluid" src="{{ asset(un_element.image|default('assets/img/placeholders/1280x720.jpg')) }}" alt="Image de {{un_element.nom}}" />
+    <div class="bg-black relative">
+
+        <!-- ICONE + SURNOM -->
+        {% if un_element.icone is defined and un_element.icone is not empty %}
+            <h2 class="icon-line-lieu-st">
+                <img class="img-96 ml-5 mr-1" src="{{ asset(un_element.icone) }}" alt="Icone de {{un_element.nom}}">
+                <i class="align-middle">{{ un_element.surnom }}</i>
+            </h2>
+        {% endif %}
+
+        <img class="img-fluid mask" src="{{ asset(un_element.image|default('assets/img/placeholders/1280x720.jpg')) }}" alt="Image de {{un_element.nom}}" />
+    </div>
 </div>
 
 <!-- CARD CONTAINER -->

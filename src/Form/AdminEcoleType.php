@@ -19,8 +19,11 @@ class AdminEcoleType extends AbstractType
     {
         $builder
             ->add('nom', TextType::class)
-            ->add('description', TextareaType::class)
             ->add('image', FileType::class, array('mapped' => false, 'data_class' => null, 'required' => false))
+            ->add('bonus', TextType::class)
+            ->add('description', TextareaType::class)
+            ->add('competences', TextareaType::class)
+            ->add('equipements', TextareaType::class)
             ->add('tech1Nom', TextType::class, ['required' => false])
             ->add('tech1Desc', TextareaType::class, ['required' => false])
             ->add('tech2Nom', TextType::class, ['required' => false])

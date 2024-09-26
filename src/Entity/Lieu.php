@@ -59,6 +59,16 @@ class Lieu
      */
     private $locY;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $surnom;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $icone;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -156,6 +166,30 @@ class Lieu
     public function setLocY(?string $locY): self
     {
         $this->locY = $locY;
+
+        return $this;
+    }
+
+    public function getSurnom(): ?string
+    {
+        return $this->surnom;
+    }
+
+    public function setSurnom(?string $surnom): self
+    {
+        $this->surnom = $surnom;
+
+        return $this;
+    }
+
+    public function getIcone(): ?string
+    {
+        return $this->icone;
+    }
+
+    public function setIcone(?string $icone): self
+    {
+        $this->icone = $icone;
 
         return $this;
     }

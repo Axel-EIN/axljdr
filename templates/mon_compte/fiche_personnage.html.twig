@@ -101,7 +101,7 @@
                     </div>
                 </div>
                 <div class="col-4">
-                    <img class="img-fluid" src="{{ asset(fiche.personnage.illustration) }}" />
+                    <img class="img-fluid" src="{{ asset(fiche.personnage.illustration|default(NA_PERSO_ILLU)) }}" />
                 </div>
                 <div class="col-8">
                     <hr>

@@ -88,7 +88,7 @@
                             <article class="col-6 mb-3">
                                 <div class="card text-center">
                                     <a href="{{ path('personnage_profil', {id: un_personnage.id} ) }}">
-                                        <img class="card-img-top hover-shine" src="{{un_personnage.icone}}" alt="Image du personnage">
+                                        <img class="card-img-top hover-shine" src="{{un_personnage.icone|default(NA_PERSO_ICO)}}" alt="Image du personnage">
                                     </a>
                                     <div class="card-body">
                                         <h4 class="card-title">{{un_personnage.nom}} <strong>{{un_personnage.prenom}}</strong></h4>

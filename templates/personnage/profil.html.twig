@@ -14,7 +14,7 @@
                 <!-- CLAN + XP -->
                 <li class="list-group-item d-flex align-items-center">
                     <a class="hover-no-under" href="{{ path('empire_clan', {id: personnage.clan.id} ) }}">
-                        <img class="img-48" src="{{ asset(personnage.clan.mon) }}" alt="Mon du Clan {{personnage.clan.nom}}" title="Mon du Clan {{personnage.clan.nom}}" />
+                        <img class="img-48" src="{{ asset(personnage.clan.mon|default(NA_ICON_MON)) }}" alt="Mon du Clan {{personnage.clan.nom}}" title="Mon du Clan {{personnage.clan.nom}}" />
                         &nbsp;
                         <strong>{{ personnage.clan.nom }}</strong>
                     </a>

@@ -28,13 +28,11 @@
                 <h1 id="read-head-ch-id{{ un_chapitre.id }}" class="{% if un_chapitre.titre|length <= 20 %}title-display-h1{% else %}title-display-h1-reduced{% endif %}">{{ un_chapitre.titre|relief|raw }}</h1>
                 <p class="quote">{{ un_chapitre.citation|nl2br }}</p>
                 {% if un_chapitre.episodes is not empty %}
-                    <div class="mx-auto mb-2">
                         <a class="btn-primary-style btn-large voir" href="#read-head-ch-id{{ un_chapitre.numero }}" data-toggle="collapse"
                            data-target="#ch{{ un_chapitre.numero }}-episodes" aria-controls="ch{{ un_chapitre.numero }}-episodes"
                            aria-expanded="true" aria-label="Toggle Chapitre {{ un_chapitre.numero }} Episodes">
                             <i class="fa-solid fa-scroll fa-bounce" alt="Icône Voir" ></i>&nbsp;&nbsp;Voir les Sessions
                         </a>
-                    </div>
                 {% else %}
                     <div class="alert alert-light mx-auto alert-persist">
                         <strong>Il n'y a pas encore de session disponible !</strong>&nbsp;&nbsp;

@@ -40,7 +40,7 @@
                 {% elseif un_element.icone is defined and un_element.icone is not empty %}
                     {% set image = un_element.icone %}
                 {% elseif un_element.personnage is defined and un_element.personnage is not empty %}
-                    {% set image = un_element.personnage.icone %}
+                    {% set image = un_element.personnage.icone|default(NA_PERSO_ICO) %}
                 {% endif %}
 
                 {% if un_element.nom is defined %}

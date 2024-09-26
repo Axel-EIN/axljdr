@@ -19,7 +19,7 @@
                 {% if un_element.clan is not empty %}
                     <div class="text-center px-5 hover-zoom" style="position: absolute; z-index: 5; right: 3rem; bottom: 1rem;">
                         <a class="link-white" href="{{ path('empire_clan', {id:un_element.clan.id} ) }}" >
-                            <img class="ml-2 img-48" src="{{ asset(un_element.clan.mon) }}" alt="Mon d'une faction" title="{{un_element.clan.nom}}" />
+                            <img class="ml-2 img-48" src="{{ asset(un_element.clan.mon|default(NA_ICON_MON)) }}" alt="Mon d'une faction" title="{{un_element.clan.nom|default('Pas de faction')}}" />
                         </a>
                     </div>
                 {% endif %}

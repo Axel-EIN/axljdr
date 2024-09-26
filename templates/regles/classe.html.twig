@@ -43,7 +43,7 @@
                 {% for un_personnage in personnagesClasse|slice(0,16) %}
                     <article class="p-1 hover-zoom">
                         <a href="{{ path('personnage_profil', {id: un_personnage.id} ) }}">
-                            <img class="img-128" src="{{ asset(un_personnage.icone) }}" alt="Icône d'un personnage" title="Voir profil de {{un_personnage.prenom}}" />
+                            <img class="img-128" src="{{ asset(un_personnage.icone|default(NA_PERSO_ICO)) }}" alt="Icône d'un personnage" title="Voir profil de {{un_personnage.prenom}}" />
                         </a>
                     </article>
                 {% else %}

@@ -1,62 +1,93 @@
 <main class="offset-2 col-8">
     {{ form_start(form) }}
         <div class="row justify-content-center align-items-start mt-5 mb-4">
+
             <div class="col-4">
                 {{ form_row(form.nom) }}
             </div> 
+
             <div class="col-4">
                 {{ form_row(form.clan) }}
             </div> 
+
             <div class="col-4">
                 {{ form_row(form.classe) }}
             </div> 
-            <div class="col-12">
+
+            <div class="col-12 mt-3">
                 {% if type == 'Modifier' %}
                     <img class="img-fluid" src="{{ asset(ecole.image) }}" />
                 {% endif %}
             </div> 
+
             <div class="col-12">
                 {{ form_row(form.image) }}
             </div>
-            <div class="col-12">
-                {{ form_row(form.description,{ 'attr': {'rows': '15'} }) }}
+
+            <div class="col-12 mt-3">
+                {{ form_row(form.bonus) }}
             </div>
-            <div class="col-12">
+
+            <div class="col-12 mt-3">
+                {{ form_row(form.description,{ 'attr': {'rows': '12'} }) }}
+            </div>
+
+            <div class="col-12 mt-3">
+                {{ form_row(form.competences,{ 'attr': {'rows': '6'} }) }}
+            </div>
+
+            <div class="col-12 mt-3">
+                {{ form_row(form.equipements,{ 'attr': {'rows': '6'} }) }}
+            </div>
+
+            <div class="col-12 mt-3">
                 {{ form_row(form.tech1Nom) }}
             </div>
-            <div class="col-12">
-                {{ form_row(form.tech1Desc,{ 'attr': {'rows': '3'} }) }}
+
+            <div class="col-12 mt-3">
+                {{ form_row(form.tech1Desc,{ 'attr': {'rows': '4'} }) }}
             </div>
-            <div class="col-12">
+
+            <div class="col-12 mt-3">
                 {{ form_row(form.tech2Nom) }}
             </div>
-            <div class="col-12">
-                {{ form_row(form.tech2Desc,{ 'attr': {'rows': '3'} }) }}
+
+            <div class="col-12 mt-3">
+                {{ form_row(form.tech2Desc,{ 'attr': {'rows': '4'} }) }}
             </div>
-            <div class="col-12">
+
+            <div class="col-12 mt-3">
                 {{ form_row(form.tech3Nom) }}
             </div>
-            <div class="col-12">
-                {{ form_row(form.tech3Desc,{ 'attr': {'rows': '3'} }) }}
+
+            <div class="col-12 mt-3">
+                {{ form_row(form.tech3Desc,{ 'attr': {'rows': '4'} }) }}
             </div>
-            <div class="col-12">
+
+            <div class="col-12 mt-3">
                 {{ form_row(form.tech4Nom) }}
             </div>
-            <div class="col-12">
-                {{ form_row(form.tech4Desc,{ 'attr': {'rows': '3'} }) }}
+
+            <div class="col-12 mt-3">
+                {{ form_row(form.tech4Desc,{ 'attr': {'rows': '4'} }) }}
             </div>
-            <div class="col-12">
+
+            <div class="col-12 mt-3">
                 {{ form_row(form.tech5Nom) }}
             </div>
-            <div class="col-12">
-                {{ form_row(form.tech5Desc,{ 'attr': {'rows': '3'} }) }}
+
+            <div class="col-12 mt-3">
+                {{ form_row(form.tech5Desc,{ 'attr': {'rows': '4'} }) }}
             </div>
-            <div class="col-12">
+
+            <div class="col-12 mt-3">
                 {{ form_row(form.techSpecialNom) }}
             </div>
-            <div class="col-12">
-                {{ form_row(form.techSpecialDesc,{ 'attr': {'rows': '3'} }) }}
+
+            <div class="col-12 mt-3">
+                {{ form_row(form.techSpecialDesc,{ 'attr': {'rows': '4'} }) }}
             </div>
+
             <div class="col-12 text-center mt-5">
                 <button class="btn btn-large btn-primary-style">{{ button_label|default('Save') }}</button>
             </div>

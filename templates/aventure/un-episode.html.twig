@@ -62,7 +62,7 @@
                 {% set numero = 0 %}
                 {% for une_scene in episode.scenes %}
 
-                    <div class="text-center mb-4">&nbsp;
+                    <div class="text-center {% if une_scene.numero == 1 %}mb-4{% else %}mb-5 pb-3{% endif %}">&nbsp;
                         {% if app.user and is_granted("ROLE_MJ") %}
                             <!-- MJ BTN ICON+TEXT Insert or Add -->
                             {% set color, entity, numero, parent, parentID, redirect, label = 'text-accent', 'scene', une_scene.numero, 'episode', episode.id, 'episode', 'Insérer' %}

@@ -146,7 +146,7 @@
             {# PERSONNAGE  #}
             {% for un_personnage in clan.personnages %}
                 <a class="{{col_perso}} p-1 hover-zoom" href="{{ path('personnage_profil', {id: un_personnage.id} ) }}" >
-                    <img class="img-fluid rounded-8" src="{{ asset(un_personnage.icone) }}" alt="Icône du personnage" />
+                    <img class="img-fluid rounded-8" src="{{ asset(un_personnage.icone|default(NA_PERSO_ICO)) }}" alt="Icône du personnage" />
                 </a>
             {% endfor %}
 

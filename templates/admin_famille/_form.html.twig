@@ -5,7 +5,7 @@
             <div class="col-12 row mb-3">
                 <div class="col-4">
                     {% if type == 'Modifier' %}
-                        <img class="img-fluid" src="{{ asset(famille.mon) }}" />
+                        <img class="img-fluid" src="{{ asset(famille.mon|default(NA_ICON_MON)) }}" />
                     {% endif %}
                 </div>
                 

@@ -77,7 +77,7 @@
             {% endfor %}
         </div>
 
-        <img class="card-img-top img-fluid mask" src="{{ asset(une_scene.image) }}"  alt="Image d'une scène">
+        <img class="card-img-top img-fluid mask" src="{{ asset(une_scene.image|default(NA_SCENE)) }}"  alt="Image d'une scène">
 
     </div>
 

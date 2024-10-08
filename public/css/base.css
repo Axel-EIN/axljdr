@@ -1,4 +1,12 @@
-body {  background-color: var(--lightest); }
+body { background-color: var(--lightest); }
+.bg-clouds {
+  background-image:
+    url( '../../assets/img/ui/bg-clouds.jpg' ),
+    linear-gradient(#FFF, #FFF);
+  background-blend-mode: multiply, normal;
+  background-color: var(--white);
+  box-shadow: 0px 4px 8px #00000080, inset 0 -3px #BBBBFF10;
+}
 
 /* --------------------------------- */
 /* ------- COMMON CONTAINER  ------- */

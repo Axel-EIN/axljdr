@@ -91,9 +91,15 @@ class Baliseur
             $lieu_trouve = $this->lieuRepo->findOneBy(array('nom' => $un_match));
 
             if ($lieu_trouve != null) {
+
+                if ($lieu_trouve->getIcone())
+                    $icone_lieu = '../../' . $lieu_trouve->getIcone();
+                else
+                    $icone_lieu = '../../assets/img/placeholders/na_lieu_ico.png';
+
                 $tableau_remplacement[] =
                     '<a class="tag-location hover-zoom-quick location-icon bg-lightest pr-1 pt-0 pb-0 pl-0" href="../../empire/lieu/' . $lieu_trouve->getId() . '">'
-                                . '<img class="location-icon-small" src="../../' . $lieu_trouve->getIcone()
+                                . '<img class="location-icon-small" src="../../' . $icone_lieu
                                 . '" alt="Icône Lieu" title="Voir ' . $lieu_trouve->getNom() .'" /> ' . $lieu_trouve->getNom() . '</a>';
             } else
                 $tableau_remplacement[] = $un_match;

@@ -20,18 +20,89 @@
 
 
 /* -------------------------------- */
-/* ------------ SIZES  ------------ */
+/* ------- BODY TEXT SIZES  ------- */
 /* -------------------------------- */
 
-html, body { font-size: 16px; }
+html, body {
+    font-size: 16px;
+}
 
 @media (max-width: 1200px) { html, body { font-size: 16px; } }
 @media (max-width: 992px) { html, body { font-size: 15px; } }
 @media (max-width: 576px) { html, body { font-size: 14px; } }
 @media (max-width: 480px) { html, body { font-size: 13px; } }
 
+.text-mini {
+    font-size: 0.6rem;
+}
 
-/* --------- DISPLAY TITLES ---------- */
+.text-small {
+    font-size: 0.8rem;
+}
+
+.text-medium {
+    font-size: 1.2rem;
+}
+
+.text-large {
+    font-size: 1.5rem;
+}
+
+.text-big {
+    font-size: 2rem;
+}
+
+.text-fat {
+    font-size: 3rem;
+}
+
+
+
+/* -------------------------------- */
+/* ------ TITLE TEXT SIZES  ------- */
+/* -------------------------------- */
+
+.title-mini {
+    font-size: 2rem;
+}
+
+@media (max-width: 1200px) { .title-mini { font-size: 2rem; } }
+@media (max-width: 992px) { .title-mini { font-size: 1.75rem; } }
+@media (max-width: 576px) { .title-mini { font-size: 1.5rem; } }
+@media (max-width: 480px) { .title-mini { font-size: 1.25rem; } }
+
+.title-small {
+    font-size: 3rem;
+}
+
+@media (max-width: 1200px) { .title-small { font-size: 3rem; } }
+@media (max-width: 992px) { .title-small { font-size: 2.5rem; } }
+@media (max-width: 576px) { .title-small { font-size: 2rem; } }
+@media (max-width: 480px) { .title-small { font-size: 1.75rem; } }
+
+.title-medium {
+    font-size: 6rem;
+}
+
+@media (max-width: 1200px) { .title-medium { font-size: 7rem; } }
+@media (max-width: 992px) { .title-medium { font-size: 6rem; } }
+@media (max-width: 576px) { .title-medium { font-size: 5rem; } }
+@media (max-width: 480px) { .title-medium { font-size: 4rem; } }
+
+.title-large {
+    font-size: 9rem;
+}
+
+@media (max-width: 1200px) { .title-large { font-size: 9rem; } }
+@media (max-width: 992px) { .title-large { font-size: 8rem; } }
+@media (max-width: 576px) { .title-large { font-size: 6rem; } }
+@media (max-width: 480px) { .title-large { font-size: 4.5rem; } }
+
+
+
+/* -------------------------------- */
+/* ----- DISPLAY TEXT SIZES  ------ */
+/* -------------------------------- */
 
 @media (max-width: 1200px) { .display-1 { font-size: 4.25rem; } }
 @media (max-width: 992px) { .display-1 { font-size: 4rem; } }
@@ -54,39 +125,14 @@ html, body { font-size: 16px; }
 @media (max-width: 480px) { .display-4 { font-size: 2.75rem; } }
 
 
-/* --------- TITLES ---------- */
-
-.grand { font-size: 9rem; }
-@media (max-width: 1200px) { .grand { font-size: 9rem; } }
-@media (max-width: 992px) { .grand { font-size: 8rem; } }
-@media (max-width: 576px) { .grand { font-size: 6rem; } }
-@media (max-width: 480px) { .grand { font-size: 4.5rem; } }
-
-.moyen { font-size: 6rem; }
-@media (max-width: 1200px) { .moyen { font-size: 7rem; } }
-@media (max-width: 992px) { .moyen { font-size: 6rem; } }
-@media (max-width: 576px) { .moyen { font-size: 5rem; } }
-@media (max-width: 480px) { .moyen { font-size: 4rem; } }
-
-.petit { font-size: 3rem; }
-@media (max-width: 1200px) { .petit { font-size: 3rem; } }
-@media (max-width: 992px) { .petit { font-size: 2.5rem; } }
-@media (max-width: 576px) { .petit { font-size: 2rem; } }
-@media (max-width: 480px) { .petit { font-size: 1.75rem; } }
-
-.plus-petit { font-size: 2rem; }
-@media (max-width: 1200px) { .plus-petit { font-size: 2rem; } }
-@media (max-width: 992px) { .plus-petit { font-size: 1.75rem; } }
-@media (max-width: 576px) { .plus-petit { font-size: 1.5rem; } }
-@media (max-width: 480px) { .plus-petit { font-size: 1.25rem; } }
-
-
 
 /* ---------------------------------- */
 /* --------- TEXT EFFECTS  ---------- */
 /* ---------------------------------- */
 
-.text-shadow { text-shadow: 2px 2px 8px black !important; }
+.text-shadow {
+    text-shadow: 2px 2px 8px black !important;
+}
       
 .clip-text {
         font-size: 1rem;
@@ -104,7 +150,9 @@ html, body { font-size: 16px; }
         }
 }
 
-.number-skillrank-effect {  font-family: "Shogun"; }
+.number-skillrank-effect {
+    font-family: "Shogun";
+}
 
 .number-session-caroussel{
     z-index: 10;
@@ -159,9 +207,9 @@ html, body { font-size: 16px; }
 
 
 
-/* ------------------------------------ */
-/* --------- TITLES EFFECTS  ---------- */
-/* ------------------------------------ */
+/* ----------------------------------- */
+/* --------- TITLE EFFECTS  ---------- */
+/* ----------------------------------- */
 
 .big-title-effect {
     font-family: "Shogun";

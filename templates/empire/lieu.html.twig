@@ -1,112 +1,140 @@
 {% extends 'element.html.twig' %}
 {% block element_content %}
 
-<!-- IMAGE -->
-<div class="col-12 text-center">
-    <div class="bg-black relative">
+    <!-- IMAGE -->
+    <div class="col-12 text-center">
+        <div class="bg-black relative">
 
-        <!-- ICONE + SURNOM -->
-        {% if un_element.icone is defined and un_element.icone is not empty %}
-            <h2 class="icon-line-lieu-st">
-                <img class="img-96 ml-5 mr-1" src="{{ asset(un_element.icone) }}" alt="Icone de {{un_element.nom}}">
-                <i class="align-middle">{{ un_element.surnom }}</i>
-            </h2>
-        {% endif %}
+            <!-- ICONE + SURNOM -->
+            {% if un_element.icone is defined and un_element.icone is not empty %}
+                <h2 class="icon-line-lieu-st">
+                    <img class="img-96 ml-5 mr-1" src="{{ asset(un_element.icone) }}" alt="Icone de {{un_element.nom}}">
+                    <i class="align-middle">{{ un_element.surnom }}</i>
+                </h2>
+            {% endif %}
 
-        <img class="img-fluid mask" src="{{ asset(un_element.image|default('assets/img/placeholders/1280x720.jpg')) }}" alt="Image de {{un_element.nom}}" />
+            <img class="img-fluid mask" src="{{ asset(un_element.image|default('assets/img/placeholders/1280x720.jpg')) }}" alt="Image de {{un_element.nom}}" />
+        </div>
     </div>
-</div>
 
-<!-- CARD CONTAINER -->
+    <!-- CARD CONTAINER -->
     <div class="col-12 pb-1">
 
-    <!-- CARD -->
-    <div class="card pb-5">
+        <!-- CARD -->
+        <div class="card pb-5">
 
-        <!-- CARD BODY -->
-        <div class="card-body px-5 py-0 relative">
+            <!-- CARD BODY -->
+            <div class="card-body px-5 py-0 relative">
                 <p class="card-text m-5 text-justify text-medium">{{ un_element.description|raw|nl2br }}</p>
-        </div>
-        <!-- END CARD-BODY -->
+            </div>
+            <!-- END CARD-BODY -->
 
-        <!-- CONTROL -->
-        {% if un_element.clan is not empty %}
-        <ul class="list-group list-group-flush border-0">
-            <li class="list-group-item">
-                <p class="text-center px-5">Contrôlé par
-                    <img class="ml-2 img-48" src="{{ asset(un_element.clan.mon) }}" />
-                    <strong>
-                        <a href="{{ path('empire_clan', {id:un_element.clan.id} ) }}" >
-                            {{ un_element.clan.nom }}
-                        </a>
-                    </strong>
-                </p>
-            </li>
-        </ul>
-        {% endif %}
+            <!-- CONTROL -->
+            {% if un_element.clan is not empty %}
+            <ul class="list-group list-group-flush border-0">
+                <li class="list-group-item">
+                    <p class="text-center px-5">Contrôlé par
+                        <img class="ml-2 img-48" src="{{ asset(un_element.clan.mon) }}" />
+                        <strong>
+                            <a href="{{ path('empire_clan', {id:un_element.clan.id} ) }}" >
+                                {{ un_element.clan.nom }}
+                            </a>
+                        </strong>
+                    </p>
+                </li>
+            </ul>
+            {% endif %}
 
-        <!-- ALENTOURS -->
-        {% if un_element.region is not empty %}
-        <ul class="list-group list-group-flush border-0 mb-3">
-            <li class="list-group-item">
-                <h2><strong>Alentours</strong></strong></h2>
-                
-                <div class="relative">
+            <!-- ALENTOURS -->
+            {% if un_element.region is not empty %}
+            <ul class="list-group list-group-flush border-0 mb-3">
+                <li class="list-group-item">
+                    <h2><strong>Alentours</strong></strong></h2>
+                    
+                    <div class="relative">
 
 
 
-                    <!-- MINI CARTE -->
-                    <div id="minimap" class="absolute">
-                        <div class="relative overflow-hidden">
+                        <!-- MINI CARTE -->
+                        <div id="minimap" class="absolute">
+                            <div class="relative overflow-hidden">
 
-                            <!-- CAPTION -->
-                            <div id="caption" class="absolute" style="z-index: 15; top: 0; left: 0; width: 100%; height: 100%">
+                                <!-- CAPTION -->
+                                <div id="caption" class="absolute" style="z-index: 15; top: 0; left: 0; width: 100%; height: 100%">
+                                </div>
+
+                                <!-- UI LOCALISATOR -->
+                                <img class="absolute localisator-ui" style="left:{{un_element.locX}}%; top:{{un_element.locY}}%" src="{{asset('assets/img/ui/mini-localisator.png')}}" />
+
+                                <img class="img-fluid" src="{{asset('assets/img/lieux/minimap.jpg')}}" alt="Carte de Rokugan">
                             </div>
-
-                            <!-- UI LOCALISATOR -->
-                            <img class="absolute localisator-ui" style="left:{{un_element.locX}}%; top:{{un_element.locY}}%" src="{{asset('assets/img/ui/mini-localisator.png')}}" />
-
-                            <img class="img-fluid" src="{{asset('assets/img/lieux/minimap.jpg')}}" alt="Carte de Rokugan">
                         </div>
+
+                        <!-- ICON ANIMEE -->
+                        <span class="absolute localisator-icon" style="left:50%; top:50%">
+                            <i class="fa-solid fa-caret-down fa-2xl fa-bounce"></i>
+                        </span>
+
+                        <img class="img-fluid" src="{{asset(un_element.region)}}" alt="Carte de la Région">
                     </div>
 
-                    <!-- ICON ANIMEE -->
-                    <span class="absolute localisator-icon" style="left:50%; top:50%">
-                        <i class="fa-solid fa-caret-down fa-2xl fa-bounce"></i>
-                    </span>
+                </li>
+            </ul>
+            {% endif %}
 
-                    <img class="img-fluid" src="{{asset(un_element.region)}}" alt="Carte de la Région">
-                </div>
-
-            </li>
-        </ul>
-        {% endif %}
-
-        <!-- CARTE -->
-        {% if un_element.carte is not empty %}
-        <ul class="list-group list-group-flush mb-5 border-0">
-            <li class="list-group-item">
-                <h2><strong>Carte</strong></strong></h2>
-                <img class="img-fluid" src="{{asset(un_element.carte)}}" alt="Carte du Lieu">
-            </li>
-        </ul>
-        {% endif %}
+            <!-- CARTE -->
+            {% if un_element.carte is not empty %}
+            <ul class="list-group list-group-flush mb-5 border-0">
+                <li class="list-group-item">
+                    <h2><strong>Carte</strong></strong></h2>
+                    <img class="img-fluid" src="{{asset(un_element.carte)}}" alt="Carte du Lieu">
+                </li>
+            </ul>
+            {% endif %}
 
 
-        <!-- ORNAMENT -->
-        {{ include('/parts/separateur-ornament.html.twig') }}
+            <!-- ORNAMENT -->
+            {{ include('/parts/separateur-ornament.html.twig') }}
 
-        <!-- BTN -->
-        {% if app.user and is_granted("ROLE_MJ") %}
-        <div class="mt-3 text-center">
-            <!-- MJ BTN LINE Delete -->
-            {% set redirect, element, un_element, color, action = 'empire', 'archive', un_element, 'text-accent', 'delete' %}
-            {{ include('/parts/btn-line.html.twig') }}
+            <!-- BTN -->
+            {% if app.user and is_granted("ROLE_MJ") %}
+            <div class="mt-3 text-center">
+                <!-- MJ BTN LINE Delete -->
+                {% set redirect, element, un_element, color, action = 'empire', 'archive', un_element, 'text-accent', 'delete' %}
+                {{ include('/parts/btn-line.html.twig') }}
+            </div>
+            {% endif %}
+
         </div>
-        {% endif %}
+        <!-- END CARD -->
 
     </div>
-    <!-- END CARD -->
+    <!-- END CARD CONTAINER -->
 
-</div>
+    <!-- AUTRES LIEUX -->
+    <section class="col-12 pt-1 mb-5">
+        <div class="card card-body h-100">
+            <h2 class="card-title"><strong>Autres Lieux</strong></h2>
+            <hr>
+
+            <div class="row px-3">
+                <!-- UN LIEU -->
+                {% for autre_lieu in lieux|filter(autre_lieu => autre_lieu.id != un_element.id) %}
+                    <article class="col-2 text-center mb-4 hover-zoom-x2 relative">
+                        {% if autre_lieu.icone is defined and autre_lieu.icone is not empty %}
+                            <img class="icon-lieu-top img-64" src="{{ asset(autre_lieu.icone) }}" alt="une icône" />
+                        {% endif %}
+                        <a href="{{ path('empire_lieu', {id: autre_lieu.id} ) }}">
+                            <img class="img-fluid" src="{{ asset(autre_lieu.image) }}" alt="Image d'un autre Lieu" />
+                        </a>
+                        <a href="{{ path('empire_lieu', {id: autre_lieu.id} ) }}" ><strong>{{ autre_lieu.nom }}</strong></a>
+                    </article>
+                {% else %}
+                    <span class="text-muted"><i>Il n'y a pas d'autres lieux.</i></span>
+                {% endfor %}
+            </div>
+
+        </div>
+    </section>
+
 {% endblock %}

@@ -32,7 +32,7 @@
                     </div>
                 {% else %}
                     <div class="alert alert-light mx-auto alert-persist">
-                        <strong>Il n'y a pas encore d'épisode disponible !</strong>&nbsp;&nbsp;
+                        <strong>Il n'y a pas encore de session disponible !</strong>&nbsp;&nbsp;
                         {% if app.user and is_granted("ROLE_MJ") %}
                             <a class="text-lightest" href="{{path('admin_episode_create')}}?numero=1&chapitreID={{un_chapitre.id}}&redirect=aventure">
                                 <i class="fas fa-plus-square fa-bounce" alt="Icône Ajouter"></i>&nbsp;&nbsp;<strong>Ajouter une Session</strong>

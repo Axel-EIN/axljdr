@@ -32,7 +32,7 @@
 
     <a class="card-inner" href="{{ path('aventure_episode', {id:un_episode.id} ) }}">
         <span class="card-number"><span class="text-big">#</span>{{ un_episode.numeroSaison }}</span>
-        <div class="image-container gradient-after">
+        <div class="image-container gradient-after-down">
             <img class="card-image" src="{{ asset(un_episode.image|default(NA_SESSION)) }}" alt="Image de la session {{un_episode.titre}}" title="{{un_episode.titre}}"  />
         </div>
         <div class="text-container">

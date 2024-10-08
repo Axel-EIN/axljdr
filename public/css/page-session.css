@@ -158,9 +158,9 @@
 .icon-aventure {
     position: absolute;
     z-index: 10;
-    width: 48px;
-    bottom: 12px;
-    left: 14px; 
+    width: 40px;
+    bottom: 16px;
+    left: 18px; 
 }
 
 .scene-title-container {

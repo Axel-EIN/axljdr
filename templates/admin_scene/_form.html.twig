@@ -113,16 +113,12 @@
         let pjs = {
             {% for un_pj in tout_pjs|default([]) %}
                 {{un_pj.id}} : "{{un_pj.nom}} {{un_pj.prenom}}",
-            {% else %}
-                Pas de personnage
             {% endfor %}
         };
 
         let pnjs = {
             {% for un_pnj in tout_pnjs|default([]) %}
                 {{un_pnj.id}} : "{{un_pnj.nom}} {{un_pnj.prenom}}",
-            {% else %}
-                Pas de personnage
             {% endfor %}
         };
         
@@ -132,7 +128,6 @@
             $("#add-participants").click(function(e)
             {
                 e.preventDefault();
-                console.log("hello");
                 let numberOfparticipants = $("#form1").find("select[name^='participants']").length;
 
                 let new_select_pj = '<select class="form-control mt-1 col-8" name="participants[' + numberOfparticipants + ']" required id="data[participants][' + numberOfparticipants + ']" >';

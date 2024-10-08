@@ -116,7 +116,9 @@ class AdminSceneController extends AbstractController
             'label' => 'Scène',
             'genre' => 'F',
             'determinant' => 'une',
-            'form' => $form->createView()
+            'tout_pjs' => $tout_pjs,
+            'tout_pnjs' => $tout_pnjs,
+            'form' => $form->createView(),
         ]);
     }
 

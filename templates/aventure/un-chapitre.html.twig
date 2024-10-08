@@ -1,5 +1,10 @@
-<section class="header-bg-img" style="background-color: {{ un_chapitre.couleur }}; background-image:linear-gradient( rgb( 0,0,0,0.6 ), rgb( 0,0,0,0), rgb( 0,0,0,0.3), rgb( 0,0,0,0.6) ), url( {{ asset(un_chapitre.image) }} );" >
-    <div class="container">
+<section    class="header-bg-img"
+            style=" background-color: {{ un_chapitre.couleur }};
+                    background-image:
+                        linear-gradient( rgb( 0,0,0,0.4 ), rgb( 0,0,0,0.4) ),
+                        linear-gradient( rgb( 0,0,0,0.6 ), rgb( 0,0,0,0), rgb( 0,0,0,0.3), rgb( 0,0,0,0.6) ),
+                        url( {{ asset(un_chapitre.image) }} );" >
+    <div class="container p-1">
 
         {% if app.user and is_granted("ROLE_MJ") %}
             <div class="text-center">
@@ -8,7 +13,7 @@
             </div>
         {% endif %}
 
-        <div class="header header-chapter d-flex flex-column justify-content-end" >
+        <div class="header header-chapter d-flex flex-column" >
             <span class="chapter-number text-left">CHAPITRE {{ un_chapitre.numero }}</span>
             <div><hr></div>
 
@@ -45,7 +50,7 @@
         </div>
 
          <!-- SESSIONS -->
-        <div id="ch{{ un_chapitre.numero }}-episodes" class="collapse py-5">
+        <div id="ch{{ un_chapitre.numero }}-episodes" class="collapse py-3">
             <div class="container">
                 <div class="row justify-content-center relative">
 

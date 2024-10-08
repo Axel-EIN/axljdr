@@ -7,7 +7,7 @@
     <div class="container saison">
         {{ include('/parts/messages-flashes.html.twig') }}
         {% if saison_suivante is not empty %}
-            <a class="btn-icon-text-white-alpha" href="{{ path('aventure_saison', {id : (saison_suivante.id) } ) }}">
+            <a class="btn-icon-text-light-alpha" href="{{ path('aventure_saison', {id : (saison_suivante.id) } ) }}">
                 <span class="text-small"><i class="fa-solid fa-caret-left"></i> saison suivante</span>
             </a>
         {% else %}
@@ -21,7 +21,7 @@
         {% endif %}
 
         {% if saison_precedente is not empty %}
-            <a class="btn-icon-text-white-alpha" href="{{ path('aventure_saison', {id : (saison_precedente.id) } ) }}" alt="Flèche Droite" title="Voir saison précédente">
+            <a class="btn-icon-text-light-alpha" href="{{ path('aventure_saison', {id : (saison_precedente.id) } ) }}" alt="Flèche Droite" title="Voir saison précédente">
                 <span class="text-small">saison précédente <i class="fa-solid fa-caret-right"></i></span> 
             </a>
         {% else %}
@@ -35,7 +35,7 @@
 {% set numero = 0 %}
 {% for un_chapitre in saison.chapitres|reverse %}
 
-    {% set color, entity, numero, parent, parentID, redirect, label = 'text-accent', 'chapitre', un_chapitre.numero, 'saison', saison.id, 'aventure', 'Insérer' %}
+    {% set color, entity, numero, parent, parentID, redirect, label = 'text-light-alpha', 'chapitre', un_chapitre.numero, 'saison', saison.id, 'aventure', 'Insérer' %}
     {{ include('/aventure/un-chapitre.html.twig', {numero}) }}
 
 {% else %}

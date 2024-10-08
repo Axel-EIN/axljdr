@@ -4,13 +4,24 @@
 
 /* BTN ICON + TEXT LINK */
 
-.btn-icon-text-white-alpha {
+.btn-icon-text-light-alpha, .btn-icon-text.text-light-alpha, .btn-icon.text-light-alpha {
+    padding: 0.125rem;
     color: var(--light-alpha);
 }
 
-.btn-icon-text-white-alpha:hover {
+.btn-icon-text-light-alpha:hover, .btn-icon-text.text-light-alpha:hover, .btn-icon.text-light-alpha:hover {
+    color: var(--white);
+}
+
+.btn-icon-text-accent, .btn-icon-text.text-accent, .btn-icon.text-accent {
+    padding: 0.125rem;
+    color: var(--accent);
+}
+
+.btn-icon-text-accent:hover, .btn-icon-text.text-accent:hover, .btn-icon.text-accent:hover {
     color: var(--primary);
 }
+
 
 /* SIZE */
 

@@ -51,6 +51,12 @@ class AdminPersonnageController extends AbstractController
                 $personnage->setIllustration($fileHandler->handle($nouvelleIllustration, null, $prefix, 'personnages'));
             } else { $personnage->setIllustration('assets/img/placeholders/na_personnage_illustration.jpg'); }
 
+            // BALISAGE : capture les mots entre [], vérifie si un prénom personnage correspondant existe, remplace par un lien personnage HTML
+            $personnage->setDescription($baliseur->baliserPersonnages($personnage->getDescription()));
+
+            // BALISAGE des LIEUX : capture les mots entre {}, vérifie si un nom de lieu correspondant existe, remplace par un lien vers la fiche du lieu en HTML
+            $personnage->setDescription($baliseur->baliserLieux($personnage->getDescription()));
+
             $em->persist($personnage);
             $em->flush();
 
@@ -80,6 +86,9 @@ class AdminPersonnageController extends AbstractController
         // DEBALISEUR : dans le texte, capture les prénoms entre balises <a><img>, vérifie si le personnage existe, remplace les balises par des crochets []
         $personnage->setDescription($baliseur->debaliserPersonnages($personnage->getDescription()));
 
+        // DEBALISEUR des LIEUX {}
+        $personnage->setDescription($baliseur->debaliserLieux($personnage->getDescription()));
+
         $form = $this->createForm(AdminPersonnageType::class, $personnage);
         
         $form->handleRequest($request);
@@ -100,6 +109,9 @@ class AdminPersonnageController extends AbstractController
 
             // BALISAGE : capture les mots entre [], vérifie si un prénom personnage correspondant existe, remplace par un lien personnage HTML
             $personnage->setDescription($baliseur->baliserPersonnages($personnage->getDescription()));
+
+            // BALISAGE des LIEUX : capture les mots entre {}, vérifie si un nom de lieu correspondant existe, remplace par un lien vers la fiche du lieu en HTML
+            $personnage->setDescription($baliseur->baliserLieux($personnage->getDescription()));
 
             $this->getDoctrine()->getManager()->flush();
             $this->addFlash('success', 'Le personnage a bien été modifié.');

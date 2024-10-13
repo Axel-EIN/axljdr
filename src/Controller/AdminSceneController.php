@@ -247,6 +247,10 @@ class AdminSceneController extends AbstractController
             'genre' => 'F',
             'determinant' => 'une',
             'form' => $form,
+            'participations_pjs' => $participations_pjs,
+            'participations_pnjs' => $participations_pnjs,
+            'tout_pjs' => $tout_pjs,
+            'tout_pnjs' => $tout_pnjs,
         ]);
     }
 

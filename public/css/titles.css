@@ -5,13 +5,20 @@
 
 /** DISPLAY **/
 
-.title-display-h1 {
+.title-display-h1, .title-display-h1-reduced {
     font-family: "Shogun";
     color: var(--white);
     font-size: 9rem;
     text-align: center;
     text-shadow: 4px 4px 1rem var(--dark);
-    margin: 0;
+}
+
+.title-display-h1 {
+    font-size: 8rem;
+}
+
+.title-display-h1-reduced {
+    font-size: 7rem;
 }
 
 .title-display-h2 {

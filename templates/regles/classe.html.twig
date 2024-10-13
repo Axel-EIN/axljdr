@@ -1,50 +1,51 @@
 {% extends 'element.html.twig' %}
 {% block element_content %}
 
-{# BANNER INTRO #}
-{% set un_element, icone, invert = classe, classe.icone, 'invert' %}
-{{ include('parts/banner-intro.html.twig') }}
+    <!-- BANNER INTRO -->
+    {% set un_element, icone, invert = classe, classe.icone, 'invert' %}
+    {{ include('parts/banner-intro.html.twig') }}
 
-{# ECOLES #}
-<section class="col-8 p-2 m-0 mb-2">
-    <div class="card card-body pt-4 h-100">
-        <h2 class="card-title"><strong>Écoles</strong></strong></h2>
-        <hr>
-        <div class="card-text row">
-            <!-- UNE ECOLE -->
-            {% for une_ecole in classe.ecoles %}
-                <article class="col-4 p-3 hover-zoom-x2 text-center">
-                    <a href="{{ path('regles_ecole', {id: une_ecole.id} ) }}">
-                        <img class="img-fluid" src="{{ asset(une_ecole.image) }}" alt="Image d'une école" title="{{une_ecole.nom}}" />
-                    </a><br/>
-                    <strong><a href="{{ path('regles_ecole', {id: une_ecole.id} ) }}" >{{ une_ecole.nom }}</a></strong>
-                </article>
-            {% else %}
-                <span class="text-muted"><i>Il n'y a pas encore d'école disponible pour cette classe.</i></span>
-            {% endfor %}
+    <!-- ECOLES -->
+    <section class="col-8 pr-1 pt-1">
+        <div class="card card-body pt-4 h-100">
+            <h2 class="card-title"><strong>Écoles</strong></h2>
+            <hr>
+            <div class="card-text row">
+                <!-- UNE ECOLE -->
+                {% for une_ecole in classe.ecoles %}
+                    <article class="col-4 p-3 hover-zoom-x2 text-center">
+                        <a href="{{ path('regles_ecole', {id: une_ecole.id} ) }}">
+                            <img class="img-fluid" src="{{ asset(une_ecole.image) }}" alt="Image d'une école" title="{{une_ecole.nom}}" />
+                        </a><br/>
+                        <strong><a href="{{ path('regles_ecole', {id: une_ecole.id} ) }}" >{{ une_ecole.nom }}</a></strong>
+                    </article>
+                {% else %}
+                    <span class="text-muted"><i>Il n'y a pas encore d'école disponible pour cette classe.</i></span>
+                {% endfor %}
+            </div>
         </div>
-    </div>
-</section>
+    </section>
 
-{# PERSONNAGES #}
-<section class="col-4 p-2 m-0 mb-2">
-    <div class="card card-body pt-4 h-100">
-        <h2 class="card-title"><strong>Personnages</strong></h2>
-        <hr>
-        <div class="card-text row justify-content-center">
+    <!-- PERSONNAGES -->
+    <section class="col-4 pl-1 pt-1">
+        <div class="card card-body pt-4 h-100">
+            <h2 class="card-title"><strong>Personnages</strong></h2>
+            <hr>
+            <div class="card-text row justify-content-center">
 
-            <!-- UN PERSONNAGE -->
-            {% for un_personnage in classe.personnages %}
-                <article class="p-1 hover-zoom-x2">
-                    <a href="{{ path('personnage_profil', {id: un_personnage.id} ) }}">
-                        <img class="img-128" src="{{ asset(un_personnage.icone) }}" alt="Icône d'un personnage" title="Voir profil de {{un_personnage.prenom}}" />
-                    </a>
-                </article>
-            {% else %}
-                <span class="text-muted">Il n'y a pas encore de personnages disponible pour cette classe.</span>
-            {% endfor %}
+                <!-- UN PERSONNAGE -->
+                {% for un_personnage in classe.personnages %}
+                    <article class="p-1 hover-zoom-x2">
+                        <a href="{{ path('personnage_profil', {id: un_personnage.id} ) }}">
+                            <img class="img-128" src="{{ asset(un_personnage.icone) }}" alt="Icône d'un personnage" title="Voir profil de {{un_personnage.prenom}}" />
+                        </a>
+                    </article>
+                {% else %}
+                    <span class="text-muted">Il n'y a pas encore de personnages disponible pour cette classe.</span>
+                {% endfor %}
 
+            </div>
         </div>
-    </div>
-</section>
+    </section>
+
 {% endblock %}

@@ -56,17 +56,19 @@ class Personnage
 
     /**
      * @ORM\ManyToOne(targetEntity=Clan::class, inversedBy="personnages")
+     * @ORM\JoinColumn(nullable=true)
      */
     private $clan;
 
     /**
      * @ORM\ManyToOne(targetEntity=Classe::class, inversedBy="personnages")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=true)
      */
     private $classe;
 
     /**
      * @ORM\ManyToOne(targetEntity=Ecole::class, inversedBy="personnages")
+     * @ORM\JoinColumn(nullable=true)
      */
     private $ecole;
 

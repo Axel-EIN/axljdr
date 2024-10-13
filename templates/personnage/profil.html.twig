@@ -1,52 +1,60 @@
 {% extends 'element.html.twig' %}
 {% block element_content %}
-    <div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6">
-        <img class="img-fluid" src="{{ asset(personnage.illustration) }}" alt="{{personnage.nom}} {{personnage.prenom}}" title="{{personnage.nom}} {{personnage.prenom}}" />
-    </div>
-    <div class="card col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6">
-        <div class="card-body">
-            <h4 class="card-title">{{ personnage.titres }}</h4>
-            {# <p class="card-text"><strong>Description :</strong></p> #}
-            <p class="card-text">{{ personnage.description|raw|nl2br }}</p>
+
+    <!-- IMAGE INTRO -->
+    <div class="col-6 pr-1 pb-1">
+        <div>
+            <img class="img-fluid w-100" src="{{ asset(personnage.illustration) }}" alt="{{personnage.nom}} {{personnage.prenom}}" title="{{personnage.nom}} {{personnage.prenom}}" />
         </div>
-        <ul class="list-group list-group-flush">
-            <li class="list-group-item">
-                    <img class="img-48" src="{{ asset(personnage.clan.mon) }}" alt="Mon du Clan {{personnage.clan.nom}}" title="Mon du Clan {{personnage.clan.nom}}" />
-                    &nbsp;<strong><a href="{{ path('empire_clan', {id: personnage.clan.id} ) }}">{{ personnage.clan.nom }}</a></strong>
-            </li>
-            <li class="list-group-item">
-                    <img class="img-48" src="{{ asset(personnage.classe.icone) }}" alt="Classe {{personnage.classe.nom}}" title="Classe {{personnage.classe.nom}}" />
-                    &nbsp;<strong><a href="{{ path('regles_ecole', {id: personnage.ecole.id} ) }}">{{ personnage.ecole.nom }}</a></strong>
-            </li>
-
-            {% set xp = 0 %}
-            {% for une_participation in personnage.participations|sortByField('scene') %}
-                {% set xp = xp + une_participation.xpGagne %}
-            {% endfor %}
-
-            {% if xp > 0 %}
-                {% set rang = 1 %}
-                {% if xp >= 100 %}
-                    {% set rang = 2 %}
-                {% elseif xp >= 150 %}
-                    {% set rang = 3 %}
-                {% elseif xp >= 200 %}
-                    {% set rang = 4 %}
-                {% elseif xp >= 250 %}
-                    {% set rang = 5 %}
-                {% endif %}
-                <li class="list-group-item"><strong>XP :</strong> <span class="title-small">{{xp}}</span></li>
-                <li class="list-group-item"><strong>Rang :</strong> <span class="title-small">{{rang}}</span></li>
-            {% endif %}
-
-            {% if personnage.joueur is not empty %}
-                <li class="list-group-item"><strong>Joueur :</strong> {{ personnage.joueur.pseudo }}</li>
-            {% endif %}
-        </ul>
     </div>
-    <div class="col-12 px-0">
-        <div class="card my-3 card-body">
-            <h2 class="card-title">Historique</h2>
+
+    <!-- DESCRIPTION -->
+    <div class="col-6 pl-1 pb-1">
+        <div class="card h-100">
+            <div class="card-body">
+                <h4 class="card-title">{{ personnage.titres }}</h4>
+                <p class="card-text">{{ personnage.description|raw|nl2br }}</p>
+            </div>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item">
+                        <img class="img-48" src="{{ asset(personnage.clan.mon) }}" alt="Mon du Clan {{personnage.clan.nom}}" title="Mon du Clan {{personnage.clan.nom}}" />
+                        &nbsp;<strong><a href="{{ path('empire_clan', {id: personnage.clan.id} ) }}">{{ personnage.clan.nom }}</a></strong>
+                </li>
+                <li class="list-group-item">
+                        <img class="img-48" src="{{ asset(personnage.classe.icone) }}" alt="Classe {{personnage.classe.nom}}" title="Classe {{personnage.classe.nom}}" />
+                        &nbsp;<strong><a href="{{ path('regles_ecole', {id: personnage.ecole.id} ) }}">{{ personnage.ecole.nom }}</a></strong>
+                </li>
+
+                {% set xp = 0 %}
+                {% for une_participation in personnage.participations|sortByField('scene') %}
+                    {% set xp = xp + une_participation.xpGagne %}
+                {% endfor %}
+
+                {% if xp > 0 %}
+                    {% set rang = 1 %}
+                    {% if xp >= 100 %}
+                        {% set rang = 2 %}
+                    {% elseif xp >= 150 %}
+                        {% set rang = 3 %}
+                    {% elseif xp >= 200 %}
+                        {% set rang = 4 %}
+                    {% elseif xp >= 250 %}
+                        {% set rang = 5 %}
+                    {% endif %}
+                    <li class="list-group-item"><strong>XP :</strong> <span class="title-small">{{xp}}</span></li>
+                    <li class="list-group-item"><strong>Rang :</strong> <span class="title-small">{{rang}}</span></li>
+                {% endif %}
+
+                {% if personnage.joueur is not empty %}
+                    <li class="list-group-item"><strong>Joueur :</strong> {{ personnage.joueur.pseudo }}</li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+
+    <div class="col-12 pt-1">
+        <div class="card card-body">
+            <h2 class="card-title"><strong>Historique</strong></h2>
             <div class="card-text">
                 {% set current_chapitre = 0 %}
                 {% set current_episode = 0 %}

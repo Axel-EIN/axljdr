@@ -126,6 +126,21 @@ class Ecole
      */
     private $Equipements;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $affinite;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $deficience;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $sorts;
+
     public function __construct()
     {
         $this->personnages = new ArrayCollection();
@@ -402,6 +417,42 @@ class Ecole
     public function setEquipements(string $Equipements): self
     {
         $this->Equipements = $Equipements;
+
+        return $this;
+    }
+
+    public function getAffinite(): ?string
+    {
+        return $this->affinite;
+    }
+
+    public function setAffinite(?string $affinite): self
+    {
+        $this->affinite = $affinite;
+
+        return $this;
+    }
+
+    public function getDeficience(): ?string
+    {
+        return $this->deficience;
+    }
+
+    public function setDeficience(?string $deficience): self
+    {
+        $this->deficience = $deficience;
+
+        return $this;
+    }
+
+    public function getSorts(): ?string
+    {
+        return $this->sorts;
+    }
+
+    public function setSorts(?string $sorts): self
+    {
+        $this->sorts = $sorts;
 
         return $this;
     }

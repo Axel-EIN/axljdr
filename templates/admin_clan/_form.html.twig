@@ -25,13 +25,13 @@
                 {{ form_row(form.couleur) }}
             </div>
 
-            <div class="col-12 m-3">
+            <div class="col-12 mt-3">
                 {% if type == 'Modifier' %}
-                    <img class="img-fluid" src="{{ asset(clan.image|default('assets/img/placeholders/1280x720.jpg')) }}" />
+                    <img class="img-fluid" src="{{ asset( clan.image|default( 'assets/img/placeholders/1280x720.jpg' ) ) }}" />
                 {% endif %}
             </div>
 
-            <div class="col-12 mt-3">
+            <div class="col-12">
                 {{ form_row(form.image) }}
             </div>
 

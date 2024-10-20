@@ -43,7 +43,7 @@
                                     <img class="character-icon-dead" src="{{asset('assets/img/icons/mort.png')}}" alt="est mort" />
                                 {% endif %}
                                 <img class="shadow-more character-icon-large {% if une_participation.estMort == 1 %}dead{% else %}hover-shine{% endif %}"
-                                    src="{{asset(une_participation.personnage.icone)}}" alt="Icone du Personnage" title="{{une_participation.personnage.prenom}}" />
+                                    src="{{asset(une_participation.personnage.icone|default(NA_PERSO_ICO))}}" alt="Icone du Personnage" title="{{une_participation.personnage.prenom}}" />
                             </a>
                         </div>
                     {% endif %}

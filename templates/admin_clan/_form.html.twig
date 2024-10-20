@@ -45,7 +45,7 @@
 
             <div class="col-12 mt-3 text-center">
                 {% if type == 'Modifier' %}
-                    <img class="img-fluid" src="{{ asset(clan.territoireCarte) }}" />
+                    <img class="img-fluid" src="{{ asset( clan.territoireCarte|default( 'assets/img/placeholders/1280x720.jpg' ) ) }}" />
                 {% endif %}
             </div>
 

@@ -63,7 +63,7 @@
 
             {% if ecole.techSpecialNom is not empty %}
                 <strong>{{ ecole.techSpecialNom|upper }}</strong>
-                        <p class="text-justify">{{ ecole.techSpecialDesc|raw|nl2br }}</p>
+                <p class="text-justify">{{ ecole.techSpecialDesc|raw|nl2br }}</p>
             {% endif %}
 
         </div>
@@ -117,7 +117,30 @@
                         </a>
                     </article>
                 {% else %}
-                    <span class="text-muted">Pas encore de personnages disponible pour cette école.</span>
+                    <span class="text-muted"><i>Il n'y a pas encore de personnage de cette école.</i></span>
+                {% endfor %}
+            </div>
+
+        </div>
+    </section>
+
+    <!-- AUTRES ECOLES DE CE CLAN -->
+    <section class="col-12 pt-1">
+        <div class="card card-body h-100">
+            <h2 class="card-title"><strong>Autres Écoles {{ecole.clan.nom}}</strong></h2>
+            <hr>
+
+            <div class="row px-3">
+                <!-- UNE ECOLE -->
+                {% for une_ecole in ecole.clan.ecoles|filter(autre_ecole => autre_ecole.id != ecole.id) %}
+                    <article class="col-2 text-center mb-4 hover-zoom-x2">
+                        <a href="{{ path('regles_ecole', {id: une_ecole.id} ) }}" ><strong>{{ une_ecole.nom }}</strong></a>
+                        <a href="{{ path('regles_ecole', {id: une_ecole.id} ) }}">
+                            <img class="img-fluid" src="{{ asset(une_ecole.image) }}" alt="Image d'une école" />
+                        </a>
+                    </article>
+                {% else %}
+                    <span class="text-muted"><i>Il n'y a pas encore d'autres écoles dans ce clan.</i></span>
                 {% endfor %}
             </div>
 

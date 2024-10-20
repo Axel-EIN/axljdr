@@ -31,9 +31,13 @@ class Baliseur
             $personnage_trouve = $this->persoRepo->findOneBy(array('prenom' => $un_match));
 
             if ($personnage_trouve != null) {
+                if($personnage_trouve->getIcone())
+                    $icone_personnage = '../../' . $personnage_trouve->getIcone();
+                else
+                    $icone_personnage = '../../assets/img/placeholders/na_perso_icon.jpg';
                 $tableau_remplacement[] =
                     '<a class="hover-zoom character-icon bg-lightest pr-1 pt-0 pb-0 pl-0" href="../../personnages/profil/' . $personnage_trouve->getId() . '">'
-                                . '<img class="character-icon-small" src="../../' . $personnage_trouve->getIcone()
+                                . '<img class="character-icon-small" src="../../' . $icone_personnage
                                 . '" alt="Icône du personnage" title="' . $personnage_trouve->getPrenom() .'" /> ' . $personnage_trouve->getPrenom() . '</a>';
             } else
                 $tableau_remplacement[] = $un_match;

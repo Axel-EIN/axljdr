@@ -36,6 +36,9 @@ class AdminEcoleType extends AbstractType
             ->add('tech5Desc', TextareaType::class, ['required' => false])
             ->add('techSpecialNom', TextType::class, ['required' => false])
             ->add('techSpecialDesc', TextareaType::class, ['required' => false])
+            ->add('affinite', TextType::class, ['required' => false])
+            ->add('deficience', TextType::class, ['required' => false])
+            ->add('sorts', TextareaType::class, ['required' => false])
             ->add('classe', EntityType::class, [
                 'class' => Classe::class,
                 'choice_label' => 'nom'

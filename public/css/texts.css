@@ -25,6 +25,7 @@
 
 html, body {
     font-size: 16px;
+    line-height: 1.6;
 }
 
 @media (max-width: 1200px) { html, body { font-size: 16px; } }
@@ -42,6 +43,10 @@ html, body {
 
 .text-medium {
     font-size: 1.2rem;
+}
+
+p.text-medium {
+    line-height: 1.8;
 }
 
 .text-large {

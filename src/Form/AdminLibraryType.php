@@ -46,6 +46,15 @@ class AdminLibraryType extends AbstractType
             ->add('filterField', TextType::class, [
                 'required' => false,
                 'constraints' => [ new Length( [ 'max' => 30 ] ) ] ] )
+            ->add('keyword1Field', TextType::class, [
+                'required' => false,
+                'constraints' => [ new Length( [ 'max' => 30 ] ) ] ] )
+            ->add('keyword2Field', TextType::class, [
+                'required' => false,
+                'constraints' => [ new Length( [ 'max' => 30 ] ) ] ] )
+            ->add('keyword3Field', TextType::class, [
+                'required' => false,
+                'constraints' => [ new Length( [ 'max' => 30 ] ) ] ] )
             ->add('mixable', CheckboxType::class, [
                 'required' => false])
             ->add('image', FileType::class, [

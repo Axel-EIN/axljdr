@@ -1,0 +1,40 @@
+{% extends 'element.html.twig' %}
+
+{% block stylesheets %}
+  {{parent()}}
+  <link rel="stylesheet" href="{{asset('css/components/rule-lore-part.css')}}" />
+{% endblock %}
+
+{% block element_content %}
+
+  <div class="col-12">
+    <div class="card card-page">
+
+      <div class="relative">
+
+        {{ include('parts/sommaire.html.twig', {un_element, parts: 3}) }}
+
+        {{ include('/parts/card-top-image.html.twig', {
+          image: un_element.image,
+          na_image: NA_LORE,
+          alt: 'Image de ' ~ nom,
+          pdf: un_element.pdf,
+          img_class: 'crop-169',
+          titre: nom,
+        }) }}
+      </div>
+
+      {% for i in 1..3 %}
+        {{ include('parts/rule-lore-part.html.twig', {un_element, i, entity: 'lore'}) }}
+      {% endfor %}
+
+    </div>
+  </div>
+
+  {{ include('/parts/picture-grid.html.twig', {
+      title: 'Autres Lores',
+      items: autresLores, route: 'empire_lore',
+      na_image: NA_LORE,
+  }) }}
+
+{% endblock %}

@@ -1,47 +1,61 @@
 {% extends 'element.html.twig' %}
 {% block element_content %}
 
-<!-- IMAGE -->
-<div class="col-12 text-center">
-    <img class="img-fluid" src="{{ asset(un_element.image|default('assets/img/placeholders/1280x720.jpg')) }}" alt="Image de {{ nom }}" />
-</div>
-
-<!-- CARD CONTAINER -->
-<div class="col-12 mb-5">
-
-    <!-- CARD -->
-    <div class="card pb-5">
-
-        <!-- CARD BODY -->
-        <div class="card-body">
-            <p class="card-text my-3 mx-5 text-justify">{{ un_element.contenu|raw|nl2br }}</p>
-        </div>
-
-        <!-- AUTEUR -->
-        {% if un_element.auteur is not empty %}
-            <ul class="list-group list-group-flush">
-                <li class="list-group-item">
-                    <strong>Auteur&nbsp;:</strong> {{ un_element.auteur.nom }} <strong>{{ un_element.auteur.prenom }}</strong> 
-                </li>
-            </ul>
-        {% endif %}
-
-        <!-- ORNAMENT -->
-        {{ include('/parts/separateur-ornament.html.twig') }}
-
-        <!-- BTN -->
-        {% if app.user and is_granted("ROLE_MJ") %}
-            <div class="mt-3 text-center">
-                <!-- MJ BTN LINE Delete -->
-                {% set redirect, element, un_element, color, action = 'empire', 'archive', un_element, 'text-accent', 'delete' %}
-                {{ include('/parts/btn-line.html.twig') }}
-            </div>
-        {% endif %}
+    <element class="col-12 pb-1">
+        <card class="card pb-5">
         
-    </div>
-    <!-- END CARD -->
+            <!-- ILLUSTRATION -->
+            <img class="img-fluid" src="{{ asset(un_element.image|default('assets/img/placeholders/1280x720.jpg')) }}" alt="Image de {{ nom }}" />
 
-</div>
-<!-- END CARD CONTAINER -->
+            <!-- TEXTE -->
+            <p class="p-5 mx-5 text-justify text-medium">{{ un_element.contenu|raw|nl2br }}</p>
+        
+            <!-- AUTEUR -->
+            {% if un_element.auteur is not empty %}
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">
+                        <strong>Auteur&nbsp;:</strong> {{ un_element.auteur.nom }} <strong>{{ un_element.auteur.prenom }}</strong> 
+                    </li>
+                </ul>
+            {% endif %}
+
+            <spacer class="my-3">{{ include('/parts/separateur-ornament.html.twig') }}</spacer>
+
+            <!-- BTN MJ DELETE-->
+            {% if app.user and is_granted("ROLE_MJ") %}
+                <div class="text-center">
+                    {% set redirect, element, un_element, color, action = 'empire', 'archive', un_element, 'text-accent', 'delete' %}
+                    {{ include('/parts/btn-line.html.twig') }}
+                </div>
+            {% endif %}
+
+        </card>
+    </element>
+
+     <!-- AUTRES ARCHIVES -->
+    <aside class="col-12 pt-1 mb-5">
+        <card class="card card-body">
+            <h2 class="card-title"><strong>Autres Archives</strong></h2>
+            <hr>
+
+            <row class="row px-3">
+                <!-- UN LIEU -->
+                {% for autre_archive in archives|filter(autre_archive => autre_archive.id != un_element.id) %}
+                    <article class="col-2 text-center mb-4 hover-zoom-x2 relative">
+                        {% if autre_archive.icone is defined and autre_archive.icone is not empty %}
+                            <img class="icon-lieu-top img-64" src="{{ asset(autre_archive.icone) }}" alt="une icône" />
+                        {% endif %}
+                        <a href="{{ path('empire_archive', {id: autre_archive.id} ) }}">
+                            <img class="img-fluid" src="{{ asset(autre_archive.image) }}" alt="Image d'une autre Archive" />
+                        </a>
+                        <a href="{{ path('empire_archive', {id: autre_archive.id} ) }}" ><strong>{{ autre_archive.titre }}</strong></a>
+                    </article>
+                {% else %}
+                    <span class="text-muted"><i>Il n'y a pas d'autres Archives.</i></span>
+                {% endfor %}
+            </row>
+
+        </card>
+    </aside>
 
 {% endblock %}

@@ -25,6 +25,7 @@ class AdminLieuType extends AbstractType
             ->add('carte', FileType::class, array('mapped' => false, 'data_class' => null, 'required' => false))
             ->add('region', FileType::class, array('mapped' => false, 'data_class' => null, 'required' => false))
             ->add('description', TextareaType::class)
+            ->add('quartiers', TextareaType::class, array('required' => false))
             ->add('locX', NumberType::class, array(
                 'scale' => 3,
                 'label' => 'Coordinate (Horizontal % of the map)',

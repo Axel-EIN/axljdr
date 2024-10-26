@@ -77,6 +77,21 @@ class Library
      */
     private $mixable;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $keyword1Field;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $keyword2Field;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $keyword3Field;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -222,6 +237,42 @@ class Library
     public function setMixable(?bool $mixable): self
     {
         $this->mixable = $mixable;
+
+        return $this;
+    }
+
+    public function getKeyword1Field(): ?string
+    {
+        return $this->keyword1Field;
+    }
+
+    public function setKeyword1Field(?string $keyword1Field): self
+    {
+        $this->keyword1Field = $keyword1Field;
+
+        return $this;
+    }
+
+    public function getKeyword2Field(): ?string
+    {
+        return $this->keyword2Field;
+    }
+
+    public function setKeyword2Field(?string $keyword2Field): self
+    {
+        $this->keyword2Field = $keyword2Field;
+
+        return $this;
+    }
+
+    public function getKeyword3Field(): ?string
+    {
+        return $this->keyword3Field;
+    }
+
+    public function setKeyword3Field(?string $keyword3Field): self
+    {
+        $this->keyword3Field = $keyword3Field;
 
         return $this;
     }

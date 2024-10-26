@@ -2,7 +2,53 @@
     {{ form_start(form) }}
         <div class="row justify-content-center align-items-center mt-5 mb-4">
 
-            <div class="col-4">
+            <div class="col-12">
+                {{ form_row(form.nom) }}
+            </div>
+
+            <div class="col-6">
+                {{ form_row(form.surnom) }}
+            </div>
+
+            <div class="col-6">
+                {{ form_row(form.clan) }}
+            </div>
+
+            <div class="col-12 mt-3">
+                {% if type == 'Modifier' and lieu.image is defined and lieu.image is not empty %}
+                    <img class="img-fluid" src="{{ asset(lieu.image) }}" />
+                {% endif %}
+                {{ form_row(form.image) }}
+            </div>
+
+            <div class="col-12 mt-3 mb-5">
+                {{ form_row(form.description,{ 'attr': {'rows': '12'} }) }}
+            </div>
+
+            <h2>--- Intérieur de la Ville ---</h2>
+
+            <div class="col-12 mt-3">
+                {% if type == 'Modifier' and lieu.carte is defined and lieu.carte is not empty %}
+                    <img class="img-fluid" src="{{ asset(lieu.carte) }}" />
+                {% endif %}
+                {{ form_row(form.carte) }}
+            </div>
+
+            <div class="col-12 mb-5">
+                {{ form_row(form.quartiers,{ 'attr': {'rows': '12'} }) }}
+            </div>
+
+
+            <h2>--- Alentours de la Ville ---</h2>
+
+            <div class="col-12 mt-3">
+                {% if type == 'Modifier' and lieu.region is defined and lieu.region is not empty %}
+                    <img class="img-fluid" src="{{ asset(lieu.region) }}" />
+                {% endif %}
+                {{ form_row(form.region) }}
+            </div>
+
+            <div class="col-6">
                 {% if type == 'Modifier' and lieu.icone is defined and lieu.icone is not empty %}
                     <img class="img-fluid" src="{{ asset(lieu.icone) }}" />
                 {% else %}
@@ -10,56 +56,10 @@
                 {% endif %}
             </div>
 
-            <div class="col-8">
-                {{ form_row(form.nom) }}
-                {{ form_row(form.surnom) }}
-                {{ form_row(form.clan) }}
-            </div>
-
-            <div class="col-12">
-                {{ form_row(form.icone) }}
-        </div>
-
-            <div class="col-12 mt-3">
-                {% if type == 'Modifier' and lieu.image is not empty %}
-                    <img class="img-fluid" src="{{ asset(lieu.image) }}" />
-                {% endif %}
-            </div>
-
-            <div class="col-12 mt-3">
-                {{ form_row(form.image) }}
-            </div>
-
-            <div class="col-6 mt-3">
-                {% if type == 'Modifier' and lieu.region is not empty %}
-                    <img class="img-fluid" src="{{ asset(lieu.region) }}" />
-                {% endif %}
-            </div>
-
-            <div class="col-6 mt-3">
-                {% if type == 'Modifier' and lieu.carte is not empty %}
-                    <img class="img-fluid" src="{{ asset(lieu.carte) }}" />
-                {% endif %}
-            </div>
-
-            <div class="col-6 mt-3">
-                {{ form_row(form.region) }}
-            </div>
-
-            <div class="col-6 mt-3">
-                {{ form_row(form.carte) }}
-            </div> 
-
             <div class="col-6 mt-3">
                 {{ form_row(form.locX) }}
-            </div>
-
-            <div class="col-6 mt-3">
                 {{ form_row(form.locY) }}
-            </div>
-
-            <div class="col-12 mt-3">
-                {{ form_row(form.description,{ 'attr': {'rows': '10'} }) }}
+                {{ form_row(form.icone) }}
             </div>
 
             <div class="col-12 text-center mt-5">

@@ -1,0 +1,23 @@
+<div class="col-12">
+    {{ form_start(form) }}
+        <div class="row form-wrapper">
+
+            {{ include('parts/form-publication.html.twig', {form: form}) }}
+
+            <div class="col-4">{{ form_row(form.nom) }}</div>
+            <div class="col-4">{{ form_row(form.numero) }}</div>
+            <div class="col-4">{{ form_row(form.pdf) }}</div>
+
+            <div class="col-12 mt-3 mb-5">
+                {{ include('parts/image-field.html.twig', {
+                    field: form.image, input_id: 'admin_lore_image', prefix: 'image',
+                    current: lore.image|default(null), fallback: NA_LORE, label: 'Image (1200×900 4:3 recommandé)',
+                    width: 1200, height: 900 }) }}
+            </div>
+
+            {{ include('rule-lore-library/part-fields.html.twig', {form, un_element: lore|default(null)}) }}
+
+            {{ include('/btns/btn-form.html.twig') }}
+        </div>
+    {{ form_end(form) }}
+</div>

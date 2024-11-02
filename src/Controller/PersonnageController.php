@@ -50,12 +50,33 @@ class PersonnageController extends AbstractController
      * @Route("/personnages/profil/{id}", name="personnage_profil")
      */
     public function afficherPersonnageProfil(Personnage $personnage): Response {
+
+        $xp_total = 0;
+        $participations = $personnage->getParticipations();
+
+        foreach ($participations as $une_participation) {
+           $xp_total = $xp_total + $une_participation->getXpGagne();
+        }
+
+        $rang = 1;
+
+        if ($xp_total >= 250)
+            $rang = 5;
+        elseif ($xp_total >= 200)
+            $rang = 4;
+        elseif ($xp_total >= 150)
+            $rang = 3;
+        elseif ($xp_total >= 100)
+            $rang = 2;
+
         return $this->render('personnage/profil.html.twig', [
             'personnage' => $personnage,
             'nom' => $personnage->getNom() . ' ' . $personnage->getPrenom(),
             'entity' => 'personnage',
             'category' => 'personnages',
             'un_element' => $personnage,
+            'xp' => $xp_total,
+            'rang' => $rang
         ]);
     }
 }

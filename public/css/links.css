@@ -39,6 +39,9 @@
     text-decoration: none;
 }
 
+.hover-no-under:hover {
+    text-decoration: none;
+}
 
 
 /* ---- Nav Bar ---- */

@@ -7,7 +7,7 @@
 
     {% set zoom, translucide, hover_opaque, text, dead, grayscale = 'hover-zoom', '', '', 'text-white', '', '' %}
     
-    {% if perso.locked == 1 and is_granted("ROLE_MJ") == false %}
+    {% if perso.locked == 1 %}
         {% set zoom, translucide, hover_opaque, text, dead, grayscale = '', 'translucide', '', 'text-white', '', 'grayscale' %}
     {% elseif perso.estMort == 1 %}
         {% set zoom, translucide, hover_opaque, text, dead, grayscale = 'hover-zoom', 'translucide', 'hover-opaque', 'text-danger', 'dead', '' %}

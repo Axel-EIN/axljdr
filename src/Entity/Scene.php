@@ -60,9 +60,15 @@ class Scene
      */
     private $lieu;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Development::class, mappedBy="scene")
+     */
+    private $developments;
+
     public function __construct()
     {
         $this->participations = new ArrayCollection();
+        $this->developments = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -180,6 +186,36 @@ class Scene
     public function setLieu(?Lieu $lieu): self
     {
         $this->lieu = $lieu;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Development>
+     */
+    public function getDevelopments(): Collection
+    {
+        return $this->developments;
+    }
+
+    public function addDevelopment(Development $development): self
+    {
+        if (!$this->developments->contains($development)) {
+            $this->developments[] = $development;
+            $development->setScene($this);
+        }
+
+        return $this;
+    }
+
+    public function removeDevelopment(Development $development): self
+    {
+        if ($this->developments->removeElement($development)) {
+            // set the owning side to null (unless already changed)
+            if ($development->getScene() === $this) {
+                $development->setScene(null);
+            }
+        }
 
         return $this;
     }

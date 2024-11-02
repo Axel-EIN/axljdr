@@ -13,6 +13,9 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use App\Repository\SceneRepository;
+use App\Repository\DevelopmentRepository;
+use App\Entity\Development;
 
 class AdminPersonnageController extends AbstractController
 {
@@ -112,7 +115,17 @@ class AdminPersonnageController extends AbstractController
      * @Route("/admin/personnage/{id}/edit", name="admin_personnage_edit")
      * @IsGranted("ROLE_MJ")
      */
-    public function editPersonnage(Request $request, Personnage $personnage, FileHandler $fileHandler, Baliseur $baliseur): Response {
+    public function editPersonnage(
+        Request $request,
+        Personnage $personnage,
+        FileHandler $fileHandler,
+        Baliseur $baliseur,
+        SceneRepository $sceneRepository,
+        DevelopmentRepository $DevelopmentRepository): Response {
+
+        // Preparing all Characters for JS lists
+        $toutes_scenes = $sceneRepository->findAll();
+        $developpements_pj = $DevelopmentRepository->findBy(array('protagonist' => $personnage));
 
         // CHARACTER UNTAGGER : capture words in character-links, check if character exist and replace with []
         $personnage->setDescription($baliseur->debaliserPersonnages($personnage->getDescription()));
@@ -155,6 +168,67 @@ class AdminPersonnageController extends AbstractController
                 $personnage->setIllustration($fileHandler->handle($nouvelleIllustration, $personnage->getIllustration(), $prefix, 'personnages'));
             }
 
+            // Getting data for Developpements
+            $developpements_modifies = $request->get('developpements');
+            var_dump($developpements_modifies);
+
+            // If Developpments Data exists, edit or delete them, this browse all current developpments and edit the matching scenes or delete if not matching
+            if (!empty($developpements_pj)) {
+                var_dump('HELLO');
+                exit;
+                foreach ($developpements_pj as $un_developpement_pj_existant) {
+                    $trouve = false;
+    
+                    foreach ($developpements_modifies as $un_developpement_modifie) {
+                        if ($un_developpement_pj_existant->getScene() == $un_developpement_modifie['scene']) {
+                            $trouve = true;
+                            break;
+                        }
+                    }
+    
+                    if ($trouve == true) {
+                        $un_developpement_pj_existant->setType($un_developpement_modifie['type']);
+                        $un_developpement_pj_existant->setResume($un_developpement_modifie['resume']);
+                        $this->addFlash(
+                            'warning', 'Le développement du personnage ' . $un_developpement_pj_existant->getProtagonist()->getPrenom()
+                            . ' dans la scène ' . $un_developpement_pj_existant->getScene()->getTitre() . ' a bien été modifié !');
+                    }
+    
+                    if ($trouve == false) {
+                        $this->addFlash(
+                            'danger', 'Le développement du personnage ' . $personnage->getPrenom()
+                            . ' dans la scène ' . $un_developpement_pj_existant->getScene()->getTitre() . ' a bien été supprimé !');
+                    }
+                }
+            }
+
+            // Add new Developpements
+            foreach ($developpements_modifies as $un_developpement_modifie) {
+                $trouve = false;
+                var_dump('HEYYY');
+
+                foreach($developpements_pj as $un_developpement_pj_existant) {
+                    if ($un_developpement_modifie['scene'] == $un_developpement_pj_existant->getScene()) {
+                        $trouve = true;
+                        var_dump('TROUVEEE!!!');
+                        break;
+                    }
+                }
+
+                if ($trouve == false) {
+                    var_dump('PAS TROUVEE !!!');
+                    $scene_trouvee = $sceneRepository->find($un_developpement_modifie['scene']);
+                    $nouveau_developpement = new Development;
+                    $nouveau_developpement->setProtagonist($personnage);
+                    $nouveau_developpement->setScene($scene_trouvee);
+                    $nouveau_developpement->setType($un_developpement_modifie['type']);
+                    $nouveau_developpement->setResume($un_developpement_modifie['resume']);
+                    $this->getDoctrine()->getManager()->persist($nouveau_developpement);
+                    $this->addFlash('success', 'Le développement du personnage ' . $personnage->getPrenom()
+                        . ' dans la scène ' . $scene_trouvee->getTitre() . ' a bien été ajouté !');
+                }
+            }
+
             // CHARACTER TAGGER : capture words between [], check if character exist, replace by a link
             $personnage->setDescription($baliseur->baliserPersonnages($personnage->getDescription()));
 
@@ -180,6 +254,8 @@ class AdminPersonnageController extends AbstractController
             'genre' => 'M',
             'determinant' => 'un',
             'form' => $form,
+            'toutes_scenes' => $toutes_scenes,
+            'developpements_pj' => $developpements_pj
         ]);
     }
 

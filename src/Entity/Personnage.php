@@ -107,9 +107,15 @@ class Personnage
      */
     private $genre;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Development::class, mappedBy="protagonist", orphanRemoval=true)
+     */
+    private $developments;
+
     public function __construct()
     {
         $this->archives = new ArrayCollection();
+        $this->developments = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -358,6 +364,36 @@ class Personnage
     public function setGenre(?string $genre): self
     {
         $this->genre = $genre;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Development>
+     */
+    public function getDevelopments(): Collection
+    {
+        return $this->developments;
+    }
+
+    public function addDevelopment(Development $development): self
+    {
+        if (!$this->developments->contains($development)) {
+            $this->developments[] = $development;
+            $development->setProtagonist($this);
+        }
+
+        return $this;
+    }
+
+    public function removeDevelopment(Development $development): self
+    {
+        if ($this->developments->removeElement($development)) {
+            // set the owning side to null (unless already changed)
+            if ($development->getProtagonist() === $this) {
+                $development->setProtagonist(null);
+            }
+        }
 
         return $this;
     }

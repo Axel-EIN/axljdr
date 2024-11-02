@@ -1,5 +1,5 @@
 <main class="col-12">
-    {{ form_start(form) }}
+    {{ form_start(form, {'attr': {'id': 'form_character'}}) }}
         <div class="row form-wrapper">
 
             <div class="col-8">
@@ -42,8 +42,111 @@
                     <div class="browser">{{ form_widget(form.illustration, {'attr': {'class': 'input-image'}}) }}</div>
                 </div>
             </div>
+
+            <!-- DEVELOPPEMENTS -->
+            <div class="col-12">
+                Développements (facultatif) :
+                <div class="form-row">
+                    <div class="col-12 text-center">
+                        {% if type != 'Créer' and developpements_pj is not empty %}
+                            {% set count = 0 %}
+                            {% for un_developpement in developpements_pj %}
+                                <div class="developpements form-row">
+
+                                    <select class="form-control mt-1 col-6" name="developpements[{{count}}]['scene']" required id="data[developpements][{{count}}]['scene']" >
+                                        {% for une_scene in toutes_scenes %}
+                                            <option value="{{une_scene.id}}" {% if une_scene.id == un_developpement.scene.id %}selected{% endif %}>
+                                                {{une_scene.titre}}
+                                            </option>
+                                        {% endfor %}
+                                    </select>
+
+                                    <select class="form-control mt-1 col-6" name="developpements[{{count}}]['type']" required id="data[developpements][{{count}}]['type']" >
+                                        <option value="dev" {% if un_developpement.type == "dev" %}selected{% endif %} >Développement</option>
+                                        <option value="issue" {% if un_developpement.type == "issue" %}selected{% endif %} >Issue</option>
+                                    </select>
+
+                                    <textarea class="form-control mt-1 col-12" name="developpements[{{count}}]['resume']" id="data[developpements][{{count}}]['resume']">
+                                        {{un_developpement.resume}}
+                                    </textarea>
+
+                                </div>
+                                {% set count = count + 1 %}
+                            {% else %}
+                                Il n'y a pas encore de développement pour ce personnage
+                            {% endfor %}
+                        {% endif %}
+                        <button class="btn btn-medium btn-secondary-style mt-3" id="add-developpement">Ajouter un Développement</button>
+
+                        {% if type != 'Créer' %}
+                            {% if developpements_pj is not empty %}
+                                <br/><button class="remove-developpement btn mt-1 btn-tertiary-style">Retirer</button>
+                            {% endif %}
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
             
             {{ include('/parts/btn-form.html.twig') }}
         </div>
     {{ form_end(form) }}
 </main>
+
+{% block javascripts %}
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script type="text/javascript">
+
+        let toutes_scenes = {
+            {% for une_scene in toutes_scenes|default([]) %}
+                {{une_scene.id}} : "{{une_scene.titre}}",
+            {% endfor %}
+        };
+        console.log(toutes_scenes);
+        
+        $(document).ready(function() {
+
+            // EVENT LISTENER pour le bouton Ajouter un Développement
+            $("#add-developpement").click(function(e)
+            {
+                e.preventDefault();
+                let count = $("#form_character").find("select[name^='developpements']").length;
+                let new_select_scene =
+                    '<select class="form-control mt-1 col-6" name="developpements['
+                    + count + '][scene]" required id="data[developpements][' + count + '][scene]" >';
+
+                for (key in toutes_scenes)
+                    new_select_scene += '<option value="' + key + '">' + toutes_scenes[key] + '</option>';
+
+                new_select_scene += '</select>';
+
+                let new_select_type = '<select class="form-control mt-1 col-6" name="developpements['
+                    + count + '][type]" id="data[developpements][' + count + '][type]" />'
+                    + '<option value="dev">Développement</option>'
+                    + '<option value="issue">Issue</option>'
+                    + '</select>';
+
+                let new_textarea_resume = '<textarea class="form-control mt-1 col-12" name="developpements[' + count + '][resume]" id="data[developpements_resume][' + count + '][resume]" />'
+                    + 'Écrire ici le développement...' + '</textarea>';
+
+                let html = '<div class="developpements form-row">' + new_select_scene + new_select_type + new_textarea_resume + '</div>';
+
+                $("#form_character").find("#add-developpement").before(html);
+
+                let removeDeveloppementButton = '<button class="remove-developpement btn mt-2 ml-2">Retirer</button>';
+                if (count == 0)
+                    $("#form_character").find("#add-developpement").after(removeDeveloppementButton);
+            });
+        });
+
+        // EVENT LISTENER pour le bouton Supprimer un PJ
+        $(document).on("click", ".remove-developpement",function(e){
+            e.preventDefault();
+            $('#form_character div.developpements:last').remove();
+
+            let count = $("#form_character").find("select[name^='developpements']").length;
+            if (count == 0)
+                $('#form_character button.remove-developpement').remove();
+        });
+        
+    </script>
+{% endblock %}

@@ -99,6 +99,10 @@ class Uploader extends AbstractController
 
     public function getTargetDirectory($categorie)
     {
+        if (!preg_match('/^[a-zA-Z0-9\-]+$/', $categorie)) {
+            throw new \InvalidArgumentException('Catégorie de fichier invalide');
+        }
+
         return $this->targetDirectory . '/' . $categorie;
     }
 }

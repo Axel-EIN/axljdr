@@ -8,6 +8,7 @@ use Symfony\Component\Form\Extension\Core\Type\MoneyType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\File;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -59,7 +60,8 @@ class AdminObjetType extends AbstractType
             ->add('image', FileType::class, [
                 'mapped' => false,
                 'data_class' => null,
-                'required' => false
+                'required' => false,
+                'constraints' => [new File(['maxSize' => '5M'])],
             ])
             ->add('description', TextareaType::class, [ 
                 'constraints' => [ new Length( [ 'max' => 3000 ] ) ]

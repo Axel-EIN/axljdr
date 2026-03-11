@@ -73,13 +73,16 @@ class MonCompteController extends AbstractController
                 $ancienAvatarNomFichier = basename($utilisateur->getAvatar());
 
                 $nouveauAvatarNomFichier = $uploadeur->upload($nouveauAvatar, 'avatar-' . $utilisateur->getPseudo(), 'avatars');
-                $nouveauChemingRelatif = 'assets/img/avatars/' . $nouveauAvatarNomFichier;
-                $utilisateur->setAvatar($nouveauChemingRelatif);
 
-                $ancienneAvatarCheminComplet = $this->getParameter('image_directory') . '/avatars/' . $ancienAvatarNomFichier;
-                $filesystem = new Filesystem();
-                if ($ancienneAvatarCheminComplet != $this->getParameter('image_directory') . '/avatars/')
-                    $filesystem->remove($ancienneAvatarCheminComplet);
+                if ($nouveauAvatarNomFichier !== null) {
+                    $nouveauChemingRelatif = 'assets/img/avatars/' . $nouveauAvatarNomFichier;
+                    $utilisateur->setAvatar($nouveauChemingRelatif);
+
+                    $ancienneAvatarCheminComplet = $this->getParameter('image_directory') . '/avatars/' . $ancienAvatarNomFichier;
+                    $filesystem = new Filesystem();
+                    if ($ancienneAvatarCheminComplet != $this->getParameter('image_directory') . '/avatars/')
+                        $filesystem->remove($ancienneAvatarCheminComplet);
+                }
 
             }
 

@@ -16,6 +16,7 @@ use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
+use Symfony\Component\Validator\Constraints\File;
 use Symfony\Component\Validator\Constraints\Length;
 
 class AdminClanType extends AbstractType
@@ -37,10 +38,22 @@ class AdminClanType extends AbstractType
             ->add('description', TextareaType::class, ['required' => false, 'constraints' => [ new Length( [ 'max' => 600 ] ) ] ] )
             ->add('longDescription', TextareaType::class, ['required' => false] )
             ->add('couleur', ColorType::class, ['required' => false] )
-            ->add('mon', FileType::class, array('mapped' => false, 'data_class' => null, 'required' => false))
-            ->add('image', FileType::class, array('mapped' => false, 'data_class' => null, 'required' => false))
-            ->add('video', FileType::class, array('mapped' => false, 'data_class' => null, 'required' => false))
-            ->add('territoireCarte', FileType::class, array('mapped' => false, 'data_class' => null, 'required' => false))
+            ->add('mon', FileType::class, [
+                'mapped' => false, 'data_class' => null, 'required' => false,
+                'constraints' => [new File(['maxSize' => '5M'])],
+            ])
+            ->add('image', FileType::class, [
+                'mapped' => false, 'data_class' => null, 'required' => false,
+                'constraints' => [new File(['maxSize' => '5M'])],
+            ])
+            ->add('video', FileType::class, [
+                'mapped' => false, 'data_class' => null, 'required' => false,
+                'constraints' => [new File(['maxSize' => '50M'])],
+            ])
+            ->add('territoireCarte', FileType::class, [
+                'mapped' => false, 'data_class' => null, 'required' => false,
+                'constraints' => [new File(['maxSize' => '5M'])],
+            ])
             ->add('territoireDesc', TextareaType::class, ['required' => false])
             ->add('chef', EntityType::class, [
                 'class' => Personnage::class,

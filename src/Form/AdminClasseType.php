@@ -11,6 +11,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\ColorType;
 
+use Symfony\Component\Validator\Constraints\File;
 use Symfony\Component\Validator\Constraints\Length;
 
 class AdminClasseType extends AbstractType
@@ -19,20 +20,18 @@ class AdminClasseType extends AbstractType
     {
         $builder
             ->add('nom', TextType::class, [ 'constraints' => [ new Length( [ 'max' => 30 ] ) ] ] )
-            ->add('icone', FileType::class,
-                [
-                    'mapped' => false,
-                    'data_class' => null,
-                    'required' => false
-                ]
-            )
-            ->add('image', FileType::class,
-                [
-                    'mapped' => false,
-                    'data_class' => null,
-                    'required' => false
-                ]
-            )
+            ->add('icone', FileType::class, [
+                'mapped' => false,
+                'data_class' => null,
+                'required' => false,
+                'constraints' => [new File(['maxSize' => '5M'])],
+            ])
+            ->add('image', FileType::class, [
+                'mapped' => false,
+                'data_class' => null,
+                'required' => false,
+                'constraints' => [new File(['maxSize' => '5M'])],
+            ])
             ->add('description', TextareaType::class, [ 'required' => false, 'constraints' => [ new Length( [ 'max' => 600 ] ) ] ] )
             ->add('citation', TextType::class, [ 'required' => false, 'constraints' => [ new Length( [ 'max' => 100 ] ) ] ] )
             ->add('couleur', ColorType::class)

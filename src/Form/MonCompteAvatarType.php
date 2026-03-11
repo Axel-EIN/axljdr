@@ -5,6 +5,7 @@ namespace App\Form;
 use App\Entity\Utilisateur;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Validator\Constraints\File;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -16,7 +17,12 @@ class MonCompteAvatarType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-        ->add('avatar', FileType::class, array('mapped' => false, 'data_class' => null, 'required' => false))
+        ->add('avatar', FileType::class, [
+            'mapped' => false,
+            'data_class' => null,
+            'required' => false,
+            'constraints' => [new File(['maxSize' => '5M'])],
+        ])
         ->add('Modifier', SubmitType::class);
     }
 

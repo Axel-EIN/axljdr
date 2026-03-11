@@ -13,6 +13,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Validator\Constraints\File;
 
 class AdminLieuType extends AbstractType
 {
@@ -21,8 +22,14 @@ class AdminLieuType extends AbstractType
         $builder
             ->add('nom', TextType::class)
             ->add('surnom', TextType::class, [ 'required' => false ])
-            ->add('icone', FileType::class, array('mapped' => false, 'data_class' => null, 'required' => false))
-            ->add('image', FileType::class, array('mapped' => false, 'data_class' => null, 'required' => false))
+            ->add('icone', FileType::class, [
+                'mapped' => false, 'data_class' => null, 'required' => false,
+                'constraints' => [new File(['maxSize' => '5M'])],
+            ])
+            ->add('image', FileType::class, [
+                'mapped' => false, 'data_class' => null, 'required' => false,
+                'constraints' => [new File(['maxSize' => '5M'])],
+            ])
             ->add('type', ChoiceType::class, [
                 'placeholder' => 'Pas de type défini',
                 'required' => false,
@@ -37,18 +44,20 @@ class AdminLieuType extends AbstractType
                     'Structure' => 'Structure',
                 ],
             ])
-            ->add('region', FileType::class, array(
+            ->add('region', FileType::class, [
                 'mapped' => false,
                 'data_class' => null,
                 'required' => false,
                 'label' => 'Carte de la région',
-            ))
-            ->add('carte', FileType::class, array(
+                'constraints' => [new File(['maxSize' => '5M'])],
+            ])
+            ->add('carte', FileType::class, [
                 'mapped' => false,
                 'data_class' => null,
                 'required' => false,
                 'label' => 'Plan Intérieur',
-            ))
+                'constraints' => [new File(['maxSize' => '5M'])],
+            ])
             ->add('description', TextareaType::class, array('required' => false))
             ->add('quartiers', TextareaType::class, array('required' => false))
             ->add('locX', NumberType::class, array(

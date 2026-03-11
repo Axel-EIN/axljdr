@@ -32,6 +32,11 @@ class FileHandler extends AbstractController
             }
 
             $nouveauNomFichier = $this->uploader->upload($fichier, $prefix, $dossier);
+
+            if ($nouveauNomFichier === null) {
+                return $ancienFichier;
+            }
+
             $nouveauCheminRelatif = 'assets/img/' . $dossier . '/' . $nouveauNomFichier;
 
             return $nouveauCheminRelatif;

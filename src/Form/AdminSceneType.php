@@ -14,6 +14,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Validator\Constraints\File;
 
 class AdminSceneType extends AbstractType
 {
@@ -53,7 +54,8 @@ class AdminSceneType extends AbstractType
                 'label' => "Image ( idéal 1280x720 )",
                 'mapped' => false,
                 'data_class' => null,
-                'required' => false
+                'required' => false,
+                'constraints' => [new File(['maxSize' => '5M'])],
             ])
         ;
     }

@@ -5,6 +5,7 @@ namespace App\Form;
 use App\Entity\Library;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Validator\Constraints\File;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
@@ -60,11 +61,15 @@ class AdminLibraryType extends AbstractType
             ->add('image', FileType::class, [
                 'required' => false,
                 'mapped' => false,
-                'data_class' => null ] )
+                'data_class' => null,
+                'constraints' => [new File(['maxSize' => '5M'])],
+            ])
             ->add('pdf', FileType::class, [
                 'required' => false,
                 'mapped' => false,
-                'data_class' => null ] )
+                'data_class' => null,
+                'constraints' => [new File(['maxSize' => '10M'])],
+            ])
             ->add('description', TextareaType::class, [
                 'required' => false ] )
             ->add('aside', TextareaType::class, [

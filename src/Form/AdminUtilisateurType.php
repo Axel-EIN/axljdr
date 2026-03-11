@@ -10,6 +10,7 @@ use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Validator\Constraints\File;
 
 class AdminUtilisateurType extends AbstractType
 {
@@ -30,7 +31,10 @@ class AdminUtilisateurType extends AbstractType
             ])
             ->add('password', TextType::class)
             ->add('email', EmailType::class)
-            ->add('avatar', FileType::class, array('mapped' => false, 'data_class' => null, 'required' => false))
+            ->add('avatar', FileType::class, [
+                'mapped' => false, 'data_class' => null, 'required' => false,
+                'constraints' => [new File(['maxSize' => '5M'])],
+            ])
         ;
     }
 

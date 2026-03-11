@@ -12,6 +12,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Validator\Constraints\File;
 use Symfony\Component\Validator\Constraints\Length;
 
 class AdminFamilleType extends AbstractType
@@ -20,7 +21,10 @@ class AdminFamilleType extends AbstractType
     {
         $builder
             ->add('nom', TextType::class, array( 'constraints' => [ new Length( [ 'max' => 30 ] ) ] ) )
-            ->add('mon', FileType::class, array('mapped' => false, 'data_class' => null, 'required' => false))
+            ->add('mon', FileType::class, [
+                'mapped' => false, 'data_class' => null, 'required' => false,
+                'constraints' => [new File(['maxSize' => '5M'])],
+            ])
             ->add('description', TextareaType::class, array( 'required' => false, 'constraints' => [ new Length( [ 'max' => 1000 ] ) ] ))
             ->add('bonus', TextType::class, array( 'constraints' => [ new Length( [ 'max' => 30 ] ) ] ) )
             ->add('clan', EntityType::class, [

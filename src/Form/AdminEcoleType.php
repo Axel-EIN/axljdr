@@ -12,6 +12,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Validator\Constraints\File;
 use Symfony\Component\Validator\Constraints\Length;
 
 class AdminEcoleType extends AbstractType
@@ -30,7 +31,11 @@ class AdminEcoleType extends AbstractType
             ])
 
             // Nullables Fields
-            ->add('image', FileType::class, [ 'required' => false, 'mapped' => false, 'data_class' => null, 'label' => 'Image (facultative)' ])
+            ->add('image', FileType::class, [
+                'required' => false, 'mapped' => false, 'data_class' => null,
+                'label' => 'Image (facultative)',
+                'constraints' => [new File(['maxSize' => '5M'])],
+            ])
             ->add('description', TextareaType::class, [ 'required' => false, 'constraints' => [ new Length( [ 'max' => 2000 ] ) ] ])
             ->add('bonus', TextType::class, [ 'required' => false, 'constraints' => [ new Length( [ 'max' => 20 ] ) ] ])
             ->add('competences', TextareaType::class, [ 'required' => false, 'constraints' => [ new Length( [ 'max' => 600 ] ) ] ])

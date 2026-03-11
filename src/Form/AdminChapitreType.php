@@ -13,6 +13,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\ColorType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Validator\Constraints\File;
 
 class AdminChapitreType extends AbstractType
 {
@@ -22,7 +23,10 @@ class AdminChapitreType extends AbstractType
             ->add('numero', IntegerType::class)
             ->add('titre', TextType::class)
             ->add('citation', TextareaType::class)
-            ->add('image', FileType::class, array('mapped' => false, 'data_class' => null, 'required' => false))
+            ->add('image', FileType::class, [
+                'mapped' => false, 'data_class' => null, 'required' => false,
+                'constraints' => [new File(['maxSize' => '5M'])],
+            ])
             ->add('couleur', ColorType::class)
             ->add('saisonParent', EntityType::class, [
                 'class' => Saison::class,

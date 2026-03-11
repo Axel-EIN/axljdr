@@ -14,6 +14,7 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\Validator\Constraints\File;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
@@ -41,12 +42,14 @@ class AdminPersonnageType extends AbstractType
             ->add('icone', FileType::class, [
                 'mapped' => false,
                 'data_class' => null,
-                'required' => false
+                'required' => false,
+                'constraints' => [new File(['maxSize' => '5M'])],
             ])
             ->add('illustration', FileType::class, [
                 'mapped' => false,
                 'data_class' => null,
-                'required' => false
+                'required' => false,
+                'constraints' => [new File(['maxSize' => '5M'])],
             ])
             ->add('description', TextareaType::class, [
                 'required' => false,

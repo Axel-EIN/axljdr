@@ -115,11 +115,11 @@ class AdminUtilisateurController extends AbstractController
     }
 
     /**
-     * @Route("/admin/utilisateur/{id}/delete", name="admin_utilisateur_delete", methods={"GET"})
+     * @Route("/admin/utilisateur/{id}/delete", name="admin_utilisateur_delete", methods={"POST"})
      * @IsGranted("ROLE_ADMIN")
      */
     public function deleteUtilisateur(Request $request, Utilisateur $utilisateur, FileHandler $fileHandler): Response {
-        if ($this->isCsrfTokenValid('delete' . $utilisateur->getId(), $request->query->get('csrf'))) {
+        if ($this->isCsrfTokenValid('delete' . $utilisateur->getId(), $request->request->get('_csrf_token'))) {
 
             $entityManager = $this->getDoctrine()->getManager();
 

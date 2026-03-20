@@ -103,12 +103,12 @@ class AdminCompetenceController extends AbstractController
     }
 
     /**
-     * @Route("/admin/competence/{id}/delete", name="admin_competence_delete", methods={"GET"})
+     * @Route("/admin/competence/{id}/delete", name="admin_competence_delete", methods={"POST"})
      * @IsGranted("ROLE_MJ")
      */
     public function deleteCompetence(Request $request, Competence $competence): Response {
 
-        if ($this->isCsrfTokenValid('delete' . $competence->getId(), $request->query->get('csrf'))) {
+        if ($this->isCsrfTokenValid('delete' . $competence->getId(), $request->request->get('_csrf_token'))) {
 
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($competence);

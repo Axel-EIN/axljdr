@@ -104,12 +104,12 @@ class AdminAvantageController extends AbstractController
     }
 
     /**
-     * @Route("/admin/avantage/{id}/delete", name="admin_avantage_delete", methods={"GET"})
+     * @Route("/admin/avantage/{id}/delete", name="admin_avantage_delete", methods={"POST"})
      * @IsGranted("ROLE_MJ")
      */
     public function deleteAvantage(Request $request, Avantage $avantage): Response {
 
-        if ($this->isCsrfTokenValid('delete' . $avantage->getId(), $request->query->get('csrf'))) {
+        if ($this->isCsrfTokenValid('delete' . $avantage->getId(), $request->request->get('_csrf_token'))) {
 
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($avantage);

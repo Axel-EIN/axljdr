@@ -80,7 +80,7 @@ class AdminClanController extends AbstractController
             $nouvelleVideo = $form->get('video')->getData();
             if (!empty($nouvelleVideo)) {
                 $prefix = 'clan-' . $clan->getNom() . '-video';
-                $clan->setVideo($fileHandler->handle($nouvelleVideo, null, $prefix, '../video'));
+                $clan->setVideo($fileHandler->handle($nouvelleVideo, null, $prefix, 'video'));
             }
 
             $em->persist($clan);
@@ -114,7 +114,7 @@ class AdminClanController extends AbstractController
 
             // Icon Image Handling
             $nouveauMon = $form->get('mon')->getData();
-            dump($nouveauMon);
+
             if (!empty($nouveauMon)) {
                 $prefix = 'clan-' . $clan->getNom() . '-mon';
                 $clan->setMon($fileHandler->handle($nouveauMon, $clan->getMon(), $prefix, 'clans'));
@@ -138,7 +138,7 @@ class AdminClanController extends AbstractController
             $nouvelleVideo = $form->get('video')->getData();
             if (!empty($nouvelleVideo)) {
                 $prefix = 'clan-' . $clan->getNom() . '-video';
-                $clan->setVideo($fileHandler->handle($nouvelleVideo, $clan->getVideo(), $prefix, '../video'));
+                $clan->setVideo($fileHandler->handle($nouvelleVideo, $clan->getVideo(), $prefix, 'video'));
             }
 
             $this->getDoctrine()->getManager()->flush();
@@ -163,12 +163,12 @@ class AdminClanController extends AbstractController
     }
 
     /**
-     * @Route("/admin/clan/{id}/delete", name="admin_clan_delete", methods={"GET"})
+     * @Route("/admin/clan/{id}/delete", name="admin_clan_delete", methods={"POST"})
      * @IsGranted("ROLE_MJ")
      */
     public function deleteClan(Request $request, Clan $clan, FileHandler $fileHandler): Response {
 
-        if ($this->isCsrfTokenValid('delete' . $clan->getId(), $request->query->get('csrf'))) {
+        if ($this->isCsrfTokenValid('delete' . $clan->getId(), $request->request->get('_csrf_token'))) {
 
             if (!$clan->getEcoles()->isEmpty()) {
                 $this->addFlash('warning', 'Veuillez supprimer les écoles enfants au prélable !');
@@ -181,7 +181,7 @@ class AdminClanController extends AbstractController
             $fileHandler->handle(null, $clan->getMon(), null, 'clans');
             $fileHandler->handle(null, $clan->getImage(), null, 'clans');
             $fileHandler->handle(null, $clan->getTerritoireCarte(), null, 'clans');
-            $fileHandler->handle(null, $clan->getVideo(), null, '../video');
+            $fileHandler->handle(null, $clan->getVideo(), null, 'video');
 
             $entityManager->remove($clan);
             $entityManager->flush();

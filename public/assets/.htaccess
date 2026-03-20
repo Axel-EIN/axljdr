@@ -1,0 +1,18 @@
+# Interdire l'exécution de scripts dans le dossier d'uploads
+<IfModule mod_php.c>
+    php_flag engine off
+</IfModule>
+
+# Fallback si mod_php n'est pas utilisé (PHP-FPM)
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteRule \.php$ - [F,L]
+</IfModule>
+
+# Désactiver le listing
+Options -Indexes
+
+# N'autoriser que les types de fichiers attendus
+<FilesMatch "\.(?!(jpg|jpeg|png|gif|webp|pdf|mp4|webm|woff|woff2|ttf|eot|css|js|ico)$)[^.]+$">
+    Require all denied
+</FilesMatch>

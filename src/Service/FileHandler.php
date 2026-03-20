@@ -16,6 +16,9 @@ class FileHandler extends AbstractController
 
     public function handle($fichier, $ancienFichier, $prefix, $dossier)
     {
+        if (!preg_match('/^[a-zA-Z0-9\-]+$/', $dossier)) {
+            throw new \InvalidArgumentException('Nom de dossier invalide');
+        }
 
         if ($fichier && !empty($fichier)) // Cas de la création ou modification
         {

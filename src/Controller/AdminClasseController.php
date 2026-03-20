@@ -126,12 +126,12 @@ class AdminClasseController extends AbstractController
     }
 
     /**
-     * @Route("/admin/classe/{id}/delete", name="admin_classe_delete", methods={"GET"})
+     * @Route("/admin/classe/{id}/delete", name="admin_classe_delete", methods={"POST"})
      * @IsGranted("ROLE_MJ")
      */
     public function deleteClasse(Request $request, Classe $classe, FileHandler $fileHandler): Response {
 
-        if ($this->isCsrfTokenValid('delete' . $classe->getId(), $request->query->get('csrf'))) {
+        if ($this->isCsrfTokenValid('delete' . $classe->getId(), $request->request->get('_csrf_token'))) {
 
             if (!$classe->getEcoles()->isEmpty()) {
                 $this->addFlash('warning', 'Veuillez supprimer les écoles enfants au prélable !');

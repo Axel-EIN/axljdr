@@ -149,13 +149,13 @@ class AdminEpisodeController extends AbstractController
     }
 
     /**
-     * @Route("/admin/episode/{id}/delete", name="admin_episode_delete", methods={"GET"})
+     * @Route("/admin/episode/{id}/delete", name="admin_episode_delete", methods={"POST"})
      * @IsGranted("ROLE_MJ")
      */
     public function deleteEpisode(Request $request, Episode $episode, Numeroteur $numeroteur, EpisodeRepository $episodeRepository, FileHandler $fileHandler): Response {
         $chapitreParent = $episode->getChapitreParent(); // Saving Parent for Redirection after Deletion
 
-        if ($this->isCsrfTokenValid('delete' . $episode->getId(), $request->query->get('csrf'))) {
+        if ($this->isCsrfTokenValid('delete' . $episode->getId(), $request->request->get('_csrf_token'))) {
 
             // CHECK if childs exists
             if (!$episode->getScenes()->isEmpty()) {

@@ -146,14 +146,14 @@ class AdminChapitreController extends AbstractController
     }
 
     /**
-     * @Route("/admin/chapitre/{id}/delete", name="admin_chapitre_delete", methods={"GET"})
+     * @Route("/admin/chapitre/{id}/delete", name="admin_chapitre_delete", methods={"POST"})
      * @IsGranted("ROLE_MJ")
      */
     public function deleteChapitre(Request $request, Chapitre $chapitre, Numeroteur $numeroteur, FileHandler $fileHandler, ChapitreRepository $chapitreRepository): Response {
 
         $saisonParent = $chapitre->getSaisonParent(); // Saving Parent before deletion to be able to redirect after
 
-        if ($this->isCsrfTokenValid('delete' . $chapitre->getId(), $request->query->get('csrf'))) {
+        if ($this->isCsrfTokenValid('delete' . $chapitre->getId(), $request->request->get('_csrf_token'))) {
 
             // CHECKING if child exists
             if (!$chapitre->getEpisodes()->isEmpty()) {

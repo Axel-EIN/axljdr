@@ -176,12 +176,12 @@ class AdminLieuController extends AbstractController
     }
 
     /**
-     * @Route("/admin/lieu/{id}/delete", name="admin_lieu_delete", methods={"GET"})
+     * @Route("/admin/lieu/{id}/delete", name="admin_lieu_delete", methods={"POST"})
      * @IsGranted("ROLE_MJ")
      */
     public function deleteLieu(Request $request, Lieu $lieu, FileHandler $fileHandler): Response {
 
-        if ($this->isCsrfTokenValid('delete' . $lieu->getId(), $request->query->get('csrf'))) {
+        if ($this->isCsrfTokenValid('delete' . $lieu->getId(), $request->request->get('_csrf_token'))) {
 
             $entityManager = $this->getDoctrine()->getManager();
 

@@ -59,7 +59,7 @@ class AdminLoreController extends AbstractController
             $pdf = $form->get('pdf')->getData();
             if (!empty($pdf)) {
                 $prefix = 'lore-' . $lore->getNom() . '-pdf';
-                $lore->setPdf($fileHandler->handle($pdf, null, $prefix, '../pdf/lores'));
+                $lore->setPdf($fileHandler->handle($pdf, null, $prefix, 'pdf-lores'));
             }
 
             $em->persist($lore);
@@ -113,7 +113,7 @@ class AdminLoreController extends AbstractController
             $nouveauPDF = $form->get('pdf')->getData();
             if (!empty($nouveauPDF)) {
                 $prefix = 'lore-' . $lore->getNom() . '-pdf';
-                $lore->setPdf($fileHandler->handle($nouveauPDF, $lore->getPdf(), $prefix, '../pdf/lores'));
+                $lore->setPdf($fileHandler->handle($nouveauPDF, $lore->getPdf(), $prefix, 'pdf-lores'));
             }
 
             // RE-ORDERING : if number has changed or if parent has changed
@@ -146,16 +146,16 @@ class AdminLoreController extends AbstractController
     }
 
     /**
-     * @Route("/admin/lore/{id}/delete", name="admin_lore_delete")
+     * @Route("/admin/lore/{id}/delete", name="admin_lore_delete", methods={"POST"})
      * @IsGranted("ROLE_MJ")
      */
     public function deleteLore(Request $request, Lore $lore, FileHandler $fileHandler, EntityManagerInterface $em, LoreRepository $loreRepository, Numeroteur $numeroteur): Response
     {
-        if ( $this->isCsrfTokenValid('delete' . $lore->getId(), $request->query->get('csrf')))
+        if ( $this->isCsrfTokenValid('delete' . $lore->getId(), $request->request->get('_csrf_token')))
         {
             // File Image and PDF handling
             $fileHandler->handle(null, $lore->getImage(), null, 'lores');
-            $fileHandler->handle(null, $lore->getPdf(), null, '../pdf/lores');
+            $fileHandler->handle(null, $lore->getPdf(), null, 'pdf-lores');
 
             // RE-ORDERING
             $fratrie = $loreRepository->findAll();

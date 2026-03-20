@@ -184,12 +184,12 @@ class AdminPersonnageController extends AbstractController
     }
 
     /**
-     * @Route("/admin/personnage/{id}/delete", name="admin_personnage_delete", methods={"GET"})
+     * @Route("/admin/personnage/{id}/delete", name="admin_personnage_delete", methods={"POST"})
      * @IsGranted("ROLE_MJ")
      */
     public function deletePersonnage(Request $request, Personnage $personnage, FileHandler $fileHandler): Response {
 
-        if ($this->isCsrfTokenValid('delete' . $personnage->getId(), $request->query->get('csrf'))) {
+        if ($this->isCsrfTokenValid('delete' . $personnage->getId(), $request->request->get('_csrf_token'))) {
 
             $entityManager = $this->getDoctrine()->getManager();
 

@@ -93,12 +93,12 @@ class AdminFicheController extends AbstractController
     }
 
     /**
-     * @Route("/admin/fiche/{id}/delete", name="admin_fiche_delete", methods={"GET"})
+     * @Route("/admin/fiche/{id}/delete", name="admin_fiche_delete", methods={"POST"})
      * @IsGranted("ROLE_MJ")
      */
     public function deleteFiche(Request $request, FichePersonnage $fiche): Response {
 
-        if ($this->isCsrfTokenValid('delete' . $fiche->getId(), $request->query->get('csrf'))) {
+        if ($this->isCsrfTokenValid('delete' . $fiche->getId(), $request->request->get('_csrf_token'))) {
 
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($fiche);

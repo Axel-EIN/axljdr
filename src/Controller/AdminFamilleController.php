@@ -126,12 +126,12 @@ class AdminFamilleController extends AbstractController
     }
 
     /**
-     * @Route("/admin/famille/{id}/delete", name="admin_famille_delete", methods={"GET"})
+     * @Route("/admin/famille/{id}/delete", name="admin_famille_delete", methods={"POST"})
      * @IsGranted("ROLE_MJ")
      */
     public function deleteFamille(Request $request, Famille $famille, FileHandler $fileHandler): Response {
 
-        if ($this->isCsrfTokenValid('delete' . $famille->getId(), $request->query->get('csrf'))) {
+        if ($this->isCsrfTokenValid('delete' . $famille->getId(), $request->request->get('_csrf_token'))) {
 
             $entityManager = $this->getDoctrine()->getManager();
 

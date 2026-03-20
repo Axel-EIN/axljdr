@@ -159,12 +159,12 @@ class AdminObjetController extends AbstractController
     }
 
     /**
-     * @Route("/admin/objet/{id}/delete", name="admin_objet_delete", methods={"GET"})
+     * @Route("/admin/objet/{id}/delete", name="admin_objet_delete", methods={"POST"})
      * @IsGranted("ROLE_MJ")
      */
     public function deleteObjet(Request $request, Objet $objet, FileHandler $fileHandler): Response {
 
-        if ($this->isCsrfTokenValid('delete' . $objet->getId(), $request->query->get('csrf'))) {
+        if ($this->isCsrfTokenValid('delete' . $objet->getId(), $request->request->get('_csrf_token'))) {
 
             $entityManager = $this->getDoctrine()->getManager();
             $fileHandler->handle(null, $objet->getImage(), null, 'objets');

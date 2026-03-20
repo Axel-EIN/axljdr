@@ -128,12 +128,12 @@ class AdminEcoleController extends AbstractController
     }
 
     /**
-     * @Route("/admin/ecole/{id}/delete", name="admin_ecole_delete", methods={"GET"})
+     * @Route("/admin/ecole/{id}/delete", name="admin_ecole_delete", methods={"POST"})
      * @IsGranted("ROLE_MJ")
      */
     public function deleteEcole(Request $request, Ecole $ecole, FileHandler $fileHandler): Response {
 
-        if ($this->isCsrfTokenValid('delete' . $ecole->getId(), $request->query->get('csrf'))) {
+        if ($this->isCsrfTokenValid('delete' . $ecole->getId(), $request->request->get('_csrf_token'))) {
 
             // CHECK if child exists
             if (!$ecole->getPersonnages()->isEmpty()) {

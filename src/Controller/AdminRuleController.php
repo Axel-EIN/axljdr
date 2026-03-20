@@ -60,7 +60,7 @@ class AdminRuleController extends AbstractController
             $pdf = $form->get('pdf')->getData();
             if (!empty($pdf)) {
                 $prefix = 'rule-' . $rule->getNom() . '-pdf';
-                $rule->setPdf($fileHandler->handle($pdf, null, $prefix, '../pdf/rules'));
+                $rule->setPdf($fileHandler->handle($pdf, null, $prefix, 'pdf-rules'));
             }
 
             $em->persist($rule);
@@ -115,7 +115,7 @@ class AdminRuleController extends AbstractController
             $nouveauPDF = $form->get('pdf')->getData();
             if (!empty($nouveauPDF)) {
                 $prefix = 'rule-' . $rule->getNom() . '-pdf';
-                $rule->setPdf($fileHandler->handle($nouveauPDF, $rule->getPdf(), $prefix, '../pdf/rules'));
+                $rule->setPdf($fileHandler->handle($nouveauPDF, $rule->getPdf(), $prefix, 'pdf-rules'));
             }
 
             // RE-ORDERING : if number has changed or if parent has changed
@@ -149,16 +149,16 @@ class AdminRuleController extends AbstractController
     }
 
     /**
-     * @Route("/admin/rule/{id}/delete", name="admin_rule_delete")
+     * @Route("/admin/rule/{id}/delete", name="admin_rule_delete", methods={"POST"})
      * @IsGranted("ROLE_MJ")
      */
     public function deleteRule(Request $request, Rule $rule, FileHandler $fileHandler, EntityManagerInterface $em, RuleRepository $ruleRepository, Numeroteur $numeroteur): Response
     {
-        if ( $this->isCsrfTokenValid('delete' . $rule->getId(), $request->query->get('csrf')))
+        if ( $this->isCsrfTokenValid('delete' . $rule->getId(), $request->request->get('_csrf_token')))
         {
             // File Image and PDF handling
             $fileHandler->handle(null, $rule->getImage(), null, 'rules');
-            $fileHandler->handle(null, $rule->getPdf(), null, '../pdf/rules');
+            $fileHandler->handle(null, $rule->getPdf(), null, 'pdf-rules');
 
             // RE-ORDERING
             $fratrieDepartId = $rule->getBase();

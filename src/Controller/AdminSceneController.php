@@ -257,14 +257,14 @@ class AdminSceneController extends AbstractController
     }
 
     /**
-     * @Route("/admin/scene/{id}/delete", name="admin_scene_delete", methods={"GET"})
+     * @Route("/admin/scene/{id}/delete", name="admin_scene_delete", methods={"POST"})
      * @IsGranted("ROLE_MJ")
      */
     public function deleteScene(Request $request, Scene $scene, Numeroteur $numeroteur, SceneRepository $sceneRepository, FileHandler $fileHandler): Response {
         
         $episodeParent = $scene->getEpisodeParent(); // Saving Parent for later Redirection after deletion
 
-        if ($this->isCsrfTokenValid('delete' . $scene->getId(), $request->query->get('csrf'))) {
+        if ($this->isCsrfTokenValid('delete' . $scene->getId(), $request->request->get('_csrf_token'))) {
 
             // CHECK CHILD
             $entityManager = $this->getDoctrine()->getManager();

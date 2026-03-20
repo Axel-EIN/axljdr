@@ -148,12 +148,12 @@ class AdminSortController extends AbstractController
     }
 
     /**
-     * @Route("/admin/sort/{id}/delete", name="admin_sort_delete", methods={"GET"})
+     * @Route("/admin/sort/{id}/delete", name="admin_sort_delete", methods={"POST"})
      * @IsGranted("ROLE_MJ")
      */
     public function deleteSort(Request $request, Sort $sort, FileHandler $fileHandler): Response {
 
-        if ($this->isCsrfTokenValid('delete' . $sort->getId(), $request->query->get('csrf'))) {
+        if ($this->isCsrfTokenValid('delete' . $sort->getId(), $request->request->get('_csrf_token'))) {
 
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($sort);

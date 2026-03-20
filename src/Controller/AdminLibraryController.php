@@ -150,12 +150,12 @@ class AdminLibraryController extends AbstractController
     }
 
     /**
-     * @Route("/admin/library/{id}/delete", name="admin_library_delete")
+     * @Route("/admin/library/{id}/delete", name="admin_library_delete", methods={"POST"})
      * @IsGranted("ROLE_MJ")
      */
     public function deleteLibrary(Request $request, Library $library, FileHandler $fileHandler, LibraryRepository $libraryRepository, Numeroteur $numeroteur): Response
     {
-        if ( $this->isCsrfTokenValid('delete' . $library->getId(), $request->query->get('csrf')))
+        if ( $this->isCsrfTokenValid('delete' . $library->getId(), $request->request->get('_csrf_token')))
         {
             // File Image and PDF handling
             $fileHandler->handle(null, $library->getImage(), null, 'librarys');

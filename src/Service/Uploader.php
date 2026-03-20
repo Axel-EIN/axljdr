@@ -15,14 +15,13 @@ class Uploader extends AbstractController
         'image/png',
         'image/gif',
         'image/webp',
-        'image/svg+xml',
         'application/pdf',
         'video/mp4',
         'video/webm',
     ];
 
     private const ALLOWED_EXTENSIONS = [
-        'jpg', 'jpeg', 'png', 'gif', 'webp', 'svg',
+        'jpg', 'jpeg', 'png', 'gif', 'webp',
         'pdf',
         'mp4', 'webm',
     ];

@@ -141,12 +141,12 @@ class AdminSaisonController extends AbstractController
     }
 
     /**
-     * @Route("/admin/saison/{id}/delete", name="admin_saison_delete", methods={"GET"})
+     * @Route("/admin/saison/{id}/delete", name="admin_saison_delete", methods={"POST"})
      * @IsGranted("ROLE_MJ")
      */
     public function deleteSaison(Request $request, Saison $saison, Numeroteur $numeroteur, SaisonRepository $saisonRepository, FileHandler $fileHandler): Response {
 
-        if ($this->isCsrfTokenValid('delete' . $saison->getId(), $request->query->get('csrf'))) {
+        if ($this->isCsrfTokenValid('delete' . $saison->getId(), $request->request->get('_csrf_token'))) {
 
             // CHECK if child exists
             if (!$saison->getChapitres()->isEmpty()) {

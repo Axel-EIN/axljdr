@@ -134,7 +134,7 @@ p > mark {
 /* BODY */
 @font-face {
     font-family: 'Barlow';
-    src: url("../assets/fonts/Barlow-Regular-Semi-Condensed.ttf");
+    src: url("../assets/fonts/Barlow-Regular-Semi-Condensed.ttf") format("truetype");
 }
 
 .font-barlow { font-family: 'Barlow'; }
@@ -142,14 +142,14 @@ p > mark {
 /* H1 */
 @font-face {
     font-family: "Shogun";
-    src: url("../assets/fonts/Shoguns-Clan-Edited-Accentued.otf");
+    src: url("../assets/fonts/Shoguns-Clan-Edited-Accentued.otf") format("opentype");
 }
 
 .font-shogun { font-family: 'Shogun'; }
 
 @font-face {
     font-family: "Misaki";
-    src: url("../assets/fonts/Misaki-Regular.otf");
+    src: url("../assets/fonts/Misaki-Regular.otf") format("opentype");
 }
 
 .font-misaki { font-family: 'Misaki'; }
@@ -157,7 +157,7 @@ p > mark {
 /* H2 DISPLAY TITLES */
 @font-face {
     font-family: "Present";
-    src: url("../assets/fonts/Present-LT-Black-Condensed.otf");
+    src: url("../assets/fonts/Present-LT-Black-Condensed.otf") format("opentype");
 }
 
 .font-present { font-family: 'Present'; }
@@ -165,7 +165,7 @@ p > mark {
 /* H3 DISPLAY TITLES */
 @font-face {
     font-family: "Avenir";
-    src: url("../assets/fonts/Avenir-Black.ttf");
+    src: url("../assets/fonts/Avenir-Black.ttf") format("truetype");
 }
 
 .font-avenir { font-family: 'Avenir'; }
@@ -173,7 +173,7 @@ p > mark {
 /* H4 DISPLAY TITLES */
 @font-face {
     font-family: "Amerigo";
-    src: url("../assets/fonts/Amerigo-Bold-BT.ttf");
+    src: url("../assets/fonts/Amerigo-Bold-BT.ttf") format("truetype");
 }
 
 .font-amerigo { font-family: 'Amerigo'; }

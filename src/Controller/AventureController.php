@@ -19,7 +19,7 @@ class AventureController extends AbstractController
      */
     public function viewAventure(SaisonRepository $saisonRepository): Response
     {
-        $premiereSaison = $saisonRepository->findOneBy(array(), array('numero' => 'ASC'));
+        $premiereSaison = $saisonRepository->findOneBy(array(), array('numero' => 'DESC'));
         return $this->redirectToRoute('aventure_saison', [ 'id' => $premiereSaison->getId() ]);
     }
 

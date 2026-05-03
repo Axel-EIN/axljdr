@@ -6,12 +6,12 @@
 <saison class="saison-bar container-fluid" style="background-color: {{ saison.couleur }}">
     <bar class="container">
         {{ include('/parts/messages-flashes.html.twig') }}
-        {% if saison_suivante is not empty %}
-            <a class="btn-quaternary-style text-light-alpha" href="{{ path('aventure_saison', {id : (saison_suivante.id) } ) }}">
-                <span class="text-small"><i class="fa-solid fa-caret-left"></i> saison suivante</span>
+        {% if saison_precedente is not empty %}
+            <a class="btn-quaternary-style text-light-alpha" href="{{ path('aventure_saison', {id : (saison_precedente.id) } ) }}" alt="Flèche Droite" title="Voir saison précédente">
+                <span class="text-small"><i class="fa-solid fa-caret-left"></i> Saison précédente</span> 
             </a>
         {% else %}
-            <span class="text-small invisible"><i class="fa-solid fa-caret-left"></i> saison suivante</span>
+            <span class="text-small invisible"><i class="fa-solid fa-caret-left"></i> Saison précédente</span>
         {% endif %}
 
         {% if saison_suivante is empty %}
@@ -20,12 +20,12 @@
             <strong>SAISON {{ saison.numero }} - {{ saison.titre|upper }}</strong>
         {% endif %}
 
-        {% if saison_precedente is not empty %}
-            <a class="btn-quaternary-style text-light-alpha" href="{{ path('aventure_saison', {id : (saison_precedente.id) } ) }}" alt="Flèche Droite" title="Voir saison précédente">
-                <span class="text-small">saison précédente <i class="fa-solid fa-caret-right"></i></span> 
+        {% if saison_suivante is not empty %}
+            <a class="btn-quaternary-style text-light-alpha" href="{{ path('aventure_saison', {id : (saison_suivante.id) } ) }}">
+                <span class="text-small">Saison suivante <i class="fa-solid fa-caret-right"></i></span>
             </a>
         {% else %}
-            <span class="text-small invisible">saison précédente <i class="fa-solid fa-caret-right"></i></span>
+            <span class="text-small invisible">Saison suivante <i class="fa-solid fa-caret-right"></i></span>
         {% endif %}
     </bar>
 </saison>

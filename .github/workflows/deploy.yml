@@ -25,7 +25,8 @@ jobs:
             **/.git*/**
             .github/**
             vendor/**
-            var/**
+            var/cache/**
+            var/logs/**
             bin/**
             tests/**
             .env*
@@ -34,3 +35,6 @@ jobs:
             symfony.lock
             phpunit.xml.dist
             .gitignore
+    
+      - name: Clear Symfony cache
+        run: curl -f "https://jdr.axl-design.me/clear_cache.php?token=${{ secrets.CACHE_CLEAR_TOKEN }}"

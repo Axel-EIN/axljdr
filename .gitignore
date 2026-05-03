@@ -1,0 +1,37 @@
+### Symfony ###
+/.env.local
+/.env.local.php
+/.env.*.local
+/config/secrets/prod/prod.decrypt.private.php
+/public/bundles/
+/var/
+/vendor/
+
+### PHPUnit ###
+.phpunit.result.cache
+/phpunit.xml
+
+### Environment ###
+.env
+.env.prod
+.env.test
+
+### Misc ###
+.htaccess
+
+### Assets ###
+/public/assets/video/
+/public/assets/pdf/
+
+/public/assets/img/*
+!/public/assets/img/
+
+# Exceptions images
+!/public/assets/img/logo-axl.png
+!/public/assets/img/icons/
+!/public/assets/img/ui/
+!/public/assets/img/placeholders/
+
+/public/assets/img/lieux/*
+!/public/assets/img/lieux/minimap.jpg
+!/public/assets/img/lieux/map.jpg

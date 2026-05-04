@@ -1,0 +1,70 @@
+.h1-hero, .shogun-h1, .category-title, .chapter-title {
+    font-family: "Shogun";
+    font-size: 8rem;
+    color: var(--color-white);
+    text-align: center;
+    text-shadow: 4px 4px 1rem var(--color-strong);
+
+    &.reduced { font-size: 7rem; }
+
+    .small-word { font-size: 0.25em; }
+
+    @media (max-width: 1199.98px) { font-size: 6.5rem; &.reduced { font-size: 5.25rem; } }
+    @media (max-width: 991.98px)  { font-size: 6rem;   &.reduced { font-size: 4.75rem; } }
+    @media (max-width: 575.98px)  { font-size: 5.5rem; &.reduced { font-size: 4.25rem; } }
+    @media (max-width: 480px)     { font-size: 5rem;   &.reduced { font-size: 3.75rem; } }
+}
+
+.h1-display, .misaki-h1, .admin-title {
+    font-family: "Misaki";
+    font-size: 4rem;
+    margin: 0;
+    padding: 0;
+    line-height: 1;
+    color: var(--color-stamp);
+
+    @media (max-width: 991.98px) { font-size: 3rem; }
+}
+
+.h1-special, .present-h1-stylized, .episode-title {
+    font-family: "Present";
+    font-size: 4rem;
+    color: var(--color-white);
+    text-shadow: 4px 4px 1rem var(--color-strong);
+    margin: 0;
+
+    @media (max-width: 991.98px) { font-size: 3rem; }
+}
+
+.h1-title, .present-h1, .element-title, .section-title {
+    font-family: "Present";
+    font-size: 4rem;
+    margin: 0;
+    padding: 0;
+    line-height: 1;
+    color: var(--color-stamp);
+
+    .small-word { font-size: 0.5em; }
+
+    @media (max-width: 991.98px) { font-size: 3rem; }
+}
+
+.h2-title, .avenir-h2, .element-card-title {
+    font-family: "Avenir";
+    font-size: 2rem;
+    margin: 0;
+    padding: 0;
+    line-height: 1;
+    color: var(--color-strong);
+
+    @media (max-width: 991.98px) { font-size: 1.75rem; }
+}
+
+.h3-title, .amerigo-h3, .card-sub-title {
+    font-family: "Amerigo";
+    font-size: 1.25rem;
+    margin: 0;
+    padding: 0;
+
+    @media (max-width: 991.98px) { font-size: 1.125rem; }
+}

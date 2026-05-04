@@ -1,0 +1,90 @@
+{% extends 'element.html.twig' %}
+
+{% block stylesheets %}
+        {{parent()}}
+        <link rel="stylesheet" href="{{asset('css/pages/rule.css')}}" />
+{% endblock %}
+
+{% block element_content %}
+
+    <!-- IMAGE & SUMMARY -->
+    <cardtopimg class="col-12 card-top-img">
+
+        <!-- SOMMAIRE (masque sur mobile : le titre de page vient se poser sur l'image a la place) -->
+        {% if rule.part1 is defined and rule.part1 is not empty and rule.part2 is defined and rule.part2 is not empty %}
+        {% set gradient_left = 'gradient-left' %}
+            <summary id="sommaire" class="d-none d-lg-flex">
+                <header>SOMMAIRE</header>
+                {% for i in 1..5 %}
+                    {% if attribute(rule, 'part' ~ i ~ 'titre') is defined and attribute(rule, 'part' ~ i ~ 'titre') is not empty %}
+                        <a class="list-group-item list-group-item-action" href="#part{{i}}">{{i}}. {{ attribute(rule, 'part' ~ i ~ 'titre') }}</a>
+                    {% endif %}
+                {% endfor %}
+            </summary>
+        {% endif %}
+
+        <!-- IMAGE -->
+        <div class="gradient-after-down {{gradient_left|default('')}}">
+            {% if rule.pdf is defined and rule.pdf is not empty %}
+                <a href="{{asset(rule.pdf)}}"><img class="img-fluid w-100" src="{{ asset(rule.image|default(NA_PDF)) }}" /></a>
+            {% else %}
+                <img class="img-fluid w-100" src="{{ asset(rule.image|default(NA_RULE)) }}" alt="Image de {{ nom }}" />
+            {% endif %}
+        </div>
+
+    </cardtopimg>
+
+    <cardcontent class="col-12 card-content">
+
+        <!-- PART 1 TO 5 -->
+        {% for i in 1..5 %}
+
+            <!-- HEADER TITLE -->
+            {% if attribute(rule, 'part' ~ i ~ 'titre') is defined and attribute(rule, 'part' ~ i ~ 'titre') is not empty %}
+                <cardheader id="part{{i}}" class="part-header">
+
+                    <!-- MJ EDIT -->
+                    {% if app.user and is_granted("ROLE_MJ") %}
+                        {% set position, size, color, entity, un_element, redirect, fragment = 'right-snap', 'btn-icon-medium', 'text-accent', 'rule', rule, 'rule', 'part' ~ i %}
+                        {{ include('/parts/btn-icon-edit.html.twig') }}
+                    {% endif %}
+                    
+                    <h2 class="element-card-title">{{i}}. {{ attribute(rule, 'part' ~ i ~ 'titre') }}</h2>
+                    <hr>
+                </cardheader>
+            {% endif %}
+
+            <!-- TEXT + ASIDE -->
+            {% if attribute(rule, 'part' ~ i) is defined and attribute(rule, 'part' ~ i) is not empty %}
+                <cardbody class="part-body">
+                    <!-- ASIDE -->
+                    {% if attribute(rule, 'part' ~ i ~ 'aside') is defined and attribute(rule, 'part' ~ i ~ 'aside') is not empty %}
+                        <aside class="aside">
+                            <p>{{ attribute(rule, 'part' ~ i ~ 'aside')|raw|nl2br }}</p>
+                        </aside>
+                    {% endif %}
+                    <!-- TEXT -->
+                    <div>{{ attribute(rule, 'part' ~ i)|raw|nl2br }}</div>
+                </cardbody>
+                <spacer class="spacer">{{ include('/parts/separateur-ornament.html.twig') }}</spacer>
+            {% endif %}
+
+        {% endfor %}
+        
+    </cardcontent>
+
+    <!-- AUTRES -->
+    {% if autresRules is defined and autresRules is not empty %}
+        <aside class="card card-body mt-2">
+            <h2 class="element-card-title">Autres Règles {% if rule.base %}de Bases{% else %}Annexes{% endif %}</h2>
+            <hr>
+            <row class="row vignette-grid">
+                {% set col, size, na_image = 'col-6 col-md-4 col-lg-2', 'small', NA_RULE %}
+                {% for un_element in autresRules %}
+                    {{ include('/parts/element-vignette.html.twig', {un_element}) }}
+                {% endfor %}
+            </row>
+        </aside>
+    {% endif %}
+
+{% endblock %}

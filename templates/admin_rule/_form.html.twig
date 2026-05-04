@@ -1,0 +1,24 @@
+<div class="col-12">
+    {{ form_start(form) }}
+        <div class="row form-wrapper">
+
+            {{ include('parts/form-publication.html.twig', {form: form}) }}
+
+            <div class="col-4">{{ form_row(form.nom) }}</div>
+            <div class="col-4">{{ form_row(form.pdf) }}</div>
+            <div class="col-2">{{ form_row(form.numero) }}</div>
+            <div class="col-2 align-self-center">{{ form_row(form.base) }}</div>
+
+            <div class="col-12">
+                {{ include('parts/image-field.html.twig', {
+                    field: form.image, input_id: 'admin_rule_image', prefix: 'image',
+                    current: rule.image|default(null), fallback: NA_RULE, label: 'Image (1200×900 4:3 recommandé)',
+                    width: 1200, height: 900 }) }}
+            </div>
+
+            {{ include('rule-lore-library/part-fields.html.twig', {form, un_element: rule|default(null)}) }}
+
+            {{ include('/btns/btn-form.html.twig') }}
+        </div>
+    {{ form_end(form) }}
+</div>

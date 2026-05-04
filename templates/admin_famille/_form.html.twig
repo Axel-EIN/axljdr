@@ -1,0 +1,24 @@
+<div class="col-12">
+    {{ form_start(form) }}
+        <div class="row form-wrapper">
+            <div class="col-8">
+                <div class="row">
+                    <div class="col-6">{{ form_row(form.nom) }}</div>
+                    <div class="col-6">{{ form_row(form.clan) }}</div>
+                    <div class="col-6">{{ form_row(form.chef) }}</div>
+                    <div class="col-6">{{ form_row(form.bonusStatNom) }}</div>
+                    <div class="col-12">{{ form_row(form.description,{ 'attr': {'rows': '5'} }) }}</div>
+                </div>
+            </div>
+
+            <div class="col-4 d-flex flex-column">
+                {{ include('parts/image-field.html.twig', {
+                    field: form.mon, input_id: 'admin_famille_mon', prefix: 'icon',
+                    current: famille.mon|default(null), fallback: NA_MON, label: 'Mon (320×320 1:1 recommandé)',
+                    width: 320, height: 320 }) }}
+            </div>
+
+            {{ include('/btns/btn-form.html.twig') }}
+        </div>
+    {{ form_end(form) }}
+</div>

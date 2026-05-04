@@ -1,0 +1,35 @@
+/* ------------------ */
+/* ----- FOOTER ----- */
+/* ------------------ */
+
+footer { color: var(--color-disabled); }
+
+#footer1 {
+    display: flex;
+    justify-content: center;
+    min-height: 24vh;
+    background-color: var(--secondary-pastel-darker);
+    border-top: 1px solid var(--secondary-pastel-light); }
+
+#footer2 {
+    display: flex;
+    justify-content: center;
+    min-height: 8vh;
+    background-color: var(--secondary-pastel-darkest); }
+
+#footer1 ul, #footer2 ul {
+    list-style:outside none none;
+    padding: 0; }
+
+#footer1 a, #footer2 a {
+    color: var(--color-white-80); }
+
+#footer1 a:hover, #footer2 a:hover {
+    color: var(--color-white) !important;
+    text-decoration: underline; }
+
+#social-medias {
+    /* gap plutot que justify-content-around : la zone fait toute la largeur
+       sur mobile, les icones s'y trouvaient dispersees. */
+    gap: 1rem;
+    font-size: 2rem; }

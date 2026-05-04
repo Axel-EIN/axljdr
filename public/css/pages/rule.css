@@ -1,0 +1,129 @@
+/* -------------------- */
+/* ----- SOMMAIRE ----- */
+/* -------------------- */
+
+#sommaire {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    z-index: 10;
+    top: 1rem;
+    left: 0;
+    margin: 0;
+    padding: 0;
+    border-radius: 0;
+    color: var(--color-white);
+
+    &>header {
+        font-weight: bold;
+        margin-top: 1rem;
+        margin-left: 2rem;
+        font-size: var(--large);
+    }
+
+    &>.list-group-item {
+        color: var(--color-gray);
+        font-size: var(--medium);
+        border: unset;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        background-color: unset;
+        margin: 0;
+        padding: 0.5rem;
+        padding-left: 2rem;
+        border-radius: 0;
+        &:hover {
+            color: var(--color-white);
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+    }
+}
+
+/* Degrade gauche pour la lisibilite du sommaire (desktop uniquement) */
+@media (min-width: 992px) {
+    .gradient-left::after {
+        background-image: linear-gradient(to right,
+                            rgba(40, 20, 20, 0.9),
+                            rgba(40, 20, 20, 0.6),
+                            rgba(0, 0, 0, 0.4),
+                            rgba(0, 0, 0, 0.2));
+        border-top-right-radius: 1rem;
+        border-top-left-radius: 1rem;
+        border-bottom-left-radius: 0;
+        border-bottom-right-radius: 0;
+    }
+}
+
+.card-content {
+    .part-header {
+        display: block;
+        position: relative;
+        margin-top: 2rem;
+    }
+
+    .part-body {
+        display: block;
+        a { font-weight: bold; }
+        aside {
+            margin-top: 1rem;
+            margin-left: 2rem;
+            margin-bottom: 1rem;
+            float: right;
+            width: 30%;
+        }
+        &>div {
+            text-align: justify;
+            font-size: var(--fontsize-regular);
+            line-height: 1.60;
+            padding: 1rem;
+            margin: 0;
+        }
+
+        /* Mobile : l'encadre passe en pleine largeur sous le texte. Il est
+           place AVANT le texte dans le template (c'est le float:right qui le
+           remonte a droite), d'ou le flex + order pour l'envoyer dessous
+           plutot que de le laisser apparaitre au-dessus. */
+        @media (max-width: 991.98px) {
+            display: flex;
+            flex-direction: column;
+
+            aside {
+                order: 2;
+                float: none;
+                width: auto;
+                margin-left: 0;
+            }
+            &>div { order: 1; }
+        }
+    }
+}
+
+.aside > p {
+    font-size: var(--fontsize-small);
+    line-height: 1.6;
+}
+
+.spacer {
+    display: block;
+    margin-top: 2rem;
+    margin-bottom: 5rem;
+}
+
+.spacer-last {
+    display: block;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+}
+
+#other {
+    padding: 1rem;
+    margin: 0;
+    margin-top: 1rem;
+    background-color: var(--color-surface);
+    border-radius: 1rem;
+    border: 1px solid var(--color-disabled);
+}
+
+#other > .row {
+    padding: 0;
+    margin: 0;
+}

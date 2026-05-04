@@ -1,0 +1,84 @@
+/* ----- PAGE LIBRARY ----- */
+
+#intro {
+    border-radius: 1rem;
+}
+
+.item {
+    padding: 0.5rem 1rem;
+    color: var(--color-strong);
+    border-top-right-radius: 0;
+    border-top-left-radius: 1rem;
+    border-bottom-right-radius: 1rem;
+    border-bottom-left-radius: 0;
+    &:hover {
+        background-color: var(--accent-lightest);
+        color: var(--color-strong);
+    }
+}
+
+.item.AIR {
+    box-shadow:
+        inset 2px 2px 0 0 var(--color-background),
+        0px 0px .5rem 0 var(--AIR);
+}
+
+.item-no-hover {
+    padding: 0.5rem 1rem;
+    color: var(--color-strong);
+}
+
+.library-row {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.list-heading {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin: 0;
+    padding: 0.5rem 1rem;
+}
+
+.list-heading-short {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin: 0;
+    padding: 0.25rem 1rem;
+    border-radius: 1rem;
+    color: var(--color-white);
+    background-color: var(--color-gray);
+}
+
+.list-heading > div, .list-heading-short > div {
+    text-align: center;
+    padding: 0 .5rem;
+    margin: 0;
+}
+
+.item-line {
+    display: flex;
+    flex-direction: row;
+    &>div { text-align: center; }
+}
+
+.item-name { color: var(--color-strong); }
+
+.item-description {
+    text-align: justify;
+    color: var(--color-gray);
+}
+
+#effet-rappel {
+    color: var(--color-strong);
+    border-radius: 1rem;
+    background-color: var(--accent-lightest);
+    padding: 1rem;
+    margin-left: 0;
+    margin-right: 0;
+    margin-bottom: 1.5rem;
+    margin-top: 0;
+    border: 1px solid #00000020;
+}

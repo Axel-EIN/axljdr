@@ -1,0 +1,41 @@
+{% extends 'element.html.twig' %}
+
+{% block stylesheets %}
+    {{parent()}}
+    <link rel="stylesheet" href="{{asset('css/components/rule-lore-part.css')}}" />
+{% endblock %}
+
+{% block element_content %}
+
+    <div class="col-12">
+        <div class="card card-page">
+
+            <div class="relative">
+
+                {{ include('rule-lore-library/summary.html.twig', {un_element: rule}) }}
+
+                {{ include('/parts/card-top-image.html.twig', {
+                    image: rule.image,
+                    na_image: NA_RULE,
+                    alt: 'Image de ' ~ nom,
+                    pdf: rule.pdf,
+                    state: element_state(rule),
+                    pdf_button: rule.hasParts,
+                    img_class: 'crop-169',
+                    titre: nom,
+                }) }}
+            </div>
+
+            {{ include('rule-lore-library/parts.html.twig', {un_element: rule, entity: 'rule'}) }}
+
+        </div>
+    </div>
+
+    {{ include('/parts/picture-grid.html.twig', {
+        variant: 'rule',
+        title: 'Autres Règles ' ~ (rule.base ? 'de Bases' : 'Annexes'),
+        items: autresRules, route: 'regles_rule',
+        na_image: NA_RULE,
+    }) }}
+
+{% endblock %}

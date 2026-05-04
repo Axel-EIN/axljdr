@@ -1,0 +1,104 @@
+/* ------------------ */
+/* ----- TITLES ----- */
+/* ------------------ */
+
+/** DISPLAY **/
+
+.title-display-h1, .title-display-h1-reduced {
+    font-family: "Shogun";
+    color: var(--white);
+    font-size: 9rem;
+    text-align: center;
+    text-shadow: 4px 4px 1rem var(--dark);
+}
+
+.title-display-h1 { font-size: 8rem; }
+
+.title-display-h1-reduced { font-size: 7rem; }
+
+.title-display-h2 {
+    font-family: "Present";
+    color: var(--white);
+    font-size: 4rem;
+    text-shadow: 4px 4px 1rem var(--dark);
+    margin: 0;
+}
+
+/** TITLES **/
+
+.title-h1 {
+    font-family: "Misaki";
+    font-size: 4rem;
+    margin: 0;
+    padding: 0;
+    line-height: 1;
+}
+
+.title-h2 {
+    font-family: "Present";
+    font-size: 4rem;
+    margin: 0;
+    padding: 0;
+    line-height: 1;
+}
+
+.title-h3 {
+    font-family: "Avenir";
+    font-size: 2rem;
+    margin: 0;
+    padding: 0;
+    line-height: 1;
+}
+
+.title-h4 {
+    font-family: "Amerigo";
+    font-size: 1.25rem;
+    margin: 0;
+    padding: 0;
+}
+
+.title-small { font-size: 2rem; }
+
+@media (max-width: 1200px) { .title-small { font-size: 2rem; } }
+@media (max-width: 992px) { .title-small { font-size: 1.75rem; } }
+@media (max-width: 576px) { .title-small { font-size: 1.5rem; } }
+@media (max-width: 480px) { .title-small { font-size: 1.5rem; } }
+
+
+/* ------------------- */
+/* ----- DISPLAY ----- */
+/* ------------------- */
+
+@media (max-width: 1200px) { .display-1 { font-size: 4.25rem; } }
+@media (max-width: 992px) { .display-1 { font-size: 4rem; } }
+@media (max-width: 576px) { .display-1 { font-size: 3.75rem; } }
+@media (max-width: 480px) { .display-1 { font-size: 3.5rem; } }
+
+@media (max-width: 1200px) { .display-2 { font-size: 4rem; } }
+@media (max-width: 992px) { .display-2 { font-size: 3.75rem; } }
+@media (max-width: 576px) { .display-2 { font-size: 3.5rem; } }
+@media (max-width: 480px) { .display-2 { font-size: 3.25rem; } }
+
+@media (max-width: 1200px) { .display-3 { font-size: 4rem; } }
+@media (max-width: 992px) { .display-3 { font-size: 3.5rem; } }
+@media (max-width: 576px) { .display-3 { font-size: 3.25rem; } }
+@media (max-width: 480px) { .display-3 { font-size: 3rem; } }
+
+@media (max-width: 1200px) { .display-4 { font-size: 3.5rem; } }
+@media (max-width: 992px) { .display-4 { font-size: 3.25rem; } }
+@media (max-width: 576px) { .display-4 { font-size: 3rem; } }
+@media (max-width: 480px) { .display-4 { font-size: 2.75rem; } }
+
+
+/* ----------------------------------- */
+/* --------- TITLE EFFECTS  ---------- */
+/* ----------------------------------- */
+
+.red-stroke-effect {
+    z-index: 2;
+    text-align: center;
+    background-image: url('../assets/img/ui/back-title.png');
+    background-size: 100% 130%;
+    background-repeat: no-repeat;
+    background-position: 50% 50%;
+}

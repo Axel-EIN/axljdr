@@ -1,0 +1,92 @@
+/* ----- STYLE SHOGUN ----- */
+
+.heading-category, .heading-chapter {
+    font-family: "Shogun";
+    font-size: 8rem;
+    color: var(--color-white);
+    text-align: center;
+    text-shadow: 4px 4px 1rem var(--color-strong);
+
+    &.reduced { font-size: 7rem; }
+
+    .small-word { font-size: 0.25em; }
+
+    @media (max-width: 1199.98px) { font-size: 6.5rem; &.reduced { font-size: 5.25rem; } }
+    @media (max-width: 991.98px)  { font-size: 6rem;   &.reduced { font-size: 4.75rem; } }
+    @media (max-width: 575.98px)  { font-size: 5.5rem; &.reduced { font-size: 4.25rem; } }
+    @media (max-width: 480px)     { font-size: 5rem;   &.reduced { font-size: 3.75rem; } }
+}
+
+/* ----- STYLE MISAKI ----- */
+
+.heading-gmpanel {
+    font-family: "Misaki";
+    font-size: 4rem;
+    margin: 0;
+    padding: 0;
+    line-height: 1;
+    color: var(--color-stamp);
+
+    @media (max-width: 991.98px) { font-size: var(--fontsize-huge); }
+}
+
+/* ----- STYLE PRESENT ----- */
+
+.heading-present, .heading-elementdetail, .heading-episodedetail, .heading-categorysubsection {
+    font-family: "Present";
+    font-size: 4rem;
+    margin: 0;
+    padding: 0;
+    line-height: 1;
+    color: var(--color-stamp);
+
+    .small-word { font-size: 0.5em; }
+
+    @media (max-width: 991.98px) { font-size: var(--fontsize-huge); }
+}
+
+.heading-episodedetail {
+    color: var(--color-white);
+    text-shadow: 4px 4px 1rem var(--color-strong);
+}
+
+/* ----- STYLE AVENIR ----- */
+
+.heading-cardtitle, .heading-elementpart {
+    font-family: "Avenir";
+    font-size: var(--fontsize-bigger);
+    margin: 0;
+    padding: 0;
+    line-height: 1;
+    color: var(--color-strong);
+
+    @media (max-width: 991.98px) {
+        font-size: var(--fontsize-big);
+    }
+}
+
+.heading-elementpart.decorated {
+    display: block;
+    text-align: center;
+    margin-bottom: 1.5rem;
+}
+
+/* ----- STYLE AMERIGO ----- */
+
+.label-amerigo, .heading-scene {
+    font-family: "Amerigo";
+    font-size: var(--fontsize-plus);
+    color: var(--color-strong);
+    margin: 0;
+    padding: 0;
+
+    @media (max-width: 991.98px) {
+        font-size: var(--fontsize-normal);
+    }
+}
+
+.heading-scene {
+    color: var(--color-white);
+    text-transform: uppercase;
+    font-size: var(--fontsize-pluser);
+}

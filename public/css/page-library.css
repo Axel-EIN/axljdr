@@ -1,0 +1,106 @@
+/* ------------------------ */
+/* ----- PAGE LIBRARY ----- */
+/* ------------------------ */
+
+#intro {
+    border-radius: 1rem;
+}
+
+.item {
+    padding: 0.5rem 1rem;
+    color: var(--dark);
+    border-top-right-radius: 0;
+    border-top-left-radius: 1rem;
+    border-bottom-right-radius: 1rem;
+    border-bottom-left-radius: 0;
+    &:hover {
+        background-color: var(--accent-lightest);
+        color: var(--dark);
+    }
+}
+
+.item.AIR {
+    box-shadow:
+        inset 2px 2px 0 0 var(--lightest),
+        0px 0px .5rem 0 var(--AIR);
+}
+
+.item-no-hover {
+    padding: 0.5rem 1rem;
+    color: var(--dark);
+}
+
+.list-heading {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 0.5rem 1rem;
+}
+
+.list-heading-short {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 0.5rem 1rem;
+    border-radius: 1rem;
+    color: var(--white);
+    background-color: var(--gray);
+}
+
+.list-heading > div, .list-heading-short > div {
+    text-align: center;
+    padding: 0 .5rem;
+    margin: 0;
+}
+
+.item-line {
+    display: flex;
+    flex-direction: row;
+    &>div { text-align: center; }
+}
+
+.item-name { color: var(--dark); }
+
+.item-description {
+    text-align: justify;
+    color: var(--gray);
+}
+
+#capacite {
+    color: var(--dark);
+    margin-left: 0.5rem;
+    padding: 0.5rem;
+}
+
+#capacite ul, #effet-rappel ul {
+    margin-top: 0.5rem;
+    list-style-image: url('../assets/img/ui/bullet.png');
+}
+
+#capacite li, #effet-rappel li {
+    padding: 0.125rem;
+}
+
+#effet-rappel {
+    color: var(--dark);
+    border-radius: 1rem;
+    background-color: var(--accent-lightest);
+    padding: 1rem;
+    margin-left: 0;
+    margin-right: 0;
+    margin-bottom: 1.5rem;
+    margin-top: 0;
+    border: 1px solid #00000020;
+}
+
+.text-rank {
+    color: white;
+    padding-left: .5rem;
+    padding-right: .5rem;
+    padding-top: 0.25rem;
+    padding-bottom: 0.25rem;
+    border-radius: 1rem;
+    font-weight: bold;
+    min-width: 24px;
+    font-size: var(--regular);
+}

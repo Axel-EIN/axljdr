@@ -1,0 +1,155 @@
+{% set i = 1 %}
+{% set library = un_element %}
+
+{% if not is_granted('ROLE_MJ') %}
+    {% set items = items|filter(objet => not objet.locked) %}
+{% endif %}
+
+{% if app.request.get('tab') is defined and app.request.get('subtab') != 'FLÈCHE' and app.request.get('tab') != 'ARMURE' %}
+
+    <div id="effet-rappel" class="col-12 library-row">
+
+        <div class="col-4 m-0 p-1 pr-2">
+            <span class="label-amerigo">Taille</span>
+            <ul>
+                <li>PETITE : Dissimulable</li>
+                <li>GRANDE : +5 ND Attaque en environement exigus</li>
+            </ul>
+        </div>
+
+
+        <div class="col-4 m-0 p-1 pl-3">
+            <span class="label-amerigo">Poids</span>
+            <ul>
+                <li>LEGERE : +5 Initiative</li>
+                <li>LOURDE : -5 Initiative</li>
+            </ul>
+        </div>
+
+        <div class="col-4 m-0 p-1 pr-2">
+            <span class="label-amerigo">Taille + Poids</span>
+            <ul>
+                <li>GRANDE + LOURDE : Maniement à 2 mains obligatoire</li>
+            </ul>
+        </div>
+
+    </div>
+
+{% endif %}
+
+{% if items is defined and items is not empty %}
+
+    <div class="col-12 list-heading-short relative">
+        {% if app.user and is_granted("ROLE_MJ") %}
+            {% set action, entity, redirect, position, color, size = 'create', 'objet', 'library&libraryID=' ~ library.id ~ '&tab=' ~ app.request.get('tab'), 'right-overflow', 'text-accent', 'btn-icon-small' %}
+            {{ include('/btns/btn-icon.html.twig') }}
+        {% endif %}
+
+        <div class="col-4 text-left pl-3">Nom</div>
+
+        {% if app.request.get('tab') is defined and app.request.get('subtab') == 'ENSEMBLE' %}
+            <div class="col-5"></div>
+            <div class="col-1 text-small">+ND Armure</div>
+            <div class="col-1">Reduction</div>
+        {% else %}
+            <div class="col-3"></div>
+            <div class="col-1">Taille</div>
+            <div class="col-1">Poids</div>
+            <div class="col-1">
+                {% if app.request.get('tab') is defined and app.request.get('tab') == 'ARC' %}
+                    Force Arc
+                {% else %}
+                    VD
+                {% endif %}
+            </div>
+
+            <div class="col-1 text-small">Dmg. Moy.<br><span class="text-mini">
+                {% if app.request.get('tab') is defined and app.request.get('tab') == 'ARC' %}
+                    Flèche 2g2 + 1g0
+                {% else %}
+                    Force 4 + 1g0
+                {% endif %}
+                </span>
+            </div>
+        {% endif %}
+
+        <div class="col-1">Prix</div>
+    </div>
+
+    {% for item in items %}
+        <div class="col-12 p-0 m-0 relative">
+
+            {% if app.user and is_granted("ROLE_MJ") %}
+                {% set position, size, color, entity, un_element, redirect = 'left-overflow', 'btn-icon-mini', 'text-accent', 'objet', item, 'library&libraryID=' ~ library.id %}
+                {{ include('/parts/btn-icon-edit.html.twig') }}
+            {% endif %}
+
+            <div class="card item-no-hover">
+
+                <div class="item-line row">
+
+                    <div class="col-4 text-left">
+                        <strong class="item-name mr-1">{{ item.nom }}</strong>
+                        <span class="badge badge-secondary">{{item.motCle1}}</span>
+                        <span class="badge badge-secondary">{{item.motCle2}}</span>
+                    </div>
+
+                    {% if app.request.get('subtab') == 'ENSEMBLE' %}
+                        <div class="col-5"></div>
+                        <div class="col-1 text-center"><strong class="text-medium">{{item.ndArmure}}</strong></div>
+                        <div class="col-1 text-center"><strong class="text-medium">{{item.reduction}}</strong></div>
+                    {% else %}
+                        <div class="col-3"></div>
+                        <div class="col-1 text-center"><strong class="align-text-middle">{{item.taille}}</strong></div>
+                        <div class="col-1 text-center"><strong class="align-text-middle">{{item.poids}}</strong></div>
+                        <div class="col-1 text-center">
+                            <strong class="text-medium text-dead">
+                                {% if app.request.get('subtab') is defined and app.request.get('subtab') == 'ARC' %}
+                                    {{item.forceArc}}
+                                {% else %}
+                                    {{item.vd}}
+                                {% endif %}
+                            </strong>
+                        </div>
+                        <div class="col-1 text-center">
+                                {% if app.request.get('subtab') is defined and app.request.get('subtab') == 'ARC' and item.forceArc is defined and item.forceArc is not empty %}
+                                    {{'2g2'|jeter(item.forceArc)}}
+                                {% elseif app.request.get('subtab') is defined and app.request.get('subtab') == 'NINJUTSU' %}
+                                    {{item.vd|jeter}}
+                                {% else %}
+                                    {{item.vd|jeter(5)}}
+                                {% endif %}
+                        </div>
+                    {% endif %}
+
+                        <div class="col-1 text-right">{{item.prix|pricer|raw}}</div>
+
+                    </div>
+
+                    <article class="row">
+                        <div class="col-2 p-0 pl-3 m-0 mt-2">
+                            <img class="img-fluid" src="{{ asset( item.image|default(NA_ICON) ) }}" />
+                        </div>
+                        <div class="col-10 p-3 m-0 mt-2">
+                            <p class="item-description text-justify">
+                                {{ item.description|raw|nl2br }}
+                            </p>
+
+                            {% if item.regles is defined and item.regles is not empty %}
+                                <div id="capacite">
+                                    <span class="label-amerigo">Règles</span>
+                                    <ul>
+                                        {% if item.regles is defined and item.regles is not empty %}
+                                            {{item.regles|lister|raw}}
+                                        {% endif %}
+                                    </ul>
+                                </div>
+                            {% endif %}
+
+                        </div>
+                    </article>
+            </div>
+        </div>
+        {% set i = i + 1 %}
+    {% endfor %}
+{% endif %}

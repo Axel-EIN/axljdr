@@ -1,4 +1,4 @@
-<a class="{{position|default('right-corner-snap')}} {{color}} btn-icon-{{size}} fa-fade hover-stop"
-    href="{{ path('admin_' ~ entity ~ '_edit', {id:un_element.id}) }}?redirect={{redirect}}">
-    <i class="fas fa-edit" alt="Icône Modifier" title="Modifier"></i>
+<a  href="{{ path('admin_' ~ entity ~ '_edit', {id:un_element.id}) }}{% if redirect is defined and redirect is not empty %}?redirect={{redirect}}{% endif %}"
+    class="{{position|default('')}} {{color}} {{size}}">
+        <i class="fas fa-edit" alt="Icône Modifier" title="Modifier"></i>
 </a>

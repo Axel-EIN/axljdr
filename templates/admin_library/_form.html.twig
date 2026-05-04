@@ -1,0 +1,36 @@
+<div class="col-12">
+    {{ form_start(form) }}
+        <div class="row form-wrapper">
+
+            {{ include('parts/form-publication.html.twig', {form: form}) }}
+
+        
+            <div class="col-5">{{ form_row(form.nom) }}</div>
+            <div class="col-5">{{ form_row(form.pdf) }}</div>
+            <div class="col-1">{{ form_row(form.numero) }}</div> 
+            <div class="col-1 align-self-center">{{ form_row(form.base) }}</div>
+
+            <div class="col-3">{{ form_row(form.entity) }}</div>
+            <div class="col-3">{{ form_row(form.tabField) }}</div>
+            <div class="col-3">{{ form_row(form.subTabField) }}</div>
+            <div class="col-3">{{ form_row(form.filterField) }}</div>
+
+            <div class="col-3">{{ form_row(form.keyword1Field) }}</div>
+            <div class="col-3">{{ form_row(form.keyword2Field) }}</div>
+            <div class="col-3">{{ form_row(form.keyword3Field) }}</div>
+            <div class="col-3 align-self-center">{{ form_row(form.mixable) }}</div>
+
+            <div class="col-8">{{ form_row(form.description,{ 'attr': {'rows': '16'} }) }}</div>
+            <div class="col-4">{{ form_row(form.aside,{ 'attr': {'rows': '16'} }) }}</div>
+
+            <div class="col-12 mt-3 mb-4">
+                {{ include('parts/image-field.html.twig', {
+                    field: form.image, input_id: 'admin_library_image', prefix: 'image',
+                    current: library.image|default(null), fallback: NA_LIBRARY,
+                    label: 'Image (1200×900 4:3 recommandé)', width: 1200, height: 900 }) }}
+            </div>
+
+            {{ include('/btns/btn-form.html.twig') }}
+        </div>
+    {{ form_end(form) }}
+</div>

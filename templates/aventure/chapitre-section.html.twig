@@ -1,0 +1,169 @@
+<section class="header-bg-img relative"
+  style="
+    background-color: {{ un_chapitre.couleur }};
+    background-image:
+      linear-gradient( rgb( 0,0,0,0.4 ), rgb( 0,0,0,0.4) ),
+      linear-gradient( rgb( 0,0,0,0.6 ), rgb( 0,0,0,0), rgb( 0,0,0,0.3), rgb( 0,0,0,0.6) ),
+      url( {{ asset(un_chapitre.image|default(NA_CHAPITRE)) }} );
+  ">
+
+  {# pas de p-1 ici : il écrasait (!important) la gouttière responsive du
+     .container et collait le label CHAPITRE à 4px du bord #}
+  <div class="container">
+
+    {% if app.user and is_granted("ROLE_MJ") %}
+
+      {% if un_chapitre.numero == saison.chapitres|length %}
+        {% set label, numero, position = 'Ajouter', (un_chapitre.numero + 1), 'top-center' %}
+      {% else %}
+        {% set label, numero, position = 'Insérer', (un_chapitre.numero + 1), 'top-center' %}
+      {% endif %}
+
+      <div class="{{position}} mt-1">
+        {{ include('/btns/btn-line-insert.html.twig') }}
+      </div>
+
+    {% endif %}
+
+    <div class="header header-chapter d-flex flex-column" >
+      <span class="chapter-number text-left">
+        {% if app.user and is_granted("ROLE_MJ") %}
+          {% set color, position, redirect, entity, un_element, size = 'text-white-80', 'mr-2 align-middle', 'aventure', 'chapitre', un_chapitre, 'btn-icon-medium' %}
+          {{ include('/parts/btn-icon-edit.html.twig') }}
+        {% endif %}
+        CHAPITRE {{ un_chapitre.numero }}
+      </span>
+      <div><hr></div>
+
+      {# COLLECTE DES PJ/PNJ ET LIEUX UNIQUES DU CHAPITRE #}
+      {% set chapter_pj_ids = [] %}
+      {% set chapter_pjs = [] %}
+      {% set chapter_pnj_ids = [] %}
+      {% set chapter_pnjs = [] %}
+      {% set chapter_lieu_ids = [] %}
+      {% set chapter_lieux = [] %}
+      {% for un_episode in un_chapitre.episodes %}
+        {% for une_scene in un_episode.scenes %}
+          {% for une_participation in une_scene.participations %}
+            {% set perso = une_participation.personnage %}
+            {% if une_participation.estPj %}
+              {% if perso.id not in chapter_pj_ids %}
+                {% set chapter_pj_ids = chapter_pj_ids|merge([perso.id]) %}
+                {% set chapter_pjs = chapter_pjs|merge([perso]) %}
+              {% endif %}
+            {% else %}
+              {% if perso.id not in chapter_pnj_ids %}
+                {% set chapter_pnj_ids = chapter_pnj_ids|merge([perso.id]) %}
+                {% set chapter_pnjs = chapter_pnjs|merge([perso]) %}
+              {% endif %}
+            {% endif %}
+          {% endfor %}
+          {% set lieu = une_scene.lieu %}
+          {% if lieu is not null and lieu.id not in chapter_lieu_ids %}
+            {% set chapter_lieu_ids = chapter_lieu_ids|merge([lieu.id]) %}
+            {% set chapter_lieux = chapter_lieux|merge([lieu]) %}
+          {% endif %}
+        {% endfor %}
+      {% endfor %}
+
+      {# LIGNE LIEUX - en haut a gauche du header #}
+      {% if chapter_lieux|length > 0 %}
+        <div class="chapter-lieux">
+          <div class="label-du-groupe">Lieux</div>
+          <div class="chapter-lieux-row">
+            {% for lieu in chapter_lieux %}
+              <a class="chapter-lieu-link" href="{{ path('empire_lieu', {id: lieu.id}) }}" title="{{ lieu.nom }}">
+                <img class="chapter-lieu-icon" src="{{ asset(lieu.icone|default(NA_LIEU_ICO)) }}" alt="Icone de {{ lieu.nom }}" />
+              </a>
+            {% endfor %}
+          </div>
+        </div>
+      {% endif %}
+
+      {# GRILLE PJ - à gauche du header #}
+      {% if chapter_pjs|length > 0 %}
+        <div class="chapter-characters pjs chapter-view">
+          <div class="label-du-groupe">Joueurs</div>
+          <div class="chapter-portraits-grid">
+            {% for perso in chapter_pjs %}
+              {% set fallback = NA_PERSO_PORTRAIT %}
+              {% if perso.icone is null and perso.genre == 'F' %}{% set fallback = attribute(_context, 'NA_PERSO_PORTRAIT_F')|default(NA_PERSO_PORTRAIT) %}
+              {% elseif perso.icone is null and perso.genre == 'M' %}{% set fallback = attribute(_context, 'NA_PERSO_PORTRAIT_M')|default(NA_PERSO_PORTRAIT) %}
+              {% endif %}
+              <a class="chapter-portrait-link" href="{{ path('personnage_profil', {id: perso.id}) }}" title="{{ perso.prenom }}">
+                <img class="chapter-portrait chapter-view" src="{{ asset(perso.icone|default(fallback)) }}" alt="Portrait de {{ perso.prenom }}" />
+              </a>
+            {% endfor %}
+          </div>
+        </div>
+      {% endif %}
+
+      {# GRILLE PNJ - à droite du header #}
+      {% if chapter_pnjs|length > 0 %}
+        <div class="chapter-characters pnjs chapter-view">
+          <div class="label-du-groupe pnjs">Non-joueurs</div>
+          <div class="chapter-portraits-grid">
+            {% for perso in chapter_pnjs %}
+              {% set fallback = NA_PERSO_PORTRAIT %}
+              {% if perso.icone is null and perso.genre == 'F' %}{% set fallback = attribute(_context, 'NA_PERSO_PORTRAIT_F')|default(NA_PERSO_PORTRAIT) %}
+              {% elseif perso.icone is null and perso.genre == 'M' %}{% set fallback = attribute(_context, 'NA_PERSO_PORTRAIT_M')|default(NA_PERSO_PORTRAIT) %}
+              {% endif %}
+              <a class="chapter-portrait-link" href="{{ path('personnage_profil', {id: perso.id}) }}" title="{{ perso.prenom }}">
+                <img class="chapter-portrait chapter-view" src="{{ asset(perso.icone|default(fallback)) }}" alt="Portrait de {{ perso.prenom }}" />
+              </a>
+            {% endfor %}
+          </div>
+        </div>
+      {% endif %}
+
+      <!-- TITLE + QUOTE + CTA BTN -->
+      <div class="mt-auto">
+        <h1 id="read-head-ch-id{{ un_chapitre.id }}" class="chapter-title{% if un_chapitre.titre|length > 20 %} reduced{% endif %}">{{ un_chapitre.titre|relief|raw }}</h1>
+        {% if un_chapitre.citation is not empty %}
+          <p class="quote quote-chapter">{{ un_chapitre.citation|nl2br }}</p>
+        {% endif %}
+        {% if un_chapitre.episodes is not empty and un_chapitre.episodes[0].scenes|length > 0 or is_granted("ROLE_MJ") %}
+          <a class="btn-primary-style btn-large voir" href="#read-head-ch-id{{ un_chapitre.numero }}" data-toggle="collapse"
+             data-target="#ch{{ un_chapitre.numero }}-episodes" aria-controls="ch{{ un_chapitre.numero }}-episodes"
+             aria-expanded="true" aria-label="Toggle Chapitre {{ un_chapitre.numero }} Episodes">
+            <i class="fa-solid fa-scroll fa-bounce" alt="Icône Voir" ></i>&nbsp;&nbsp;Voir les Episodes
+          </a>
+        {% else %}
+          <div class="alert alert-light mx-auto alert-persist">
+            <strong>Il n'y a pas encore de session disponible !</strong>&nbsp;&nbsp;
+            {% if app.user and is_granted("ROLE_MJ") %}
+              <a class="btn-quaternary-style text-white-80" href="{{path('admin_episode_create')}}?numero=1&chapitreID={{un_chapitre.id}}&redirect=aventure">
+                <i class="fas fa-plus-square" alt="Icône Ajouter"></i>&nbsp;&nbsp;<strong>Ajouter une Session</strong>
+              </a>
+            {% endif %}
+          </div>
+        {% endif %}
+      </div>
+
+    </div>
+
+    <!-- EPISODES -->
+    <div id="ch{{ un_chapitre.numero }}-episodes" class="collapse mb-4 mt-2">
+      <div class="container">
+        <div class="row justify-content-center relative">
+
+          {% for un_episode in un_chapitre.episodes %}
+            {% if un_episode.scenes|length > 0 or is_granted("ROLE_MJ") %}
+              <!-- ONE SESSION -->
+              {{ include('/aventure/episode-card.html.twig') }}
+            {% endif %}
+          {% endfor %}
+
+          <!-- MJ - BIG ICON BTN - ADD -->
+          {% if app.user and is_granted("ROLE_MJ") %}
+            <a class="absolute btn-display-icon" href="{{path('admin_episode_create')}}?numero={{(un_chapitre.episodes|length)+1}}&chapitreID={{un_chapitre.id}}&redirect=aventure">
+              <i class="fas fa-plus-square" alt="Icône Ajouter" title="Ajouter une Session"></i>
+            </a>
+          {% endif %}
+
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>

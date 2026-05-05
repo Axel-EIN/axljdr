@@ -1,0 +1,159 @@
+{% extends 'element.html.twig' %}
+
+{% block stylesheets %}
+    {{parent()}}
+    <link rel="stylesheet" href="{{asset('css/page-ecole.css')}}" />
+{% endblock %}
+
+{% block element_content %}
+
+    <!-- BANNER INTRO -->
+    <section class="col-12 p-1">
+        <card class="card">
+
+            <!-- CONTAINER IMAGE -->
+            <div class="relative">
+
+                <!-- MON -->
+                <a id="banner-icon-clan" class="hover-zoom" href="{{ path('empire_clan', {id:ecole.clan.id} ) }}" >
+                    <img class="img-96 filter-shadow" src="{{ asset(ecole.clan.mon|default(NA_MON)) }}" alt="Mon d'une faction" title="Voir la faction {{ecole.clan.nom}}" />
+                </a>
+
+                <!-- CONTAINER ZONE TEXT + BLUR ABSOLUTE -->
+                <text id="text-zone" class="col-10 row p-0 m-0 mb-3 justify-content-end" >
+
+                    <div class="col-4 m-0 p-0 text-center text-shadow on-top">
+                        <h2 class="title-h3">Bonus</h2>
+                        <span class="text-zone-blur text-xp text-big">{{ ecole.bonus }}</span>
+                    </div>
+
+                    <div class="col-4 m-0 p-0 on-top">
+                        <h2 class="title-h3">Compétences</h2>
+                        <p class="text-zone-blur ml-4 mt-2"><ul>{{ ecole.competences|lister|raw }}</ul></p>
+                    </div>
+
+                    <div class="col-4 m-0 p-0 on-top">
+                        <h2 class="title-h3">Équipement</h2>
+                        <p class="text-zone-blur ml-4 mt-2"><ul>{{ ecole.equipements|lister|raw }}</ul></p>
+                    </div>
+
+                </text>
+
+                <!-- IMAGE -->
+                <div class="gradient-after-down">
+                    <img class="img-fluid" src="{{ asset(ecole.image|default('assets/img/placeholders/na_school_' ~ ecole.classe.nom|lower ~ '.jpg')) }}" alt="Image de l'École"  />
+                </div>
+
+            </div>
+
+            <!-- DESCRIPTION -->
+            <div class="card-body"><p class="text-justify px-5 py-3 m-3 mb-5 text-medium">{{ ecole.description|raw|nl2br }}</p></div>
+
+        </card>
+    </section>
+
+    {% if ecole.personnages|length > 0 %}
+        {% set col = 'col-10' %}
+    {% else %}
+        {% set col = 'col-12' %}
+    {% endif %}
+
+    <div class="col-12 p-0 m-0 row">
+        <div class="{{col}} p-0 m-0 row">
+
+            <!-- TECHNIQUES -->
+            <section class="col-12 p-1 m-0">
+                <div class="card card-body pt-4 h-100">
+                    <h2 class="title-h3">Techniques</h2>
+                    <hr>
+
+                    {% for i in 1..5 %}
+                        {% if attribute(ecole, 'tech' ~ i ~ 'Nom') is not empty %}
+                            <div class="card-text row p-0 my-3 mx-0">
+                                <div class="col-2 text-center" style="color: {{ ecole.clan.couleur }}">
+                                    <strong>Rang</strong><br/>
+                                    <span class="number-skillrank-effect display-1" >{{ i|relief|raw }}</span>
+                                </div>
+                                <div class="col-10 ml-n2">
+                                    <h3 class="title-h4 mb-2">{{ attribute(ecole, 'tech' ~ i ~ 'Nom')|upper }}</h3>
+                                    <p class="text-justify text-regular">{{ attribute(ecole, 'tech' ~ i ~ 'Desc')|raw|nl2br }}</p>
+                                </div>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+
+                    {% if ecole.techSpecialNom is not empty %}
+                        <h3 class="title-h4 mx-3 mb-2">{{ ecole.techSpecialNom|upper }}</h3>
+                        <p class="mx-3 text-justify text-medium">{{ ecole.techSpecialDesc|raw|nl2br }}</p>
+                    {% endif %}
+
+                </div>
+            </section>
+
+            {% if ecole.sorts is defined and ecole.sorts is not empty %}
+            <!-- MAGIE -->
+            <section class="col-12 p-1 m-0">
+                <div class="card card-body pt-4 h-100">
+                    <h2 class="title-h3">Magie</h2>
+                    <hr>
+
+                    <div class="d-flex justify-content-around align-items-start">
+                        <div>
+                            <h4>Affinité</h4>
+                            <span class="text-xp text-large">{{ecole.affinite}}</span>
+                        </div>
+                        <div>
+                            <h4>Déficience</h4>
+                            <span class="text-dead text-large">{{ecole.deficience}}</span>
+                        </div>
+                        <div>
+                            <h4>Sorts de départ</h4>
+                            {{ecole.sorts|lister|raw}}
+                        </div>
+                    </div>
+
+                </div>
+            </section>
+            {% endif %}
+
+        </div>
+
+        <!-- PERSONNAGES DE CETTE ECOLE -->
+        <aside class="col-2">
+            <div class="row">
+            <!-- UN PERSONNAGE -->
+            {% for un_personnage in ecole.personnages %}
+                <a class="col-12 hover-zoom p-2" href="{{ path('personnage_profil', {id: un_personnage.id} ) }}">
+                    <img class="img-fluid rounded-8" src="{{ asset(un_personnage.icone|default(NA_PERSO_ICO)) }}" alt="Icône d'un personnage" title="Voir le profil de {{un_personnage.prenom}}" />
+                </a>
+            {% endfor %}
+            </div>
+        </aside>
+
+    </div>
+
+    {% if ecole.clan.genre == 'M' %}
+        {% set preposition = 'du' %}
+    {% elseif ecole.clan.genre == 'F' %}
+        {% set preposition = 'de la' %}
+    {% else %}
+        {% set preposition = '' %}
+    {% endif %}
+
+    {% if autresEcoles is defined and autresEcoles is not empty %}
+    <!-- AUTRES ECOLES DU CLAN -->
+    <aside class="col-12 p-1">
+        <div class="card card-body h-100 pb-1">
+            <h2 class="title-h3">Autres écoles {{preposition}} {{ecole.clan.nom}}</h2>
+            <hr>
+            <div class="row p-0 m-0 pt-2">
+                {% set col, size, na_image, ratio = 'col-2', 'small', NA_43, '43' %}
+                {% for un_element in autresEcoles %}
+                    {{ include('/parts/element-vignette.html.twig', {un_element}) }}
+                {% endfor %}
+            </div>
+        </div>
+    </aside>
+    {% endif %}
+
+{% endblock %}

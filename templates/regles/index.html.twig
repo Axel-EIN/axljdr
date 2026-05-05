@@ -1,0 +1,43 @@
+{% extends 'category.html.twig' %}
+{% block title %}Les Règles de l'Aventure {{ parent() }}{% endblock %}
+
+{% block stylesheets %}
+    {{parent()}}
+    <link rel="stylesheet" href="{{asset('css/components/picture-grid.css')}}" />
+{% endblock %}
+
+{% block section_content1 %}
+    {{ include('/parts/picture-grid.html.twig', {
+        items: rulesBases, route: 'regles_rule', na_image: NA_RULE,
+        ratio: '43', size: 'medium',
+        wrapper: 'col-12', per_row: {desktop: 4, mobile: 2},
+        empty_message: 'Pas de règles de base disponibles.',
+    }) }}
+{% endblock %}
+
+{% block section_content2 %}
+    {{ include('/parts/picture-grid.html.twig', {
+        variant: 'emblem',
+        items: classes, route: 'regles_classe', na_image: NA_CLASS_ICO,
+        field: 'icone', wrapper: 'col-12',
+        per_row: {desktop: 6, mobile: 2},
+    }) }}
+{% endblock %}
+
+{% block section_content3 %}
+    {{ include('/parts/picture-grid.html.twig', {
+        items: librariesBases, route: 'regles_library', na_image: NA_LIBRARY,
+        ratio: '43', size: 'medium',
+        wrapper: 'col-12', per_row: {desktop: 4, mobile: 2},
+        empty_message: 'Pas de bibliothèques disponibles.',
+    }) }}
+{% endblock %}
+
+{% block section_content4 %}
+    {{ include('/parts/picture-grid.html.twig', {
+        items: annexes, route: 'regles_rule', na_image: NA_RULE,
+        ratio: '43',
+        wrapper: 'col-12', per_row: {desktop: 6, mobile: 2},
+        empty_message: 'Pas de règles annexes disponibles.',
+    }) }}
+{% endblock %}

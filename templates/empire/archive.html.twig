@@ -1,0 +1,51 @@
+{% extends 'element.html.twig' %}
+{% block element_content %}
+
+    <element class="col-12 pb-1">
+        <card class="card pb-5">
+        
+            <!-- ILLUSTRATION -->
+            <img class="img-fluid" src="{{ asset(un_element.image|default(NA_ARCHIVE)) }}" alt="Image de {{ nom }}" />
+
+            <!-- TEXTE -->
+            <p class="p-5 mx-5 text-justify text-medium">{{ un_element.contenu|raw|nl2br }}</p>
+        
+            <!-- AUTEUR -->
+            {% if un_element.auteur is not empty %}
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">
+                        <strong>Auteur&nbsp;:</strong> {{ un_element.auteur.nom }} <strong>{{ un_element.auteur.prenom }}</strong> 
+                    </li>
+                </ul>
+            {% endif %}
+
+            <spacer class="my-3">{{ include('/parts/separateur-ornament.html.twig') }}</spacer>
+
+            <!-- BTN MJ DELETE-->
+            {% if app.user and is_granted("ROLE_MJ") %}
+                <div class="text-center">
+                    {% set redirect, element, un_element, color, action = 'empire', 'archive', un_element, 'text-accent', 'delete' %}
+                    {{ include('/parts/btn-line.html.twig') }}
+                </div>
+            {% endif %}
+
+        </card>
+    </element>
+
+     <!-- AUTRES ARCHIVES -->
+     {% if autresArchives is defined and autresArchives|length > 0 %}
+        <aside class="col-12 pt-1 mb-5">
+            <card class="card card-body pb-1">
+                <h2 class="title-h3">Autres Archives</h2>
+                <hr>
+                <row class="row p-0 m-0 pt-2">
+                    {% set col, size, na_image = 'col-2', 'small', NA_ARCHIVE %}
+                    {% for un_element in autresArchives %}
+                        {{ include('/parts/element-vignette.html.twig', {un_element}) }}
+                    {% endfor %}
+                </row>
+            </card>
+        </aside>
+    {% endif %}
+
+{% endblock %}

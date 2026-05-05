@@ -1,0 +1,166 @@
+{% extends 'element.html.twig' %}
+
+{% block stylesheets %}
+    {{parent()}}
+    <link rel="stylesheet" href="{{asset('css/page-clan.css')}}" />
+{% endblock %}
+
+{% block element_content %} 
+
+    {# BANNER INTRO #}
+    {% set category, entity, un_element, icone, invert , all_elements = 'empire', 'clan' , clan, clan.mon|default(NA_MON), '' , toutClans %}
+    {{ include('parts/banner-intro.html.twig') }}
+
+    {# FAMILLES #}
+    <section class="col-8 p-1">
+        <div class="card card-body pt-4 h-100 relative">
+
+            <!-- BTN MJ ADD -->
+            {% set redirect, entity, position, label_one, options = 'clan', 'famille', 'right-corner-16', 'une famille', 'clanID=' ~ clan.id %}
+            {{ include('/parts/btn-box-add-element.html.twig', {element: entity}) }}
+
+            <h2 class="title-h3">Familles</h2>
+            <div class="card-text">
+
+                {% for une_famille in clan.familles %}
+                    <hr>
+                    <article class="my-4 row align-items-start relative">
+
+                        {% if app.user and is_granted("ROLE_MJ") %}
+                        <!-- MJ BTN ICON EDIT -->
+                            {% set redirect, entity, un_element, size, color, position = 'clan', 'famille', une_famille, 'btn-icon-small', 'text-accent', 'right-corner-snap' %}
+                            {{ include('/parts/btn-icon-edit.html.twig') }}
+                        {% endif %}
+
+                        <div class="col-lg-3 text-center d-flex flex-column">
+                            <img class="img-fluid circle-crop" src="{{ asset(une_famille.mon|default(NA_MON)) }}" alt="Mon Famille" />
+
+                            <!-- DAIMYO -->
+                            {% if une_famille.chef is not empty %}
+                                <a class="d-flex flex-column justify-center align-items-center mt-3 hover-no-under hover-zoom" href="{{ path('personnage_profil', {id: une_famille.chef.id} ) }}" title="{{une_famille.chef.nom}} {{une_famille.chef.prenom}}">
+                                    <span class="text-muted align-middle">Daimyo</span>
+                                    <img class="character-portrait medium" src="{{ asset(une_famille.chef.icone) }}" alt="Icône du personnage" />
+                                </a>                                 
+                            {% endif %}
+
+                        </div>
+
+                        <div class="col-lg-9">
+                            <h3><strong> {{ une_famille.nom }}</strong></h3>
+                            <strong>{{une_famille.bonus|upper}}</strong>
+                            <p class="text-justify text-regular mt-2 pr-2">{{ une_famille.description|raw|nl2br }}</p>
+                        </div>
+
+                    </article>
+                {% else %}
+                    <span class="text-muted"><i>Familles à venir</i></span>
+                {% endfor %}
+
+            </div>
+        </div>
+    </section>
+
+    {# ECOLES DU CLAN #}
+    <section class="col-4 p-1">
+        <div class="card card-body pt-4 h-100">
+
+            <!-- BTN MJ ADD -->
+            {% set redirect, entity, position, label_one, options = 'clan', 'ecole', 'right-corner-16', 'une école', 'clanID=' ~ clan.id %}
+            {{ include('/parts/btn-box-add-element.html.twig', {element: entity}) }}
+
+            <h2 class="title-h3">Écoles</h2>
+            <hr>
+
+            {% for une_ecole in clan.ecoles %}
+            <a class="vignette-aside mb-3" href="{{ path('regles_ecole', {id: une_ecole.id} ) }}">
+                <strong>{{ une_ecole.nom|upper }}</strong>
+                <img class="img-fluid" src="{{ asset(une_ecole.image|default('assets/img/placeholders/na_school_' ~ une_ecole.classe.nom|lower ~ '.jpg')) }}" alt="Image d'une école" />
+            </a>
+            {% else %}
+                <i class="text-muted">Écoles à venir.</i>
+            {% endfor %}
+
+        </div>
+    </section>
+        
+    {# TERRITOIRES #}
+    {% if clan.territoireDesc is defined and clan.territoireDesc is not empty %}
+    <section class="col-12 p-1">
+        <div class="card card-body pt-4 h-100">
+            <h2 class="title-h3">Territoires</h2>
+            <hr>
+
+            {% if clan.territoireCarte %}
+                <img id="carte" class="img-fluid" src="{{asset(clan.territoireCarte)}}" alt="Carte du Territoire du clan" />
+            {% endif %}
+
+            {% if clan.territoireDesc %}
+                <p class="text-justify mt-3 px-5 py-3 text-medium">{{clan.territoireDesc}}</p>
+            {% else %}
+                <p class="text-muted"><i>Description des Territoires à venir.</i></p>
+            {% endif %}
+
+        </div>
+    </section>
+    {% endif %}
+
+    {# AUTRES #}
+    {% if clan.longDescription is defined and clan.longDescription is not empty %}
+        {% set col_side = "col-4" %}
+        {% set col_lieu = "col-12" %}  
+        {% set col_perso = "col-6" %}  
+        <section class="col-8 p-1">
+            <div class="card card-body pt-4 h-100">
+                <h2 class="title-h3">Autres</h2>
+                <hr>
+                <p class="card-text text-justify px-5 py-3 text-medium">
+                    {{ clan.longDescription|raw|nl2br }}
+                </p>
+            </div>
+        </section>
+    {% else %}
+        {% set col_side = "col-12" %}
+        {% set col_lieu = "col-3" %}  
+        {% set col_perso = "col-2" %}  
+    {% endif %}
+
+    {# LIEUX & PERSONNAGES #}
+    <aside class="{{col_side}} p-1">
+
+        <div class="row m-n1 p-0">
+
+            {# LIEUX  #}
+            {% for un_lieu in clan.lieux %}
+            <div class="p-1 {{col_lieu}}">
+                <a class="vignette-aside" href="{{path('empire_lieu', {id: un_lieu.id} )}}">
+
+                    <!-- ICON ON TOP -->
+                    {% set PLACEHOLDER = NA_LIEU %}
+                    {% if un_lieu.icone is defined and un_lieu.icone is not empty and un_lieu.image is defined and un_lieu.image is empty %}
+                        <img class="badge-center img-128" src="{{ asset(un_lieu.icone) }}" alt="une icône" />
+                        {% set PLACEHOLDER = NA_LIEU_BG %}
+                    {% endif %}
+
+                    <strong>{{ un_lieu.nom|upper }}</strong>
+                    <img class="img-fluid" src="{{asset(un_lieu.image|default(PLACEHOLDER))}}" alt="Image d'un Lieu" /></a>
+                </a>
+            </div>
+            {% endfor %}
+
+            {# PERSONNAGE  #}
+            {% for un_personnage in clan.personnages %}
+                <a class="{{col_perso}} p-1 hover-zoom" href="{{ path('personnage_profil', {id: un_personnage.id} ) }}" >
+                    <img class="img-fluid rounded-8" src="{{ asset(un_personnage.icone|default(NA_PERSO_ICO)) }}" alt="Icône du personnage" />
+                </a>
+            {% endfor %}
+
+        </div>
+
+    </aside>
+
+{% endblock %}
+
+{% block javascripts %}
+    {{parent()}}
+    <script src="{{ asset('scripts/clan.js') }}"></script>
+{% endblock %}

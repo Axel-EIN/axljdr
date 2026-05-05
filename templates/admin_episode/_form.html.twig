@@ -1,0 +1,25 @@
+<div class="col-12">
+    {{ form_start(form) }}
+        <div class="row form-wrapper">
+
+            <div class="col-3">{{ form_row(form.titre) }}</div>
+            <div class="col-3">{{ form_row(form.chapitreParent) }}</div>
+            <div class="col-2">{{ form_row(form.numero) }}</div>
+            <div class="col-2">{{ form_row(form.numeroSaison) }}</div>
+            <div class="col-2">{{ form_row(form.issue) }}</div>
+
+            <div class="col-12">{{ form_row(form.resume,{ 'attr': {'rows': '2'} }) }}</div>
+
+            <div class="offset-2 col-8 mt-3 mb-5">
+                {{ include('parts/image-field.html.twig', {
+                    field: form.image, input_id: 'admin_episode_image', prefix: 'image',
+                    current: episode.image|default(null), fallback: NA_SESSION,
+                    label: 'Image (1280×720 16:9 recommandé)', width: 1280, height: 720 }) }}
+            </div>
+
+            {{ include('parts/form-publication.html.twig', {form: form}) }}
+
+            {{ include('/btns/btn-form.html.twig') }}
+        </div>
+    {{ form_end(form) }}
+</div>

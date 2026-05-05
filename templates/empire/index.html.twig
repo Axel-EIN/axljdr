@@ -1,0 +1,63 @@
+{% extends 'category.html.twig' %}
+{% block title %}L'Univers de l'Aventure {{ parent() }}{% endblock %}
+
+{% block stylesheets %}
+    {{parent()}}
+    <link rel="stylesheet" href="{{asset('css/components/picture-grid.css')}}" />
+    <link rel="stylesheet" href="{{asset('css/pages/empire.css')}}" />
+{% endblock %}
+
+{% block section_content1 %}
+    {{ include('/parts/picture-grid.html.twig', {
+        items: archives, route: 'empire_archive', na_image: NA_ARCHIVE,
+        wrapper: 'col-12', per_row: {desktop: 6, mobile: 2},
+        empty_message: "Pas d'archives disponibles.",
+    }) }}
+{% endblock %}
+
+{% block section_content2 %}
+    {% if clansMajeurs is empty and clansAutres is empty %}
+        <p class="col-12 text-muted font-italic">Pas de factions disponibles.</p>
+    {% else %}
+
+        <div class="col-12 col-lg-9">
+            <h4 class="text-secondary">Clans Majeurs</h4>
+            <p class="faction-intro">Les Clans Majeurs sont les plus grandes factions de Rokugan.
+            Chacune d'elle est héritière d'un Kami originel qui juera fidélité à l'Empereur et se répartit la majeur partie de l'Empire.
+            Elles se composent de plusieurs familles et forment des miliers de Samuraïs dans leur dojos.</p>
+            {{ include('/parts/picture-grid.html.twig', {
+                variant: 'emblem',
+                items: clansMajeurs, route: 'empire_clan', na_image: NA_MON,
+                per_row: {desktop: 4, mobile: 2},
+            }) }}
+        </div>
+
+        <div class="col-12 col-lg-3 border-left">
+            <h4 class="text-secondary text-center">Autres</h4>
+            <p class="faction-intro">Clans Mineurs, Confrérie des Moines, Familles Impérialles, Ennemis...</p>
+            {{ include('/parts/picture-grid.html.twig', {
+                variant: 'emblem',
+                items: clansAutres, route: 'empire_clan', na_image: NA_MON,
+                label: false, max_size: '6rem',
+                per_row: {desktop: 2, mobile: 3},
+            }) }}
+        </div>
+
+    {% endif %}
+{% endblock %}
+
+{% block section_content3 %}
+    {{ include('/parts/picture-grid.html.twig', {
+        items: lieux, route: 'empire_lieu', na_image: NA_LIEU, force_image: true,
+        wrapper: 'col-12', per_row: {desktop: 6, mobile: 2},
+        empty_message: 'Pas de lieux disponibles.',
+    }) }}
+{% endblock %}
+
+{% block section_content4 %}
+    {{ include('/parts/picture-grid.html.twig', {
+        items: lores, route: 'empire_lore', na_image: NA_ARCHIVE,
+        wrapper: 'col-12', per_row: {desktop: 6, mobile: 2},
+        empty_message: 'Pas de lore disponible.',
+    }) }}
+{% endblock %}

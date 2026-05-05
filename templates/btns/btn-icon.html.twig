@@ -2,9 +2,6 @@
 
 {% if redirect is defined and redirect is not empty %}
     {% set frag_redir = 'redirect=' ~ redirect %}
-    {% if action == 'delete' %}
-        {% set frag_redir = '&' ~ frag_redir %}
-    {% endif %}
 {% endif %}
 
 {% if fragment is defined and fragment is not empty %}
@@ -14,18 +11,24 @@
 {% if action == 'create' %}
     {% set href = path(path) %}
     {% set fa_icon, label = 'fa-plus-square', 'Ajouter' %}
-{% else %}
+{% elseif action == 'edit' %}
     {% set href = path(path, {id:un_element.id}) %}
-    {% if action == 'edit' %}
-        {% set fa_icon, label = 'fa-edit', 'Modifier' %}
-    {% elseif action =='delete' %}
-        {% set frag_csrf = "csrf=" ~ csrf_token('delete' ~ un_element.id) %}
-        {% set fa_icon, label = 'fa-trash-alt', 'Supprimer' %}
-    {% endif %}
+    {% set fa_icon, label = 'fa-edit', 'Modifier' %}
+{% elseif action == 'delete' %}
+    {% set fa_icon, label = 'fa-trash-alt', 'Supprimer' %}
 {% endif %}
 
-{% set href = href ~ '?' ~ frag_csrf|default('') ~ frag_redir|default('') ~ fragment|default('') %}
-
-<a  href="{{href}}" class="{{position|default('')}} {{color}} {{size}}">
-    <i class="fas {{fa_icon}}" alt="Icône {{label}}" title="{{label}}"></i>
-</a>
+{% if action == 'delete' %}
+    {% set form_action = path(path, {id:un_element.id}) ~ '?' ~ frag_redir|default('') ~ fragment|default('') %}
+    <form method="POST" action="{{ form_action }}" style="display:inline" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cet élément ?')">
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token('delete' ~ un_element.id) }}">
+        <button type="submit" class="{{position|default('')}} {{color}} {{size}}" style="border:none;background:none;cursor:pointer;padding:0;">
+            <i class="fas {{fa_icon}}" alt="Icône {{label}}" title="{{label}}"></i>
+        </button>
+    </form>
+{% else %}
+    {% set href = href ~ '?' ~ frag_redir|default('') ~ fragment|default('') %}
+    <a href="{{href}}" class="{{position|default('')}} {{color}} {{size}}">
+        <i class="fas {{fa_icon}}" alt="Icône {{label}}" title="{{label}}"></i>
+    </a>
+{% endif %}

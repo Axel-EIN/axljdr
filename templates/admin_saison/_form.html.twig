@@ -1,0 +1,18 @@
+<div class="col-12">
+    {{ form_start(form) }}
+        <div class="row form-wrapper">
+            <div class="col-8">{{ form_row(form.titre) }}</div> 
+            <div class="col-2">{{ form_row(form.numero) }}</div>
+            <div class="col-2">{{ form_row(form.couleur) }}</div>
+
+            <div class="col-12 mt-3 mb-5">
+                {{ include('parts/image-field.html.twig', {
+                    field: form.image, input_id: 'admin_saison_image', prefix: 'image',
+                    current: saison.image|default(null), fallback: NA_SAISON,
+                    label: 'Image (1920×1080 16:9 recommandé)', width: 1920, height: 1080 }) }}
+            </div>
+
+            {{ include('/btns/btn-form.html.twig') }}
+        </div>
+    {{ form_end(form) }}
+</div>

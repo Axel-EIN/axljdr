@@ -1,0 +1,29 @@
+<div class="col-12">
+    {{ form_start(form) }}
+        <div class="row form-wrapper">
+
+            <div class="col-10">{{ form_row(form.nom) }}</div>
+            <div class="col-2">{{ form_row(form.couleur) }}</div>
+
+            <div class="col-12">{{ form_row(form.citation) }}</div>
+            <div class="col-12">{{ form_row(form.description,{ 'attr': {'rows': '6'} }) }}</div>   
+
+            <div class="col-8 mt-3 mb-4">
+                {{ include('parts/image-field.html.twig', {
+                    field: form.image, input_id: 'admin_classe_image', prefix: 'image',
+                    current: classe.image|default(null), fallback: NA_169 }) }}
+            </div>
+
+            <div class="col-4 mt-3 mb-4">
+                <div class="d-flex flex-column mb-4"> 
+                    {{ include('parts/image-field.html.twig', {
+                        field: form.icone, input_id: 'admin_classe_icone', prefix: 'icon',
+                        current: classe.icone|default(null), fallback: NA_CLASS_ICO,
+                        label: 'Icone (320×320 1:1 recommandé)', width: 320, height: 320 }) }}
+                </div>
+            </div>
+
+            {{ include('/btns/btn-form.html.twig') }}
+        </div>
+    {{ form_end(form) }}
+</div>

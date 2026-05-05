@@ -1,0 +1,33 @@
+{% extends 'element.html.twig' %}
+
+{% block stylesheets %}
+    {{parent()}}
+    <link rel="stylesheet" href="{{asset('css/components/banner-intro.css')}}" />
+{% endblock %}
+
+{% block element_content %}
+
+    {{ include('parts/classe-banner.html.twig', {classe, classes}) }}
+
+    {{ include('/parts/picture-grid.html.twig', {
+        title: 'Écoles de ' ~ classe.nom,
+        items: ecolesClasse, route: 'regles_ecole',
+        na_image: NA_ECOLE,
+        force_image: true,
+        ratio: '43',
+        per_row: {desktop: 4, mobile: 2},
+        wrapper: 'col-12 col-lg-8',
+        empty_message: "Il n'y a pas encore d'école disponible pour cette classe.",
+    }) }}
+
+    {{ include('/parts/picture-grid.html.twig', {
+        variant: 'portrait',
+        title: 'Personnages',
+        items: personnagesClasse, route: 'personnage_profil',
+        limit: 16,
+        wrapper: 'col-12 col-lg-4',
+        per_row: {desktop: 2, tablet: 4, mobile: 2},
+        empty_message: "Il n'y a pas encore de personnages disponible pour cette classe.",
+    }) }}
+
+{% endblock %}

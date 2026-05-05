@@ -1,0 +1,243 @@
+{% extends 'element.html.twig' %}
+
+{% block stylesheets %}
+  {{parent()}}
+  <link rel="stylesheet" href="{{asset('css/components/other-elements-grid.css')}}" />
+  <link rel="stylesheet" href="{{asset('css/pages/profil.css')}}" />
+{% endblock %}
+
+{% block element_content %}
+
+{% if locked|default(false) %}
+  {% set na_image = NA_169 %}
+  {{ include('/parts/element-locked.html.twig') }}
+{% else %}
+
+{% if personnage.illustration is null and personnage.genre == 'F' %}
+  {% set NA_PERSO_ILLU = NA_PERSO_ILLU_F %}
+{% elseif personnage.illustration is null and personnage.genre == 'M' %}
+  {% set NA_PERSO_ILLU = NA_PERSO_ILLU_M %}
+{% endif %}
+{% set illustration_src = asset(personnage.illustration|default(NA_PERSO_ILLU)) %}
+
+{# Ordre mobile : bandeau, description, infos, historique, autres persos.
+   Ordre desktop (>= lg) : infos + description, puis historique + autres. #}
+
+<!-- BANDEAU ILLUSTRATION (mobile uniquement) -->
+<section class="col-12 d-lg-none order-0">
+  <div class="profil-banner-mobile">
+    <img src="{{ illustration_src }}" alt="{{personnage.nom}} {{personnage.prenom}}" title="{{personnage.nom}} {{personnage.prenom}}" />
+  </div>
+</section>
+
+<!-- CARD GAUCHE : ILLUSTRATION + LISTE -->
+<section class="col-12 col-lg-4 pb-1 pr-lg-1 order-2 order-lg-1">
+  <card class="card card-body p-0 overflow-hidden h-100">
+
+    <!-- ILLUSTRATION (masquee sur mobile : remplacee par le bandeau) -->
+    <img class="img-fluid w-100 d-none d-lg-block" src="{{ illustration_src }}" alt="{{personnage.nom}} {{personnage.prenom}}" title="{{personnage.nom}} {{personnage.prenom}}" />
+
+    <!-- LIST -->
+    <ul class="list-group list-group-flush">
+
+      <!-- XP -->
+      <li class="list-group-item d-flex justify-content-between align-items-center">
+        <div class="d-flex flex-column">
+          <span class="text-muted text-small">Création : <strong class="extrabold">{{xp_creation}}</strong></span>
+          <span class="text-muted text-small">Progression : <strong class="extrabold">{{xp_progression}}</strong></span>
+        </div>
+        <div class="text-big text-flash-green-darker extrabold">
+          {% if xp > 0 %}
+            {{xp}} XP
+          {% endif %}
+        </div>
+      </li>
+
+      <li class="list-group-item d-flex justify-content-between align-items-center">
+        <!-- CLAN -->
+        {% if personnage.clan is defined and personnage.clan is not empty %}
+          <a class="hover-no-under" href="{{ path('empire_clan', {id: personnage.clan.id} ) }}">
+            <img class="img-48" src="{{ asset(personnage.clan.mon|default(NA_MON)) }}" alt="Mon du Clan {{personnage.clan.nom}}" title="Mon du Clan {{personnage.clan.nom}}" />
+            &nbsp;
+            <strong class="extrabold">{{ personnage.clan.nom }}</strong>
+          </a>
+        {% endif %}
+
+        <!-- FAMILLE -->
+        {% if personnage.famille is defined and personnage.famille is not empty %}
+          <a class="d-block hover-no-under overflow-hidden" href="{{ path('empire_clan', {id: personnage.clan.id, '_fragment': personnage.famille.nom } ) }}">
+            <strong class="extrabold">{{ personnage.famille.nom }}</strong>
+            <img
+              class="img-48 ml-2 rounded-circle" src="{{ asset(personnage.famille.mon|default(NA_MON)) }}"
+              alt="Mon de la Famille {{personnage.famille.nom}}" title="Mon de la Famille {{personnage.famille.nom}}"
+            />
+          </a>
+        {% endif %}
+      </li>
+
+      <!-- ECOLE + RANK-->
+      {% if personnage.ecole is defined and personnage.ecole is not empty %}
+        <li class="list-group-item d-flex align-items-center">
+            
+          <a class="hover-no-under" href="{{ path('regles_ecole', {id: personnage.ecole.id} ) }}">
+            <img class="img-48" src="{{ asset(personnage.classe.icone|default(NA_CLASS_ICO)) }}" alt="Classe {{personnage.classe.nom}}" title="Classe {{personnage.classe.nom}}" />
+            &nbsp;
+            <strong class="extrabold">{{ personnage.ecole.nom }}</strong>
+          </a>           
+          {% if xp > 0 %}
+            <span class="ml-auto badge badge-info">RANG {{rang}}</span>
+          {% endif %}
+        </li>
+      {% endif %} 
+
+      <!-- JOUEUR-->
+      {% if personnage.joueur is not empty %}
+        <li class="list-group-item"><strong>Joueur :</strong> {{ personnage.joueur.pseudo }}</li>
+      {% endif %}
+
+      <!-- BTN-->
+      {% if personnage.fichePersonnage is not null %}
+        <li class="list-group-item d-flex justify-content-center mt-3">
+          <a class="btn-primary-style btn-medium" href="{{ path('personnage_fiche', {id: personnage.fichePersonnage.id}) }}">
+            <i class="fas fa-scroll"></i> Voir la fiche de personnage
+          </a>
+        </li>
+      {% endif %}
+    </ul>
+
+  </card>
+</section>
+
+<!-- CARTE DROITE : DESCRIPTION TEXTE -->
+<section class="col-12 col-lg-8 pb-1 pl-lg-1 order-1 order-lg-2">
+  {# px-3 : le texte de description respire mal a la gouttiere mobile de 0.5rem. #}
+  <card class="card card-body h-100 py-2 px-3 p-lg-4">
+    {% if personnage.titres is defined and personnage.titres is not empty %}
+      <h4 class="card-title">{{ personnage.titres }}</h4>
+    {% endif %}
+    <p class="card-text text-medium text-justify">{{ personnage.description|default('')|raw|nl2br }}</p>
+  </card>
+</section>
+
+<!-- HISTORIQUE -->
+<section class="col-12 col-lg-8 py-1 pr-lg-1 order-3">
+  <card class="card card-body h-100">
+
+    <!-- TITLE -->
+    <h2 class="element-card-title">Historique</h2>
+    <hr>
+    {# pb-2 : l'espacement de la liste vient du mt-3 des en-tetes, le dernier
+       episode n'a donc rien sous lui. #}
+    <div class="card-text pb-3 pb-lg-0">
+      {% if xp_creation > 0 %}
+        <span class="ml-3">Création du personnage {{ personnage.prenom }} avec <strong>{{ xp_creation }}xp</strong>.</span><br/>
+      {% endif %}
+      {# Chaque episode devient un accordeon : on collecte d'abord les episodes
+         distincts dans l'ordre chronologique, puis on rend un bloc complet par
+         episode (au lieu d'emettre les en-tetes au fil des participations, ce
+         qui ne permettait pas d'englober ses scenes dans un conteneur). #}
+      {% set participations = personnage.participations|sortByField('scene') %}
+      {% set episode_ids = [] %}
+      {% set episodes = [] %}
+      {% for une_participation in participations %}
+        {% if une_participation.scene.episodeParent.id not in episode_ids %}
+          {% set episode_ids = episode_ids|merge([une_participation.scene.episodeParent.id]) %}
+          {% set episodes = episodes|merge([une_participation.scene.episodeParent]) %}
+        {% endif %}
+      {% endfor %}
+
+      {% set current_saison = 0 %}
+      {% set current_chapitre = 0 %}
+      {% set new_saison = true %}
+      {% for un_episode in episodes %}
+        {% set un_chapitre = un_episode.chapitreParent %}
+        {% set une_saison = un_chapitre.saisonParent %}
+
+        {% if une_saison.id != current_saison %}
+          {% set new_saison = true %}
+          {# current_saison vaut encore 0 sur la premiere bande : elle suit la
+             ligne de creation, pas une autre saison, donc moins de marge. #}
+          <h3
+            class="profil-saison {{ current_saison == 0 ? 'mt-3' : 'mt-5' }} mb-4 mx-n3 px-3 text-uppercase d-flex align-items-center"
+            style="background-color: {{ une_saison.couleur }};"
+          >
+            <img class="img-48 mr-2" src="{{ asset("/assets/icons/aventure/aventure-saison.png") }}" />
+            <span class="text-white">{{ une_saison.titre }}</span>
+          </h3>
+          {% set current_saison = une_saison.id %}
+        {% endif %}
+
+        {% if un_chapitre.id != current_chapitre %}
+          {% if new_saison != true %}<hr class="my-4 mx-n3">{% endif %}
+          <h4 class="ml-2 p-0">
+            <img class="img-36 invert mr-2" src="{{ asset("/assets/icons/aventure/aventure-chapitre.png") }}" />
+            <strong>{{ un_chapitre.titre }}</strong>
+          </h4>
+          {% set current_chapitre = un_chapitre.id %}
+          {% set new_saison = false %}
+        {% endif %}
+
+        {# En-tete d'episode : le titre deplie le detail, l'icone a droite
+           conserve l'acces a la page de l'episode. #}
+        <h5 class="ml-4 mt-3 mb-0 d-flex align-items-center">
+          <a  class="profil-episode-toggle chevron-toggle d-flex align-items-center flex-grow-1"
+              data-toggle="collapse" href="#episode{{ un_episode.id }}" role="button"
+              aria-expanded="false" aria-controls="episode{{ un_episode.id }}">
+            <img class="img-24 invert mr-2" src="{{ asset("/assets/icons/aventure/aventure-episode.png") }}" />
+            {# meme numero que celui affiche sur les cartes d'episode (vue Aventure) #}
+            <span class="text-muted mr-2">#{{ un_episode.numeroSaison }}</span>
+            {{ un_episode.titre }}
+            <i class="fas fa-chevron-down ml-2 text-small"></i>
+          </a>
+          {# mr-2 : la carte etant bord a bord sur mobile, l'icone collait au bord. #}
+          <a class="ml-2 mr-2 mr-lg-0 text-small" href="{{ path('aventure_episode', {id: un_episode.id}) }}" title="Voir l'épisode">
+            <i class="fas fa-external-link-alt"></i>
+          </a>
+        </h5>
+
+        <div id="episode{{ un_episode.id }}" class="collapse">
+          {% for une_participation in participations|filter(p => p.scene.episodeParent.id == un_episode.id) %}
+            <div class="ml-3 ml-lg-5 pl-1">
+              {{personnage.prenom}}
+              {% if une_participation.estMort == 0 %}
+                a
+                {% if une_participation.xpGagne == 0 %}
+                  participé
+                {% else %}
+                  gagné <strong class="extrabold text-flash-green-darker">{{ une_participation.xpEffectif }}xp</strong>
+                  {% if une_participation.xpBonus %}
+                    <small class="text-flash-green-darker">(XP * {{ constant('App\\Entity\\Participation::XP_BONUS_MULTIPLIER') }} bonus)</small>
+                  {% endif %}
+                {% endif %}
+                  lors de la scène <a href="{{path('aventure_episode', {id: une_participation.scene.episodeParent.id, '_fragment': 'scn' ~  une_participation.scene.numero  })}}" ><strong>{{une_participation.scene.titre}}</strong></a><br/>
+              {% else %}
+                <strong class="text-danger">
+                  est mort{% if personnage.genre == 'F' %}e{% endif %}
+                </strong>
+                dans la scène
+                <a
+                  href="{{path('aventure_episode', {id: une_participation.scene.episodeParent.id, '_fragment': 'scn' ~  une_participation.scene.numero  })}}" >
+                  <strong>{{une_participation.scene.titre}}</strong>
+                </a><br/>
+              {% endif %}
+            </div>
+          {% endfor %}
+        </div>
+      {% endfor %}
+    </div>
+  </card>
+</section>
+
+<!-- AUTRES PERSONNAGES -->
+<aside class="col-12 col-lg-4 pt-1 pb-lg-1 pl-lg-1 order-4">
+  {{ include('parts/other-character-grid.html.twig', {
+    titre: personnage.estPj ? 'Autres PJs' : 'Autres PNJs',
+    personnages: autresPersonnages,
+    limite: 12,
+    vide_message: "Il n'y a pas d'autres personnage.",
+  }) }}
+</aside>
+
+{% endif %}
+
+{% endblock %}

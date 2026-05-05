@@ -1,0 +1,84 @@
+<section    class="header-bg-img relative"
+            style=" background-color: {{ un_chapitre.couleur }};
+                    background-image:
+                        linear-gradient( rgb( 0,0,0,0.4 ), rgb( 0,0,0,0.4) ),
+                        linear-gradient( rgb( 0,0,0,0.6 ), rgb( 0,0,0,0), rgb( 0,0,0,0.3), rgb( 0,0,0,0.6) ),
+                        url( {{ asset(un_chapitre.image) }} );" >
+
+    <div class="container p-1">
+
+        {% if app.user and is_granted("ROLE_MJ") %}
+
+            {% if un_chapitre.numero == saison.chapitres|length %}
+                {% set label, numero, position = 'Ajouter', (un_chapitre.numero + 1), 'top-center' %}
+            {% else %}
+                {% set label, numero, position = 'Insérer', (un_chapitre.numero + 1), 'top-center' %}
+            {% endif %}
+
+            <div class="{{position}} mt-1">
+                {{ include('/btns/btn-line-insert.html.twig') }}
+            </div>
+
+        {% endif %}
+
+        <div class="header header-chapter d-flex flex-column" >
+            <span class="chapter-number text-left">CHAPITRE {{ un_chapitre.numero }}</span>
+            <div><hr></div>
+
+            {% if app.user and is_granted("ROLE_MJ") %}
+                <!-- MJ - BTN ICON - Edit -->
+                {% set color, position, redirect, entity, un_element, size = 'text-light-alpha', 'right-corner-8', 'aventure', 'chapitre', un_chapitre, 'btn-icon-medium' %}
+                {{ include('/parts/btn-icon-edit.html.twig') }}
+            {% endif %}
+
+            <!-- TITLE + QUOTE + CTA BTN -->
+            <div class="mt-auto">
+                <h1 id="read-head-ch-id{{ un_chapitre.id }}" class="{% if un_chapitre.titre|length <= 20 %}title-display-h1{% else %}title-display-h1-reduced{% endif %}">{{ un_chapitre.titre|relief|raw }}</h1>
+                <p class="quote">{{ un_chapitre.citation|nl2br }}</p>
+                {% if un_chapitre.episodes is not empty and un_chapitre.episodes[0].scenes|length > 0 or is_granted("ROLE_MJ") %}
+                        <a class="btn-primary-style btn-large voir" href="#read-head-ch-id{{ un_chapitre.numero }}" data-toggle="collapse"
+                           data-target="#ch{{ un_chapitre.numero }}-episodes" aria-controls="ch{{ un_chapitre.numero }}-episodes"
+                           aria-expanded="true" aria-label="Toggle Chapitre {{ un_chapitre.numero }} Episodes">
+                            <i class="fa-solid fa-scroll fa-bounce" alt="Icône Voir" ></i>&nbsp;&nbsp;Voir les Sessions
+                        </a>
+                {% else %}
+                    <div class="alert alert-light mx-auto alert-persist">
+                        <strong>Il n'y a pas encore de session disponible !</strong>&nbsp;&nbsp;
+                        {% if app.user and is_granted("ROLE_MJ") %}
+                            <a class="btn-quaternary-style text-light-alpha" href="{{path('admin_episode_create')}}?numero=1&chapitreID={{un_chapitre.id}}&redirect=aventure">
+                                <i class="fas fa-plus-square" alt="Icône Ajouter"></i>&nbsp;&nbsp;<strong>Ajouter une Session</strong>
+                            </a>
+                        {% endif %}
+                    </div>
+                {% endif %}
+            </div>
+            
+        </div>
+
+         <!-- SESSIONS -->
+        <div id="ch{{ un_chapitre.numero }}-episodes" class="collapse mb-4 mt-2">
+            <div class="container">
+                <div class="row justify-content-center relative">
+
+                {% for un_episode in un_chapitre.episodes %}
+                    {% if un_episode.scenes|length > 0 or is_granted("ROLE_MJ") %}
+                        <!-- ONE SESSION -->
+                        {{ include('/aventure/card-session.html.twig') }}
+                    {% endif %}
+                {% endfor %}
+
+                <!-- MJ - BIG ICON BTN - ADD -->
+                {% if app.user and is_granted("ROLE_MJ") %}
+                    <a class="absolute btn-display-icon" href="{{path('admin_episode_create')}}?numero={{(un_chapitre.episodes|length)+1}}&chapitreID={{un_chapitre.id}}&redirect=aventure">
+                        <i class="fas fa-plus-square" alt="Icône Ajouter" title="Ajouter une Session"></i>
+                    </a>
+                {% endif %}
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+            

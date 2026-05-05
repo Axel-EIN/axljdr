@@ -1,0 +1,260 @@
+{% extends 'element.html.twig' %}
+
+{% block stylesheets %}
+  {{parent()}}
+  <link rel="stylesheet" href="{{asset('css/pages/lieu.css')}}" />
+{% endblock %}
+
+{% block element_content %}
+
+{% if locked|default(false) %}
+  {% set na_image = NA_LIEU %}
+  {{ include('/parts/element-locked.html.twig') }}
+{% else %}
+
+  {% set lieu_color = (un_element.clan is defined and un_element.clan is not empty and un_element.clan.couleur is not empty) ? un_element.clan.couleur : null %}
+
+  <!-- EMBLEME DU LIEU, en surimpression sur l'image, au-dessus du titre (mobile uniquement, cf. pages/lieu.css) -->
+  <div class="lieu-icon-overlay d-lg-none">
+    <img class="img-96 filter-shadow" src="{{ asset(un_element.icone|default(NA_LIEU_ICO)) }}" alt="Icone de {{un_element.nom}}" />
+  </div>
+
+  <element class="col-12 pb-1">
+    <card class="card pb-3 pb-lg-5">
+
+      <!-- ILLUSTRATION-->
+      <imagezone class="bg-black relative">
+
+        <!-- SURIMPRESSION GAUCHE : ICONE + SURNOM (desktop uniquement, cf. bloc mobile apres l'imagezone) -->
+        <h2 class="surname-container d-none d-lg-flex">
+          <img class="img-96 ml-lg-5 mr-lg-3 mb-lg-2 filter-shadow" src="{{ asset(un_element.icone|default(NA_LIEU_ICO)) }}" alt="Icone de {{un_element.nom}}">
+          <i class="align-middle">{{ un_element.surnom|default('') }}</i>
+        </h2>
+
+        <!-- SURIMPRESSION DROITE : TYPE, POPULATION, AFFILIATION (desktop uniquement) -->
+        <div class="stats d-none d-lg-flex">
+          {% if un_element.clan is defined and un_element.clan is not empty %}
+            <a class="d-flex justify-content-end" href="{{ path('empire_clan', {id:un_element.clan.id} ) }}" >
+              <img class="mb-2 img-64 circle-crop" src="{{ asset(un_element.clan.mon|default(NA_MON)) }}" alt="Mon d'une faction" title="{{un_element.clan.nom|default('')}}" />
+            </a>
+          {% endif %}
+          {% if un_element.type is defined and un_element.type is not empty %}<span>Type : <strong>{{ un_element.type }}</strong></span>{% endif %}
+          {% if un_element.population is defined and un_element.population is not empty %}
+            <span>Population : <strong>{{ un_element.population|number_format(0, ',', '.') }} habitants</strong></span>
+          {% endif %}
+        </div>
+
+        <!-- IMAGE -->
+        <div class="gradient-after-down">
+          <img class="img-fluid mask" src="{{ asset(un_element.image|default(NA_LIEU)) }}" alt="Image de {{un_element.nom}}" />
+        </div>
+      </imagezone>
+
+      <!-- SURNOM + INFOS (mobile uniquement, meme style Clan/Famille/Ecole que fiche-personnage) -->
+      <div class="lieu-mobile-info d-lg-none text-center">
+        {% if un_element.surnom is defined and un_element.surnom is not empty %}
+          <p class="lieu-surnom">{{ un_element.surnom }}</p>
+        {% endif %}
+
+        <ul class="list-decored text-left d-inline-block">
+          {% if un_element.clan is defined and un_element.clan is not empty %}
+            <li>
+              <span class="label">Clan :</span>
+              <a class="extrabold" href="{{ path('empire_clan', {id:un_element.clan.id} ) }}">
+                <img class="img-24" src="{{ asset(un_element.clan.mon|default(NA_MON)) }}" alt="" title="Mon du clan {{un_element.clan.nom}}" />
+                {{ un_element.clan.nom }}
+              </a>
+            </li>
+          {% endif %}
+          {% if un_element.type is defined and un_element.type is not empty %}
+            <li><span class="label">Type :</span> {{ un_element.type }}</li>
+          {% endif %}
+          {% if un_element.population is defined and un_element.population is not empty %}
+            <li><span class="label">Habitants :</span> {{ un_element.population|number_format(0, ',', '.') }}</li>
+          {% endif %}
+        </ul>
+      </div>
+
+      {% if un_element.description is defined and un_element.description is not empty %}
+        <!-- DESCRIPTION DE LA VILLE -->
+        <p class="card-description p-lg-5 m-0 mx-lg-5 text-justify text-medium">{{ un_element.description|raw|nl2br }}</p>
+      {% endif %}
+
+      {% if un_element.locX is defined and un_element.locX is not empty and un_element.locY is defined and un_element.locY is not empty %}
+        <!-- LOCALISATION (carte interactive : bugue sur mobile, masquee) -->
+        <spacer class="my-3 d-none d-lg-block">{{ include('/parts/separateur-ornament.html.twig') }}</spacer>
+
+        <h2 class="text-center mb-4 d-none d-lg-block"><strong>Carte</Strong></h2>
+
+        <imagezone id="map-frame" class="relative d-none d-lg-block" data-locx="{{un_element.locX}}" data-locy="{{un_element.locY}}">
+
+          <!-- TOGGLE TERRITOIRES (haut-gauche) -->
+          <button type="button" id="map-toggle-territoires" class="map-toggle-btn absolute"
+                  data-map-clean="{{ asset('assets/maps/map-rokugan-50-clean.jpg') }}"
+                  data-map-frontier="{{ asset('assets/maps/map-rokugan-50-frontier.jpg') }}">
+            <i class="fa-solid fa-map mr-1"></i>
+            <span class="label">Afficher territoires</span>
+          </button>
+
+          <!-- WRAPPER DRAGGABLE (contient carte + icones ancrees au point geo) -->
+          <div id="map-drag" class="map-drag" style="transform: translate(-{{un_element.locX}}%, -{{un_element.locY}}%);">
+
+            <img class="map-image" src="{{asset('assets/maps/map-rokugan-50-clean.jpg')}}" alt="Carte de Rokugan" draggable="false" />
+
+            <!-- AUTRES LIEUX LOCALISES (cliquables, sous le lieu courant) -->
+            {% for autre in lieux %}
+              {% if autre.id != un_element.id and autre.locX is not empty and autre.locY is not empty %}
+                {% set autre_locked = autre.locked and not is_granted("ROLE_MJ") %}
+                {% set autre_color = (not autre_locked and autre.clan is defined and autre.clan is not empty and autre.clan.couleur is not empty) ? autre.clan.couleur : null %}
+                <a href="{{ path('empire_lieu', {id: autre.id}) }}" class="absolute lieu-other-icon {% if autre_locked %}locked{% endif %}" style="left:{{autre.locX}}%; top:{{autre.locY}}%;{% if autre_color %} --clan-color: {{autre_color}};{% endif %}">
+                  {% if autre_locked %}
+                    <img class="lieu-other-lock fa-beat-fade" src="{{ asset(LOCKED_ICO) }}" alt="Cadenas" title="À débloquer !" />
+                  {% endif %}
+                  <img src="{{ asset(autre.icone|default(NA_LIEU_ICO)) }}" alt="Icone de {{ autre_locked ? 'lieu à débloquer' : autre.nom }}" />
+                  <span class="hover-tooltip">{{ autre_locked ? 'À débloquer' : autre.nom }}</span>
+                </a>
+              {% endif %}
+            {% endfor %}
+
+            <!-- CARET DOWN ANIME (sur le point du lieu) -->
+            <icon class="absolute localisator-icon" style="left:{{un_element.locX}}%; top:{{un_element.locY}}%">
+              <i class="fa-solid fa-caret-down fa-2xl fa-bounce"></i>
+            </icon>
+
+            <!-- ICONE DU LIEU (sous le caret, pulse) -->
+            <img class="absolute lieu-pulse-icon" style="left:{{un_element.locX}}%; top:{{un_element.locY}}%;{% if lieu_color %} --clan-color: {{lieu_color}};{% endif %}" src="{{ asset(un_element.icone|default(NA_LIEU_ICO)) }}" alt="Icone de {{un_element.nom}}" />
+
+            <!-- LABEL PERMANENT DU LIEU COURANT -->
+            <div class="absolute lieu-current-label" style="left:{{un_element.locX}}%; top:{{un_element.locY}}%;{% if lieu_color %} --clan-color: {{lieu_color}};{% endif %}">
+              {{ un_element.nom }}
+            </div>
+
+          </div>
+
+          <!-- MINI CARTE (fixe en haut a droite du cadre) -->
+          <imagezone id="minimap" class="absolute">
+            <div class="relative overflow-hidden">
+              <img class="absolute localisator-ui" style="left:{{un_element.locX}}%; top:{{un_element.locY}}%" src="{{asset('assets/maps/mini-localisator.png')}}" />
+              <img class="img-fluid" src="{{asset('assets/img/lieux/minimap.jpg')}}" alt="Carte de Rokugan">
+            </div>
+          </imagezone>
+
+        </imagezone>
+      {% endif %}
+
+
+      {% if un_element.carte is defined and un_element.carte is not empty %}
+        <!-- PLAN DE LA VILLE -->
+        <spacer class="my-3">{{ include('/parts/separateur-ornament.html.twig') }}</spacer>
+
+        <h2 class="text-center mb-4"><strong>Plan</Strong></h2>
+
+        <img class="img-fluid" src="{{asset(un_element.carte)}}" alt="Carte du Lieu">
+      {% endif %}
+
+      {% if un_element.quartiers is defined and un_element.quartiers is not empty %}
+        <!-- QUARTIERS -->
+        <p class="card-description my-3 mx-lg-5 my-lg-5 px-lg-5 py-lg-0 text-justify text-medium">{{ un_element.quartiers|raw|nl2br }}</p>
+      {% endif %}
+
+      {% if (un_element.description is defined and un_element.description is not empty)
+        or (un_element.locX is defined and un_element.locX is not empty)
+        or (un_element.carte is defined and un_element.carte is not empty)
+        or (un_element.quartiers is defined and un_element.carte is not empty)
+      %}
+        <!-- ORNAMENT -->
+        <spacer class="my-3">{{ include('/parts/separateur-ornament.html.twig') }}</spacer>
+        {% set spacer = true %}
+      {% endif %}
+
+      <!-- BTN MJ DELETE-->
+      {% if app.user and is_granted("ROLE_MJ") %}
+        <div class="text-center {% if spacer is not defined %}mt-5{% endif %}">
+          {% set redirect, element, un_element, color, action = 'empire', 'lieu', un_element, 'text-accent', 'delete' %}
+          {{ include('/parts/btn-line.html.twig') }}
+        </div>
+      {% endif %}
+
+    </card>
+  </element>
+
+  <!-- HISTORIQUE : scenes ou ce lieu apparait -->
+  {% if historique is defined and historique|length > 0 %}
+    <section class="col-12 pt-1 mb-0 mb-lg-5">
+      <card class="card card-body pb-3">
+        <h2 class="element-card-title">Historique des visites</h2>
+        <hr>
+        <div class="card-text">
+          {% set current_saison = 0 %}
+          {% set current_chapitre = 0 %}
+          {% set current_episode = 0 %}
+          {% set new_saison = true %}
+          {% for une_scene in historique %}
+
+            {% if une_scene.episodeParent.chapitreParent.saisonParent.id != current_saison %}
+              {% set new_saison = true %}
+              <h3
+                class="{{ current_saison == 0 ? 'mt-0' : 'mt-5' }} mb-4 mx-n3 px-3 text-uppercase d-flex align-items-center"
+                style="background-color: {{ une_scene.episodeParent.chapitreParent.saisonParent.couleur }};"
+              >
+                <img class="img-48 mr-2" src="{{ asset('/assets/icons/aventure/aventure-saison.png') }}" />
+                <span class="text-white">{{ une_scene.episodeParent.chapitreParent.saisonParent.titre }}</span>
+              </h3>
+              {% set current_saison = une_scene.episodeParent.chapitreParent.saisonParent.id %}
+            {% endif %}
+
+            {% if une_scene.episodeParent.chapitreParent.id != current_chapitre %}
+              {% if new_saison != true %}<hr class="my-4 mx-n3">{% endif %}
+              <h4 class="ml-2 p-0">
+                <img class="img-36 invert mr-2" src="{{ asset('/assets/icons/aventure/aventure-chapitre.png') }}" />
+                <strong>{{ une_scene.episodeParent.chapitreParent.titre }}</strong>
+              </h4>
+              {% set current_chapitre = une_scene.episodeParent.chapitreParent.id %}
+              {% set new_saison = false %}
+            {% endif %}
+
+            {% if une_scene.episodeParent.id != current_episode %}
+              <h5 class="ml-4 mt-3 d-flex align-items-center">
+                <img class="img-24 invert mr-2" src="{{ asset('/assets/icons/aventure/aventure-episode.png') }}" />
+                <a href="{{ path('aventure_episode', {id: une_scene.episodeParent.id}) }}">
+                  {{ une_scene.episodeParent.titre }}
+                </a>
+              </h5>
+              {% set current_episode = une_scene.episodeParent.id %}
+            {% endif %}
+
+            <div class="ml-3 ml-lg-5 pl-1">
+              <a href="{{ path('aventure_episode', {id: une_scene.episodeParent.id, '_fragment': 'scn' ~ une_scene.numero}) }}">
+                Scène {{ une_scene.numero }} — <strong>{{ une_scene.titre }}</strong>
+              </a>
+            </div>
+          {% endfor %}
+        </div>
+      </card>
+    </section>
+  {% endif %}
+
+  <!-- AUTRES LIEUX -->
+  {% if autresLieux is defined and autresLieux|length > 0 %}
+  <aside class="col-12 pt-1 mb-0 mb-lg-5">
+    <div class="card card-body h-100 pb-1">
+      <h2 class="element-card-title">Autres Lieux</h2>
+      <hr>
+      <div class="row vignette-grid p-0 m-lg-0 pt-2">
+        {% set col, size, na_image = 'col-6 col-md-4 col-lg-2', 'small', NA_LIEU %}
+        {% for un_element in autresLieux %}
+          {{ include('/parts/element-vignette.html.twig', {un_element, force_image: true}) }}
+        {% endfor %}
+      </div>
+    </div>
+  </aside>
+  {% endif %}
+
+{% endif %}
+
+{% endblock %}
+
+{% block javascripts %}
+  {{ parent() }}
+  <script src="{{ asset('scripts/lieu.js') }}"></script>
+{% endblock %}

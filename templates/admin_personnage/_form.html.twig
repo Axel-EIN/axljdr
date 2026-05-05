@@ -1,0 +1,46 @@
+<div class="col-12">
+    {{ form_start(form) }}
+        <div class="row form-wrapper">
+
+            {{ include('parts/form-publication.html.twig', {form: form}) }}
+
+            <div class="col-8">
+                <div class="row">
+                    <div class="col-4">{{ form_row(form.nom) }}</div>
+                    <div class="col-4">{{ form_row(form.prenom) }}</div>
+                    <div class="col-4">{{ form_row(form.genre) }}</div>
+                    <div class="col-4">{{ form_row(form.clan) }}</div>
+                    <div class="col-4">{{ form_row(form.famille) }}</div>
+                    <div class="col-4">{{ form_row(form.classe) }}</div>
+                    <div class="col-4">{{ form_row(form.ecole) }}</div>
+                    <div class="col-6">{{ form_row(form.titres) }}</div>
+                    <div class="col-6">{{ form_row(form.joueur) }}</div>
+                    <div class="col-12">{{ form_row(form.description, {'attr': {'rows': '10'} }) }}</div>
+                    <div class="col-4 text-center">{{ form_row(form.status) }}</div>
+                    <div class="col-4 text-center">{{ form_row(form.estPj) }}</div>
+                </div>
+            </div>
+
+            <div class="col-4">
+                <div class="d-flex flex-column text-center mb-4"> 
+                    {{ include('parts/image-field.html.twig', {
+                        field: form.icone, input_id: 'admin_personnage_icone', prefix: 'icon',
+                        current: personnage.icone|default(null), fallback: NA_PERSO_PORTRAIT,
+                        label: 'Portrait (240×240 1:1 recommandé)', preview_class: 'img-96', width: 240,
+                        height: 240 }) }}
+                </div>
+
+                <div class="d-flex flex-column text-center">
+                    {{ include('parts/image-field.html.twig', {
+                        field: form.illustration, input_id: 'admin_personnage_illustration', prefix: 'image',
+                        current: personnage.illustration|default(null), fallback: NA_PERSO_ILLU,
+                        label: 'Illustration (450×800 9:16 recommandé)', preview_class: 'img-240', width: 450,
+                        height: 800 }) }}
+                </div>
+            </div>
+            
+
+            {{ include('/btns/btn-form.html.twig') }}
+        </div>
+    {{ form_end(form) }}
+</div>

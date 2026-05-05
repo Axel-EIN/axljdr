@@ -1,0 +1,57 @@
+<div class="col-12">
+  {{ form_start(form) }}
+    <div class="row form-wrapper">
+
+      {{ include('parts/form-publication.html.twig', {form: form}) }}
+
+      <div class="col-6">{{ form_row(form.nom) }}</div>
+      <div class="col-6">{{ form_row(form.surnom) }}</div>
+
+      <div class="col-4">{{ form_row(form.type) }}</div>
+      <div class="col-4">{{ form_row(form.clan) }}</div>
+      <div class="col-4">{{ form_row(form.population) }}</div>
+
+      <div class="col-12 mt-3 mt-3">{{ form_row(form.description,{ 'attr': {'rows': '7'} }) }}</div>
+
+      <div class="col-4 mt-3 mb-5 d-flex flex-column text-center">
+        {{ include('parts/image-field.html.twig', {
+            field: form.icone, input_id: 'admin_lieu_icone', prefix: 'icon', current: lieu.icone|default(null),
+            fallback: NA_LIEU_ICO, label: 'Icone (192×192 1:1 recommandé)', width: 192, height: 192 }) }}
+      </div>
+
+      <div class="col-8 mt-3 mb-5">
+        {{ include('parts/image-field.html.twig', {
+            field: form.image, input_id: 'admin_lieu_image', prefix: 'image', current: lieu.image|default(null),
+            fallback: NA_LIEU, label: 'Image (1280×720 16:9 recommandé)', width: 1280, height: 720 }) }}
+      </div>
+
+      <div class="col-4">{{ form_row(form.locX) }}</div>
+      <div class="col-4">{{ form_row(form.locY) }}</div>
+
+      <div class="col-12 mt-5">
+
+        <a class="w-100" data-toggle="collapse" href="#part-lieu-collapse" role="button"
+          aria-expanded="{% if type == 'Modifier' and lieu.quartiers is defined and lieu.quartiers is not empty %}true{% else %}false{% endif %}"
+          aria-controls="part-lieu-collapse">
+          <h2 class="heading-cardtitle">Plus d'options ...</h2>
+        </a>
+        <hr>
+
+        <div id="part-lieu-collapse" class="collapse {% if type == 'Modifier' and lieu.quartiers is defined and lieu.quartiers is not empty %} show{% endif %}">
+
+          <div class="col-12 mt-3 mb-5">
+            {{ include('parts/image-field.html.twig', {
+                field: form.carte, input_id: 'admin_lieu_carte', prefix: 'plan', current: lieu.carte|default(null),
+                fallback: NA_MAP, deletable: false }) }}
+          </div>
+
+          <div class="col-12">{{ form_row(form.quartiers,{ 'attr': {'rows': '16'} }) }}</div>
+
+        </div>
+
+      </div>
+
+      {{ include('/btns/btn-form.html.twig') }}
+    </div>
+  {{ form_end(form) }}
+</div>

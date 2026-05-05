@@ -1,0 +1,56 @@
+{% extends 'base.html.twig' %}
+{% block title %}L'Aventure Saison {{ saison.numero }} {{ parent() }}{% endblock %}
+{% block body %}
+
+<!-- SAISON BAR -->
+<saison class="saison-bar container-fluid" style="background-color: {{ saison.couleur }}">
+    <bar class="container">
+        {{ include('/parts/messages-flashes.html.twig') }}
+        {% if saison_precedente is not empty %}
+            <a class="btn-quaternary-style text-light-alpha" href="{{ path('aventure_saison', {id : (saison_precedente.id) } ) }}" alt="Flèche Droite" title="Voir saison précédente">
+                <span class="text-small"><i class="fa-solid fa-caret-left"></i> Saison précédente</span> 
+            </a>
+        {% else %}
+            <span class="text-small invisible"><i class="fa-solid fa-caret-left"></i> Saison précédente</span>
+        {% endif %}
+
+        {% if saison_suivante is empty %}
+            <strong>SAISON {{ saison.numero }} - actuellement en cours !</strong>
+        {% else %}
+            <strong>SAISON {{ saison.numero }} - {{ saison.titre|upper }}</strong>
+        {% endif %}
+
+        {% if saison_suivante is not empty %}
+            <a class="btn-quaternary-style text-light-alpha" href="{{ path('aventure_saison', {id : (saison_suivante.id) } ) }}">
+                <span class="text-small">Saison suivante <i class="fa-solid fa-caret-right"></i></span>
+            </a>
+        {% else %}
+            <span class="text-small invisible">Saison suivante <i class="fa-solid fa-caret-right"></i></span>
+        {% endif %}
+    </bar>
+</saison>
+
+<!-- AFFICHAGE DES CHAPITRES DE LA SAISON -->
+<main class="relative">
+
+    {% set color, entity, parent, parentID, redirect = 'text-light-alpha', 'chapitre', 'saison', saison.id, 'aventure' %}
+    {% for un_chapitre in saison.chapitres|reverse %}
+        {{ include('/aventure/un-chapitre.html.twig') }}
+    {% else %}
+
+        <!-- PAS DE CHAPITRE -->
+        <section class="header-bg-img header-bg-no-chapter" style="background-color: #400000; background-image:linear-gradient( rgb( 0,0,0,0.6 ), rgb( 0,0,0,0), rgb( 0,0,0,0.3), rgb( 0,0,0,0.6) ), url( {{ asset(NA_169) }} );" >
+            <div class="container">
+                <div class="header header-chapter d-flex flex-column justify-content-end" >
+                    <div class="alert alert-light mx-auto alert-persist mt-3 mb-3">
+                        <strong>Désolé, il n'y a pas encore de Chapitre dans cette Saison.</strong>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    {% endfor %}
+
+</main>
+
+{% endblock %}

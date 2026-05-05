@@ -1,0 +1,80 @@
+{% extends 'other.html.twig' %}
+
+{% set titre = 'Votre espace de compte' %}
+
+{% block stylesheets %}
+  {{ parent() }}
+  <link rel="stylesheet" href="{{asset('css/pages/account.css')}}" />
+{% endblock %}
+
+{% block cartes %}
+
+  <div class="col-12 col-lg-6">
+    <div class="card card-page">
+      <h2 class="heading-cardtitle">Informations Personnelles</h2>
+      <hr>
+
+      <dl class="compte-infos">
+        <dt>Votre Pseudo</dt>
+        <dd><strong>{{ app.user.pseudo }}</strong></dd>
+
+        <dt>Votre E-mail</dt>
+        <dd><strong>{{ app.user.email }}</strong></dd>
+
+        <dt>Votre Mot de passe</dt>
+        <dd>
+          <strong>******</strong>
+          <a href="{{ path('mon_compte_mdp') }}"><i class="fas fa-edit" aria-hidden="true"></i> Modifier</a>
+        </dd>
+
+        <dt>Votre statut de compte</dt>
+        <dd><strong>{{ app.user.isVerified == 1 ? 'Vérifié' : 'Non-vérifié' }}</strong></dd>
+
+        <dt>Vos rôles</dt>
+        <dd>
+          {% for un_role in app.user.roles %}
+            <strong>{{ un_role }}</strong>{{ not loop.last ? ',' : '' }}
+          {% else %}
+            Il n'y a pas de rôle
+          {% endfor %}
+        </dd>
+
+        <dt>Votre avatar</dt>
+        <dd>
+          <img class="img-128" src="{{ asset(app.user.avatar|default(NA_PERSO_PORTRAIT)) }}" alt="Avatar de l'utilisateur" />
+          <a href="{{ path('mon_compte_avatar') }}"><i class="fas fa-edit" aria-hidden="true"></i> Modifier</a>
+        </dd>
+      </dl>
+    </div>
+  </div>
+
+  <div class="col-12 col-lg-6">
+    <div class="card card-page">
+      <h2 class="heading-cardtitle">Mes Personnages ({{ app.user.personnages|length }})</h2>
+      <hr>
+
+      {# Grille propre a cette carte : c'est le seul endroit du site ou un
+         personnage est montre avec le lien vers sa fiche privee. #}
+      <div class="compte-personnages">
+        {% for un_personnage in app.user.personnages %}
+          <article>
+            <a href="{{ path('personnage_profil', {id: un_personnage.id}) }}" class="hover-zoom">
+              <img src="{{ asset(un_personnage.icone|default(NA_PERSO_PORTRAIT)) }}" alt="Portrait de {{ un_personnage.prenom }}" />
+            </a>
+            <strong>{{ un_personnage.nom }} {{ un_personnage.prenom }}</strong>
+            {% if un_personnage.fichePersonnage is not empty %}
+              <a href="{{ path('personnage_fiche', {id: un_personnage.fichePersonnage.id}) }}">
+                <i class="fas fa-user-secret" aria-hidden="true"></i> Fiche privée
+              </a>
+            {% else %}
+              <small class="text-muted">Pas encore de fiche privée</small>
+            {% endif %}
+          </article>
+        {% else %}
+          <p class="text-muted font-italic">Il n'y a pas encore de personnage sur ce compte.</p>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+
+{% endblock %}

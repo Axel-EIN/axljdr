@@ -1,0 +1,150 @@
+/* -------------------------- */
+/* --------- ALERTS --------- */
+/* -------------------------- */  
+
+.alert-flash {
+    position: fixed;
+    z-index: 100;
+    top: 1rem;
+    left: 50%;
+    transform: translate(-50%, 0%);
+}
+
+.alert-persist {
+    display: inline-block;
+    font-size: 1rem;
+    color: var(--color-white-80);
+    background-color: var(--color-black-80) !important;
+    border-color: var(--color-white-40) !important;
+    margin-bottom: 0;
+}
+
+/* ------------------------------- */
+/* --------- DROPDOWNS ----------- */
+/* ------------------------------- */
+
+/* Menu déroulant sur fond sombre, et chevron qui pivote à l'ouverture.
+   Partagés par la nav du site, la nav des bandeaux (classes / clans) et
+   l'accordéon de l'historique du profil. aria-expanded est piloté par
+   Bootstrap : pas de classe d'état à gérer. */
+
+.dropdown-dark {
+    background-color: var(--secondary-pastel-darker);
+    border: 1px solid var(--color-white-40);
+
+    .dropdown-item {
+        color: var(--color-white-80);
+
+        /* Repere discret pour l'item actif : le hover doit rester plus
+           marque (fond plein) que ce simple voile clair. */
+        &.active {
+            background-color: rgba(255, 255, 255, 0.2);
+            color: var(--color-white);
+        }
+
+        &:hover, &:focus {
+            color: var(--color-white);
+            background-color: var(--primary-darker);
+        }
+    }
+}
+
+.chevron-toggle {
+    .fa-chevron-down { transition: transform 0.2s var(--ease); }
+
+    &[aria-expanded="true"] .fa-chevron-down { transform: rotate(180deg); }
+}
+
+/* Onglet actif du bandeau, réduit à un déclencheur de menu sur mobile */
+.banner-nav-toggle {
+    text-decoration: none;
+
+    &:hover, &:focus {
+        color: var(--color-white);
+        text-decoration: none;
+    }
+}
+
+/* -------------------------- */
+/* --------- ASIDES --------- */
+/* -------------------------- */
+
+.aside {
+    float: right;
+    border-color: transparent;
+    border-style: double;
+    border-width: 24px 24px 140px 24px;
+    border-image: url('/assets/ui/bg-aside.png') 24 24 140 24 fill repeat;
+
+    &>p { font-size: var(--small); }
+}
+
+/* ----------------------------- */
+/* --------- VIGNETTES --------- */
+/* ----------------------------- */  
+
+.vignette {
+    position: relative;
+    margin: 0;
+    padding: 0 0.5rem;
+
+    img {
+        border-top-left-radius: 1rem;
+        border-bottom-right-radius: 1rem;
+    }
+
+    .label {
+        color: var(--primary-darker-more);
+        font-weight: bold;
+        text-align: center;
+        line-height: 1.4;
+    }
+
+    .text-small { font-size: 1rem; }
+}
+
+.vignette-locked {
+    cursor: pointer;
+
+    .hover-tooltip {
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+
+    &:hover .hover-tooltip { visibility: visible; }
+}
+
+/* ---------------------- */
+/* ------ TOOL TIP ------ */
+/* ---------------------- */  
+
+.hover-tooltip {
+    position: absolute;
+    visibility: hidden;
+    z-index: 100;
+    white-space: nowrap;
+    color: #fff;
+    text-align: center;
+    font-size: var(--small);
+    padding: 0.2rem 0.5rem;
+    border-radius: 0.5rem;
+    background-color: var(--primary-darker-more);
+}
+
+/* -------------------------------------- */
+/* ------ CHARACTER PORTAITS ICONS ------ */
+/* -------------------------------------- */  
+
+.character-portrait {
+    &.small { width: 28px; }
+    &.medium {
+        width: 48px;
+        border-radius: 4px;
+    }
+    &.large {
+        width: 64px;
+        border-radius: 5px;
+        box-shadow: 1px 1px 8px 2px var(--color-black-80);
+    }
+}

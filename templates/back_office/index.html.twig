@@ -1,0 +1,101 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Panneau d'Administration {{ parent() }}{% endblock %}
+
+{% block stylesheets %}
+    {{parent()}}
+    <link rel="stylesheet" href="{{asset('css/forms.css')}}" />
+{% endblock %}
+
+{% block body %}
+
+    <main class="container-fluid page-min">
+        <div class="container py-5 relative">
+            <h1 class="title-h1 text-center">
+                {% block h1 %}Panneau {% if app.user and is_granted("ROLE_ADMIN") %}d'Administration{% else %}du Maître{% endif %}{% endblock %}
+            </h1>
+
+            {{ include('back_office/nav-admin.html.twig') }}
+            {{ include('parts/messages-flashes.html.twig') }}
+
+            {% block child %}
+
+                {% if app.user and is_granted("ROLE_MJ") %}
+
+                    {# AVENTURE #}
+                    <h2 class="title-h2 mt-5">Aventure</h2>
+                    <p class="mb-4 text-muted">Éléments ajoutés pour le descriptif de l'aventure.</p>
+                    <section class="row pb-5">
+                        {% for admin_element in admin_elements %}
+                            {% if admin_element['categorie'] == 'AVENTURE' %}
+                                {% set  label, element, nbr, last, nom, image =
+                                        admin_element['label'], admin_element['element'], admin_element['nbr'], admin_element['last'], admin_element['nom'], admin_element['image'] %}
+                                {{ include('back_office/card-element-resume.html.twig') }}
+                            {% endif %}
+                        {% endfor %}
+                    </section>
+
+                    {# EMPIRE LORE #}
+                    <h2 class="title-h2 mt-5">Empire</h2>
+                    <p class="mb-4 text-muted">Éléments ajoutés pour le descriptif de l'univers de jeu.</p>
+                    <section class="row pb-5">
+                        {% for admin_element in admin_elements %}
+                            {% if admin_element['categorie'] == 'EMPIRE' %}
+                                {% set   label, element, nbr, last, nom, image =
+                                        admin_element['label'], admin_element['element'], admin_element['nbr'], admin_element['last'], admin_element['nom'], admin_element['image'] %}
+                                {{ include('back_office/card-element-resume.html.twig') }}
+                            {% endif %}
+                        {% endfor %}
+                    </section>
+
+
+                    {# REGLES #}
+                    <h2 class="title-h2 mt-5">Règles</h2>
+                    <p class="mb-4 text-muted">Éléments ajoutés pour les mécaniques de jeu.</p>
+                    <section class="row pb-5">
+                        {% for admin_element in admin_elements %}
+                            {% if admin_element['categorie'] == 'REGLES' %}
+                                {% set  label, element, nbr, last, nom, image =
+                                        admin_element['label'], admin_element['element'], admin_element['nbr'], admin_element['last'], admin_element['nom'], admin_element['image'] %}
+                                {{ include('back_office/card-element-resume.html.twig') }}
+                            {% endif %}
+                        {% endfor %}
+                    </section>
+
+                    {# PERSONNAGES #}
+                    <h2 class="title-h2 mt-5">Personnages</h2>
+                    <p class="mb-4 text-muted">Tout les personnages enregistrés.</p>
+                    <section class="row pb-5">
+                        {% for admin_element in admin_elements %}
+                            {% if admin_element['categorie'] == 'PERSONNAGES' %}
+                                {% set  label, element, nbr, last, nom, image =
+                                        admin_element['label'], admin_element['element'], admin_element['nbr'], admin_element['last'], admin_element['nom'], admin_element['image'] %}
+                                {{ include('back_office/card-element-resume.html.twig') }}
+                            {% endif %}
+                        {% endfor %}
+                    </section>
+
+                {% endif %}
+
+                {% if app.user and is_granted("ROLE_ADMIN") %}
+                    {# UTILISATEURS #}
+                    <h2 class="title-h2 mt-5">Comptes Utilisateurs</h2>
+                    <p class="mb-4 text-muted">Tout les comptes utilisateurs.</p>
+                    <section class="row pb-5">
+                        {% set  label, element, nbr, last, nom, image =
+                                'Utilisateurs', 'utilisateur', nbrUtilisateurs, lastUtilisateur, lastUtilisateur.pseudo, lastUtilisateur.avatar %}
+                        {{ include('back_office/card-element-resume.html.twig') }}
+                    </section>
+                {% endif %}
+
+            {% endblock %}
+
+        </div> 
+    </main>
+
+    {% block javascripts %}
+        {{parent()}}
+        <script src="{{ asset('scripts/forms.js') }}"></script>
+    {% endblock %}
+
+{% endblock %}

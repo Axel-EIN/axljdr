@@ -1,0 +1,181 @@
+{% extends 'base.html.twig' %}
+{% block title %}L'épisode {{ episode.titre }} du Chapitre {{ episode.chapitreParent.titre }} {{ parent() }}{% endblock %}
+
+{% block stylesheets %}
+  {{parent()}}
+  <link rel="stylesheet" href="{{asset('css/components/element.css')}}" />
+  <link rel="stylesheet" href="{{asset('css/pages/episode.css')}}" />
+  <link rel="stylesheet" href="{{asset('css/components/scene.css')}}" />
+  <link rel="stylesheet" href="{{asset('css/components/chapter.css')}}" />
+{% endblock %}
+
+{% block body %}
+
+<div class="header-episode p-md-4"
+     style=" background-image:
+                    linear-gradient( rgb( 0,0,0,0.4 ), rgb( 0,0,0,0.4) ),
+                    url('{{ asset(episode.chapitreParent.image|default(NA_CHAPITRE)) }}');
+             background-color: {{ episode.chapitreParent.couleur }}">
+
+  <header class="container header header-episode">
+
+    {{ include('/parts/messages-flashes.html.twig') }}
+
+    <div class="relative d-flex w-100 flex-column">
+      <span class="chapter-number display-5 text-left">CHAPITRE {{ episode.chapitreParent.numero }}</span>
+      <div><hr></div>
+      <a class="btn-primary-style btn-medium chapter-backbtn" href="{{ path('aventure_saison', {id: episode.chapitreParent.saisonParent.id, '_fragment': 'read-head-ch-id' ~ episode.chapitreParent.id } ) }}">Retour</a>
+    </div>
+
+    <h2 id="read-head" class="heading-chapter">{{ episode.chapitreParent.titre|relief|raw }}</h2>
+
+    <div class="relative mb-5">
+      {{ include('aventure/chapter-characters.html.twig', {un_chapitre: episode.chapitreParent, episode}) }}
+      <p class="quote quote-chapter">{{ episode.chapitreParent.citation|nl2br }}</p>
+    </div>
+
+  </header>
+
+  <main class="container-fluid element-page">
+   <div class="container">
+    <section>
+     <div class="row">
+
+      <div class="col-12 relative">
+        {{ include('aventure/episodes-line.html.twig', {episode}) }}
+      </div>
+
+      <div class="col-12 bg-stroke-container relative">
+        <h1 class="heading-episodedetail mb-0 mt-3 py-3">
+          {{episode.titre}}
+          {% if app.user and is_granted("ROLE_MJ") %}            {% set color, position, redirect, entity, un_element, size = 'text-white-50', '', 'aventure', 'episode', episode, 'btn-icon-medium' %}
+            {{ include('/parts/btn-icon-edit.html.twig') }}
+          {% endif %}
+        </h1>
+      </div>
+
+      <div class="col-12 offset-xl-1 col-xl-10">
+        <div class="card card-page card-episode-detail bg-clouds">
+
+          {% set numero = 0 %}
+          {% for une_scene in episode.scenes %}
+
+            {% if app.user and is_granted("ROLE_MJ") %}
+              <div class="text-center mb-4">&nbsp;
+                  {% set color, entity, numero, parent, parentID, redirect, label = 'text-accent', 'scene', une_scene.numero, 'episode', episode.id, 'episode', 'Insérer' %}
+                  {{ include('/btns/btn-line-insert.html.twig') }}
+              </div>
+            {% endif %}
+
+            {{ include('/aventure/scene-detail.html.twig', {une_scene}) }}
+
+          {% else %}
+            <p class="text-center text-light py-5">Il n'y a pas encore de scènes pour cette épisode.</p>
+          {% endfor %}
+
+          {% if app.user and is_granted("ROLE_MJ") %}
+            <div class="text-center mt-1 mb-3">
+              {% set btnStyle, btnSize, color, entity, numero, parent, parentID, redirect, label = 'btn-primary-style', 'btn-medium', 'text-white', 'scene', (numero + 1), 'episode', episode.id, 'episode', 'Ajouter' %}
+              {{ include('/btns/btn-line-insert.html.twig') }}
+            </div>
+          {% endif %}
+
+          <hr class="mt-5">
+
+          {% if episode.issue is defined and episode.issue is not empty %}
+            <div class="text-center mt-4 mb-2">
+              {% if episode.issue == 'Win' %}
+                <img class="img-fluid" src="{{asset('assets/ui/outcome-success.png')}}" />
+              {% elseif episode.issue == 'Mitigate' %}
+                <img class="img-fluid" src="{{asset('assets/ui/outcome-mitigate.png')}}" />
+              {% elseif episode.issue == 'Lose' %}
+                <img class="img-fluid" src="{{asset('assets/ui/outcome-fail.png')}}" />
+              {% endif %}
+            </div>
+          {% endif %}
+
+          {% if classement_episode %}
+            <div class="d-flex justify-content-center">
+              <div class="list-group list-group-flush">
+                {% set mvp = false %}
+                {% if episode.issue is not empty and episode.issue == 'Win' %}
+                  {% set mvp = true %}
+                  {% for un_personnage in classement_episode %}
+                    {% if un_personnage != classement_episode|first and un_personnage.xp == classement_episode|first.xp %}
+                      {% set mvp = false %}
+                    {% endif %}
+                  {% endfor %}
+                {% endif %}
+
+                {% set previous_xp = null %}
+                {% set rank = 0 %}
+                {% for un_personnage in classement_episode %}
+
+                  {% if previous_xp != un_personnage.xp %}
+                    {% set rank = rank + 1 %}
+                  {% endif %}
+
+                  {% if episode.issue is not empty and episode.issue == 'Win' %}
+                    {% set scale = 'scale-100' %}
+                    {% if mvp == true and rank == 1 %}
+                      {% set scale = 'scale-120' %}
+                    {% endif %}
+                  {% else %}
+                    {% set scale = 'scale-80' %}
+                  {% endif %}
+
+                  <a class="list-group-item d-flex align-items-center hover-zoom bg-transparent ranking {{scale|default('')}}" href="{{path('personnage_profil',{id:un_personnage.id})}}">
+                    <img class="img-96 mr-4 rounded-circle" src="{{ asset(un_personnage.icone|default(NA_PERSO_PORTRAIT)) }}" alt="Portrait du Personnage" title="Voir le profil de {{un_personnage.prenom}}"/>
+                    <div class="relative inlineblock mr-4">
+                      {% if mvp == true and rank == 1 %}<i class="crown fa-solid fa-crown fa-2xl text-primary mr-4"></i>{% endif %}
+                      <span class="heading-present">
+                        <span class="text-body-c">{{un_personnage.prenom}}</span>
+                      </span>
+                    </div>
+                    <div class="ml-auto text-right">
+                      <span class="badge badge-pill text-large text-gray">{{un_personnage.xp}}xp</span>
+                      {% if un_personnage.xpWithBonus is defined and un_personnage.xpWithBonus > un_personnage.xp %}
+                        <div class="text-regular extrabold text-flash-green-darker mt-1">Total avec Bonus XP*2 : {{ un_personnage.xpWithBonus }}xp</div>
+                      {% endif %}
+                    </div>
+                  </a>
+                  {% set previous_xp = un_personnage.xp %}
+                {% endfor %}
+              </div>
+            </div>
+          {% endif %}
+
+          <div class="back-next-btns">
+            <div class="col text-left pl-0">
+              <a class="btn-primary-style btn-medium hue-gray" href="#read-head">
+                <i class="fa-solid fa-arrow-turn-up" title="revenir en haut de page"></i>&nbsp;Retour
+              </a>
+            </div>
+            <div class="col text-center">
+            </div>
+            <div class="col text-right pr-0">
+              {% if episode_suivant is not empty %}
+                {% if episode_suivant.scenes|length > 0 or is_granted("ROLE_MJ") %}
+                  <a class="btn-primary-style btn-medium" href="{{ path('aventure_episode', {id: episode_suivant.id}) }}">
+                    Suivant
+                  </a>
+                {% endif %}
+              {% else %}
+                {% if episode_chapitre_suivant is not empty %}
+                  <a class="btn-primary-style btn-medium hue-fuschia" href="{{ path('aventure_episode', {id: episode_chapitre_suivant.id}) }}">
+                    Chapitre suivant&nbsp;<i class="fa-solid fa-book-open" aria-hidden="true"></i>
+                  </a>
+                {% endif %}
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      </div>
+
+     </div>
+    </section>
+   </div>
+  </main>
+</div>
+
+{% endblock %}

@@ -1,0 +1,43 @@
+{% extends 'element.html.twig' %}
+
+{% block stylesheets %}
+    {{parent()}}
+    <link rel="stylesheet" href="{{asset('css/components/element-banner-intro.css')}}" />
+    <link rel="stylesheet" href="{{asset('css/components/classe-banner.css')}}" />
+    <link rel="stylesheet" href="{{asset('css/components/other-elements-grid.css')}}" />
+{% endblock %}
+
+{% block element_content %}
+
+    <!-- BANNER + NAV -->
+    {{ include('parts/classe-banner.html.twig', {classe, classes}) }}
+
+    <!-- ECOLES -->
+    <section class="col-12 col-lg-8 pr-lg-1 py-1">
+        <div class="card card-body h-100">
+            <h2 class="element-card-title">Écoles de {{classe.nom}}</h2>
+            <hr>
+            <div class="card-text m-lg-0 row vignette-grid">
+                {% set col, size = 'col-6 col-md-4', 'small' %}
+                {% for une_ecole in ecolesClasse %}
+                    {% set na_image = 'assets/placeholders/na_school_' ~ une_ecole.classe.nom|lower ~ '.jpg' %}
+                    {{ include('/parts/element-vignette.html.twig', {un_element: une_ecole, category: 'regles', entity: 'ecole', na_image}) }}
+                {% else %}
+                    <span class="text-muted">Il n'y a pas encore d'école disponible pour cette classe.</span>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+
+    <!-- PERSONNAGES -->
+    {# pb-0 : cf. DESIGN-SYSTEM.md, "empilement mobile". #}
+    <aside class="col-12 col-lg-4 pl-lg-1 pt-1 pb-0 pb-lg-1">
+        {{ include('parts/other-character-grid.html.twig', {
+            titre: 'Personnages',
+            personnages: personnagesClasse,
+            limite: 16,
+            vide_message: "Il n'y a pas encore de personnages disponible pour cette classe.",
+        }) }}
+    </aside>
+
+{% endblock %}

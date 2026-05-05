@@ -1,0 +1,22 @@
+<div class="col-12">
+    {{ form_start(form) }}
+        <div class="row form-wrapper">
+
+            {{ include('parts/form-publication.html.twig', {form: form}) }}
+
+            <div class="col-6">{{ form_row(form.titre) }}</div> 
+            <div class="col-3">{{ form_row(form.auteur) }}</div>
+
+            <div class="col-12 mt-3">{{ form_row(form.contenu,{ 'attr': {'rows': '20'} }) }}</div>
+
+            <div class="col-12 mt-3 mb-5">
+                {{ include('parts/image-field.html.twig', {
+                    field: form.image, input_id: 'admin_archive_image', prefix: 'image',
+                    current: archive.image|default(null), fallback: NA_ARCHIVE,
+                    label: 'Image (1280×720 16:9 recommandé)', width: 1280, height: 720 }) }}
+            </div>
+
+            {{ include('/btns/btn-form.html.twig') }}
+        </div>
+    {{ form_end(form) }}
+</div>

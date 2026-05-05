@@ -1,0 +1,74 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Panneau d'Administration {{ parent() }}{% endblock %}
+
+{% block stylesheets %}
+    {{parent()}}
+    <link rel="stylesheet" href="{{asset('css/forms.css')}}" />
+    <link rel="stylesheet" href="{{asset('css/pages/backoffice.css')}}" />
+{% endblock %}
+
+{% block body %}
+
+    <main class="container-fluid page-min">
+        <div class="container py-5 relative">
+            <h1 class="heading-gmpanel text-center">
+                {% block h1 %}
+                  Panneau
+                    {% if app.user and is_granted("ROLE_ADMIN") %}
+                      d'Administration
+                    {% else %}
+                      du Maître
+                    {% endif %}
+                {% endblock %}
+            </h1>
+
+            {{ include('back_office/nav-admin.html.twig') }}
+            {{ include('parts/messages-flashes.html.twig') }}
+
+            {% block child %}
+
+                {# Ordre des sections : celui de la navigation visiteur. #}
+                {% if app.user and is_granted("ROLE_MJ") %}
+                    {% for section in [
+                        {cle: 'AVENTURE',    titre: 'Aventure',    texte: "Éléments ajoutés pour le descriptif de l'aventure."},
+                        {cle: 'PERSONNAGES', titre: 'Personnages', texte: 'Tous les personnages enregistrés.'},
+                        {cle: 'EMPIRE',      titre: 'Empire',      texte: "Éléments ajoutés pour le descriptif de l'univers de jeu."},
+                        {cle: 'REGLES',      titre: 'Règles',      texte: 'Éléments ajoutés pour les mécaniques de jeu.'},
+                    ] %}
+                        <h2 class="heading-categorysubsection mt-5">{{ section.titre }}</h2>
+                        <p class="mb-4 text-muted">{{ section.texte }}</p>
+                        <section class="row pb-5">
+                            {% for admin_element in admin_elements|filter(e => e.categorie == section.cle) %}
+                                {{ include('back_office/card-element-resume.html.twig', admin_element) }}
+                            {% endfor %}
+                        </section>
+                    {% endfor %}
+                {% endif %}
+
+                {% if app.user and is_granted("ROLE_ADMIN") %}
+                    <h2 class="heading-categorysubsection mt-5">Comptes Utilisateurs</h2>
+                    <p class="mb-4 text-muted">Tous les comptes utilisateurs.</p>
+                    <section class="row pb-5">
+                        {{ include('back_office/card-element-resume.html.twig', {
+                            label: 'Utilisateurs',
+                            element: 'utilisateur',
+                            nbr: nbrUtilisateurs,
+                            last: lastUtilisateur,
+                            nom: lastUtilisateur ? lastUtilisateur.pseudo : null,
+                            image: lastUtilisateur ? lastUtilisateur.avatar : null,
+                        }) }}
+                    </section>
+                {% endif %}
+
+            {% endblock %}
+
+        </div>
+    </main>
+
+{% endblock %}
+
+{% block javascripts %}
+    {{parent()}}
+    <script src="{{ asset('scripts/forms.js') }}"></script>
+{% endblock %}

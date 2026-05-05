@@ -1,0 +1,40 @@
+{% extends 'category.html.twig' %}
+{% block title %}Les Règles de l'Aventure {{ parent() }}{% endblock %}
+
+{% block section_content1 %}
+<!-- REGLES DE BASES -->
+    {% set col, size, na_image, ratio = 'col-3', 'medium', NA_RULE, '43' %}
+    {% for un_element in rulesBases %}
+        {{ include('/parts/element-vignette.html.twig', {un_element}) }}
+    {% endfor %}
+{% endblock %}
+
+{% block section_content2 %}
+<!-- LES CLASSES -->
+    {% for une_classe in classes %}
+        <!-- CLASSE -->
+        <a href="{{ path('regles_classe', {id: une_classe.id} ) }}" class="col-2 text-center hover-zoom">
+            <img src="{{ asset(une_classe.icone|default(NA_CLASS_ICO)) }}"  class="img-fluid" alt="Icône de la classe" title="{{une_classe.nom}}" />
+            <br>
+            <h3 class="text-center my-2 text-primary-darker-more">
+                <strong>{{ une_classe.nom }}</strong>
+            </h3>
+        </a>
+    {% endfor %}
+{% endblock %}
+
+{% block section_content3 %}
+<!-- BIBLIOTHEQUES -->
+    {% set col, size, na_image, ratio = 'col-3', 'medium', NA_LIBRARY, '43' %}
+    {% for un_element in librariesBases %}
+        {{ include('/parts/element-vignette.html.twig', {un_element}) }}
+    {% endfor %}
+{% endblock %}
+
+{% block section_content4 %}
+<!-- REGLES ANNEXES -->
+    {% set col, size, na_image, ratio = 'col-2', 'small', NA_RULE, '43' %}
+    {% for un_element in annexes %}
+        {{ include('/parts/element-vignette.html.twig', {un_element}) }}
+    {% endfor %}
+{% endblock %}

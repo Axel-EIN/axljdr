@@ -1,0 +1,59 @@
+{% extends 'category.html.twig' %}
+{% block title %}L'Univers de l'Aventure {{ parent() }}{% endblock %}
+
+{% block section_content1 %}
+<!-- ARCHIVES -->
+    {% set col, size, na_image = 'col-2', 'small', NA_ARCHIVE %}
+    {% for un_element in archives %}
+        {{ include('/parts/element-vignette.html.twig', {un_element}) }}
+    {% endfor %}
+{% endblock %}
+
+{% block section_content2 %}
+    <div class="col-9">
+        <h4 class="text-secondary">Clans Majeurs</h4>
+        <p class="text-regular m-3">Les Clans Majeurs sont les plus grandes factions de Rokugan.
+        Chacune d'elle est héritière d'un Kami originel qui juera fidélité à l'Empereur et se répartit la majeur partie de l'Empire.
+        Elles se composent de plusieurs familles et forment des miliers de Samuraïs dans leur dojos.</p>
+        <div class="row mt-4">
+        {% for un_clan_majeur in clansMajeurs %}
+
+            <!-- UN CLAN MAJEUR -->
+            <article class="col-lg-3 col-md-4 col-sm-6 py-3 text-center hover-zoom hover-shine">
+                <a href="{{ path('empire_clan', {id: un_clan_majeur.id} ) }}"><img class="img-160" src="{{ asset(un_clan_majeur.mon|default(NA_MON)) }}" alt="Mon du clan" /></a>
+                <br/>
+                <h3 class="text-center my-3"><strong><a href="{{ path('empire_clan', {id: un_clan_majeur.id} ) }}">{{ un_clan_majeur.nom }}</a></strong></h3>
+            </article>
+
+        {% endfor %}
+        </div>
+    </div>
+    <div class="col-3 border-left">
+    <h4 class="text-secondary text-center">Autres</h4>
+        <p class="text-regular m-3">Clans Mineurs, Confrérie des Moines, Familles Impérialles, Ennemis...</p>
+        <div class="row p-0 m-0 justify-content-around">
+        {% for un_clan_autre in clansAutres %}
+            <!-- UN CLAN AUTRE -->
+            <a class="col-6 m-0 p-1 hover-zoom" href="{{ path('empire_clan', {id: un_clan_autre.id} ) }}">
+                <img class="img-96 circle-crop" src="{{ asset(un_clan_autre.mon|default(NA_MON)) }}" alt="Mon du clan" title="{{un_clan_autre.nom}}" /></a>
+            </a>
+        {% endfor %}
+        </div>
+    </div>
+{% endblock %}
+
+{% block section_content3 %}
+<!-- LIEUX -->
+    {% set col, size, na_image = 'col-2', 'small', NA_LIEU %}
+    {% for un_element in lieux %}
+        {{ include('/parts/element-vignette.html.twig', {un_element}) }}
+    {% endfor %}
+{% endblock %}
+
+{% block section_content4 %}
+<!-- LORES -->
+    {% set col, size, na_image = 'col-2', 'small', NA_ARCHIVE %}
+    {% for un_element in lores %}
+        {{ include('/parts/element-vignette.html.twig', {un_element}) }}
+    {% endfor %}
+{% endblock %}

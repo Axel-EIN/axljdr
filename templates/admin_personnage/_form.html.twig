@@ -1,0 +1,54 @@
+<div class="col-12">
+    {{ form_start(form) }}
+        <div class="row form-wrapper">
+
+            <div class="col-8">
+                <div class="row">
+                    <div class="col-4">{{ form_row(form.nom) }}</div>
+                    <div class="col-4">{{ form_row(form.prenom) }}</div>
+                    <div class="col-4">{{ form_row(form.genre) }}</div>
+                    <div class="col-4">{{ form_row(form.clan) }}</div>
+                    <div class="col-4">{{ form_row(form.famille) }}</div>
+                    <div class="col-4">{{ form_row(form.classe) }}</div>
+                    <div class="col-4">{{ form_row(form.ecole) }}</div>
+                    <div class="col-6">{{ form_row(form.titres) }}</div>
+                    <div class="col-6">{{ form_row(form.joueur) }}</div>
+                    <div class="col-12">{{ form_row(form.description, {'attr': {'rows': '10'} }) }}</div>
+                    <div class="col-4 text-center">{{ form_row(form.locked) }}</div>
+                    <div class="col-4 text-center">{{ form_row(form.estMort) }}</div>
+                    <div class="col-4 text-center">{{ form_row(form.estPj) }}</div>
+                </div>
+            </div>
+
+            <div class="col-4">
+                <div class="d-flex flex-column text-center mb-4"> 
+                    {{ form_label(form.icone, 'Portrait (240×240 1:1 recommandé)') }}
+                    <label for="admin_personnage_icone" class="preview-label img-96 hover-slight-fade hover-pointer hover-icon-visible">
+                        <span class="btn-icon-medium right-corner-16"><i class="fas fa-edit semi-visible text-white"></i></span>
+                        <img id="icon-preview" class="img-fluid border-soft" src="{{ asset(personnage.icone|default(NA_PERSO_PORTRAIT)) }}" />
+                        <span id="icon-filename" class="filename"></span>
+                    </label>
+                    <div class="browser">{{ form_widget(form.icone, {'attr': {'class': 'input-icon'}}) }}</div>
+
+                    {{ include('parts/image-cropper.html.twig', {input_id: 'admin_personnage_icone', width: 240, height: 240}) }}
+                    {{ include('parts/image-delete-button.html.twig', {input_id: 'admin_personnage_icone', field_name: 'icone', current: personnage.icone|default(null)}) }}
+                </div>
+
+                <div class="d-flex flex-column text-center">
+                    {{ form_label(form.illustration, 'Illustration (450×800 9:16 recommandé)') }}
+                    <label for="admin_personnage_illustration" class="preview-label img-240 hover-slight-fade hover-pointer hover-icon-visible">
+                        <span class="btn-icon-medium right-corner-16"><i class="fas fa-edit semi-visible text-white"></i></span>
+                        <img id="image-preview" class="img-fluid border-soft" src="{{ asset(personnage.illustration|default(NA_PERSO_ILLU)) }}" />
+                        <span id="image-filename" class="filename"></span>
+                    </label>
+                    <div class="browser">{{ form_widget(form.illustration, {'attr': {'class': 'input-image'}}) }}</div>
+
+                    {{ include('parts/image-cropper.html.twig', {input_id: 'admin_personnage_illustration', width: 450, height: 800}) }}
+                    {{ include('parts/image-delete-button.html.twig', {input_id: 'admin_personnage_illustration', field_name: 'illustration', current: personnage.illustration|default(null)}) }}
+                </div>
+            </div>
+            
+            {{ include('/parts/btn-form.html.twig') }}
+        </div>
+    {{ form_end(form) }}
+</div>

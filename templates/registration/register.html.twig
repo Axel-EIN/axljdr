@@ -1,0 +1,19 @@
+{% extends 'other.html.twig' %}
+
+{% set titre = 'Créer un compte' %}
+
+{% block contenu %}
+  {% for flashError in app.flashes('verify_email_error') %}
+    <div class="alert alert-danger" role="alert">{{ flashError }}</div>
+  {% endfor %}
+
+  <div class="formulaire-etroit">
+    {{ form_start(registrationForm) }}
+      {{ form_row(registrationForm.pseudo) }}
+      {{ form_row(registrationForm.email) }}
+      {{ form_row(registrationForm.plainPassword) }}
+      {{ form_row(registrationForm.agreeTerms) }}
+      {{ include('/parts/btn-form.html.twig', {button_label: 'Créer un compte'}) }}
+    {{ form_end(registrationForm) }}
+  </div>
+{% endblock %}

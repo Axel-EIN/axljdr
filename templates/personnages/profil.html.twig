@@ -1,0 +1,130 @@
+{% extends 'element.html.twig' %}
+
+{% block stylesheets %}
+  {{parent()}}
+  <link rel="stylesheet" href="{{asset('css/components/history.css')}}" />
+  <link rel="stylesheet" href="{{asset('css/pages/profil.css')}}" />
+{% endblock %}
+
+{% block element_content %}
+
+{% if personnage.illustration is null and personnage.genre == 'F' %}
+  {% set NA_PERSO_ILLU = NA_PERSO_ILLU_F %}
+{% elseif personnage.illustration is null and personnage.genre == 'M' %}
+  {% set NA_PERSO_ILLU = NA_PERSO_ILLU_M %}
+{% endif %}
+{% set illustration_src = asset(personnage.illustration|default(NA_PERSO_ILLU)) %}
+
+{# Ordre mobile : bandeau, description, infos, historique, autres persos.
+   Ordre desktop (>= lg) : infos + description, puis historique + autres. #}
+
+<div class="col-12 d-lg-none order-0">
+  <div class="profil-banner-mobile">
+    <img src="{{ illustration_src }}" alt="{{personnage.nom}} {{personnage.prenom}}" title="{{personnage.nom}} {{personnage.prenom}}" />
+  </div>
+</div>
+
+<div class="col-12 col-lg-4 order-2 order-lg-1">
+  <div class="card card-body profil-infos">
+
+    {# Masquee sur mobile : le bandeau du haut la remplace. #}
+    <img class="img-fluid w-100 d-none d-lg-block" src="{{ illustration_src }}" alt="{{personnage.nom}} {{personnage.prenom}}" title="{{personnage.nom}} {{personnage.prenom}}" />
+
+    <ul class="list-group list-group-flush">
+
+      <li class="list-group-item d-flex justify-content-between align-items-center">
+        <div class="d-flex flex-column">
+          <span class="text-muted text-small">Création : <strong class="extrabold">{{xp_creation}}</strong></span>
+          <span class="text-muted text-small">Progression : <strong class="extrabold">{{xp_progression}}</strong></span>
+        </div>
+        <div class="text-big text-flash-green-darker extrabold">
+          {% if xp > 0 %}
+            {{xp}} XP
+          {% endif %}
+        </div>
+      </li>
+
+      <li class="list-group-item d-flex justify-content-between align-items-center">
+        {% if personnage.clan is defined and personnage.clan is not empty %}
+          <a class="hover-no-under" href="{{ path('empire_clan', {id: personnage.clan.id} ) }}">
+            <img class="img-48" src="{{ asset(personnage.clan.mon|default(NA_MON)) }}" alt="Mon du Clan {{personnage.clan.nom}}" title="Mon du Clan {{personnage.clan.nom}}" />
+            &nbsp;
+            <strong class="extrabold">{{ personnage.clan.nom }}</strong>
+          </a>
+        {% endif %}
+
+        {% if personnage.famille is defined and personnage.famille is not empty %}
+          <a class="d-block hover-no-under overflow-hidden" href="{{ path('empire_clan', {id: personnage.clan.id, '_fragment': personnage.famille.nom } ) }}">
+            <strong class="extrabold">{{ personnage.famille.nom }}</strong>
+            <img
+              class="img-48 rounded-circle" src="{{ asset(personnage.famille.mon|default(NA_MON)) }}"
+              alt="Mon de la Famille {{personnage.famille.nom}}" title="Mon de la Famille {{personnage.famille.nom}}"
+            />
+          </a>
+        {% endif %}
+      </li>
+
+      {% if personnage.ecole is defined and personnage.ecole is not empty %}
+        <li class="list-group-item d-flex align-items-center">
+            
+          <a class="hover-no-under" href="{{ path('regles_ecole', {id: personnage.ecole.id} ) }}">
+            <img class="img-48" src="{{ asset(personnage.classe.icone|default(NA_CLASS_ICO)) }}" alt="Classe {{personnage.classe.nom}}" title="Classe {{personnage.classe.nom}}" />
+            &nbsp;
+            <strong class="extrabold">{{ personnage.ecole.nom }}</strong>
+          </a>           
+          {% if xp > 0 %}
+            <span class="ml-auto badge badge-info">RANG {{rang}}</span>
+          {% endif %}
+        </li>
+      {% endif %} 
+
+      {% if personnage.joueur is not empty %}
+        <li class="list-group-item"><strong>Joueur :</strong> {{ personnage.joueur.pseudo }}</li>
+      {% endif %}
+
+      {% if personnage.fichePersonnage is not null %}
+        <li class="list-group-item d-flex justify-content-center profil-btn-fiche">
+          <a class="btn-primary-style btn-medium" href="{{ path('personnage_fiche', {id: personnage.fichePersonnage.id}) }}">
+            <i class="fas fa-scroll"></i> Voir la fiche de personnage
+          </a>
+        </li>
+      {% endif %}
+    </ul>
+
+  </div>
+</div>
+
+<div class="col-12 col-lg-8 order-1 order-lg-2">
+  <div class="card card-body">
+    {% if personnage.titres is defined and personnage.titres is not empty %}
+      <h4 class="card-title-cartouche">{{ personnage.titres }}</h4>
+    {% endif %}
+    <p class="card-description condensed">{{ personnage.description|default('')|raw|nl2br }}</p>
+  </div>
+</div>
+
+<div class="col-12 col-lg-8 order-3">
+  <div class="card card-body">
+
+    <h2 class="heading-cardtitle">Historique</h2>
+    <hr>
+    <div class="card-text profil-historique">
+      {{ include('parts/historique.html.twig', {historique, saison_courante}) }}
+      {% if xp_creation > 0 %}
+        <p class="profil-creation">Création du personnage {{ personnage.prenom }} avec <strong>{{ xp_creation }}xp</strong>.</p>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+{{ include('/parts/picture-grid.html.twig', {
+  variant: 'portrait',
+  title: personnage.estPj ? 'Autres PJs' : 'Autres PNJs',
+  items: autresPersonnages, route: 'personnage_profil',
+  limit: 12,
+  wrapper: 'col-12 col-lg-4 order-4',
+  per_row: {desktop: 2, tablet: 4, mobile: 2},
+  empty_message: "Il n'y a pas d'autres personnage.",
+}) }}
+
+{% endblock %}

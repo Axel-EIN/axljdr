@@ -1,0 +1,124 @@
+/* --- BREADCRUMBS --- */
+
+.breadcrumbs {
+  padding-top: 1rem;
+  @media (max-width: 575.98px) { display: none; }
+}
+
+/* --- ALERTS --- */
+
+.alert-flash {
+    position: fixed;
+    z-index: 100;
+    top: 1rem;
+    left: 50%;
+    transform: translate(-50%, 0%);
+}
+
+.alert-persist {
+    display: inline-block;
+    font-size: var(--fontsize-regular);
+    color: var(--color-white-50);
+    background-color: var(--color-black-50) !important;
+    border-color: var(--color-white-25) !important;
+    margin-bottom: 0;
+}
+
+
+.dropdown-dark {
+    background-color: var(--secondary-pastel-darker);
+    border: 1px solid var(--color-white-25);
+
+    .dropdown-item {
+        color: var(--color-white-50);
+
+        
+        &.active {
+            background-color: rgba(255, 255, 255, 0.2);
+            color: var(--color-white);
+        }
+
+        &:hover, &:focus {
+            color: var(--color-white);
+            background-color: var(--primary-darker);
+        }
+    }
+}
+
+.chevron-toggle {
+    .fa-chevron-down { transition: transform 0.2s var(--ease); }
+
+    &[aria-expanded="true"] .fa-chevron-down { transform: rotate(180deg); }
+}
+
+.banner-nav-toggle {
+    text-decoration: none;
+
+    &:hover, &:focus {
+        color: var(--color-white);
+        text-decoration: none;
+    }
+}
+
+/* --------- ASIDES --------- */
+
+.aside {
+    float: right;
+    border-color: transparent;
+    border-style: double;
+    border-width: 24px 24px 140px 24px;
+    border-image: url('/assets/ui/bg-aside.png') 24 24 140 24 fill repeat;
+
+    &>p { font-size: var(--fontsize-small); }
+}
+
+/* ------ TOOL TIP ------ */
+
+.hover-tooltip {
+    position: absolute;
+    visibility: hidden;
+    z-index: 100;
+    white-space: nowrap;
+    color: #fff;
+    text-align: center;
+    font-size: var(--fontsize-small);
+    padding: 0.2rem 0.5rem;
+    border-radius: 0.5rem;
+    background-color: var(--primary-darker-more);
+}
+
+/* ------ CHARACTER PORTAITS ICONS ------ */
+
+.character-portrait {
+    &.small { width: 28px; }
+    &.medium {
+        width: 48px;
+        border-radius: 4px;
+    }
+    &.large {
+        width: 64px;
+        border-radius: 5px;
+        box-shadow: 1px 1px 8px 2px var(--color-black-50);
+    }
+}
+
+/* --------- DIVIDERS --------- */
+
+.divider-ornament {
+    display: flex;
+    align-items: center;
+    width: 60%;
+    margin: 0 auto;
+
+    hr {
+        flex: 1;
+        margin: 0 1rem;
+        background-color: #ffbbbb;
+        height: 1px;
+    }
+
+    .icon-ornament {
+        width: var(--icon-medium);
+        height: auto;
+    }
+}

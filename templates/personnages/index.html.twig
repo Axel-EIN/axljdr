@@ -1,0 +1,109 @@
+{% extends 'category.html.twig' %}
+
+{% block stylesheets %}
+    {{parent()}}
+    <link rel="stylesheet" href="{{asset('css/pages/characters.css')}}" />
+{% endblock %}
+{% block title %}Personnages de l'Aventure {{ parent() }}{% endblock %}
+
+{% block content_top %}
+    {% set active_filter = selected_episode_id is not null ? 'episode'
+                         : (selected_chapitre_id is not null ? 'chapitre'
+                         : (selected_saison_id is not null ? 'saison' : null)) %}
+    <div class="characters-filters bg-stroke-container">
+        {% if active_filter is not null %}
+            <a href="{{ path('personnages') }}" class="btn-reset-icon" title="Réinitialiser les filtres">
+                <i class="fas fa-undo"></i>
+            </a>
+        {% endif %}
+        {# "reset" liste les filtres en aval a vider, "inactif" la condition qui
+           desactive celui-ci faute de filtre parent. #}
+        {% set filtres = [
+            { nom: 'saison',   label: 'Saison',   icone: AVENTURE_SAISON_ICO,   vide: '— Toutes —', options: saisons,   selected: selected_saison_id,   inactif: false,                        reset: ['chapitre', 'episode'] },
+            { nom: 'chapitre', label: 'Chapitre', icone: AVENTURE_CHAPITRE_ICO, vide: '— Tous —',   options: chapitres, selected: selected_chapitre_id, inactif: selected_saison_id is null,   reset: ['episode'] },
+            { nom: 'episode',  label: 'Episode',  icone: AVENTURE_EPISODE_ICO,  vide: '— Tous —',   options: episodes,  selected: selected_episode_id,  inactif: selected_chapitre_id is null, reset: [] },
+        ] %}
+
+        <form method="get" action="{{ path('personnages') }}" class="form-row align-items-end m-0">
+            {% for filtre in filtres %}
+                {# mobile : icône et liste sur une même ligne (3 lignes au lieu de 6),
+                   le libellé texte est masqué. desktop : libellé au-dessus de la liste. #}
+                <div class="col-12 col-md-4 mb-2 mb-md-0 px-1 d-flex d-md-block align-items-center">
+                    {# mr-3 / mr-md-1 : l'ecart icone-liste est porte par le libelle
+                       sur mobile, par l'image sur desktop ou le texte s'intercale. #}
+                    <label for="filtre-{{ filtre.nom }}" class="mb-0 mb-md-2 mr-3 mr-md-0 ml-md-n1 flex align-items-center">
+                        <img class="img-32 mr-md-1" src="{{ asset(filtre.icone) }}" alt="" />
+                        <span class="label-amerigo d-none d-md-inline">{{ filtre.label }}</span>
+                    </label>
+                    <select name="{{ filtre.nom }}" id="filtre-{{ filtre.nom }}"
+                            class="form-control form-control-sm{% if active_filter == filtre.nom %} is-active-filter{% endif %}"
+                            onchange="{% for aval in filtre.reset %}document.getElementById('filtre-{{ aval }}').value='';{% endfor %}this.form.submit();"
+                            {% if filtre.inactif %}disabled{% endif %}>
+                        <option value="">{{ filtre.vide }}</option>
+                        {% for option in filtre.options %}
+                            <option value="{{ option.id }}" {% if filtre.selected == option.id %}selected{% endif %}>
+                                {{ filtre.label }} {{ option.numero }} — {{ option.titre }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+            {% endfor %}
+        </form>
+    </div>
+{% endblock %}
+
+{% block section_content1 %}
+    {% for perso in pjs %}
+        {{ include('/personnages/card-personnage.html.twig', {perso}) }}
+    {% endfor %}
+    {% if pjs is empty %}
+        <div class="col-12"><p class="text-muted font-italic">Aucun personnage joueur ne correspond à ce filtre.</p></div>
+    {% endif %}
+{% endblock %}
+
+{% block section_content2 %}
+    <div class="col-12">
+        {% set clans_pnjs = [
+            { nom: 'Imperial',        titre: 'Familles Impériales' },
+            { nom: 'Crabe',           titre: 'Clan du Crabe' },
+            { nom: 'Dragon',          titre: 'Clan du Dragon' },
+            { nom: 'Grue',            titre: 'Clan de la Grue' },
+            { nom: 'Licorne',         titre: 'Clan de la Licorne' },
+            { nom: 'Lion',            titre: 'Clan du Lion' },
+            { nom: 'Phénix',          titre: 'Clan du Phénix' },
+            { nom: 'Scorpion',        titre: 'Clan du Scorpion' },
+            { nom: 'Confrérie',       titre: 'Confrérie de Shinsei' },
+            { nom: 'Lièvre',          titre: 'Clan Mineur du Lièvre' },
+            { nom: 'Adeptes du Sang', titre: 'Adeptes du Sang' },
+        ] %}
+
+        {% for clan_def in clans_pnjs %}
+            {% set persos_du_clan = pnjs|filter(p => p.clan is not empty and p.clan.nom == clan_def.nom) %}
+            {% if persos_du_clan|length > 0 %}
+                <h3 class="heading-cardtitle">{{ clan_def.titre }}</h3>
+                <div class="row">
+                    {% for perso in persos_du_clan %}
+                        {{ include('/personnages/card-personnage.html.twig', {perso}) }}
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endfor %}
+
+        {# Un clan hors de cette table rejoint "Autres" : sans ca ses PNJ
+           n'apparaitraient nulle part. #}
+        {% set clans_listes = clans_pnjs|map(c => c.nom) %}
+        {% set autres = pnjs|filter(p => p.clan is empty or p.clan.nom not in clans_listes) %}
+        {% if autres|length > 0 %}
+            <h3 class="heading-cardtitle">Autres</h3>
+            <div class="row">
+                {% for perso in autres %}
+                    {{ include('/personnages/card-personnage.html.twig', {perso}) }}
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        {% if pnjs is empty %}
+            <p class="text-muted font-italic">Aucun autre personnage ne correspond à ce filtre.</p>
+        {% endif %}
+    </div>
+{% endblock %}

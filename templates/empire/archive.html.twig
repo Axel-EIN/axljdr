@@ -1,0 +1,36 @@
+{% extends 'element.html.twig' %}
+
+{% block element_content %}
+
+    <div class="col-12">
+        <div class="card card-page">
+        
+            {{ include('/parts/card-top-image.html.twig', {image: un_element.image, na_image: NA_ARCHIVE, alt: 'Image de ' ~ nom, img_class: 'crop-169', titre: nom}) }}
+
+            <p class="card-description aerated">{{ un_element.contenu|raw|nl2br }}</p>
+        
+            {% if un_element.auteur is not empty %}
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">
+                        <strong>Auteur&nbsp;:</strong> {{ un_element.auteur.nom }} <strong>{{ un_element.auteur.prenom }}</strong> 
+                    </li>
+                </ul>
+            {% endif %}
+
+            {{ include('/parts/divider-ornament.html.twig') }}
+
+            {% if app.user and is_granted("ROLE_MJ") %}
+                {% set redirect, element, un_element, color, action = 'empire', 'archive', un_element, 'text-accent', 'delete' %}
+                {{ include('/parts/btn-line.html.twig') }}
+            {% endif %}
+
+        </div>
+    </div>
+
+    {{ include('/parts/picture-grid.html.twig', {
+        title: 'Autres Archives',
+        items: autresArchives, route: 'empire_archive',
+        na_image: NA_ARCHIVE,
+    }) }}
+
+{% endblock %}

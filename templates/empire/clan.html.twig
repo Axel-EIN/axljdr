@@ -1,0 +1,132 @@
+{% extends 'element.html.twig' %}
+
+{% block stylesheets %}
+    {{parent()}}
+    <link rel="stylesheet" href="{{asset('css/components/banner-intro.css')}}" />
+    <link rel="stylesheet" href="{{asset('css/pages/clan.css')}}" />
+{% endblock %}
+
+{% block element_content %}
+
+    {{ include('parts/clan-banner.html.twig', {clan, toutClans}) }}
+
+    <div class="col-12 col-lg-8">
+        <div class="card card-body relative">
+
+            {{ include('/parts/btn-ajouter-element.html.twig', {
+                entity: 'famille', label_one: 'une famille',
+                position: 'right-corner-16', options: 'clanID=' ~ clan.id,
+            }) }}
+
+            <h2 class="heading-cardtitle">Familles</h2>
+            <div class="card-text">
+
+                {% for une_famille in clan.familles %}
+                    <hr>
+                    <article id="{{ une_famille.nom }}" class="famille relative">
+
+                        {% if app.user and is_granted("ROLE_MJ") %}
+                            {% set redirect, entity, un_element, size, color, position = 'clan', 'famille', une_famille, 'btn-icon-small', 'text-accent', 'right-corner-snap' %}
+                            {{ include('/parts/btn-icon-edit.html.twig') }}
+                        {% endif %}
+
+                        <div class="famille-mon">
+                            <img class="img-fluid circle-crop" src="{{ asset(une_famille.mon|default(NA_MON)) }}" alt="Mon Famille" />
+
+                            {# Masque sur mobile : pas la place a cote du logo. #}
+                            {% if une_famille.chef is not empty %}
+                                <a class="famille-daimyo hover-no-under hover-zoom" href="{{ path('personnage_profil', {id: une_famille.chef.id} ) }}" title="{{une_famille.chef.nom}} {{une_famille.chef.prenom}}">
+                                    <span class="text-muted">Daimyo</span>
+                                    <img class="character-portrait medium" src="{{ asset(une_famille.chef.icone|default(NA_PERSO_PORTRAIT)) }}" alt="Icône du personnage" />
+                                </a>
+                            {% endif %}
+                        </div>
+
+                        <div class="famille-entete">
+                            <h3><strong>{{ une_famille.nom }}</strong></h3>
+                            {% if une_famille.bonusStatNom %}
+                                {% set labels = {'constitution':'Constitution','volonte':'Volonté','reflexes':'Réflexes','intuition':'Intuition','agilite':'Agilité','intelligence':'Intelligence','forceStat':'Force','perception':'Perception','vide':'Vide'} %}
+                                <strong>Trait bonus : {{ labels[une_famille.bonusStatNom] ?? une_famille.bonusStatNom }} +1</strong>
+                            {% endif %}
+                        </div>
+
+                        <p class="famille-description">{{ une_famille.description|raw|nl2br }}</p>
+
+                    </article>
+                {% else %}
+                    <span class="text-muted"><i>Familles à venir</i></span>
+                {% endfor %}
+
+            </div>
+        </div>
+    </div>
+
+    {{ include('/parts/picture-grid.html.twig', {
+        title: 'Écoles',
+        items: clan.ecoles, route: 'regles_ecole',
+        na_image: NA_ECOLE,
+        force_image: true,
+        ratio: '43',
+        per_row: 1,
+        wrapper: 'col-12 col-lg-4',
+        btn_add: {entity: 'ecole', label_one: 'une école', position: 'right-corner-16', options: 'clanID=' ~ clan.id},
+        empty_message: 'Écoles à venir.',
+    }) }}
+
+    {% if clan.territoireDesc is defined and clan.territoireDesc is not empty %}
+    <div class="col-12">
+        <div class="card card-body">
+            <h2 class="heading-cardtitle">Territoires</h2>
+            <hr>
+
+            {% if clan.territoireCarte %}
+                <img id="carte" class="img-fluid img-bleed" src="{{asset(clan.territoireCarte)}}" alt="Carte du Territoire du clan" />
+            {% endif %}
+
+            {% if clan.territoireDesc %}
+                <p class="card-description">{{clan.territoireDesc}}</p>
+            {% else %}
+                <p class="text-muted"><i>Description des Territoires à venir.</i></p>
+            {% endif %}
+
+        </div>
+    </div>
+    {% endif %}
+
+    {{ include('/parts/picture-grid.html.twig', {
+        title: 'Lieux',
+        items: clan.lieux, route: 'empire_lieu',
+        na_image: NA_LIEU,
+        force_image: true,
+        per_row: {desktop: 4, tablet: 3, mobile: 2},
+        empty_message: "Il n'y a pas encore de lieu rattaché à ce clan.",
+    }) }}
+
+    {% if clan.longDescription is defined and clan.longDescription is not empty %}
+        {% set col_side = "col-12 col-lg-4" %}
+        <div class="col-12 col-lg-8">
+            <div class="card card-body">
+                <h2 class="heading-cardtitle">Autres</h2>
+                <hr>
+                <p class="card-description">{{ clan.longDescription|raw|nl2br }}</p>
+            </div>
+        </div>
+    {% else %}
+        {% set col_side = "col-12" %}
+    {% endif %}
+
+    {{ include('/parts/picture-grid.html.twig', {
+        variant: 'portrait',
+        title: 'Personnages',
+        items: clan.personnages, route: 'personnage_profil',
+        wrapper: col_side,
+        per_row: {desktop: 2, tablet: 4, mobile: 2},
+        empty_message: "Il n'y a pas encore de personnage rattaché à ce clan.",
+    }) }}
+
+{% endblock %}
+
+{% block javascripts %}
+    {{parent()}}
+    <script src="{{ asset('scripts/clan.js') }}"></script>
+{% endblock %}

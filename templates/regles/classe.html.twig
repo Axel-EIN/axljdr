@@ -1,0 +1,57 @@
+{% extends 'element.html.twig' %}
+
+{% block stylesheets %}
+    {{parent()}}
+    <link rel="stylesheet" href="{{asset('css/page-classe.css')}}" />
+{% endblock %}
+
+{% block element_content %}
+
+    <!-- BANNER + NAV -->
+    {% set un_element, icone, invert, all_elements = classe, classe.icone, 'invert', classes %}
+    {{ include('parts/banner-intro.html.twig') }}
+
+    <!-- ECOLES -->
+    <section class="col-8 pr-1 py-1">
+        <div class="card card-body pt-4 h-100">
+            <h2 class="title-h3">Écoles de {{un_element.nom}}</h2>
+            <hr>
+            <div class="card-text m-0 row">
+                <!-- UNE ECOLE -->
+                {% for une_ecole in ecolesClasse %}
+                    <article class="col-4 p-3 hover-zoom text-center">
+                        <a href="{{ path('regles_ecole', {id: une_ecole.id} ) }}">
+                            <img class="img-fluid" src="{{ asset(une_ecole.image|default('assets/img/placeholders/na_school_' ~ une_ecole.classe.nom|lower ~ '.jpg')) }}" alt="Image d'une école" title="{{une_ecole.nom}}" />
+                        </a><br/>
+                        <strong><a href="{{ path('regles_ecole', {id: une_ecole.id} ) }}" >{{ une_ecole.nom }}</a></strong>
+                    </article>
+                {% else %}
+                    <span class="text-muted">Il n'y a pas encore d'école disponible pour cette classe.</span>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+
+    <!-- PERSONNAGES -->
+    <aside class="col-4 pl-1 py-1">
+        <div class="card card-body pt-4 h-100">
+            <h2 class="title-h3">Personnages</h2>
+            <hr>
+            <div class="card-text row m-0 justify-content-center">
+
+                <!-- UN PERSONNAGE -->
+                {% for un_personnage in personnagesClasse|slice(0,16) %}
+                    <article class="p-1 hover-zoom">
+                        <a href="{{ path('personnage_profil', {id: un_personnage.id} ) }}">
+                            <img class="img-128" src="{{ asset(un_personnage.icone|default(NA_PERSO_ICO)) }}" alt="Icône d'un personnage" title="Voir profil de {{un_personnage.prenom}}" />
+                        </a>
+                    </article>
+                {% else %}
+                    <span class="text-muted">Il n'y a pas encore de personnages disponible pour cette classe.</span>
+                {% endfor %}
+
+            </div>
+        </div>
+    </aside>
+
+{% endblock %}

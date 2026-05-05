@@ -1,0 +1,58 @@
+{% extends 'base.html.twig' %}
+
+{% block stylesheets %}
+    {{parent()}}
+    <link rel="stylesheet" href="{{asset('css/pages/aventure.css')}}" />
+{% endblock %}
+{% block title %}L'Aventure Saison {{ saison.numero }} {{ parent() }}{% endblock %}
+{% block body %}
+
+<!-- SAISON BAR -->
+<saison class="saison-bar container-fluid" style="background-color: {{ saison.couleur }}">
+    <bar class="container">
+        {{ include('/parts/messages-flashes.html.twig') }}
+        {# Les deux flèches gardent exactement le même gabarit qu'elles soient
+           actives ou non (invisible plutôt qu'absente), sinon le titre entre
+           elles n'est plus centré dans la barre. #}
+        <a class="btn-quaternary-style text-white-80{{ saison_precedente is empty ? ' invisible' : '' }}"
+           {% if saison_precedente is not empty %}href="{{ path('aventure_saison', {id: saison_precedente.id}) }}" title="Voir saison précédente"{% endif %}>
+            <span class="text-small"><i class="fa-solid fa-caret-left"></i><span class="d-none d-lg-inline"> Saison Précédente</span></span>
+        </a>
+
+        {% if saison_suivante is empty %}
+            <strong>SAISON {{ saison.numero }} en cours</strong>
+        {% else %}
+            <strong>SAISON {{ saison.numero }} - {{ saison.titre|upper }}</strong>
+        {% endif %}
+
+        <a class="btn-quaternary-style text-white-80{{ saison_suivante is empty ? ' invisible' : '' }}"
+           {% if saison_suivante is not empty %}href="{{ path('aventure_saison', {id: saison_suivante.id}) }}" title="Voir saison suivante"{% endif %}>
+            <span class="text-small"><span class="d-none d-lg-inline">Saison Suivante </span><i class="fa-solid fa-caret-right"></i></span>
+        </a>
+    </bar>
+</saison>
+
+<!-- AFFICHAGE DES CHAPITRES DE LA SAISON -->
+<main class="relative">
+
+    {% set color, entity, parent, parentID, redirect = 'text-white-80', 'chapitre', 'saison', saison.id, 'aventure' %}
+    {% for un_chapitre in saison.chapitres|reverse %}
+        {{ include('/aventure/chapitre-section.html.twig') }}
+    {% else %}
+
+        <!-- PAS DE CHAPITRE -->
+        <section class="header-bg-img header-bg-no-chapter" style="background-color: #400000; background-image:linear-gradient( rgb( 0,0,0,0.6 ), rgb( 0,0,0,0), rgb( 0,0,0,0.3), rgb( 0,0,0,0.6) ), url( {{ asset(NA_169) }} );" >
+            <div class="container">
+                <div class="header header-chapter d-flex flex-column justify-content-end" >
+                    <div class="alert alert-light mx-auto alert-persist mt-3 mb-3">
+                        <strong>Désolé, il n'y a pas encore de Chapitre dans cette Saison.</strong>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    {% endfor %}
+
+</main>
+
+{% endblock %}

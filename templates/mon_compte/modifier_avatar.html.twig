@@ -1,0 +1,14 @@
+{% extends 'other.html.twig' %}
+
+{% set titre = 'Modifier votre avatar' %}
+
+{% block contenu %}
+  <div class="formulaire-etroit">
+    {% if app.user.avatar %}
+      <img class="img-fluid" src="{{ asset(app.user.avatar) }}" alt="Avatar de l'utilisateur" />
+    {% else %}
+      <p class="text-muted text-center"><small>Pas d'avatar paramétré</small></p>
+    {% endif %}
+    {{ form(form) }}
+  </div>
+{% endblock %}

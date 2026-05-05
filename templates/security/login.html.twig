@@ -1,0 +1,9 @@
+{% extends 'other.html.twig' %}
+
+{% set titre = 'Connexion' %}
+
+{% block contenu %}
+  <div class="formulaire-etroit">
+    {{ include('/parts/form-se-connecter.html.twig') }}
+  </div>
+{% endblock %}

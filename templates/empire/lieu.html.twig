@@ -1,0 +1,135 @@
+{% extends 'element.html.twig' %}
+
+{% block stylesheets %}
+        {{parent()}}
+        <link rel="stylesheet" href="{{asset('css/page-lieu.css')}}" />
+{% endblock %}
+
+{% block element_content %}
+
+    <element class="col-12 pb-1">
+        <card class="card pb-5">
+
+            <!-- ILLUSTRATION-->
+            <imagezone class="bg-black relative">
+
+                <!-- SURIMPRESSION GAUCHE : ICONE + SURNOM -->
+                <h2 class="surname">
+                    <img class="img-96 ml-5 mr-3 mb-2 filter-shadow" src="{{ asset(un_element.icone|default(NA_LIEU_ICO)) }}" alt="Icone de {{un_element.nom}}">
+                    <i class="align-middle">{{ un_element.surnom|default('') }}</i>
+                </h2>
+
+                <!-- SURIMPRESSION DROITE : TYPE, POPULATION, AFFILIATION  -->
+                <div class="stats">
+                    {% if un_element.clan is defined and un_element.clan is not empty %}
+                    <div>
+                        <span class="hover-tooltip">{{un_element.clan.nom|default('')}}</span>
+                        <a href="{{ path('empire_clan', {id:un_element.clan.id} ) }}" >
+                            <img class="ml-2 mb-2 img-64 circle-crop" src="{{ asset(un_element.clan.mon|default(NA_MON)) }}" alt="Mon d'une faction" title="{{un_element.clan.nom|default('')}}" />
+                        </a>
+                    </div>
+                    {% endif %}
+                    {% if un_element.type is defined and un_element.type is not empty %}<span>Type : <strong>{{ un_element.type }}</strong></span>{% endif %}
+                    {% if un_element.population is defined and un_element.population is not empty %}
+                        <span>Population : <strong>{{ un_element.population|number_format(0, ',', '.') }} habitants</strong></span>
+                    {# {% elseif un_element.type == 'Région ou Royaume' and un_element.population is defined and un_element.population is empty %}
+                        <span>Population : <strong>Inconnue</strong></span> #}
+                    {% endif %}                   
+                </div>
+
+                <!-- IMAGE -->
+                <img class="img-fluid mask" src="{{ asset(un_element.image|default(NA_LIEU)) }}" alt="Image de {{un_element.nom}}" />
+            </imagezone>
+
+            {% if un_element.description is defined and un_element.description is not empty %}
+                <!-- DESCRIPTION DE LA VILLE -->
+                <p class="p-5 mx-5 text-justify text-medium">{{ un_element.description|raw|nl2br }}</p>
+            {% endif %}
+            
+            {% if un_element.region is defined and un_element.region is not empty %}
+                <!-- LOCALISATION -->
+                <spacer class="my-3">{{ include('/parts/separateur-ornament.html.twig') }}</spacer>
+
+                <h2 class="text-center mb-4"><strong>Carte</Strong></h2>
+
+                <imagezone class="relative">
+
+                    <!-- MINI CARTE -->
+                    <imagezone id="minimap" class="absolute">
+                        <div class="relative overflow-hidden">
+
+                            <!-- CAPTION -->
+                            <div id="caption" class="absolute" style="z-index: 15; top: 0; left: 0; width: 100%; height: 100%">
+                            </div>
+
+                            <!-- UI LOCALISATOR -->
+                            <img class="absolute localisator-ui" style="left:{{un_element.locX}}%; top:{{un_element.locY}}%" src="{{asset('assets/img/ui/mini-localisator.png')}}" />
+
+                            <img class="img-fluid" src="{{asset('assets/img/lieux/minimap.jpg')}}" alt="Carte de Rokugan">
+                        </div>
+                    </imagezone>
+
+                    <!-- ICON ANIMEE -->
+                    <icon class="absolute localisator-icon" style="left:50%; top:50%">
+                        <i class="fa-solid fa-caret-down fa-2xl fa-bounce"></i>
+                    </icon>
+
+                    <!-- IMAGE REGION -->
+                    <img class="img-fluid" src="{{asset(un_element.region)}}" alt="Carte de la Région">
+
+                </imagezone>
+            {% endif %}
+
+            
+            {% if un_element.carte is defined and un_element.carte is not empty %}
+                <!-- PLAN DE LA VILLE -->
+                <spacer class="my-3">{{ include('/parts/separateur-ornament.html.twig') }}</spacer>
+
+                <h2 class="text-center mb-4"><strong>Plan</Strong></h2>
+
+               <img class="img-fluid" src="{{asset(un_element.carte)}}" alt="Carte du Lieu">
+            {% endif %}
+
+            {% if un_element.quartiers is defined and un_element.quartiers is not empty %}
+                <!-- QUARTIERS -->
+                <p class="mx-5 my-5 px-5 py-0 text-justify text-medium">{{ un_element.quartiers|raw|nl2br }}</p>
+            {% endif %}
+
+            {% if (un_element.description is defined and un_element.description is not empty)
+                or (un_element.region is defined and un_element.region is not empty)
+                or (un_element.carte is defined and un_element.carte is not empty)
+                or (un_element.quartiers is defined and un_element.carte is not empty)
+            %}
+                <!-- ORNAMENT -->
+                <spacer class="my-3">{{ include('/parts/separateur-ornament.html.twig') }}</spacer>
+                {% set spacer = true %}
+            {% endif %}
+
+            <!-- BTN MJ DELETE-->
+            {% if app.user and is_granted("ROLE_MJ") %}
+                <div class="text-center {% if spacer is not defined %}mt-5{% endif %}">
+                    {% set redirect, element, un_element, color, action = 'empire', 'lieu', un_element, 'text-accent', 'delete' %}
+                    {{ include('/parts/btn-line.html.twig') }}
+                </div>
+            {% endif %}
+
+        </card>
+    </element>
+
+    <!-- AUTRES LIEUX -->
+    {% if autresLieux is defined and autresLieux|length > 0 %}
+    <aside class="col-12 pt-1 mb-5">
+        <card class="card card-body pb-1">
+            <h2 class="title-h3">Autres Lieux</h2>
+            <hr>
+            <row class="row p-0 m-0 pt-3">
+                {% set col, size, na_image = 'col-2', 'small', NA_LIEU %}
+                {% for un_element in autresLieux %}
+                    {{ include('/parts/element-vignette.html.twig', {un_element}) }}
+                {% endfor %}
+            </row>
+        </card>
+    </aside>
+    {% endif %}
+
+{% endblock %}

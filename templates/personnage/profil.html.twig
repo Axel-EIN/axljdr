@@ -1,0 +1,134 @@
+{% extends 'element.html.twig' %}
+{% block element_content %}
+
+    <!-- CARD GAUCHE : ILLUSTRATION + LISTE -->
+    <section class="col-4 pr-1 pb-1">
+        <card class="card">
+
+            {% if personnage.illustration is null and personnage.genre == 'F' %}
+                {% set NA_PERSO_ILLU = NA_PERSO_ILLU_F %}
+            {% elseif personnage.illustration is null and personnage.genre == 'M' %}
+                {% set NA_PERSO_ILLU = NA_PERSO_ILLU_M %}
+            {% endif %}
+
+            <!-- ILLUSTRATION -->
+            <img class="img-fluid w-100" src="{{ asset(personnage.illustration|default(NA_PERSO_ILLU)) }}" alt="{{personnage.nom}} {{personnage.prenom}}" title="{{personnage.nom}} {{personnage.prenom}}" />
+
+            <!-- LIST -->
+            <ul class="list-group list-group-flush">
+
+                <!-- CLAN + XP -->
+                {% if personnage.clan is defined and personnage.clan is not empty %}
+                    <li class="list-group-item d-flex align-items-center">
+                        <a class="hover-no-under" href="{{ path('empire_clan', {id: personnage.clan.id} ) }}">
+                            <img class="img-48" src="{{ asset(personnage.clan.mon|default(NA_MON)) }}" alt="Mon du Clan {{personnage.clan.nom}}" title="Mon du Clan {{personnage.clan.nom}}" />
+                            &nbsp;
+                            <strong>{{ personnage.clan.nom }}</strong>
+                        </a>
+                        {% if xp > 0 %}<strong class="ml-auto text-blue text-big text-flash-green">{{xp}} XP</strong>{% endif %}
+                    </li>
+                {% endif %}
+
+                <!-- CLASSE + RANK-->
+                {% if personnage.ecole is defined and personnage.ecole is not empty %}
+                    <li class="list-group-item d-flex align-items-center">
+                        
+                            <a class="hover-no-under" href="{{ path('regles_ecole', {id: personnage.ecole.id} ) }}">
+                                <img class="img-48" src="{{ asset(personnage.classe.icone) }}" alt="Classe {{personnage.classe.nom}}" title="Classe {{personnage.classe.nom}}" />
+                                &nbsp;
+                                <strong>{{ personnage.ecole.nom }}</strong>
+                            </a>           
+                        {% if xp > 0 %}<span class="ml-auto badge badge-info">RANG {{rang}}</span>{% endif %}
+                    </li>
+                {% endif %} 
+
+                {% if personnage.joueur is not empty %}
+                    <li class="list-group-item"><strong>Joueur :</strong> {{ personnage.joueur.pseudo }}</li>
+                {% endif %}
+            </ul>
+
+        </card>
+    </section>
+
+    <!-- CARTE DROITE : DESCRIPTION TEXTE -->
+    <section class="col-8 pl-1 pb-1">
+        <card class="card h-100 p-4">
+            {% if personnage.titres is defined and personnage.titres is not empty %}
+                <h4 class="card-title">{{ personnage.titres }}</h4>
+            {% endif %}
+            <p class="px-2 card-text text-medium text-justify">{{ personnage.description|default('')|raw|nl2br }}</p>
+        </card>
+    </section>
+
+    <!-- HISTORIQUE -->
+    <section class="col-8 py-1 pr-1">
+        <card class="card card-body h-100">
+
+            <!-- TITLE -->
+            <h2 class="title-h3">Historique</h2>
+            <div class="card-text">
+                {% set current_chapitre = 0 %}
+                {% set current_episode = 0 %}
+                {% for une_participation in personnage.participations|sortByField('scene') %}
+
+                    {% if une_participation.scene.episodeParent.chapitreParent.id != current_chapitre %}
+                        <hr>
+                        <h4 class="mb-3"><strong>{{une_participation.scene.episodeParent.chapitreParent.titre}}</strong></h4>
+                    {% endif %}
+                    {% set current_chapitre = une_participation.scene.episodeParent.chapitreParent.id %}
+
+                    {% if une_participation.scene.episodeParent.id != current_episode %}
+                        <h5 class="ml-3"><a href="{{path('aventure_episode', {id: une_participation.scene.episodeParent.id})}}">{{une_participation.scene.episodeParent.titre}}</a></h5>
+                    {% endif %}
+                    {% set current_episode = une_participation.scene.episodeParent.id %}
+
+                    <span class="ml-3">
+                    {{personnage.prenom}}
+                    {% if une_participation.estMort == 0 %}
+                        a
+                        {% if une_participation.xpGagne == 0 %}
+                            participé 
+                        {% else %}
+                            gagné <strong>{{une_participation.xpGagne}}xp</strong> 
+                        {% endif %}
+                            lors de la scène <a href="{{path('aventure_episode', {id: une_participation.scene.episodeParent.id, '_fragment': 'scn' ~  une_participation.scene.numero  })}}" ><strong>{{une_participation.scene.titre}}</strong></a><br/>
+                    {% else %}
+                        <strong class="text-danger">est mort{% if personnage.genre == 'F' %}e{% endif %}</strong> dans la scène <a href="{{path('aventure_episode', {id: une_participation.scene.episodeParent.id, '_fragment': 'scn' ~  une_participation.scene.numero  })}}" ><strong>{{une_participation.scene.titre}}</strong></a><br/>
+                    {% endif %}
+                    </span>
+                    
+                {% endfor %}
+            </div>
+        </card>
+    </section>
+
+    <!-- AUTRES PERSONNAGES -->
+    <aside class="col-4 py-1 pl-1">
+        <div class="card card-body h-100">
+            <h2 class="title-h3">Autres personnages</h2>
+            <hr>
+
+            <div class="row justify-content-center px-3">
+                <!-- UN PERSONNAGE -->
+                {% for un_personnage in autresPersonnages|slice(0,10) %}
+
+                    {% if un_personnage.icone is null and un_personnage.genre == 'F' %}
+                        {% set NA_PERSO_ICO = NA_PERSO_ICO_F %}
+                    {% elseif un_personnage.icone is null and un_personnage.genre == 'M' %}
+                        {% set NA_PERSO_ICO = NA_PERSO_ICO_M %}
+                    {% endif %}
+
+                    <article class="p-1 hover-zoom">
+                        <a href="{{ path('personnage_profil', {id: un_personnage.id} ) }}">
+                            <img class="img-128" src="{{ asset(un_personnage.icone|default(NA_PERSO_ICO)) }}" alt="Icône d'un personnage" title="Voir le profil de {{un_personnage.prenom}}" />
+                        </a>
+                    </article>
+                {% else %}
+                    <span class="text-muted"><i>Il n'y a pas d'autres personnage.</i></span>
+                {% endfor %}
+            </div>
+
+        </div>
+    </aside>
+
+{% endblock %}

@@ -1,0 +1,111 @@
+<div class="col-12">
+    {{ form_start(form) }}
+        <div class="row form-wrapper">
+            <div class="col-6">{{ form_row(form.personnage) }}</div>
+            <div class="col-6">{{ form_row(form.creationExp) }}</div>
+            <div class="col-4">{{ form_row(form.arme) }}</div>
+            <div class="col-4">{{ form_row(form.arme2) }}</div>
+            <div class="col-4">{{ form_row(form.armure) }}</div>
+
+            <div class="col-3">{{ form_row(form.avantage1) }}</div>
+            <div class="col-3">{{ form_row(form.avantage2) }}</div>
+            <div class="col-3">{{ form_row(form.desavantage1) }}</div>
+            <div class="col-3">{{ form_row(form.desavantage2) }}</div>
+
+            <div class="col-2">{{ form_row(form.constitution) }}</div>
+            <div class="col-2">{{ form_row(form.volonte) }}</div>
+
+            <div class="col-2">{{ form_row(form.reflexes) }}</div>
+            <div class="col-2">{{ form_row(form.intuition) }}</div>
+
+            <div class="col-2">{{ form_row(form.agilite) }}</div>
+            <div class="col-2">{{ form_row(form.intelligence) }}</div>
+
+            <div class="col-2">{{ form_row(form.forceStat) }}</div>
+            <div class="col-2">{{ form_row(form.perception) }}</div>
+
+            <div class="col-2">{{ form_row(form.vide) }}</div>
+
+            <div class="col-2">{{ form_row(form.reductionModifier) }}</div>
+            <div class="col-2">{{ form_row(form.ndModifier) }}</div>
+            <div class="col-2">{{ form_row(form.honneur) }}</div>
+            <div class="col-2">{{ form_row(form.gloire) }}</div>
+            <div class="col-2">{{ form_row(form.infamie) }}</div>
+            <div class="col-2">{{ form_row(form.souillure) }}</div>
+
+            <div class="col-12 mt-4">
+                <h3>Compétences</h3>
+                <hr>
+                {% for i in 1..20 %}
+                    <div class="row mb-2 align-items-end admin-comp-slot" data-comp-slot="{{ i }}">
+                        <div class="col-5">{{ form_row(attribute(form, 'competence' ~ i)) }}</div>
+                        <div class="col-2">{{ form_row(attribute(form, 'valeur' ~ i)) }}</div>
+                        <div class="col-2">{{ form_row(attribute(form, 'compEcole' ~ i)) }}</div>
+                        <div class="col-3">
+                            <label class="d-block">Spé. offertes</label>
+                            <div class="admin-spe-ecole-checkboxes" data-spe-ecole-target="{{ i }}"></div>
+                            {{ form_widget(attribute(form, 'speEcole' ~ i)) }}
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+
+            {{ include('/parts/btn-form.html.twig') }}
+    {{ form_end(form) }}
+
+    <script>
+    (function () {
+        const compsMeta = {{ competences_json|default({})|json_encode|raw }};
+        document.querySelectorAll('.admin-comp-slot').forEach(slot => {
+            const i = slot.dataset.compSlot;
+            const compSelect = slot.querySelector(`select[name$="[competence${i}]"]`);
+            const hiddenSpe = slot.querySelector(`input[name$="[speEcole${i}]"]`);
+            const checkboxesWrap = slot.querySelector('.admin-spe-ecole-checkboxes');
+            if (!compSelect || !hiddenSpe || !checkboxesWrap) return;
+
+            function readBitmask() {
+                const cbs = checkboxesWrap.querySelectorAll('input[type="checkbox"]');
+                if (cbs.length === 0) return '';
+                const bits = ['0','0','0','0','0','0'];
+                cbs.forEach(c => {
+                    const idx = parseInt(c.dataset.specIndex, 10);
+                    if (c.checked && idx >= 0 && idx < 6) bits[idx] = '1';
+                });
+                return bits.join('');
+            }
+
+            function render(initialBitmask) {
+                checkboxesWrap.innerHTML = '';
+                const compId = parseInt(compSelect.value, 10) || 0;
+                const meta = compsMeta[compId];
+                if (!meta || !Array.isArray(meta.specialisations)) return;
+                meta.specialisations.forEach((label, idx) => {
+                    if (!label) return;
+                    const wrap = document.createElement('label');
+                    wrap.className = 'd-block mb-0 mr-2';
+                    wrap.style.fontWeight = 'normal';
+                    const cb = document.createElement('input');
+                    cb.type = 'checkbox';
+                    cb.dataset.specIndex = String(idx);
+                    if (initialBitmask && initialBitmask[idx] === '1') cb.checked = true;
+                    cb.addEventListener('change', () => { hiddenSpe.value = readBitmask(); });
+                    const txt = document.createElement('span');
+                    txt.textContent = ' ' + label;
+                    wrap.appendChild(cb);
+                    wrap.appendChild(txt);
+                    checkboxesWrap.appendChild(wrap);
+                });
+            }
+
+            // Premier rendu sur valeur initiale
+            render(hiddenSpe.value || '');
+            // Re-render si la compétence change : on repart sur le bitmask déjà saisi (rebind labels)
+            compSelect.addEventListener('change', () => {
+                const current = readBitmask() || hiddenSpe.value || '';
+                render(current);
+                hiddenSpe.value = readBitmask();
+            });
+        });
+    })();
+    </script>
+</div>

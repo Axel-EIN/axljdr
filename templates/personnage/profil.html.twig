@@ -25,7 +25,19 @@
                             &nbsp;
                             <strong>{{ personnage.clan.nom }}</strong>
                         </a>
-                        {% if xp > 0 %}<strong class="ml-auto text-blue text-big text-flash-green">{{xp}} XP</strong>{% endif %}
+                        {% if xp > 0 %}
+                            <div class="ml-auto text-right">
+                                <strong class="text-blue text-big text-flash-green">{{xp}} XP</strong>
+                                <div class="text-muted text-small">Création : {{xp_creation}} | Progression : {{xp_progression}}</div>
+                            </div>
+                        {% endif %}
+                    </li>
+                {% endif %}
+
+                <!-- FAMILLE -->
+                {% if personnage.famille is defined and personnage.famille is not empty %}
+                    <li class="list-group-item">
+                        <strong>Famille :</strong> {{ personnage.famille.nom }}
                     </li>
                 {% endif %}
 
@@ -44,6 +56,14 @@
 
                 {% if personnage.joueur is not empty %}
                     <li class="list-group-item"><strong>Joueur :</strong> {{ personnage.joueur.pseudo }}</li>
+                {% endif %}
+
+                {% if app.user and personnage.fichePersonnage is not empty and (is_granted('ROLE_MJ') or (personnage.joueur and app.user.id == personnage.joueur.id)) %}
+                    <li class="list-group-item">
+                        <a href="{{ path('mon_compte_fiche', {id: personnage.fichePersonnage.id}) }}">
+                            <i class="fas fa-scroll"></i> Voir la fiche de personnage
+                        </a>
+                    </li>
                 {% endif %}
             </ul>
 
@@ -67,6 +87,9 @@
             <!-- TITLE -->
             <h2 class="title-h3">Historique</h2>
             <div class="card-text">
+                {% if xp_creation > 0 %}
+                    <span class="ml-3">Création du personnage {{ personnage.prenom }} avec <strong>{{ xp_creation }}xp</strong>.</span><br/>
+                {% endif %}
                 {% set current_chapitre = 0 %}
                 {% set current_episode = 0 %}
                 {% for une_participation in personnage.participations|sortByField('scene') %}

@@ -13,6 +13,6 @@
 Options -Indexes
 
 # N'autoriser que les types de fichiers attendus
-<FilesMatch "\.(?!(jpg|jpeg|png|gif|webp|pdf|mp4|webm|woff|woff2|ttf|eot|css|js|ico)$)[^.]+$">
+<FilesMatch "\.(?!(jpg|jpeg|png|gif|webp|pdf|mp4|webm|woff|woff2|ttf|otf|eot|css|js|ico|svg)$)[^.]+$">
     Require all denied
 </FilesMatch>

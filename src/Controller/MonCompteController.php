@@ -112,8 +112,8 @@ class MonCompteController extends AbstractController
 
         $estLeJoueur = $fiche->getPersonnage()->getJoueur() && $fiche->getPersonnage()->getJoueur()->getId() == $utilisateur->getId();
 
-        if (!$estLeJoueur && !$this->isGranted('ROLE_MJ'))
-            return $this->redirectToRoute('mon_compte');
+        // if (!$estLeJoueur && !$this->isGranted('ROLE_MJ'))
+        //     return $this->redirectToRoute('mon_compte');
 
         $xp_progression = 0;
         foreach ($fiche->getPersonnage()->getParticipations() as $participation) {

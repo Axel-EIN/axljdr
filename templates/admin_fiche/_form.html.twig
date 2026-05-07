@@ -3,8 +3,13 @@
         <div class="row form-wrapper">
             <div class="col-6">{{ form_row(form.personnage) }}</div>
             <div class="col-6">{{ form_row(form.creationExp) }}</div>
-            <div class="col-6">{{ form_row(form.avantages) }}</div>
-            <div class="col-6">{{ form_row(form.desavantages) }}</div>
+            <div class="col-6">{{ form_row(form.arme) }}</div>
+            <div class="col-6">{{ form_row(form.armure) }}</div>
+
+            <div class="col-3">{{ form_row(form.avantage1) }}</div>
+            <div class="col-3">{{ form_row(form.avantage2) }}</div>
+            <div class="col-3">{{ form_row(form.desavantage1) }}</div>
+            <div class="col-3">{{ form_row(form.desavantage2) }}</div>
 
             <div class="col-2">{{ form_row(form.constitution) }}</div>
             <div class="col-2">{{ form_row(form.volonte) }}</div>
@@ -19,6 +24,23 @@
             <div class="col-2">{{ form_row(form.perception) }}</div>
 
             <div class="col-2">{{ form_row(form.vide) }}</div>
+
+            <div class="col-2">{{ form_row(form.reductionSpecial) }}</div>
+            <div class="col-2">{{ form_row(form.honneur) }}</div>
+            <div class="col-2">{{ form_row(form.gloire) }}</div>
+            <div class="col-2">{{ form_row(form.infamie) }}</div>
+            <div class="col-2">{{ form_row(form.souillure) }}</div>
+
+            <div class="col-12 mt-4">
+                <h3>Compétences</h3>
+                <hr>
+                {% for i in 1..20 %}
+                    <div class="row mb-2 align-items-end">
+                        <div class="col-8">{{ form_row(attribute(form, 'competence' ~ i)) }}</div>
+                        <div class="col-4">{{ form_row(attribute(form, 'valeur' ~ i)) }}</div>
+                    </div>
+                {% endfor %}
+            </div>
 
             {{ include('/parts/btn-form.html.twig') }}
     {{ form_end(form) }}

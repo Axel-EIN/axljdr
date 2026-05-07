@@ -10,6 +10,8 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Validator\Constraints\File;
@@ -37,7 +39,26 @@ class AdminEcoleType extends AbstractType
                 'constraints' => [new File(['maxSize' => '5M'])],
             ])
             ->add('description', TextareaType::class, [ 'required' => false, 'constraints' => [ new Length( [ 'max' => 2000 ] ) ] ])
-            ->add('bonus', TextType::class, [ 'required' => false, 'constraints' => [ new Length( [ 'max' => 20 ] ) ] ])
+            ->add('valeurCompetencesDepart', IntegerType::class, [
+                'label' => 'Valeur compétences de départ (offerts)',
+                'required' => false,
+            ])
+            ->add('bonusStatNom', ChoiceType::class, [
+                'label' => 'Trait bonus (+1)',
+                'placeholder' => 'Aucun bonus',
+                'required' => false,
+                'choices' => [
+                    'Constitution'  => 'constitution',
+                    'Volonté'       => 'volonte',
+                    'Réflexes'      => 'reflexes',
+                    'Intuition'     => 'intuition',
+                    'Agilité'       => 'agilite',
+                    'Intelligence'  => 'intelligence',
+                    'Force'         => 'forceStat',
+                    'Perception'    => 'perception',
+                    'Vide'          => 'vide',
+                ],
+            ])
             ->add('competences', TextareaType::class, [ 'required' => false, 'constraints' => [ new Length( [ 'max' => 600 ] ) ] ])
             ->add('equipements', TextareaType::class, [ 'required' => false, 'constraints' => [ new Length( [ 'max' => 600 ] ) ] ])
             ->add('tech1Nom', TextType::class, ['required' => false, 'constraints' => [ new Length( [ 'max' => 100 ] ) ] ])

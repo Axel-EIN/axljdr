@@ -5,6 +5,7 @@ namespace App\Form;
 use App\Entity\Clan;
 use App\Entity\Ecole;
 use App\Entity\Classe;
+use App\Entity\Famille;
 use App\Entity\Personnage;
 use App\Entity\Utilisateur;
 use Doctrine\DBAL\Types\BooleanType;
@@ -67,6 +68,13 @@ class AdminPersonnageType extends AbstractType
             ->add('clan', EntityType::class, [
                 'class' => Clan::class,
                 'choice_label' => 'nom',
+                'required' => false
+            ])
+            ->add('famille', EntityType::class, [
+                'class' => Famille::class,
+                'choice_label' => 'nom',
+                'group_by' => 'clan.nom',
+                'placeholder' => 'Aucune famille',
                 'required' => false
             ])
             ->add('classe', EntityType::class, [

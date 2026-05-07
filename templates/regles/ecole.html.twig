@@ -23,8 +23,9 @@
                 <text id="text-zone" class="col-10 row p-0 m-0 mb-3 justify-content-end" >
 
                     <div class="col-4 m-0 p-0 text-center text-shadow on-top">
-                        <h2 class="title-h3">Bonus</h2>
-                        <span class="text-zone-blur text-xp text-big">{{ ecole.bonus }}</span>
+                        <h2 class="title-h3">Trait bonus</h2>
+                        {% set labels = {'constitution':'Constitution','volonte':'Volonté','reflexes':'Réflexes','intuition':'Intuition','agilite':'Agilité','intelligence':'Intelligence','forceStat':'Force','perception':'Perception','vide':'Vide'} %}
+                        <span class="text-zone-blur text-xp text-big">{{ ecole.bonusStatNom ? (labels[ecole.bonusStatNom] ?? ecole.bonusStatNom) ~ ' +1' : '—' }}</span>
                     </div>
 
                     <div class="col-4 m-0 p-0 on-top">

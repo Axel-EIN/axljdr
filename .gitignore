@@ -1,0 +1,25 @@
+### Symfony ###
+/.env.local
+/.env.local.php
+/.env.*.local
+/config/secrets/prod/prod.decrypt.private.php
+/public/bundles/
+/var/
+/vendor/
+
+### PHPUnit ###
+.phpunit.result.cache
+/phpunit.xml
+
+### Environment ###
+.env
+.env.prod
+.env.test
+
+### Misc ###
+.htaccess
+
+### Assets ###
+/public/assets/img/
+/public/assets/pdf/
+/public/assets/video/

@@ -61,15 +61,21 @@ class PersonnageController extends AbstractController
            $xp_total = $xp_total + $une_participation->getXpGagne();
         }
 
+        $xp_progression = $xp_total;
+
+        $fiche = $personnage->getFichePersonnage();
+        $xp_creation = ($fiche !== null) ? $fiche->getCreationExp() : 0;
+        $xp_total += $xp_creation;
+
         $rang = 1;
 
-        if ($xp_total >= 250)
+        if ($xp_total >= 360)
             $rang = 5;
-        elseif ($xp_total >= 200)
+        elseif ($xp_total >= 240)
             $rang = 4;
-        elseif ($xp_total >= 150)
+        elseif ($xp_total >= 140)
             $rang = 3;
-        elseif ($xp_total >= 100)
+        elseif ($xp_total >= 60)
             $rang = 2;
 
         return $this->render('personnage/profil.html.twig', [
@@ -79,6 +85,8 @@ class PersonnageController extends AbstractController
             'category' => 'personnages',
             'un_element' => $personnage,
             'xp' => $xp_total,
+            'xp_creation' => $xp_creation,
+            'xp_progression' => $xp_progression,
             'rang' => $rang,
             'autresPersonnages' => $autresPersonnages
         ]);

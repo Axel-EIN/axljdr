@@ -18,6 +18,7 @@
 
 ### Misc ###
 .htaccess
+/public/migrate.php
 
 ### Assets ###
 /public/assets/video/

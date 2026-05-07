@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\FichePersonnage;
 use App\Entity\Personnage;
 use App\Repository\PersonnageRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -89,6 +90,41 @@ class PersonnageController extends AbstractController
             'xp_progression' => $xp_progression,
             'rang' => $rang,
             'autresPersonnages' => $autresPersonnages
+        ]);
+    }
+
+    /**
+     * @Route("/mon_compte/fiche/{id}", name="mon_compte_fiche")
+     */
+    public function afficherFichePersonnage(FichePersonnage $fiche): Response
+    {
+        $utilisateur = $this->getUser();
+
+        $estLeJoueur = $utilisateur !== null
+            && $fiche->getPersonnage()->getJoueur() !== null
+            && $fiche->getPersonnage()->getJoueur()->getId() == $utilisateur->getId();
+
+        $xp_progression = 0;
+        foreach ($fiche->getPersonnage()->getParticipations() as $participation) {
+            $xp_progression += $participation->getXpGagne();
+        }
+
+        $xp_creation = $fiche->getCreationExp() ?? 0;
+        $xp_total = $xp_progression + $xp_creation;
+
+        $rang = 1;
+        if ($xp_total >= 360)      $rang = 5;
+        elseif ($xp_total >= 240)  $rang = 4;
+        elseif ($xp_total >= 140)  $rang = 3;
+        elseif ($xp_total >= 60)   $rang = 2;
+
+        return $this->render('personnage/fiche_personnage.html.twig', [
+            'fiche'          => $fiche,
+            'xp_total'       => $xp_total,
+            'xp_creation'    => $xp_creation,
+            'xp_progression' => $xp_progression,
+            'rang'           => $rang,
+            'est_le_joueur'  => $estLeJoueur,
         ]);
     }
 }

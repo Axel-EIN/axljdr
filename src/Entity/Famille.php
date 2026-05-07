@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\FamilleRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -45,9 +47,19 @@ class Famille
     private $chef;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\OneToMany(targetEntity=Personnage::class, mappedBy="famille")
      */
-    private $bonus;
+    private $personnages;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $bonusStatNom;
+
+    public function __construct()
+    {
+        $this->personnages = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -114,15 +126,20 @@ class Famille
         return $this;
     }
 
-    public function getBonus(): ?string
+    public function getBonusStatNom(): ?string
     {
-        return $this->bonus;
+        return $this->bonusStatNom;
     }
 
-    public function setBonus(string $bonus): self
+    public function setBonusStatNom(?string $bonusStatNom): self
     {
-        $this->bonus = $bonus;
+        $this->bonusStatNom = $bonusStatNom;
 
         return $this;
+    }
+
+    public function getPersonnages(): Collection
+    {
+        return $this->personnages;
     }
 }

@@ -58,11 +58,13 @@
                     <li class="list-group-item"><strong>Joueur :</strong> {{ personnage.joueur.pseudo }}</li>
                 {% endif %}
 
+                {% if personnage.fichePersonnage is not null %}
                 <li class="list-group-item">
                     <a href="{{ path('mon_compte_fiche', {id: personnage.fichePersonnage.id}) }}">
                         <i class="fas fa-scroll"></i> Voir la fiche de personnage
                     </a>
                 </li>
+                {% endif %}
             </ul>
 
         </card>

@@ -112,11 +112,6 @@ class Ecole
     private $image;
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    private $bonus;
-
-    /**
      * @ORM\Column(type="text", nullable=true)
      */
     private $competences;
@@ -140,6 +135,16 @@ class Ecole
      * @ORM\Column(type="text", nullable=true)
      */
     private $sorts;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $bonusStatNom;
+
+    /**
+     * @ORM\Column(type="smallint", nullable=true)
+     */
+    private $valeurCompetencesDepart;
 
     public function __construct()
     {
@@ -385,18 +390,6 @@ class Ecole
         return $this;
     }
 
-    public function getBonus(): ?string
-    {
-        return $this->bonus;
-    }
-
-    public function setBonus(string $bonus): self
-    {
-        $this->bonus = $bonus;
-
-        return $this;
-    }
-
     public function getCompetences(): ?string
     {
         return $this->competences;
@@ -453,6 +446,30 @@ class Ecole
     public function setSorts(?string $sorts): self
     {
         $this->sorts = $sorts;
+
+        return $this;
+    }
+
+    public function getBonusStatNom(): ?string
+    {
+        return $this->bonusStatNom;
+    }
+
+    public function setBonusStatNom(?string $bonusStatNom): self
+    {
+        $this->bonusStatNom = $bonusStatNom;
+
+        return $this;
+    }
+
+    public function getValeurCompetencesDepart(): ?int
+    {
+        return $this->valeurCompetencesDepart;
+    }
+
+    public function setValeurCompetencesDepart(?int $valeurCompetencesDepart): self
+    {
+        $this->valeurCompetencesDepart = $valeurCompetencesDepart;
 
         return $this;
     }

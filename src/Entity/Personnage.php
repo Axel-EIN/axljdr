@@ -61,6 +61,12 @@ class Personnage
     private $clan;
 
     /**
+     * @ORM\ManyToOne(targetEntity=Famille::class, inversedBy="personnages")
+     * @ORM\JoinColumn(nullable=true)
+     */
+    private $famille;
+
+    /**
      * @ORM\ManyToOne(targetEntity=Classe::class, inversedBy="personnages")
      * @ORM\JoinColumn(nullable=true)
      */
@@ -209,6 +215,18 @@ class Personnage
     public function setClan(?Clan $clan): self
     {
         $this->clan = $clan;
+
+        return $this;
+    }
+
+    public function getFamille(): ?Famille
+    {
+        return $this->famille;
+    }
+
+    public function setFamille(?Famille $famille): self
+    {
+        $this->famille = $famille;
 
         return $this;
     }

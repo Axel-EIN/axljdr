@@ -47,7 +47,10 @@
 
                         <div class="col-lg-9">
                             <h3><strong> {{ une_famille.nom }}</strong></h3>
-                            <strong>{{une_famille.bonus|upper}}</strong>
+                            {% if une_famille.bonusStatNom %}
+                                {% set labels = {'constitution':'Constitution','volonte':'Volonté','reflexes':'Réflexes','intuition':'Intuition','agilite':'Agilité','intelligence':'Intelligence','forceStat':'Force','perception':'Perception','vide':'Vide'} %}
+                                <strong>Trait bonus : {{ labels[une_famille.bonusStatNom] ?? une_famille.bonusStatNom }} +1</strong>
+                            {% endif %}
                             <p class="text-justify text-regular mt-2 pr-2">{{ une_famille.description|raw|nl2br }}</p>
                         </div>
 

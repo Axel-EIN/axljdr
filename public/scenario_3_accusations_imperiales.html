@@ -1,0 +1,1728 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>L5R — Scénario 3 : Accusations Impériales</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,400;0,600;1,400&family=Cinzel:wght@400;600&display=swap');
+
+  :root {
+    --gold: #c9a84c;
+    --gold-light: #e8cc82;
+    --gold-dark: #8a6a1f;
+    --red-dark: #6b1a1a;
+    --red-mid: #8c2626;
+    --ink: #1a1410;
+    --parchment: #f5edd8;
+    --parchment-dark: #e8d9b8;
+    --parchment-mid: #ede0c4;
+    --shadow: rgba(26,20,16,0.18);
+    --teal: #1a4a4a;
+    --teal-light: #2a6a6a;
+    --purple-dark: #3a1a5a;
+    --amber-mid: #7a4a10;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: #1a1410;
+    font-family: 'Crimson Pro', Georgia, serif;
+    color: var(--ink);
+    min-height: 100vh;
+  }
+
+  /* ── COVER ── */
+  .cover {
+    background: linear-gradient(160deg, #1a1410 0%, #2a1a0a 40%, #1a0a0a 100%);
+    text-align: center;
+    padding: 24px 24px 8px;
+    border-bottom: 3px solid var(--gold);
+    position: relative;
+    overflow: hidden;
+  }
+  .cover::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at 50% 40%, rgba(201,168,76,0.08) 0%, transparent 70%);
+  }
+  .cover-kamon {
+    font-size: 52px;
+    margin-bottom: 18px;
+    filter: drop-shadow(0 0 12px rgba(201,168,76,0.4));
+  }
+  .cover h1 {
+    font-family: 'Cinzel', serif;
+    font-size: 28px;
+    font-weight: 600;
+    color: var(--gold-light);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .cover .subtitle {
+    font-family: 'Cinzel', serif;
+    font-size: 13px;
+    color: var(--gold-dark);
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+  .cover .tagline {
+    font-style: italic;
+    font-size: 17px;
+    color: rgba(232,204,130,0.7);
+    max-width: 500px;
+    margin: 0 auto 28px;
+    line-height: 1.6;
+  }
+  .cover-meta {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    flex-wrap: wrap;
+  }
+  .cover-meta span {
+    font-size: 12px;
+    color: var(--gold-dark);
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    border: 1px solid rgba(201,168,76,0.3);
+    padding: 4px 14px;
+    border-radius: 2px;
+  }
+
+  /* ── WRAPPER ── */
+  .wrapper {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 40px 24px 80px;
+  }
+
+  /* ── TOC ── */
+  .toc {
+    background: var(--parchment-dark);
+    border: 1px solid var(--gold-dark);
+    border-radius: 4px;
+    padding: 28px 32px;
+    margin-bottom: 48px;
+  }
+  .toc h2 {
+    font-family: 'Cinzel', serif;
+    font-size: 14px;
+    letter-spacing: 3px;
+    color: var(--gold-dark);
+    text-transform: uppercase;
+    margin-bottom: 16px;
+    border-bottom: 1px solid rgba(138,106,31,0.3);
+    padding-bottom: 10px;
+  }
+  .toc a {
+    display: block;
+    color: var(--red-dark);
+    text-decoration: none;
+    font-size: 15px;
+    padding: 4px 0;
+    transition: color 0.2s;
+  }
+  .toc a:hover { color: var(--red-mid); text-decoration: underline; }
+  .toc .toc-alt { margin-left: 20px; color: var(--teal); font-style: italic; font-size: 14px; }
+  .toc .toc-alt:hover { color: var(--teal-light); }
+
+  /* ── SECTION SCENE ── */
+  .scene {
+    background: var(--parchment);
+    border-radius: 4px;
+    margin-bottom: 48px;
+    overflow: hidden;
+    box-shadow: 0 4px 24px var(--shadow);
+  }
+  .scene-alt {
+    border-left: 4px solid var(--teal);
+  }
+  .scene-header {
+    padding: 22px 32px 18px;
+    border-bottom: 2px solid var(--gold);
+    background: var(--parchment-mid);
+  }
+  .scene-header.alt { background: #d8e8e8; border-bottom-color: var(--teal); }
+  .scene-number {
+    font-family: 'Cinzel', serif;
+    font-size: 11px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--gold-dark);
+    margin-bottom: 4px;
+  }
+  .scene-number.alt { color: var(--teal); }
+  .scene-title {
+    font-family: 'Cinzel', serif;
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--red-dark);
+    margin-bottom: 8px;
+  }
+  .scene-title.alt { color: var(--teal); }
+  .scene-meta {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    font-size: 13px;
+    color: #6b5a3a;
+  }
+  .scene-meta span { display: flex; align-items: center; gap: 5px; }
+
+  .scene-body { padding: 28px 32px; }
+
+  /* ── MJ BOX ── */
+  .mj-box {
+    background: #2a1a0a;
+    border-left: 4px solid var(--gold);
+    border-radius: 0 4px 4px 0;
+    padding: 16px 20px;
+    margin: 20px 0;
+    color: #e8cc82;
+    font-style: italic;
+    font-size: 16px;
+    line-height: 1.7;
+    position: relative;
+  }
+  .mj-box::before {
+    content: '✦ Description MJ';
+    display: block;
+    font-style: normal;
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--gold-dark);
+    margin-bottom: 8px;
+    font-family: 'Cinzel', serif;
+  }
+
+  /* ── DIALOGUE BOX ── */
+  .dialogue-block {
+    background: var(--parchment-dark);
+    border: 1px solid rgba(138,106,31,0.4);
+    border-radius: 4px;
+    padding: 18px 22px;
+    margin: 16px 0;
+  }
+  .dialogue-block h4 {
+    font-family: 'Cinzel', serif;
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--gold-dark);
+    margin-bottom: 12px;
+  }
+  .dialogue {
+    margin: 10px 0;
+    padding-left: 14px;
+    border-left: 2px solid rgba(138,106,31,0.35);
+  }
+  .dialogue .speaker {
+    font-family: 'Cinzel', serif;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--red-dark);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 3px;
+  }
+  .dialogue .speaker.alt { color: var(--teal); }
+  .dialogue .speaker.neutral { color: var(--amber-mid); }
+  .dialogue .line {
+    font-style: italic;
+    font-size: 16px;
+    color: var(--ink);
+    line-height: 1.65;
+  }
+  .dialogue .note {
+    font-size: 13px;
+    color: #7a6a4a;
+    margin-top: 4px;
+    font-style: normal;
+  }
+
+  /* ── MECANIQUE BOX ── */
+  .meca-box {
+    background: #f0e8d0;
+    border: 1px solid rgba(138,106,31,0.3);
+    border-radius: 4px;
+    padding: 16px 20px;
+    margin: 18px 0;
+  }
+  .meca-box h4 {
+    font-family: 'Cinzel', serif;
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #5a3a1a;
+    margin-bottom: 10px;
+  }
+  .meca-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  .meca-table th {
+    text-align: left;
+    padding: 6px 10px;
+    background: rgba(138,106,31,0.15);
+    font-family: 'Cinzel', serif;
+    font-size: 11px;
+    font-weight: 400;
+    letter-spacing: 1px;
+    color: #5a3a1a;
+    border-bottom: 1px solid rgba(138,106,31,0.2);
+  }
+  .meca-table td {
+    padding: 7px 10px;
+    border-bottom: 1px solid rgba(138,106,31,0.12);
+    vertical-align: top;
+    line-height: 1.5;
+    color: var(--ink);
+  }
+  .meca-table tr:last-child td { border-bottom: none; }
+  .nd { font-family: 'Cinzel', serif; font-weight: 600; color: var(--red-dark); font-size: 13px; }
+
+  /* ── PARCHEMIN BOX ── */
+  .parchemin {
+    background: #ede0b8;
+    border: 1px dashed var(--gold-dark);
+    border-radius: 4px;
+    padding: 20px 24px;
+    margin: 18px 0;
+    font-style: italic;
+    font-size: 15px;
+    line-height: 1.8;
+    color: #3a2a10;
+    position: relative;
+  }
+  .parchemin::before {
+    content: '📜 Parchemin / Document';
+    display: block;
+    font-style: normal;
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--gold-dark);
+    margin-bottom: 10px;
+    font-family: 'Cinzel', serif;
+  }
+
+  /* ── ISSUE BOX ── */
+  .issue-box {
+    background: #faf0e8;
+    border-left: 4px solid var(--red-mid);
+    padding: 14px 18px;
+    margin: 16px 0;
+    border-radius: 0 4px 4px 0;
+  }
+  .issue-box h4 {
+    font-family: 'Cinzel', serif;
+    font-size: 11px;
+    color: var(--red-dark);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .issue-box ul { list-style: none; padding: 0; }
+  .issue-box ul li {
+    font-size: 14px;
+    padding: 4px 0 4px 14px;
+    position: relative;
+    color: var(--ink);
+    line-height: 1.5;
+  }
+  .issue-box ul li::before { content: '▸'; position: absolute; left: 0; color: var(--red-mid); }
+
+  /* ── MORAL TABLE ── */
+  .moral-table { width: 100%; border-collapse: collapse; font-size: 14px; margin-top: 10px; }
+  .moral-table th {
+    background: rgba(26,20,16,0.08);
+    padding: 7px 12px;
+    text-align: left;
+    font-family: 'Cinzel', serif;
+    font-size: 11px;
+    font-weight: 400;
+    letter-spacing: 1px;
+    color: #5a3a1a;
+  }
+  .moral-table td { padding: 7px 12px; border-bottom: 1px solid rgba(138,106,31,0.15); line-height: 1.5; }
+  .moral-table tr:last-child td { border-bottom: none; }
+  .moral-plus { color: #1a5a1a; font-weight: 600; }
+  .moral-minus { color: var(--red-mid); font-weight: 600; }
+
+  /* ── NPC BOX ── */
+  .npc-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; margin-top: 14px; }
+  .npc-card {
+    background: var(--parchment-mid);
+    border: 1px solid rgba(138,106,31,0.35);
+    border-radius: 4px;
+    padding: 16px 18px;
+  }
+  .npc-card h4 {
+    font-family: 'Cinzel', serif;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--red-dark);
+    margin-bottom: 6px;
+  }
+  .npc-card .npc-role { font-size: 12px; color: var(--gold-dark); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 8px; }
+  .npc-card p { font-size: 14px; line-height: 1.6; color: var(--ink); }
+
+  /* ── JET REMINDER ── */
+  .jet-reminder {
+    background: rgba(201, 168, 76, 0.10);
+    border-left: 3px solid var(--gold);
+    border-radius: 0 3px 3px 0;
+    padding: 10px 14px;
+    margin: 14px 0;
+    font-size: 13.5px;
+    line-height: 1.55;
+    color: var(--ink);
+  }
+  .jet-reminder .jet-label {
+    font-family: 'Cinzel', serif;
+    font-size: 10px;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: var(--gold-dark);
+    margin-bottom: 6px;
+    display: block;
+  }
+  .jet-reminder .jet-item {
+    display: block;
+    margin-bottom: 4px;
+    padding-left: 8px;
+    text-indent: -8px;
+  }
+  .jet-reminder .jet-item:last-child { margin-bottom: 0; }
+  .jet-reminder .jet-item b {
+    color: var(--red-dark);
+    font-weight: 600;
+  }
+  .jet-reminder .jet-nd {
+    display: inline-block;
+    background: var(--red-dark);
+    color: var(--parchment);
+    padding: 1px 7px;
+    border-radius: 2px;
+    font-size: 11px;
+    font-weight: 600;
+    font-family: 'Cinzel', serif;
+    letter-spacing: 0.5px;
+    margin: 0 4px;
+  }
+  .jet-reminder .jet-nd.combat {
+    background: var(--amber-mid);
+  }
+
+  /* ── NPC STATS ── */
+  .npc-stats {
+    margin-top: 12px;
+    padding-top: 10px;
+    border-top: 1px dashed rgba(138,106,31,0.4);
+    font-size: 12.5px;
+    line-height: 1.55;
+    color: var(--ink);
+  }
+  .npc-stats .rings { display: flex; gap: 5px; margin-bottom: 8px; flex-wrap: wrap; }
+  .npc-stats .ring {
+    background: var(--parchment);
+    border: 1px solid var(--gold-dark);
+    padding: 2px 7px;
+    border-radius: 2px;
+    font-size: 11px;
+    font-family: 'Cinzel', serif;
+    letter-spacing: 0.5px;
+  }
+  .npc-stats .ring b { color: var(--red-dark); margin-right: 4px; }
+  .npc-stats .stat-line { margin-bottom: 4px; }
+  .npc-stats .stat-line b {
+    color: var(--gold-dark);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-size: 10.5px;
+    font-family: 'Cinzel', serif;
+    margin-right: 4px;
+  }
+
+  /* ── SEPARATOR ── */
+  .sep {
+    text-align: center;
+    color: var(--gold);
+    font-size: 18px;
+    letter-spacing: 8px;
+    margin: 32px 0;
+    opacity: 0.5;
+  }
+
+  /* ── SECTION HEADING ── */
+  .section-heading {
+    font-family: 'Cinzel', serif;
+    font-size: 13px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--gold-dark);
+    margin: 24px 0 12px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid rgba(138,106,31,0.25);
+  }
+
+  p.body { font-size: 16px; line-height: 1.75; margin-bottom: 12px; color: var(--ink); }
+
+  /* ── CHOICE BOX ── */
+  .choice-box {
+    background: #e8f0e8;
+    border: 1px solid #2a6a2a;
+    border-radius: 4px;
+    padding: 16px 20px;
+    margin: 18px 0;
+  }
+  .choice-box h4 {
+    font-family: 'Cinzel', serif;
+    font-size: 11px;
+    letter-spacing: 2px;
+    color: #1a4a1a;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+  .choice-box p { font-size: 14px; line-height: 1.6; color: #1a3a1a; }
+
+  /* ── ALERT BOX ── */
+  .alert {
+    background: #f0e0d0;
+    border: 1px solid var(--red-mid);
+    border-radius: 4px;
+    padding: 14px 18px;
+    margin: 16px 0;
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--red-dark);
+  }
+  .alert strong { font-family: 'Cinzel', serif; display: block; margin-bottom: 4px; font-size: 11px; letter-spacing: 2px; text-transform: uppercase; }
+
+  /* ── ALT BANNER ── */
+  .alt-banner {
+    background: var(--teal);
+    color: #a8d8d8;
+    text-align: center;
+    padding: 14px 24px;
+    font-family: 'Cinzel', serif;
+    font-size: 13px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 32px;
+    border-radius: 4px;
+  }
+  .alt-banner span { color: #d8f0f0; }
+
+  @media print {
+    body { background: white; }
+    .scene { box-shadow: none; border: 1px solid #ccc; }
+  }
+
+  @media (max-width: 600px) {
+    .scene-body { padding: 18px 16px; }
+    .cover h1 { font-size: 20px; }
+    .npc-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ══════════════════ COVER ══════════════════ -->
+<div class="cover">
+  <h1>Sous le Sceau Brisé</h1>
+  <p class="tagline">« Une cité affamée, un sceau qui ment, un sage qui demande de l'aide. »</p>
+</div>
+
+<div class="wrapper">
+
+<!-- ══════════════════ TABLE DES MATIÈRES ══════════════════ -->
+<div class="toc">
+  <h2>Table des matières</h2>
+  <a href="#scene1">I — La Parole du Rebelle (14h00 – 15h30)</a>
+  <a href="#scene2">II — L'Alliance du Vieux Sage (15h30 – 17h00)</a>
+  <a href="#scene3">III — Secrets Sous le Tatami (17h00 – 18h30)</a>
+  <a href="#scene4">IV — La Nuit Déchire le Voile (18h30 – 20h00)</a>
+  <a href="#scene5">V — Le Serment et la Route des Morts (21h00 – 22h30)</a>
+  <div style="margin-top:12px; padding-top:12px; border-top:1px solid rgba(138,106,31,0.2)">
+    <div style="font-family:'Cinzel',serif;font-size:11px;letter-spacing:2px;color:var(--teal);text-transform:uppercase;margin-bottom:6px;">Variante — Départ immédiat pour le Bosquet des Traîtres</div>
+    <a class="toc-alt" href="#alt1">Alt I — La Route des Ombres (voyage)</a>
+    <a class="toc-alt" href="#alt2">Alt II — Les Caves des Prophéties</a>
+    <a class="toc-alt" href="#alt3">Alt III — Godaigo, Tesaguri, et la Vérité Maudite</a>
+  </div>
+  <div style="margin-top:12px; padding-top:12px; border-top:1px solid rgba(138,106,31,0.2)">
+    <a href="#npcs">Personnages Clés</a>
+    <a href="#moral">Indicateur de Moral des Troupes</a>
+    <a href="#parchemins">Parchemins & Documents</a>
+  </div>
+</div>
+
+<!-- ══════════════════ SCENE I ══════════════════ -->
+<div class="scene" id="scene1">
+  <div class="scene-header">
+    <div class="scene-number">Scène I</div>
+    <div class="scene-title">La Parole du Rebelle</div>
+    <div class="scene-meta">
+      <span>🕑 14h00 – 15h30</span>
+      <span>📍 Résidence du Gouverneur — Salle de réception</span>
+      <span>⚡ Négociation · Haute tension politique</span>
+    </div>
+  </div>
+  <div class="scene-body">
+
+    <h3 class="section-heading">Prologue — Le retour de Susukaï</h3>
+    <div class="mj-box">
+      La 14ème Légion est stoppée à cent mètres de la résidence du Gouverneur : <strong>nobles pris en otage</strong> dans la zone, pousser serait un massacre. Le moine <strong>Susukaï</strong>, envoyé parlementer, ressort des ruelles : le chef rebelle <strong>Taro</strong> refuse tout intermédiaire et exige Anton <em>en personne, armé et escorté</em>. Susukaï reste soigner les blessés. Anton part <strong>sans le moine</strong>, accompagné d'une escouade triée sur le volet.
+    </div>
+
+    <div class="mj-box">
+      Quand Anton et son escorte franchissent le porche de la résidence du Gouverneur, l'air sent la cendre froide et la peur. Les gardes de la légion qui tiennent le périmètre dehors ont les mâchoires serrées. À l'intérieur, le couloir est silencieux — trop silencieux. Des traces de lutte sur le plancher de bois, un vase renversé, une sandale abandonnée. On vous guide jusqu'à la grande salle de réception. Deux rebelles armés s'écartent pour vous laisser passer. Ce que vous voyez alors : Seppun Goshi, le gouverneur, agenouillé sur le tatami, un wakizashi posé contre sa nuque par un homme debout derrière lui. À gauche, deux vieillards en robes impériales à genoux — Miya Yoto et son frère Katsu, les mains liées dans le dos avec des cordes grossières. Et dans un coin, d'autres otages : <strong>Doji Hideo</strong> et <strong>Utaku Kaede</strong>, présents par le plus mauvais des hasards. Au centre de la pièce, Taro vous regarde entrer. C'est un homme d'une quarantaine d'années, les traits creusés par le manque de nourriture, les yeux de quelqu'un qui a dépassé le stade de la peur.
+    </div>
+    <div class="jet-reminder">
+      <span class="jet-label">⚔ Jets — observation initiale de la salle</span>
+      <div class="jet-item"><b>Héraldique / Intelligence</b> <span class="jet-nd">ND 15</span> Reconnaître <strong>Miya Yoto</strong> — héraut impérial réputé, vieux sage pacifiste aimé du peuple dans tout l'Empire. Son frère Katsu est un archiviste connu des cours.</div>
+      <div class="jet-item"><b>Perception / Enquête</b> <span class="jet-nd">ND 15</span> Plusieurs rebelles portent un équipement de qualité non-heimin (armure de cuir travaillée, lames de bonne facture). Indice : armement extérieur (Satoshi/Kachiko).</div>
+      <div class="jet-item"><b>Art de la Guerre / Intelligence</b> <span class="jet-nd">ND 20</span> Les rebelles sont trop organisés pour des habitants improvisés — discipline militaire, signaux convenus. Piste : anciens ashigaru scorpion coordonnés.</div>
+    </div>
+
+
+    <h3 class="section-heading">Introduction des nouveaux joueurs</h3>
+    <p class="body"><strong>Bayushi Tobei</strong> (sous l'identité de couverture <strong>Doji Hideo</strong>, courtisan Grue) était dans le quartier à suivre une piste sur l'orphelinat local — il a été happé par la foule des rebelles et contraint de se mettre à couvert dans la résidence. Il ne s'est pas encore présenté à Anton. La situation lui permet d'observer.</p>
+    <p class="body"><strong>Utaku Kaede</strong> (shugenja de l'école Iuchi) était en mission officielle pour escorter Miya Yoto. Elle se retrouve liée à côté de son protégé. Son daimyo lui a demandé de surveiller discrètement les agissements d'Ide Toju — la coïncidence est embarrassante.</p>
+
+    <h3 class="section-heading">Temps 1 — L'Accusation publique</h3>
+    <div class="mj-box">
+      Taro ne bouge pas. Il vous laisse regarder la salle. Il attend que vous ayez vu. Puis il parle, d'une voix posée, celle de quelqu'un qui a répété ce discours des dizaines de fois dans sa tête la nuit.
+    </div>
+
+    <div class="dialogue-block">
+      <h4>Dialogues — Taro</h4>
+      <div class="dialogue">
+        <div class="speaker neutral">Taro</div>
+        <div class="line">« Commandant Anton. Merci d'être venu sans faire le fanfaron. Cela me confirme que vous n'êtes pas aussi stupide que certains le disent. Je ne veux pas tuer cet homme. Je veux que vous le regardiez pour ce qu'il est. »</div>
+      </div>
+      <div class="dialogue">
+        <div class="speaker neutral">Taro</div>
+        <div class="line">« Faites entrer. »</div>
+        <div class="note">Deux rebelles apportent un tonneau de vivres marqué du sceau impérial, retrouvé dans l'entrepôt incendié d'Ide Toju. Une femme d'une trentaine d'années suit, les yeux baissés — une servante.</div>
+      </div>
+      <div class="dialogue">
+        <div class="speaker neutral">Taro</div>
+        <div class="line">« Depuis trois mois, Honoka transportait des sacs de riz, de sel et de légumes séchés depuis les entrepôts de la légion jusqu'aux caves du marchand Ide Toju. Sur ordre du gouverneur. Pendant que nos enfants maigrissaient dans le district ouest. »</div>
+      </div>
+      <div class="dialogue">
+        <div class="speaker">Seppun Goshi</div>
+        <div class="line">« Vous prenez la parole d'une esclave contre celle d'un représentant de l'Empereur ? Cette femme est analphabète et dira n'importe quoi si on lui pose le bon couteau sous la gorge. »</div>
+      </div>
+      <div class="dialogue">
+        <div class="speaker neutral">Taro</div>
+        <div class="line">— Il ne répond pas à Goshi. Il regarde Anton. —<br>« Le tonneau parlera mieux que la servante. Apportez-le plus près de la lumière. »</div>
+        <div class="note">Deux rebelles avancent le tonneau jusqu'au centre de la salle. Le sceau impérial, intact et clairement gravé, devient visible aux yeux de tous.</div>
+      </div>
+      <div class="dialogue">
+        <div class="speaker">Miya Yoto</div>
+        <div class="line">— Yoto ne dit rien. Mais quand le tonneau passe sous la lanterne, son regard s'arrête une fraction de seconde sur le sceau, et sa respiration se suspend. Puis il baisse de nouveau les yeux. —</div>
+        <div class="note">Réaction subtile, mais détectable par un jet d'<strong>Intuition / Etiquette ND 20</strong>. Aucun mot. Goshi ne croise pas son regard.</div>
+      </div>
+      <div class="dialogue">
+        <div class="speaker">Seppun Goshi</div>
+        <div class="line">— Le wakizashi toujours contre la nuque, il force un sourire crispé. —<br>« Et alors ? Qui me dit que ce tonneau n'a pas été volé ? Qu'on ne l'a pas placé là exprès pour me compromettre ? C'est un peu léger pour accuser un représentant de l'Empereur, vous ne trouvez pas, Commandant ? »</div>
+      </div>
+    </div>
+    <div class="jet-reminder">
+      <span class="jet-label">⚔ Jets — pendant l'accusation</span>
+      <div class="jet-item"><b>Intuition / Etiquette</b> <span class="jet-nd">ND 20</span> Lire la grimace de Miya Yoto comme une désapprobation du gouverneur — une ouverture diplomatique à exploiter.</div>
+      <div class="jet-item"><b>Intuition / Commérages (Tobei)</b> <span class="jet-nd">ND 20</span> Reconnaître dans l'attitude de Taro le profil d'un homme instruit par quelqu'un. Il ne parle pas en heimin révolté, il parle en stratège.</div>
+    </div>
+
+
+    <h3 class="section-heading">Temps 2 — L'Ultimatum</h3>
+    <div class="mj-box">
+      Taro s'avance vers le centre de la pièce. L'homme au wakizashi ne bouge pas. Le gouverneur transpire. Taro pose sa main sur le tonneau comme s'il posait la main sur un autel.
+    </div>
+
+    <div class="dialogue-block">
+      <h4>Dialogues — L'Ultimatum</h4>
+      <div class="dialogue">
+        <div class="speaker neutral">Taro</div>
+        <div class="line">« Voici ce que je veux. Premièrement : ouvrez les stocks de la légion aux habitants. Tout ce qui a été confisqué depuis deux mois. Deuxièmement : arrêtez cet homme et envoyez-le à Otosan Uchi répondre de ses actes. Troisièmement : les habitants qui ont participé à ce soulèvement ne seront pas poursuivis. Ce sont des gens qui mouraient de faim. Pas des traîtres. »</div>
+      </div>
+      <div class="dialogue">
+        <div class="speaker neutral">Taro</div>
+        <div class="line">« En échange, je vous rends les otages. Et je disparais. Vous ne me reverrez plus. Vous avez ma parole. »</div>
+      </div>
+      <div class="dialogue">
+        <div class="speaker">Seppun Goshi</div>
+        <div class="line">— Il se redresse autant qu'il peut avec le wakizashi dans le dos. Sa voix tremble mais il la contrôle. —<br>« Commandant. Écoutez-moi. Si vous m'arrêtez, c'est vous que l'Empereur jugera ensuite. Je suis son représentant dans cette ville. Ma chute est votre faute. Ma disgrâce devient la vôtre. Vous êtes déjà en sursis — il vous surveille, il attend un faux pas. Vous vous condamnerez. »</div>
+      </div>
+      <div class="dialogue">
+        <div class="speaker">Seppun Goshi</div>
+        <div class="line">« Et vous — » il regarde Taro — « vous n'êtes qu'un ronin affamé qui joue au samourai. Quand tout ceci sera terminé, je m'assurerai personnellement que votre nom soit inscrit dans les registres des traîtres. »</div>
+      </div>
+      <div class="dialogue">
+        <div class="speaker neutral">Taro</div>
+        <div class="line">— Il ne cille pas. —<br>« Mon nom est déjà dans ces registres, Gouverneur. Depuis le jour où le Scorpion est tombé et que j'ai perdu mon clan, ma terre, et ma raison d'être. Vous ne pouvez plus me menacer de perdre ce que je n'ai plus. »</div>
+      </div>
+    </div>
+
+    <h3 class="section-heading">Temps 3 — La Résolution</h3>
+    <div class="mj-box">
+      La salle est silencieuse. Tous les regards se tournent vers Anton. Le vieux Miya Yoto, toujours à genoux, lève imperceptiblement les yeux vers lui — pas un appel au secours. Plutôt une curiosité tranquille. Comme s'il voulait voir ce que cet homme est vraiment.
+    </div>
+    <div class="jet-reminder">
+      <span class="jet-label">⚔ Jet clé — résolution</span>
+      <div class="jet-item"><b>Sincérité / Volonté (opposé Taro Vol. 4)</b> <span class="jet-nd">ND 20</span> Convaincre Taro d'accepter une promesse d'enquête à la place d'une livraison immédiate de vivres.</div>
+    </div>
+
+
+    <div class="issue-box">
+      <h4>Issues possibles</h4>
+      <ul>
+        <li><strong>Anton promet l'enquête + vivres ouverts :</strong> Taro accepte, libère les otages. Il part avec 3 hommes armés, laissant le reste se dissoudre dans la ville. Il dit avant de partir : « Vous avez l'air d'un homme honnête, Commandant. J'espère que vous le resterez. »</li>
+        <li><strong>Anton refuse ou temporise trop :</strong> Taro fait un signe. Son homme au wakizashi dégage sa lame. Goshi est tué. Crise maximale — scénario 4 en mode chaos total. Moral militaire -3 immédiatement.</li>
+        <li><strong>Anton promet mais ne tient pas :</strong> Taro libère les otages de bonne foi. Quand la trahison est découverte (scénario 4), mutinerie dans la légion, moral -4, Taro devient un ennemi actif.</li>
+        <li><strong>Anton propose une solution créative</strong> (arrestation provisoire, témoignage impérial, tutelle de Miya Yoto) : Taro réfléchit longuement. Jet opposé Sincérité/Volonté. Si réussi, il dit : « D'accord. Mais si dans trois jours rien n'a bougé, je reviens. Et pas pour parler. »</li>
+      </ul>
+    </div>
+
+    <div class="mj-box">
+      <strong>Si Goshi est sauvé et libéré :</strong> En sortant, le gouverneur s'arrête à côté d'Anton. Il ne le regarde pas. D'une voix très basse, presque inaudible : « Vous venez de me sauver la vie mais cela ne change rien entre nous, Commandant, car l'Empereur sait tout. » Puis il part sans se retourner.
+    </div>
+
+    <div class="meca-box">
+      <h4>Mécaniques</h4>
+      <table class="meca-table">
+        <tr><th>Jet</th><th>ND</th><th>Effet</th></tr>
+        <tr><td>Héraldique / Intelligence</td><td class="nd">15</td><td>Reconnaître Miya Yoto — héraut impérial réputé, sage pacifiste aimé du peuple dans tout l'Empire. Son témoignage aurait un poids considérable.</td></tr>
+        <tr><td>Perception / Enquête</td><td class="nd">15</td><td>Remarquer que plusieurs rebelles portent des équipements de qualité non-heimin — armure de cuir travaillée, lames de bonne facture. Indice : armement extérieur (Satoshi/Kachiko).</td></tr>
+        <tr><td>Intuition / Etiquette</td><td class="nd">20</td><td>Lire la grimace de Miya Yoto comme une désapprobation du gouverneur — une ouverture diplomatique à exploiter.</td></tr>
+        <tr><td>Sincérité / Volonté (opposé Taro Vol. 4)</td><td class="nd">20</td><td>Convaincre Taro d'accepter une promesse d'enquête à la place d'une livraison immédiate de vivres.</td></tr>
+        <tr><td>Art de la Guerre / Intelligence</td><td class="nd">20</td><td>Évaluer que les rebelles sont trop organisés pour des habitants improvisés — discipline militaire, signaux convenus. Piste : anciens ashigaru scorpion coordonnés.</td></tr>
+        <tr><td>Intuition / Commérages (Tobei)</td><td class="nd">20</td><td>Reconnaître dans l'attitude de Taro le profil d'un homme instruit par quelqu'un — il ne parle pas en heimin révolté, il parle en stratège. Quelqu'un l'a conseillé.</td></tr>
+      </table>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══════════════════ SCENE II ══════════════════ -->
+<div class="scene" id="scene2">
+  <div class="scene-header">
+    <div class="scene-number">Scène II</div>
+    <div class="scene-title">L'Alliance du Vieux Sage</div>
+    <div class="scene-meta">
+      <span>🕓 15h30 – 17h00</span>
+      <span>📍 Auberge Impériale — Salon privé</span>
+      <span>🌿 Mystère doux · Confiance progressive</span>
+    </div>
+  </div>
+  <div class="scene-body">
+
+    <div class="mj-box">
+      Après la tension de la résidence du gouverneur, l'auberge impériale ressemble presque à un sanctuaire. Miya Yoto marche lentement — ses genoux accusent l'âge et le temps passé à genoux sur le tatami. Il ne se plaint pas. Son frère Katsu, plus petit et plus nerveux, trottine à côté de lui en échangeant des regards inquiets avec vous. Dans le salon qu'on vous réserve, du thé chaud attend déjà sur un plateau de laque noire. Yoto s'assied avec la lenteur d'un homme qui a appris à ne pas gaspiller ses gestes. Il attend que tout le monde soit installé. Puis il vous regarde, l'un après l'autre.
+    </div>
+
+    <h3 class="section-heading">Temps 1 — L'offre de témoignage</h3>
+    <div class="dialogue-block">
+      <h4>Dialogues — Miya Yoto</h4>
+      <div class="dialogue">
+        <div class="speaker alt">Miya Yoto</div>
+        <div class="line">— Il pose sa tasse, croise les mains sur ses genoux, et regarde Anton avec calme. —<br>« Commandant. Je vais vous faire une <em>proposition</em>. Pas un remerciement, pas une faveur — une proposition entre hommes qui ont chacun quelque chose dont l'autre a besoin. »</div>
+      </div>
+      <div class="dialogue">
+        <div class="speaker alt">Miya Yoto</div>
+        <div class="line">« Voici ce que je vous offre : j'ai voyagé dans les soixante-dix provinces de cet empire. Je connais les codes de la famille Seppun, les registres de la famille Otomo, et les protocoles de transfert de denrées impériales. Ce tonneau que cet homme a apporté — je peux témoigner de son authenticité devant n'importe quelle cour de l'Empire. Y compris devant l'Empereur lui-même. Un témoignage de la famille Miya contre Seppun Goshi, c'est un poids que même l'Empereur ne peut pas ignorer. »</div>
+      </div>
+      <div class="dialogue">
+        <div class="speaker alt">Miya Yoto</div>
+        <div class="line">« Voici ce que je vous demande en retour. Moi aussi, j'ai besoin de gens comme vous. Des gens qui savent agir, qui savent se battre, qui ne reculent pas devant ce que les courtisans n'osent pas regarder. Ma famille traverse une crise dont je ne peux pas vous parler ici, en présence de tous. Mais le cœur de cette crise, c'est <em>quelqu'un que je dois retrouver</em>. Quelqu'un que je ne peux pas chercher moi-même, ni envoyer chercher par mes hommes. »</div>
+        <div class="note">Il prend son thé. Il attend la réponse d'Anton avant d'aller plus loin.</div>
+      </div>
+    </div>
+    <h3 class="section-heading">Temps 2 — Miya Katsu et les nouveaux joueurs</h3>
+    <div class="mj-box">
+      Pendant que Yoto parle à Anton, son frère Katsu circule dans la pièce avec l'agitation d'un homme incapable de rester assis. Il s'intéresse particulièrement aux nouveaux joueurs — Utaku Kaede qu'il reconnaît comme une des escorteurs de son frère, et Doji Hideo dont il n'est pas tout à fait sûr.
+    </div>
+
+    <div class="dialogue-block">
+      <h4>Dialogues — Miya Katsu</h4>
+      <div class="dialogue">
+        <div class="speaker alt">Miya Katsu</div>
+        <div class="line">— À voix basse, en aparté avec Doji Hideo, s'il a fait un bon jet —<br>« Vous portez les couleurs de la Grue. Mais vous avez les réflexes de quelqu'un qui a été formé à regarder derrière lui avant de sortir d'une pièce. Je ne dis pas ça pour vous accuser. Je le dis parce que... moi aussi, je sais garder un secret. »</div>
+        <div class="note">Katsu lui sourit — un sourire d'archiviste qui a passé sa vie à lire entre les lignes.</div>
+      </div>
+      <div class="dialogue">
+        <div class="speaker alt">Miya Katsu</div>
+        <div class="line">« Ma famille traverse une crise. Un de mes neveux a décidé que l'ère du dialogue était terminée. Il s'est fait des amis... très puissants. Des amis qui lui ont promis de l'aide en échange de ce que notre famille peut leur donner. Je ne peux pas vous dire qui, pas ici. Mais si vous m'aidez à protéger mon frère et à retrouver ma nièce, je vous dirai tout ce que je sais. »</div>
+      </div>
+    </div>
+    <div class="jet-reminder">
+      <span class="jet-label">⚔ Jet — observer Katsu</span>
+      <div class="jet-item"><b>Enquête / Intelligence</b> <span class="jet-nd">ND 20</span> Reconnaître en Katsu un expert des archives et des codes anciens. Il pourrait déchiffrer la carte sous le cerisier.</div>
+    </div>
+
+    <h3 class="section-heading">Temps 3 — La nièce disparue</h3>
+    <div class="mj-box">
+      Yoto repose sa tasse. Il regarde ses mains un moment, comme s'il cherchait les bons mots parmi les rides de ses paumes.
+    </div>
+
+    <div class="dialogue-block">
+      <h4>Dialogues — La révélation de Yumi</h4>
+      <div class="dialogue">
+        <div class="speaker alt">Miya Yoto</div>
+        <div class="line">« Ma nièce Yumi est partie seule, il y a deux semaines, vers les terres de l'ancien clan du Scorpion. Plus précisément : vers une forêt que les habitants d'ici appellent le Bosquet des Traîtres. »</div>
+        <div class="note">Il laisse le silence s'installer. Le nom a son effet.</div>
+      </div>
+      <div class="dialogue">
+        <div class="speaker alt">Miya Yoto</div>
+        <div class="line">« Elle cherche quelque chose. Je ne sais pas exactement quoi. Elle m'a laissé une lettre qui disait seulement qu'elle cherchait la vérité sur un objet de notre famille, et qu'elle avait trouvé une piste que personne d'autre ne pouvait suivre. Yumi est <em>Shisha</em> — une héraut de notre famille, comme moi avant elle. C'est une émissaire qui a accès à des routes, des archives et des audiences que peu de samuraïs peuvent obtenir. C'est ce qui la rend précieuse. Et c'est ce qui la rend dangereuse aujourd'hui — parce qu'elle utilise ces accès pour quelque chose qui n'a pas été ordonné. »</div>
+      </div>
+      <div class="dialogue">
+        <div class="speaker alt">Miya Yoto</div>
+        <div class="line">« J'ai un homme à mon service — Ichiro, de la Guêpe — qui est prêt à y aller seul si personne ne l'accompagne. Mais le Bosquet des Traîtres n'est pas un endroit pour un homme seul. Ni pour deux. »</div>
+      </div>
+      <div class="dialogue">
+        <div class="speaker alt">Miya Yoto</div>
+        <div class="line">— Il vous regarde avec une franchise désarmante. —<br>« Je ne peux pas vous ordonner d'y aller. Je ne suis pas votre daimyo. Mais je peux vous dire ceci : ce que Yumi cherche là-bas concerne tout le monde dans cette salle. Et probablement chaque homme et femme de cet empire. »</div>
+      </div>
+    </div>
+    <div class="jet-reminder">
+      <span class="jet-label">⚔ Jets — pousser Yoto à la révélation</span>
+      <div class="jet-item"><b>Courtisan / Intuition</b> <span class="jet-nd">ND 15</span> Sentir que Yoto cache quelque chose sur Yumi — pas de la malveillance, de la honte. Elle est partie en désobéissant à ses instructions directes.</div>
+      <div class="jet-item"><b>Sincérité / Intuition</b> <span class="jet-nd">ND 20</span> Obtenir de Yoto le nom de Satoshi et sa connexion à Kachiko. Il hésite longuement avant de parler : « C'est mon neveu. Un garçon brillant. Et la femme qui le guide est bien plus dangereuse que lui. »</div>
+    </div>
+
+
+    <div class="choice-box">
+      <h4>Le choix cornélien — Partir maintenant ou attendre ?</h4>
+      <p>Après cette conversation, Katsu prend Anton à part et lui propose les deux options :</p>
+      <br>
+      <p><strong>Option A — Partir maintenant avec Ichiro :</strong> Katsu restera à Ryoko Owari pour continuer l'enquête avec les preuves disponibles. Moral militaire : -1 à -3 selon si Anton laisse un plan clair. Mais Utaku Kaede peut accélérer le voyage significativement.</p>
+      <br>
+      <p><strong>Option B — Attendre 1-2 jours :</strong> Finir l'enquête sur Goshi et Toju, rassembler les preuves, stabiliser la légion. Ichiro part seul en éclaireur — risqué. Les scènes III, IV, V se jouent normalement.</p>
+      <br>
+      <p><em>Jet d'Intelligence ND 15 (Anton) :</em> Il réalise que son absence fera baisser le moral militaire entre 1 et 3 points selon la transition organisée. Jet d'Intelligence ND 15 (Utaku Kaede) : Il calcule qu'en partant maintenant il peut rattraper Ichiro en moins d'une journée et réduire le risque total.</p>
+    </div>
+
+    <div class="meca-box">
+      <h4>Mécaniques</h4>
+      <table class="meca-table">
+        <tr><th>Jet</th><th>ND</th><th>Effet</th></tr>
+        <tr><td>Courtisan / Intuition</td><td class="nd">15</td><td>Sentir que Yoto cache quelque chose sur Yumi — pas de la malveillance, de la honte. Elle est partie en désobéissant à ses instructions directes.</td></tr>
+        <tr><td>Enquête / Intelligence</td><td class="nd">20</td><td>Reconnaître en Katsu un expert des archives et des codes anciens. Il pourrait déchiffrer la carte sous le cerisier.</td></tr>
+        <tr><td>Sincérité / Intuition</td><td class="nd">20</td><td>Obtenir de Yoto le nom de Satoshi et sa connexion à Kachiko — il hésite longuement avant de parler, les yeux fermés. « C'est mon neveu. Un garçon brillant. Et la femme qui le guide est bien plus dangereuse que lui. »</td></tr>
+        <tr><td>Intelligence (Anton)</td><td class="nd">15</td><td>Évaluer l'impact de son départ sur le moral militaire (-1 à -3 pts selon préparation).</td></tr>
+        <tr><td>Intelligence (Utaku Kaede)</td><td class="nd">15</td><td>Calculer que partir maintenant et rattraper Ichiro est plus sûr que d'attendre et risquer qu'il soit seul trop longtemps.</td></tr>
+      </table>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══════════════════ SCENE III ══════════════════ -->
+<div class="scene" id="scene3">
+  <div class="scene-header">
+    <div class="scene-number">Scène III</div>
+    <div class="scene-title">Secrets Sous le Tatami</div>
+    <div class="scene-meta">
+      <span>🕔 17h00 – 18h30</span>
+      <span>📍 Résidence Goshi / Demeure Ide Toju</span>
+      <span>🔍 Enquête · Révélations · Tension froide</span>
+    </div>
+  </div>
+  <div class="scene-body">
+
+    <div class="mj-box">
+      La ville a retrouvé un calme nerveux. Les habitants regardent passer les légionnaires sans expressions lisibles — ni haine ni soulagement, juste de l'attente. La résidence du gouverneur est sous contrôle militaire. Ide Toju, chez lui, a repris conscience depuis ce matin, mais reste alité. Deux enquêtes sont possibles, menées simultanément ou l'une après l'autre.
+    </div>
+
+    <h3 class="section-heading">Branche A — Perquisition chez Seppun Goshi</h3>
+    <div class="mj-box">
+      Les appartements privés du gouverneur sont à l'image de l'homme : luxueux et désorganisés. Des objets étrangers partout — des statuettes gaijin à têtes rondes, des cartes aux caractères incompréhensibles, un tissu aux couleurs vives pendu au mur comme une tapisserie. Le genre de choses que la Licorne ramène de ses voyages au-delà des déserts. Sous ces couches de fascination pour l'étranger se cachent des documents qu'un homme plus prudent aurait brûlé.
+    </div>
+    <div class="jet-reminder">
+      <span class="jet-label">⚔ Jets — perquisition Goshi</span>
+      <div class="jet-item"><b>Enquête / Perception (fouilles bureau)</b> <span class="jet-nd">ND 20</span> Trouver le registre de paiements et le coffret verrouillé.</div>
+      <div class="jet-item"><b>Enquête / Perception (coffret en santal)</b> <span class="jet-nd">ND 25</span> Trouver le coffret et son registre nominatif — adresse de l'Orphelinat des Ailes Brisées, commanditaire (Otomo Jefurei-Eptenu), date de livraison. BG Tobei activé.</div>
+      <div class="jet-item"><b>Déchiffrage (seul / avec Katsu)</b> <span class="jet-nd">ND 20 / 15</span> Décoder le message codé Licorne-Gouverneur (Document B).</div>
+    </div>
+
+
+    <div class="parchemin">
+      <strong>Document A — Registre de paiements (fouilles du bureau)</strong><br><br>
+      Ce registre en apparence anodin liste des « frais de logement et de divertissement » sur quatre mois. Chaque entrée correspond à une date. Les initiés remarqueront que ces dates coïncident précisément avec les nuits où l'ancien général était vu ivre en ville — et que la somme versée correspond au tarif d'une geisha de haut rang à la maison Yuka. En marge, d'une écriture différente : <em>« I.T. — arrangement satisfaisant. Continuer. »</em><br><br>
+      <strong>Traduction MJ :</strong> Goshi a organisé et payé les rencontres entre le général et la geisha Yuka, sur instruction d'Ide Toju, pour affaiblir le commandement militaire.
+    </div>
+
+    <div class="parchemin">
+      <strong>Document B — Message codé dans coffret verrouillé (déchiffrage ND 20, ou Katsu aide : ND 15)</strong><br><br>
+      Le message original, en code Licorne commercial :<br><br>
+      <em>« À notre ami discret du palais de sel — Les marchandises transitent sans encombre. Le gardien de la maison se montre coopératif en échange des cadeaux convenus (voir liste annexe : 3 statuettes Shinomen, 2 rouleaux cartographiques gaijin, 1 fiole d'huile parfumée de Medinaat al-Salaam). Ses questions concernant les stocks ne poseront plus de problème. Confirmer réception. — L'Ami aux mains blanches »</em><br><br>
+      <strong>Traduction MJ :</strong> Ide Toju a corrompu Goshi avec des objets gaijins pour couvrir le détournement de vivres impériaux au profit de marchands Licorne.
+    </div>
+
+    <div class="parchemin">
+      <strong>Document C — Coffret verrouillé (Enquête/Perception ND 25)</strong><br><br>
+      Dans un coffret en bois de santal, un parchemin plié serré : un registre nominatif de douze enfants de l'<strong>Orphelinat des Ailes Brisées</strong> (district est de Ryoko Owari), classés par âge. Chaque nom est marqué d'un sceau apposé d'une autre encre. En tête de page, une seule mention manuscrite : <em>« Livraison convenue avec Otomo Jefurei-Eptenu — septième jour du Lièvre. »</em> La date correspond à la semaine prochaine.<br><br>
+      <strong>Note MJ (piste Tobei) :</strong> Tobei n'a aucune certitude que son enfant figure sur la liste — mais l'âge et l'origine collent. Le document lui donne trois choses : une <strong>adresse</strong> (l'Orphelinat des Ailes Brisées), un <strong>nom de commanditaire</strong> (Otomo Jefurei-Eptenu), et une <strong>date</strong> (la semaine prochaine). Il pourrait sauver une douzaine d'enfants — et peut-être le sien.
+    </div>
+
+    <h3 class="section-heading">Branche B — Confrontation avec Ide Toju</h3>
+    <div class="mj-box">
+      Ide Toju est allongé sur un futon épais, la peau légèrement jaunâtre, les lèvres encore sèches du poison. Un herboriste est assis à côté de lui, l'air épuisé. Les gardes à la porte ont cédé — après des arguments solides ou une intimidation convaincante. Toju vous regarde entrer avec les yeux d'un homme qui calcule encore, même affaibli.
+    </div>
+    <div class="jet-reminder">
+      <span class="jet-label">⚔ Jets — confrontation Toju</span>
+      <div class="jet-item"><b>Médecine / Intelligence</b> <span class="jet-nd">ND 20</span> Confirmer que le poison utilisé sur Toju est le même type que celui qui a tué le prisonnier ninja — piste vers les Dards Rouges.</div>
+      <div class="jet-item"><b>Intimidation / Volonté (opposé Toju Vol. 3)</b> <span class="jet-nd">ND 20</span> Faire avouer à Toju sa connexion aux mercenaires (les « Frères Gris »).</div>
+    </div>
+
+
+    <div class="dialogue-block">
+      <h4>Dialogues — Ide Toju (affaibli mais rusé)</h4>
+      <div class="dialogue">
+        <div class="speaker neutral">Ide Toju</div>
+        <div class="line">« Commandant. Je suis heureux que vous preniez cette affaire au sérieux. On a tenté de me tuer cette nuit. C'est bien la preuve que quelqu'un a peur de ce que je sais. »</div>
+        <div class="note">Il essaie d'inverser la position de victime dès le premier mot.</div>
+      </div>
+      <div class="dialogue">
+        <div class="speaker neutral">Ide Toju</div>
+        <div class="line">— Si on lui montre le document B —<br>« Ce document est un faux. Ou bien il a été mal interprété. Je suis un marchand. J'offre des cadeaux. C'est ma profession, pas un crime. »</div>
+      </div>
+      <div class="dialogue">
+        <div class="speaker neutral">Ide Toju</div>
+        <div class="line">— Sous intimidation sérieuse (ND 20, opposé Vol. 3) —<br>« ... D'accord. D'accord. J'ai offert des cadeaux au gouverneur. Pour faciliter le commerce. C'est... c'est la façon dont les choses fonctionnent ici depuis toujours. Ce n'est pas moi qui ai créé ce système. »</div>
+      </div>
+      <div class="dialogue">
+        <div class="speaker neutral">Ide Toju</div>
+        <div class="line">— Sur les mercenaires incendiaires, si on a des preuves (ND 25) —<br>« Je n'ai engagé personne pour brûler quoi que ce soit. J'ai... j'ai demandé à des gens de... perturber le calendrier logistique. Pas de détruire. Quelqu'un a dépassé mes instructions. »</div>
+        <div class="note">Il ment encore à moitié — il savait que les « Frères Gris » brûleraient des vivres, mais pas autant.</div>
+      </div>
+      <div class="dialogue">
+        <div class="speaker neutral">Ide Toju</div>
+        <div class="line">— Sur le parchemin chiffré, si on le trouve dans ses affaires —<br>« Je ne sais pas ce que c'est. Ce sont des symboles commerciaux. Un code de comptabilité. Rien de plus. »</div>
+        <div class="note">Il transpire. Pour la première fois, il a vraiment peur.</div>
+      </div>
+    </div>
+
+    <div class="parchemin">
+      <strong>Parchemin codé (dans les affaires de Toju, Déchiffrage ND 25 / Katsu ND 15)</strong><br><br>
+      Le parchemin utilise un alphabet à substitution simple avec des caractères commerciaux Licorne détournés. Une fois décodé :<br><br>
+      <em>« Frère de l'Ordre — Le gardien céleste de la ville est compromis comme convenu. L'opération de découragement peut commencer à votre signal. Nous confirmons l'exécution par les Frères Gris dès réception de paiement final. Lorsque le siège sera vacant, l'Ordre veillera à ce que tu y prennes place — comme convenu. Que l'Ordre prospère sans chaînes. »</em><br><br>
+      <strong>Traduction MJ :</strong> Preuves directes du lien entre Ide Toju et <strong>L'Ordre</strong> (le Kolat — les « Frères Gris » sont les mercenaires déguisés en ninjas). Surtout, le parchemin évoque <strong>une promesse explicite</strong> : Toju doit être installé au poste de gouverneur une fois Goshi écarté. C'est ce qui motive vraiment Toju — pas l'argent, le pouvoir.
+    </div>
+
+    <div class="meca-box">
+      <h4>Mécaniques</h4>
+      <table class="meca-table">
+        <tr><th>Jet</th><th>ND</th><th>Effet</th></tr>
+        <tr><td>Enquête / Perception (fouilles Goshi)</td><td class="nd">20</td><td>Trouver le registre de paiements et le coffret verrouillé.</td></tr>
+        <tr><td>Déchiffrage (seul / avec Katsu)</td><td class="nd">20 / 15</td><td>Décoder le message codé Licorne-Gouverneur (Document B).</td></tr>
+        <tr><td>Médecine / Intelligence</td><td class="nd">20</td><td>Confirmer que le poison utilisé sur Toju est le même type que celui qui a tué le prisonnier ninja — piste vers les Dards Rouges.</td></tr>
+        <tr><td>Intimidation / Volonté (opposé Toju Vol. 3)</td><td class="nd">20</td><td>Faire avouer à Toju sa connexion aux mercenaires (« Frères Gris »).</td></tr>
+        <tr><td>Enquête / Perception (coffret en santal)</td><td class="nd">25</td><td>Trouver le coffret et son registre nominatif — adresse de l'Orphelinat des Ailes Brisées, commanditaire, date. BG Tobei activé.</td></tr>
+      </table>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══════════════════ SCENE IV ══════════════════ -->
+<div class="scene" id="scene4">
+  <div class="scene-header">
+    <div class="scene-number">Scène IV</div>
+    <div class="scene-title">La Nuit Déchire le Voile</div>
+    <div class="scene-meta">
+      <span>🕔 18h30 – 20h00</span>
+      <span>📍 Abords sud · Ruelle des entrepôts</span>
+      <span>⚔️ Combat · Révélation · Tension croissante</span>
+    </div>
+  </div>
+  <div class="scene-body">
+
+    <div class="mj-box">
+      Le soleil se couche sur Ryoko Owari et la ville reprend ses couleurs — l'orange chaud des lanternes dans les ruelles, le bleu-noir du ciel au-dessus des toits. C'est presque beau. Puis la cloche du poste sud retentit — pas le rythme habituel. Trois coups lents. Le signal de quelque chose d'anormal. Pas d'incendie, pas d'émeute. Quelque chose d'autre.
+    </div>
+
+    <h3 class="section-heading">Temps 1 — L'Oni errant</h3>
+    <div class="mj-box">
+      Trois légionnaires sont morts dans la ruelle du marché sud. Éventrés. Pas frappés, pas taillés — éventrés, comme si quelque chose avait enfoncé ses membres dans leur thorax depuis l'extérieur. Le mur derrière eux est couvert de traces de griffes qui entrent dans la pierre comme dans du bois tendre. Une odeur âcre, comme du soufre et de la viande brûlée. Dans l'ombre au fond de la ruelle, quelque chose bouge. Deux yeux rouges, au niveau de la tête d'un homme adulte, mais trop écartés. Et des bras — trop longs.
+    </div>
+    <div class="jet-reminder">
+      <span class="jet-label">⚔ Jets — face à l'Oni no Kaze</span>
+      <div class="jet-item"><b>Combat (Oni no Kaze)</b> <span class="jet-nd combat">ND —</span> Profil Oni R3, griffes 3k3, armure naturelle 8, Init +5, <strong>ailes</strong> (peut s'envoler). Fuit en volant après 2 blessures sérieuses.</div>
+      <div class="jet-item"><b>Vide (Kaede)</b> <span class="jet-nd">ND 15</span> Sentir que la créature n'est pas envoyée — c'est une rôdeuse opportuniste. Elle a profité d'une faille dans les défenses : le Crabe ne tient plus la Grande Muraille comme avant.</div>
+    </div>
+
+
+    <div class="dialogue-block">
+      <h4>L'Oni no Kaze — comportement</h4>
+      <div class="dialogue">
+        <div class="speaker">Oni no Kaze</div>
+        <div class="line">— Il ne parle pas. Il émet un son : un sifflement long et décroissant, comme le vent dans un couloir vide. Puis il charge. —</div>
+        <div class="note">Profil : Rang 3, griffes (dégâts 3k3), armure naturelle 8, rapide (Init +5), <strong>ailes</strong>. Pas de but précis — il rôde, opportuniste. Il fuit en s'envolant entre les toits dès qu'il a reçu deux blessures sérieuses.</div>
+      </div>
+    </div>
+
+    <h3 class="section-heading">Temps 2 — La confrontation des ombres</h3>
+    <div class="mj-box">
+      Vous tentez de poursuivre la créature, mais ses ailes la portent rapidement par-dessus les toits. Vous la perdez de vue en quelques rues. Le souffle court, vous vous arrêtez : aucun de vous ne reconnaît ce coin de la ville. Une ruelle étroite, des entrepôts désaffectés, des lanternes éteintes. Au moment où vous décidez de rebrousser chemin, des bruits parviennent du fond de la ruelle voisine — métal sur métal, étouffés, brefs. <em>Un combat.</em> Vous avancez prudemment.<br><br>
+      Ce que vous trouvez là n'est pas ce que vous attendiez. Cinq hommes en noir — les mêmes « ninjas » que vous avez affrontés à l'entrepôt — sont morts ou mourants par terre. L'un d'eux a encore un couteau dans la main. Debout au milieu d'eux, trois silhouettes immobiles vous regardent approcher. Leurs vêtements sont sombres, leur présence presque celle de gens qui n'existent pas tout à fait. L'un d'eux tient encore un fil de soie entre ses doigts. Ils vous regardent.
+    </div>
+    <div class="jet-reminder">
+      <span class="jet-label">⚔ Jets — identifier les Dards Rouges</span>
+      <div class="jet-item"><b>Enquête / Perception (scène)</b> <span class="jet-nd">ND 20</span> Identifier que les morts utilisent les mêmes artifices que les saboteurs de l'incendie du camp — mêmes « Frères Gris ».</div>
+      <div class="jet-item"><b>Enquête / Intelligence</b> <span class="jet-nd">ND 25</span> Reconnaître dans le style des Dards Rouges une technique d'élite Shosuro — pas des ronins ordinaires, une unité formée.</div>
+      <div class="jet-item"><b>Perception (avant fumée)</b> <span class="jet-nd">ND 20</span> Apercevoir le tatouage sur le poignet du chef — une épine de rose noire. Emblème des Dards Rouges.</div>
+    </div>
+
+
+    <div class="dialogue-block">
+      <h4>Dialogues — Le Chef des Dards Rouges</h4>
+      <div class="dialogue">
+        <div class="speaker">Chef des Dards Rouges</div>
+        <div class="line">— Voix très calme. Presque douce. —<br>« Nous n'avons aucun intérêt à vous tuer, Commandant. La ville a besoin de ses vivres. Et ces hommes travaillaient contre son approvisionnement.»</div>
+      </div>
+      <div class="dialogue">
+        <div class="speaker">Chef des Dards Rouges</div>
+        <div class="line">— Si Anton demande qui ils sont —<br>« Des gens qui n'ont plus de nom. Des gens dont le clan a été effacé. Des gens qui n'ont rien à perdre d'autre que cette ville et ses habitants. »</div>
+      </div>
+      <div class="dialogue">
+        <div class="speaker">Chef des Dards Rouges</div>
+        <div class="line">— Si Anton demande ce qu'ils veulent —<br>« Que les morts d'hier ne soient pas morts pour rien. C'est tout. Nous ne demandons pas de réhabilitation. Nous ne demandons pas de pardon. Juste de la nourriture pour des gens qui ont faim. »</div>
+      </div>
+      <div class="dialogue">
+        <div class="speaker">Chef des Dards Rouges</div>
+        <div class="line">— Il fait un geste. —<br>« Bonne nuit, Commandant. »</div>
+        <div class="note">Trois bombes fumigènes. La fumée est violette — couleur scorpion. Quand elle se dissipe, ils sont partis. Sur le sol, à l'endroit où se tenait le chef : une épingle en forme de rose noire.</div>
+      </div>
+    </div>
+
+    <div class="meca-box">
+      <h4>Mécaniques</h4>
+      <table class="meca-table">
+        <tr><th>Jet</th><th>ND</th><th>Effet</th></tr>
+        <tr><td>Combat (Oni no Kaze)</td><td class="nd">—</td><td>Profil Oni R3, ailes. Rôdeuse opportuniste — fuit en s'envolant après 2 blessures sérieuses.</td></tr>
+        <tr><td>Enquête / Perception (scène)</td><td class="nd">20</td><td>Identifier que les morts utilisent les mêmes artifices que les saboteurs de l'incendie du camp.</td></tr>
+        <tr><td>Enquête / Intelligence</td><td class="nd">25</td><td>Reconnaître dans le style des Dards Rouges une technique d'élite Shosuro — pas des ronins ordinaires, une unité formée.</td></tr>
+        <tr><td>Perception (avant fumée)</td><td class="nd">20</td><td>Apercevoir le tatouage sur le poignet du chef — une épine de rose noire. Emblème des Dards Rouges.</td></tr>
+      </table>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══════════════════ SCENE V ══════════════════ -->
+<div class="scene" id="scene5">
+  <div class="scene-header">
+    <div class="scene-number">Scène V</div>
+    <div class="scene-title">Le Serment et la Route des Morts</div>
+    <div class="scene-meta">
+      <span>🕙 21h00 – 22h30</span>
+      <span>📍 Camp militaire → Porte est de la ville</span>
+      <span>🌙 Résolution · Solennité · Départ</span>
+    </div>
+  </div>
+  <div class="scene-body">
+
+    <div class="mj-box">
+      La nuit est tombée sur Ryoko Owari. Les lanternes de la légion projettent des ombres longues sur les toits. Dans le camp militaire, les chefs de compagnie se sont réunis dans la tente de commandement. L'air est lourd — pas d'hostilité ouverte, mais quelque chose de fragile. Mirumoto Yoshiteru se tient à l'écart, les bras croisés. Il attend de voir.
+    </div>
+
+    <h3 class="section-heading">Temps 1 — Le Témoignage de Yoto</h3>
+    <div class="dialogue-block">
+      <h4>Dialogues — Miya Yoto devant les officiers</h4>
+      <div class="dialogue">
+        <div class="speaker alt">Miya Yoto</div>
+        <div class="line">— Il se lève lentement. Il n'a pas l'autorité d'un général. Il a quelque chose de plus rare : la réputation d'un homme honnête. —<br>« J'ai traversé soixante-douze provinces en cinquante ans de service à l'Empereur. J'ai vu des gouverneurs justes et des gouverneurs corrompus. Ce que j'ai vu ici, dans les documents de Seppun Goshi, est parmi les pires. »</div>
+      </div>
+      <div class="dialogue">
+        <div class="speaker alt">Miya Yoto</div>
+        <div class="line">« Je témoignerai. Devant n'importe quelle cour. Devant l'Empereur lui-même si nécessaire. La vérité de cette ville mérite d'être entendue. »</div>
+      </div>
+      <div class="dialogue">
+        <div class="speaker neutral">Mirumoto Yoshiteru</div>
+        <div class="line">— Après un long silence. —<br>« Et les vivres ? On les distribue quand ? »</div>
+      </div>
+      <div class="dialogue">
+        <div class="speaker alt">Miya Yoto</div>
+        <div class="line">— Il se tourne vers Anton. —<br>« C'est la décision du Commandant. Pas la mienne. »</div>
+      </div>
+    </div>
+    <div class="jet-reminder">
+      <span class="jet-label">⚔ Jets — gestion de la légion</span>
+      <div class="jet-item"><b>Sincérité / Intuition</b> <span class="jet-nd">ND 20</span> Convaincre Mirumoto Yoshiteru de rester loyal et de soutenir Katsu en l'absence d'Anton.</div>
+      <div class="jet-item"><b>Art de la Guerre / Intuition</b> <span class="jet-nd">ND 20</span> Évaluer que laisser Katsu + une escouade est viable (-1 pt moral au lieu de -2).</div>
+    </div>
+
+
+    <h3 class="section-heading">Temps 2 — La demande finale de Yoto</h3>
+    <div class="mj-box">
+      Après la réunion, Yoto demande à parler à Anton en privé. Il attend que tout le monde soit sorti. Katsu reste avec eux.
+    </div>
+
+    <div class="dialogue-block">
+      <h4>Dialogues — La demande de retrouver Yumi</h4>
+      <div class="dialogue">
+        <div class="speaker alt">Miya Yoto</div>
+        <div class="line">« Mon frère restera ici. Il continuera l'enquête, protégera les témoins, et coordonnera avec vos officiers de confiance. »</div>
+      </div>
+      <div class="dialogue">
+        <div class="speaker alt">Miya Yoto</div>
+        <div class="line">— Il sort une lettre cachetée du sceau Miya. —<br>« Si vous trouvez Yumi, donnez-lui ceci. Dites-lui que son oncle ne lui en veut pas. Dites-lui qu'elle a fait ce que personne d'autre n'aurait osé faire. Dites-lui de rentrer vivante. »</div>
+      </div>
+      <div class="dialogue">
+        <div class="speaker neutral">Ashinagabachi Ichiro</div>
+        <div class="line">— Il entre dans la tente sans frapper, un sac sur l'épaule, l'air de quelqu'un qui partait déjà. —<br>« Alors ? On y va ? Parce que moi je pars de toute façon dans cinq minutes. Avec ou sans vous. »</div>
+        <div class="note">Il dit ça avec un sourire — ce n'est pas une menace, c'est juste sa façon d'être.</div>
+      </div>
+    </div>
+
+    <h3 class="section-heading">Temps 3 — Le départ et le cliffhanger</h3>
+    <div class="mj-box">
+      Le groupe quitte Ryoko Owari par la porte est, dans la nuit. La ville est silencieuse derrière vous. Devant : les routes du territoire Scorpion, et au loin, les premières collines sombres de la forêt. Vous n'avez pas fait cent mètres sur la route impériale qu'un légionnaire vous rattrape au pas de course, haletant, une lettre à la main portant le sceau impérial.
+    </div>
+
+    <div class="parchemin">
+      <strong>Message impérial</strong><br><br>
+      <em>« Commandant Anton du Crabe. Il a été porté à Notre connaissance que votre gestion de la 14ème Légion Impériale à Ryoko Owari laisse à désirer en matière de loyauté et de discipline. Votre conduite sera examinée à votre retour. Que ceci vous rappelle que les yeux de l'Empereur sont partout. »</em><br><br>
+      Signé du sceau impérial. Otomo Banu.
+    </div>
+    <div class="jet-reminder">
+      <span class="jet-label">⚔ Jets — message impérial et départ</span>
+      <div class="jet-item"><b>Vide (Kaede)</b> <span class="jet-nd">ND 15</span> En quittant la ville, ressentir la même sensation de néant que lors du voyage aller — plus proche, plus forte.</div>
+      <div class="jet-item"><b>Perception (Tobei)</b> <span class="jet-nd">ND 20</span> Apercevoir depuis la route une silhouette d'enfant à la fenêtre de l'orphelinat — qui les regarde partir.</div>
+    </div>
+
+
+    <div class="mj-box">
+      Le légionnaire repart. La route est sombre devant vous. Ichiro siffle doucement. « Bon. Alors on a vraiment intérêt à trouver quelque chose d'utile dans ce bosquet. »<br><br>
+      <em>Fin de session.</em>
+    </div>
+
+    <div class="meca-box">
+      <h4>Mécaniques</h4>
+      <table class="meca-table">
+        <tr><th>Jet</th><th>ND</th><th>Effet</th></tr>
+        <tr><td>Art de la Guerre / Intuition</td><td class="nd">20</td><td>Évaluer que laisser Katsu + une escouade est viable (-1 pt moral au lieu de -2).</td></tr>
+        <tr><td>Sincérité / Intuition</td><td class="nd">20</td><td>Convaincre Mirumoto Yoshiteru de rester loyal et de soutenir Katsu en l'absence d'Anton.</td></tr>
+        <tr><td>Vide (Kaede)</td><td class="nd">15</td><td>En quittant la ville, ressentir la même sensation de néant que lors du voyage aller — plus proche. Plus forte.</td></tr>
+        <tr><td>Perception (Tobei)</td><td class="nd">20</td><td>Apercevoir depuis la route une silhouette d'enfant à la fenêtre de l'orphelinat — qui les regarde partir.</td></tr>
+      </table>
+    </div>
+
+  </div>
+</div>
+
+<div class="sep">✦ ✦ ✦</div>
+
+<!-- ══════════════════ ALT BANNER ══════════════════ -->
+<div class="alt-banner">
+  Variante — Si les joueurs partent immédiatement pour le Bosquet des Traîtres<br>
+  <span>Les scènes suivantes remplacent III, IV et V</span>
+</div>
+
+<!-- ══════════════════ ALT I ══════════════════ -->
+<div class="scene scene-alt" id="alt1">
+  <div class="scene-header alt">
+    <div class="scene-number alt">Alt I</div>
+    <div class="scene-title alt">La Route des Ombres</div>
+    <div class="scene-meta">
+      <span>🕔 17h00 – 18h30</span>
+      <span>📍 Route impériale → Territoire Scorpion</span>
+      <span>🌿 Voyage · Rencontre de l'Outre-Monde</span>
+    </div>
+  </div>
+  <div class="scene-body">
+
+    <div class="mj-box">
+      Ichiro marche devant. Il connaît ces routes — pas parce qu'il les aime, mais parce qu'il y a chassé pendant des mois en tant que chasseur de prime de la Guêpe. Il pointe des repères qui n'ont rien d'impérial : une roche en forme de sanglier, un arbre dont la moitié est morte depuis que la foudre l'a frappé il y a un an, un pont de bois dont une planche a été remplacée en vert foncé. Il ne parle pas beaucoup. Mais il note tout.<br><br>
+      Utaku Kaede peut tenter de <em>bénir la route</em> avec un sort de voyage Iuchi — mais elle ne connaît pas bien ce coin de l'ancien territoire scorpion, et la route impériale s'efface vite dans la forêt. <strong>Le sort exige un jet et peut échouer.</strong> En cas de succès, le voyage se comprime à moins d'une journée (arrivée en fin de soirée). En cas d'échec, le groupe met deux jours pleins — et arrive à la nuit tombée du second jour, épuisé.
+    </div>
+    <div class="jet-reminder">
+      <span class="jet-label">⚔ Jet — sort de voyage de Kaede</span>
+      <div class="jet-item"><b>Invocation Iuchi / Anneau d'Air</b> <span class="jet-nd">ND 20</span> Bénir la route et raccourcir le trajet (~14h au lieu de 2 jours). Difficulté modérée car Kaede ne connaît pas bien ces terres scorpion. <em>Échec</em> : 2 jours de voyage, fatigue cumulée.</div>
+    </div>
+
+    <div class="dialogue-block">
+      <h4>Dialogues — Ichiro sur la route</h4>
+      <div class="dialogue">
+        <div class="speaker neutral">Ashinagabachi Ichiro</div>
+        <div class="line">« Le Bosquet des Traîtres. On l'appelle aussi la Forêt qui Juge. Les habitants d'ici disent qu'on n'en sort que si on n'a rien à se reprocher. J'ai beaucoup de choses à me reprocher. Donc je compte sur vous. »</div>
+        <div class="note">Il dit ça avec le même sourire. Il est sérieux à moitié.</div>
+      </div>
+      <div class="dialogue">
+        <div class="speaker neutral">Ashinagabachi Ichiro</div>
+        <div class="line">— Sur l'ancienne forêt du Scorpion —<br>« Les Scorpion avaient des routes secrètes partout. Des cachettes. Des tunnels. Si votre carte codée indique quelque chose dans ce coin-là, c'est probablement une de ces cachettes. La question c'est : qui l'a fermée en partant ? Et est-ce qu'il y a quelque chose — ou quelqu'un — qui la garde encore ? »</div>
+      </div>
+    </div>
+
+    <h3 class="section-heading">La Rencontre avec l'Outre-Monde</h3>
+    <div class="mj-box">
+      Vers le milieu de l'après-midi, la route traverse un bois de pins noirs — les arbres sont trop serrés, la lumière trop faible pour l'heure. Ichiro s'arrête. Il lève la main. Silence. Puis un bruit : quelque chose se traîne entre les troncs. Pas un animal. Les animaux fuient. Ce bruit-là avance.
+    </div>
+    <div class="jet-reminder">
+      <span class="jet-label">⚔ Jets — embuscade de l'Outre-Monde</span>
+      <div class="jet-item"><b>Art de la Guerre / Survie</b> <span class="jet-nd">ND 15</span> Repérer la troupe de bakemono avant qu'elle n'embusque le groupe. Initiative +10.</div>
+      <div class="jet-item"><b>Combat (Bakemono R2 x4)</b> <span class="jet-nd combat">ND —</span> Goblins de l'Outre-Monde. Combat normal, Initiative basse. Lâches mais agressifs en groupe.</div>
+    </div>
+
+
+    <p class="body">Quatre <strong>Goblins Bakemono</strong> (Rang 2) émergent des arbres en glapissant. Crocs jaunes, peau noirâtre, armes grossières. Ils n'ont pas de but, juste l'envie d'égorger ce qui passe — et ce qui passe, ce sont les PJ. Leurs grognements ressemblent presque à des rires.</p>
+
+    <div class="dialogue-block">
+      <h4>Dialogues — Après le combat</h4>
+      <div class="dialogue">
+        <div class="speaker neutral">Ashinagabachi Ichiro</div>
+        <div class="line">— Il regarde les cadavres de goblins. —<br>« Bien. J'avais besoin de savoir si vous vous battiez vraiment ou si vous faisiez semblant. »</div>
+      </div>
+    </div>
+    <div class="jet-reminder">
+      <span class="jet-label">⚔ Jets — analyse après combat</span>
+      <div class="jet-item"><b>Vide (Kaede)</b> <span class="jet-nd">ND 20</span> Percevoir l'absence totale d'intention chez ces créatures — pas envoyées, pas guidées, juste opportunistes. Elles errent et tuent par plaisir, comme des bêtes lâchées dans une bergerie.</div>
+      <div class="jet-item"><b>Intelligence / Connaissance (L'Outre-Monde)</b> <span class="jet-nd">ND 15</span> <strong>Inquiétant pour Anton :</strong> les bakemono ne s'aventurent <em>jamais</em> dans l'Empire — ils restent au-delà de la Grande Muraille du Crabe. Leur présence ici signifie qu'une brèche dans la Muraille est désormais ouverte, ou qu'une présence puissante les a appelés. Combiné à l'oni ailé de la veille, le constat est sans appel : la défense du Crabe ne tient plus.</div>
+    </div>
+
+
+    <div class="meca-box">
+      <h4>Mécaniques</h4>
+      <table class="meca-table">
+        <tr><th>Jet</th><th>ND</th><th>Effet</th></tr>
+        <tr><td>Invocation Iuchi / Anneau d'Air (Kaede)</td><td class="nd">20</td><td>Sort de voyage. Réussite : trajet ~14h, arrivée fin de soirée. Échec : 2 jours pleins, fatigue cumulée.</td></tr>
+        <tr><td>Art de la Guerre / Survie</td><td class="nd">15</td><td>Repérer la troupe de bakemono avant qu'elle n'embusque le groupe. Initiative +10.</td></tr>
+        <tr><td>Combat (Bakemono R2 x4)</td><td class="nd">—</td><td>Goblins de l'Outre-Monde. Combat normal, lâches en isolé, agressifs en meute.</td></tr>
+        <tr><td>Intelligence / Connaissance (L'Outre-Monde)</td><td class="nd">15</td><td>Les bakemono ne s'aventurent jamais dans l'Empire — la Muraille du Crabe ne tient plus. Constat alarmant pour Anton.</td></tr>
+      </table>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══════════════════ ALT II ══════════════════ -->
+<div class="scene scene-alt" id="alt2">
+  <div class="scene-header alt">
+    <div class="scene-number alt">Alt II</div>
+    <div class="scene-title alt">Les Caves des Prophéties</div>
+    <div class="scene-meta">
+      <span>🕔 18h30 – 20h00</span>
+      <span>📍 Orée du Bosquet des Traîtres — Entrée des Caves Secrètes</span>
+      <span>🔮 Exploration · Prophéties · Kitsu Kimiyo</span>
+    </div>
+  </div>
+  <div class="scene-body">
+
+    <div class="mj-box">
+      Le Bosquet des Traîtres commence là où la forêt normale s'arrête — pas progressivement, mais d'un coup. Un arbre, un autre, et soudain les troncs sont plus sombres, plus tordus, et les branches forment des entrelacs qui ressemblent à des doigts. Le sol est couvert de feuilles mortes depuis si longtemps qu'elles sont devenues de la poussière noire. L'air est froid — pas la fraîcheur des bois, le froid d'un endroit où quelque chose de chaud a été éteint depuis très longtemps. Kitsu Kimiyo — si elle est avec le groupe — s'arrête à l'entrée. Elle ferme les yeux. Elle rouvre les yeux. Elle a l'air d'avoir entendu quelque chose que personne d'autre n'a entendu.
+    </div>
+
+    <div class="dialogue-block">
+      <h4>Dialogues — Kitsu Kimiyo à l'entrée du Bosquet</h4>
+      <div class="dialogue">
+        <div class="speaker alt">Kitsu Kimiyo</div>
+        <div class="line">« Il y a beaucoup d'esprits ici. Pas des esprits paisibles. Des esprits qui ont été forcés de rester — comme des prisonniers. Ils sont en colère. Et ils vont essayer de nous détourner de notre chemin. »</div>
+      </div>
+      <div class="dialogue">
+        <div class="speaker alt">Kitsu Kimiyo</div>
+        <div class="line">— Si on lui demande si elle peut parler aux esprits ici —<br>« Je peux essayer. Mais les esprits emprisonnés mentent beaucoup. Ce qui est vrai pour un esprit emprisonné depuis des siècles... c'est compliqué. Il faut savoir quelle question poser. »</div>
+      </div>
+    </div>
+
+    <h3 class="section-heading">La Carte codée — révélation de l'entrée</h3>
+    <div class="mj-box">
+      La carte récupérée sous le cerisier de la maison de Yamada et Tsukuko indique, une fois déchiffrée par Katsu (si le groupe l'a faite déchiffrer avant de partir) ou par Kimiyo sur place (Déchiffrage spirituel ND 20), une série de symboles qui correspondent à des repères naturels dans le Bosquet : trois pierres en triangle, un arbre dont l'écorce a la forme d'un visage, une source asséchée. À l'intersection de ces repères : une ouverture dans le sol, cachée sous des racines mortes.
+    </div>
+    <div class="jet-reminder">
+      <span class="jet-label">⚔ Jets — accès aux caves</span>
+      <div class="jet-item"><b>Survie / Perception (trouver l'entrée)</b> <span class="jet-nd">ND 15</span> Suivre les repères de la carte jusqu'à l'ouverture cachée.</div>
+      <div class="jet-item"><b>Sincérité (1ère porte) ou aveu roleplay</b> <span class="jet-nd">ND 20</span> La porte s'ouvre. Si personne n'avoue rien, elle reste fermée (peut contourner avec Kimiyo : jet Shugenja/Contact esprit ND 20).</div>
+      <div class="jet-item"><b>BG Tobei (2ème porte)</b> <span class="jet-nd combat">ND —</span> S'ouvre automatiquement quand Tobei s'approche. L'esprit de la porte reconnaît qu'il marche pour un proche qu'il n'a pu protéger (sa compagne Grue, et l'enfant qu'il cherche).</div>
+    </div>
+
+
+    <div class="parchemin">
+      <strong>Carte déchiffrée de Yamada — Instructions d'accès aux caves</strong><br><br>
+      <em>« Cherche les trois gardiens de pierre. Marche vers le visage de l'arbre sans regarder ses yeux — il montre, il ne voit pas. Là où l'eau a oublié de couler, descends. La première porte s'ouvre à celui qui porte honte et ne la cache pas. La deuxième à celui qui marche pour quelqu'un qu'il n'a pas pu protéger. La troisième s'ouvre à celui qui rend hommage aux morts qui ont gardé ce savoir. »</em><br><br>
+      <strong>Note MJ :</strong> Les "portes" sont des mécanismes magiques scorpion — des tests de vérité sur l'âme du visiteur. La première s'ouvre si quelqu'un du groupe avoue une honte sincère (jet Sincérité ND 20, ou aveu roleplay libre). La deuxième s'ouvre pour Tobei : il porte la culpabilité d'avoir laissé mourir sa compagne Grue, et il marche aujourd'hui pour un enfant — peut-être le sien — qu'il n'a pas encore pu protéger. La troisième est la chambre des prophéties : elle s'ouvre par invocation sincère des ancêtres. <strong>Kimiyo (Kitsu)</strong> peut le faire automatiquement de par sa nature de shugenja-medium ; sinon jet de <strong>Méditation / Vide ND 20</strong> pour rendre un hommage sincère aux gardiens. Yumi <strong>n'est pas passée par là</strong> — personne ne l'a ouverte depuis Yamada lui-même.
+    </div>
+
+    <h3 class="section-heading">Les Caves — ce que le groupe trouve</h3>
+    <div class="mj-box">
+      Les caves sont taillées dans la roche noire, illuminées par des cristaux de jade vert qui pulsent doucement d'une lumière propre. Sur des étagères creusées dans les murs, plusieurs <strong>parchemins sont alignés</strong> — copies déchiffrées que Yamada a soustraites à l'Ombre puis cachées ici, dans la dernière chambre, pour les protéger. La plupart sont rédigées dans des codes scorpion à difficultés croissantes : Yamada n'a jamais eu l'intention que tout soit lu d'un coup.<br><br>
+      Sur les murs, près des étagères et surtout autour du seuil, on remarque <strong>des marques noires</strong> — des traînées, des éraflures, comme si quelque chose d'<em>autre</em> avait tenté plusieurs fois d'entrer. La pierre, à ces endroits, est légèrement creusée, comme rongée.
+    </div>
+    <div class="jet-reminder">
+      <span class="jet-label">⚔ Jets — fouille des caves &amp; lecture des parchemins</span>
+      <div class="jet-item"><b>Déchiffrage / Intelligence</b> <span class="jet-nd">ND 15</span> Lire la <em>première prophétie</em> (la plus accessible). Le contenu exact figure dans le livre de référence du MJ.</div>
+      <div class="jet-item"><b>Déchiffrage / Intelligence</b> <span class="jet-nd">ND 20</span> Lire la <em>deuxième prophétie</em> — clé de la trahison du Scorpion : la version <strong>originale</strong> avant que l'Ombre ne la modifie. Là où la version manipulée annonçait que « le dernier des Hantei deviendrait Fu Leng » (justification du coup d'État de Shoju), l'original disait que <strong>« si la famille Hantei s'affaiblit, son plus faible représentant deviendra une proie pour Fu Leng »</strong>. Pas un destin, une vulnérabilité.</div>
+      <div class="jet-item"><b>Déchiffrage / Intelligence</b> <span class="jet-nd">ND 25</span> Lire la <em>troisième prophétie</em>. Contenu dans le livre de référence MJ.</div>
+      <div class="jet-item"><b>Déchiffrage / Intelligence</b> <span class="jet-nd">ND 30</span> Lire la <em>quatrième prophétie</em>. Très difficile — généralement hors de portée du groupe ce soir.</div>
+      <div class="jet-item"><b>Enquête / Perception (marques d'ombre)</b> <span class="jet-nd">ND 20</span> Repérer les traînées noires sur les murs et au seuil : l'Ombre a tenté à plusieurs reprises de forcer le passage, sans succès. La pierre est légèrement rongée. Quelque chose veille toujours sur ce lieu — et veut entrer.</div>
+      <div class="jet-item"><b>Enquête / Connaissance (Archives Scorpion)</b> <span class="jet-nd">ND 25</span> Identifier que le style des cachettes correspond aux protocoles des Archives Secrètes du Scorpion — Yamada était un opérateur formé, pas juste un érudit.</div>
+    </div>
+
+
+    <div class="dialogue-block">
+      <h4>Dialogues — Kitsu Kimiyo face aux parchemins</h4>
+      <div class="dialogue">
+        <div class="speaker alt">Kitsu Kimiyo</div>
+        <div class="line">— Elle effleure du bout des doigts les premiers parchemins, sans oser les saisir tout de suite. —<br>« Yamada-san a tout copié à la main. Mot pour mot. Et il a ajouté ses propres annotations en marge — des doutes, des confrontations, des questions. Il <em>savait</em> que les versions qui circulaient avaient été modifiées. C'est pour ça qu'il les a soustraites à l'Ombre. »</div>
+      </div>
+      <div class="dialogue">
+        <div class="speaker alt">Kitsu Kimiyo</div>
+        <div class="line">— Lorsque la deuxième prophétie est lue à voix haute. —<br>« <em>Voilà.</em> Voilà ce qu'on a essayé de faire disparaître. Cette phrase, telle qu'elle est écrite ici, ne dit pas que le dernier des Hantei <em>deviendra</em> Fu Leng. Elle dit que la dynastie qui s'affaiblit <em>laissera passer</em> Fu Leng par sa fissure. C'est différent. C'est complètement différent. Shoju a tué Hantei 38 sur la base d'un mensonge. »</div>
+        <div class="note">Si les PJ font le lien : c'est l'argumentaire que l'Ombre a utilisé pour pousser le Scorpion au régicide. La vérité ne disculpe pas Shoju, mais elle révèle qui l'a manipulé.</div>
+      </div>
+      <div class="dialogue">
+        <div class="speaker alt">Kitsu Kimiyo</div>
+        <div class="line">— Elle regarde les marques noires sur les murs. —<br>« Et celui qui a modifié la prophétie sait que les originaux sont ici. Il essaie d'entrer. Pas avec des serrures — avec sa nature. Cette pierre tient. Pour combien de temps, je ne sais pas. »</div>
+      </div>
+    </div>
+
+    <div class="meca-box">
+      <h4>Mécaniques</h4>
+      <table class="meca-table">
+        <tr><th>Jet</th><th>ND</th><th>Effet</th></tr>
+        <tr><td>Survie / Perception (trouver l'entrée)</td><td class="nd">15</td><td>Suivre les repères de la carte jusqu'à l'ouverture cachée.</td></tr>
+        <tr><td>Sincérité ND 20 ou aveu roleplay (1ère porte)</td><td class="nd">—</td><td>La porte s'ouvre sur aveu sincère.</td></tr>
+        <tr><td>BG Tobei (2ème porte)</td><td class="nd">—</td><td>S'ouvre automatiquement pour Tobei (compagne Grue perdue, enfant cherché).</td></tr>
+        <tr><td>Méditation / Vide (3ème porte)</td><td class="nd">20</td><td>Hommage sincère aux ancêtres gardiens. Kimiyo (Kitsu) ouvre automatiquement.</td></tr>
+        <tr><td>Déchiffrage / Intelligence (1ère prophétie)</td><td class="nd">15</td><td>Lecture accessible. Contenu dans le livre de référence MJ.</td></tr>
+        <tr><td>Déchiffrage / Intelligence (2ème prophétie)</td><td class="nd">20</td><td>Version originale : la dynastie Hantei affaiblie laisse passer Fu Leng — pas de fatalité de transformation.</td></tr>
+        <tr><td>Déchiffrage / Intelligence (3ème prophétie)</td><td class="nd">25</td><td>Difficile. Contenu dans le livre de référence MJ.</td></tr>
+        <tr><td>Déchiffrage / Intelligence (4ème prophétie)</td><td class="nd">30</td><td>Très difficile, généralement hors de portée ce soir.</td></tr>
+        <tr><td>Enquête / Perception (marques d'ombre)</td><td class="nd">20</td><td>Traces noires au seuil et près des étagères : l'Ombre tente de forcer le lieu.</td></tr>
+        <tr><td>Enquête / Connaissance (Archives Scorpion)</td><td class="nd">25</td><td>Yamada était un opérateur formé des Archives Secrètes — pas juste un érudit.</td></tr>
+      </table>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══════════════════ ALT III ══════════════════ -->
+<div class="scene scene-alt" id="alt3">
+  <div class="scene-header alt">
+    <div class="scene-number alt">Alt III</div>
+    <div class="scene-title alt">Godaigo, Tesaguri, et la Vérité Maudite</div>
+    <div class="scene-meta">
+      <span>🕙 21h00 – 22h30</span>
+      <span>📍 Cœur du Bosquet des Traîtres</span>
+      <span>⚔️ Combat · Esprits · Révélation finale</span>
+    </div>
+  </div>
+  <div class="scene-body">
+
+    <div class="mj-box">
+      Le cœur du Bosquet. Les arbres ici sont si anciens qu'ils ont perdu toute forme naturelle — leurs troncs sont des colonnes lisses d'où émergent parfois des formes qui ressemblent à des visages, à des mains. L'air est immobile. Même le vent s'est arrêté. Et dans cette immobilité, vous entendez d'abord les bruits du combat — pas des cris humains, mais le fracas de quelque chose de puissant contre quelque chose de résistant.
+    </div>
+
+    <h3 class="section-heading">Temps 1 — Le Combat : Uragirimono vs Akodo Godaigo</h3>
+    <div class="mj-box">
+      Dans la clairière centrale du Bosquet, une scène que vous n'oublierez pas de sitôt. Trois créatures — les Uragirimono, mi-homme mi-ombre, des silhouettes dont les bords sont flous comme de la fumée, aux bras terminés en lames courbes — encerclent une figure en armure. L'armure est du Lion — dorée, ancienne, gravée de kanji que personne ne porte plus depuis des siècles. La figure bouge avec une précision terrifiante malgré les entailles sur son armure. Ce n'est pas un homme vivant. C'est quelque chose de plus ancien. Et les Uragirimono reculent devant ses coups.
+    </div>
+    <div class="jet-reminder">
+      <span class="jet-label">⚔ Jets — combat Uragirimono</span>
+      <div class="jet-item"><b>Combat (Uragirimono R4 x3)</b> <span class="jet-nd combat">ND —</span> Lames-membres 3k4 (contondant et tranchant). Résistance -10 aux armes non-sacrées. Vulnérables invocations Kimiyo / armes bénies. Flanquement automatique si 2 vs 1.</div>
+      <div class="jet-item"><b>Contact spirituel / Kimiyo (Uragirimono)</b> <span class="jet-nd">ND 20</span> Identifier qu'ils sont des fragments d'Uragiri — les blesser assez fort pourrait les renvoyer temporairement dans l'Outre-Monde.</div>
+    </div>
+
+
+    <div class="dialogue-block">
+      <h4>Dialogues — Akodo Godaigo</h4>
+      <div class="dialogue">
+        <div class="speaker">Akodo Godaigo</div>
+        <div class="line">— Il ne vous voit pas tout de suite. Il finit son mouvement — un tourbillon parfait qui écarte deux Uragirimono. Il se retourne. Sa voix est celle d'un homme mort depuis des siècles : profonde, lente, comme si les mots traversaient quelque chose de dense avant de sortir. —<br>« D'autres vivants. C'est... inhabituel. »</div>
+      </div>
+    </div>
+
+    <p class="body">Les Uragirimono se retournent vers le groupe — nouveau combat. Profil : Rang 4, lames-membres (3k4, contondant et tranchant), résistance aux armes non-sacrées (-10 aux dégâts), mais vulnérables aux invocations de Kimiyo et aux attaques bénie par un shugenja.</p>
+
+    <div class="mj-box">
+      Quand le dernier Uragirimono est défait, il se dissout en une fumée qui sent la cendre mouillée. Godaigo s'immobilise. Il regarde ses propres mains. Puis il vous regarde.
+    </div>
+
+    <div class="dialogue-block">
+      <h4>Dialogues — Godaigo après le combat</h4>
+      <div class="dialogue">
+        <div class="speaker">Akodo Godaigo</div>
+        <div class="line">« Je suis Akodo Godaigo. Je fus général sous le troisième Hantei. J'ai porté un objet qu'on m'a dit être une relique sacrée. C'était un mensonge. L'objet m'a... changé. Quand j'ai compris ce que j'étais devenu, j'avais déjà trahi tout ce que j'aimais. »</div>
+      </div>
+      <div class="dialogue">
+        <div class="speaker">Akodo Godaigo</div>
+        <div class="line">« Mon conseiller — Uragiri — a disparu depuis longtemps. Il est devenu le père de ce que vous venez de combattre. Des fragments. Des éclats d'une âme corrompue qui ne peut plus mourir vraiment. Ils gardent le Heaume. Ils le garderont jusqu'à ce qu'il puisse leur utile à nouveau. »</div>
+      </div>
+      <div class="dialogue">
+        <div class="speaker">Akodo Godaigo</div>
+        <div class="line">« L'honneur que j'avais cultivé toute ma vie — c'est lui qui m'a empêché de me laisser corrompre complètement. Fu Leng a essayé. Il a échoué. Mais ça m'a coûté ma mort. »</div>
+        <div class="note">Si on lui demande s'il souffre : long silence. « Non. Pas souffrir. Attendre. Je suis là depuis si longtemps que j'ai oublié ce que l'impatience ressent. »</div>
+      </div>
+      <div class="dialogue">
+        <div class="speaker">Akodo Godaigo</div>
+        <div class="line">« Je ne peux pas vous donner l'emplacement du Heaume. Je ne le sais pas. Celui qui le sait, c'est Bayushi Tesaguri — l'esprit gravé dans le grand arbre, au cœur du Bosquet.»</div>
+      </div>
+      <div class="dialogue">
+        <div class="speaker">Akodo Godaigo</div>
+        <div class="line">« Méfiez-vous de ce qu'il dit. Tesaguri ne ment jamais complètement. C'est ce qui le rend dangereux. »</div>
+        <div class="note">Il s'écarte et vous indique d'un geste le sentier qui s'enfonce vers le cœur du Bosquet. Il ne vous accompagne pas.</div>
+      </div>
+    </div>
+    <div class="jet-reminder">
+      <span class="jet-label">⚔ Jet — reconnaître Godaigo</span>
+      <div class="jet-item"><b>Enquête / Connaissance (Godaigo)</b> <span class="jet-nd">ND 15</span> Reconnaître Akodo Godaigo comme un personnage historique — général du troisième Hantei, disparu mystérieusement.</div>
+    </div>
+
+
+    <h3 class="section-heading">Temps 2 — Bayushi Tesaguri, l'Esprit Traître</h3>
+    <div class="mj-box">
+      Au cœur du Bosquet, dans une clairière sans soleil, se dresse un <strong>arbre gigantesque en décrépitude</strong> — un tronc tordu de douleur, comme s'il essayait depuis des siècles de s'arracher à la terre sans y parvenir. L'écorce noire est striée de fissures luminescentes qui pulsent doucement. Et dans le bois même, <strong>gravé en relief comme si l'arbre avait poussé autour de lui</strong>, un visage et un torse — silhouette d'un courtisan Scorpion du siècle dernier, vêtements élégants encore reconnaissables dans la matière du tronc. C'est <strong>Bayushi Tesaguri</strong>. Ses yeux s'ouvrent à votre approche. Il vous regarde avec l'expression de quelqu'un qui attendait quelque chose d'intéressant depuis des décennies.
+    </div>
+    <div class="jet-reminder">
+      <span class="jet-label">⚔ Jets — face à Tesaguri</span>
+      <div class="jet-item"><b>Intuition / Sincérité (Tesaguri)</b> <span class="jet-nd">ND 20</span> Distinguer les demi-vérités dans le discours de Tesaguri — il dit la vérité sur Junzo et sur le Village, mais omet quelque chose sur le Phénix.</div>
+    </div>
+
+
+    <div class="dialogue-block">
+      <h4>Dialogues — Bayushi Tesaguri</h4>
+      <div class="dialogue">
+        <div class="speaker">Bayushi Tesaguri</div>
+        <div class="line">— Il sourit. C'est le sourire d'un homme qui sait des choses. —<br>« Des vivants. Et pas les mêmes que la dernière fois. La petite Miya avait de l'audace, mais elle était pressée. Vous, vous avez l'air de gens qui posent les bonnes questions. »</div>
+      </div>
+      <div class="dialogue">
+        <div class="speaker">Bayushi Tesaguri</div>
+        <div class="line">— Si on lui demande pourquoi il est enfermé ici —<br>« J'ai vendu trois parchemins noirs au clan du Phénix. Les parchemins que mon clan était censé garder au nom de l'Empire. »</div>
+        <div class="note">Silence.</div>
+      </div>
+      <div class="dialogue">
+        <div class="speaker">Bayushi Tesaguri</div>
+        <div class="line">« Je l'ai fait parce que le Phénix en avait besoin pour comprendre ce qui vient. Ce qui vient, personne ne pouvait l'arrêter en gardant des secrets. Parfois la trahison est la seule loyauté possible envers quelque chose de plus grand que soi-même. »</div>
+        <div class="note">Il dit ça sans se défendre. Comme si c'était simplement vrai.</div>
+      </div>
+      <div class="dialogue">
+        <div class="speaker">Bayushi Tesaguri</div>
+        <div class="line">— Si on lui demande l'emplacement du Heaume —<br>« Le Heaume de Kenshin se trouve dans les terres du clan du Phénix. Plus précisément : dans un village qui s'appelle le Village de la Fin du Voyage — on dirait que quelqu'un avait le sens de l'humour quand il l'a nommé. C'est là qu'Uragiri l'a déposé après la mort de Godaigo.»</div>
+      </div>
+      <div class="dialogue">
+        <div class="speaker">Bayushi Tesaguri</div>
+        <div class="line">« Il y a quelque chose d'autre que vous devriez savoir. Yogo Junzo — un sorcier du Scorpion, un homme de grand talent et de grand désespoir — est en train de devenir quelque chose de pire qu'un traître.»</div>
+      </div>
+    </div>
+
+    <div class="dialogue-block">
+      <h4>Dialogues — Kitsu Kimiyo face à Tesaguri</h4>
+      <div class="dialogue">
+        <div class="speaker alt">Kitsu Kimiyo</div>
+        <div class="line">— Elle s'approche seule de l'esprit, sans arme, les mains ouvertes. —<br>« Vous n'êtes pas emprisonné parce que vous avez trahi. Vous êtes emprisonné parce que vous avez refusé d'admettre que c'était une trahison. »</div>
+      </div>
+      <div class="dialogue">
+        <div class="speaker">Bayushi Tesaguri</div>
+        <div class="line">— Pour la première fois, quelque chose change dans son expression. —<br>« Une Kitsu. Voilà longtemps. »</div>
+        <div class="note">Il ne répond pas à l'accusation. Ce qui est, en soi, une réponse.</div>
+      </div>
+    </div>
+
+    <div class="mj-box">
+      En sortant du Bosquet, l'aube commence à pointer. Le ciel est orange et rose au-dessus des arbres tordus. Ichiro s'arrête à la lisière de la forêt normale. Il se retourne pour regarder le Bosquet une dernière fois. « Bon. J'ai survécu. Je ne suis pas sûr de l'avoir mérité. » Il reprend sa marche vers le nord. La prochaine étape : retrouver Miya Yumi.<br><br>
+      <em>Fin de session.</em>
+    </div>
+
+    <div class="meca-box">
+      <h4>Mécaniques</h4>
+      <table class="meca-table">
+        <tr><th>Jet</th><th>ND</th><th>Effet</th></tr>
+        <tr><td>Combat (Uragirimono R4 x3)</td><td class="nd">—</td><td>Résistance -10 armes normales. Vulnérables invocations Kimiyo / armes sacrées. Combattent en coordination (flanquement automatique si 2 vs 1).</td></tr>
+        <tr><td>Contact spirituel / Kimiyo (Uragirimono)</td><td class="nd">20</td><td>Identifier qu'ils sont des fragments d'Uragiri — les blesser assez fort pourrait les renvoyer temporairement dans l'Outre-Monde.</td></tr>
+        <tr><td>Enquête / Connaissance (Godaigo)</td><td class="nd">15</td><td>Reconnaître Akodo Godaigo comme un personnage historique — général du troisième Hantei, disparu mysterieusement.</td></tr>
+        <tr><td>Intuition / Sincérité (Tesaguri)</td><td class="nd">20</td><td>Distinguer les demi-vérités dans le discours de Tesaguri — il dit la vérité sur Junzo et sur le Village, mais omet quelque chose sur le Phénix.</td></tr>
+      </table>
+    </div>
+
+  </div>
+</div>
+
+<div class="sep">✦ ✦ ✦</div>
+
+<!-- ══════════════════ NPCS ══════════════════ -->
+<div class="scene" id="npcs">
+  <div class="scene-header">
+    <div class="scene-number">Référence</div>
+    <div class="scene-title">Personnages Clés</div>
+    <div class="scene-meta"><span>👁 PNJ actifs ce scénario</span></div>
+  </div>
+  <div class="scene-body">
+    <div class="npc-grid">
+      <div class="npc-card">
+        <h4>Taro</h4>
+        <div class="npc-role">Chef Rebelle · Ancien Ashigaru Bayushi</div>
+        <p>38 ans. Ancien soldat, devenu ronin après la chute du Scorpion. Sincère dans ses revendications, mais a reçu un sac d'or dont il ne connaît pas la source (Satoshi via Kachiko). Pas un traître : un homme acculé. Parle peu mais dit l'essentiel.</p>
+        <div class="npc-stats">
+          <div class="rings">
+            <span class="ring"><b>TER</b>3</span>
+            <span class="ring"><b>AIR</b>3</span>
+            <span class="ring"><b>FEU</b>3</span>
+            <span class="ring"><b>EAU</b>3</span>
+            <span class="ring"><b>VID</b>2</span>
+          </div>
+          <div class="stat-line"><b>Traits</b>Volonté 4</div>
+          <div class="stat-line"><b>Avantages</b>Voix de Velours, Allié (anciens compagnons ashigaru)</div>
+          <div class="stat-line"><b>Désavantages</b>Sombre Secret (or de Satoshi), Chassé (l'Empire)</div>
+          <div class="stat-line"><b>Compétences</b>Art de la Guerre 3, Kenjutsu 3, Intimidation 3, Sincérité 3, Commandement 3, Athlétisme 2</div>
+          <div class="stat-line"><b>Arme</b>Katana, Yari (lance)</div>
+        </div>
+      </div>
+      <div class="npc-card">
+        <h4>Miya Yoto</h4>
+        <div class="npc-role">Daimyo Miya · Pacifiste</div>
+        <p>70 ans. Aimé du peuple dans tout l'Empire. Patient, posé. Terrifié pour Yumi mais il ne le montre pas. Sait que Satoshi est dangereux. Son témoignage a un poids considérable devant toute cour impériale.</p>
+        <div class="npc-stats">
+          <div class="rings">
+            <span class="ring"><b>TER</b>2</span>
+            <span class="ring"><b>AIR</b>4</span>
+            <span class="ring"><b>FEU</b>3</span>
+            <span class="ring"><b>EAU</b>4</span>
+            <span class="ring"><b>VID</b>4</span>
+          </div>
+          <div class="stat-line"><b>Traits</b>Perception 5</div>
+          <div class="stat-line"><b>Avantages</b>Voix de Velours, Réputation (Bien-aimé du Peuple), Allié Impérial</div>
+          <div class="stat-line"><b>Désavantages</b>Devoir (retrouver Yumi), Âge Avancé</div>
+          <div class="stat-line"><b>Compétences</b>Etiquette 6, Courtisan 5, Sincérité 4, Connaissance (Histoire) 5, Calligraphie 4, Méditation 3</div>
+          <div class="stat-line"><b>Arme</b>Wakizashi cérémoniel</div>
+        </div>
+      </div>
+      <div class="npc-card">
+        <h4>Miya Katsu</h4>
+        <div class="npc-role">Archiviste · Frère de Yoto</div>
+        <p>62 ans. Plus bavard et direct que son frère. Décrypteur de codes anciens. Restera à Ryoko Owari pour continuer l'enquête pendant que le groupe part. Nerveux mais fiable.</p>
+        <div class="npc-stats">
+          <div class="rings">
+            <span class="ring"><b>TER</b>3</span>
+            <span class="ring"><b>AIR</b>3</span>
+            <span class="ring"><b>FEU</b>3</span>
+            <span class="ring"><b>EAU</b>3</span>
+            <span class="ring"><b>VID</b>3</span>
+          </div>
+          <div class="stat-line"><b>Traits</b>Intelligence 4</div>
+          <div class="stat-line"><b>Avantages</b>Connaissances étendues (Codes anciens), Don (Mémoire eidétique)</div>
+          <div class="stat-line"><b>Désavantages</b>Faible (Petite Constitution), Devoir (envers son frère)</div>
+          <div class="stat-line"><b>Compétences</b>Déchiffrage 5, Calligraphie 5, Connaissance (Histoire) 4, Enquête 4, Recherche 4, Etiquette 3</div>
+          <div class="stat-line"><b>Arme</b>Wakizashi</div>
+        </div>
+      </div>
+      <div class="npc-card">
+        <h4>Ashinagabachi Ichiro</h4>
+        <div class="npc-role">Mercenaire de la Guêpe</div>
+        <p>42 ans. Pragmatique, souriant, jamais inquiet en surface. Connaît les routes du territoire scorpion comme sa poche. A peur du Bosquet mais ne le montrera jamais. Sa prime : retrouver Yumi vivante.</p>
+        <div class="npc-stats">
+          <div class="rings">
+            <span class="ring"><b>TER</b>3</span>
+            <span class="ring"><b>AIR</b>3</span>
+            <span class="ring"><b>FEU</b>3</span>
+            <span class="ring"><b>EAU</b>3</span>
+            <span class="ring"><b>VID</b>3</span>
+          </div>
+          <div class="stat-line"><b>Traits</b>Réflexes 4, Force 4</div>
+          <div class="stat-line"><b>Avantages</b>Sang-froid, Connaissances étendues (Terres Scorpion)</div>
+          <div class="stat-line"><b>Désavantages</b>Goût pour le saké, Sombre Secret (a tué un samouraï scorpion en mission)</div>
+          <div class="stat-line"><b>Compétences</b>Survie 4, Pistage 4, Kenjutsu 4, Tir à l'arc 4, Discrétion 3, Athlétisme 3</div>
+          <div class="stat-line"><b>Arme</b>Katana, Yumi (arc long), Wakizashi</div>
+        </div>
+      </div>
+      <div class="npc-card">
+        <h4>Seppun Goshi</h4>
+        <div class="npc-role">Gouverneur Corrompu</div>
+        <p>50 ans. Fasciné par les objets gaijin au point d'en avoir vendu son intégrité. Corrompu par Ide Toju. Utilise les menaces impériales contre Anton comme bouclier. Lâche mais dangereux.</p>
+        <div class="npc-stats">
+          <div class="rings">
+            <span class="ring"><b>TER</b>3</span>
+            <span class="ring"><b>AIR</b>3</span>
+            <span class="ring"><b>FEU</b>3</span>
+            <span class="ring"><b>EAU</b>3</span>
+            <span class="ring"><b>VID</b>2</span>
+          </div>
+          <div class="stat-line"><b>Traits</b>Perception 4</div>
+          <div class="stat-line"><b>Avantages</b>Position (Gouverneur Impérial), Riche</div>
+          <div class="stat-line"><b>Désavantages</b>Compulsion (Objets gaijin), Lâche</div>
+          <div class="stat-line"><b>Compétences</b>Etiquette 4, Courtisan 4, Sincérité 4 (mensonge), Manipulation 3, Connaissance (Cultures gaijin) 3, Commerce 3</div>
+          <div class="stat-line"><b>Arme</b>Katana cérémoniel, Wakizashi</div>
+        </div>
+      </div>
+      <div class="npc-card">
+        <h4>Ide Toju</h4>
+        <div class="npc-role">Marchand Licorne · Agent Kolat</div>
+        <p>55 ans. Riche, influent, agent de <strong>L'Ordre</strong> (Kolat). A engagé des mercenaires pour saboter les vivres en échange d'une promesse : prendre la place du gouverneur Goshi une fois ce dernier écarté. A été empoisonné par les Dards Rouges. Encore vivant, mais affaibli.</p>
+        <div class="npc-stats">
+          <div class="rings">
+            <span class="ring"><b>TER</b>3</span>
+            <span class="ring"><b>AIR</b>4</span>
+            <span class="ring"><b>FEU</b>3</span>
+            <span class="ring"><b>EAU</b>3</span>
+            <span class="ring"><b>VID</b>3</span>
+          </div>
+          <div class="stat-line"><b>Traits</b>Intuition 5</div>
+          <div class="stat-line"><b>Avantages</b>Riche, Allié (L'Ordre — Kolat)</div>
+          <div class="stat-line"><b>Désavantages</b>Sombre Secret (Kolat), Ennemi Juré (Dards Rouges)</div>
+          <div class="stat-line"><b>Compétences</b>Commerce 5, Manipulation 5, Sincérité 4, Courtisan 4, Connaissance (Gaijin) 4, Etiquette 3</div>
+          <div class="stat-line"><b>Arme</b>Wakizashi, Tanto dissimulé</div>
+        </div>
+      </div>
+      <div class="npc-card">
+        <h4>Chef des Dards Rouges</h4>
+        <div class="npc-role">Opérateur Shosuro · Ordre de Aramaro</div>
+        <p>Âge inconnu. Voix douce, aucune émotion visible. Ordres d'Aramaro : protéger la population scorpion de Ryoko Owari. Considère Anton comme un outil utile pour l'instant. Symbole : épine de rose noire.</p>
+        <div class="npc-stats">
+          <div class="rings">
+            <span class="ring"><b>TER</b>3</span>
+            <span class="ring"><b>AIR</b>4</span>
+            <span class="ring"><b>FEU</b>4</span>
+            <span class="ring"><b>EAU</b>3</span>
+            <span class="ring"><b>VID</b>4</span>
+          </div>
+          <div class="stat-line"><b>Traits</b>Agilité 5, Réflexes 5</div>
+          <div class="stat-line"><b>Avantages</b>École avancée (Shosuro), Vitesse Surnaturelle</div>
+          <div class="stat-line"><b>Désavantages</b>Sombre Secret (Identité), Devoir (envers Bayushi Aramaro)</div>
+          <div class="stat-line"><b>Compétences</b>Discrétion 5, Ninjutsu 5, Connaissance (Poisons) 5, Kenjutsu 4, Athlétisme 4, Escalade 4</div>
+          <div class="stat-line"><b>Arme</b>Ninja-to, Shuriken empoisonnés, Tanto, Fioles de poison</div>
+        </div>
+      </div>
+      <div class="npc-card">
+        <h4>Akodo Godaigo</h4>
+        <div class="npc-role">Esprit du Lion · Mort-Vivant d'honneur</div>
+        <p>Général du troisième Hantei. A porté le Heaume de Kenshin par tromperie. Son honneur exceptionnel l'a empêché de se corrompre totalement. Erre dans le Bosquet depuis des siècles, combattant les fragments d'Uragiri. Attend. Juste.</p>
+        <div class="npc-stats">
+          <div class="rings">
+            <span class="ring"><b>TER</b>5</span>
+            <span class="ring"><b>AIR</b>3</span>
+            <span class="ring"><b>FEU</b>5</span>
+            <span class="ring"><b>EAU</b>4</span>
+            <span class="ring"><b>VID</b>5</span>
+          </div>
+          <div class="stat-line"><b>Traits</b>Volonté 6, Force 6</div>
+          <div class="stat-line"><b>Avantages</b>Bénédiction Ancestrale, Esprit Honoré</div>
+          <div class="stat-line"><b>Désavantages</b>Mort-Vivant (lié au Bosquet), Honneur Inflexible</div>
+          <div class="stat-line"><b>Compétences</b>Kenjutsu 7, Art de la Guerre 6, Iaijutsu 5, Intimidation 5, Méditation 5, Connaissance (Histoire) 5</div>
+          <div class="stat-line"><b>Arme</b>Katana spectral (lame impériale ancienne), Wakizashi spectral</div>
+        </div>
+      </div>
+      <div class="npc-card">
+        <h4>Bayushi Tesaguri</h4>
+        <div class="npc-role">Esprit Emprisonné · Traître-Prophète</div>
+        <p>Courtisan scorpion du siècle passé. A vendu trois parchemins noirs au Phénix pour que l'Empire puisse comprendre ce qui vient. Emprisonné dans le Bosquet. Ne ment jamais complètement. Dangereux pour cette raison.</p>
+        <div class="npc-stats">
+          <div class="rings">
+            <span class="ring"><b>TER</b>3</span>
+            <span class="ring"><b>AIR</b>5</span>
+            <span class="ring"><b>FEU</b>3</span>
+            <span class="ring"><b>EAU</b>4</span>
+            <span class="ring"><b>VID</b>4</span>
+          </div>
+          <div class="stat-line"><b>Traits</b>Intuition 6</div>
+          <div class="stat-line"><b>Avantages</b>Bénédiction des Esprits, Connaissances étendues (Prophéties)</div>
+          <div class="stat-line"><b>Désavantages</b>Spectre Emprisonné (ne peut quitter le Bosquet), Ennemi Juré (Phénix)</div>
+          <div class="stat-line"><b>Compétences</b>Sincérité 6 (mensonge), Manipulation 6, Courtisan 5, Connaissance (Prophéties) 5, Tromperie 5, Divination 4</div>
+          <div class="stat-line"><b>Arme</b>Aucune (désarmé pour l'éternité)</div>
+        </div>
+      </div>
+      <div class="npc-card">
+        <h4>Kitsu Kimiyo</h4>
+        <div class="npc-role">Shugenja Lion · Chercheuse de Prophéties</div>
+        <p>Jeune, espiègle, menteuse de bonne foi. Fascinée par les prophéties de Tsukuko depuis qu'elle l'a entendue. Peut communiquer avec les esprits y compris les emprisonnés. Morceau de katana brisé comme preuve de sa sincérité.</p>
+        <div class="npc-stats">
+          <div class="rings">
+            <span class="ring"><b>TER</b>3</span>
+            <span class="ring"><b>AIR</b>3</span>
+            <span class="ring"><b>FEU</b>3</span>
+            <span class="ring"><b>EAU</b>3</span>
+            <span class="ring"><b>VID</b>3</span>
+          </div>
+          <div class="stat-line"><b>Traits</b>Perception 4</div>
+          <div class="stat-line"><b>Avantages</b>Sensibilité aux Esprits, Affinité élémentaire (Esprits)</div>
+          <div class="stat-line"><b>Désavantages</b>Petit Gabarit, Mauvaise Réputation (Mensonges)</div>
+          <div class="stat-line"><b>Compétences</b>Divination 4, Connaissance (Esprits) 4, Théologie 3, Calligraphie 3, Méditation 3, Médecine 2</div>
+          <div class="stat-line"><b>Arme</b>Wakizashi, Bô (bâton), Parchemins de sorts (Eau, Air)</div>
+        </div>
+      </div>
+      <div class="npc-card">
+        <h4>Mirumoto Yoshiteru</h4>
+        <div class="npc-role">Légionnaire Dragon · Potentiel allié</div>
+        <p>Légionnaire du Dragon indigné par le traitement de la population. Peut devenir un soutien solide d'Anton si ce dernier prend des décisions justes. Peut aussi déclencher une mutinerie si le moral s'effondre.</p>
+        <div class="npc-stats">
+          <div class="rings">
+            <span class="ring"><b>TER</b>3</span>
+            <span class="ring"><b>AIR</b>3</span>
+            <span class="ring"><b>FEU</b>3</span>
+            <span class="ring"><b>EAU</b>3</span>
+            <span class="ring"><b>VID</b>2</span>
+          </div>
+          <div class="stat-line"><b>Traits</b>Force 4</div>
+          <div class="stat-line"><b>Avantages</b>Sang-froid, Allié (Légionnaires Dragon)</div>
+          <div class="stat-line"><b>Désavantages</b>Mauvaise Réputation (Insubordonné), Honneur Strict</div>
+          <div class="stat-line"><b>Compétences</b>Kenjutsu 4 (Niten), Art de la Guerre 3, Athlétisme 3, Connaissance (Tactique) 3, Méditation 2, Intimidation 2</div>
+          <div class="stat-line"><b>Arme</b>Daisho — Katana + Wakizashi (style Niten, deux lames)</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════ MORAL TABLE ══════════════════ -->
+<div class="scene" id="moral">
+  <div class="scene-header">
+    <div class="scene-number">Mécanique</div>
+    <div class="scene-title">Indicateur de Moral des Troupes</div>
+    <div class="scene-meta"><span>⚡ Score actuel : 5/10</span></div>
+  </div>
+  <div class="scene-body">
+    <p class="body">Commencer à <strong>5/10</strong>. Chaque action notable modifie le score. En dessous de <strong>3</strong> → début de désertions. En dessous de <strong>1</strong> → mutinerie au scénario 4.</p>
+    <table class="moral-table">
+      <tr><th>Événement</th><th>Modification</th></tr>
+      <tr><td>Anton distribue les vivres aux habitants</td><td class="moral-plus">+2</td></tr>
+      <tr><td>Taro libéré sans punition collective</td><td class="moral-plus">+1</td></tr>
+      <tr><td>Seppun Goshi arrêté / exposé publiquement</td><td class="moral-plus">+2</td></tr>
+      <tr><td>Mirumoto Yoshiteru convaincu et gardé loyal</td><td class="moral-plus">+1</td></tr>
+      <tr><td>Miya Yoto accepte la gouvernance temporaire</td><td class="moral-plus">+2</td></tr>
+      <tr><td>Anton part avec un plan clair et un successeur désigné</td><td class="moral-plus">+0 (neutre)</td></tr>
+      <tr><td>Anton part sans plan ni successeur</td><td class="moral-minus">-2</td></tr>
+      <tr><td>Promesse aux rebelles non tenue</td><td class="moral-minus">-3</td></tr>
+      <tr><td>Oni attaque sans réponse visible d'Anton</td><td class="moral-minus">-1</td></tr>
+      <tr><td>Légionnaire tué sans enquête sérieuse</td><td class="moral-minus">-1</td></tr>
+      <tr><td>Goshi tué pendant la prise d'otage (chaos)</td><td class="moral-minus">-3</td></tr>
+    </table>
+  </div>
+</div>
+
+<!-- ══════════════════ PARCHEMINS REFERENCE ══════════════════ -->
+<div class="scene" id="parchemins">
+  <div class="scene-header">
+    <div class="scene-number">Référence</div>
+    <div class="scene-title">Synthèse — Documents & Parchemins</div>
+    <div class="scene-meta"><span>📜 Preuves disponibles ce scénario</span></div>
+  </div>
+  <div class="scene-body">
+    <div class="parchemin">
+      <strong>Document A — Registre de paiements (Bureau Goshi)</strong><br>
+      Preuve : Goshi a organisé et payé les rencontres entre l'ancien général et la geisha Yuka, sur instruction d'Ide Toju. Initiales "I.T." en marge. → Implique Goshi ET Toju dans la déstabilisation du commandement militaire.
+    </div>
+    <div class="parchemin">
+      <strong>Document B — Message codé Licorne-Gouverneur (Coffret Goshi)</strong><br>
+      Preuve : Ide Toju a corrompu Goshi avec des objets gaijins pour couvrir le détournement de vivres impériaux. → Preuve de corruption directe d'un représentant impérial par un marchand Licorne.
+    </div>
+    <div class="parchemin">
+      <strong>Document C — Coffret verrouillé (Goshi)</strong><br>
+      Contenu : Registre nominatif de douze enfants de l'Orphelinat des Ailes Brisées, livraison prévue à Otomo Jefurei-Eptenu dans une semaine. → Fil narratif BG Tobei : adresse, commanditaire, date — son enfant est peut-être parmi les douze.
+    </div>
+    <div class="parchemin">
+      <strong>Parchemin codé Kolat (Effets Ide Toju)</strong><br>
+      Preuve : Lien direct entre Ide Toju et <strong>L'Ordre</strong> (Kolat ; « Frères Gris » = mercenaires). Surtout, promesse écrite : Toju doit être installé au poste de gouverneur une fois Goshi écarté. → Preuve que l'incendie des vivres était commandité par L'Ordre via Toju, et que Toju vise la place de Goshi.
+    </div>
+  </div>
+</div>
+
+<div style="text-align:center; padding: 40px 0 20px; color:#3a2a10; font-family:'Cinzel',serif; font-size:12px; letter-spacing:3px; opacity:0.5;">
+  L5R · SAISON 2 · SCÉNARIO 3 · SOUS LE SCEAU BRISÉ
+</div>
+
+</div><!-- /wrapper -->
+</body>
+</html>

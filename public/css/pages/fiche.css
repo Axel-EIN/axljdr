@@ -1,0 +1,274 @@
+/* ------------------------------- */
+/* ----- MANDALA DES ANNEAUX ----- */
+/* ------------------------------- */
+
+/* Seule l'URL du mon reste inline, via --mon-clan : elle est dynamique. */
+.anneaux-board {
+  position: relative;
+  background-image: var(--mon-clan);
+  background-size: 192px;
+  background-repeat: no-repeat;
+  background-position: center 40%;
+}
+
+/* Trois calques au rayon croissant : leur superposition epaissit le halo. */
+.anneaux-glow {
+  position: absolute;
+  top: 45%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 170px;
+  filter: invert(1);
+  z-index: 0;
+  pointer-events: none;
+  mix-blend-mode: overlay;
+}
+
+.anneaux-glow:nth-of-type(1) {
+  -webkit-mask-image: radial-gradient(circle, black 30%, transparent 60%);
+          mask-image: radial-gradient(circle, black 30%, transparent 60%);
+}
+.anneaux-glow:nth-of-type(2) {
+  -webkit-mask-image: radial-gradient(circle, black 40%, transparent 70%);
+          mask-image: radial-gradient(circle, black 40%, transparent 70%);
+}
+.anneaux-glow:nth-of-type(3) {
+  -webkit-mask-image: radial-gradient(circle, black 45%, transparent 75%);
+          mask-image: radial-gradient(circle, black 45%, transparent 75%);
+}
+
+/* ------------------------------------- */
+/* ----- TRAITS SUR L'ILLUSTRATION ----- */
+/* ------------------------------------- */
+
+/* Sous 992px le mandala est masque (d-none dans le template) et ses valeurs
+   passent en surimpression sur l'illustration, qui occupait sinon un ecran
+   entier pour rien. */
+@media (max-width: 991.98px) {
+  /* Ligne Classe repliee dans la ligne Ecole, qui en reprend l'icone. Masquee
+     en CSS et non via d-none : le li perdrait sa puce list-style-image. */
+  .fiche-ligne-classe { display: none; }
+
+  /* Colonnes dans des .row imbriques, hors de portee de la regle de base.css
+     qui ne vise que le premier niveau. Le texte nu garde son retrait. */
+  .fiche-bord-a-bord { padding-left: 0; padding-right: 0; }
+
+  /* L'illustration ouvre la carte : le retrait haut de base.css laissait un
+     lisere blanc au-dessus d'elle. */
+  #fiche-personnage { padding-top: 0; }
+
+  /* Le titre quitte le flux pour se poser en haut de l'illustration. z-index 3
+     pour passer au-dessus du voile (1) et des anneaux (2). */
+  .element-page > .container > section { position: relative; }
+
+  .element-page > .container > section > h1 {
+    position: absolute;
+    top: 0.25rem;
+    left: 0;
+    right: 0;
+    z-index: 3;
+    padding: 1rem;
+    /* 2.5rem par defaut : « Fiche de <prenom nom> » passait sur deux lignes et
+       percutait la premiere rangee d'anneaux. */
+    font-size: 2rem;
+    text-align: center;
+    color: var(--color-white);
+    line-height: 1.25;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.9);
+  }
+
+  /* Hauteur portee par le cadre, et non plus par l'image : celle-ci passe en
+     absolute pour pouvoir etre remontee sans laisser de vide en bas. */
+  .fiche-illu-wrap {
+    position: relative;
+    height: 25.75rem;
+    overflow: hidden;
+    /* L'illustration etant a fleur d'ecran, rien ne la separe du premier
+       libelle de la liste qui suit. */
+    margin-bottom: 1rem;
+  }
+
+  /* L'image demarre a 10% de sa hauteur. Le translate se calcule sur elle et
+     non sur le cadre ; les 111.2% compensent la remontee pour qu'elle couvre
+     encore tout le cadre (1 / 0.9). */
+  .fiche-illu {
+    position: absolute;
+    top: 0;
+    width: 100%;
+    height: 111.2%;
+    object-fit: cover;
+    object-position: top;
+    transform: translateY(-10%);
+    border-radius: 0;
+  }
+
+  /* Ordre de peinture au z-index et non au DOM : image (auto) < voile < texte.
+     La fenetre claire de 20% degage le visage entre le titre et les anneaux. */
+  .fiche-illu-wrap::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    background-image: linear-gradient(
+      to bottom,
+      rgba(0, 0, 0, 0.8) 0%,
+      rgba(0, 0, 0, 0) 20%,
+      rgba(0, 0, 0, 0.6) 50%,
+      rgba(0, 0, 0, 0.8) 100%
+    );
+  }
+
+  .fiche-traits {
+    --ico: 24px;
+    --gouttiere: 0.5rem;
+    position: absolute;
+    inset: 30% 0 0;
+    z-index: 2;
+    padding: 0 1rem 1rem;
+    color: var(--color-white);
+    /* Deux colonnes d'anneaux. row-gap plutot que space-between : ce dernier
+       etirait les trois rangees sur toute la hauteur disponible. */
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap: 2rem;
+    row-gap: 1rem;
+    /* Cale en bas : l'espace libre remonte au-dessus du bloc et degage
+       d'autant le visage. La marge basse vient du padding. */
+    align-content: end;
+    /* Le voile est transparent sur son premier tiers (voulu) : sans ombre le
+       blanc y devient illisible sur les zones claires de l'illustration. */
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.9);
+  }
+
+  .fiche-anneau-line,
+  .fiche-trait-line {
+    display: flex;
+    align-items: center;
+    gap: var(--gouttiere);
+  }
+
+  /* Les blasons sont des glyphes noirs, invisibles sur le voile. Le flex: none
+     les empeche de retrecir, ce qui desalignerait le retrait des traits. */
+  .fiche-anneau-ico {
+    flex: none;
+    width: var(--ico);
+    height: var(--ico);
+    filter: invert(1);
+  }
+
+  .fiche-anneau-solo { grid-column: 1 / -1; }
+  .fiche-anneau-solo .fiche-anneau-line { justify-content: center; }
+  .fiche-anneau-solo .fiche-anneau-rang { margin-left: var(--gouttiere); }
+
+  /* Les traits s'alignent sur le nom de leur anneau, pas sur son blason. */
+  .fiche-trait-line { padding-left: calc(var(--ico) + var(--gouttiere)); }
+
+  .fiche-trait-value,
+  .fiche-anneau-rang { margin-left: auto; }
+}
+
+/* En em : suit les 2rem du titre sur mobile comme ses 4rem en desktop. */
+.fiche-titre-ico { font-size: 0.8em; }
+
+.anneau-rang {
+  font-family: 'Present';
+  font-size: var(--fontsize-hero);
+  line-height: var(--leading-1);
+  color: var(--color-alternate);
+}
+
+.trait-rang {
+  font-size: var(--fontsize-large);
+  font-family: 'Avenir';
+  color: var(--color-alternate);
+  line-height: var(--leading-12);
+}
+
+/* Le trait dominant de la paire (constitution>volonté, etc.) doit ressortir
+   en couleur forte. Sans ce sélecteur combiné, .trait-rang (chargé après
+   colors.css) écrase la couleur de .text-strong à cause de la cascade. */
+.trait-rang.text-strong {
+  color: var(--color-strong);
+}
+
+/* Blocs visibles uniquement en mode édition */
+.edit-only { display: none; }
+.fiche-edit-mode .edit-only { display: revert; }
+
+/* Lignes de compétences vides masquées par défaut, révélées en mode édition */
+.comp-row-empty { display: none; }
+.fiche-edit-mode .comp-row-empty { display: table-row; }
+
+/* Headers de catégorie de compétences masqués en mode édition (évitent la confusion) */
+.fiche-edit-mode .comp-cat-header { display: none; }
+.fiche-edit-mode [data-trait-eff] select { width: 3em; display: inline-block; vertical-align: middle; }
+.fiche-edit-mode select.comp-select { min-width: 14em; }
+
+/* Slots d'avantages/désavantages vides masqués hors édition */
+.av-row-empty { display: none; }
+.fiche-edit-mode .av-row-empty { display: list-item; }
+.fiche-edit-mode select.av-select { min-width: 14em; }
+.fiche-edit-mode [data-av-slot] > * { display: flex; justify-content:flex-start; align-items:center; }
+
+/* Lignes des spécialisations : visibles uniquement si la compétence en a achetées, ou en mode édition */
+.comp-specs-row { display: none; }
+.comp-specs-row.has-specs { display: table-row; }
+.fiche-edit-mode .comp-specs-row { display: table-row; }
+.comp-specs-row td { border-top: 0; }
+
+/* Tri-state via icônes Font Awesome — cycle vide → achetée/école R1 → école R2 (doré) */
+.comp-ecole-tri,
+.comp-spec-tri {
+    position: relative;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    user-select: none;
+    vertical-align: middle;
+}
+.comp-spec-tri {
+    margin-right: 1em;
+    font-size: 0.9em;
+    gap: 0.3em;
+}
+
+.comp-ecole-tag,
+.spec-ecole-tag {
+    display: none;
+    position: absolute;
+    left: 0;
+    bottom: 100%;
+    white-space: nowrap;
+    font-size: 0.65em;
+    line-height: 1;
+    margin-bottom: 1px;
+    pointer-events: none;
+}
+.comp-ecole-tag      { color: var(--color-yellow-gold); }
+.spec-ecole-tag      { color: var(--color-green-success); }
+
+/* Compétence école : 1 = vert (départ R1), 2 = doré (départ R2) */
+.comp-ecole-tri[data-state="1"] .tri-icon { color: var(--color-green-success); }
+.comp-ecole-tri[data-state="2"] .tri-icon,
+.comp-ecole-tri[data-state="2"]           { color: var(--color-yellow-gold); }
+.comp-ecole-tri[data-state="2"] .comp-ecole-tag { display: inline-flex; justify-content: center; align-items: center; }
+
+/* Spécialisation : 1 = achetée payante (rouge), 2 = offerte école (vert) */
+.comp-spec-tri[data-state="1"] .tri-icon { color: var(--color-red-danger); }
+.comp-spec-tri[data-state="2"] .tri-icon,
+.comp-spec-tri[data-state="2"]           { color: var(--color-green-success); }
+.comp-spec-tri[data-state="2"] .spec-ecole-tag { display: inline-flex; justify-content: center; align-items: center; }
+
+/* Alignement vertical des cellules de la table compétences (notamment en mode édition où on mélange selects + checkboxes) */
+#comp-table td,
+#comp-table th { vertical-align: middle; }
+
+#comp-table .comp-cat-header th {
+    background: rgba(0,0,0,0.06);
+    font-variant: small-caps;
+    letter-spacing: 0.05em;
+    font-size: 0.85em;
+    padding-top: 0.5rem;
+    padding-bottom: 0.25rem;
+}

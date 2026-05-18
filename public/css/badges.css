@@ -1,0 +1,121 @@
+.badge-rang-1,
+.badge-rang-2,
+.badge-rang-3,
+.badge-rang-4,
+.badge-rang-5 {
+    display: inline-block;
+    padding: 0.25em 0.4em;
+    font-size: 75%;
+    font-weight: 700;
+    line-height: var(--leading-1);
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: baseline;
+    border-radius: 0.25rem;
+    transition:
+      color 0.15s ease-in-out,
+      background-color 0.15s ease-in-out,
+      border-color 0.15s ease-in-out,
+      box-shadow 0.15s ease-in-out;
+    color: #fff;
+}
+
+.badge-rang-1 {
+  background-color: #00e1ff;
+}
+
+.badge-rang-2 {
+  background-color: #ffc400;
+}
+
+.badge-rang-3 {
+  background-color: #ff6600;
+}
+
+.badge-rang-4 {
+  background-color: #ff0000;
+}
+
+.badge-rang-5 {
+  background-color: #e100ff;
+}
+
+/* ----- BADGE ACCESS ---- */
+
+.badge-access {
+    position: absolute;
+    z-index: 30;
+    top: -8px;
+    right: -8px;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    width: var(--icon-base);
+    height: var(--icon-base);
+    border-radius: 50%;
+    background-color: var(--color-grayiron);
+
+    .badge-font-icon {
+        color: var(--color-white);
+        font-size: var(--fontsize-small);
+
+        &.locked { color: var(--color-white); }
+    }
+
+    &.mini {
+        --icon-base: 1rem;
+
+        right: 0;
+
+        .badge-font-icon { font-size: var(--fontsize-mini); }
+    }
+}
+
+/* ----- BADGE NOUVEAU ----- */
+
+.badge-new {
+  position: absolute;
+  z-index: 20;
+  top: 1rem;
+  left: 0;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0.25rem 0.5rem;
+  margin: 0;
+  border-radius: 0 0.5rem 0.5rem 0;
+  background-color: var(--color-primary);
+
+  &.pin-downcenter {
+    top: unset;
+    border-radius: 0.33rem;
+    bottom: 0;
+    left: 50%;
+    transform: translate(-50%,0);
+  }
+
+  &.pin-topleft {
+    top: 0;
+    left: 0;
+    border-top-right-radius: 0;
+  }
+
+  &.pin-centerleft {
+    top: 2.5rem;
+    left: 0;
+    border-radius: 0 0.5rem 0.5rem 0;
+  }
+
+  .label-new {
+    padding: 0;
+    margin: 0;
+    color: var(--color-white);
+    font-size: var(--fontsize-mini);
+    font-weight: bold;
+    line-height: var(--leading-1);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+}

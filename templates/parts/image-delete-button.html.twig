@@ -1,0 +1,33 @@
+{# Params : input_id, field_name, current (le bouton n'apparait que si non vide).
+   Cote controleur, `remove_<field_name> === '1'` signale la suppression demandee :
+   a lire apres le handleRequest. #}
+
+{% if current is defined and current is not empty %}
+    <div class="text-center mt-2" id="delete-wrap-{{ input_id }}">
+        <input type="hidden" name="remove_{{ field_name }}" value="0" />
+        <button type="button" class="btn btn-sm btn-outline-danger">
+            <i class="fas fa-trash"></i> Supprimer l'image
+        </button>
+    </div>
+    <script>
+    (function () {
+        const wrap = document.getElementById('delete-wrap-{{ input_id }}');
+        const btn = wrap.querySelector('button');
+        const hidden = wrap.querySelector('input[type=hidden]');
+        btn.addEventListener('click', function () {
+            if (hidden.value === '0') {
+                if (!confirm("Marquer l'image pour suppression à l'enregistrement ?")) return;
+                hidden.value = '1';
+                btn.classList.remove('btn-outline-danger');
+                btn.classList.add('btn-warning');
+                btn.innerHTML = '<i class="fas fa-undo"></i> Annuler la suppression';
+            } else {
+                hidden.value = '0';
+                btn.classList.remove('btn-warning');
+                btn.classList.add('btn-outline-danger');
+                btn.innerHTML = '<i class="fas fa-trash"></i> Supprimer l\'image';
+            }
+        });
+    })();
+    </script>
+{% endif %}

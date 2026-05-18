@@ -1,0 +1,41 @@
+.badge-rang-1,
+.badge-rang-2,
+.badge-rang-3,
+.badge-rang-4,
+.badge-rang-5 {
+    display: inline-block;
+    padding: 0.25em 0.4em;
+    font-size: 75%;
+    font-weight: 700;
+    line-height: 1;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: baseline;
+    border-radius: 0.25rem;
+    transition:
+      color 0.15s ease-in-out,
+      background-color 0.15s ease-in-out,
+      border-color 0.15s ease-in-out,
+      box-shadow 0.15s ease-in-out;
+    color: #fff;
+}
+
+.badge-rang-1 {
+  background-color: #00e1ff;
+}
+
+.badge-rang-2 {
+  background-color: #ffc400;
+}
+
+.badge-rang-3 {
+  background-color: #ff6600;
+}
+
+.badge-rang-4 {
+  background-color: #ff0000;
+}
+
+.badge-rang-5 {
+  background-color: #e100ff;
+}

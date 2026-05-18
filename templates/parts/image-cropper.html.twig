@@ -1,0 +1,89 @@
+{# Params : input_id (le file input), width, height. Gere N croppers par
+   formulaire sans race condition. #}
+
+<div id="{{ input_id }}-cropper-container" style="display:none; max-width:100%; margin-top:1rem;">
+    <div style="max-height: 480px; background: #222;">
+        <img id="{{ input_id }}-cropper-image" style="display:block; max-width: 100%;" />
+    </div>
+    <p class="text-muted small mt-2 mb-0">
+        Cadrez votre image au format <strong>{{ width }}×{{ height }}</strong>. Glissez pour déplacer, molette pour zoomer.
+        Tout ce qui dépasse du cadre sera coupé.
+    </p>
+</div>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cropperjs@1.6.1/dist/cropper.min.css" />
+<script src="https://cdn.jsdelivr.net/npm/cropperjs@1.6.1/dist/cropper.min.js"></script>
+<script type="text/javascript">
+(function () {
+    const fileInput = document.getElementById('{{ input_id }}');
+    const cropperContainer = document.getElementById('{{ input_id }}-cropper-container');
+    const cropperImg = document.getElementById('{{ input_id }}-cropper-image');
+    const form = fileInput ? fileInput.closest('form') : null;
+    const targetW = {{ width }};
+    const targetH = {{ height }};
+    let cropper = null;
+
+    if (!fileInput || !form) return;
+
+    fileInput.addEventListener('change', function (e) {
+        const file = e.target.files && e.target.files[0];
+        if (!file || !file.type.startsWith('image/')) return;
+
+        const reader = new FileReader();
+        reader.onload = function (ev) {
+            cropperImg.src = ev.target.result;
+            cropperContainer.style.display = 'block';
+
+            if (cropper) cropper.destroy();
+            cropper = new Cropper(cropperImg, {
+                aspectRatio: targetW / targetH,
+                viewMode: 1,
+                autoCropArea: 1,
+                background: false,
+                movable: true,
+                zoomable: true,
+                rotatable: false,
+                scalable: false,
+            });
+        };
+        reader.readAsDataURL(file);
+    });
+
+    // Coordination multi-croppers : un seul handler de submit par form,
+    // qui attend que tous les crops en attente soient résolus avant de soumettre.
+    if (!form._pendingCrops) {
+        form._pendingCrops = [];
+        form.addEventListener('submit', function (e) {
+            const active = form._pendingCrops.filter(c => c.hasCropper());
+            if (active.length === 0) return;
+            e.preventDefault();
+            Promise.all(active.map(c => c.process())).then(function () {
+                form.submit();
+            });
+        });
+    }
+
+    form._pendingCrops.push({
+        hasCropper: function () { return cropper !== null; },
+        process: function () {
+            return new Promise(function (resolve) {
+                if (!cropper) { resolve(); return; }
+                const originalFile = fileInput.files[0];
+                cropper.getCroppedCanvas({
+                    width: targetW,
+                    height: targetH,
+                    imageSmoothingQuality: 'high',
+                }).toBlob(function (blob) {
+                    const cropped = new File([blob], originalFile.name, { type: originalFile.type });
+                    const dt = new DataTransfer();
+                    dt.items.add(cropped);
+                    fileInput.files = dt.files;
+                    cropper.destroy();
+                    cropper = null;
+                    resolve();
+                }, originalFile.type, 0.9);
+            });
+        },
+    });
+})();
+</script>

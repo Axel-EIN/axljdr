@@ -1,0 +1,20 @@
+ul.list-decored {
+  list-style-image: url('../assets/icons/bullet.png');
+  margin-bottom: 0;
+  margin-top: 0.5rem;
+  padding-left: 1.2rem;
+
+  li {
+    padding-left: 0.33rem;
+    vertical-align: middle;
+    margin-bottom: 0.5rem;
+
+    .label {
+      text-transform: uppercase;
+      font-size: var(--fontsize-small);
+      display: inline-block;
+      min-width: 6rem;
+    }
+  }
+}
+

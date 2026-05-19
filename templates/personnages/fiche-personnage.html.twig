@@ -1,0 +1,2121 @@
+{% extends 'element.html.twig' %}
+
+{% block stylesheets %}
+  {{parent()}}
+  <link rel="stylesheet" href="{{asset('css/pages/fiche.css')}}" />
+{% endblock %}
+
+{% set cout_par_spe = 2 %}
+
+{# Avantages / Désavantages : applique discount si le clan/classe du personnage qualifie.
+   Défini hors bloc pour être accessible aux blocs element_content ET javascripts. #}
+{% set perso_clan_id   = fiche.personnage.clan   ? fiche.personnage.clan.id   : 0 %}
+{% set perso_classe_id = fiche.personnage.classe ? fiche.personnage.classe.id : 0 %}
+{% set effective_costs = {av1: 0, av2: 0, dv1: 0, dv2: 0} %}
+{% for key, item in {av1: fiche.avantage1, av2: fiche.avantage2, dv1: fiche.desavantage1, dv2: fiche.desavantage2} %}
+  {% if item %}
+    {% set qualifies = item.discount and (
+      (item.discountClan   and item.discountClan.id   == perso_clan_id)
+      or (item.discountClan2  and item.discountClan2.id  == perso_clan_id)
+      or (item.discountClasse and item.discountClasse.id == perso_classe_id)
+    ) %}
+    {% set effective_costs = effective_costs|merge({(key): (qualifies ? item.discount : item.cout)}) %}
+  {% endif %}
+{% endfor %}
+{% set cout_avantages_total    = effective_costs.av1 + effective_costs.av2 %}
+{% set gain_desavantages_total = effective_costs.dv1 + effective_costs.dv2 %}
+
+{# Parsing des modificateurs de combat.
+   initiativeModifier : INT (modifie le résultat de l'init en flat).
+   attaqueModifier / dmgModifier : "XgY" (modifient le jet de dés). #}
+{% set initMod = fiche.initiativeModifier ?? 0 %}
+{% set atkModL, atkModG = 0, 0 %}
+{% if fiche.attaqueModifier %}
+  {% set atkModSplit = fiche.attaqueModifier|split('g') %}
+  {% set atkModL = atkModSplit[0]|default(0) %}
+  {% set atkModG = atkModSplit[1]|default(0) %}
+{% endif %}
+{% set dmgModL, dmgModG = 0, 0 %}
+{% if fiche.dmgModifier %}
+  {% set dmgModSplit = fiche.dmgModifier|split('g') %}
+  {% set dmgModL = dmgModSplit[0]|default(0) %}
+  {% set dmgModG = dmgModSplit[1]|default(0) %}
+{% endif %}
+
+{% block element_content %}
+
+{% set bonusNomFamille = (fiche.personnage.famille is not empty) ? fiche.personnage.famille.bonusStatNom : null %}
+{% set bonusNomEcole   = (fiche.personnage.ecole is not empty) ? fiche.personnage.ecole.bonusStatNom : null %}
+
+{# nb_bonus_X = nombre de sources (famille/école) offrant un rang gratuit sur ce trait (0, 1 ou 2). #}
+{% set nb_bonus_constitution = (bonusNomFamille == 'constitution'  ? 1 : 0) + (bonusNomEcole == 'constitution'  ? 1 : 0) %}
+{% set nb_bonus_volonte      = (bonusNomFamille == 'volonte'       ? 1 : 0) + (bonusNomEcole == 'volonte'       ? 1 : 0) %}
+{% set nb_bonus_reflexes     = (bonusNomFamille == 'reflexes'      ? 1 : 0) + (bonusNomEcole == 'reflexes'      ? 1 : 0) %}
+{% set nb_bonus_intuition    = (bonusNomFamille == 'intuition'     ? 1 : 0) + (bonusNomEcole == 'intuition'     ? 1 : 0) %}
+{% set nb_bonus_agilite      = (bonusNomFamille == 'agilite'       ? 1 : 0) + (bonusNomEcole == 'agilite'       ? 1 : 0) %}
+{% set nb_bonus_intelligence = (bonusNomFamille == 'intelligence'  ? 1 : 0) + (bonusNomEcole == 'intelligence'  ? 1 : 0) %}
+{% set nb_bonus_forceStat    = (bonusNomFamille == 'forceStat'     ? 1 : 0) + (bonusNomEcole == 'forceStat'     ? 1 : 0) %}
+{% set nb_bonus_perception   = (bonusNomFamille == 'perception'    ? 1 : 0) + (bonusNomEcole == 'perception'    ? 1 : 0) %}
+{% set nb_bonus_vide         = (bonusNomFamille == 'vide'          ? 1 : 0) + (bonusNomEcole == 'vide'          ? 1 : 0) %}
+
+{% set eff_constitution  = fiche.constitution  + nb_bonus_constitution %}
+{% set eff_volonte       = fiche.volonte       + nb_bonus_volonte %}
+{% set eff_reflexes      = fiche.reflexes      + nb_bonus_reflexes %}
+{% set eff_intuition     = fiche.intuition     + nb_bonus_intuition %}
+{% set eff_agilite       = fiche.agilite       + nb_bonus_agilite %}
+{% set eff_intelligence  = fiche.intelligence  + nb_bonus_intelligence %}
+{% set eff_forceStat     = fiche.forceStat     + nb_bonus_forceStat %}
+{% set eff_perception    = fiche.perception    + nb_bonus_perception %}
+{% set eff_vide          = fiche.vide          + nb_bonus_vide %}
+
+{# Rang de départ gratuit (base 2, +1 par bonus cumulé) : chaque bonus décale la franchise d'un rang. #}
+{% set libre_constitution = 2 + nb_bonus_constitution %}
+{% set libre_volonte      = 2 + nb_bonus_volonte %}
+{% set libre_reflexes     = 2 + nb_bonus_reflexes %}
+{% set libre_intuition    = 2 + nb_bonus_intuition %}
+{% set libre_agilite      = 2 + nb_bonus_agilite %}
+{% set libre_intelligence = 2 + nb_bonus_intelligence %}
+{% set libre_forceStat    = 2 + nb_bonus_forceStat %}
+{% set libre_perception   = 2 + nb_bonus_perception %}
+{% set libre_vide         = 2 + nb_bonus_vide %}
+
+{% set cout_constitution = eff_constitution > libre_constitution ? (4 * (eff_constitution * (eff_constitution + 1) / 2 - (libre_constitution * (libre_constitution + 1) / 2)))|round : 0 %}
+{% set cout_volonte      = eff_volonte      > libre_volonte      ? (4 * (eff_volonte      * (eff_volonte      + 1) / 2 - (libre_volonte      * (libre_volonte      + 1) / 2)))|round : 0 %}
+{% set cout_reflexes     = eff_reflexes     > libre_reflexes     ? (4 * (eff_reflexes     * (eff_reflexes     + 1) / 2 - (libre_reflexes     * (libre_reflexes     + 1) / 2)))|round : 0 %}
+{% set cout_intuition    = eff_intuition    > libre_intuition    ? (4 * (eff_intuition    * (eff_intuition    + 1) / 2 - (libre_intuition    * (libre_intuition    + 1) / 2)))|round : 0 %}
+{% set cout_agilite      = eff_agilite      > libre_agilite      ? (4 * (eff_agilite      * (eff_agilite      + 1) / 2 - (libre_agilite      * (libre_agilite      + 1) / 2)))|round : 0 %}
+{% set cout_intelligence = eff_intelligence > libre_intelligence ? (4 * (eff_intelligence * (eff_intelligence + 1) / 2 - (libre_intelligence * (libre_intelligence + 1) / 2)))|round : 0 %}
+{% set cout_forceStat    = eff_forceStat    > libre_forceStat    ? (4 * (eff_forceStat    * (eff_forceStat    + 1) / 2 - (libre_forceStat    * (libre_forceStat    + 1) / 2)))|round : 0 %}
+{% set cout_perception   = eff_perception   > libre_perception   ? (4 * (eff_perception   * (eff_perception   + 1) / 2 - (libre_perception   * (libre_perception   + 1) / 2)))|round : 0 %}
+{% set cout_vide         = eff_vide         > libre_vide         ? (6 * (eff_vide         * (eff_vide         + 1) / 2 - (libre_vide         * (libre_vide         + 1) / 2)))|round : 0 %}
+
+{% set cout_traits_total = cout_constitution + cout_volonte + cout_reflexes + cout_intuition + cout_forceStat + cout_perception + cout_agilite + cout_intelligence + cout_vide %}
+{% set cout_competences_total = 0 %}
+{% set cout_specialisations_total = 0 %}
+{% for i in 1..20 %}
+  {% set val = attribute(fiche, 'valeur' ~ i) %}
+  {% set comp_i = attribute(fiche, 'competence' ~ i) %}
+  {% set n_ecole = attribute(fiche, 'compEcole' ~ i)|default(0) %}
+  {% if comp_i is not empty and val %}
+    {% set raw_cost = (val * (val + 1) / 2)|round %}
+    {% set offset  = (n_ecole * (n_ecole + 1) / 2)|round %}
+    {% set net = raw_cost - offset %}
+    {% set cout_competences_total = cout_competences_total + (net > 0 ? net : 0) %}
+  {% endif %}
+  {% if comp_i is not empty %}
+    {% set bm     = attribute(fiche, 'specialisations' ~ i)|default('') %}
+    {% set bm_ec  = attribute(fiche, 'speEcole' ~ i)|default('') %}
+    {% for k in 1..6 %}
+      {% set lab_k     = attribute(comp_i, 'specialisation' ~ k) %}
+      {% set bit_k     = (bm|length     >= k) ? bm|slice(k - 1, 1)    : '0' %}
+      {% set bit_ec_k  = (bm_ec|length  >= k) ? bm_ec|slice(k - 1, 1) : '0' %}
+      {% if lab_k and bit_k == '1' and bit_ec_k != '1' %}
+        {% set cout_specialisations_total = cout_specialisations_total + cout_par_spe %}
+      {% endif %}
+    {% endfor %}
+  {% endif %}
+{% endfor %}
+{% set cout_competences_total = cout_competences_total + cout_specialisations_total %}
+
+{% set xp_total_effectif = xp_total + gain_desavantages_total %}
+{% set cout_total        = cout_traits_total + cout_competences_total + cout_avantages_total %}
+
+<card id="fiche-personnage" class="col-12 card card-body text-gray-slate">
+
+  <!-- [INFOS + ANNEAUX] + ILLU -->
+  <div class="row">
+
+    <!-- GENERAL INFOS + ANNEAUX -->
+    <div class="col-12 col-lg-8">
+
+      <!-- GENERAL INFOS -->
+      {# mb-3 sur mobile : le mandala qui suivait est masque, la liste donne
+         donc directement sur les competences. #}
+      <div class="row mb-2 mb-lg-4">
+        <div class="col-12 col-lg-6">
+          <ul class="list-decored">
+            {% set trait_labels = {
+              constitution: 'Constitution', volonte: 'Volonté', reflexes: 'Réflèxes',
+              intuition: 'Intuition', agilite: 'Agilité', intelligence: 'Intelligence',
+              forceStat: 'Force', perception: 'Perception', vide: 'Vide'
+            } %}
+            <!-- CLAN -->
+            <li>
+              <span class="label">Clan :</span>
+              {% if fiche.personnage.clan %}
+                <a class="extrabold" href="{{ path('empire_clan', {id: fiche.personnage.clan.id}) }}">
+                  <img  class="img-24" src="{{ asset(fiche.personnage.clan.mon|default(NA_MON)) }}"
+                        title="Mon du clan {{ fiche.personnage.clan.nom }}" />
+                  {{ fiche.personnage.clan.nom }}
+                </a>
+              {% else %}
+                Aucun
+              {% endif %}
+            </li>
+            <!-- FAMILLE -->
+            <li>
+              <span class="label">Famille :</span>
+              {% if fiche.personnage.famille %}
+                <a class="extrabold" href="{{ path('empire_clan', {id: fiche.personnage.clan.id, '_fragment': fiche.personnage.famille.nom}) }}">
+                  <img  class="img-24 rounded-circle" src="{{ asset(fiche.personnage.famille.mon|default(NA_MON)) }}"
+                        title="Mon de la famille {{ fiche.personnage.famille.nom }}" />
+                  {{ fiche.personnage.famille.nom }}
+                </a>
+                {% if bonusNomFamille %}
+                  <small class="text-success ml-1">+1 {{ trait_labels[bonusNomFamille] ?? bonusNomFamille }}</small>{% endif %}
+              {% else %}
+                Aucun
+              {% endif %}
+            </li>
+            <!-- CLASSE -->
+            <li class="fiche-ligne-classe">
+              <span class="label">Classe :</span>
+              {% if fiche.personnage.classe %}
+                <a class="extrabold" href="{{ path('regles_classe', {id: fiche.personnage.classe.id}) }}">
+                  <img  class="img-24" src="{{ asset(fiche.personnage.classe.icone|default(NA_MON)) }}"
+                        title="Mon de la classe {{ fiche.personnage.classe.nom }}" />
+                  {{ fiche.personnage.classe.nom }}
+                </a>
+              {% else %}
+                Aucun
+              {% endif %}
+            </li>
+            <!-- ECOLE -->
+            <li>
+              <span class="label">Ecole :</span>
+              {# Mobile : la ligne Classe est masquee, son icone la represente ici
+                 et garde son lien vers la page de classe. #}
+              {% if fiche.personnage.classe %}
+                <a class="d-lg-none" href="{{ path('regles_classe', {id: fiche.personnage.classe.id}) }}"
+                   title="Classe {{ fiche.personnage.classe.nom }}">
+                  <img class="img-24" src="{{ asset(fiche.personnage.classe.icone|default(NA_MON)) }}" alt="" />
+                </a>
+              {% endif %}
+              {% if fiche.personnage.ecole %}
+                <a class="extrabold" href="{{ path('regles_ecole', {id: fiche.personnage.ecole.id}) }}">
+                  {{ fiche.personnage.ecole.nom }}
+                </a>
+                {% if bonusNomEcole %}
+                  <small class="text-success ml-1">+1 {{ (trait_labels[bonusNomEcole] ?? bonusNomEcole)|u.truncate(8, '…') }}</small>
+                {% endif %}
+              {% else %}
+                Aucun
+              {% endif %}
+            </li>
+          </ul>
+        </div>
+        <div class="col-12 col-lg-6">
+          <ul class="list-decored">
+            <!-- RANG GENERAL -->
+            <li>
+              <span class="label">Rang Général :</span>
+              <span class="ml-auto badge-rang-{{rang}}">RANG {{rang}}</span>
+            </li>
+
+            {% if est_le_joueur or is_granted('ROLE_MJ') %}
+
+              <!-- EXPERIENCE -->
+              <li>
+                <span class="label">Expérience :</span>
+                <strong><span class="xp-total-value">{{ xp_total_effectif }}</span>xp</strong>
+                &nbsp;
+                <small>
+                  (
+                  {{ xp_creation }}
+                  {% if gain_desavantages_total > 0 %}
+                    + <span class="xp-desav-value text-success">{{ gain_desavantages_total }}</span>
+                  {% endif %}
+                  + {{ xp_progression }}
+                  )
+                </small>
+              </li>
+              <!-- DEPENSES -->
+              <li>
+                <span class="label">Dépensés :</span>
+                <strong><span class="xp-spent-value">{{ cout_total }}</span>xp</strong>
+                &nbsp;
+                <small>
+                  (
+                  <span class="xp-traits-value">
+                    {% if cout_avantages_total > 0 %}
+                      <span class="xp-avant-value text-danger">{{ cout_avantages_total }} +</span>
+                    {% endif %}
+                    {{ cout_traits_total }}
+                  </span>
+                  +
+                  <span class="xp-comps-value">{{ cout_competences_total }}</span>
+                  )
+                </small>
+              </li>
+              <!-- RESTANTS -->
+              <li>
+                <span class="label">Restants :</span>
+                <strong><span class="xp-remaining text-success">{{ xp_total_effectif - cout_total }}xp</span></strong>
+              </li>
+            {% endif %}
+
+          </ul>
+        </div>
+      </div>
+
+      {# Separe les infos du mandala, masque avec lui sous 992px. #}
+      <hr class="my-2 d-none d-lg-block">
+
+      <!-- ANNEAUX -->
+      {# Masque au niveau de la rangee et non de ses enfants, sinon son mt-4
+         subsiste et creuse un vide sous les infos. Sur mobile les anneaux
+         passent sur l'illustration et l'edition est desactivee. #}
+      <div class="row mt-4 d-none d-lg-flex">
+        <div class="col-12 anneaux-board"
+             style="--mon-clan: url('{{ asset(fiche.personnage.clan.mon|default(NA_MON)) }}');">
+
+          <!-- HALO DE L'ICONE DE CLASSE : trois calques de rayons croissants -->
+          {% for i in 1..3 %}
+            <img class="anneaux-glow" src="{{ asset(fiche.personnage.classe.icone|default(NA_MON)) }}" />
+          {% endfor %}
+
+          <!-- ESPACE (2) + ANNEAU TERRE (4) + ANNEAU AIR (4) + ESPACE (2) -->
+          <div class="row text-center">
+            <!-- ESPACE -->
+            <div class="col-2"></div>
+
+            <!-- ANNEAU DE TERRE -->
+            <div class="col-4 flex-col align-items-center">
+              <div class="flex align-items-start">
+                <span class="anneau-rang" data-ring="terre">
+                  {{ min(eff_constitution, eff_volonte) }}
+                </span>
+                <img src="{{FLAT_TERRE}}" class="ml-3 img-72" />
+              </div>
+
+              <!-- CONSTITUTION -->
+              <div class="align-self-start">
+                <span
+                  class="trait-rang
+                    {% if eff_constitution > eff_volonte %} text-strong {% endif %}"
+                  data-trait-eff="constitution" data-base="{{ fiche.constitution }}"
+                  data-bonus="{{ nb_bonus_constitution }}" data-multiplier="4"
+                >
+                  <span class="eff-display">{{ eff_constitution }}</span>
+                </span>
+                &nbsp;
+                Constitution
+                {% if nb_bonus_constitution > 0 %}
+                  <small class="text-success extrabold">+{{ nb_bonus_constitution }}</small>
+                {% endif %}
+                {% if est_le_joueur or is_granted('ROLE_MJ') %}
+                  <span class="text-alternate edit-only" data-cost-for="constitution">
+                    {% if cout_constitution > 0 %}-{{ cout_constitution }}xp{% endif %}
+                  </span>
+                {% endif %}
+              </div>
+              
+              <!-- VOLONTÉ -->
+              <div class="align-self-start">
+                <span
+                  class="trait-rang
+                    {% if eff_volonte > eff_constitution %} text-strong {% endif %}"
+                  data-trait-eff="volonte" data-base="{{ fiche.volonte }}"
+                  data-bonus="{{ nb_bonus_volonte }}" data-multiplier="4"
+                >
+                  <span class="eff-display">{{ eff_volonte }}</span>
+                </span>
+                &nbsp;
+                Volonté
+                {% if nb_bonus_volonte > 0 %}
+                  <small class="text-success extrabold">+{{ nb_bonus_volonte }}</small>
+                {% endif %}
+                {% if est_le_joueur or is_granted('ROLE_MJ') %}
+                  <span class="text-alternate edit-only" data-cost-for="volonte">
+                    {% if cout_volonte > 0 %}-{{ cout_volonte }}xp{% endif %}
+                  </span>
+                {% endif %}
+              </div>
+            </div>
+
+            <!-- ANNEAU DE AIR -->
+            <div class="col-4 flex-col align-items-center">
+              <div class="flex align-items-start">
+                <img src="{{FLAT_AIR}}" class="img-72 mr-3" />
+                <span class="anneau-rang" data-ring="air">
+                  {{ min(eff_reflexes, eff_intuition) }}
+                </span>
+              </div>
+
+              <!-- REFLEXES -->
+              <div class="align-self-end">
+                {% if est_le_joueur or is_granted('ROLE_MJ') %}
+                  <span class="text-alternate edit-only" data-cost-for="reflexes">
+                    {% if cout_reflexes > 0 %}-{{ cout_reflexes }}xp{% endif %}
+                  </span>
+                {% endif %}
+                Réflèxes
+                {% if nb_bonus_reflexes > 0 %}
+                  <small class="text-success extrabold">+{{ nb_bonus_reflexes }}</small>
+                {% endif %}
+                &nbsp;
+                <span
+                  class="trait-rang
+                    {% if eff_reflexes > eff_intuition %} text-strong {% endif %}"
+                  data-trait-eff="reflexes" data-base="{{ fiche.reflexes }}"
+                  data-bonus="{{ nb_bonus_reflexes }}" data-multiplier="4"
+                >
+                  <span class="eff-display">{{ eff_reflexes }}</span>
+                </span>
+              </div>
+
+              <!-- INTUITION -->
+              <div class="align-self-end">
+                {% if est_le_joueur or is_granted('ROLE_MJ') %}
+                  <span class="text-alternate edit-only" data-cost-for="intuition">
+                    {% if cout_intuition > 0 %}-{{ cout_intuition }}xp{% endif %}
+                  </span>
+                {% endif %}
+                Intuition
+                {% if nb_bonus_intuition > 0 %}
+                  <small class="text-success extrabold">+{{ nb_bonus_intuition }}</small>
+                {% endif %}
+                &nbsp;
+                <span
+                  class="trait-rang
+                    {% if eff_intuition > eff_reflexes %} text-strong {% endif %}"
+                  data-trait-eff="intuition" data-base="{{ fiche.intuition }}"
+                  data-bonus="{{ nb_bonus_intuition }}" data-multiplier="4"
+                >
+                  <span class="eff-display">{{ eff_intuition }}</span>
+                </span>
+              </div>
+            </div>
+
+            <!-- ESPACE -->
+            <div class="col-2"></div>
+          </div>
+
+          <!-- ESPACE (1) + ANNEAU EAU (4) + CENTRE (2) + ANNEAU FEU (4) + ESPACE (1) -->
+          <div class="row text-center mt-3">
+
+            <!-- ESPACE -->
+            <div class="col-1"></div>
+
+            <!-- ANNEAU DE L'EAU -->
+            <div class="col-4 flex-col align-items-center">
+              <div class="flex align-items-center">
+                <span class="anneau-rang" data-ring="eau">
+                  {{ min(eff_forceStat, eff_perception) }}
+                </span>
+                <img src="{{FLAT_EAU}}" class="img-72 ml-3" />
+              </div>
+
+              <!-- FORCE -->
+              <div class="align-self-start">
+                <span
+                  class="trait-rang
+                    {% if eff_forceStat > eff_perception %} text-strong {% endif %}"
+                  data-trait-eff="forceStat" data-base="{{ fiche.forceStat }}"
+                  data-bonus="{{ nb_bonus_forceStat }}" data-multiplier="4"
+                >
+                  <span class="eff-display">{{ eff_forceStat }}</span>
+                </span>
+                &nbsp;
+                Force
+                {% if nb_bonus_forceStat > 0 %}
+                  <small class="text-success extrabold">+{{ nb_bonus_forceStat }}</small>
+                {% endif %}
+                {% if est_le_joueur or is_granted('ROLE_MJ') %}
+                  <span class="text-alternate edit-only" data-cost-for="forceStat">
+                    {% if cout_forceStat > 0 %}-{{ cout_forceStat }}xp{% endif %}
+                  </span>
+                {% endif %}
+              </div>
+
+              <!-- PERCEPTION -->
+              <div class="align-self-start">
+                <span
+                  class="trait-rang
+                    {% if eff_perception > eff_forceStat %} text-strong {% endif %}"
+                  data-trait-eff="perception" data-base="{{ fiche.perception }}"
+                  data-bonus="{{ nb_bonus_perception }}" data-multiplier="4"
+                >
+                  <span class="eff-display">{{ eff_perception }}</span>
+                </span>
+                &nbsp;
+                Perception
+                {% if nb_bonus_perception > 0 %}
+                  <small class="text-success extrabold">+{{ nb_bonus_perception }}</small>
+                {% endif %}
+                {% if est_le_joueur or is_granted('ROLE_MJ') %}
+                  <span class="text-alternate edit-only" data-cost-for="perception">
+                    {% if cout_perception > 0 %}-{{ cout_perception }}xp{% endif %}
+                  </span>
+                {% endif %}
+              </div>
+            </div>
+
+            <!-- CENTRE XP -->
+            <div class="col-2 m-0 p-0">
+              {% if est_le_joueur or is_granted('ROLE_MJ') %}
+                <div class="flex-col p-1 bg-strong text-fade text-small rounded-8 edit-only">
+                  <div class="card-sub-title">Exp.</div>
+                  <div class="flex w-100 justify-content-between {% if gain_desavantages_total == 0 %}d-none{% endif %}" id="xp-desav-row">
+                    Désavantages
+                    <span id="xp-desav-total" class="text-success">+{{ gain_desavantages_total }}xp</span>
+                  </div>
+                  <div class="flex w-100 justify-content-between {% if cout_avantages_total == 0 %}d-none{% endif %}" id="xp-avant-row">
+                    Avantages
+                    <span id="xp-avant-total" class="text-danger">-{{ cout_avantages_total }}xp</span>
+                  </div>
+                  <div class="flex w-100 justify-content-between">
+                    Traits
+                    <span id="xp-traits-total">-{{ cout_traits_total }}xp</span>
+                  </div>
+                  <div class="flex w-100 justify-content-between">
+                    Compétences
+                    <span id="xp-comps-total">-{{ cout_competences_total }}xp</span>
+                  </div>
+                  <div class="flex w-100 justify-content-between extrabold">
+                    Restants
+                    <span class="xp-remaining text-success">{{ xp_total_effectif - cout_total }}xp</span>
+                  </div>
+                </div>
+              {% endif %}
+            </div>
+
+            <!-- ANNEAU DE FEU -->
+            <div class="col-4 flex-col align-items-center">
+              <div class="flex align-items-center">
+                <img src="{{FLAT_FEU}}" class="img-72 mr-2" />
+                <span class="anneau-rang" data-ring="feu">
+                  {{ min(eff_agilite, eff_intelligence) }}
+                </span>
+              </div>
+
+              <!-- AGILITE -->
+              <div class="align-self-end">
+                {% if est_le_joueur or is_granted('ROLE_MJ') %}
+                  <span class="text-alternate edit-only" data-cost-for="agilite">
+                    {% if cout_agilite > 0 %}-{{ cout_agilite }}xp{% endif %}
+                  </span>
+                {% endif %}
+                Agilité
+                {% if nb_bonus_agilite > 0 %}
+                  <small class="text-success extrabold">+{{ nb_bonus_agilite }}</small>
+                {% endif %}
+                &nbsp;
+                <span
+                  class="trait-rang
+                    {% if eff_agilite > eff_intelligence %} text-strong {% endif %}"
+                  data-trait-eff="agilite" data-base="{{ fiche.agilite }}"
+                  data-bonus="{{ nb_bonus_agilite }}" data-multiplier="4"
+                >
+                  <span class="eff-display">{{ eff_agilite }}</span>
+                </span>
+              </div>
+
+              <!-- INTELLIGENCE -->
+              <div class="align-self-end">
+                {% if est_le_joueur or is_granted('ROLE_MJ') %}
+                  <span class="text-alternate edit-only" data-cost-for="intelligence">
+                    {% if cout_intelligence > 0 %}-{{ cout_intelligence }}xp{% endif %}
+                  </span>
+                {% endif %}
+                Intelligence
+                {% if nb_bonus_intelligence > 0 %}
+                  <small class="text-success extrabold">+{{ nb_bonus_intelligence }}</small>
+                {% endif %}
+                &nbsp;
+                <span
+                  class="trait-rang
+                    {% if eff_intelligence > eff_agilite %} text-strong {% endif %}"
+                  data-trait-eff="intelligence" data-base="{{ fiche.intelligence }}"
+                  data-bonus="{{ nb_bonus_intelligence }}" data-multiplier="4"
+                >
+                  <span class="eff-display">{{ eff_intelligence }}</span>
+                </span>
+              </div>
+            </div>
+
+            <!-- ESPACE -->
+            <div class="col-1"></div>
+          </div>
+
+          <!-- ESPACE (4) + ANNEAU DU VIDE (4) + ESPACE (4) -->
+          <div class="row text-center">
+
+            <!-- ESPACE -->
+            <div class="col-4"></div>
+
+            <!-- ANNEAU VIDE -->
+            <div class="col-4 flex-col align-items-center">
+              <div class="flex align-items-center">
+                <img class="img-72 ml-5 mr-3" src="{{FLAT_VIDE}}"/>
+                <span class="anneau-rang"
+                  data-trait-eff="vide" data-base="{{ fiche.vide }}"
+                  data-bonus="{{ nb_bonus_vide }}" data-multiplier="6"
+                >
+                  <span class="eff-display">{{ eff_vide }}</span>
+                </span>
+              </div>
+              <div class="flex align-items-center">
+                {% if est_le_joueur or is_granted('ROLE_MJ') %}
+                  <span class="text-alternate edit-only" data-cost-for="vide">
+                    {% if cout_vide > 0 %}-{{ cout_vide }}xp{% endif %}
+                  </span>
+                  &nbsp;
+                {% endif %}
+                <span class="h6 m-0 mb-0 mt-2 ml-2 mr-2">Vide</span>
+                &nbsp;
+                {% if nb_bonus_vide > 0 %}
+                  <small class="text-success extrabold">+{{ nb_bonus_vide }}</small>
+                {% endif %}
+              </div>
+            </div>
+
+            <!-- ESPACE -->
+            <div class="col-4"></div>
+          </div>
+
+        </div>
+
+        {% if est_le_joueur or is_granted('ROLE_MJ') %}
+          <!-- CHARACTER EDIT BTN -->
+          <div class="my-4 d-flex w-100 justify-content-center align-items-center">
+            <button type="button" id="btn-fiche-edit" class="btn-primary-style btn-large">
+              <i class="fas fa-edit"></i> {{ est_le_joueur ? 'Éditer ma fiche' : 'Éditer la fiche' }}
+            </button>
+            <button type="button" id="btn-fiche-cancel" class="btn btn-secondary btn-sm ml-3" style="display:none;">
+              <i class="fas fa-times"></i> Annuler
+            </button>
+            <button type="button" id="btn-fiche-valider" class="btn btn-success btn-sm ml-3" style="display:none;">
+              <i class="fas fa-check"></i> Valider
+            </button>
+          </div>
+        {% endif %}
+
+      </div>
+
+    </div>
+
+    <!-- ILLUSTRATION -->
+    {# Empilee, l'illustration passe en tete et recoit anneaux et traits en
+       surimpression, le mandala etant masque sous 992px (cf. pages/fiche.css). #}
+    {% set anneaux_mobile = [
+      { nom: 'Terre', icone: FLAT_TERRE, rang: min(eff_constitution, eff_volonte), traits: [
+        { nom: 'Constitution', val: eff_constitution, bonus: nb_bonus_constitution },
+        { nom: 'Volonté',      val: eff_volonte,      bonus: nb_bonus_volonte }
+      ] },
+      { nom: 'Air', icone: FLAT_AIR, rang: min(eff_reflexes, eff_intuition), traits: [
+        { nom: 'Réflèxes',  val: eff_reflexes,  bonus: nb_bonus_reflexes },
+        { nom: 'Intuition', val: eff_intuition, bonus: nb_bonus_intuition }
+      ] },
+      { nom: 'Eau', icone: FLAT_EAU, rang: min(eff_forceStat, eff_perception), traits: [
+        { nom: 'Force',      val: eff_forceStat,  bonus: nb_bonus_forceStat },
+        { nom: 'Perception', val: eff_perception, bonus: nb_bonus_perception }
+      ] },
+      { nom: 'Feu', icone: FLAT_FEU, rang: min(eff_agilite, eff_intelligence), traits: [
+        { nom: 'Agilité',      val: eff_agilite,      bonus: nb_bonus_agilite },
+        { nom: 'Intelligence', val: eff_intelligence, bonus: nb_bonus_intelligence }
+      ] },
+      { nom: 'Vide', icone: FLAT_VIDE, rang: eff_vide, traits: [] }
+    ] %}
+    <div class="fiche-bord-a-bord col-12 col-lg-4 order-first order-lg-last">
+      <div class="fiche-illu-wrap">
+        <img class="fiche-illu img-fluid rounded-8 d-block mx-auto" src="{{ asset(fiche.personnage.illustration|default(NA_PERSO_ILLU)) }}" />
+
+        <div class="fiche-traits d-lg-none">
+          {% for anneau in anneaux_mobile %}
+            {# Le Vide n'a pas de trait : c'est ce qui lui vaut la pleine largeur. #}
+            <div class="fiche-anneau-groupe{% if anneau.traits is empty %} fiche-anneau-solo{% endif %}">
+              <div class="fiche-anneau-line">
+                <img class="fiche-anneau-ico" src="{{ anneau.icone }}" alt="" />
+                <span class="text-plus extrabold">{{ anneau.nom }}</span>
+                <strong class="fiche-anneau-rang text-plus">{{ anneau.rang }}</strong>
+              </div>
+              {% for trait in anneau.traits %}
+                <div class="fiche-trait-line">
+                  <span>{{ trait.nom }}</span>
+                  {% if trait.bonus > 0 %}<small class="text-success">+{{ trait.bonus }}</small>{% endif %}
+                  <strong class="fiche-trait-value">{{ trait.val }}</strong>
+                </div>
+              {% endfor %}
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- [AVANTAGES + COMPETENCES] + COMBAT -->
+  <row class="row">
+
+    <!-- AVANTAGES + COMPETENCES -->
+    <section class="fiche-bord-a-bord col-12 col-lg-8 mt-2 d-flex flex-column">
+
+      {% if est_le_joueur or is_granted('ROLE_MJ') %}
+        <!-- AVANTAGES + DESAVANTAGES -->
+        <card class="card p-0 rounded-8 overflow-hidden mb-3">
+
+          <cardtitle class="card-title d-flex align-items-center">
+            Avantages & Désavantages
+            <small class="ml-auto text-lowercase text-danger">
+              <i class="fas fa-eye mr-1"></i>
+              visible uniquement par le joueur ou le MJ
+            </small>
+          </cardtitle>
+
+          <cardbody class="row p-3">
+
+            <!-- AVANTAGES -->
+            <column class="col-12 col-lg-6">
+              <h6>Avantages</h6>
+              <ul class="list-decored flex-col gap-4 ml-2">
+                {% for slot in ['av1', 'av2'] %}
+                  {% set item = (slot == 'av1') ? fiche.avantage1 : fiche.avantage2 %}
+                  <li data-av-slot="{{ slot }}" data-av-kind="avantage"
+                      data-av-id="{{ item ? item.id : 0 }}"
+                      {% if not item %}class="av-row-empty"{% endif %}
+                  >
+                    <div>
+                      <span data-av-name class="text-strong extrabold">
+                        {{ item ? item.nom : '' }}
+                      </span>
+                      <i class="fas fa-info-circle text-disabled ml-1{% if not item %} d-none{% endif %}"
+                        data-toggle="tooltip" data-placement="right" data-av-tooltip
+                        title="{{ item ? item.description : '' }}">
+                      </i>
+                    </div>
+                    <span class="edit-only text-danger text-small ml-2" data-av-cost>
+                      {% if item %}-{{ effective_costs[slot] }}xp
+                        {% if effective_costs[slot] != item.cout %}
+                          (promo)
+                        {% endif %}
+                      {% endif %}
+                    </span>
+                  </li>
+                {% endfor %}
+              </ul>
+            </column>
+
+            <!-- DESAVANTAGES -->
+            <column class="col-12 col-lg-6">
+              <h6>Désavantages</h6>
+              <ul class="list-decored flex-col gap-4 ml-2">
+                {% for slot in ['dv1', 'dv2'] %}
+                  {% set item = (slot == 'dv1') ? fiche.desavantage1 : fiche.desavantage2 %}
+                  <li data-av-slot="{{ slot }}" data-av-kind="desavantage"
+                      data-av-id="{{ item ? item.id : 0 }}"
+                      {% if not item %} class="av-row-empty"{% endif %}
+                  >
+                    <div>
+                      <span data-av-name class="text-strong extrabold">
+                        {{ item ? item.nom : '' }}
+                      </span>
+                      <i class="fas fa-info-circle text-gray-dust ml-1{% if not item %} d-none{% endif %}"
+                        data-toggle="tooltip" data-placement="right" data-av-tooltip
+                        title="{{ item ? item.description : '' }}">
+                      </i>
+                    </div>
+                    <span class="edit-only text-success text-small" data-av-cost>
+                      {% if item %}+{{ effective_costs[slot] }}xp
+                        {% if effective_costs[slot] != item.cout %}
+                          (promo)
+                        {% endif %}
+                      {% endif %}
+                    </span>
+                  </li>
+                {% endfor %}
+              </ul>
+            </column>
+
+          </cardbody>
+        </card>
+      {% endif %}
+
+      <!-- COMPETENCES -->
+      <card class="card card-body p-0 rounded-8 overflow-hidden">
+        <table class="table m-0 p-0" id="comp-table">
+          <thead>
+            <tr class="card-title p-0 py-2">
+              <th class="text-mini font-regular font-barlow text-center text-lowercase px-1" style='width: 24px;' scope="col">
+                Comp. École
+              </th>
+              <th class="px-0 py-2 font-regular" scope="col">Compétences</th>
+              <th class="px-0 py-2 text-small semi-visible" scope="col">Rang</th>
+              <th class="px-0 py-2 text-small semi-visible d-none d-lg-table-cell" scope="col">Trait</th>
+              <th class="px-0 py-2 text-small semi-visible edit-only" scope="col">Coût XP</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% set filled_by_cat = {} %}
+            {% set empty_slots = [] %}
+            {% for i in 1..20 %}
+              {% set comp = attribute(fiche, 'competence' ~ i) %}
+              {% set val  = attribute(fiche, 'valeur' ~ i) %}
+              {% set specs = attribute(fiche, 'specialisations' ~ i) %}
+              {% set compEcole = attribute(fiche, 'compEcole' ~ i)|default(0) %}
+              {% set speEcole  = attribute(fiche, 'speEcole'  ~ i)|default('') %}
+              {% if comp is not empty %}
+                {% set cat = comp.categorie|default('Autres') %}
+                {% set filled_by_cat = filled_by_cat|merge({ (cat): (filled_by_cat[cat] ?? [])|merge([{i: i, comp: comp, val: val, specs: specs, compEcole: compEcole, speEcole: speEcole}]) }) %}
+              {% else %}
+                {% set empty_slots = empty_slots|merge([{i: i, comp: comp, val: val, specs: specs, compEcole: compEcole, speEcole: speEcole}]) %}
+              {% endif %}
+            {% endfor %}
+
+            {# Ordre des catégories : Bugei → Noble → Marchand → Dégradante (toute autre catégorie en queue, alpha) #}
+            {% set CAT_ORDER = ['Bugei', 'Noble', 'Marchand', 'Dégradante'] %}
+            {% set ordered_cats = CAT_ORDER|filter(c => filled_by_cat[c] is defined) %}
+            {% set extra_cats = filled_by_cat|keys|filter(c => c not in CAT_ORDER)|sort %}
+
+            {% for cat in ordered_cats|merge(extra_cats) %}
+              {# Tri alphabetique. Le |u.ascii replie les accents : sans lui la
+                 comparaison se fait octet par octet et « Étiquette » passerait
+                 derriere « Sincérité ». #}
+              {% set slots = filled_by_cat[cat]|sort((a, b) =>
+                  a.comp.nom|u.ascii|lower <=> b.comp.nom|u.ascii|lower
+              ) %}
+              <tr class="comp-cat-header bg-gray-edge border-0">
+                <th colspan="5" scope="colgroup">{{ cat }}{% if cat == 'Bugei' %} (combat){% endif %}</th>
+              </tr>
+              {% for slot in slots %}
+                {% set bitmask = slot.specs|default('') %}
+                {% set bm_ec   = slot.speEcole|default('') %}
+                {% set bought_specs = [] %}
+                {% for k in 1..6 %}
+                  {% set lab = attribute(slot.comp, 'specialisation' ~ k) %}
+                  {% set bit = (bitmask|length >= k) ? bitmask|slice(k - 1, 1) : '0' %}
+                  {% set bit_ec = (bm_ec|length >= k) ? bm_ec|slice(k - 1, 1) : '0' %}
+                  {% if lab and bit == '1' %}
+                    {% set bought_specs = bought_specs|merge([{label: lab, ecole: bit_ec == '1'}]) %}
+                  {% endif %}
+                {% endfor %}
+                {% set raw_cost = slot.val ? (slot.val * (slot.val + 1) / 2)|round : 0 %}
+                {% set offset   = (slot.compEcole * (slot.compEcole + 1) / 2)|round %}
+                {% set net_cost = raw_cost - offset > 0 ? raw_cost - offset : 0 %}
+                {% set paid_specs_count = 0 %}
+                {% for s in bought_specs %}{% if not s.ecole %}{% set paid_specs_count = paid_specs_count + 1 %}{% endif %}{% endfor %}
+                <tr
+                  class="p-0" data-comp-row="{{ slot.i }}" data-comp-id="{{ slot.comp.id }}"
+                  data-comp-val="{{ slot.val ?? 0 }}" data-comp-specs="{{ bitmask }}"
+                  data-comp-ecole="{{ slot.compEcole ?? 0 }}" data-comp-spe-ecole="{{ bm_ec }}"
+                >
+                  <td class="p-1 text-center" data-comp-ecole-cell>
+                    {% if slot.compEcole > 0 %}
+                      <img src="{{ asset(fiche.personnage.ecole.clan.mon) }}" class="img-24" title="Compétence de l'École {{ fiche.personnage.ecole.nom }}" />
+                    {% else %}
+                      <span class="d-inline-flex icon-20 rounded-circle border-base">&nbsp;</span>
+                    {% endif %}
+                  </td>
+                  <th class="p-1 text-strong extrabold" scope="row" data-comp-name>
+                    <strong>{{ slot.comp.nom }}</strong>
+                  </th>
+                  <td class="p-1 text-strong extrabold" data-comp-val-cell>{{ slot.val ?? '' }}</td>
+                  <td class="p-1 text-body-c d-none d-lg-table-cell" data-comp-trait-cell>{{ slot.comp.trait }}</td>
+                  <td class="edit-only p-1 text-alternate" data-comp-cost-cell>{% if slot.val %}-{{ net_cost }}xp{% endif %}</td>
+                </tr>
+                <tr data-comp-specs-row="{{ slot.i }}" class="p-0 comp-specs-row{% if bought_specs|length > 0 %} has-specs{% endif %}">
+                  <td class="p-1"></td>
+                  <td class="p-1" colspan="3" data-comp-specs-cell>
+                    {% if bought_specs|length > 0 %}
+                      <small class="text-body-c">
+                        <span class="text-alternate">Spécialisations :</span>
+                        {% for s in bought_specs %}
+                          {{ s.label }}{% if not loop.last %}, {% endif %}
+                        {% endfor %}
+                      </small>
+                    {% endif %}
+                  </td>
+                  <td class="edit-only p-1 text-alternate" data-comp-specs-cost-cell>
+                    {% if paid_specs_count > 0 %}
+                      <small>-{{ paid_specs_count * cout_par_spe }}xp (spé)</small>
+                    {% endif %}
+                  </td>
+                </tr>
+              {% endfor %}
+            {% endfor %}
+
+            {% for slot in empty_slots %}
+              <tr data-comp-row="{{ slot.i }}" data-comp-id="0" data-comp-val="0" data-comp-specs="" data-comp-ecole="0" data-comp-spe-ecole="" class="comp-row-empty">
+                <td class="p-1 text-center" data-comp-ecole-cell></td>
+                <th class="p-1 text-strong extrabold" scope="row" data-comp-name></th>
+                <td class="p-1 text-strong extrabold" data-comp-val-cell></td>
+                <td class="p-1 text-body-c d-none d-lg-table-cell" data-comp-trait-cell></td>
+                <td class="edit-only p-1 text-alternate" data-comp-cost-cell></td>
+              </tr>
+              <tr data-comp-specs-row="{{ slot.i }}" class="comp-specs-row comp-row-empty">
+                <td class="p-1"></td>
+                <td class="p-1 text-body-c" colspan="3" data-comp-specs-cell></td>
+                <td class="edit-only p-1 text-alternate" data-comp-specs-cost-cell></td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </card>
+
+    </section>
+
+    <!-- COMBAT -->
+    <section class="fiche-bord-a-bord col-12 col-lg-4 mt-2 d-flex flex-column">
+
+      <card class="card p-0 rounded-8 overflow-hidden mb-3">
+
+        <cardtitle class="card-title">
+          Statistiques de Combat
+        </cardtitle>
+
+        <cardcontent>
+          <ul class="list-group list-group-flush">
+
+            <!-- MODIFICATEURS (édition uniquement) -->
+            <li class="list-group-item px-3 py-2 edit-only" id="modifiers-edit-block">
+              <div class="text-small text-muted mb-2"><strong>Modificateurs</strong></div>
+              <div class="row no-gutters" style="gap: .25rem .5rem;">
+                <div class="col-12 col-sm-6">
+                  <label for="mod-input-initiative" class="m-0 text-mini d-block">Init (nombre)</label>
+                  <input type="number" id="mod-input-initiative" class="form-control form-control-sm" value="{{ fiche.initiativeModifier ?? '' }}" />
+                </div>
+                <div class="col-12 col-sm-6">
+                  <label for="mod-input-attaque" class="m-0 text-mini d-block">Attaque (XgY)</label>
+                  <input type="text" id="mod-input-attaque" class="form-control form-control-sm" value="{{ fiche.attaqueModifier ?? '' }}" placeholder="ex: 1g0" pattern="\d+g\d+" />
+                </div>
+                <div class="col-12 col-sm-6">
+                  <label for="mod-input-dmg" class="m-0 text-mini d-block">Dommages (XgY)</label>
+                  <input type="text" id="mod-input-dmg" class="form-control form-control-sm" value="{{ fiche.dmgModifier ?? '' }}" placeholder="ex: 1g0" pattern="\d+g\d+" />
+                </div>
+                <div class="col-12 col-sm-6">
+                  <label for="mod-input-nd" class="m-0 text-mini d-block">ND (nombre)</label>
+                  <input type="number" id="mod-input-nd" class="form-control form-control-sm" value="{{ fiche.ndModifier ?? '' }}" />
+                </div>
+                <div class="col-12 col-sm-6">
+                  <label for="mod-input-reduction" class="m-0 text-mini d-block">Réduction (nombre)</label>
+                  <input type="number" id="mod-input-reduction" class="form-control form-control-sm" value="{{ fiche.reductionModifier ?? '' }}" />
+                </div>
+              </div>
+            </li>
+
+            <!-- INITIATIVE -->
+            {% set JetInitL = eff_reflexes + rang %}
+            {% set JetInitG = eff_reflexes %}
+            <li class="list-group-item p-0 px-3 py-1 flex gap-2">
+              <div class="flex-grow-1 flex-col">
+                Initiative
+                <StatJet class="ml-2">
+                  <strong class="text-strong" data-stat="initiative">{{JetInitL}}g{{JetInitG}}{% if initMod != 0 %} {{ initMod > 0 ? '+' : '' }}{{ initMod }}{% endif %}</strong>
+                  &nbsp;
+                  <i
+                    class="fa-solid fa-dice text-accent"
+                    data-tooltip-stat="initiative"
+                    data-toggle="tooltip" data-placement="right" data-html="true"
+                    title="
+                      <div class='text-mini text-left'>
+                        /lancer
+                        <br/>Réflèxes + RangGen.
+                        <br/>/garder
+                        Réflèxes
+                        <br/>
+                        <br/>/lancer {{eff_reflexes}} + {{rang}}
+                        <br/>/garder {{eff_reflexes}}
+                        {% if initMod != 0 %}
+                          <br/>Modificateur : {{ initMod > 0 ? '+' : '' }}{{ initMod }}
+                        {% endif %}
+                      </div>"
+                  >
+                  </i>
+                </StatJet>
+              </div>
+              <div class="text-right text-small">
+                <strong data-stat="initiative-avg">{{ (((rang + eff_reflexes) ~ 'g' ~ eff_reflexes)|jeter) + initMod }}</strong>
+                {% if fiche.arme and fiche.arme.type == 'LOURDE' %}
+                  <br/>-5 (arme lourde)
+                {% endif %}
+              </div>
+            </li>
+
+            {# Détermine la valeur de la compétence active de combat (compCombatActuelle) en cherchant dans les slots #}
+            {% set comp_combat_val = 0 %}
+            {% if fiche.compCombatActuelle %}
+              {% for i in 1..20 %}
+                {% set ci = attribute(fiche, 'competence' ~ i) %}
+                {% if ci and ci.id == fiche.compCombatActuelle.id %}
+                  {% set comp_combat_val = attribute(fiche, 'valeur' ~ i) ?? 0 %}
+                {% endif %}
+              {% endfor %}
+            {% endif %}
+
+            <!-- COMPETENCE DE COMBAT (édition uniquement) -->
+            <li class="list-group-item p-0 px-3 py-1 flex gap-2 edit-only"
+                data-comp-combat-row
+                data-comp-combat-id="{{ fiche.compCombatActuelle ? fiche.compCombatActuelle.id : 0 }}">
+              <div class="flex-grow-1">
+                Compétence de combat
+                <i  class="fas fa-info-circle text-disabled ml-1"
+                  data-toggle="tooltip" data-placement="right"
+                  title="Compétence Bugei utilisée pour le calcul du Jet d'Attaque"></i>
+                <span data-comp-combat-select-cell class="ml-2"></span>
+              </div>
+            </li>
+
+            <!-- JET D'ATTAQUE -->
+            {% set JetAtkL = eff_agilite + atkModL + (comp_combat_val / 2)|round(0, 'ceil') %}
+            {% set JetAtkG = eff_agilite + atkModG %}
+            <li class="list-group-item p-0 px-3 py-1 flex gap-2">
+              <div class="flex-grow-1 stat-attaque-with-comp{% if not fiche.compCombatActuelle %} d-none{% endif %}">
+                Attaque <span class="text-small text-gray-ash">(<span data-stat="comp-combat-nom">{{ fiche.compCombatActuelle ? fiche.compCombatActuelle.nom : '' }}</span>)</span>
+                <br/>
+                <StatJet>
+                  <strong class="text-strong ml-2" data-stat="attaque">{{JetAtkL}}g{{JetAtkG}}</strong>
+                  &nbsp;
+                  <i
+                    class="fa-solid fa-dice text-accent"
+                    data-tooltip-stat="attaque"
+                    data-toggle="tooltip" data-placement="right" data-html="true"
+                    title="
+                      <div class='text-mini text-left'>
+                        /lancer
+                        <br/>Agilité + CompCombat/2 arrSup.
+                        <br/>/garder
+                        Agilité
+                        <br/>
+                        <br/>/lancer {{eff_agilite}} + {{comp_combat_val / 2}}
+                        <br/>/garder {{eff_agilite}}
+                        {% if fiche.attaqueModifier %}
+                          Modificateur : {{ fiche.attaqueModifier }}
+                        {% endif %}
+                      </div>
+                    "></i>
+                </StatJet>
+              </div>
+              <div class="text-right text-small stat-attaque-with-comp{% if not fiche.compCombatActuelle %} d-none{% endif %}">
+                <strong data-stat="attaque-avg">{{(JetAtkL ~ 'g' ~ JetAtkG)|jeter}}</strong>
+                <br/><span class="edit-only">en Assaut : <span data-stat="attaque-assaut-avg">{{((JetAtkL + 2) ~ 'g' ~ (JetAtkG + 1))|jeter}}</span></span>
+              </div>
+              <div class="stat-attaque-no-comp{% if fiche.compCombatActuelle %} d-none{% endif %}">
+                Jet Attaque
+                <br/>
+                <small class="text-alternate">Choisissez une compétence de combat principal</small>
+              </div>
+            </li>
+
+            <!-- ARME ACTIVE (édition uniquement) -->
+            <li class="list-group-item p-0 px-3 py-1 flex gap-2 edit-only"
+                data-arme-actuelle-row
+                data-arme-actuelle-id="{{ fiche.armeActuelle ? fiche.armeActuelle.id : 0 }}"
+                data-arme-id="{{ fiche.arme ? fiche.arme.id : 0 }}"
+                data-arme2-id="{{ fiche.arme2 ? fiche.arme2.id : 0 }}">
+              <div class="flex-grow-1">
+                Arme actuelle
+                <i  class="fas fa-info-circle text-disabled ml-1"
+                  data-toggle="tooltip" data-placement="right"
+                  title="Arme utilisée pour le calcul du Jet de Dommages"></i>
+                <span data-arme-actuelle-select-cell class="ml-2"></span>
+              </div>
+            </li>
+
+            <!-- ARME ET DOMMAGES -->
+            {% set vdparts = fiche.armeActuelle ? fiche.armeActuelle.vd|default('0g1')|split('g') : ['0', '1'] %}
+            {% set JetDmglances = vdparts[0] + dmgModL + eff_forceStat %}
+            {% set JetDmgGardes = vdparts[1] + dmgModG %}
+            <li class="list-group-item px-3 py-2 flex gap-2">
+              <div class="flex-grow-1 flex-col stat-dommages-with-arme{% if not fiche.armeActuelle %} d-none{% endif %}">
+                <span>
+                  Dommages <span class="text-small text-gray-ash">(<span data-stat="arme-actuelle-nom">{{ fiche.armeActuelle ? fiche.armeActuelle.nom : '' }}</span>)</span>
+                </span>
+                <span class="ml-2 text-gray-ash">
+                  <strong class="text-strong" data-stat="dommages">{{ JetDmglances ~ 'g' ~ JetDmgGardes }}</strong>
+                  &nbsp;
+                  <i class="fa-solid fa-dice text-accent"
+                      data-tooltip-stat="dommages"
+                      data-toggle="tooltip" data-placement="right" data-html="true"
+                      title="
+                        <div class='text-mini text-left'>
+                          /lancer
+                          <br/>VD de l'Arme + Force
+                          <br/>/garder VD de l'Arme
+                          <br/>
+                          <br/><img class='img-56' src={{ asset(fiche.armeActuelle ? fiche.armeActuelle.image|default(NA_OBJET) : NA_OBJET) }} />
+                          <br/>- VD {{ fiche.armeActuelle ? fiche.armeActuelle.nom : '' }} : {{ fiche.armeActuelle ? fiche.armeActuelle.vd|default('0g1') : '0g1' }}
+                          <br/>- Force : +{{ eff_forceStat }}g0
+                          {% if fiche.dmgModifier %}
+                            <br/>
+                            <br/>Modificateurs :
+                            <br/> - Av./Techniques : +{{ fiche.dmgModifier }}
+                          {% endif %}
+                        </div>"
+                  >
+                  </i>
+                </span>
+              </div>
+              <div class="text-right text-small stat-dommages-with-arme{% if not fiche.armeActuelle %} d-none{% endif %}">
+                <strong data-stat="dommages-avg">{{ ( JetDmglances ~  'g' ~ JetDmgGardes  )|jeter }}</strong>
+                <br/><span class="edit-only">3 Aug. : <span data-stat="dommages-aug3-avg">{{ ( (JetDmglances + 3) ~  'g' ~ JetDmgGardes  )|jeter }}</span></span>
+              </div>
+              <div class="stat-dommages-no-arme{% if fiche.armeActuelle %} d-none{% endif %}">
+                Jet Dommages
+                <br/>
+                <small class="text-alternate">Choisissez une arme principale</small>
+              </div>
+            </li>
+
+            <!-- ND POUR ETRE TOUCHE -->
+            {% set nd_mod = fiche.ndModifier ?? 0 %}
+            <li class="list-group-item px-3 py-2 flex gap-2">
+              <div class="flex-grow-1">
+                ND pour être touché
+                <br/><strong class="text-strong ml-2" data-stat="nd-touche">{{ eff_reflexes * 5 + nd_mod }}</strong>
+                &nbsp;
+                <i
+                  class="fa-solid fa-arrow-trend-up"
+                  data-toggle="tooltip" data-placement="right" data-html="true"
+                  title="
+                    <div class='text-mini'>
+                      Réflèxes * 5{% if nd_mod != 0 %}<br/>Modificateur : {{ nd_mod > 0 ? '+' : '' }}{{ nd_mod }}{% endif %}
+                    </div>"
+                >
+                </i>
+              </div>
+              {% if fiche.armure %}
+                <small class="text-right">
+                  <strong data-stat="nd-touche-armure">{{ fiche.armure.ndArmure + (eff_reflexes * 5) + nd_mod }}</strong>
+                  <br/>
+                  Avec Armure
+                </small>
+              {% endif %}
+            </li>
+
+            {% if fiche.armure %}
+              <!-- ARMURE -->
+              <li class="list-group-item px-3 py-2 flex">
+                <div class="flex-grow-1" >
+                  Armure <span class="text-small text-gray-ash">({{ fiche.armure.nom }})</span>
+                  <br/><strong class="text-strong ml-2">+{{ fiche.armure.ndArmure }} au ND pour être touché</strong>
+                  <br/><strong class="text-strong ml-2">-{{ fiche.armure.reduction }} Réduction de dommages</strong>
+                </div>
+              </li>
+            {% endif %}
+
+            <!-- REDUCTION -->
+            {% set reduction_armure = fiche.armure ? fiche.armure.reduction : 0 %}
+            {% set reduction_mod = fiche.reductionModifier ?? 0 %}
+            <li class="list-group-item px-3 py-2 d-flex">
+              <div class="flex-grow-1">
+                Réduction
+                <br><strong class="ml-2 text-strong">{{ reduction_armure + reduction_mod }}</strong>
+                &nbsp;
+                <i
+                  class="fa-solid fa-shield-halved"
+                  data-toggle="tooltip" data-placement="right" data-html="true"
+                  title="
+                    <div class='text-mini text-left'>
+                      {% if fiche.armure %}
+                        {{ fiche.armure.nom }} : {{ fiche.armure.reduction }}
+                      {% endif %}
+                      {% if reduction_mod != 0 %}
+                        <br/>Modificateur : {{ reduction_mod > 0 ? '+' : '' }}{{ reduction_mod }}
+                      {% endif %}
+                    </div>
+                "></i>
+              </div>
+              <div class="text-right">
+                {% if reduction_mod != 0 %}
+                  <br/><small class="text-muted">({{ reduction_armure }} armure {{ reduction_mod > 0 ? '+' : '' }}{{ reduction_mod }} modif.)</small>
+                {% endif %}
+              </div>
+            </li>
+
+            <!-- POINTS DE VIE & RECUP -->
+            <li class="list-group-item px-3 py-2 d-flex">
+              <div class="flex-grow-1">
+                Points de Vie
+                <br><strong class="ml-2 text-strong" data-stat="hp-total">{{ (5 * min(eff_constitution, eff_volonte)) + (7 * (2 * min(eff_constitution, eff_volonte))) }}</strong>
+                &nbsp;
+                <i
+                  class="fa-solid fa-heart-pulse text-primary"
+                  data-toggle="tooltip" data-placement="right" data-html="true"
+                  title="
+                    <div class='text-mini'>
+                      1 * (TERRE * 5)
+                      <br/>
+                      +
+                      <br/> 7 * (TERRE * 2)
+                    </div>
+                "></i>
+              </div>
+              <div class="flex-grow-1">
+                Récupération
+                <br><strong class="ml-2 text-strong" data-stat="recuperation">{{(eff_constitution * 2) + rang}}</strong>
+                &nbsp;
+                <i 
+                  class="fas fa-briefcase-medical text-success"
+                  data-toggle="tooltip" data-placement="right" data-html="true"
+                  title="
+                    <div class='text-mini'>
+                      (Constitution * 2) + RangGen.
+                    </div>
+                "></i>
+                &nbsp;<span class="text-small">par nuit<small>
+              </div>
+            </li>
+          </ul>
+          <table class="table table-striped text-center text-regular">
+            <thead>
+              <tr>
+                <th>Etat</th>
+                <th>Malus</th>
+                <th>HP</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Indemne</td>
+                <td>0</td>
+                <td data-stat="hp-indemne">{{ 5*min(eff_constitution, eff_volonte) }}</td>
+              </tr>
+              <tr>
+                <td>Egratiné</td>
+                <td>+3</td>
+                <td data-stat="hp-blesse">{{ 2*min(eff_constitution, eff_volonte) }}</td>
+              </tr>
+              <tr>
+                <td>Légerement blessé</td>
+                <td>+5</td>
+                <td data-stat="hp-blesse">{{ 2*min(eff_constitution, eff_volonte) }}</td>
+              </tr>
+              <tr>
+                <td>Blessé</td>
+                <td>+10</td>
+                <td data-stat="hp-blesse">{{ 2*min(eff_constitution, eff_volonte) }}</td>
+              </tr>
+              <tr>
+                <td>Gravement blessé</td>
+                <td>+15</td>
+                <td data-stat="hp-blesse">{{ 2*min(eff_constitution, eff_volonte) }}</td>
+              </tr>
+              <tr>
+                <td>Impotent</td>
+                <td>+20</td>
+                <td data-stat="hp-blesse">{{ 2*min(eff_constitution, eff_volonte) }}</td>
+              </tr>
+              <tr>
+                <td>Epuisé</td>
+                <td>+30</td>
+                <td data-stat="hp-blesse">{{ 2*min(eff_constitution, eff_volonte) }}</td>
+              </tr>
+              <tr>
+                <td>Hors de Combat</td>
+                <td>ne peut agir</td>
+                <td data-stat="hp-blesse">{{ 2*min(eff_constitution, eff_volonte) }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </cardcontent>
+      </card>
+    </section>
+  </row>
+</card>
+
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        $(function () { $('[data-toggle="tooltip"]').tooltip(); });
+    </script>
+
+    {% if est_le_joueur or is_granted('ROLE_MJ') %}
+    <script>
+        window.FICHE_CONFIG = {
+            xpTotal: {{ xp_total }},
+            persoClanId: {{ perso_clan_id }},
+            persoClasseId: {{ perso_classe_id }},
+            rang: {{ rang }},
+            armureNd: {{ fiche.armure and fiche.armure.ndArmure ? fiche.armure.ndArmure : 0 }},
+            ndModifier: {{ fiche.ndModifier ?? 0 }},
+            editUrl: {{ path('personnage_fiche_edit', {id: fiche.id})|json_encode|raw }},
+            csrfToken: {{ csrf_token('joueur_fiche_personnage')|json_encode|raw }},
+            competences: {{ competences_json|json_encode|raw }},
+            avantages: {{ avantages_json|json_encode|raw }},
+            desavantages: {{ desavantages_json|json_encode|raw }},
+            armes: {{ armes_json|default([])|json_encode|raw }},
+            mainsNuesId: {{ mains_nues_id ?? 'null' }},
+            jetMap: {{ jet_map()|json_encode|raw }},
+            armeVd: {% if fiche.armeActuelle and fiche.armeActuelle.vd %}{{ fiche.armeActuelle.vd|json_encode|raw }}{% else %}null{% endif %},
+            armeId: {{ fiche.arme ? fiche.arme.id : 0 }},
+            arme2Id: {{ fiche.arme2 ? fiche.arme2.id : 0 }},
+            armeActuelleId: {{ fiche.armeActuelle ? fiche.armeActuelle.id : 0 }},
+            compCombatActuelleId: {{ fiche.compCombatActuelle ? fiche.compCombatActuelle.id : 0 }},
+            initiativeModifier: {{ fiche.initiativeModifier ?? 0 }},
+            atkModL:  {{ atkModL }},
+            atkModG:  {{ atkModG }},
+            dmgModL:  {{ dmgModL }},
+            dmgModG:  {{ dmgModG }},
+            attaqueModifierStr:    {% if fiche.attaqueModifier %}{{ fiche.attaqueModifier|json_encode|raw }}{% else %}null{% endif %},
+            dmgModifierStr:        {% if fiche.dmgModifier %}{{ fiche.dmgModifier|json_encode|raw }}{% else %}null{% endif %}
+        };
+    </script>
+    <script>
+    (function () {
+        const cfg = window.FICHE_CONFIG;
+        const COUT_PAR_SPE = {{ cout_par_spe }};
+        const traits = ['constitution','volonte','reflexes','intuition','agilite','intelligence','forceStat','perception','vide'];
+        const btnEdit = document.getElementById('btn-fiche-edit');
+        const btnCancel = document.getElementById('btn-fiche-cancel');
+        const btnValider = document.getElementById('btn-fiche-valider');
+        const article = document.getElementById('fiche-personnage');
+
+        // === Calcul du coût d'un trait ===
+        // bonusCount = nombre de sources (famille/école) offrant un rang gratuit sur ce trait (0, 1 ou 2).
+        function traitCost(eff, bonusCount, multiplier) {
+            const freeRank = 2 + bonusCount;
+            if (eff <= freeRank) return 0;
+            const baseDeduct = freeRank * (freeRank + 1) / 2;
+            return Math.round(multiplier * (eff * (eff + 1) / 2 - baseDeduct));
+        }
+
+        // === Récupère la valeur courante d'un trait (base) ===
+        function getTraitBase(name) {
+            const span = document.querySelector(`[data-trait-eff="${name}"]`);
+            if (!span) return 0;
+            const select = span.querySelector('select');
+            if (select) return parseInt(select.value, 10);
+            return parseInt(span.dataset.base, 10);
+        }
+
+        // === Coût d'une compétence (val * (val + 1) / 2), avec décalage si offerte ===
+        // n = nb de rangs offerts par l'école (0, 1, 2). Le coût démarre au rang n+1.
+        function compCost(val, nEcole) {
+            if (!val || val < 1) return 0;
+            const n = parseInt(nEcole, 10) || 0;
+            const raw = Math.round(val * (val + 1) / 2);
+            const offset = Math.round(n * (n + 1) / 2);
+            return Math.max(0, raw - offset);
+        }
+
+        // === Lookup du score moyen d'un jet XgY dans la matrice fournie par PHP ===
+        // Miroir JS de AppExtension::calculerJet. Le map est partagé via cfg.jetMap ;
+        // seule cette logique wrapper doit être maintenue des deux côtés.
+        function jeterMap(rolled, kept) {
+            if (kept < 1) return 0;
+            // Plus de dés gardés que lancés : on cap les gardés au nombre de lancés
+            if (rolled < kept) kept = rolled;
+            // Dés surnuméraires au dessus de 10 : +1 par dé lancé, +2 par dé gardé
+            let bonus = 0;
+            if (rolled > 10) { bonus += rolled - 10; rolled = 10; }
+            if (kept   > 10) { bonus += (kept - 10) * 2; kept = 10; }
+            const row = cfg.jetMap[rolled];
+            if (!row) return 0;
+            return (row[kept] ?? 0) + bonus;
+        }
+
+        // === ID actuellement choisi pour la compétence de combat (Bugei) ===
+        function getCompCombatId() {
+            const row = document.querySelector('[data-comp-combat-row]');
+            const select = row ? row.querySelector('select.comp-combat-select') : null;
+            if (select) return parseInt(select.value, 10) || 0;
+            return parseInt(cfg.compCombatActuelleId, 10) || 0;
+        }
+
+        // === Valeur du slot dont la compétence == compCombatActuelle ===
+        function getCompCombatVal() {
+            const compId = getCompCombatId();
+            if (!compId) return 0;
+            const rows = document.querySelectorAll('[data-comp-row]');
+            for (const row of rows) {
+                const compSelect = row.querySelector('.comp-select');
+                const valSelect = row.querySelector('.val-select');
+                const rowCompId = compSelect ? (parseInt(compSelect.value, 10) || 0) : (parseInt(row.dataset.compId, 10) || 0);
+                if (rowCompId === compId) {
+                    return valSelect ? (parseInt(valSelect.value, 10) || 0) : (parseInt(row.dataset.compVal, 10) || 0);
+                }
+            }
+            return 0;
+        }
+
+        // === ID et VD de l'arme actuellement utilisée pour le jet de dommages ===
+        function getArmeActuelleId() {
+            const row = document.querySelector('[data-arme-actuelle-row]');
+            const select = row ? row.querySelector('select.arme-actuelle-select') : null;
+            if (select) return parseInt(select.value, 10) || 0;
+            return parseInt(cfg.armeActuelleId, 10) || 0;
+        }
+
+        function getArmeActuelleVd() {
+            const id = getArmeActuelleId();
+            if (!id) return null;
+            const arme = (cfg.armes || []).find(a => a.id === id);
+            return arme ? arme.vd : null;
+        }
+
+        // === Mise à jour du tooltip Bootstrap ===
+        // BS4 cache le titre rendu dans data-original-title après init ; on l'écrase
+        // pour que le prochain hover reflète les valeurs courantes.
+        function setTooltipHtml(el, html) {
+            if (!el) return;
+            el.setAttribute('data-original-title', html);
+            el.setAttribute('title', html);
+        }
+
+        function buildInitiativeTooltip(effRefl, rang) {
+            const initMod = cfg.initiativeModifier || 0;
+            const mod = initMod !== 0
+                ? `<br/>Modificateur : ${initMod > 0 ? '+' : ''}${initMod}`
+                : '';
+            return `<div class='text-mini text-left'>`
+                + `/lancer<br/>Réflèxes + RangGen.<br/>/garder Réflèxes`
+                + `<br/><br/>/lancer ${effRefl} + ${rang}<br/>/garder ${effRefl}${mod}`
+                + `</div>`;
+        }
+
+        function buildAttaqueTooltip(effAgi, compCombatVal) {
+            const mod = cfg.attaqueModifierStr ? `<br/>Modificateur : ${cfg.attaqueModifierStr}` : '';
+            return `<div class='text-mini text-left'>`
+                + `/lancer<br/>Agilité + CompCombat/2 arrSup.<br/>/garder Agilité`
+                + `<br/><br/>/lancer ${effAgi} + ${compCombatVal / 2}<br/>/garder ${effAgi}${mod}`
+                + `</div>`;
+        }
+
+        function buildDommagesTooltip(effFor, arme) {
+            if (!arme) return '';
+            const mod = cfg.dmgModifierStr
+                ? `<br/><br/>Modificateurs :<br/> - Av./Techniques : +${cfg.dmgModifierStr}`
+                : '';
+            return `<div class='text-mini text-left'>`
+                + `/lancer<br/>VD de l'Arme + Force<br/>/garder VD de l'Arme`
+                + `<br/><br/>- VD ${arme.nom} : ${arme.vd || '0g1'}`
+                + `<br/>- Force : +${effFor}g0${mod}`
+                + `</div>`;
+        }
+
+        // === Recalcul global ===
+        function recalculate() {
+            let totalTraits = 0;
+            const eff = {};
+            traits.forEach(name => {
+                const span = document.querySelector(`[data-trait-eff="${name}"]`);
+                if (!span) return;
+                const base = getTraitBase(name);
+                const bonus = parseInt(span.dataset.bonus, 10) || 0;
+                const mult = parseInt(span.dataset.multiplier, 10);
+                const effVal = base + bonus;
+                eff[name] = effVal;
+                const cost = traitCost(effVal, bonus, mult);
+                totalTraits += cost;
+                // Mettre à jour l'affichage de la valeur effective
+                const valNode = span.querySelector('.eff-display');
+                if (valNode) valNode.textContent = effVal;
+                // Mettre à jour le coût affiché
+                const costSpan = document.querySelector(`[data-cost-for="${name}"]`);
+                if (costSpan) costSpan.textContent = cost > 0 ? `-${cost} xp` : '';
+            });
+
+            // Mettre à jour les anneaux (min des 2 traits associés)
+            const rings = {
+                terre: Math.min(eff.constitution, eff.volonte),
+                air:   Math.min(eff.reflexes, eff.intuition),
+                eau:   Math.min(eff.forceStat, eff.perception),
+                feu:   Math.min(eff.agilite, eff.intelligence),
+            };
+            Object.keys(rings).forEach(r => {
+                const node = document.querySelector(`[data-ring="${r}"]`);
+                if (node) node.textContent = rings[r];
+            });
+
+            // Marquer en noir le trait le plus élevé de chaque paire
+            const pairs = {
+                constitution: 'volonte', volonte: 'constitution',
+                reflexes: 'intuition',   intuition: 'reflexes',
+                forceStat: 'perception', perception: 'forceStat',
+                agilite: 'intelligence', intelligence: 'agilite',
+            };
+            Object.keys(pairs).forEach(name => {
+                const span = document.querySelector(`[data-trait-eff="${name}"]`);
+                if (!span) return;
+                const isHigher = eff[name] > eff[pairs[name]];
+                span.classList.toggle('text-strong', isHigher);
+                span.classList.toggle('extrabold', isHigher);
+            });
+
+            // === Statistiques de combat ===
+            // Initiative : Réflexes + RangGen, avec un modificateur flat (initiativeModifier int)
+            const initLances = cfg.rang + eff.reflexes;
+            const initGardes = eff.reflexes;
+            const initMod    = cfg.initiativeModifier || 0;
+            const initNode = document.querySelector('[data-stat="initiative"]');
+            if (initNode) {
+                const suffix = initMod !== 0 ? ` ${initMod > 0 ? '+' : ''}${initMod}` : '';
+                initNode.textContent = `${initLances}g${initGardes}${suffix}`;
+            }
+
+            // Attaque : Agilité + CompCombat/2 (avec attaqueModifier sur lancers et gardés)
+            const compCombatId  = getCompCombatId();
+            const compCombatVal = getCompCombatVal();
+            const attaqueLances = eff.agilite + Math.ceil(compCombatVal / 2) + cfg.atkModL;
+            const attaqueGardes = eff.agilite + cfg.atkModG;
+            const attaqueNode = document.querySelector('[data-stat="attaque"]');
+            if (attaqueNode) attaqueNode.textContent = `${attaqueLances}g${attaqueGardes}`;
+
+            // Moyennes (lookup dans la matrice exposée par PHP)
+            const initAvgNode = document.querySelector('[data-stat="initiative-avg"]');
+            if (initAvgNode) initAvgNode.textContent = jeterMap(initLances, initGardes) + initMod;
+
+            const attaqueAvgNode = document.querySelector('[data-stat="attaque-avg"]');
+            if (attaqueAvgNode) attaqueAvgNode.textContent = jeterMap(attaqueLances, attaqueGardes);
+
+            // En Assaut : +2 dés lancés, +1 dé gardé
+            const attaqueAssautAvgNode = document.querySelector('[data-stat="attaque-assaut-avg"]');
+            if (attaqueAssautAvgNode) attaqueAssautAvgNode.textContent = jeterMap(attaqueLances + 2, attaqueGardes + 1);
+
+            // Bascule comp combat sélectionnée / absente + mise à jour du nom
+            const compCombat = compCombatId
+                ? (cfg.competences || []).find(c => c.id === compCombatId)
+                : null;
+            document.querySelectorAll('.stat-attaque-with-comp').forEach(el => el.classList.toggle('d-none', !compCombat));
+            document.querySelectorAll('.stat-attaque-no-comp').forEach(el => el.classList.toggle('d-none', !!compCombat));
+            const compCombatNomNode = document.querySelector('[data-stat="comp-combat-nom"]');
+            if (compCombatNomNode) compCombatNomNode.textContent = compCombat ? compCombat.nom : '';
+
+            const armeActuelleId = getArmeActuelleId();
+            const armeActuelle   = armeActuelleId
+                ? (cfg.armes || []).find(a => a.id === armeActuelleId)
+                : null;
+            const armeVd = armeActuelle ? armeActuelle.vd : null;
+            const dommagesNode         = document.querySelector('[data-stat="dommages"]');
+            const dommagesAvgNode      = document.querySelector('[data-stat="dommages-avg"]');
+            const dommagesAug3AvgNode  = document.querySelector('[data-stat="dommages-aug3-avg"]');
+            if (armeVd) {
+                const parts = armeVd.split('g');
+                // VD de l'arme + Force + dmgModifier (lancers et gardés)
+                const rolled = (parseInt(parts[0], 10) || 0) + eff.forceStat + cfg.dmgModL;
+                const kept   = (parseInt(parts[1], 10) || 0) + cfg.dmgModG;
+                if (dommagesNode)        dommagesNode.textContent        = `${rolled}g${kept}`;
+                if (dommagesAvgNode)     dommagesAvgNode.textContent     = jeterMap(rolled, kept);
+                // 3 Augmentations : +3 dés lancés (dés gardés inchangés)
+                if (dommagesAug3AvgNode) dommagesAug3AvgNode.textContent = jeterMap(rolled + 3, kept);
+            }
+            document.querySelectorAll('.stat-dommages-with-arme').forEach(el => el.classList.toggle('d-none', !armeActuelle));
+            document.querySelectorAll('.stat-dommages-no-arme').forEach(el => el.classList.toggle('d-none', !!armeActuelle));
+            const armeNomNode = document.querySelector('[data-stat="arme-actuelle-nom"]');
+            if (armeNomNode) armeNomNode.textContent = armeActuelle ? armeActuelle.nom : '';
+
+            // ND pour être touché : Réflexes × 5 (base) + ndModifier ; +ndArmure si armure
+            const ndBase = eff.reflexes * 5 + (cfg.ndModifier || 0);
+            const ndNode = document.querySelector('[data-stat="nd-touche"]');
+            if (ndNode) ndNode.textContent = ndBase;
+            const ndArmureNode = document.querySelector('[data-stat="nd-touche-armure"]');
+            if (ndArmureNode) ndArmureNode.textContent = ndBase + cfg.armureNd;
+
+            const terre = Math.min(eff.constitution, eff.volonte);
+            const hpIndemne = document.querySelector('[data-stat="hp-indemne"]');
+            if (hpIndemne) hpIndemne.textContent = 5 * terre;
+            document.querySelectorAll('[data-stat="hp-blesse"]').forEach(td => {
+                td.textContent = 2 * terre;
+            });
+            const hpTotal = document.querySelector('[data-stat="hp-total"]');
+            if (hpTotal) hpTotal.textContent = 5 * terre + 7 * (2 * terre);
+
+            // Récupération : Constitution × 2 + RangGen
+            const recupNode = document.querySelector('[data-stat="recuperation"]');
+            if (recupNode) recupNode.textContent = eff.constitution * 2 + cfg.rang;
+
+            let totalComps = 0;
+            let totalSpecs = 0;
+            document.querySelectorAll('[data-comp-row]').forEach(row => {
+                const compSelect = row.querySelector('.comp-select');
+                const valSelect = row.querySelector('.val-select');
+                let compId, val, nEcole;
+                if (compSelect && valSelect) {
+                    compId = parseInt(compSelect.value, 10) || 0;
+                    val = parseInt(valSelect.value, 10) || 0;
+                } else {
+                    compId = parseInt(row.dataset.compId, 10) || 0;
+                    val = parseInt(row.dataset.compVal, 10) || 0;
+                }
+                const ecoleWrap = row.querySelector('.comp-ecole-tri');
+                if (ecoleWrap) {
+                    nEcole = parseInt(ecoleWrap.dataset.state, 10) || 0;
+                } else {
+                    nEcole = parseInt(row.dataset.compEcole, 10) || 0;
+                }
+                const rowCost = (compId > 0 && val > 0) ? compCost(val, nEcole) : 0;
+                if (rowCost > 0) totalComps += rowCost;
+                // Mettre à jour la cellule de coût du rang
+                const costCell = row.querySelector('[data-comp-cost-cell]');
+                if (costCell) costCell.textContent = rowCost > 0 ? `-${rowCost}xp` : '';
+                // Comptage des spécialisations achetées payantes (state === 1 = achetée non offerte)
+                let paidSpecs = 0;
+                const specsRow = document.querySelector(`[data-comp-specs-row="${row.dataset.compRow}"]`);
+                if (compId > 0 && specsRow) {
+                    const wraps = specsRow.querySelectorAll('.comp-spec-tri');
+                    if (wraps.length > 0) {
+                        wraps.forEach(w => {
+                            if ((parseInt(w.dataset.state, 10) || 0) === 1) paidSpecs += 1;
+                        });
+                    } else {
+                        const bm   = row.dataset.compSpecs || '';
+                        const bmEc = row.dataset.compSpeEcole || '';
+                        for (let k = 0; k < bm.length; k++) {
+                            if (bm[k] === '1' && bmEc[k] !== '1') paidSpecs += 1;
+                        }
+                    }
+                    totalSpecs += paidSpecs * COUT_PAR_SPE;
+                }
+                // Mettre à jour la cellule de coût des spés sur la ligne des spés
+                const specsCostCell = specsRow ? specsRow.querySelector('[data-comp-specs-cost-cell]') : null;
+                if (specsCostCell) {
+                    specsCostCell.innerHTML = paidSpecs > 0 ? `<small>-${paidSpecs * COUT_PAR_SPE}xp (spé)</small>` : '';
+                }
+            });
+            totalComps = totalComps + totalSpecs;
+
+            // === Coût/gain des avantages/désavantages (dynamique) ===
+            const avantageById    = new Map((cfg.avantages    || []).map(a => [a.id, a]));
+            const desavantageById = new Map((cfg.desavantages || []).map(a => [a.id, a]));
+            function effectiveCost(av) {
+                if (!av) return 0;
+                const qualifies = av.discount && (
+                    (av.discountClanId   && av.discountClanId   === cfg.persoClanId)
+                    || (av.discountClan2Id  && av.discountClan2Id  === cfg.persoClanId)
+                    || (av.discountClasseId && av.discountClasseId === cfg.persoClasseId)
+                );
+                return qualifies ? av.discount : av.cout;
+            }
+            let coutAvantages = 0;
+            let gainDesavantages = 0;
+            document.querySelectorAll('[data-av-slot]').forEach(li => {
+                const select = li.querySelector('select.av-select');
+                const id = select ? parseInt(select.value, 10) : parseInt(li.dataset.avId, 10);
+                const kind = li.dataset.avKind;
+                const av = id ? (kind === 'avantage' ? avantageById.get(id) : desavantageById.get(id)) : null;
+                const cost = effectiveCost(av);
+                if (av) {
+                    if (kind === 'avantage') coutAvantages += cost; else gainDesavantages += cost;
+                }
+                // Mise à jour de l'affichage du coût/gain sur la ligne
+                const costSpan = li.querySelector('[data-av-cost]');
+                if (costSpan) {
+                    if (av) {
+                        const sign = kind === 'avantage' ? '-' : '+';
+                        const promo = (av.discount && cost !== av.cout) ? ' <small class="text-success">(promo)</small>' : '';
+                        costSpan.innerHTML = `${sign}${cost}xp${promo}`;
+                    } else {
+                        costSpan.innerHTML = '';
+                    }
+                }
+            });
+
+            const totalSpent = totalTraits + totalComps + coutAvantages;
+            const xpEffectif = cfg.xpTotal + gainDesavantages;
+            const remaining = xpEffectif - totalSpent;
+
+            // Mettre à jour les totaux affichés
+            const tt = document.getElementById('xp-traits-total');
+            if (tt) tt.textContent = `-${totalTraits}xp`;
+            const tc = document.getElementById('xp-comps-total');
+            if (tc) tc.textContent = `-${totalComps}xp`;
+            const avRow = document.getElementById('xp-avant-row');
+            if (avRow) {
+                avRow.classList.toggle('d-none', coutAvantages === 0);
+                const avTotal = document.getElementById('xp-avant-total');
+                if (avTotal) avTotal.textContent = `-${coutAvantages}xp`;
+            }
+            const dvRow = document.getElementById('xp-desav-row');
+            if (dvRow) {
+                dvRow.classList.toggle('d-none', gainDesavantages === 0);
+                const dvTotal = document.getElementById('xp-desav-total');
+                if (dvTotal) dvTotal.textContent = `+${gainDesavantages}xp`;
+            }
+            document.querySelectorAll('.xp-traits-value').forEach(n => { n.textContent = totalTraits; });
+            document.querySelectorAll('.xp-comps-value').forEach(n => { n.textContent = totalComps; });
+            document.querySelectorAll('.xp-spent-value').forEach(n => { n.textContent = totalSpent; });
+            document.querySelectorAll('.xp-total-value').forEach(n => { n.textContent = xpEffectif; });
+            document.querySelectorAll('.xp-avant-value').forEach(n => { n.textContent = coutAvantages; });
+            document.querySelectorAll('.xp-desav-value').forEach(n => { n.textContent = gainDesavantages; });
+            document.querySelectorAll('.xp-remaining').forEach(tr => {
+                tr.textContent = `${remaining} xp`;
+                tr.classList.toggle('text-danger', remaining < 0);
+                tr.classList.toggle('text-success', remaining >= 0);
+            });
+
+            // Mise à jour des tooltips dynamiques (initiative, attaque, dommages)
+            setTooltipHtml(
+                document.querySelector('[data-tooltip-stat="initiative"]'),
+                buildInitiativeTooltip(eff.reflexes, cfg.rang)
+            );
+            setTooltipHtml(
+                document.querySelector('[data-tooltip-stat="attaque"]'),
+                buildAttaqueTooltip(eff.agilite, compCombatVal)
+            );
+            const dmgTooltipEl = document.querySelector('[data-tooltip-stat="dommages"]');
+            if (dmgTooltipEl && armeActuelle) {
+                setTooltipHtml(dmgTooltipEl, buildDommagesTooltip(eff.forceStat, armeActuelle));
+            }
+
+            // Désactiver le bouton Valider si XP restant négatif
+            if (btnValider) {
+                btnValider.disabled = remaining < 0;
+                btnValider.classList.toggle('btn-danger', remaining < 0);
+                btnValider.classList.toggle('btn-success', remaining >= 0);
+            }
+        }
+
+        // === Construit un <select> de compétences (avec optgroups par catégorie) ===
+        // Ordre des catégories : Bugei, Noble, Marchand, Dégradante (puis le reste alphabétique).
+        // À l'intérieur de chaque catégorie : tri alphabétique par nom.
+        const COMP_CAT_ORDER = ['Bugei', 'Noble', 'Marchand', 'Dégradante'];
+        function buildCompSelect(selectedId) {
+            const select = document.createElement('select');
+            select.className = 'form-control form-control-sm comp-select';
+            const emptyOpt = document.createElement('option');
+            emptyOpt.value = '0';
+            emptyOpt.textContent = '— Aucune —';
+            select.appendChild(emptyOpt);
+            const byCat = {};
+            cfg.competences.forEach(c => {
+                const cat = c.categorie || 'Autres';
+                if (!byCat[cat]) byCat[cat] = [];
+                byCat[cat].push(c);
+            });
+            const extraCats = Object.keys(byCat)
+                .filter(cat => !COMP_CAT_ORDER.includes(cat))
+                .sort((a, b) => a.localeCompare(b, 'fr'));
+            const orderedCats = COMP_CAT_ORDER.filter(cat => byCat[cat]).concat(extraCats);
+            orderedCats.forEach(cat => {
+                const group = document.createElement('optgroup');
+                group.label = cat;
+                byCat[cat]
+                    .slice()
+                    .sort((a, b) => (a.nom || '').localeCompare(b.nom || '', 'fr'))
+                    .forEach(c => {
+                        const opt = document.createElement('option');
+                        opt.value = c.id;
+                        opt.dataset.trait = c.trait;
+                        opt.textContent = c.nom;
+                        if (parseInt(selectedId, 10) === c.id) opt.selected = true;
+                        group.appendChild(opt);
+                    });
+                select.appendChild(group);
+            });
+            return select;
+        }
+
+        // === Construit un <select> d'avantages/désavantages pour un slot ===
+        // kind = 'avantage' | 'desavantage' ; filtre les exclusifs incompatibles avec la classe.
+        function buildAvantageSelect(kind, selectedId) {
+            const select = document.createElement('select');
+            select.className = 'form-control form-control-sm av-select';
+            const emptyOpt = document.createElement('option');
+            emptyOpt.value = '0';
+            emptyOpt.textContent = '— Aucun —';
+            select.appendChild(emptyOpt);
+            const list = (kind === 'avantage') ? (cfg.avantages || []) : (cfg.desavantages || []);
+            list.forEach(a => {
+                // Exclusif à une autre classe → on masque (sauf si c'est l'avantage actuellement sélectionné)
+                if (a.exclusiveId && a.exclusiveId !== cfg.persoClasseId && a.id !== selectedId) return;
+                const opt = document.createElement('option');
+                opt.value = a.id;
+                opt.textContent = a.nom;
+                if (a.id === selectedId) opt.selected = true;
+                select.appendChild(opt);
+            });
+            return select;
+        }
+
+        // === Construit un <select> de compétences Bugei pour le compCombat ===
+        function buildCompCombatSelect(selectedId) {
+            const select = document.createElement('select');
+            select.className = 'form-control form-control-sm comp-combat-select';
+            const emptyOpt = document.createElement('option');
+            emptyOpt.value = '0';
+            emptyOpt.textContent = '— Aucune —';
+            select.appendChild(emptyOpt);
+            (cfg.competences || [])
+                .filter(c => c.categorie === 'Bugei')
+                .forEach(c => {
+                    const opt = document.createElement('option');
+                    opt.value = c.id;
+                    opt.textContent = c.nom;
+                    if (parseInt(selectedId, 10) === c.id) opt.selected = true;
+                    select.appendChild(opt);
+                });
+            return select;
+        }
+
+        // === Construit un <select> d'armes : arme, arme2 + "Mains Nues" (universel) ===
+        function buildArmeActuelleSelect(armeId, arme2Id, selectedId) {
+            const select = document.createElement('select');
+            select.className = 'form-control form-control-sm arme-actuelle-select';
+            const emptyOpt = document.createElement('option');
+            emptyOpt.value = '0';
+            emptyOpt.textContent = '— Aucune —';
+            select.appendChild(emptyOpt);
+            const armesById = new Map((cfg.armes || []).map(a => [a.id, a]));
+            const ids = [armeId, arme2Id];
+            if (cfg.mainsNuesId) ids.push(cfg.mainsNuesId);
+            const seen = new Set();
+            ids.forEach(id => {
+                const idNum = parseInt(id, 10) || 0;
+                if (!idNum || seen.has(idNum)) return;
+                seen.add(idNum);
+                const arme = armesById.get(idNum);
+                if (!arme) return;
+                const opt = document.createElement('option');
+                opt.value = arme.id;
+                opt.textContent = `${arme.nom} (${arme.vd || ''})`;
+                if (parseInt(selectedId, 10) === arme.id) opt.selected = true;
+                select.appendChild(opt);
+            });
+            return select;
+        }
+
+        // === Construit un <select> de rang (1-10, pas de vide) ===
+        function buildValSelect(selectedVal) {
+            const select = document.createElement('select');
+            select.className = 'form-control form-control-sm val-select';
+            const targetVal = parseInt(selectedVal, 10) >= 1 ? parseInt(selectedVal, 10) : 1;
+            for (let i = 1; i <= 10; i++) {
+                const opt = document.createElement('option');
+                opt.value = i;
+                opt.textContent = i;
+                if (targetVal === i) opt.selected = true;
+                select.appendChild(opt);
+            }
+            return select;
+        }
+
+        // En lecture les competences sont groupees par categorie ; en edition les
+        // en-tetes disparaissent (pages/fiche.css) et un simple ordre alphabetique
+        // se lit mieux. Chaque ligne emmene sa ligne de specialisations. Les
+        // emplacements vides n'ont pas encore de nom : ils ferment la liste.
+        // Pas de restauration a prevoir, Annuler recharge la page.
+        function sortCompRowsAlphabetically() {
+            const tbody = document.querySelector('#comp-table tbody');
+            if (!tbody) return;
+            [...tbody.querySelectorAll('[data-comp-row]')]
+                .sort((a, b) => {
+                    const na = a.querySelector('[data-comp-name]').textContent.trim();
+                    const nb = b.querySelector('[data-comp-name]').textContent.trim();
+                    if (!na || !nb) return (!na) - (!nb);
+                    return na.localeCompare(nb, 'fr');
+                })
+                .forEach(row => {
+                    tbody.appendChild(row);
+                    const specsRow = tbody.querySelector(`[data-comp-specs-row="${row.dataset.compRow}"]`);
+                    if (specsRow) tbody.appendChild(specsRow);
+                });
+        }
+
+        function enterEditMode() {
+            article.classList.add('fiche-edit-mode');
+            sortCompRowsAlphabetically();
+            btnEdit.style.display = 'none';
+            btnCancel.style.display = '';
+            btnValider.style.display = '';
+
+            // Traits : préfixer la valeur effective d'un <select> pour la base.
+            // On conserve .eff-display dans le span pour que recalculate() puisse
+            // l'actualiser (affichage base+bonus pendant l'édition).
+            traits.forEach(name => {
+                const span = document.querySelector(`[data-trait-eff="${name}"]`);
+                if (!span) return;
+                const base = parseInt(span.dataset.base, 10);
+                const select = document.createElement('select');
+                select.className = 'form-control form-control-sm';
+                for (let i = 1; i <= 10; i++) {
+                    const opt = document.createElement('option');
+                    opt.value = i;
+                    opt.textContent = i;
+                    if (i === base) opt.selected = true;
+                    select.appendChild(opt);
+                }
+                select.addEventListener('change', recalculate);
+                span.prepend(select);
+            });
+
+            // Compétences : remplacer chaque ligne par des selects
+            document.querySelectorAll('[data-comp-row]').forEach(row => {
+                const compId = parseInt(row.dataset.compId, 10) || 0;
+                const val = parseInt(row.dataset.compVal, 10) || 0;
+                const compEcole = parseInt(row.dataset.compEcole, 10) || 0;
+                const speEcoleMask = row.dataset.compSpeEcole || '';
+                const ecoleCell = row.querySelector('[data-comp-ecole-cell]');
+                const nameCell = row.querySelector('[data-comp-name]');
+                const valCell = row.querySelector('[data-comp-val-cell]');
+                const traitCell = row.querySelector('[data-comp-trait-cell]');
+                const costCell = row.querySelector('[data-comp-cost-cell]');
+                const specsCell = getSpecsCell(row);
+
+                const compSelect = buildCompSelect(compId);
+                const valSelect = buildValSelect(val);
+                valSelect.addEventListener('change', recalculate);
+                valCell.innerHTML = '';
+                valCell.appendChild(valSelect);
+
+                // Tri-state "école" : posé dans sa propre cellule (colonne École)
+                ecoleCell.innerHTML = '';
+                const ecoleWrap = document.createElement('span');
+                ecoleWrap.className = 'comp-ecole-tri';
+                ecoleWrap.title = "Cycle : rien → offerte +1 → offerte +2";
+                const ecoleIcon = document.createElement('i');
+                ecoleWrap.appendChild(ecoleIcon);
+                const ecoleTag = document.createElement('small');
+                ecoleTag.className = 'comp-ecole-tag';
+                ecoleWrap.appendChild(ecoleTag);
+                ecoleCell.appendChild(ecoleWrap);
+                bindTriState(ecoleWrap, ecoleIcon, compEcole, COMP_ECOLE_ICONS, (state) => {
+                    ecoleTag.textContent = state === 2 ? 'offerte école R2' : '';
+                });
+                if (compId === 0) {
+                    valSelect.style.display = 'none';
+                    ecoleWrap.style.display = 'none';
+                }
+
+                renderSpecsCheckboxes(specsCell, compId, row.dataset.compSpecs || '', speEcoleMask);
+
+                compSelect.addEventListener('change', () => {
+                    const opt = compSelect.options[compSelect.selectedIndex];
+                    const newCompId = parseInt(compSelect.value, 10) || 0;
+                    traitCell.textContent = opt && opt.dataset.trait ? opt.dataset.trait : '';
+                    valSelect.style.display = newCompId > 0 ? '' : 'none';
+                    ecoleWrap.style.display = newCompId > 0 ? '' : 'none';
+                    // Reset des spés + école quand la compétence change
+                    renderSpecsCheckboxes(specsCell, newCompId, '', '');
+                    recalculate();
+                });
+                nameCell.innerHTML = '';
+                nameCell.appendChild(compSelect);
+            });
+
+            // Compétence de combat (Jet d'Attaque) : insérer un <select> Bugei
+            const compCombatRow = document.querySelector('[data-comp-combat-row]');
+            if (compCombatRow) {
+                const cell = compCombatRow.querySelector('[data-comp-combat-select-cell]');
+                const currentId = parseInt(compCombatRow.dataset.compCombatId, 10) || 0;
+                if (cell) {
+                    cell.innerHTML = '';
+                    const select = buildCompCombatSelect(currentId);
+                    select.addEventListener('change', recalculate);
+                    cell.appendChild(select);
+                }
+            }
+
+            // Arme actuelle (Jet de Dommages) : insérer un <select> arme/arme2
+            const armeActuelleRow = document.querySelector('[data-arme-actuelle-row]');
+            if (armeActuelleRow) {
+                const cell = armeActuelleRow.querySelector('[data-arme-actuelle-select-cell]');
+                const currentId = parseInt(armeActuelleRow.dataset.armeActuelleId, 10) || 0;
+                const armeId    = parseInt(armeActuelleRow.dataset.armeId, 10) || 0;
+                const arme2Id   = parseInt(armeActuelleRow.dataset.arme2Id, 10) || 0;
+                if (cell) {
+                    cell.innerHTML = '';
+                    const select = buildArmeActuelleSelect(armeId, arme2Id, currentId);
+                    select.addEventListener('change', recalculate);
+                    cell.appendChild(select);
+                }
+            }
+
+            // Avantages / Désavantages : remplacer le nom par un select
+            document.querySelectorAll('[data-av-slot]').forEach(li => {
+                const kind = li.dataset.avKind;
+                const currentId = parseInt(li.dataset.avId, 10) || 0;
+                const nameSpan = li.querySelector('[data-av-name]');
+                const tooltip  = li.querySelector('[data-av-tooltip]');
+                const select = buildAvantageSelect(kind, currentId);
+                select.addEventListener('change', () => {
+                    const newId = parseInt(select.value, 10) || 0;
+                    // Met à jour le tooltip avec la nouvelle description
+                    if (tooltip) {
+                        const list = (kind === 'avantage') ? (cfg.avantages || []) : (cfg.desavantages || []);
+                        const av = list.find(a => a.id === newId);
+                        if (av) {
+                            tooltip.setAttribute('title', av.description || '');
+                            tooltip.setAttribute('data-original-title', av.description || '');
+                            tooltip.classList.remove('d-none');
+                        } else {
+                            tooltip.classList.add('d-none');
+                        }
+                    }
+                    recalculate();
+                });
+                if (nameSpan) {
+                    nameSpan.innerHTML = '';
+                    nameSpan.appendChild(select);
+                }
+            });
+        }
+
+        function getSpecsCell(row) {
+            const specsRow = document.querySelector(`[data-comp-specs-row="${row.dataset.compRow}"]`);
+            return specsRow ? specsRow.querySelector('[data-comp-specs-cell]') : null;
+        }
+
+        // Câble un wrap qui cycle entre 3 états au clic (0 → 1 → 2 → 0).
+        // L'icône Font Awesome est swappée selon l'état via la table passée en paramètre.
+        // onState(state) est appelé à chaque application pour mettre à jour les libellés annexes.
+        const COMP_ECOLE_ICONS = {
+            0: 'tri-icon fa-regular fa-square',
+            1: 'tri-icon fa-solid fa-graduation-cap',
+            2: 'tri-icon fa-solid fa-graduation-cap'
+        };
+        const SPEC_ECOLE_ICONS = {
+            0: 'tri-icon fa-regular fa-square',
+            1: 'tri-icon fa-solid fa-square-check',
+            2: 'tri-icon fa-solid fa-graduation-cap'
+        };
+        function bindTriState(wrap, icon, initialState, iconClasses, onState) {
+            function apply(state) {
+                wrap.dataset.state = String(state);
+                icon.className = iconClasses[state] || iconClasses[0];
+                if (typeof onState === 'function') onState(state);
+            }
+            apply(Math.max(0, Math.min(2, parseInt(initialState, 10) || 0)));
+            wrap.addEventListener('click', (e) => {
+                e.preventDefault();
+                const cur = parseInt(wrap.dataset.state, 10) || 0;
+                apply((cur + 1) % 3);
+                recalculate();
+            });
+        }
+
+        function renderSpecsCheckboxes(cell, compId, bitmask, bitmaskEcole) {
+            if (!cell) return;
+            cell.innerHTML = '';
+            if (!compId) return;
+            const comp = cfg.competences.find(c => c.id === compId);
+            if (!comp || !Array.isArray(comp.specialisations)) return;
+            comp.specialisations.forEach((label, idx) => {
+                if (!label) return;
+                const wrap = document.createElement('span');
+                wrap.className = 'comp-spec-tri';
+                wrap.dataset.specIndex = String(idx);
+                const icon = document.createElement('i');
+                wrap.appendChild(icon);
+                const txt = document.createElement('span');
+                txt.textContent = label;
+                wrap.appendChild(txt);
+                const tag = document.createElement('small');
+                tag.className = 'spec-ecole-tag';
+                tag.textContent = 'offerte école';
+                wrap.appendChild(tag);
+
+                // État initial : 2 si école, 1 si achetée sans école, 0 sinon
+                let initial = 0;
+                if (bitmaskEcole && bitmaskEcole[idx] === '1') initial = 2;
+                else if (bitmask && bitmask[idx] === '1') initial = 1;
+                bindTriState(wrap, icon, initial, SPEC_ECOLE_ICONS);
+
+                cell.appendChild(wrap);
+            });
+        }
+
+        function readBitmask(row) {
+            const specsRow = document.querySelector(`[data-comp-specs-row="${row.dataset.compRow}"]`);
+            if (!specsRow) return '';
+            const wraps = specsRow.querySelectorAll('.comp-spec-tri');
+            if (wraps.length === 0) return '';
+            const bits = ['0','0','0','0','0','0'];
+            wraps.forEach(w => {
+                const idx = parseInt(w.dataset.specIndex, 10);
+                const state = parseInt(w.dataset.state, 10) || 0;
+                if (state >= 1 && idx >= 0 && idx < 6) bits[idx] = '1';
+            });
+            return bits.join('');
+        }
+
+        function readSpeEcoleBitmask(row) {
+            const specsRow = document.querySelector(`[data-comp-specs-row="${row.dataset.compRow}"]`);
+            if (!specsRow) return '';
+            const wraps = specsRow.querySelectorAll('.comp-spec-tri');
+            if (wraps.length === 0) return '';
+            const bits = ['0','0','0','0','0','0'];
+            wraps.forEach(w => {
+                const idx = parseInt(w.dataset.specIndex, 10);
+                const state = parseInt(w.dataset.state, 10) || 0;
+                if (state === 2 && idx >= 0 && idx < 6) bits[idx] = '1';
+            });
+            return bits.join('');
+        }
+
+        function submitFiche() {
+            const form = document.createElement('form');
+            form.method = 'POST';
+            form.action = cfg.editUrl;
+
+            function addInput(name, value) {
+                const i = document.createElement('input');
+                i.type = 'hidden';
+                i.name = name;
+                i.value = value;
+                form.appendChild(i);
+            }
+
+            traits.forEach(name => {
+                const span = document.querySelector(`[data-trait-eff="${name}"]`);
+                const select = span ? span.querySelector('select') : null;
+                if (select) addInput(`joueur_fiche_personnage[${name}]`, select.value);
+            });
+
+            document.querySelectorAll('[data-comp-row]').forEach(row => {
+                const i = row.dataset.compRow;
+                const compSelect = row.querySelector('.comp-select');
+                const valSelect = row.querySelector('.val-select');
+                const ecoleWrap = row.querySelector('.comp-ecole-tri');
+                const compId = compSelect && parseInt(compSelect.value, 10) > 0 ? compSelect.value : '';
+                // N'envoie un rang que si une compétence est sélectionnée
+                const valVal = compId !== '' && valSelect && valSelect.value ? valSelect.value : '';
+                const specsVal     = compId !== '' ? readBitmask(row) : '';
+                const speEcVal     = compId !== '' ? readSpeEcoleBitmask(row) : '';
+                const compEcoleVal = compId !== '' && ecoleWrap
+                    ? String(parseInt(ecoleWrap.dataset.state, 10) || 0)
+                    : '0';
+                addInput(`joueur_fiche_personnage[competence${i}]`, compId);
+                addInput(`joueur_fiche_personnage[valeur${i}]`, valVal);
+                addInput(`joueur_fiche_personnage[specialisations${i}]`, specsVal);
+                addInput(`joueur_fiche_personnage[compEcole${i}]`, compEcoleVal);
+                addInput(`joueur_fiche_personnage[speEcole${i}]`, speEcVal);
+            });
+
+            // Avantages / Désavantages
+            const slotToField = {av1: 'avantage1', av2: 'avantage2', dv1: 'desavantage1', dv2: 'desavantage2'};
+            Object.keys(slotToField).forEach(slot => {
+                const li = document.querySelector(`[data-av-slot="${slot}"]`);
+                if (!li) return;
+                const select = li.querySelector('select.av-select');
+                const id = select && parseInt(select.value, 10) > 0 ? select.value : '';
+                addInput(`joueur_fiche_personnage[${slotToField[slot]}]`, id);
+            });
+
+            // Compétence de combat et arme actuelle
+            const compCombatSelect = document.querySelector('select.comp-combat-select');
+            const compCombatId = compCombatSelect && parseInt(compCombatSelect.value, 10) > 0 ? compCombatSelect.value : '';
+            addInput('joueur_fiche_personnage[compCombatActuelle]', compCombatId);
+
+            const armeActuelleSelect = document.querySelector('select.arme-actuelle-select');
+            const armeActuelleId = armeActuelleSelect && parseInt(armeActuelleSelect.value, 10) > 0 ? armeActuelleSelect.value : '';
+            addInput('joueur_fiche_personnage[armeActuelle]', armeActuelleId);
+
+            // arme2 n'est pas éditable ici mais doit être renvoyée pour ne pas être écrasée par Symfony
+            addInput('joueur_fiche_personnage[arme2]', cfg.arme2Id || '');
+
+            // Modificateurs (init/attaque/dmg/ND/réduction)
+            const modIds = {
+                initiativeModifier: 'mod-input-initiative',
+                attaqueModifier:    'mod-input-attaque',
+                dmgModifier:        'mod-input-dmg',
+                ndModifier:         'mod-input-nd',
+                reductionModifier:  'mod-input-reduction',
+            };
+            Object.keys(modIds).forEach(field => {
+                const el = document.getElementById(modIds[field]);
+                addInput(`joueur_fiche_personnage[${field}]`, el ? el.value.trim() : '');
+            });
+
+            addInput('joueur_fiche_personnage[_token]', cfg.csrfToken);
+            document.body.appendChild(form);
+            form.submit();
+        }
+
+        if (btnEdit) btnEdit.addEventListener('click', enterEditMode);
+        if (btnCancel) btnCancel.addEventListener('click', () => location.reload());
+        if (btnValider) btnValider.addEventListener('click', submitFiche);
+    })();
+    </script>
+    {% endif %}
+{% endblock %}

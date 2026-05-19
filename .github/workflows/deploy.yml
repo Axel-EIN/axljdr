@@ -1,0 +1,78 @@
+name: Deploy to OVH
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Deploy via FTP
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          server-dir: www/jdr/
+          dangerous-clean-slate: false
+          exclude: |
+            **/.git*
+            **/.git*/**
+            .github/**
+            .ci/**
+            vendor/**
+            var/cache/**
+            var/logs/**
+            bin/**
+            tests/**
+            .env*
+            composer.json
+            composer.lock
+            symfony.lock
+            phpunit.xml.dist
+            .gitignore
+            public/assets/img/**
+            public/assets/pdf/**
+            public/assets/video/**
+
+      # Cache + migrations via un script jetable : déposé sous un nom aléatoire,
+      # appelé une fois avec un jeton à usage unique, supprimé quoi qu'il arrive.
+      # Rien d'exécutable ne subsiste sur le FTP entre deux déploiements.
+      - name: Purge du cache et migrations
+        env:
+          FTP_SERVER: ${{ secrets.FTP_SERVER }}
+          FTP_USERNAME: ${{ secrets.FTP_USERNAME }}
+          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+          SITE_URL: https://jdr.axl-design.me
+          # Racine web du sous-domaine, pas la racine du projet : le script doit
+          # être joignable en HTTP, et son dirname(__DIR__) doit tomber sur vendor/.
+          PUBLIC_DIR: www/jdr/public
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq && sudo apt-get install -y -qq lftp
+
+          NAME="deploy-$(openssl rand -hex 16).php"
+          TOKEN="$(openssl rand -hex 32)"
+          echo "::add-mask::$TOKEN"
+          sed "s/__TOKEN__/$TOKEN/" .ci/deploy.php > "/tmp/$NAME"
+
+          ftp_do() {
+            lftp -u "$FTP_USERNAME","$FTP_PASSWORD" "$FTP_SERVER" \
+                 -e "set ssl:verify-certificate no; $1; bye"
+          }
+
+          # Le trap garantit la suppression même si le curl échoue ou si le job
+          # est annulé — c'est lui qui rend le script réellement éphémère.
+          trap 'ftp_do "rm -f $PUBLIC_DIR/$NAME" || true' EXIT
+
+          ftp_do "put /tmp/$NAME -o $PUBLIC_DIR/$NAME"
+
+          HTTP=$(curl -sS -o /tmp/deploy-out.txt -w '%{http_code}' \
+                      -H "X-Deploy-Token: $TOKEN" "$SITE_URL/$NAME")
+          cat /tmp/deploy-out.txt
+          [ "$HTTP" = "200" ] || { echo "::error::Déploiement échoué (HTTP $HTTP)"; exit 1; }

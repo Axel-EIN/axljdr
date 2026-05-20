@@ -1,0 +1,64 @@
+.card-body, .card-page { border-radius: 1rem; }
+
+.card.card-body, .card-page { box-shadow: var(--shadow-card); }
+
+.card-body {
+  padding: 1rem;
+}
+
+.card-page {
+  overflow: hidden;
+  padding-bottom: 3rem;
+
+  @media (max-width: 991.98px) {
+    padding-bottom: 1rem;
+    border: 0;
+    border-radius: 0;
+  }
+}
+
+.card-title-cartouche {
+  font-family: 'Amerigo';
+  font-size: var(--fontsize-plus);
+  text-transform: uppercase;
+  background-color: var(--color-black-tar);
+  color: var(--color-white-fog);
+  padding: 0.5rem 1rem;
+  margin: 0;
+}
+
+.card-body > heading-cardtitle {
+  padding-top: 1rem;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+}
+
+.card-description {
+  margin: 0;
+  padding: 1rem 3rem;
+  text-align: justify;
+  font-size: var(--fontsize-regular);
+  line-height: 1.5;
+
+  &.condensed {
+    padding: 1rem;
+  }
+
+  &.compact {
+    padding: 3rem 4rem;
+    font-size: var(--fontsize-normal);
+    line-height: 1.6;
+  }
+
+  &.aerated {
+    padding: 3rem 6rem;
+    font-size: var(--fontsize-medium);
+    line-height: 1.75;
+  }
+
+  @media (max-width: 991.98px) {
+    padding: 1rem;
+    &.compact { padding: 1rem; }
+    &.aerated { padding: 1rem; }
+  }
+}

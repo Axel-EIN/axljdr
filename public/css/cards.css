@@ -1,0 +1,42 @@
+/* ----------------- */
+/* ----- CARDS ----- */
+/* ----------------- */
+
+.card-content {
+  background-color: var(--color-white);
+  border-radius: 1rem;
+  border-top-right-radius: 0;
+  border-top-left-radius: 0;
+  padding: 1rem;
+  margin: 0;
+
+  header {
+    position: relative;
+    margin-top: 1rem;
+  }
+}
+
+.card-title {
+  font-family: 'Amerigo';
+  font-size: var(--fontsize-plus);
+  text-transform: uppercase;
+  background-color: var(--color-black-tar);
+  color: var(--color-white-fog);
+  padding: 0.5rem 1rem;
+  margin: 0;
+}
+
+.card-body {
+  border-radius: 1rem;
+  padding: 1rem;
+}
+
+.card-body > .element-card-title {
+  padding-top: 1rem;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+}
+
+.card-description {
+  padding: 1rem;
+}

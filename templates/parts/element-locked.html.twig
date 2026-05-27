@@ -1,0 +1,34 @@
+{# ----------------------------------------------------------------------------
+   PAGE "ÉLÉMENT À DÉCOUVRIR"
+   Affichée à un joueur (non-MJ) quand l'élément (lieu, archive, personnage...)
+   est verrouillé (locked) par le MJ. Reprend la mise en page habituelle d'un
+   élément : une image placeholder grisée surmontée d'un cadenas qui pulse,
+   puis une carte avec un texte d'attente.
+
+   Variables attendues :
+     - entity   : type d'élément (lieu | archive | personnage)
+     - na_image : image placeholder à afficher (NA_LIEU, NA_ARCHIVE, ...)
+---------------------------------------------------------------------------- #}
+
+{% set textes_locked = {
+  'lieu':       "Ce lieu n'a pas encore été déverrouillé dans l'aventure. Seules vos actions, jeunes samuraïs, vous mèneront un jour jusqu'à lui.",
+  'archive':    "Cette archive n'a pas encore été déverrouillée dans l'aventure. Seules vos actions, jeunes samuraïs, vous permettront d'en percer les secrets.",
+  'personnage': "Ce personnage n'a pas encore été déverrouillé dans l'aventure. Seules vos actions, jeunes samuraïs, vous permettront un jour de le rencontrer."
+} %}
+
+<element class="col-12 pb-1">
+  <card class="card pb-5">
+
+    <!-- IMAGE PLACEHOLDER + CADENAS -->
+    <imagezone class="bg-black relative">
+      <img class="absolute icon-lock grayscale fa-beat-fade" src="{{ asset(LOCKED_ICO) }}" alt="Cadenas" title="À débloquer !" />
+      <img class="img-fluid mask grayscale" src="{{ asset(na_image|default(NA_1610)) }}" alt="Élément à découvrir" />
+    </imagezone>
+
+    <!-- TEXTE D'ATTENTE -->
+    <p class="p-5 mx-5 text-center text-medium">
+      <i>{{ textes_locked[entity]|default("Cet élément n'a pas encore été déverrouillé dans l'aventure. Seules vos actions, jeunes samuraïs, vous permettront un jour de le découvrir.") }}</i>
+    </p>
+
+  </card>
+</element>

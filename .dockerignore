@@ -1,0 +1,7 @@
+.git
+var/cache
+var/log
+vendor
+public/assets/img
+public/assets/pdf
+public/assets/video

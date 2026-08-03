@@ -1,0 +1,13 @@
+{% extends 'other.html.twig' %}
+
+{% set titre = 'Pas encore de saison disponible' %}
+
+{% block contenu %}
+  <p class="card-description texte-attente">L'aventure n'a pas encore commencé.</p>
+
+  <div class="text-center">
+    {{ include('/parts/btn-ajouter-element.html.twig', {
+      entity: 'saison', label_one: 'la première saison', position: '',
+    }) }}
+  </div>
+{% endblock %}

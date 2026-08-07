@@ -1,0 +1,126 @@
+.element-page { --profil-banner-h: 125px; }
+
+/* ----- CARTES DU PROFIL ------- */
+
+.profil-infos {
+    padding: 0;
+    overflow: hidden;
+
+    .list-group-item > a > img { margin-left: 0.5rem; }
+}
+
+.profil-btn-fiche { margin-top: 1rem; }
+
+.profil-creation { margin-left: 1rem; }
+
+.profil-historique {
+    @media (max-width: 991.98px) { padding-bottom: 1rem; }
+}
+
+/* ----- PROFIL BANNER MOBILE --- */
+
+.profil-banner-mobile {
+    position: relative;
+    height: var(--profil-banner-h);
+    overflow: hidden;
+    @media (min-width: 576px) {
+        border-top-left-radius: 1rem;
+        border-top-right-radius: 1rem;
+    }
+
+    img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center 17%;
+    }
+}
+
+.profil-banner-mobile::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.8));
+}
+
+@media (max-width: 991.98px) {
+        .element-page > .container > section { position: relative; }
+
+        .element-page > .container > section > h1 {
+        position: absolute;
+        z-index: 2;
+        top: 0;
+        left: 1rem;
+        right: 1rem;
+        height: var(--profil-banner-h);
+        display: flex;
+        align-items: flex-end;
+        justify-content: center;
+        color: var(--color-white);
+    }
+}
+
+/* ----- EDITION EN PLACE ------- */
+
+textarea.edit-only {
+    width: 100%;
+    margin-bottom: 1rem;
+}
+
+.edit-mode textarea.edit-only { display: block; }
+
+.zone-actions {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 1rem;
+}
+
+/* ----- DEVELOPPEMENT ---------- */
+
+.profil-developments {
+    .development-line + .development-line { margin-top: 1.5rem; }
+
+    .development-head {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: baseline;
+        gap: 0.5rem;
+    }
+
+    .development-meta {
+        margin-left: auto;
+        text-align: right;
+        font-size: var(--fontsize-small);
+        color: var(--color-body);
+    }
+
+    .development-content {
+        display: flex;
+        align-items: flex-start;
+        gap: 1rem;
+        margin-top: 0.25rem;
+
+        .card-description { padding: 0; }
+    }
+
+    .card-description {
+        flex: 1;
+        min-width: 0;
+        margin: 0;
+    }
+
+    .development-image {
+        flex: 0 0 10rem;
+
+        img {
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            object-fit: cover;
+            border-radius: 0.5rem;
+        }
+
+        @media (max-width: 575.98px) { flex-basis: 6rem; }
+    }
+}

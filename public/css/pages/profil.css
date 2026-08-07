@@ -1,0 +1,51 @@
+.element-page { --profil-banner-h: 125px; }
+
+/* ------------------------------ */
+/* ----- PROFIL BANNER MOBILE --- */
+/* ------------------------------ */
+
+.profil-banner-mobile {
+    position: relative;
+    height: var(--profil-banner-h);
+    overflow: hidden;
+    @media (min-width: 576px) {
+        border-top-left-radius: 1rem;
+        border-top-right-radius: 1rem;
+    }
+
+    img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center 17%;
+    }
+}
+
+/* Dégradé sur le fond de l'image sur mobile */
+.profil-banner-mobile::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.8));
+}
+
+@media (max-width: 991.98px) {
+    .profil-saison { font-size: 1.25rem; }
+
+    /* Ajoute une position relative pour le placement du titre qui va suivre */
+    .element-page > .container > section { position: relative; }
+
+    /* Placement du titre sur l'image */
+    .element-page > .container > section > h1 {
+        position: absolute;
+        z-index: 2;
+        top: 0;
+        left: 1rem;
+        right: 1rem;
+        height: var(--profil-banner-h);
+        display: flex;
+        align-items: flex-end;
+        justify-content: center;
+        color: var(--color-white);
+    }
+}

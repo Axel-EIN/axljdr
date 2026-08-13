@@ -1,0 +1,147 @@
+#element-banner > div {
+    display: flex;
+    flex-direction: column;
+    justify-content: end;
+    position: relative;
+    min-height: 60vh;
+    margin: 0;
+    padding: 0;
+    text-align: center;
+    background-blend-mode: multiply, soft-light;
+    background-position: 50% 10%;
+
+    nav {
+        margin: 0;
+        padding: 0;
+    }
+
+    @media (max-width: 991.98px) {
+        background-size: cover;
+
+        /* `svh` et non `vh` : sur mobile `vh` ignore la barre d'adresse. */
+        min-height: calc(100svh - var(--nav-height));
+    }
+}
+
+/* ----- LES DEUX COLONNES ----- */
+
+#left-part, #right-part {
+    position: relative;
+    z-index: 2;
+    margin-top: auto;
+}
+
+/* display obligatoire : en inline, la width des classes col-* est inerte. */
+#right-part {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    margin: 0;
+    padding: 1rem;
+
+    &>p {
+        color: var(--color-white);
+        text-align: justify;
+        margin: 0 2rem 2rem 0;
+        padding: 0;
+
+        
+        @media (max-width: 991.98px) {
+            margin-left: 0;
+            margin-right: 0;
+        }
+    }
+}
+
+@media (max-width: 991.98px) {
+    .element-page > .container > section { position: relative; }
+
+    .element-page > .container > section > h1 {
+        position: absolute;
+        top: var(--banner-title-top, 0.5rem);
+        left: 0;
+        right: 0;
+        z-index: 4;
+        padding: 0 1rem;
+        color: var(--color-white);
+        text-align: center;
+    }
+
+    #element-banner > div {
+        position: relative;
+        padding-top: var(--banner-content-offset, 3.5rem);
+
+        &::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            z-index: 1;
+            background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0) 20%);
+            pointer-events: none;
+        }
+    }
+}
+
+@media (max-width: 991.98px) {
+    .element-page > .container > section > h1 {
+        --banner-title-top: 1rem;
+    }
+
+    #element-banner > div {
+        --banner-content-offset: 3rem;
+    }
+
+    #left-part .img-240 {
+        max-width: min(216px, 100%);
+    }
+}
+
+#banner-video {
+    position: absolute;
+    top: 0;
+    z-index: 0;
+    object-fit: cover;
+    width: 100%;
+    height: 100%;
+}
+
+#overlay-video {
+    position: absolute;
+    z-index: 1;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+#icon-play {
+    position: absolute;
+    z-index: 2;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: var(--color-white);
+}
+
+#icon-mute-video {
+    position: absolute;
+    z-index: 5;
+    top: 1rem;
+    left: 2rem;
+    color: var(--color-white-50);
+
+    &:hover {
+        cursor: pointer;
+        color: var(--color-white);
+    }
+}
+
+@media (max-width: 991.98px) {
+    .element-page > .container > section > h1 {
+        --banner-title-top: 0.5rem;
+    }
+
+    #element-banner > div {
+        --banner-content-offset: 3.5rem;
+    }
+}

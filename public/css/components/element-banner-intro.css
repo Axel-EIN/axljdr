@@ -1,0 +1,112 @@
+/* -------------------------------------------------- */
+/* --------- BANDEAU D'INTRO — SOCLE PARTAGE --------- */
+/* -------------------------------------------------- */
+
+/* Mecanique commune aux bandeaux d'intro clan et classe (icone/citation +
+   description + nav des autres elements). Charge par les deux gabarits ;
+   `components/clan-banner.css` et `components/classe-banner.css` n'y
+   ajoutent que leurs specificites (video/champion/majeur pour le clan,
+   valeurs de `--banner-title-top` / `--banner-content-offset` pour chacun).
+
+   .banner-nav-toggle, .chevron-toggle et .dropdown-dark restent dans
+   components.css : la nav du site et la page episode les utilisent aussi. */
+
+#element-banner > div {
+    display: flex;
+    flex-direction: column;
+    justify-content: end;
+    position: relative;
+    min-height: 60vh;
+    margin: 0;
+    padding: 0;
+    text-align: center;
+    background-blend-mode: multiply, soft-light;
+    background-position: 50% 10%;
+
+    nav {
+        margin: 0;
+        padding: 0;
+    }
+
+    @media (max-width: 991.98px) {
+        /* Sans cover, l'illustration s'affiche a sa taille naturelle et on
+           n'en voit qu'une petite fenetre. */
+        background-size: cover;
+
+        /* Aligne sur .header (banners.css), meme 60vh -> 40vh. */
+        min-height: 40vh;
+    }
+}
+
+/* ----- LES DEUX COLONNES ----- */
+
+/* z-index : passer au-dessus de #overlay-video et du degrade de fond
+   (le clan a une video, la classe non — la regle reste neutre pour les deux). */
+#left-part, #right-part {
+    position: relative;
+    z-index: 2;
+    margin-top: auto;
+}
+
+/* display obligatoire : <right> est une balise maison, donc display:inline par
+   defaut, ou la width des classes col-* est inerte. */
+#right-part {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    margin: 0;
+    padding: 1rem;
+
+    &>p {
+        color: var(--color-white);
+        text-align: justify;
+        margin: 0 2rem 2rem 0;
+        padding: 0;
+
+        /* Marge symetrique de 1rem : le padding de #right-part suffit, cette
+           marge droite fixe la doublait d'un cote seulement. */
+        @media (max-width: 991.98px) {
+            margin-left: 0;
+            margin-right: 0;
+        }
+    }
+}
+
+@media (max-width: 991.98px) {
+    /* Le titre (h1 d'element.html.twig) quitte le flux et vient se poser en
+       haut du bandeau, comme sur les pages Profil/Fiche Personnage. `top` et
+       le `padding-top` du contenu varient legerement selon le bandeau (cf.
+       les 2 fichiers component-specifiques). */
+    .element-page > .container > section { position: relative; }
+
+    .element-page > .container > section > h1 {
+        position: absolute;
+        top: var(--banner-title-top, 0.5rem);
+        left: 0;
+        right: 0;
+        z-index: 4;
+        padding: 0 1rem;
+        color: var(--color-white);
+        text-align: center;
+    }
+
+    /* Reserve sa propre ligne au titre en haut du bandeau : le contenu
+       (icone, citation, badges, texte) est repousse d'autant, pas comprime. */
+    #element-banner > div {
+        position: relative;
+        padding-top: var(--banner-content-offset, 3.5rem);
+
+        &::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            z-index: 1;
+            background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0) 20%);
+            pointer-events: none;
+        }
+    }
+}
+
+/* L'ecart mobile vers la carte suivante (cf. DESIGN-SYSTEM.md, "Empilement
+   mobile") est traite dans le twig (mb-0 mb-lg-3), pas ici : un utilitaire
+   Bootstrap est !important, une regle CSS ne pourrait jamais l'emporter. */

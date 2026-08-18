@@ -1,0 +1,54 @@
+/* ------------------------------------------------- */
+/* ----- GRID-GALLERY-VIGNETTE (DESIGN-SYSTEM.md) --- */
+/* ------------------------------------------------- */
+
+/* Desktop : gouttière Bootstrap classique. Mobile (< 992px) : plein cadre,
+   fond sombre, vignettes bord à bord sans gouttière, liseré interne. */
+
+.other-character-grid img {
+    width: 100%;
+    max-width: none;
+    aspect-ratio: 1;
+    object-fit: cover;
+    border: 0;
+}
+
+.other-school-grid img {
+    width: 100%;
+    border: 0;
+    border-radius: 0;
+}
+
+/* Liseré interne flouté : dessine la grille sans dépendre d'une gouttière
+   partagée. En ::after car un box-shadow inset sur un <img> passe derrière
+   l'image. */
+.other-character-grid a,
+.other-school-grid a {
+    position: relative;
+    display: block;
+}
+
+.other-character-grid a::after,
+.other-school-grid a::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    box-shadow: inset 0 0 0 4px rgba(0, 0, 0, 0.4);
+    pointer-events: none;
+}
+
+@media (max-width: 991.98px) {
+    /* Plein cadre : ni gouttière entre les vignettes, ni retrait autour.
+       Les marges négatives annulent le padding de la carte (0.5rem, cf.
+       .element-page dans base.css). */
+    .element-page .other-character-grid,
+    .element-page .other-school-grid {
+        margin-left: -0.5rem;
+        margin-right: -0.5rem;
+        margin-bottom: -0.5rem;
+        background-color: var(--color-black-tar);
+    }
+
+    .element-page .other-character-grid > *,
+    .element-page .other-school-grid > * { padding: 0; }
+}

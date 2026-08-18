@@ -1,0 +1,19 @@
+/* -------------------------------------------- */
+/* --------- BANDEAU D'INTRO — CLASSE --------- */
+/* -------------------------------------------- */
+
+/* Sert parts/classe-banner.html.twig, charge uniquement par
+   regles/classe.html.twig. Le socle commun (icone/citation + description +
+   nav) vit dans components/element-banner-intro.css, a charger avant ce
+   fichier : ici, seulement les valeurs propres au bandeau classe (pas de
+   video/champion/majeur, ce sont des champs du Clan). */
+
+@media (max-width: 991.98px) {
+    .element-page > .container > section > h1 {
+        --banner-title-top: 0.5rem;
+    }
+
+    #element-banner > div {
+        --banner-content-offset: 3.5rem;
+    }
+}

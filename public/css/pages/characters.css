@@ -1,0 +1,175 @@
+/* --------- PAGE PERSONNAGES --------- */
+
+/* .card-img-overlay est une classe Bootstrap : la regle plus bas la surcharge,
+   et n'a de sens que pour ces cartes. */
+
+.character-card {
+  border: unset;
+  transition: 0.5s var(--ease);
+}
+
+/* Bande horizontale : le ratio 9:16 tombe au quart (177.78% → 44%) et l'image
+   se recadre sur le visage, vers 16% du haut. */
+@media (max-width: 575.98px) {
+  .character-card .ratio-916 { padding-top: 44%; }
+
+  /* .ratio-916 n'est pas decoratif : sans ce troisieme niveau, effects.css
+     l'emporte et l'image reste centree. */
+  .character-card .ratio-916 .ratio-cropped { object-position: center 16%; }
+
+  /* Calibrees pour un portrait haut : sur une bande large, elles depassent. */
+  .character-card .icon-lock-character {
+    width: 15%;
+    top: 25%;
+    left: 42%;
+  }
+
+  .character-card .icon-dead-big {
+    width: 78px;
+    top: 1rem;
+  }
+
+  
+  .character-card .card-img-overlay {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: baseline;
+  }
+  .character-card .card-img-overlay p { margin-bottom: 0; }
+  .character-card .card-titres { flex-basis: 100%; }
+}
+
+.card-img-overlay {
+  top: unset;
+  padding: 0.5rem;
+  h4 { margin-bottom: 0; }
+}
+
+/* ----- FILTRES SAISON / CHAPITRE / EPISODE ----- */
+
+/* Bloc a cheval sur la frontiere banniere / contenu. Le position:relative du
+   main n'existe que pour lui servir de repere. */
+main.container-fluid { position: relative; }
+
+.characters-filters {
+  position: absolute;
+  top: -4rem;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 10;
+  max-width: 860px;
+  width: calc(100% - 2rem);
+  padding: 20px 56px 28px 56px;
+  filter:
+    drop-shadow(0 4px 2px rgba(0, 0, 0, 0.4))
+    drop-shadow(0 12px 16px rgba(0, 0, 0, 0.35));
+}
+
+.characters-filters label {
+  margin-bottom: 0.25rem;
+  font-size: 0.9rem;
+}
+
+/* .label-amerigo declare sa couleur : l'heritage ne peut pas l'emporter, il
+   faut la viser directement. */
+.characters-filters label,
+.characters-filters .label-amerigo { color: var(--color-white); }
+
+/* Le min() de .img-32 n'est pas resoluble au calcul intrinseque : l'icone
+   comptait pour ses 128px natifs. */
+.characters-filters label img { width: 32px; }
+
+.characters-filters .form-control:disabled,
+.characters-filters .form-control[disabled] {
+  opacity: 0.35;
+  background-color: rgba(255, 255, 255, 0.55);
+  cursor: not-allowed;
+}
+
+.characters-filters .form-control.is-active-filter {
+  border-color: #f5d36a;
+  box-shadow: 0 0 0 0.15rem rgba(245, 211, 106, 0.35);
+}
+
+.characters-filters .btn-reset-icon {
+  position: absolute;
+  top: 0.4rem;
+  right: 0.4rem;
+  z-index: 2;
+  color: var(--color-white);
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  border-radius: 50%;
+  width: 1.75rem;
+  height: 1.75rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  font-size: var(--fontsize-small);
+  text-decoration: none;
+}
+.characters-filters .btn-reset-icon:hover {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: var(--color-white);
+  color: var(--color-white);
+}
+
+/* relative et non static : le bouton reset en absolute a besoin du repere. */
+@media (max-width: 991.98px) {
+  /* Le cartouche deborde jusqu'aux bords de l'ecran, d'ou l'impression de
+     coupure. --bleed reprend le padding du .container. */
+  .characters-filters {
+    --bleed: 1rem;
+
+    position: relative;
+    top: auto;
+    left: auto;
+    transform: none;
+    width: auto;
+    max-width: none;
+    margin: 0 calc(-1 * var(--bleed)) 1rem;
+    margin-top: -4rem;
+    /* 3rem a droite : le bouton de reinitialisation y est en absolute. */
+    padding: 1.25rem calc(3rem + var(--bleed)) 0.75rem calc(1rem + var(--bleed));
+
+    @media (max-width: 575.98px) { --bleed: 0.5rem; }
+  }
+
+  /* Base nulle : sinon l'option la plus longue pilote la repartition. */
+  .characters-filters select {
+    flex: 1 1 0;
+    min-width: 0;
+  }
+
+  /* Rentre du coin : le bouton s'y confondait avec la texture dechiree. */
+  .characters-filters .btn-reset-icon {
+    top: 1rem;
+    right: calc(1.25rem + var(--bleed));
+  }
+}
+
+/* ----- SURIMPRESSIONS DE LA CARTE ----- */
+
+.corner-badge {
+    z-index: 20;
+    top: -12px;
+    left: -12px;
+    width: 48px;
+}
+
+.icon-dead-big {
+    z-index: 10;
+    top: 4rem;
+    left: 0.20rem;
+    width: 156px;
+}
+
+.icon-lock-character {
+    z-index: 10;
+    top: 35%;
+    left: 35%;
+    width: 30%;
+    filter: grayscale(100%);
+}

@@ -1,0 +1,27 @@
+/* --------- PANNEAU ADMIN ----------- */
+
+.admin-element-list {
+    width: 100%;
+    th, td {
+        text-align: center;
+        padding: 0.5rem;
+    }
+    th {
+        background-color: var(--secondary-pastel-darker);
+        color: var(--color-background);
+    }
+    td {
+        background-color: var(--color-white);
+        border: 1px solid var(--color-background);
+    }
+}
+
+.element-number {
+    font-size: 3.5rem;
+    font-weight: 300;
+    line-height: 1.2;
+
+    @media (max-width: 991.98px) { font-size: 3.25rem; }
+    @media (max-width: 575.98px) { font-size: var(--fontsize-huge); }
+    @media (max-width: 480px) { font-size: 2.75rem; }
+}

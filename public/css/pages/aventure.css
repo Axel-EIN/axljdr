@@ -1,0 +1,255 @@
+/* --------------------------------- */
+/* --------- PAGE AVENTURE --------- */
+/* --------------------------------- */
+
+/* Venait de banners.css : usage unique a cette page. */
+.header-bg-no-chapter {
+  background-image:
+    linear-gradient(rgb(40,0,0,0.5),rgb(40,0,0,0.5)),
+    url('../assets/placeholders/na-chapter.jpg');
+  background-position: center;
+}
+
+/* Cartes d'episode affichees quand on deplie un chapitre (episode-card.html.twig,
+   inclus par chapitre-section.html.twig, lui-meme inclus par aventure/index).
+   Ces styles ne servent que la, d'ou leur sortie de cards.css qui est charge
+   sur tout le site. */
+
+.episode-card-space {
+  position: relative;
+  padding-right: 8px;
+  padding-left: 8px;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  margin-bottom: 1rem;
+
+  /* Une fois empilees, les cartes suivraient la largeur de l'ecran : au-dela
+     de 420px elles s'etirent sans rien gagner. Le .row qui les porte est en
+     justify-content-center, elles restent donc centrees une fois bridees. */
+  @media (max-width: 991.98px) {
+    max-width: 420px;
+  }
+
+  .character-box {
+    position: absolute;
+    z-index: 10;
+    top: -1.5rem;
+    left: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .card-inner {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    border-radius: 0.75rem;
+    /* Dégradé qui s'estompe vers le bas : opaque en haut (sous l'image),
+       transparent en bas (sous le résumé). */
+    background-image: linear-gradient(
+      to bottom,
+      var(--color-black-40) 0%,
+      var(--color-black-40) 40%,
+      transparent 90%
+    );
+    background-color: #FFFFFF10;
+    box-shadow: 0px -4px 16px var(--color-black-40);
+    backdrop-filter: blur(4px);
+    min-width: 265px;
+    min-height: 360px;
+    max-height: 360px;
+    /* drop-shadow (au lieu de box-shadow) suit l'alpha du contenu :
+       l'ombre s'estompe avec le dégradé transparent en bas, au lieu de
+       dessiner un rectangle d'ombre sous toute la card. */
+    border: 0;
+
+    .card-number {
+      position: absolute;
+      z-index: 10;
+      top: 54px;
+      left: 16px;
+      color: var(--color-white);
+      font-size: 3rem;
+      font-weight: bold;
+      text-shadow: 0px 2px 8px black;
+    }
+
+    .image-container {
+      position: relative;
+      border-radius: 0.75rem 0.75rem 0px 0px;
+      background-color: var(--color-black);
+      overflow: hidden;
+      display: flex;
+
+      .card-image {
+        width: 100%;
+        object-fit: cover;
+      }
+    }
+
+    .text-container {
+      position: relative;
+      padding: 0.75rem;
+      min-height: 120px;
+      max-height: 120px;
+
+      .card-title {
+        position: absolute;
+        z-index: 5;
+        top: -30px;
+        left: 16px;
+        font-size: 0.95rem !important;
+        padding: 4px !important;
+        margin-top: 8px;
+        margin-left: -16px;
+        width: 100%;
+        letter-spacing: -0.5px;
+        color: var(--color-white);
+        font-weight: bold;
+        text-shadow: 0px 2px 8px black;
+        text-align: center;
+      }
+
+      .card-text {
+        font-size: 0.9rem;
+        color: var(--color-gray);
+        margin-bottom: 0.5rem;
+      }
+    }
+
+    button.btn-medium {
+      margin-top: auto;
+      margin-bottom: 0.5rem;
+      align-self: center;
+    }
+
+    /* Mobile : carte plus basse. L'image et la zone de texte perdent 40% de
+       hauteur ; la hauteur de la carte n'est plus figee et suit son contenu,
+       ce qui evite d'avoir a la recalculer a la main. L'image, en cover,
+       recadre au centre au lieu de se deformer. */
+    @media (max-width: 991.98px) {
+      /* Hauteur de la vignette declaree une fois : le numero d'episode s'y
+         centre via calc(), les deux ne peuvent donc pas se desynchroniser. */
+      --episode-image-height: 90px;
+
+      min-height: auto;
+      max-height: none;
+
+      .image-container { height: var(--episode-image-height); }
+
+      .card-image {
+        height: 100%;
+        object-position: center;
+      }
+
+      /* Centre verticalement sur la vignette, a 1rem du bord gauche. Le
+         top: 54px du desktop le faisait deborder sur la zone de texte. */
+      .card-number {
+        top: calc(var(--episode-image-height) / 2);
+        left: 1rem;
+        transform: translateY(-50%);
+      }
+
+      .text-container {
+        min-height: 72px;
+        max-height: 72px;
+      }
+    }
+  }
+}
+
+/* ----- BANDEAU DE CHAPITRE ----- */
+
+/* Venaient de banners.css : contrairement aux grilles de portraits PJ/PNJ
+   (partagees avec la page episode), ces regles ne servent que cette page. */
+/* LIGNE DE LIEUX DU CHAPITRE (en header)
+   Ancree top-left du `.header` parent. Icones meme format / effets que
+   les portraits PJ/PNJ. */
+/* ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾ */
+
+.chapter-lieux {
+  position: absolute;
+  top: 0.5rem;
+  right: 0rem;
+  z-index: 10;
+  text-align: left;
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.chapter-lieux-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 4px;
+
+  .chapter-lieu-link {
+    display: block;
+    line-height: 0;
+  }
+
+  .chapter-lieu-icon {
+    width: 48px;
+    height: 48px;
+    filter: brightness(1);
+  }
+
+}
+
+/* Masquee sous 992px, comme la grille de portraits (banners.css) : le header y
+   passe en mode compact (40vh) et la ligne, ancree top-right en absolute,
+   chevauche le libelle CHAPITRE et le titre. */
+@media (max-width: 991.98px) { .chapter-lieux { display: none; } }
+
+/* Bandeau de chapitre : un peu d'air sous le CTA pour qu'il ne colle pas au
+   bord bas. A l'ouverture, script.js remplace la classe .voir du bouton par
+   .cacher et les cartes d'episode prennent le relais juste en dessous : cette
+   marge s'ajouterait a la leur, on la retire donc dans cet etat.
+   Valeur en CSS et non en utilitaire : un mb-3 (!important) ne pourrait pas
+   etre annule par le :has() sans un second !important. */
+.header-chapter > .mt-auto {
+  margin-bottom: 1rem;
+
+  &:has(.cacher) { margin-bottom: 0; }
+}
+
+/* ----- BARRE DE SAISON (navigation precedente/suivante) ----- */
+/* Venait de header.css : usage unique a cette page. */
+
+.saison-bar {
+  display: block;
+  position: relative;
+  box-shadow: 0px 2px 8px #00000040;
+
+  /* Grille 3 colonnes : les deux colonnes laterales font la meme largeur,
+     donc le titre central reste centre meme si "Saison Precedente" est plus
+     long que "Saison Suivante". Les liens ne s'etirent pas pour autant
+     (justify-self) : seule leur propre boite reagit au survol. */
+  .container {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    height: 48px;
+    align-items: center;
+    color: var(--color-disabled);
+
+    @media (max-width: 991.98px) { height: 40px; }
+  }
+
+  .container > a {
+    justify-self: start;
+
+    &:last-of-type { justify-self: end; }
+
+    /* Reduit au seul chevron sur mobile : cible de 32px de large, qui prend
+       toute la hauteur de la barre (align-self) avec le chevron centre dedans. */
+    @media (max-width: 991.98px) {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      align-self: stretch;
+      width: 32px;
+    }
+  }
+}

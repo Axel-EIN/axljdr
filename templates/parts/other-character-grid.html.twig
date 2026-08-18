@@ -1,0 +1,30 @@
+{# Grille de portraits de personnages liés à l'élément affiché.
+   Variables : titre (string), personnages (collection), limite (int, optionnel).
+   Style défini dans components/other-elements-grid.css : mobile plein cadre
+   sur fond sombre, desktop classique en 2 colonnes. #}
+
+<div class="card card-body h-100">
+    <h2 class="element-card-title">{{ titre }}</h2>
+    <hr>
+    <div class="row other-character-grid px-lg-3">
+        {% for un_personnage in limite is defined ? personnages|slice(0, limite) : personnages %}
+
+            {% if un_personnage.icone is null and un_personnage.genre == 'F' %}
+                {% set na_portrait = NA_PERSO_PORTRAIT_F %}
+            {% elseif un_personnage.icone is null and un_personnage.genre == 'M' %}
+                {% set na_portrait = NA_PERSO_PORTRAIT_M %}
+            {% else %}
+                {% set na_portrait = NA_PERSO_PORTRAIT %}
+            {% endif %}
+
+            <article class="col-6 col-sm-3 col-lg-6 py-lg-1 text-center hover-zoom">
+                <a href="{{ path('personnage_profil', {id: un_personnage.id}) }}">
+                    <img src="{{ asset(un_personnage.icone|default(na_portrait)) }}" alt="Icône d'un personnage" title="Voir le profil de {{ un_personnage.prenom }}" />
+                </a>
+            </article>
+
+        {% else %}
+            <span class="text-muted">{{ vide_message|default("Il n'y a pas de personnage à afficher.") }}</span>
+        {% endfor %}
+    </div>
+</div>

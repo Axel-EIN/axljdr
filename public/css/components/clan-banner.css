@@ -1,0 +1,73 @@
+/* ------------------------------------------ */
+/* --------- BANDEAU D'INTRO — CLAN ---------- */
+/* ------------------------------------------ */
+
+/* Sert parts/clan-banner.html.twig, charge uniquement par
+   empire/clan.html.twig. Le socle commun (icone/citation + description + nav)
+   vit dans components/element-banner-intro.css, a charger avant ce fichier :
+   ici, seulement les specificites du Clan (video, champion, majeur) et les
+   valeurs propres au bandeau clan. */
+
+@media (max-width: 991.98px) {
+    .element-page > .container > section > h1 {
+        --banner-title-top: 1rem;
+    }
+
+    #element-banner > div {
+        --banner-content-offset: 3rem;
+    }
+
+    /* Emblème -10% (240px -> 216px) : gagner de la place sur mobile. */
+    #left-part .img-240 {
+        max-width: min(216px, 100%);
+    }
+}
+
+/* ----- VIDEO DE FOND (optionnelle) ----- */
+
+/* Seule l'entite Clan a un champ video aujourd'hui, mais ces regles restent
+   avec le composant : une autre entite qui en gagne un fonctionnera seule. */
+
+#banner-video {
+    position: absolute;
+    top: 0;
+    z-index: 0;
+    object-fit: cover;
+    width: 100%;
+    height: 100%;
+}
+
+#overlay-video {
+    position: absolute;
+    z-index: 1;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+#zone-mon {
+    display: block;
+}
+
+#icon-play {
+    position: absolute;
+    z-index: 2;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: var(--color-white);
+}
+
+#icon-mute-video {
+    position: absolute;
+    z-index: 5;
+    top: 1rem;
+    left: 2rem;
+    color: var(--color-white-80);
+
+    &:hover {
+        cursor: pointer;
+        color: var(--color-white);
+    }
+}

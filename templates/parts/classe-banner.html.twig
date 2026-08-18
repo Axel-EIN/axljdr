@@ -1,0 +1,58 @@
+{# Bandeau d'intro de la Classe. Params : classe, classes (pour la nav). #}
+
+<div id="element-banner" class="col-12">
+
+    <div class="row" style="background-image: linear-gradient( #00000000 ,  #00000040 , #000000EE ), linear-gradient( {{classe.couleur}}60 , {{classe.couleur}}FF ),
+                            url('{{ asset( classe.image|default(NA_CLAN) ) }}');">
+
+        <div class="row m-0 p-0">
+
+            <div id="left-part" class="col-12 col-lg-5 py-3 py-lg-5 pl-lg-5 pr-lg-0 m-0 d-flex flex-column justify-content-center align-items-center" >
+                <img class="img-240 invert filter-shadow" src="{{ asset(classe.icone|default(NA_CLASS_ICO)) }}" alt="Icône" />
+
+                {% if classe.citation is not empty %}
+                    <span class="quote text-white m-0 pr-3">«&nbsp;{{classe.citation}}&nbsp;»</span>
+                {% endif %}
+            </div>
+
+            <div id="right-part" class="col-12 col-lg-7">
+                <p class="text-zone-blur">
+                    {{ classe.description|raw|nl2br }}
+                </p>
+            </div>
+
+        </div>
+
+        <nav class="col-12 relative" style="z-index: 3; border-bottom: 4px solid {{classe.couleur}}">
+
+            <div class="d-none d-lg-flex justify-content-center">
+                {% for une_autre_classe in classes %}
+                    <a class="text-white py-2 px-3" {% if une_autre_classe.id == classe.id %}style="background-color: {{classe.couleur}}"{% endif %}
+                    href="{{ path('regles_classe', { id: une_autre_classe.id, '_fragment' : 'element-banner' } ) }}">
+                        <strong>{{une_autre_classe.nom|upper}}</strong>
+                    </a>
+                {% endfor %}
+            </div>
+
+            {# Mobile : seule la classe active est affichee, le chevron deroule les autres #}
+            <div class="dropdown d-lg-none text-center">
+                <a  class="banner-nav-toggle chevron-toggle text-white py-2 px-3 d-inline-flex align-items-center"
+                    style="background-color: {{classe.couleur}}"
+                    data-toggle="dropdown" href="#" role="button"
+                    aria-expanded="false" aria-label="Choisir une autre classe">
+                    <strong>{{classe.nom|upper}}</strong>
+                    <i class="fas fa-chevron-down ml-2"></i>
+                </a>
+                <div class="dropdown-menu dropdown-dark">
+                    {% for une_autre_classe in classes|filter(c => c.id != classe.id) %}
+                        <a class="dropdown-item" href="{{ path('regles_classe', { id: une_autre_classe.id, '_fragment' : 'element-banner' } ) }}">
+                            {{une_autre_classe.nom|upper}}
+                        </a>
+                    {% endfor %}
+                </div>
+            </div>
+        </nav>
+
+    </div>
+
+</div>

@@ -63,6 +63,7 @@
 .h3-title, .amerigo-h3, .card-sub-title {
     font-family: "Amerigo";
     font-size: 1.25rem;
+    color: var(--color-strong);
     margin: 0;
     padding: 0;
 

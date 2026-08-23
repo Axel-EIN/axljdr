@@ -1,0 +1,73 @@
+/* ----- DOCUMENT EN PARTIES ---------- */
+
+/* ----- SOMMAIRE ----- */
+
+/* Sa lisibilite vient de .blur-cartouche, pas d'un degrade sur l'image. */
+#sommaire {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    z-index: 10;
+    bottom: 1rem;
+    left: 1rem;
+    margin: 0;
+    padding: 0.5rem 0;
+    color: var(--color-white);
+
+    & > strong {
+        margin: 0.5rem 1.5rem;
+        font-size: var(--fontsize-large);
+    }
+
+    & > .list-group-item {
+        color: var(--color-alternate);
+        font-size: var(--fontsize-medium);
+        border: unset;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        background-color: unset;
+        margin: 0;
+        padding: 0.5rem 1.5rem;
+        border-radius: 0;
+        &:hover {
+            color: var(--color-white);
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        &:last-child { border-bottom: 0; }
+    }
+}
+
+.part-header {
+    position: relative;
+    margin-top: 2rem;
+    padding: 0 1rem;
+}
+
+.part-body {
+    a { font-weight: bold; }
+
+    aside {
+        margin: 1rem 1rem 1rem 2rem;
+        float: right;
+        width: 30%;
+    }
+
+    /* L'encadre est place AVANT le texte dans le template, le float:right le
+       remontant a droite : d'ou le flex + order pour l'envoyer dessous. */
+    @media (max-width: 991.98px) {
+        display: flex;
+        flex-direction: column;
+
+        aside {
+            order: 2;
+            float: none;
+            width: auto;
+            margin: 1rem;
+        }
+        .card-description { order: 1; }
+    }
+}
+
+.aside > p {
+    font-size: var(--fontsize-small);
+    line-height: 1.6;
+}

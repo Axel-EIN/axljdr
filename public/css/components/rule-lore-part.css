@@ -1,0 +1,110 @@
+/* ----- DOCUMENT EN PARTIES ---------- */
+
+/* ----- SOMMAIRE ----- */
+
+#sommaire {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    z-index: 10;
+    bottom: 1rem;
+    left: 1rem;
+    margin: 0;
+    padding: 0.5rem 0;
+    color: var(--color-white);
+
+    & > strong {
+        margin: 0.5rem 1.5rem;
+        font-size: var(--fontsize-large);
+    }
+
+    & > .list-group-item {
+        color: var(--color-alternate);
+        font-size: var(--fontsize-medium);
+        border: unset;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        background-color: unset;
+        margin: 0;
+        padding: 0.5rem 1.5rem;
+        border-radius: 0;
+        &:hover {
+            color: var(--color-white);
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        &:last-child { border-bottom: 0; }
+    }
+}
+
+/* ----- SOURCE PDF ----- */
+
+.btn-pdf-source {
+    position: absolute;
+    z-index: 10;
+    right: 1rem;
+    bottom: 1rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.4rem 1rem;
+    border-radius: 2rem;
+    background-color: rgb(from var(--color-primary) r g b / 0.5);
+    backdrop-filter: blur(8px);
+    color: var(--color-white);
+    font-size: var(--fontsize-small);
+
+    & > img { width: 20px; }
+
+    &:hover {
+        background-color: rgb(from var(--color-primary) r g b / 0.75);
+        color: var(--color-white);
+    }
+
+    @media (max-width: 991.98px) {
+        top: 1rem;
+        bottom: auto;
+    }
+}
+
+.part-header {
+    position: relative;
+    margin-top: 2rem;
+    padding: 0 1rem;
+}
+
+.part-body {
+    a { font-weight: bold; }
+
+    .articlepart {
+        font-size: var(--fontsize-regular);
+    }
+
+    .aside {
+        margin: 1rem 1rem 1rem 1.5rem;
+        float: right;
+        width: 30%;
+        float: right;
+        border-color: transparent;
+        border-style: double;
+        border-width: 24px 24px 140px 24px;
+        border-image: url('/assets/ui/bg-aside.png') 24 24 140 24 fill repeat;
+
+        & > p {
+            font-size: var(--fontsize-base);
+            line-height: var(--leading-16);
+        }
+    }
+
+
+    @media (max-width: 991.98px) {
+        display: flex;
+        flex-direction: column;
+
+        aside {
+            order: 2;
+            float: none;
+            width: auto;
+            margin: 1rem;
+        }
+        .card-description { order: 1; }
+    }
+}

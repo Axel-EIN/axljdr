@@ -1,0 +1,35 @@
+{% extends 'base.html.twig' %}
+{% block title %}{{ titre }} {{ parent() }}{% endblock %}
+
+{% block stylesheets %}
+  {{ parent() }}
+  <link rel="stylesheet" href="{{asset('css/components/element.css')}}" />
+  <link rel="stylesheet" href="{{asset('css/components/other.css')}}" />
+{% endblock %}
+
+{% block body %}
+  <main class="container-fluid element-page other-page">
+    <div class="container">
+
+      {{ include('parts/breadcrumbs.html.twig', {items: [{label: titre}]}) }}
+      {{ include('parts/messages-flashes.html.twig') }}
+
+      <section>
+        <h1 class="heading-elementdetail"><strong>{{ titre }}</strong></h1>
+        <hr class="hr-title">
+
+        <div class="row">
+          {# Une seule carte pleine largeur par defaut ; une page qui en veut
+             plusieurs, ou en colonnes, surcharge `cartes` plutot que `contenu`. #}
+          {% block cartes %}
+            <div class="col-12">
+              <div class="card card-page">
+                {% block contenu %}{% endblock %}
+              </div>
+            </div>
+          {% endblock %}
+        </div>
+      </section>
+    </div>
+  </main>
+{% endblock %}

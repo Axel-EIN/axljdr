@@ -1,0 +1,149 @@
+.chapter-number {
+    font-size: var(--fontsize-bigger);
+    color: var(--color-white);
+
+    @media (max-width: 991.98px) {
+        .chapter-number {
+            font-size: var(--fontsize-large);
+        }
+    }
+
+    @media (max-width: 575.98px) {
+        .chapter-number {
+            font-size: var(--fontsize-plus);
+        }
+    }
+
+    @media (max-width: 480px) {
+        .chapter-number {
+            font-size: var(--fontsize-regular);
+        }
+    }
+}
+
+.chapter-backbtn {
+    position: absolute;
+    bottom: -3rem;
+    left: 0;
+}
+
+.chapter-lieux {
+  position: absolute;
+  top: 0.5rem;
+  right: 0rem;
+  z-index: 10;
+  text-align: left;
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.chapter-lieux-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 4px;
+
+  .chapter-lieu-link {
+    display: block;
+    line-height: 0;
+  }
+
+  .chapter-lieu-icon {
+    width: 48px;
+    height: 48px;
+    filter: brightness(1);
+  }
+
+}
+
+@media (max-width: 991.98px) { .chapter-lieux { display: none; } }
+
+.quote-chapter {
+  width: 60%;
+  margin: 16px auto;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+@media (max-width: 991.98px) { .quote-chapter { width: 90%; } }
+
+/* GRILLE DE PORTRAITS DU CHAPITRE — s'ancre sur le `.header` parent. */
+/* ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾ */
+
+.chapter-characters {
+  position: absolute;
+  bottom: 1rem;
+  z-index: 10;
+  padding: 2px 16px 16px;
+  border-radius: 8px;
+  /* max-content : sans lui, l'absolute borne la grille a la distance entre son
+     ancrage et le bord oppose du parent. */
+  width: max-content;
+  
+  &.pjs  { right: 80%; text-align: right; }
+  &.pnjs { left:  80%; text-align: left;  }
+  &.chapter-view { margin-top: 72px;}
+  &.episode-view { top: 0; }
+}
+
+.label-du-groupe {
+  font-family: 'Present';
+  color: var(--color-white-50);
+  text-shadow: var(--shadow-text);
+}
+
+.chapter-portrait, .chapter-lieu-icon {
+  opacity: 0.4;
+  background-color: var(--color-black-50);
+  object-fit: cover;
+  border-radius: 4px;
+  box-shadow: 8px 8px 16px var(--color-black-25);
+  transition: 0.2s var(--ease);
+}
+
+.chapter-portraits-grid {
+  display: grid;
+  grid-template-rows: repeat(4, 40px);
+  grid-auto-flow: column;
+  grid-auto-columns: 40px;
+  margin-top: 4px;
+  gap: 6px;
+    max-width: calc(10 * 40px + 15 * 6px);
+  backdrop-filter: blur(16px);
+
+  .chapter-portrait-link {
+    display: block;
+    line-height: 0;
+  }
+
+  .chapter-portrait {
+    width: 40px;
+    height: 40px;
+    filter: grayscale(1) brightness(0.5);
+    &.chapter-view { filter: brightness(1);}
+  }
+
+  /* N'a d'effet que la ou la classe est posee, soit la page episode. */
+  .chapter-portrait.in-episode {
+    opacity: 1;
+    filter: grayscale(0);
+  }
+
+  .chapter-portrait-link:hover .chapter-portrait {
+    border-color: var(--primary, #fff);
+  }
+}
+
+.chapter-portrait-link:hover .chapter-portrait,
+.chapter-lieu-link:hover .chapter-lieu-icon {
+  transform: scale(1.1);
+  opacity: 1;
+}
+
+/* direction pilote le sens de remplissage : les PJ s'etendent vers la gauche
+   depuis leur ancrage a droite, les PNJ l'inverse. */
+.chapter-characters.pjs  .chapter-portraits-grid { direction: rtl; }
+.chapter-characters.pnjs .chapter-portraits-grid { direction: ltr; }
+
+@media (max-width: 991.98px) { .chapter-characters { display: none; } }

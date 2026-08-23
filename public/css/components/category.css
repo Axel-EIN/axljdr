@@ -1,0 +1,25 @@
+.category-page {
+  margin-top: 3rem;
+  margin-bottom: 3rem;
+  padding-bottom: 3rem;
+
+  > .container > section {
+    padding-bottom: 3rem;
+    margin-bottom: 3rem;
+
+    > .row { margin-top: 1rem; }
+  }
+
+  .heading-categorysubsection + hr { margin: 0.5rem 0 1.5rem; }
+
+  @media (max-width: 991.98px) {
+    margin-top: 1rem;
+    margin-bottom: 0;
+    padding-bottom: 0;
+
+    > .container > section {
+      margin-bottom: 0;
+      &:last-of-type { padding-bottom: 0; }
+    }
+  }
+}

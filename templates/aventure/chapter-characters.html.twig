@@ -1,0 +1,62 @@
+{# Params : un_chapitre ; episode (grise les absents) et avec_lieux optionnels. #}
+
+{% set pj_ids, pjs, pnj_ids, pnjs = [], [], [], [] %}
+{% set lieu_ids, lieux_chapitre = [], [] %}
+{% set episode_perso_ids = [] %}
+
+{% for un_episode in un_chapitre.episodes %}
+  {% for une_scene in un_episode.scenes %}
+    {% for une_participation in une_scene.participations %}
+      {% set perso = une_participation.personnage %}
+      {% if une_participation.estPj and perso.id not in pj_ids %}
+        {% set pj_ids = pj_ids|merge([perso.id]) %}
+        {% set pjs = pjs|merge([perso]) %}
+      {% elseif not une_participation.estPj and perso.id not in pnj_ids %}
+        {% set pnj_ids = pnj_ids|merge([perso.id]) %}
+        {% set pnjs = pnjs|merge([perso]) %}
+      {% endif %}
+      {% if episode is defined and un_episode.id == episode.id and perso.id not in episode_perso_ids %}
+        {% set episode_perso_ids = episode_perso_ids|merge([perso.id]) %}
+      {% endif %}
+    {% endfor %}
+    {% if avec_lieux|default(false) and une_scene.lieu is not null and une_scene.lieu.id not in lieu_ids %}
+      {% set lieu_ids = lieu_ids|merge([une_scene.lieu.id]) %}
+      {% set lieux_chapitre = lieux_chapitre|merge([une_scene.lieu]) %}
+    {% endif %}
+  {% endfor %}
+{% endfor %}
+
+{% set vue = episode is defined ? ' episode-view' : ' chapter-view' %}
+
+{% if lieux_chapitre|length > 0 %}
+  <div class="chapter-lieux">
+    <div class="label-du-groupe">Lieux</div>
+    <div class="chapter-lieux-row">
+      {% for lieu in lieux_chapitre %}
+        <a class="chapter-lieu-link" href="{{ path('empire_lieu', {id: lieu.id}) }}" title="{{ lieu.nom }}">
+          <img class="chapter-lieu-icon" src="{{ asset(lieu.icone|default(NA_LIEU_ICO)) }}" alt="Icone de {{ lieu.nom }}" />
+        </a>
+      {% endfor %}
+    </div>
+  </div>
+{% endif %}
+
+{% for groupe in [{cle: 'pjs', label: 'Joueurs', persos: pjs}, {cle: 'pnjs', label: 'Non-joueurs', persos: pnjs}] %}
+  {% if groupe.persos|length > 0 %}
+    <div class="chapter-characters {{ groupe.cle }}{{ vue }}">
+      <div class="label-du-groupe {{ groupe.cle == 'pnjs' ? 'pnjs' : '' }}">{{ groupe.label }}</div>
+      <div class="chapter-portraits-grid">
+        {% for perso in groupe.persos %}
+          {% set fallback = NA_PERSO_PORTRAIT %}
+          {% if perso.icone is null and perso.genre == 'F' %}{% set fallback = attribute(_context, 'NA_PERSO_PORTRAIT_F')|default(NA_PERSO_PORTRAIT) %}
+          {% elseif perso.icone is null and perso.genre == 'M' %}{% set fallback = attribute(_context, 'NA_PERSO_PORTRAIT_M')|default(NA_PERSO_PORTRAIT) %}
+          {% endif %}
+          <a class="chapter-portrait-link" href="{{ path('personnage_profil', {id: perso.id}) }}" title="{{ perso.prenom }}">
+            <img class="chapter-portrait{{ vue }}{% if episode is defined and perso.id in episode_perso_ids %} in-episode{% endif %}"
+                 src="{{ asset(perso.icone|default(fallback)) }}" alt="Portrait de {{ perso.prenom }}" />
+          </a>
+        {% endfor %}
+      </div>
+    </div>
+  {% endif %}
+{% endfor %}

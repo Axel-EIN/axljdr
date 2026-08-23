@@ -1,0 +1,60 @@
+{# Historique groupe par episode (forme construite par ClasseurHistorique) :
+   bandes de saison/chapitre quand elles changent, puis les scenes depliantes. #}
+{% for un_bloc in historique %}
+  {% set un_episode = un_bloc.episode %}
+  {% set precedent = loop.index0 > 0 ? historique[loop.index0 - 1].episode : null %}
+  {% set chapitre = un_episode.chapitreParent %}
+  {% set saison = chapitre.saisonParent %}
+  {% set nouvelle_saison = precedent is null or precedent.chapitreParent.saisonParent.id != saison.id %}
+
+  {% if nouvelle_saison %}
+    <h3 class="historique-saison{{ precedent is null ? ' first' : '' }}" style="background-color: {{ saison.couleur }};">
+      <img class="img-48 mr-2" src="{{ asset(AVENTURE_SAISON_ICO) }}" alt="" />
+      <span class="text-white">{{ saison.numero == saison_courante|default(null) ? 'Saison en cours' : saison.titre }}</span>
+    </h3>
+  {% endif %}
+
+  {% if precedent is null or precedent.chapitreParent.id != chapitre.id %}
+    {% if not nouvelle_saison %}<hr class="my-4 mx-n3">{% endif %}
+    <h4 class="ml-2 p-0">
+      <img class="img-36 invert mr-2" src="{{ asset(AVENTURE_CHAPITRE_ICO) }}" alt="" />
+      <strong>{{ chapitre.titre }}</strong>
+    </h4>
+  {% endif %}
+
+  <h5 class="historique-episode">
+    <a  class="chevron-toggle d-flex align-items-center flex-grow-1"
+        data-toggle="collapse" href="#episode{{ un_episode.id }}" role="button"
+        aria-expanded="false" aria-controls="episode{{ un_episode.id }}">
+      <img class="img-24 invert mr-2" src="{{ asset(AVENTURE_EPISODE_ICO) }}" alt="" />
+      <span class="text-muted mr-2">#{{ un_episode.numeroSaison }}</span>
+      {{ un_episode.titre }}
+      <i class="fas fa-chevron-down ml-2 text-small"></i>
+      {% if un_bloc.xp > 0 %}
+        <strong class="ml-auto extrabold text-flash-green-darker text-nowrap">+{{ un_bloc.xp }}xp</strong>
+      {% endif %}
+    </a>
+    {# mr-2 : la carte etant bord a bord sur mobile, l'icone collait au bord. #}
+    <a class="ml-2 mr-2 mr-lg-0 text-small" href="{{ path('aventure_episode', {id: un_episode.id}) }}" title="Voir l'épisode">
+      <i class="fas fa-external-link-alt"></i>
+    </a>
+  </h5>
+
+  <div id="episode{{ un_episode.id }}" class="collapse">
+    {% for ligne in un_bloc.lignes %}
+      <div class="historique-scene">
+        <a href="{{ path('aventure_episode', {id: un_episode.id, '_fragment': 'scn' ~ ligne.scene.numero}) }}">
+          Scène {{ ligne.scene.numero }} — <strong>{{ ligne.scene.titre }}</strong>
+        </a>
+
+        {% if ligne.mort %}
+          <strong class="text-dead">MORT</strong>
+        {% elseif ligne.xp > 0 %}
+          <strong class="extrabold text-flash-green-darker text-nowrap">
+            +{{ ligne.xp }}xp{% if ligne.bonus %} <small>(×{{ constant('App\\Entity\\Participation::XP_BONUS_MULTIPLIER') }})</small>{% endif %}
+          </strong>
+        {% endif %}
+      </div>
+    {% endfor %}
+  </div>
+{% endfor %}

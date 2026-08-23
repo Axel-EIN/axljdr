@@ -1,0 +1,33 @@
+/* ----- FONTS ----- */
+
+@font-face {
+  font-family: 'Barlow';
+  src: url("../assets/fonts/barlow-semi-condensed.ttf") format("truetype");
+}
+.font-barlow { font-family: 'Barlow'; }
+
+@font-face {
+  font-family: "Shogun";
+  src: url("../assets/fonts/shoguns-clan-edited.otf") format("opentype");
+}
+
+@font-face {
+  font-family: "Misaki";
+  src: url("../assets/fonts/misaki-regular.otf") format("opentype");
+}
+
+@font-face {
+  font-family: "Present";
+  src: url("../assets/fonts/present-lt-black-condensed.otf") format("opentype");
+}
+.font-present { font-family: 'Present'; }
+
+@font-face {
+  font-family: "Avenir";
+  src: url("../assets/fonts/avenir-black.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Amerigo";
+  src: url("../assets/fonts/amerigo-bold-bt.ttf") format("truetype");
+}

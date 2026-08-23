@@ -1,0 +1,30 @@
+/* -------- HISTORIQUE -------- */
+
+.historique-saison {
+  display: flex;
+  align-items: center;
+  margin: 3rem -1rem 1.5rem;
+  padding: 0 1rem;
+  text-transform: uppercase;
+
+  &.first { margin-top: 0; }
+
+  @media (max-width: 991.98px) { font-size: var(--fontsize-plus); }
+}
+
+.historique-episode {
+  display: flex;
+  align-items: center;
+  margin: 1rem 0 0 1.5rem;
+}
+
+.historique-scene {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 0.5rem;
+  margin-left: 3rem;
+  padding-left: 0.25rem;
+
+  @media (max-width: 991.98px) { margin-left: 1rem; }
+}

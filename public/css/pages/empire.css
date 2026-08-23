@@ -1,0 +1,6 @@
+/* ----- RUBRIQUE EMPIRE ---- */
+
+.faction-intro {
+  margin: 1rem;
+  font-size: var(--fontsize-regular);
+}

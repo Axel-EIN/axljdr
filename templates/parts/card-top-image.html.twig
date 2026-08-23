@@ -1,0 +1,13 @@
+<div class="gradient-after-down {{ classes|default('') }}">
+  {% if pdf is defined and pdf is not empty %}
+    <a href="{{ asset(pdf) }}">
+      <img class="img-fluid {{ img_class|default('') }}" src="{{ asset(image|default(NA_PDF)) }}" alt="{{ alt }}" />
+    </a>
+  {% else %}
+    <img class="img-fluid {{ img_class|default('') }}" src="{{ asset(image|default(na_image)) }}" alt="{{ alt }}" />
+  {% endif %}
+
+  {% if titre is defined %}
+    <span class="heading-elementdetail card-top-titre d-lg-none" aria-hidden="true">{{ titre }}</span>
+  {% endif %}
+</div>

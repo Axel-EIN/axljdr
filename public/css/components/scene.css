@@ -1,0 +1,118 @@
+.time-location-infos-container {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+
+    .time-and-location {
+        position: relative;
+        width: 84px;
+        z-index: 10;
+        left: 24px;
+        top: -28px;
+        filter: drop-shadow(2px 2px 4px var(--color-black-50));
+    
+        .location {
+            position: absolute;
+            z-index: 1;
+            top: 4px;
+            left: 2px;
+            img { width: 84px; }
+        }
+        
+        .time {
+            position: absolute;
+            z-index: -1;
+            top: 0px;
+            left: 8px;
+            img { width: 72px; }
+            &:hover .hover-tooltip { visibility: visible; }
+        }
+        
+        @media (max-width: 991.98px) {
+            display: none;
+        }
+    }
+
+    .infos {
+        display: flex;
+        flex-direction: column;
+        color: var(--color-white);
+        font-size: var(--fontsize-small);
+        text-shadow: var(--shadow-text);
+        white-space: nowrap;
+        padding-top: 3rem;
+        padding-left: 2rem;
+
+        @media (max-width: 991.98px) {
+            padding-top: 1rem;
+        }
+    }
+}
+
+
+.characters-line {
+  position: absolute;
+  z-index: 10;
+  right: 24px;
+  &.pnjs { top: -24px; }
+  &.pjs { bottom: -24px; }
+
+  .character-portrait-box {
+    position: relative;
+    display: inline-block;
+
+    .character-portrait-link {
+      position: relative;
+
+      &:hover .hover-tooltip { visibility: visible; }
+
+      .character-name {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        padding-left: 0;
+        padding-right: 0;
+        width: 95%;
+        border-top-left-radius: 0;
+        border-top-right-radius: 0;
+        bottom: -2.75rem;
+        &.pj { background-color: var(--flash-blue); }
+        &.pnj { background-color: var(--primary-darker-more); }
+        &.gray { background-color: var(--color-gray-ash); }
+        &.me {
+          visibility: visible;
+          background-color: var(--flash-green);
+        }
+      }
+    }
+  }
+  @media (max-width: 991.98px) { display: none; }
+}
+
+.scene-title-container {
+    position: absolute;
+    z-index: 2;
+    top: -64px;
+    left: 0.5rem;
+
+    display: flex;
+    align-items: center;
+
+    width: 98%;
+    
+    gap: 0.5rem;
+    padding-left: 0.5rem;
+
+    color: var(--color-white);
+
+    .scene-icon {
+        width: var(--icon-medium);
+    }
+
+  @media (max-width: 991.98px) {
+    left: 0;
+    width: 110%;
+    top: -50px;
+    border-radius: 0;
+    border: unset;
+  }
+}

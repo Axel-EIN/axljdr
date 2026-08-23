@@ -1,0 +1,13 @@
+<nav class="breadcrumbs">
+    <span class="text-muted">
+        <a href="{{ path('aventure') }}"><i class="fas fa-home"></i></a>
+        {% for item in items %}
+            &nbsp;&gt;&nbsp;
+            {% if not loop.last and item.path is defined %}
+                <a href="{{ item.path }}"><strong>{{ item.label }}</strong></a>
+            {% else %}
+                <strong>{{ item.label }}</strong>
+            {% endif %}
+        {% endfor %}
+    </span>
+</nav>

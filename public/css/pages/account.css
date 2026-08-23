@@ -1,0 +1,38 @@
+/* ----- ESPACE DE COMPTE --- */
+
+.compte-infos {
+  margin: 0;
+
+  dt {
+    margin-top: 1rem;
+    font-weight: normal;
+    color: var(--color-gray);
+  }
+
+  dd {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin: 0 0 0 1rem;
+  }
+}
+
+.compte-personnages {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--gap, 1rem);
+
+  article {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 0.25rem;
+  }
+
+  img {
+    width: 100%;
+    max-width: 8rem;
+    border-radius: 0.5rem;
+  }
+}

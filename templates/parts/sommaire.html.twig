@@ -1,0 +1,19 @@
+{# Params : soit `items`, une liste de {label, path}, soit `un_element` et
+   `parts` pour balayer ses parties. #}
+{% if items is not defined %}
+  {% set items = [] %}
+  {% for i in 1..parts %}
+    {% if attribute(un_element, 'part' ~ i ~ 'titre') is defined and attribute(un_element, 'part' ~ i ~ 'titre') is not empty %}
+      {% set items = items|merge([{label: i ~ '. ' ~ attribute(un_element, 'part' ~ i ~ 'titre'), path: '#part' ~ i}]) %}
+    {% endif %}
+  {% endfor %}
+{% endif %}
+
+{% if items|length > 1 %}
+  <div id="sommaire" class="blur-cartouche d-none d-lg-flex">
+    <strong>SOMMAIRE</strong>
+    {% for item in items %}
+      <a class="list-group-item list-group-item-action" href="{{ item.path }}">{{ item.label }}</a>
+    {% endfor %}
+  </div>
+{% endif %}

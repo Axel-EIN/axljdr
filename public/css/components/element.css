@@ -1,0 +1,123 @@
+/* ----- GABARIT ELEMENT -------- */
+
+.element-page {
+  margin-top: 0.5rem;
+  margin-bottom: 3rem;
+  padding-bottom: 3rem;
+
+  > .container > section {
+    margin-top: 1.5rem;
+    margin-bottom: 3rem;
+  }
+
+  @media (max-width: 991.98px) {
+    margin-top: 1rem;
+    margin-bottom: 0;
+    padding-bottom: 0;
+
+    @media (max-width: 575.98px) { margin-top: 0; }
+
+    > .container > section {
+      margin-top: 1rem;
+      margin-bottom: 0;
+
+      @media (max-width: 575.98px) { margin-top: 0; }
+    }
+  }
+}
+
+/* --gap pilote seul l'ecart entre cartes. L'horizontale reste en padding de
+   colonne : les colonnes etant en pourcentage, un column-gap ferait deborder. */
+.element-page > .container > section > .row {
+  --gap: 0.5rem;
+
+  row-gap: var(--gap);
+  margin-left: calc(var(--gap) / -2);
+  margin-right: calc(var(--gap) / -2);
+
+  > * {
+    padding-left: calc(var(--gap) / 2);
+    padding-right: calc(var(--gap) / 2);
+  }
+}
+
+/* Element verrouille, saison inexistante : centre et italique, contrairement
+   au texte justifie d'une carte ordinaire. */
+.texte-attente {
+  text-align: center;
+  font-style: italic;
+}
+
+/* Sinon la carte la plus courte flotte a cote de la plus longue. Sans effet
+   sur une rangee a une seule carte, d'ou l'absence de h-100 dans les templates. */
+.element-page > .container > section > .row > * > .card,
+.other-page > .container > section > .row > * > .card {
+  height: 100%;
+}
+
+.hr-title {
+  margin: 0 0 1rem;
+  @media (max-width: 991.98px) { display: none; }
+}
+
+/* Sous 992px le titre est toujours sur l'image ; au-dessus, seules les pages
+   qui y superposent autre chose gardent le degrade, via `gradient-desktop`. */
+@media (min-width: 992px) {
+  .card-page .gradient-after-down:not(.gradient-desktop)::after { content: none; }
+}
+
+/* Ancre sur l'image elle-meme : `bottom: 0` suffit, aucune hauteur a calculer. */
+.gradient-after-down .card-top-titre {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 4;
+  text-align: center;
+  color: var(--color-white);
+}
+
+/* Le h1 du gabarit lui cede la place, mais reste lu par les lecteurs d'ecran. */
+@media (max-width: 991.98px) {
+  .element-page:has(.card-top-titre) > .container > section > h1 {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+}
+
+@media (max-width: 991.98px) {
+  /* Compense le padding du .container : les cartes atteignent les bords. */
+  .element-page > .container > section > .row {
+    margin-left: -1rem;
+    margin-right: -1rem;
+  }
+
+  .element-page > .container > section > .row > * {
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  .element-page .card-body {
+    border: 0;
+    border-radius: 0;
+  }
+
+  .element-page .img-bleed {
+    display: block;
+    width: calc(100% + 1rem);
+    max-width: none;
+    margin-left: -0.5rem;
+    margin-right: -0.5rem;
+  }
+}
+
+@media (max-width: 575.98px) {
+  .element-page > .container > section > .row {
+    margin-left: -0.5rem;
+    margin-right: -0.5rem;
+  }
+}

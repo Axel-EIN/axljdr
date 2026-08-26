@@ -1,0 +1,117 @@
+/* ----- GRILLE D'IMAGES : thumbnail, emblem, portrait ----- */
+
+.picture-grid {
+  /* Le compte passe par --cols : un style inline gagne sur toute feuille. */
+  --cols: var(--cols-desktop, auto-fill);
+
+  display: grid;
+  grid-template-columns: repeat(var(--cols), minmax(var(--grid-min, 10.5rem), 1fr));
+  gap: var(--gap, 0.5rem);
+  padding-top: 0.5rem;
+
+  @media (max-width: 991.98px) {
+    --cols: var(--cols-tablet, var(--cols-desktop, auto-fill));
+  }
+
+  @media (max-width: 575.98px) {
+    --cols: var(--cols-mobile, var(--cols-tablet, var(--cols-desktop, auto-fill)));
+  }
+
+  > * { position: relative; }
+  > *:hover { z-index: 1; }
+  > .grid-empty { grid-column: 1 / -1; }
+
+  .label {
+    font-weight: bold;
+    text-align: center;
+    line-height: 1.4;
+  }
+
+  .picture { width: 100%; }
+}
+
+/* ----- THUMBNAIL ----- */
+
+.picture-grid.thumbnail > a {
+  padding: 0 0.5rem;
+
+  .frame {
+    overflow: hidden;
+    border-top-left-radius: 1rem;
+    border-bottom-right-radius: 1rem;
+  }
+
+  .label {
+    margin-top: 0.25rem;
+    color: var(--primary-darker-more);
+  }
+
+  &:hover .icon-on-hover { opacity: 1; }
+  &:has(.icon-on-hover):hover .ratio-cropped { filter: brightness(0.35); }
+}
+
+.icon-on-hover {
+  opacity: 0;
+  transition: opacity 0.3s var(--ease);
+}
+
+/* ----- EMBLEM ----- */
+
+.picture-grid.emblem > a {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+
+  .picture { max-width: var(--image-max, 10rem); }
+
+  .label {
+    margin-top: 0.5rem;
+    color: var(--color-strong);
+  }
+}
+
+/* ----- PORTRAIT ----- */
+
+.picture-grid.portrait > a {
+  display: block;
+  line-height: 0;
+
+  .picture {
+    max-width: none;
+    aspect-ratio: 1;
+    object-fit: cover;
+    border: 0;
+  }
+
+  /* En ::after car un box-shadow inset sur un <img> passe derriere l'image. */
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    box-shadow: inset 0 0 0 4px rgba(0, 0, 0, 0.4);
+    pointer-events: none;
+  }
+}
+
+@media (max-width: 991.98px) {
+  .element-page .picture-grid.portrait {
+    gap: 0;
+    margin: 0 -0.5rem -0.5rem;
+    background-color: var(--color-black-tar);
+  }
+}
+
+/* ----- VERROUILLE ----- */
+
+.picture-grid > a.locked {
+  cursor: pointer;
+
+  .hover-tooltip {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  &:hover .hover-tooltip { visibility: visible; }
+}

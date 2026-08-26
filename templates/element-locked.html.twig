@@ -1,0 +1,46 @@
+{% extends 'element.html.twig' %}
+
+{% set labels = {
+  archive: 'Archive', clan: 'Faction', ecole: 'École', lieu: 'Lieu',
+  lore: 'Lore', objet: 'Objet', personnage: 'Personnage', rule: 'Règle',
+} %}
+{% set nom = labels[entity]|default('Élément') ~ ' à découvrir' %}
+
+{% block element_content %}
+
+  {% set placeholders = {
+    archive: NA_ARCHIVE, clan: NA_CLAN, ecole: NA_ECOLE, lieu: NA_LIEU,
+    lore: NA_LORE, objet: NA_OBJET, rule: NA_RULE,
+  } %}
+
+  {% set attentes = {
+    archive:    "Cette archive n'a pas encore été déverrouillée dans l'aventure. Seules vos actions, jeunes samuraïs, vous permettront d'en percer les secrets.",
+    clan:       "Cette faction n'a pas encore été déverrouillée dans l'aventure. Seules vos actions, jeunes samuraïs, vous permettront un jour de la côtoyer.",
+    ecole:      "Cette école n'a pas encore été déverrouillée dans l'aventure. Seules vos actions, jeunes samuraïs, vous permettront un jour d'en apprendre les techniques.",
+    lieu:       "Ce lieu n'a pas encore été déverrouillé dans l'aventure. Seules vos actions, jeunes samuraïs, vous mèneront un jour jusqu'à lui.",
+    lore:       "Ce savoir n'a pas encore été déverrouillé dans l'aventure. Seules vos actions, jeunes samuraïs, vous permettront un jour de le lire.",
+    objet:      "Cet objet n'a pas encore été déverrouillé dans l'aventure. Seules vos actions, jeunes samuraïs, vous permettront un jour de le tenir.",
+    personnage: "Ce personnage n'a pas encore été déverrouillé dans l'aventure. Seules vos actions, jeunes samuraïs, vous permettront un jour de le rencontrer.",
+    rule:       "Cette règle n'a pas encore été déverrouillée dans l'aventure. Seules vos actions, jeunes samuraïs, vous permettront un jour de la maîtriser.",
+  } %}
+
+  <div class="col-12">
+    <div class="card card-page">
+
+      <div class="relative">
+        <img class="absolute icon-lock grayscale fa-beat-fade" src="{{ asset(LOCKED_ICO) }}" alt="Cadenas" title="À débloquer !" />
+        {{ include('/parts/card-top-image.html.twig', {
+          image: placeholders[entity]|default(NA_1610),
+          na_image: NA_1610,
+          alt: nom,
+          img_class: 'crop-169 grayscale',
+          titre: nom,
+        }) }}
+      </div>
+
+      <p class="card-description texte-attente">{{ attentes[entity]|default("Cet élément n'a pas encore été déverrouillé dans l'aventure. Seules vos actions, jeunes samuraïs, vous permettront un jour de le découvrir.") }}</p>
+
+    </div>
+  </div>
+
+{% endblock %}

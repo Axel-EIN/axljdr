@@ -2,6 +2,7 @@
 
 {% block stylesheets %}
   {{parent()}}
+  <link rel="stylesheet" href="{{asset('css/components/spell.css')}}" />
   <link rel="stylesheet" href="{{asset('css/pages/character-sheet.css')}}" />
 {% endblock %}
 
@@ -576,7 +577,7 @@
       ] },
       { nom: 'Vide', icone: FLAT_VIDE, rang: eff_vide, traits: [] }
     ] %}
-    <div class="fiche-bord-a-bord col-12 col-lg-4 order-first order-lg-last">
+    <div class="illu-col col-12 col-lg-4 order-first order-lg-last">
       <div class="fiche-illu-wrap">
         <img class="fiche-illu img-fluid rounded-8 d-block mx-auto" src="{{ asset(fiche.personnage.illustration|default(NA_PERSO_ILLU)) }}" />
 
@@ -603,12 +604,12 @@
     </div>
   </div>
 
-  <div class="row">
+  <div class="row bloc-row">
 
-    <section class="fiche-bord-a-bord col-12 col-lg-8 mt-2 d-flex flex-column">
+    <section class="col-12 col-lg-8">
 
       {% if est_le_joueur or is_granted('ROLE_MJ') %}
-        <div class="card fiche-bloc">
+        <div class="card card-bloc">
 
           <div class="card-title-cartouche d-flex align-items-center">
             Avantages & Désavantages
@@ -684,7 +685,7 @@
         </div>
       {% endif %}
 
-      <div class="card card-body fiche-bloc">
+      <div class="card card-body card-bloc">
         <table class="table m-0 p-0" id="comp-table">
           <thead>
             <tr class="card-title-cartouche p-0 py-2">
@@ -803,11 +804,90 @@
         </table>
       </div>
 
+      {% set ecole = fiche.personnage.ecole %}
+      {% set est_shugenja = fiche.personnage.classe and fiche.personnage.classe.nom == 'Shugenja' %}
+      {% if est_shugenja or fiche.knownSpells|length > 0 %}
+
+        {% set spells_by_ring = {} %}
+        {% for spell in fiche.knownSpells %}
+          {% set spells_by_ring = spells_by_ring|merge({ (spell.anneau): (spells_by_ring[spell.anneau] ?? [])|merge([spell]) }) %}
+        {% endfor %}
+
+        {% set rings = {TERRE: FLAT_TERRE, AIR: FLAT_AIR, FEU: FLAT_FEU, EAU: FLAT_EAU} %}
+        {% set est_ishiken = (fiche.avantage1 and fiche.avantage1.nom == 'Ishiken-Do')
+                          or (fiche.avantage2 and fiche.avantage2.nom == 'Ishiken-Do') %}
+        {% if est_ishiken %}
+          {% set rings = rings|merge({VIDE: FLAT_VIDE}) %}
+        {% endif %}
+
+        <div class="card card-bloc">
+
+          <div class="card-title-cartouche">Magie</div>
+
+          <div class="row no-gutters magie-entete">
+
+            <div class="col-6 col-lg-3">
+              <h6>Affinité</h6>
+              <strong class="text-{{ ecole.affinite|upper }} text-uppercase">{{ ecole.affinite|default('—') }}</strong>
+            </div>
+
+            <div class="col-6 col-lg-3">
+              <h6>Déficience</h6>
+              <strong class="text-{{ ecole.deficience|upper }} text-uppercase">{{ ecole.deficience|default('—') }}</strong>
+            </div>
+
+            <div class="col-6 col-lg-3">
+              <h6>Technique de l'École</h6>
+              {% if ecole and ecole.techSpecialNom is not empty %}
+                <a  class="spell-link extrabold" role="button" tabindex="0"
+                    data-toggle="popover" data-html="true" data-trigger="focus"
+                    data-container="body" data-placement="top"
+                    title="{{ ecole.techSpecialNom }}"
+                    data-content="{{ ecole.techSpecialDesc|raw|nl2br|e('html_attr') }}">
+                  {{ ecole.techSpecialNom }}
+                </a>
+              {% else %}
+                —
+              {% endif %}
+            </div>
+
+            <div class="col-6 col-lg-3">
+              <h6>Sorts universels</h6>
+              <ul class="spell-list" data-spell-list="UNIVERSEL">
+                {% for spell in spells_by_ring['UNIVERSEL']|default([]) %}
+                  {{ include('/parts/spell-line.html.twig', {spell: spell}) }}
+                {% endfor %}
+              </ul>
+              <div class="spell-add edit-only" data-spell-add="UNIVERSEL"></div>
+            </div>
+
+          </div>
+
+          <div class="row no-gutters magie-anneaux">
+            {% for ring, icone in rings %}
+              <div class="col-6 col-lg knownspells-column">
+                <h6 class="element-header text-{{ ring }}-lighten bg-{{ ring }}-darken extrabold">
+                  <img class="img-24 invert" src="{{ asset(icone) }}" />{{ ring|lower|capitalize }}
+                </h6>
+                <ul class="spell-list" data-spell-list="{{ ring }}">
+                  {% for spell in spells_by_ring[ring]|default([]) %}
+                    {{ include('/parts/spell-line.html.twig', {spell: spell}) }}
+                  {% endfor %}
+                </ul>
+                <div class="spell-add edit-only" data-spell-add="{{ ring }}"></div>
+              </div>
+            {% endfor %}
+          </div>
+
+        </div>
+
+      {% endif %}
+
     </section>
 
-    <section class="fiche-bord-a-bord col-12 col-lg-4 mt-2 d-flex flex-column">
+    <section class="col-12 col-lg-4">
 
-      <div class="card fiche-bloc">
+      <div class="card card-bloc">
 
         <div class="card-title-cartouche">
           Statistiques de Combat
@@ -1159,7 +1239,10 @@
 {% block javascripts %}
     {{ parent() }}
     <script>
-        $(function () { $('[data-toggle="tooltip"]').tooltip(); });
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip();
+            $('[data-toggle="popover"]').popover();
+        });
     </script>
 
     {% if est_le_joueur or is_granted('ROLE_MJ') %}
@@ -1177,6 +1260,7 @@
             avantages: {{ avantages_json|json_encode|raw }},
             desavantages: {{ desavantages_json|json_encode|raw }},
             armes: {{ armes_json|default([])|json_encode|raw }},
+            spells: {{ spells_json|default([])|json_encode|raw }},
             mainsNuesId: {{ mains_nues_id ?? 'null' }},
             jetMap: {{ jet_map()|json_encode|raw }},
             armeVd: {% if fiche.armeActuelle and fiche.armeActuelle.vd %}{{ fiche.armeActuelle.vd|json_encode|raw }}{% else %}null{% endif %},
@@ -1640,6 +1724,94 @@
 
         // === Construit un <select> d'avantages/désavantages pour un slot ===
         // kind = 'avantage' | 'desavantage' ; filtre les exclusifs incompatibles avec la classe.
+        // === Sorts connus : ids presents dans le bloc Magie ===
+        function knownSpellIds() {
+            return Array.from(document.querySelectorAll('[data-spell-id]'))
+                .map(li => parseInt(li.dataset.spellId, 10));
+        }
+
+        // === <select> d'ajout d'un sort, groupe par niveau, sans les sorts deja connus ===
+        function buildSpellSelect(ring) {
+            const select = document.createElement('select');
+            select.className = 'form-control form-control-sm spell-select';
+            const emptyOpt = document.createElement('option');
+            emptyOpt.value = '0';
+            emptyOpt.textContent = '— Ajouter —';
+            select.appendChild(emptyOpt);
+            const known = knownSpellIds();
+            let group = null;
+            let groupLevel = null;
+            (cfg.spells || [])
+                .filter(s => s.anneau === ring && !known.includes(s.id))
+                .forEach(s => {
+                    if (s.niveau !== groupLevel) {
+                        groupLevel = s.niveau;
+                        group = document.createElement('optgroup');
+                        group.label = 'Niveau ' + s.niveau;
+                        select.appendChild(group);
+                    }
+                    const opt = document.createElement('option');
+                    opt.value = s.id;
+                    opt.textContent = s.nom;
+                    group.appendChild(opt);
+                });
+            return select;
+        }
+
+        function buildSpellRemove() {
+            const btn = document.createElement('button');
+            btn.type = 'button';
+            btn.className = 'spell-remove text-danger';
+            btn.title = 'Retirer ce sort';
+            btn.innerHTML = '<i class="fa-solid fa-xmark"></i>';
+            btn.addEventListener('click', () => {
+                btn.closest('.spell-line').remove();
+                refreshSpellSelects();
+            });
+            return btn;
+        }
+
+        // Un sort ajoute n'a pas son detail cote client : son popover revient au
+        // rechargement qui suit la validation.
+        function insertSpellLine(spell, ring) {
+            const list = document.querySelector(`[data-spell-list="${ring}"]`);
+            if (!list) return;
+
+            const li = document.createElement('li');
+            li.className = 'spell-line';
+            li.dataset.spellId = spell.id;
+            const name = document.createElement('span');
+            name.className = 'spell-name';
+            name.textContent = spell.nom;
+            const rank = document.createElement('strong');
+            rank.className = 'text-rank reduced bg-' + (ring === 'UNIVERSEL' ? 'black' : ring);
+            rank.textContent = spell.niveau;
+            li.append(name, rank, buildSpellRemove());
+
+            const next = Array.from(list.children).find(existing => {
+                const level = parseInt(existing.querySelector('.text-rank').textContent, 10) || 0;
+                if (level !== spell.niveau) return level > spell.niveau;
+                return existing.querySelector('.spell-link, .spell-name')
+                    .textContent.trim().localeCompare(spell.nom, 'fr') > 0;
+            });
+            list.insertBefore(li, next || null);
+        }
+
+        function refreshSpellSelects() {
+            document.querySelectorAll('[data-spell-add]').forEach(wrap => {
+                const ring = wrap.dataset.spellAdd;
+                const select = buildSpellSelect(ring);
+                select.addEventListener('change', () => {
+                    const spell = (cfg.spells || []).find(s => s.id === parseInt(select.value, 10));
+                    if (!spell) return;
+                    insertSpellLine(spell, ring);
+                    refreshSpellSelects();
+                });
+                wrap.innerHTML = '';
+                wrap.appendChild(select);
+            });
+        }
+
         function buildAvantageSelect(kind, selectedId) {
             const select = document.createElement('select');
             select.className = 'form-control form-control-sm av-select';
@@ -1881,6 +2053,10 @@
                     nameSpan.appendChild(select);
                 }
             });
+
+            // Sorts : une croix par ligne et un select d'ajout par colonne
+            document.querySelectorAll('.spell-line').forEach(li => li.appendChild(buildSpellRemove()));
+            refreshSpellSelects();
         }
 
         function getSpecsCell(row) {
@@ -2047,6 +2223,11 @@
             Object.keys(modIds).forEach(field => {
                 const el = document.getElementById(modIds[field]);
                 addInput(`joueur_fiche_personnage[${field}]`, el ? el.value.trim() : '');
+            });
+
+            // Sorts connus : ce qui est affiche est ce qui est enregistre
+            document.querySelectorAll('[data-spell-id]').forEach(li => {
+                addInput('joueur_fiche_personnage[knownSpells][]', li.dataset.spellId);
             });
 
             addInput('joueur_fiche_personnage[_token]', cfg.csrfToken);

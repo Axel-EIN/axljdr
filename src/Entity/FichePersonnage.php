@@ -3,10 +3,13 @@
 namespace App\Entity;
 
 use App\Repository\FichePersonnageRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use App\Entity\Avantage;
 use App\Entity\Competence;
 use App\Entity\Objet;
+use App\Entity\Sort;
 
 /**
  * @ORM\Entity(repositoryClass=FichePersonnageRepository::class)
@@ -175,6 +178,13 @@ class FichePersonnage
      */
     private $vide;
 
+    /**
+     * @ORM\ManyToMany(targetEntity=Sort::class)
+     * @ORM\JoinTable(name="known_spell")
+     * @ORM\OrderBy({"niveau" = "ASC", "nom" = "ASC"})
+     */
+    private $knownSpells;
+
     /** @ORM\ManyToOne(targetEntity=Competence::class) @ORM\JoinColumn(nullable=true) */ private $competence1;
     /** @ORM\Column(type="smallint", nullable=true) */ private $valeur1;
     /** @ORM\ManyToOne(targetEntity=Competence::class) @ORM\JoinColumn(nullable=true) */ private $competence2;
@@ -278,6 +288,11 @@ class FichePersonnage
     /** @ORM\Column(type="string", length=6, nullable=true) */ private $speEcole18;
     /** @ORM\Column(type="string", length=6, nullable=true) */ private $speEcole19;
     /** @ORM\Column(type="string", length=6, nullable=true) */ private $speEcole20;
+
+    public function __construct()
+    {
+        $this->knownSpells = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -692,4 +707,28 @@ class FichePersonnage
     public function setSpeEcole19(?string $s): self { $this->speEcole19 = $s; return $this; }
     public function getSpeEcole20(): ?string { return $this->speEcole20; }
     public function setSpeEcole20(?string $s): self { $this->speEcole20 = $s; return $this; }
+
+    /**
+     * @return Collection|Sort[]
+     */
+    public function getKnownSpells(): Collection
+    {
+        return $this->knownSpells;
+    }
+
+    public function addKnownSpell(Sort $spell): self
+    {
+        if (!$this->knownSpells->contains($spell)) {
+            $this->knownSpells[] = $spell;
+        }
+
+        return $this;
+    }
+
+    public function removeKnownSpell(Sort $spell): self
+    {
+        $this->knownSpells->removeElement($spell);
+
+        return $this;
+    }
 }

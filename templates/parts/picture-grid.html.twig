@@ -1,0 +1,89 @@
+{% if items is defined and (items is not empty or empty_message is defined) %}
+
+  {% set variant = variant|default('thumbnail') %}
+
+  {% if per_row is defined %}
+    {% set cols = per_row is iterable ? per_row : {desktop: per_row} %}
+    {# Largeur mini a zero, sinon la rangee imposee deborderait sur mobile. #}
+    {% set style = '--grid-min: 0' %}
+    {% for palier, nombre in cols %}
+      {% set style = style ~ '; --cols-' ~ palier ~ ': ' ~ nombre %}
+    {% endfor %}
+  {% else %}
+    {% set style = min_size is defined ? '--grid-min: ' ~ min_size : '' %}
+  {% endif %}
+  {% if max_size is defined %}{% set style = style ~ '; --image-max: ' ~ max_size %}{% endif %}
+
+  {% if title is defined %}
+    <div class="{{ wrapper|default('col-12') }}">
+      <div class="card card-body">
+        {% if btn_add is defined %}{{ include('/parts/btn-ajouter-element.html.twig', btn_add) }}{% endif %}
+        <h2 class="heading-cardtitle">{{ title }}</h2>
+        <hr>
+  {% endif %}
+
+  <div class="picture-grid {{ variant }} {{ title is not defined ? wrapper|default('') }}" style="{{ style }}">
+    {% for item in limit is defined ? items|slice(0, limit) : items %}
+
+      {% set locked = item.locked|default(false) %}
+      {% set hidden = locked and not is_granted('ROLE_MJ') %}
+      {% set grayscale = hidden ? 'grayscale' : '' %}
+      {% set name = item.nom is defined ? item.nom : item.titre %}
+      {% if item.prenom is defined %}{% set name = (name ? name ~ ' ' : '') ~ item.prenom %}{% endif %}
+      {% set alt = hidden ? 'À découvrir' : name %}
+      {% set image_na = item.pdf|default(null) ? NA_PDF : na_image|default(NA_ICON) %}
+
+      <a class="{{ hidden ? 'translucide locked' : 'hover-zoom' }}"
+         {% if hidden %}aria-disabled="true"{% else %}title="{{ name }}"
+           href="{{ item.pdf|default(null) ? asset(item.pdf) : path(route, {id: item.id}) }}"{% endif %}>
+
+        {% if locked %}
+          {% if hidden %}
+            <img class="absolute icon-lock grayscale fa-beat-fade" src="{{ asset(LOCKED_ICO) }}" alt="Cadenas" />
+            <span class="hover-tooltip">À débloquer</span>
+          {% else %}
+            <img class="absolute icon-lock-corner" src="{{ asset(LOCKED_ICO) }}" alt="Verrouillé" title="Verrouillé pour les joueurs" />
+          {% endif %}
+        {% endif %}
+
+        {% if variant == 'portrait' %}
+          {% set na_genre = item.genre == 'F' ? NA_PERSO_PORTRAIT_F : (item.genre == 'M' ? NA_PERSO_PORTRAIT_M : NA_PERSO_PORTRAIT) %}
+          <img class="picture {{ grayscale }}" src="{{ asset(item.icone|default(na_genre)) }}" alt="{{ alt }}" />
+
+        {% elseif variant == 'emblem' %}
+          <span class="hover-ray">
+            <img class="picture {{ grayscale }}" src="{{ asset(attribute(item, field|default('mon'))|default(image_na)) }}" alt="{{ alt }}" />
+          </span>
+
+        {% elseif not force_image|default(false) and item.icone|default(null) %}
+          <div class="frame ratio-{{ ratio|default('1610') }}">
+            <img class="badge-center img-128 {{ grayscale }}" src="{{ asset(item.icone) }}" alt="{{ alt }}" />
+          </div>
+
+        {% else %}
+          {% if item.pdf|default(null) %}<img class="badge-corner" src="{{ asset(PDF) }}" alt="Icône PDF" />{% endif %}
+          <div class="frame ratio-{{ ratio|default('1610') }}">
+            <img class="ratio-cropped {{ grayscale }}" src="{{ asset(item.imageAffichee|default(item.image|default(image_na))) }}" alt="{{ alt }}" />
+            {% if not hidden and item.icone|default(null) %}
+              <img class="badge-center img-128 icon-on-hover" src="{{ asset(item.icone) }}" alt="" />
+            {% endif %}
+          </div>
+        {% endif %}
+
+        {% if label is defined ? label : variant != 'portrait' %}
+          <div class="label {{ size is defined ? 'text-' ~ size }}">{{ name }}</div>
+        {% endif %}
+
+      </a>
+
+    {% else %}
+      <span class="grid-empty text-muted font-italic">{{ empty_message|default('') }}</span>
+    {% endfor %}
+  </div>
+
+  {% if title is defined %}
+      </div>
+    </div>
+  {% endif %}
+
+{% endif %}

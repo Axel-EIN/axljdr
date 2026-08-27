@@ -73,21 +73,6 @@
     color: var(--color-gray);
 }
 
-#capacite {
-    color: var(--color-strong);
-    margin-left: 0.5rem;
-    padding: 0.5rem;
-}
-
-#capacite ul, #effet-rappel ul {
-    margin-top: 0.5rem;
-    list-style-image: url('../assets/icons/bullet.png');
-}
-
-#capacite li, #effet-rappel li {
-    padding: 0.125rem;
-}
-
 #effet-rappel {
     color: var(--color-strong);
     border-radius: 1rem;
@@ -98,16 +83,4 @@
     margin-bottom: 1.5rem;
     margin-top: 0;
     border: 1px solid #00000020;
-}
-
-.text-rank {
-    color: white;
-    padding-left: .5rem;
-    padding-right: .5rem;
-    padding-top: 0.25rem;
-    padding-bottom: 0.25rem;
-    border-radius: 1rem;
-    font-weight: bold;
-    min-width: 24px;
-    font-size: var(--fontsize-regular);
 }

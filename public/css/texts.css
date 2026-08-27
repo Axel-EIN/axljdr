@@ -1,14 +1,30 @@
 /* ------- BODY TEXT  ------- */
 
 :root {
+  --fontsize-mini: 0.75rem;
+  .text-mini { font-size: var(--fontsize-mini); }
+
   --fontsize-small: 0.8rem;
+  .text-small { font-size: var(--fontsize-small); }
+
   --fontsize-regular : 1rem;
+  .text-regular { font-size: var(--fontsize-regular); }
+
   --fontsize-normal : 1.125rem;
+
   --fontsize-medium: 1.2rem;
+  .text-medium { font-size: var(--fontsize-medium); }
+
   --fontsize-plus: 1.25rem;
+  .text-plus { font-size: var(--fontsize-plus); }
+
   --fontsize-pluser: 1.4rem;
   --fontsize-large: 1.5rem;
+  .text-large { font-size: var(--fontsize-large); }
+
   --fontsize-big: 1.75rem;
+  .text-big { font-size: var(--fontsize-big); }
+
   --fontsize-bigger: 2rem;
   --fontsize-huge: 3rem;
   --fontsize-hero: 4rem;
@@ -22,13 +38,6 @@
   --leading-18: 1.8;
   --leading-2: 2;
 }
-
-.text-small { font-size: var(--fontsize-small); }
-.text-regular { font-size: var(--fontsize-regular); }
-.text-medium { font-size: var(--fontsize-medium); }
-.text-plus { font-size: var(--fontsize-plus); }
-.text-large { font-size: var(--fontsize-large); }
-.text-big { font-size: var(--fontsize-big); }
 
 html, body {
   font-size: 18px;

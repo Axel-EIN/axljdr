@@ -36,23 +36,33 @@
 
     --AIR: #7AA9FF;
     .text-AIR { color: var(--AIR); }
+    .text-AIR-lighten { color: hsl(from var(--AIR) h calc(s - 10) calc(l + 15)); }
     .bg-AIR { background-color: var(--AIR); }
+    .bg-AIR-darken { background-color: hsl(from var(--AIR) h s calc(l - 20)); }
 
     --TERRE: #9E816A;
     .text-TERRE { color: var(--TERRE); }
+    .text-TERRE-lighten { color: hsl(from var(--TERRE) h calc(s - 10) calc(l + 15)); }
     .bg-TERRE { background-color: var(--TERRE); }
+    .bg-TERRE-darken { background-color: hsl(from var(--TERRE) h s calc(l - 20)); }
 
     --EAU: #44BDC4;
     .text-EAU { color: var(--EAU); }
+    .text-EAU-lighten { color: hsl(from var(--EAU) h calc(s - 10) calc(l + 15)); }
     .bg-EAU { background-color: var(--EAU); }
+    .bg-EAU-darken { background-color: hsl(from var(--EAU) h s calc(l - 20)); }
 
     --FEU: #FF9D4C;
     .text-FEU { color: var(--FEU); }
+    .text-FEU-lighten { color: hsl(from var(--FEU) h calc(s - 10) calc(l + 15)); }
     .bg-FEU { background-color: var(--FEU); }
+    .bg-FEU-darken { background-color: hsl(from var(--FEU) h s calc(l - 20)); }
 
     --VIDE: #B293FF;
     .text-VIDE { color: var(--VIDE); }
+    .text-VIDE-lighten { color: hsl(from var(--VIDE) h calc(s - 10) calc(l + 15)); }
     .bg-VIDE { background-color: var(--VIDE); }
+    .bg-VIDE-darken { background-color: hsl(from var(--VIDE) h s calc(l - 20)); }
 
     --color-white-50: #FFFFFF80;
     .text-white-50 { color: var(--color-white-50)};

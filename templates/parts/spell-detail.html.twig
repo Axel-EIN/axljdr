@@ -1,0 +1,21 @@
+<p class="spell-description">{{ spell.description|raw|nl2br }}</p>
+
+<ul class="list-decored spell-capacites">
+
+    {% if spell.portee is not empty %}
+        <li><span class="text-muted">Portée :</span> {{ spell.portee }}</li>
+    {% endif %}
+
+    {% if spell.zone is not empty %}
+        <li><span class="text-muted">Zone d'Effet :</span> {{ spell.zone }}</li>
+    {% endif %}
+
+    {% if spell.duree is not empty %}
+        <li><span class="text-muted">Durée :</span> {{ spell.duree }}</li>
+    {% endif %}
+
+    {% if spell.augmentations is not empty %}
+        <li><span class="text-muted">Augmentations :</span> {{ spell.augmentations }}</li>
+    {% endif %}
+
+</ul>

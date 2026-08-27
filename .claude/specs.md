@@ -687,7 +687,7 @@ Deux rangées à l'intérieur de la carte :
 2. À gauche, les **avantages et désavantages** puis le **tableau des
    compétences** ; à droite, les **statistiques de combat**.
 
-Les blocs internes de la carte partagent une même classe, `fiche-bloc` : padding
+Les blocs internes de la carte partagent une même classe, `sheet-bloc` : padding
 zéro, coins à 0.5rem, contenu découpé — leur tableau ou leur cartouche touche
 leurs bords.
 

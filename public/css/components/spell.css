@@ -1,0 +1,55 @@
+.spell-description {
+    margin: 0;
+    padding: 0.5rem 1rem;
+    text-align: justify;
+    color: var(--color-gray);
+}
+
+.spell-capacites { color: var(--color-strong); }
+
+.spell-link {
+    cursor: pointer;
+    font-weight: bolder;
+    &:hover { text-decoration: underline !important;}
+}
+
+.text-rank {
+    color: white;
+    padding: 0.25rem 0.5rem;
+    border-radius: 1rem;
+    font-weight: bold;
+    min-width: 24px;
+    font-size: var(--fontsize-regular);
+    text-align: center;
+
+    &.reduced {
+        padding: 0.1rem 0.4rem;
+        font-size: var(--fontsize-small);
+    }
+}
+
+.spell-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.spell-line {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.125rem 0.25rem;
+    font-size: var(--fontsize-small);
+
+    /* Pousse le badge de niveau, et la croix d'edition, contre le bord droit. */
+    & .spell-link, & .spell-name { flex: 1; }
+}
+
+.popover { max-width: 360px; }
+
+.popover-body {
+    overflow-y: auto;
+
+    /* Le corps du popover porte deja son padding. */
+    .spell-description { padding: 0; }
+}

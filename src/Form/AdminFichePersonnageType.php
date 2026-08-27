@@ -7,6 +7,7 @@ use App\Entity\Competence;
 use App\Entity\Objet;
 use App\Entity\Personnage;
 use App\Entity\FichePersonnage;
+use App\Entity\Sort;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -127,6 +128,18 @@ class AdminFichePersonnageType extends AbstractType
             ->add('forceStat', IntegerType::class)
             ->add('perception', IntegerType::class)
             ->add('vide', IntegerType::class)
+            ->add('knownSpells', EntityType::class, [
+                'class' => Sort::class,
+                'label' => 'Sorts connus (Ctrl + clic pour en sélectionner plusieurs)',
+                'choice_label' => fn(Sort $sort) => $sort->getNom() . ' (' . $sort->getNiveau() . ')',
+                'group_by' => 'anneau',
+                'multiple' => true,
+                'required' => false,
+                'attr' => ['size' => 20],
+                'query_builder' => fn(EntityRepository $er) => $er->createQueryBuilder('s')
+                    ->where('s.categorie = :categorie')->setParameter('categorie', 'MAGIE')
+                    ->orderBy('s.anneau', 'ASC')->addOrderBy('s.niveau', 'ASC')->addOrderBy('s.nom', 'ASC'),
+            ])
         ;
 
         $competenceOptions = [

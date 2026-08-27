@@ -145,36 +145,16 @@
                 </div>
 
                 {% if app.request.get('tab') != 'TATOUAGE' %}
-                    <div class="col-1 p-0 m-0 text-{{item.anneau|default('black')}}">
-                        <strong class="text-rank font-present bg-{{item.anneau|default('black')}}">{{ item.niveau }}</strong>
+                    {% set ring = item.anneau in ['TERRE', 'AIR', 'FEU', 'EAU', 'VIDE'] ? item.anneau : 'black' %}
+                    <div class="col-1 p-0 m-0 text-{{ ring }}">
+                        <strong class="text-rank font-present bg-{{ ring }}">{{ item.niveau }}</strong>
                     </div>
                 {% endif %}
 
             </div>
 
             <div id="collapse{{i}}" class="collapse">
-                <p class="p-2 px-3 m-0 item-description">{{ item.description|raw|nl2br }}</p>
-                <div id="capacite">
-                    <ul>
-
-                        {% if item.portee is defined and item.portee is not empty %}
-                            <li><span class="text-muted">Portée :</span> {{item.portee}}</li>
-                        {% endif %}
-
-                        {% if item.zone is defined and item.zone is not empty %}
-                            <li><span class="text-muted">Zone d'Effet :</span> {{item.zone}}</strong></li>
-                        {% endif %}
-
-                        {% if item.duree is defined and item.duree is not empty %}
-                            <li><span class="text-muted">Durée :</span> {{item.duree}}</li>
-                        {% endif %}
-
-                        {% if item.augmentations is defined and item.augmentations is not empty %}
-                            <li><span class="text-muted">Augmentations :</span> {{item.augmentations}}</li>
-                        {% endif %}
-
-                    </ul>
-                </div>
+                {{ include('/parts/spell-detail.html.twig', {spell: item}) }}
             </div>
 
         </a>

@@ -12,6 +12,7 @@ use App\Repository\EpisodeRepository;
 use App\Repository\ObjetRepository;
 use App\Repository\PersonnageRepository;
 use App\Repository\SaisonRepository;
+use App\Repository\SortRepository;
 use App\Service\ClasseurHistorique;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -188,7 +189,7 @@ class PersonnagesController extends AbstractController
     /**
      * @Route("/personnages/fiche/{id}", name="personnage_fiche")
      */
-    public function afficherFichePersonnage(FichePersonnage $fiche, CompetenceRepository $competenceRepository, AvantageRepository $avantageRepository, ObjetRepository $objetRepository): Response
+    public function afficherFichePersonnage(FichePersonnage $fiche, CompetenceRepository $competenceRepository, AvantageRepository $avantageRepository, ObjetRepository $objetRepository, SortRepository $sortRepository): Response
     {
         $utilisateur = $this->getUser();
 
@@ -219,6 +220,7 @@ class PersonnagesController extends AbstractController
         $avantagesJson = [];
         $desavantagesJson = [];
         $armesJson = [];
+        $spellsJson = [];
         if ($estLeJoueur || $this->isGranted('ROLE_MJ')) {
             $allComps = $competenceRepository->findBy([], ['nom' => 'ASC']);
             foreach ($allComps as $c) {
@@ -279,6 +281,15 @@ class PersonnagesController extends AbstractController
                 ];
             }
 
+            foreach ($sortRepository->findBy(['categorie' => 'MAGIE'], ['niveau' => 'ASC', 'nom' => 'ASC']) as $s) {
+                $spellsJson[] = [
+                    'id'     => $s->getId(),
+                    'nom'    => $s->getNom(),
+                    'niveau' => $s->getNiveau(),
+                    'anneau' => $s->getAnneau(),
+                ];
+            }
+
             $mainsNues = $objetRepository->findOneBy(['nom' => 'Mains Nues / Corps']);
             $mainsNuesId = $mainsNues ? $mainsNues->getId() : null;
         } else {
@@ -296,6 +307,7 @@ class PersonnagesController extends AbstractController
             'avantages_json'    => $avantagesJson,
             'desavantages_json' => $desavantagesJson,
             'armes_json'        => $armesJson,
+            'spells_json'       => $spellsJson,
             'mains_nues_id'     => $mainsNuesId,
             'category' => 'personnages',
             'entity' => 'fiche',

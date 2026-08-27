@@ -1,0 +1,12 @@
+{% set ring = spell.anneau in ['TERRE', 'AIR', 'FEU', 'EAU', 'VIDE'] ? spell.anneau : 'black' %}
+
+<li class="spell-line" data-spell-id="{{ spell.id }}">
+    <a  class="spell-link extrabold text-{{ ring }}" role="button" tabindex="0"
+        data-toggle="popover" data-html="true" data-trigger="focus"
+        data-container="body" data-placement="top"
+        title="{{ spell.nom }}"
+        data-content="{{ include('/parts/spell-detail.html.twig', {spell: spell})|e('html_attr') }}">
+        {{ spell.nom }}
+    </a>
+    <strong class="text-rank reduced bg-{{ ring }}">{{ spell.niveau }}</strong>
+</li>

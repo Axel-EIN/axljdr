@@ -1,16 +1,40 @@
-.fiche-bloc {
-  padding: 0;
-  border-radius: 0.5rem;
-  overflow: hidden;
-
-  &:not(.card-body) { margin-bottom: 1rem; }
-}
-
-/* Sa grille etant posee a la main, c'est la carte qui porte le padding. */
+/* Cartes dans la carte : --gap-bloc pilote seul leur ecart, vertical comme
+   horizontal. Plus serre que l'ecart entre cartes du gabarit (--gap, 0.5rem,
+   components/element.css). */
 #character-sheet {
+  --gap-bloc: 0.75rem;
+
+  /* Sa grille etant posee a la main, c'est la carte qui porte le padding. */
   padding: 1rem;
 
   @media (max-width: 991.98px) { padding: 0.5rem; }
+}
+
+.card-bloc {
+  padding: 0;
+  border-radius: 0.5rem;
+  overflow: hidden;
+}
+
+/* L'horizontale passe par le padding de colonne, la .row en reprenant la
+   moitie en marge negative : les colonnes etant en pourcentage, un column-gap
+   les ferait deborder. */
+.bloc-row {
+  margin-top: var(--gap-bloc);
+  margin-left: calc(var(--gap-bloc) / -2);
+  margin-right: calc(var(--gap-bloc) / -2);
+  row-gap: var(--gap-bloc);
+
+  > * {
+    padding-left: calc(var(--gap-bloc) / 2);
+    padding-right: calc(var(--gap-bloc) / 2);
+
+    /* Colonne en flex : le gap remplace le margin-bottom que portait chaque
+       carte, sans laisser de marge morte en bas de colonne. */
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-bloc);
+  }
 }
 
 /* ----- MANDALA DES ANNEAUX ----- */
@@ -55,9 +79,8 @@
   /* Masquee en CSS et non via d-none : le li perdrait sa puce list-style-image. */
   .fiche-ligne-classe { display: none; }
 
-  /* .row imbriquees : hors de portee de la regle de base.css, qui ne vise que
-     le premier niveau. */
-  .fiche-bord-a-bord { padding-left: 0; padding-right: 0; }
+  /* Pleine largeur : l'image et les traits qu'elle porte tiennent la bande. */
+  .illu-col { padding-left: 0; padding-right: 0; }
 
   /* Sans ca, le retrait haut de base.css laisse un lisere au-dessus de l'image. */
   #character-sheet { padding-top: 0; }
@@ -255,4 +278,55 @@
     font-size: 0.85em;
     padding-top: 0.5rem;
     padding-bottom: 0.25rem;
+}
+
+/* ----- BLOC MAGIE ----- */
+
+.magie-entete {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--color-border-base);
+}
+
+.magie-anneaux {
+  display: flex;
+}
+
+.knownspells-column {
+  padding-left: 0.125rem !important;
+  padding-right: 0.125rem !important;
+
+  .element-header {
+    padding: 0.25rem;
+    border-radius: 0.25rem;
+    text-transform: uppercase;
+  }
+
+  .element-spell {
+    padding: 0.25rem;
+  }
+}
+
+.magie-entete h6, .knownspells-column h6 {
+  margin-bottom: 0.25rem;
+  font-size: var(--fontsize-small);
+  color: var(--color-alternate);
+}
+
+.knownspells-column h6 {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.25rem;
+  color: inherit;
+}
+
+.spell-add { margin-top: 0.5rem; }
+
+.spell-select { font-size: var(--fontsize-small); }
+
+.spell-remove {
+  padding: 0 0.25rem;
+  border: 0;
+  background: none;
+  line-height: 1;
 }

@@ -6,6 +6,7 @@ use App\Entity\Avantage;
 use App\Entity\Competence;
 use App\Entity\FichePersonnage;
 use App\Entity\Objet;
+use App\Entity\Sort;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -107,6 +108,15 @@ class JoueurFichePersonnageType extends AbstractType
                         'message' => 'Le format doit être XgY (ex: 1g0, 2g1).',
                     ]),
                 ],
+            ])
+            ->add('knownSpells', EntityType::class, [
+                'class' => Sort::class,
+                'choice_label' => 'nom',
+                'multiple' => true,
+                'required' => false,
+                'query_builder' => fn(EntityRepository $er) => $er->createQueryBuilder('s')
+                    ->where('s.categorie = :categorie')->setParameter('categorie', 'MAGIE')
+                    ->orderBy('s.nom', 'ASC'),
             ])
             ->add('dmgModifier', TextType::class, [
                 'required' => false,

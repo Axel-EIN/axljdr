@@ -50,6 +50,12 @@
                 {% endfor %}
             </div>
 
+            <div class="col-12 mt-4">
+                <h3>Magie</h3>
+                <hr>
+                {{ form_row(form.knownSpells) }}
+            </div>
+
             {{ include('/parts/btn-form.html.twig') }}
     {{ form_end(form) }}
 

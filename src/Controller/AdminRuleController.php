@@ -13,6 +13,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use App\Service\Unlocker;
 
 class AdminRuleController extends AbstractController
 {
@@ -42,7 +43,8 @@ class AdminRuleController extends AbstractController
                 'part3:part3:bool',
                 'part4:part4:bool',
                 'part5:part5:bool',
-                'locked:Bloqué:boolInt',
+                'access:Accès:access',
+                'publishedAt:Publié le:date',
             ],
         ]);
     }
@@ -51,7 +53,7 @@ class AdminRuleController extends AbstractController
      * @Route("/admin/rule/create", name="admin_rule_create")
      * @IsGranted("ROLE_MJ")
      */
-    public function addRule(Request $request, EntityManagerInterface $em, FileHandler $fileHandler, RuleRepository $ruleRepository, Numeroteur $numeroteur): Response
+    public function addRule(Request $request, EntityManagerInterface $em, FileHandler $fileHandler, RuleRepository $ruleRepository, Numeroteur $numeroteur, Unlocker $unlocker): Response
     {
         $rule = new Rule;
         $form = $this->createForm(AdminRuleType::class, $rule);
@@ -72,6 +74,9 @@ class AdminRuleController extends AbstractController
             }
 
             $em->persist($rule);
+            $em->flush();
+
+            $unlocker->sync($rule, $form->get('unlockedBy')->getData());
             $em->flush();
             $this->addFlash('success', 'La Règle a bien été ajoutée');
 
@@ -98,12 +103,13 @@ class AdminRuleController extends AbstractController
      * @Route("/admin/rule/{id}/edit", name="admin_rule_edit")
      * @IsGranted("ROLE_MJ")
      */
-    public function editRule(Request $request, Rule $rule, FileHandler $fileHandler, RuleRepository $ruleRepository, Numeroteur $numeroteur): Response
+    public function editRule(Request $request, Rule $rule, FileHandler $fileHandler, RuleRepository $ruleRepository, Numeroteur $numeroteur, Unlocker $unlocker): Response
     {
         $numeroDepart = $rule->getNumero();
         $fratrieDepartId = $rule->getBase();
 
         $form = $this->createForm(AdminRuleType::class, $rule);
+        $form->get('unlockedBy')->setData($unlocker->charactersOf($rule));
         $form->handleRequest($request);
 
         if ( $form->isSubmitted() && $form->isValid() ) {
@@ -123,13 +129,14 @@ class AdminRuleController extends AbstractController
                 $rule->setPdf($fileHandler->handle($nouveauPDF, $rule->getPdf(), $prefix, 'pdf-rules'));
             }
 
-            // RE-ORDERING : if number has changed or if parent has changed
             if ($numeroDepart != $rule->getNumero() || $fratrieDepartId != $rule->getBase())
             {
                 $fratrieDepart = $ruleRepository->findBy(['base' => $fratrieDepartId]);
                 $fratrieArrivee = $ruleRepository->findBy(['base' => $rule->getBase()]);
                 $numeroteur->reordonnerNumero($rule->getId(), $numeroDepart, $rule->getNumero(), $fratrieDepart, $fratrieArrivee);
             }
+
+            $unlocker->sync($rule, $form->get('unlockedBy')->getData());
 
             $this->getDoctrine()->getManager()->flush();
             $this->addFlash('success', 'La Règle a bien été modifiée');
@@ -155,7 +162,7 @@ class AdminRuleController extends AbstractController
      * @Route("/admin/rule/{id}/delete", name="admin_rule_delete", methods={"POST"})
      * @IsGranted("ROLE_MJ")
      */
-    public function deleteRule(Request $request, Rule $rule, FileHandler $fileHandler, EntityManagerInterface $em, RuleRepository $ruleRepository, Numeroteur $numeroteur): Response
+    public function deleteRule(Request $request, Rule $rule, FileHandler $fileHandler, EntityManagerInterface $em, RuleRepository $ruleRepository, Numeroteur $numeroteur, Unlocker $unlocker): Response
     {
         if ( $this->isCsrfTokenValid('delete' . $rule->getId(), $request->request->get('_csrf_token')))
         {
@@ -167,6 +174,7 @@ class AdminRuleController extends AbstractController
             $fratrieDepart = $ruleRepository->findBy(['base' => $fratrieDepartId]);
             $numeroteur->reordonnerNumero($rule->getId(), $rule->getNumero(), -1, $fratrieDepart, []);
 
+            $unlocker->forget($rule);
             $em->remove($rule);
             $em->flush();
             $this->addFlash('success', 'La Règle a bien été supprimée');    

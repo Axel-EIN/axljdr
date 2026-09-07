@@ -14,6 +14,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use App\Service\Unlocker;
 
 class AdminEpisodeController extends AbstractController
 {
@@ -40,6 +41,8 @@ class AdminEpisodeController extends AbstractController
                 'numeroSaison:Enième:number',
                 'issue:Issue',
                 'resume:Résumé:bool',
+                'access:Accès:access',
+                'publishedAt:Publié le:date',
             ],
         ]);
     }
@@ -48,7 +51,7 @@ class AdminEpisodeController extends AbstractController
      * @Route("/admin/episode/create", name="admin_episode_create")
      * @IsGranted("ROLE_MJ")
      */
-    public function addEpisode(Request $request, EntityManagerInterface $em, FileHandler $fileHandler, ChapitreRepository $chapitreRepository, Numeroteur $numeroteur, EpisodeRepository $episodeRepository) {
+    public function addEpisode(Request $request, EntityManagerInterface $em, FileHandler $fileHandler, ChapitreRepository $chapitreRepository, Numeroteur $numeroteur, EpisodeRepository $episodeRepository, Unlocker $unlocker) {
 
         $episode = new Episode;
 
@@ -75,6 +78,9 @@ class AdminEpisodeController extends AbstractController
 
             $em->persist($episode);
             $em->flush();
+
+            $unlocker->sync($episode, $form->get('unlockedBy')->getData());
+            $em->flush();
             $this->addFlash('success', 'L\'épisode a bien été crée.');
 
             $fratrieArrivee = $episodeRepository->findBy(['chapitreParent' => $episode->getChapitreParent()->getId()]);
@@ -100,12 +106,13 @@ class AdminEpisodeController extends AbstractController
      * @Route("/admin/episode/{id}/edit", name="admin_episode_edit")
      * @IsGranted("ROLE_MJ")
      */
-    public function editEpisode(Request $request, Episode $episode, FileHandler $fileHandler, Numeroteur $numeroteur, EpisodeRepository $episodeRepository): Response {
+    public function editEpisode(Request $request, Episode $episode, FileHandler $fileHandler, Numeroteur $numeroteur, EpisodeRepository $episodeRepository, Unlocker $unlocker): Response {
 
         $numeroDepart = $episode->getNumero();
         $fratrieDepartId = $episode->getChapitreParent()->getId();
 
         $form = $this->createForm(AdminEpisodeType::class, $episode);
+        $form->get('unlockedBy')->setData($unlocker->charactersOf($episode));
         $form->handleRequest($request);
 
         if($form->isSubmitted() && $form->isValid()) {
@@ -121,13 +128,14 @@ class AdminEpisodeController extends AbstractController
                 $episode->setImage(null);
             }
 
-            // RE-ORDERING : If Order Number has changed OR ParentID have changed, then it needs RE-ORDERING
             if ($numeroDepart != $episode->getNumero() || $fratrieDepartId != $episode->getChapitreParent()->getId())
             {
                 $fratrieDepart = $episodeRepository->findBy(['chapitreParent' => $fratrieDepartId]);
                 $fratrieArrivee = $episodeRepository->findBy(['chapitreParent' => $episode->getChapitreParent()->getId()]);
                 $numeroteur->reordonnerNumero($episode->getId(), $numeroDepart, $episode->getNumero(), $fratrieDepart, $fratrieArrivee);
             }
+
+            $unlocker->sync($episode, $form->get('unlockedBy')->getData());
 
             $this->getDoctrine()->getManager()->flush();
             $this->addFlash('success', 'L\'épisode a bien été modifié.');
@@ -153,18 +161,16 @@ class AdminEpisodeController extends AbstractController
      * @Route("/admin/episode/{id}/delete", name="admin_episode_delete", methods={"POST"})
      * @IsGranted("ROLE_MJ")
      */
-    public function deleteEpisode(Request $request, Episode $episode, Numeroteur $numeroteur, EpisodeRepository $episodeRepository, FileHandler $fileHandler): Response {
-        $chapitreParent = $episode->getChapitreParent(); // Saving Parent for Redirection after Deletion
+    public function deleteEpisode(Request $request, Episode $episode, Numeroteur $numeroteur, EpisodeRepository $episodeRepository, FileHandler $fileHandler, Unlocker $unlocker): Response {
+        $chapitreParent = $episode->getChapitreParent();
 
         if ($this->isCsrfTokenValid('delete' . $episode->getId(), $request->request->get('_csrf_token'))) {
 
-            // CHECK if childs exists
             if (!$episode->getScenes()->isEmpty()) {
                 $this->addFlash('warning', 'Veuillez supprimer les scènes enfants au prélable !');
                 return $this->redirectToRoute('admin_episode');
             }
 
-            // File Image Handle
             $fileHandler->handle(null, $episode->getImage(), null, 'episodes');
 
             $fratrieDepartId = $episode->getChapitreParent()->getId();
@@ -172,6 +178,7 @@ class AdminEpisodeController extends AbstractController
             $numeroteur->reordonnerNumero($episode->getId(), $episode->getNumero(), -1, $fratrieDepart, []);
 
             $entityManager = $this->getDoctrine()->getManager();
+            $unlocker->forget($episode);
             $entityManager->remove($episode);
             $entityManager->flush();
             $this->addFlash('success', 'L\'épisode a bien été supprimé.');

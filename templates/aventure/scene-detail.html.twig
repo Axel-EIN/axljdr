@@ -2,8 +2,6 @@
 
     <div class="bg-black relative">
 
-        {# calculee avant .time-and-location : servie a la fois par la pastille
-           superposee (desktop) et par la ligne de texte (mobile) #}
         {% if une_scene.temps == 'Aube' or une_scene.temps == 'Matinée' %}
             {% set TIME_ICO = MORNING %}
         {% elseif une_scene.temps == 'Midi' or une_scene.temps == 'Après-midi' or une_scene.temps == 'Journée' %}
@@ -55,7 +53,7 @@
                             {{une_participation.personnage.prenom}}
                         </span>
                         <img class="character-portrait large pnj
-                            {% if une_participation.estMort == 1 %} dead{% endif %}"
+                            {% if une_participation.estMort == 1 %}effect-dead{% endif %}"
                             src="{{ asset(une_participation.personnage.icone|default( attribute(_context, 'NA_PERSO_PORTRAIT' ~ gender_variable_sufix|default ) ) ) }}"
                             alt="Icone personnage" />
                     </a>
@@ -88,7 +86,7 @@
                         <img
                             class="character-portrait large pj 
                             {% if une_participation.personnage.joueur == app.user %} me outlined{% endif %}
-                            {% if une_participation.estMort == 1 %} dead{% elseif une_participation.xpGagne == 0 %}grayscale{% endif %}"
+                            {% if une_participation.estMort == 1 %}effect-dead{% elseif une_participation.xpGagne == 0 %}grayscale{% endif %}"
                             src="{{asset(une_participation.personnage.icone|default( attribute(_context, 'NA_PERSO_PORTRAIT' ~ gender_variable_sufix|default ) ) ) }}"
                             alt="Icone personnage" />
                     </a>
@@ -119,10 +117,10 @@
         <div class="d-flex justify-content-center">
 
             {% set action = 'edit' %}
-            {{ include('/parts/btn-line.html.twig', {classes: 'mr-5'}) }}
+            {{ include('/btns/btn-line.html.twig', {classes: 'mr-5'}) }}
 
             {% set action = 'delete' %}
-            {{ include('/parts/btn-line.html.twig', {classes: 'ml-5'}) }}
+            {{ include('/btns/btn-line.html.twig', {classes: 'ml-5'}) }}
 
         </div>
     {% endif %}

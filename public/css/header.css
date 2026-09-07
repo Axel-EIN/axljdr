@@ -5,13 +5,13 @@
 .control-panel-bar {
     position: relative;
     z-index: 100;
-    color: var(--color-white-50);
+    color: var(--color-white50);
     padding: 0.125rem;
     font-weight: bold;
     text-align: center;
 
     &.mj {
-        background-color: var(--primary-darker);
+        background-color: var(--color-primarydarker);
     }
     &.admin {
         background-color: var(--green);
@@ -19,7 +19,7 @@
 
     a {
         text-decoration: none;
-        color: var(--color-white-50);
+        color: var(--color-white50);
     }
     a:hover {
         color: var(--color-white);
@@ -29,8 +29,6 @@
 /* ----- NAV ----- */
 /* --------------- */  
 
-/* Hauteur de la nav, barre MJ comprise. Le bandeau d'intro s'en sert pour
-   remplir le reste du premier ecran : valeur a ajuster ici. */
 :root { --nav-height: 5rem; }
 
 .navigation-bar {
@@ -42,20 +40,19 @@
         url( '../../assets/ui/bg-clouds.jpg' ),
         url( '../../assets/ui/bg-clouds.jpg' );
     background-blend-mode: overlay, multiply, multiply, multiply;
-    background-color: var(--secondary-pastel-darker);
+    background-color: var(--color-secondarypasteldark);
     box-shadow: 0px 4px 8px #00000080, inset 0 -3px #BBBBFF10;
 
     .navbar { padding: 0.5rem 0 }
 
-    /* .nav-link et non a.active : couvre le declencheur mobile, un <button>. */
     .nav-link.active {
         color: var(--color-white) !important;
         font-weight: bold;
-        border-bottom: 3px solid var(--primary);
+        border-bottom: 3px solid var(--color-primary);
     }
 
     .nav-link {
-        color: var(--color-white-50) !important;
+        color: var(--color-white50) !important;
         &:active { color: var(--color-white) !important; }
         &:hover {
             color: var(--color-background) !important;
@@ -81,18 +78,31 @@
         justify-content: end;
     }
 
-    /* Sinon le max-width de .img-96 est ignore au calcul max-content : le
-       conteneur prend la taille du fichier (cf. .claude/design.md). */
-    .avatar {
-        flex: 0 0 auto;
-        width: 96px;     }
+    .user-infos {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .main-character {
+        display: flex;
+        align-items: center;
+        gap: 0.35rem;
+        color: var(--color-white50);
+
+        &:hover {
+            color: var(--color-white);
+            text-decoration: underline;
+        }
+    }
+
+    .avatar-link { margin-left: 1rem; }
 
     &.disconnected {
         flex-direction: column;
         justify-content: center;
     }
 }
-
 
 .nav-mobile-menu {
     display: flex;
@@ -104,16 +114,15 @@
     }
 }
 
-
 .nav-mobile-toggle-full {
     display: flex;
     align-items: center;
     gap: 0.4rem;
     background: none;
     border: 0;
-    line-height: 1;
+    line-height: var(--leading-1);
 
-    &:hover i { color: var(--primary); }
+    &:hover i { color: var(--color-primary); }
 }
 
 @media (max-width: 991.98px) {
@@ -123,24 +132,22 @@
         justify-content: flex-start;
     }
 
-    /* .navbar-collapse ne forme plus de boite : la zone utilisateur devient
-       enfant direct de la barre et peut se coller a droite. */
     .navbar-collapse { display: contents; }
 
-    /* Ici et non sur .connected : couvre aussi l'etat deconnecte. */
     #user-zone {
         margin-left: auto;
-        font-size: var(--fontsize-regular);
+        font-size: var(--fontsize-base);
         text-align: right;
         align-items: flex-end;
     }
     #user-zone.connected { flex-direction: column-reverse; }
+    #user-zone .user-infos { align-items: flex-end; }
 
     
     #user-zone.disconnected {
         align-items: center;
         text-align: center;
     }
-        #user-zone .avatar { display: none; }
+    #user-zone .avatar-link { display: none; }
 }
 

@@ -71,6 +71,8 @@ class AdminCompetenceType extends AbstractType
         ->add('capacite2', TextareaType::class, array( 'required' => false, 'constraints' => [ new Length( [ 'max' => 3000 ] ) ] ))
         ->add('description', TextareaType::class, array( 'constraints' => [ new Length( [ 'max' => 3000 ] ) ] ))
         ;
+
+        PublishableFields::add($builder);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

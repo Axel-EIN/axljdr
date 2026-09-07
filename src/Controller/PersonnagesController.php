@@ -5,15 +5,20 @@ namespace App\Controller;
 use App\Entity\FichePersonnage;
 use App\Entity\Personnage;
 use App\Form\JoueurFichePersonnageType;
+use App\Form\JoueurPersonnageType;
 use App\Repository\AvantageRepository;
 use App\Repository\ChapitreRepository;
 use App\Repository\CompetenceRepository;
+use App\Repository\DevelopmentRepository;
 use App\Repository\EpisodeRepository;
 use App\Repository\ObjetRepository;
 use App\Repository\PersonnageRepository;
 use App\Repository\SaisonRepository;
 use App\Repository\SortRepository;
+use App\Service\Baliseur;
 use App\Service\ClasseurHistorique;
+use App\Service\ClasseurXP;
+use App\Service\Visibility;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -22,7 +27,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class PersonnagesController extends AbstractController
 {
-    use LockedTrait;
+    use VisibilityTrait;
 
     /**
      * @Route("/personnages", name="personnages")
@@ -34,10 +39,6 @@ class PersonnagesController extends AbstractController
         ChapitreRepository $chapitreRepository,
         EpisodeRepository $episodeRepository
     ): Response {
-        // Si aucun paramètre n'est explicitement dans l'URL, on applique le défaut :
-        // dernière saison + dernier chapitre + dernier épisode.
-        // Si l'utilisateur a explicitement choisi "Toutes les saisons" (param présent mais vide),
-        // on respecte son choix et on ne pré-filtre pas.
         $saisonId   = null;
         $chapitreId = null;
         $episodeId  = null;
@@ -69,7 +70,6 @@ class PersonnagesController extends AbstractController
             }
         }
 
-        // Le chapitre est rattaché à une saison : on ignore le chapitre si la saison ne correspond pas.
         if ($chapitreId !== null && $saisonId !== null) {
             $chapitre = $chapitreRepository->find($chapitreId);
             if ($chapitre === null || $chapitre->getSaisonParent()->getId() !== $saisonId) {
@@ -78,7 +78,6 @@ class PersonnagesController extends AbstractController
             }
         }
 
-        // L'épisode est rattaché à un chapitre : on l'ignore si le chapitre ne correspond pas.
         if ($episodeId !== null && $chapitreId !== null) {
             $episode = $episodeRepository->find($episodeId);
             if ($episode === null || $episode->getChapitreParent()->getId() !== $chapitreId) {
@@ -135,9 +134,9 @@ class PersonnagesController extends AbstractController
     /**
      * @Route("/personnages/profil/{id}", name="personnage_profil")
      */
-    public function viewPersonnageProfil(Personnage $personnage, PersonnageRepository $personnageRepository, ClasseurHistorique $classeur, SaisonRepository $saisonRepository): Response {
+    public function viewPersonnageProfil(Personnage $personnage, PersonnageRepository $personnageRepository, ClasseurHistorique $classeur, SaisonRepository $saisonRepository, Visibility $visibility, DevelopmentRepository $developmentRepository, Baliseur $baliseur, ClasseurXP $classeurXP): Response {
 
-        if ($response = $this->lockedPage($personnage, 'personnage', 'personnages')) {
+        if ($response = $this->accessGuard($visibility, $personnage, 'personnage', 'personnages')) {
             return $response;
         }
 
@@ -146,32 +145,28 @@ class PersonnagesController extends AbstractController
             : $personnageRepository->findAllPNJsExceptOne($personnage->getId());
         shuffle($autresPersonnages);
 
-        $xp_total = 0;
-        $participations = $personnage->getParticipations();
+        $fiche = $personnage->getFichePersonnage();
+        $xp_creation = ($fiche !== null) ? (int) $fiche->getCreationExp() : 0;
+        $xp_total = $classeurXP->total($personnage);
+        $xp_progression = $xp_total - $xp_creation;
+        $rang = $classeurXP->rank($xp_total);
 
-        foreach ($participations as $une_participation) {
-           $xp_total = $xp_total + $une_participation->getXpEffectif();
+        $estLeJoueur = $this->estLeJoueur($personnage);
+        $estMj = $this->isGranted('ROLE_MJ');
+        $peutEditer = $estLeJoueur || $estMj;
+
+        $form = null;
+        if ($peutEditer) {
+            $form = $this->createForm(JoueurPersonnageType::class, $personnage, ['is_gm' => $estMj]);
+            $form->get('description')->setData($baliseur->debaliser($personnage->getDescription()));
         }
 
-        $xp_progression = $xp_total;
-
-        $fiche = $personnage->getFichePersonnage();
-        $xp_creation = ($fiche !== null) ? $fiche->getCreationExp() : 0;
-        $xp_total += $xp_creation;
-
-        $rang = 1;
-
-        if ($xp_total >= 360)
-            $rang = 5;
-        elseif ($xp_total >= 240)
-            $rang = 4;
-        elseif ($xp_total >= 140)
-            $rang = 3;
-        elseif ($xp_total >= 60)
-            $rang = 2;
-
-        return $this->render('personnages/profil.html.twig', [
+        return $this->render('personnages/character-profil.html.twig', [
             'personnage' => $personnage,
+            'est_le_joueur' => $estLeJoueur,
+            'peut_editer' => $peutEditer,
+            'form' => $form?->createView(),
+            'developments' => $developmentRepository->findByPersonnage($personnage),
             'nom' => $personnage->getNom() . ' ' . $personnage->getPrenom(),
             'entity' => 'personnage',
             'category' => 'personnages',
@@ -189,33 +184,19 @@ class PersonnagesController extends AbstractController
     /**
      * @Route("/personnages/fiche/{id}", name="personnage_fiche")
      */
-    public function afficherFichePersonnage(FichePersonnage $fiche, CompetenceRepository $competenceRepository, AvantageRepository $avantageRepository, ObjetRepository $objetRepository, SortRepository $sortRepository): Response
+    public function afficherFichePersonnage(FichePersonnage $fiche, CompetenceRepository $competenceRepository, AvantageRepository $avantageRepository, ObjetRepository $objetRepository, SortRepository $sortRepository, Visibility $visibility, ClasseurXP $classeurXP): Response
     {
-        $utilisateur = $this->getUser();
+        $estLeJoueur = $this->estLeJoueur($fiche->getPersonnage());
 
-        $estLeJoueur = $utilisateur !== null
-            && $fiche->getPersonnage()->getJoueur() !== null
-            && $fiche->getPersonnage()->getJoueur()->getId() == $utilisateur->getId();
-
-        if (!$estLeJoueur && ($response = $this->lockedPage($fiche->getPersonnage(), 'personnage', 'personnages'))) {
-            return $response;
+        if (!$estLeJoueur && !$this->isGranted('ROLE_MJ')) {
+            return $this->render('element-hidden.html.twig', [], new Response('', Response::HTTP_NOT_FOUND));
         }
 
-        $xp_progression = 0;
-        foreach ($fiche->getPersonnage()->getParticipations() as $participation) {
-            $xp_progression += $participation->getXpEffectif();
-        }
+        $xp_creation = (int) ($fiche->getCreationExp() ?? 0);
+        $xp_total = $classeurXP->total($fiche->getPersonnage());
+        $xp_progression = $xp_total - $xp_creation;
+        $rang = $classeurXP->rank($xp_total);
 
-        $xp_creation = $fiche->getCreationExp() ?? 0;
-        $xp_total = $xp_progression + $xp_creation;
-
-        $rang = 1;
-        if ($xp_total >= 360)      $rang = 5;
-        elseif ($xp_total >= 240)  $rang = 4;
-        elseif ($xp_total >= 140)  $rang = 3;
-        elseif ($xp_total >= 60)   $rang = 2;
-
-        // Compétences + Avantages pour les dropdowns d'édition in-place (joueur ou MJ)
         $competences = [];
         $avantagesJson = [];
         $desavantagesJson = [];
@@ -260,8 +241,6 @@ class PersonnagesController extends AbstractController
                 $desavantagesJson[] = $serialize($a);
             }
 
-            $seesLocked = $this->isGranted('ROLE_MJ');
-            // Une arme verrouillée déjà équipée reste servie, sinon le JS perd son VD.
             $equipped = array_filter([
                 $fiche->getArme()?->getId(),
                 $fiche->getArme2()?->getId(),
@@ -269,7 +248,7 @@ class PersonnagesController extends AbstractController
             ]);
 
             foreach ($objetRepository->findBy(['categorie' => 'ARME'], ['nom' => 'ASC']) as $o) {
-                if ($o->getLocked() && !$seesLocked && !in_array($o->getId(), $equipped, true)) {
+                if (!$visibility->isReadable($o) && !in_array($o->getId(), $equipped, true)) {
                     continue;
                 }
 
@@ -319,13 +298,9 @@ class PersonnagesController extends AbstractController
     /**
      * @Route("/personnages/fiche/{id}/edit", name="personnage_fiche_edit", methods={"POST"})
      */
-    public function editerFichePersonnage(Request $request, FichePersonnage $fiche, EntityManagerInterface $em): Response
+    public function editerFichePersonnage(Request $request, FichePersonnage $fiche, EntityManagerInterface $em, Visibility $visibility): Response
     {
-        $utilisateur = $this->getUser();
-
-        $estLeJoueur = $utilisateur !== null
-            && $fiche->getPersonnage()->getJoueur() !== null
-            && $fiche->getPersonnage()->getJoueur()->getId() == $utilisateur->getId();
+        $estLeJoueur = $this->estLeJoueur($fiche->getPersonnage());
 
         if (!$estLeJoueur && !$this->isGranted('ROLE_MJ')) {
             throw $this->createAccessDeniedException("Vous ne pouvez éditer que la fiche de votre propre personnage.");
@@ -333,6 +308,7 @@ class PersonnagesController extends AbstractController
 
         $form = $this->createForm(JoueurFichePersonnageType::class, $fiche, [
             'sees_locked' => $this->isGranted('ROLE_MJ'),
+            'unlocked' => $visibility->unlockedIds('objet'),
         ]);
         $form->handleRequest($request);
 
@@ -344,5 +320,50 @@ class PersonnagesController extends AbstractController
         }
 
         return $this->redirectToRoute('personnage_fiche', ['id' => $fiche->getId()]);
+    }
+
+    /**
+     * @Route("/personnages/profil/{id}/edit", name="personnage_profil_edit", methods={"POST"})
+     */
+    public function editerProfilPersonnage(Request $request, Personnage $personnage, EntityManagerInterface $em, Baliseur $baliseur): Response
+    {
+        $estMj = $this->isGranted('ROLE_MJ');
+
+        if (!$this->estLeJoueur($personnage) && !$estMj) {
+            throw $this->createAccessDeniedException("Vous ne pouvez éditer que le profil de votre propre personnage.");
+        }
+
+        $form = $this->createForm(JoueurPersonnageType::class, $personnage, ['is_gm' => $estMj]);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            if ($estMj) {
+                $personnage->setDescription($baliseur->baliser($personnage->getDescription()));
+            } else {
+                $personnage->setDescription($this->sansHtml($personnage->getDescription()));
+                $personnage->setPlayerNotes($this->sansHtml($personnage->getPlayerNotes()));
+            }
+
+            $em->flush();
+            $this->addFlash('success', 'Le profil a bien été modifié.');
+        } else {
+            $this->addFlash('danger', "Le profil n'a pas pu être modifié : données invalides.");
+        }
+
+        return $this->redirectToRoute('personnage_profil', ['id' => $personnage->getId()]);
+    }
+
+    private function sansHtml(?string $texte): ?string
+    {
+        return $texte === null ? null : strip_tags($texte);
+    }
+
+    private function estLeJoueur(Personnage $personnage): bool
+    {
+        $utilisateur = $this->getUser();
+
+        return $utilisateur !== null
+            && $personnage->getJoueur() !== null
+            && $personnage->getJoueur()->getId() == $utilisateur->getId();
     }
 }

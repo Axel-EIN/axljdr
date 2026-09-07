@@ -16,8 +16,6 @@
                 <i class="fas fa-undo"></i>
             </a>
         {% endif %}
-        {# "reset" liste les filtres en aval a vider, "inactif" la condition qui
-           desactive celui-ci faute de filtre parent. #}
         {% set filtres = [
             { nom: 'saison',   label: 'Saison',   icone: AVENTURE_SAISON_ICO,   vide: '— Toutes —', options: saisons,   selected: selected_saison_id,   inactif: false,                        reset: ['chapitre', 'episode'] },
             { nom: 'chapitre', label: 'Chapitre', icone: AVENTURE_CHAPITRE_ICO, vide: '— Tous —',   options: chapitres, selected: selected_chapitre_id, inactif: selected_saison_id is null,   reset: ['episode'] },
@@ -26,11 +24,7 @@
 
         <form method="get" action="{{ path('personnages') }}" class="form-row align-items-end m-0">
             {% for filtre in filtres %}
-                {# mobile : icône et liste sur une même ligne (3 lignes au lieu de 6),
-                   le libellé texte est masqué. desktop : libellé au-dessus de la liste. #}
                 <div class="col-12 col-md-4 mb-2 mb-md-0 px-1 d-flex d-md-block align-items-center">
-                    {# mr-3 / mr-md-1 : l'ecart icone-liste est porte par le libelle
-                       sur mobile, par l'image sur desktop ou le texte s'intercale. #}
                     <label for="filtre-{{ filtre.nom }}" class="mb-0 mb-md-2 mr-3 mr-md-0 ml-md-n1 flex align-items-center">
                         <img class="img-32 mr-md-1" src="{{ asset(filtre.icone) }}" alt="" />
                         <span class="label-amerigo d-none d-md-inline">{{ filtre.label }}</span>
@@ -52,9 +46,16 @@
     </div>
 {% endblock %}
 
+{% block section_aside1 %}
+    <label class="voir-inactifs" for="voir-inactifs">
+        <input type="checkbox" id="voir-inactifs">
+        Afficher les morts et disparus
+    </label>
+{% endblock %}
+
 {% block section_content1 %}
     {% for perso in pjs %}
-        {{ include('/personnages/card-personnage.html.twig', {perso}) }}
+        {{ include('/personnages/character-card.html.twig', {perso}) }}
     {% endfor %}
     {% if pjs is empty %}
         <div class="col-12"><p class="text-muted font-italic">Aucun personnage joueur ne correspond à ce filtre.</p></div>
@@ -83,21 +84,19 @@
                 <h3 class="heading-cardtitle">{{ clan_def.titre }}</h3>
                 <div class="row">
                     {% for perso in persos_du_clan %}
-                        {{ include('/personnages/card-personnage.html.twig', {perso}) }}
+                        {{ include('/personnages/character-card.html.twig', {perso}) }}
                     {% endfor %}
                 </div>
             {% endif %}
         {% endfor %}
 
-        {# Un clan hors de cette table rejoint "Autres" : sans ca ses PNJ
-           n'apparaitraient nulle part. #}
         {% set clans_listes = clans_pnjs|map(c => c.nom) %}
         {% set autres = pnjs|filter(p => p.clan is empty or p.clan.nom not in clans_listes) %}
         {% if autres|length > 0 %}
             <h3 class="heading-cardtitle">Autres</h3>
             <div class="row">
                 {% for perso in autres %}
-                    {{ include('/personnages/card-personnage.html.twig', {perso}) }}
+                    {{ include('/personnages/character-card.html.twig', {perso}) }}
                 {% endfor %}
             </div>
         {% endif %}

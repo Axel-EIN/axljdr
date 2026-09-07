@@ -7,9 +7,13 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass=LoreRepository::class)
+ * @ORM\HasLifecycleCallbacks
  */
 class Lore
 {
+    use PublishableTrait;
+    use PartsTrait;
+
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
@@ -81,11 +85,6 @@ class Lore
      * @ORM\Column(type="integer")
      */
     private $numero;
-
-    /**
-     * @ORM\Column(type="boolean")
-     */
-    private $locked = false;
 
     public function getId(): ?int
     {
@@ -244,18 +243,6 @@ class Lore
     public function setNumero(int $numero): self
     {
         $this->numero = $numero;
-
-        return $this;
-    }
-
-    public function getLocked(): ?bool
-    {
-        return $this->locked;
-    }
-
-    public function setLocked(bool $locked): self
-    {
-        $this->locked = $locked;
 
         return $this;
     }

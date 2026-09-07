@@ -13,7 +13,6 @@
         {% set create_label = "Créer un nouvel élément" %}
     {% endif %}
 
-    {# Colonnes decrites en chaines par le controleur, cf. .claude/design.md. #}
     {% set table_cols = table_cols|default([])|filter(c => c is not empty) %}
 
     <section>
@@ -28,7 +27,7 @@
                 {% for col in table_cols %}
                     {% set parts = col|split(':') %}
                     {% set format = parts[2]|default(null) %}
-                    <th class="first-letter-upper {% if format == 'number' %}text-right{% elseif format in ['symbol','image','bool','color'] %}text-center{% else %}text-left{% endif %}">{{ parts[1]|default(parts[0]) }}</th>
+                    <th class="first-letter-upper {% if format == 'number' %}text-right{% elseif format in ['symbol','image','bool','color','access','date','status'] %}text-center{% else %}text-left{% endif %}">{{ parts[1]|default(parts[0]) }}</th>
                 {% endfor %}
                 <th>Edit</th>
                 <th>Delete</th>
@@ -55,6 +54,12 @@
                             <td class="text-center align-middle{{ bold_class }}">
                                 {% if val == 1 %}<span class="text-success">Oui</span>{% elseif val == 0 %}<span class="text-muted">Non</span>{% endif %}
                             </td>
+                        {% elseif format == 'status' %}
+                            <td class="text-center align-middle{{ bold_class }}">{{ status_label(val) }}</td>
+                        {% elseif format == 'access' %}
+                            <td class="text-center align-middle{{ bold_class }}">{{ access_label(val) }}</td>
+                        {% elseif format == 'date' %}
+                            <td class="text-center align-middle{{ bold_class }}">{{ val ? val|date('d/m/Y H:i') : '' }}</td>
                         {% elseif format == 'number' %}
                             <td class="text-right align-middle{{ bold_class }}">{{ val }}</td>
                         {% elseif format == 'symbol' %}

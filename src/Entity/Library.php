@@ -7,9 +7,12 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass=LibraryRepository::class)
+ * @ORM\HasLifecycleCallbacks
  */
 class Library
 {
+    use PublishableTrait;
+
     /**
      * @ORM\Id
      * @ORM\GeneratedValue

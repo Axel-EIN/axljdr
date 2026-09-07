@@ -10,7 +10,6 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\File;
 use Symfony\Component\Validator\Constraints\Length;
-use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
@@ -89,13 +88,11 @@ class AdminObjetType extends AbstractType
                 ],
             ])
 
-            // ARMOR OBJECT
             ->add('ndArmure', IntegerType::class, [
                 'required' => false ] )
             ->add('reduction', IntegerType::class, [
                 'required' => false ] )
 
-            // WEAPON OBJECT
             ->add('vd', TextType::class, [
                 'required' => false,
                 'constraints' => [ new Length( [ 'max' => 60 ] ) ]
@@ -117,8 +114,9 @@ class AdminObjetType extends AbstractType
             ])
             ->add('forceArc', IntegerType::class, [
                 'required' => false ] )
-            ->add('locked', CheckboxType::class, ['required' => false])
         ;
+
+        PublishableFields::add($builder);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

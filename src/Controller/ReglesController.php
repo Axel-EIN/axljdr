@@ -18,10 +18,11 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use App\Service\Visibility;
 
 class ReglesController extends AbstractController
 {
-    use LockedTrait;
+    use VisibilityTrait;
 
     /**
      * @Route("/regles", name="regles")
@@ -35,7 +36,6 @@ class ReglesController extends AbstractController
 
         $sections = [];
 
-        // Section 1 : Règles de Base
         $sections[0]['name'] = "Règles de Base";
         $sections[0]['entity'] = 'rule';
         $sections[0]['label_one'] = 'une Règle';
@@ -43,7 +43,6 @@ class ReglesController extends AbstractController
         $sections[0]['titleStrong'] = 'Base';
 
         
-        // Section 2 : Les Classes
         $sections[1]['name'] = "Classes";
         $sections[1]['entity'] = 'classe';
         $sections[1]['label_one'] = 'une Classe';
@@ -51,14 +50,12 @@ class ReglesController extends AbstractController
         $sections[1]['titleStrong'] = 'Classes';
 
         
-        // Section 3 : Les Bibliothèques de Bases (Liste d'Objet de Règles comme les Avantages/Désavantages/Compétences/Equipement/Sorts/Kiho/Tatoo)
         $sections[2]['name'] = "Bibliothèques";
         $sections[2]['entity'] = 'library';
         $sections[2]['label_one'] = 'une Bibliothèque';
         $sections[2]['titleLight'] = 'Les ';
         $sections[2]['titleStrong'] = 'Bibliothèques';
 
-        // Section 4 : Les Règles Annexes (Règles Simples Annexes ou Bibliothèques Annexes)
         $sections[3]['name'] = "Règles Annexes";
         $sections[3]['entity'] = 'rule';
         $sections[3]['label_one'] = 'une Règle';
@@ -86,9 +83,9 @@ class ReglesController extends AbstractController
     /**
      * @Route("/regles/rule/{id}", name="regles_rule")
      */
-    public function viewRule(Rule $rule, RuleRepository $ruleRepository, Request $request, AvantageRepository $avantageRepository, CompetenceRepository $competenceRepository, ObjetRepository $objetRepository): Response
+    public function viewRule(Rule $rule, RuleRepository $ruleRepository, Request $request, AvantageRepository $avantageRepository, CompetenceRepository $competenceRepository, ObjetRepository $objetRepository, Visibility $visibility): Response
     {
-        if ($response = $this->lockedPage($rule, 'rule', 'regles')) {
+        if ($response = $this->accessGuard($visibility, $rule, 'rule', 'regles')) {
             return $response;
         }
 
@@ -111,30 +108,29 @@ class ReglesController extends AbstractController
                                 AvantageRepository $avantageRepository,
                                 CompetenceRepository $competenceRepository,
                                 SortRepository $sortRepository,
-                                ObjetRepository $objetRepository): Response
+                                ObjetRepository $objetRepository, Visibility $visibility): Response
     {
-        // RECUPERATION des noms des champs de la librairie
+        if ($response = $this->accessGuard($visibility, $library, 'library', 'regles')) {
+            return $response;
+        }
+
         $tab_field_name = $library->getTabField();
         $subtab_field_name = $library->getSubTabField();
         $filter_field_name = $library->getFilterField();
 
-        // RECUPERATION URL PARAMS
         $tab_url_param = $request->query->get('tab');
         $subtab_url_param = $request->query->get('subtab');
         $filter_url_param = $request->query->get('filter');
         $keyword_url_param = $request->query->get('keyword');
 
-        // LIBRARY ALL ITEMS
         $entity_name = $library->getEntity();
         $items = ${ $entity_name . 'Repository' }->findAll();
 
-        // TABS, SUBTABS initialize
         $tabs = [];
         $subtabs = [];
         $filters = [];
         $keywords = [];
 
-        // TABS
         if ( !empty( $tab_field_name ) ) {
             foreach ( $items as $item )
             {
@@ -153,7 +149,6 @@ class ReglesController extends AbstractController
                 $tabs = ['MAGIE', 'MAHO', 'KIHO', 'TATOUAGE'];
         }
 
-        // IF TAB SELECTED
         if ( !empty( $tab_url_param ) && !empty( $tab_field_name ) )
         {
             if ( $tab_url_param != 'all')
@@ -177,7 +172,6 @@ class ReglesController extends AbstractController
 
             }
 
-            // IF FILTER KEYWORD EXISTS
             $keyword2_field_name = $library->getKeyword2Field();
             $keyword3_field_name = $library->getKeyword3Field();
             $keyword1_field_name = $library->getKeyword1Field();
@@ -208,7 +202,6 @@ class ReglesController extends AbstractController
             if ( !empty($subtab_field_name) && empty( $subtab_url_param ) )
                 $items = [];
 
-            // IF SUB TAB SELECTED
             if ( !empty( $subtab_url_param ) && !empty( $subtab_field_name ) && $subtab_url_param != 'all' && $subtab_url_param != 'first' )
             {
                 $items = array_filter($items, function ($obj) use ($subtab_url_param, $subtab_field_name) {
@@ -222,11 +215,9 @@ class ReglesController extends AbstractController
             }
         }
 
-        // IF FILTER SELECTED
         if ( !empty( $filter_url_param ) && !empty( $filter_field_name ) )
             $items = array_filter($items, function ($obj) use ($filter_url_param, $filter_field_name) { return $obj->{ 'get' .  ucfirst( $filter_field_name ) }() == $filter_url_param; });
 
-        // IF KEYWORD FILTER SELECTED
         if ( !empty( $keyword_url_param ) && ( !empty( $keyword1_field_name ) || !empty( $keyword2_field_name ) || !empty( $keyword3_field_name ) ) )
         {
             $filtered_items = [];
@@ -242,10 +233,8 @@ class ReglesController extends AbstractController
             $items = $filtered_items;
         }
 
-        // OTHER LIBRARIES
         $otherLibraries = $libraryRepository->findOthersSameType($library->getId(), $library->getBase());
 
-        // VIEW
         return $this->render('regles/library-detail.html.twig', [
             'library' => $library,
             'nom' => $library->getNom(),
@@ -286,9 +275,9 @@ class ReglesController extends AbstractController
     /**
      * @Route("/regles/ecole/{id}", name="regles_ecole")
      */
-    public function viewEcole(Ecole $ecole, EcoleRepository $ecoleRepository): Response
+    public function viewEcole(Ecole $ecole, EcoleRepository $ecoleRepository, Visibility $visibility): Response
     {
-        if ($response = $this->lockedPage($ecole, 'ecole', 'regles')) {
+        if ($response = $this->accessGuard($visibility, $ecole, 'ecole', 'regles')) {
             return $response;
         }
 

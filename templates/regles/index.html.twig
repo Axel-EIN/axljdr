@@ -8,8 +8,8 @@
 
 {% block section_content1 %}
     {{ include('/parts/picture-grid.html.twig', {
+        variant: 'rule',
         items: rulesBases, route: 'regles_rule', na_image: NA_RULE,
-        ratio: '43', size: 'medium',
         wrapper: 'col-12', per_row: {desktop: 4, mobile: 2},
         empty_message: 'Pas de règles de base disponibles.',
     }) }}
@@ -26,8 +26,8 @@
 
 {% block section_content3 %}
     {{ include('/parts/picture-grid.html.twig', {
+        variant: 'rule',
         items: librariesBases, route: 'regles_library', na_image: NA_LIBRARY,
-        ratio: '43', size: 'medium',
         wrapper: 'col-12', per_row: {desktop: 4, mobile: 2},
         empty_message: 'Pas de bibliothèques disponibles.',
     }) }}
@@ -35,8 +35,8 @@
 
 {% block section_content4 %}
     {{ include('/parts/picture-grid.html.twig', {
+        variant: 'rule',
         items: annexes, route: 'regles_rule', na_image: NA_RULE,
-        ratio: '43',
         wrapper: 'col-12', per_row: {desktop: 6, mobile: 2},
         empty_message: 'Pas de règles annexes disponibles.',
     }) }}

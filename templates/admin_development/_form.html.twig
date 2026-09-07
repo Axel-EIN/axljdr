@@ -1,0 +1,57 @@
+<div class="col-12">
+    {{ form_start(form) }}
+        <div class="row form-wrapper">
+
+            <div class="col-12 col-lg-6">{{ form_row(form.personnage) }}</div>
+            <div class="col-12 col-lg-6">{{ form_row(form.participation) }}</div>
+            <div class="col-12">{{ form_row(form.content) }}</div>
+
+            {{ include('/btns/btn-form.html.twig') }}
+        </div>
+    {{ form_end(form) }}
+</div>
+
+<script>
+(function () {
+    const personnage = document.getElementById('admin_development_personnage');
+    const scene = document.getElementById('admin_development_participation');
+    if (!personnage || !scene) return;
+
+    const toutes = Array.from(scene.querySelectorAll('option')).map(option => ({
+        option,
+        chapitre: option.parentElement.tagName === 'OPTGROUP' ? option.parentElement.label : null,
+    }));
+
+    function filtrer() {
+        const choisie = scene.value;
+        scene.innerHTML = '';
+
+        let courant = null;
+        let groupe = null;
+
+        toutes
+            .filter(({ option }) => !option.value || option.dataset.personnage === personnage.value)
+            .forEach(({ option, chapitre }) => {
+                if (chapitre === null) {
+                    scene.add(option);
+                    courant = null;
+                    return;
+                }
+
+                if (chapitre !== courant) {
+                    groupe = document.createElement('optgroup');
+                    groupe.label = chapitre;
+                    scene.add(groupe);
+                    courant = chapitre;
+                }
+
+                groupe.appendChild(option);
+            });
+
+        scene.value = choisie;
+    }
+
+    personnage.addEventListener('change', filtrer);
+    filtrer();
+})();
+</script>

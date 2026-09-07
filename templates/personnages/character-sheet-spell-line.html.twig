@@ -1,0 +1,18 @@
+{% set ring = spell.anneau in ['TERRE', 'AIR', 'FEU', 'EAU', 'VIDE'] ? spell.anneau : 'black' %}
+
+<li class="spell-line{% if spell.niveau is null %} unranked{% endif %}" data-spell-id="{{ spell.id }}">
+    {% if emblem is defined %}
+        <img class="img-24" src="{{ asset(emblem) }}" alt="" />
+    {% endif %}
+    <a class="spell-link extrabold{% if spell.categorie != 'TATOUAGE' %} text-{{ ring }}{% endif %}" href="{{ element_url(spell) }}">{{ spell.nom }}</a>
+    <a  class="spell-info" role="button" tabindex="0" aria-label="Description de {{ spell.nom }}"
+        data-toggle="popover" data-html="true" data-trigger="focus"
+        data-container="body" data-placement="top"
+        title="{{ spell.nom }}"
+        data-content="{{ include('/personnages/character-sheet-spell-detail.html.twig', {spell: spell})|e('html_attr') }}">
+        <i class="fa-solid fa-circle-info"></i>
+    </a>
+    {% if spell.niveau is not null %}
+        <strong class="text-rank reduced bg-{{ ring }}">{{ spell.niveau }}</strong>
+    {% endif %}
+</li>

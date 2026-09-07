@@ -30,13 +30,11 @@
     <main class="container-fluid category-page">
         <div class="container">
 
-            {# Contenu optionnel place avant le titre de la premiere section
-               (filtres de la rubrique Personnages). Vide ailleurs. #}
             {% block content_top %}{% endblock %}
 
             {% set compteur = 1 %}
             {% for une_section in sections %}
-                {% set entity, label_one = une_section['entity'], une_section['label_one'] %}
+                {% set entity, label_one = une_section['entity'], une_section['label_one']|default(null) %}
 
                 <section id="{{une_section['entity']}}">
 
@@ -44,10 +42,13 @@
                         <h2 class="heading-categorysubsection">
                             <span class="small-word">{{une_section['titleLight']}}</span><strong>{{une_section['titleStrong']}}</strong>
                         </h2>
-                        {# le filet n'a plus lieu d'etre sur mobile : les cartes
-                           et images empilees separent deja les sections #}
                         <hr class="d-none d-lg-block">
-                        {{ include('/parts/btn-ajouter-element.html.twig', {entity, label_one, position: 'right-corner-16'}) }}
+                        <div class="section-aside">
+                            {% if block('section_aside' ~ compteur) is defined %}{{ block('section_aside' ~ compteur) }}{% endif %}
+                            {% if label_one is not empty %}
+                                {{ include('/btns/btn-add-element.html.twig', {entity, label_one, position: ''}) }}
+                            {% endif %}
+                        </div>
                     </div>
                     <div class="row">
 

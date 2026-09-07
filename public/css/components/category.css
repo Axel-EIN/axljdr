@@ -23,3 +23,15 @@
     }
   }
 }
+
+/* ----- CONTENU A DROITE DU TITRE DE SECTION ----- */
+
+.section-aside {
+    position: absolute;
+    z-index: 10;
+    top: 1rem;
+    right: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}

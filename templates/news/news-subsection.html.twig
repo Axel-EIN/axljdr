@@ -1,0 +1,36 @@
+<div class="{{ secrets_visibles ? 'col-12 col-lg-7' : 'col-12' }}">
+    <div class="card card-body news-subsection">
+        {% for groupe in rubrique.groupes %}
+            <div class="news-group">
+                <h3 class="label-amerigo news-subtitle">{{ groupe.titre }}</h3>
+                {{ include('/parts/picture-grid.html.twig', {
+                    items: groupe.publie,
+                    variant: groupe.variant|default('landscape'),
+                    per_row: {desktop: groupe.perRow, tablet: groupe.perRow, mobile: 3},
+                    empty_message: 'Rien de nouveau',
+                }) }}
+            </div>
+            {% if not loop.last %}<hr class="my-4">{% endif %}
+        {% endfor %}
+    </div>
+</div>
+
+{% if secrets_visibles %}
+    <div class="col-12 col-lg-5">
+        <div class="card card-body news-subsection news-secrets"
+            style="--character-image: url('{{ asset(mon_personnage.illustration|default(NA_PERSO_ILLU)) }}');{% if mon_personnage.clan %} --faction-color: {{ mon_personnage.clan.couleur }};{% endif %}">
+            {% for groupe in rubrique.groupes %}
+                <div class="news-group">
+                    <h3 class="label-amerigo news-subtitle">{{ groupe.secretTitle }}</h3>
+                    {{ include('/parts/picture-grid.html.twig', {
+                        items: groupe.secrets,
+                        variant: groupe.variant|default('landscape'),
+                        per_row: {desktop: groupe.secretPerRow, tablet: groupe.perRow, mobile: 3},
+                        empty_message: 'Aucun secret',
+                    }) }}
+                </div>
+                {% if not loop.last %}<hr class="my-4">{% endif %}
+            {% endfor %}
+        </div>
+    </div>
+{% endif %}

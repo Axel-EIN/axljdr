@@ -24,7 +24,7 @@
     font-size: 4rem;
     margin: 0;
     padding: 0;
-    line-height: 1;
+    line-height: var(--leading-1);
     color: var(--color-stamp);
 
     @media (max-width: 991.98px) { font-size: var(--fontsize-huge); }
@@ -37,7 +37,7 @@
     font-size: 4rem;
     margin: 0;
     padding: 0;
-    line-height: 1;
+    line-height: var(--leading-1);
     color: var(--color-stamp);
 
     .small-word { font-size: 0.5em; }
@@ -57,7 +57,7 @@
     font-size: var(--fontsize-bigger);
     margin: 0;
     padding: 0;
-    line-height: 1;
+    line-height: var(--leading-1);
     color: var(--color-strong);
 
     @media (max-width: 991.98px) {
@@ -81,12 +81,12 @@
     padding: 0;
 
     @media (max-width: 991.98px) {
-        font-size: var(--fontsize-normal);
+        font-size: var(--fontsize-regular);
     }
 }
 
 .heading-scene {
-    color: var(--color-white);
     text-transform: uppercase;
+    color: var(--color-white);
     font-size: var(--fontsize-pluser);
 }

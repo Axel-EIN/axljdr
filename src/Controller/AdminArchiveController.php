@@ -12,6 +12,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use App\Service\Unlocker;
 
 class AdminArchiveController extends AbstractController
 {
@@ -36,7 +37,8 @@ class AdminArchiveController extends AbstractController
                 'titre:Titre::bold',
                 'auteur:Auteur',
                 'contenu:Texte:bool',
-                'locked:Bloqué:boolInt',
+                'access:Accès:access',
+                'publishedAt:Publié le:date',
             ],
         ]);
     }
@@ -45,7 +47,7 @@ class AdminArchiveController extends AbstractController
      * @Route("/admin/archive/create", name="admin_archive_create")
      * @IsGranted("ROLE_MJ")
      */
-    public function addArchive(Request $request, EntityManagerInterface $em, FileHandler $fileHandler) {
+    public function addArchive(Request $request, EntityManagerInterface $em, FileHandler $fileHandler, Unlocker $unlocker) {
 
         $archive = new Archive;
         $form = $this->createForm(AdminArchiveType::class, $archive);
@@ -60,6 +62,9 @@ class AdminArchiveController extends AbstractController
             }
 
             $em->persist($archive);
+            $em->flush();
+
+            $unlocker->sync($archive, $form->get('unlockedBy')->getData());
             $em->flush();
             $this->addFlash('success', 'L\'Archive a bien été ajoutée.');
 
@@ -83,9 +88,10 @@ class AdminArchiveController extends AbstractController
      * @Route("/admin/archive/{id}/edit", name="admin_archive_edit")
      * @IsGranted("ROLE_MJ")
      */
-    public function editArchive(Request $request, Archive $archive, FileHandler $fileHandler): Response {
+    public function editArchive(Request $request, Archive $archive, FileHandler $fileHandler, Unlocker $unlocker): Response {
 
         $form = $this->createForm(AdminArchiveType::class, $archive);
+        $form->get('unlockedBy')->setData($unlocker->charactersOf($archive));
         $form->handleRequest($request);
 
         if($form->isSubmitted() && $form->isValid()) {
@@ -98,6 +104,8 @@ class AdminArchiveController extends AbstractController
                 $fileHandler->handle(null, $archive->getImage(), null, 'archives');
                 $archive->setImage(null);
             }
+
+            $unlocker->sync($archive, $form->get('unlockedBy')->getData());
 
             $this->getDoctrine()->getManager()->flush();
             $this->addFlash('success', 'L\'Archive a bien été modifiée.');
@@ -123,7 +131,7 @@ class AdminArchiveController extends AbstractController
      * @Route("/admin/archive/{id}/delete", name="admin_archive_delete", methods={"POST"})
      * @IsGranted("ROLE_MJ")
      */
-    public function deleteArchive(Request $request, Archive $archive, FileHandler $fileHandler): Response {
+    public function deleteArchive(Request $request, Archive $archive, FileHandler $fileHandler, Unlocker $unlocker): Response {
 
         if ($this->isCsrfTokenValid('delete' . $archive->getId(), $request->request->get('_csrf_token'))) {
 
@@ -131,6 +139,7 @@ class AdminArchiveController extends AbstractController
 
             $fileHandler->handle(null, $archive->getImage(), null, 'archives');
 
+            $unlocker->forget($archive);
             $entityManager->remove($archive);
             $entityManager->flush();
             $this->addFlash('success', 'L\'archive a bien été supprimée.');

@@ -26,8 +26,6 @@
   }
 }
 
-/* --gap pilote seul l'ecart entre cartes. L'horizontale reste en padding de
-   colonne : les colonnes etant en pourcentage, un column-gap ferait deborder. */
 .element-page > .container > section > .row {
   --gap: 0.5rem;
 
@@ -41,15 +39,12 @@
   }
 }
 
-/* Element verrouille, saison inexistante : centre et italique, contrairement
-   au texte justifie d'une carte ordinaire. */
 .texte-attente {
   text-align: center;
   font-style: italic;
+  margin-bottom: 0;
 }
 
-/* Sinon la carte la plus courte flotte a cote de la plus longue. Sans effet
-   sur une rangee a une seule carte, d'ou l'absence de h-100 dans les templates. */
 .element-page > .container > section > .row > * > .card,
 .other-page > .container > section > .row > * > .card {
   height: 100%;
@@ -60,13 +55,10 @@
   @media (max-width: 991.98px) { display: none; }
 }
 
-/* Sous 992px le titre est toujours sur l'image ; au-dessus, seules les pages
-   qui y superposent autre chose gardent le degrade, via `gradient-desktop`. */
 @media (min-width: 992px) {
   .card-page .gradient-after-down:not(.gradient-desktop)::after { content: none; }
 }
 
-/* Ancre sur l'image elle-meme : `bottom: 0` suffit, aucune hauteur a calculer. */
 .gradient-after-down .card-top-titre {
   position: absolute;
   bottom: 0;
@@ -77,7 +69,6 @@
   color: var(--color-white);
 }
 
-/* Le h1 du gabarit lui cede la place, mais reste lu par les lecteurs d'ecran. */
 @media (max-width: 991.98px) {
   .element-page:has(.card-top-titre) > .container > section > h1 {
     position: absolute;
@@ -90,7 +81,6 @@
 }
 
 @media (max-width: 991.98px) {
-  /* Compense le padding du .container : les cartes atteignent les bords. */
   .element-page > .container > section > .row {
     margin-left: -1rem;
     margin-right: -1rem;

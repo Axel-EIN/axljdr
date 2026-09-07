@@ -14,7 +14,6 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
-use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Validator\Constraints\File;
 use Symfony\Component\Validator\Constraints\Length;
 
@@ -33,7 +32,6 @@ class AdminEcoleType extends AbstractType
                 'choice_label' => 'nom'
             ])
 
-            // Nullables Fields
             ->add('image', FileType::class, [
                 'required' => false, 'mapped' => false, 'data_class' => null,
                 'label' => 'Image (facultative)',
@@ -77,8 +75,9 @@ class AdminEcoleType extends AbstractType
             ->add('affinite', TextType::class, ['required' => false, 'constraints' => [ new Length( [ 'max' => 50 ] ) ] ])
             ->add('deficience', TextType::class, ['required' => false, 'constraints' => [ new Length( [ 'max' => 50 ] ) ] ])
             ->add('sorts', TextareaType::class, ['required' => false])
-            ->add('locked', CheckboxType::class, ['required' => false])
         ;
+
+        PublishableFields::add($builder);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

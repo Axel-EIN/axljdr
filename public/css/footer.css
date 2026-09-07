@@ -4,27 +4,26 @@ footer { color: var(--color-disabled); }
     display: flex;
     justify-content: center;
     min-height: 24vh;
-    background-color: var(--secondary-pastel-darker);
-    border-top: 1px solid var(--secondary-pastel-light); }
+    background-color: var(--color-secondarypasteldark);
+    border-top: 1px solid var(--color-secondarypastellight); }
 
 #footer2 {
     display: flex;
     justify-content: center;
     min-height: 8vh;
-    background-color: var(--secondary-pastel-darkest); }
+    background-color: var(--color-secondarypasteldarker); }
 
 #footer1 ul, #footer2 ul {
     list-style:outside none none;
     padding: 0; }
 
 #footer1 a, #footer2 a {
-    color: var(--color-white-50); }
+    color: var(--color-white50); }
 
 #footer1 a:hover, #footer2 a:hover {
     color: var(--color-white) !important;
     text-decoration: underline; }
 
 #social-medias {
-    /* gap et non justify-content-around : les icones s'y dispersaient. */
     gap: 1rem;
     font-size: var(--fontsize-bigger); }

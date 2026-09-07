@@ -1,7 +1,5 @@
 :root {
-  --shadow-text: 1px 1px 2px var(--color-black-50);
-  /* Moitie moins opaque que le .shadow de Bootstrap : detache une carte du fond
-     sans la faire flotter. */
+  --shadow-text: 1px 1px 2px var(--color-black50);
   --shadow-card: 0 0 2rem 0rem rgba(10, 0, 0, 0.1);
 }
 
@@ -36,8 +34,18 @@
 .translucide {
     filter: opacity(0.30);
     transition: 0.5s var(--ease);
+
+    &:hover {
+        filter: opacity(1);
+    }
 }
 
+.access-hidden {
+    filter: opacity(0.30);
+    transition: 0.5s var(--ease);
+
+    &:hover { filter: opacity(1); }
+}
 
 /* --------- BORDERS --------- */
 
@@ -50,15 +58,12 @@
 
 .filter-shadow { filter: drop-shadow(4px 4px 16px rgba(0,0,0,0.5)); }
 
-/* Le flou rend le texte lisible sans assombrir l'image, contrairement a un
-   degrade. */
 .blur-cartouche {
     border: 1px solid #FFFFFF20;
     border-radius: 1rem;
     background-color: #FFAAAA10;
     backdrop-filter: blur(16px);
 }
-
 
 /* ---- GRADIENTS & MASKS ---- */  
 
@@ -100,8 +105,6 @@
     }
 }
 
-
-
 .bg-stroke-container {
     z-index: 2;
     text-align: center;
@@ -133,12 +136,22 @@
     transition: 0.5s var(--ease);
 }
 
-.dead {
+.effect-dead {
     filter:
         grayscale(100%)
         brightness(0.4)
         sepia(100%)
         hue-rotate(-50deg)
+        saturate(300%)
+    ;
+}
+
+.missing {
+    filter:
+        grayscale(100%)
+        brightness(0.4)
+        sepia(100%)
+        hue-rotate(180deg)
         saturate(300%)
     ;
 }
@@ -174,6 +187,7 @@
 
 /* ----- IMAGE RATIO ----- */
 
+.ratio-11,
 .ratio-43,
 .ratio-169,
 .ratio-916,
@@ -192,13 +206,12 @@
     }
 }
 
+.ratio-11 { padding-top: 100%; }
 .ratio-43 { padding-top: calc(100% * (3 / 4)); }
 .ratio-169 { padding-top: calc(100% * (9 / 16)); }
 .ratio-916 { padding-top: calc(100% * (16 / 9)); }
 .ratio-1610 { padding-top: calc(100% * (10 / 16)); }
 
-/* La largeur est indispensable : une image dont les deux dimensions sont auto
-   ignore aspect-ratio et garde sa taille. */
 .crop-169 {
     width: 100%;
     aspect-ratio: 16 / 9;
@@ -208,7 +221,6 @@
 
     @media (max-width: 575.98px) { height: 42vh; }
 }
-
 
 /* TEXT ZONE BLURRED */
 

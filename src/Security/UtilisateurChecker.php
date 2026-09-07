@@ -7,11 +7,6 @@ use Symfony\Component\Security\Core\Exception\CustomUserMessageAccountStatusExce
 use Symfony\Component\Security\Core\User\UserCheckerInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
-/**
- * Refuse la connexion tant que l'adresse e-mail n'a pas été confirmée. Sans ce
- * checker, isVerified n'est lu que pour l'affichage et le lien de confirmation
- * ne sert à rien.
- */
 class UtilisateurChecker implements UserCheckerInterface
 {
     public function checkPreAuth(UserInterface $user): void

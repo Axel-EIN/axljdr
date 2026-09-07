@@ -1,0 +1,128 @@
+.episode-card-space {
+  position: relative;
+  padding-right: 8px;
+  padding-left: 8px;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  margin-bottom: 1rem;
+
+  @media (max-width: 991.98px) {
+    max-width: 420px;
+  }
+
+  .character-box {
+    position: absolute;
+    z-index: 10;
+    top: -1.5rem;
+    left: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .card-inner {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    border-radius: 0.75rem;
+    
+    background-image: linear-gradient(
+      to bottom,
+      var(--color-black25) 0%,
+      var(--color-black25) 40%,
+      transparent 90%
+    );
+    background-color: #FFFFFF10;
+    box-shadow: 0px -4px 16px var(--color-black25);
+    backdrop-filter: blur(4px);
+    min-width: 265px;
+    min-height: 360px;
+    max-height: 360px;
+    border: 0;
+
+    .card-number {
+      position: absolute;
+      z-index: 10;
+      top: 54px;
+      left: 16px;
+      color: var(--color-white);
+      font-size: var(--fontsize-huge);
+      font-weight: bold;
+      text-shadow: 0px 2px 8px black;
+    }
+
+    .image-container {
+      position: relative;
+      border-radius: 0.75rem 0.75rem 0px 0px;
+      background-color: var(--color-black);
+      overflow: hidden;
+      display: flex;
+
+      .card-image {
+        width: 100%;
+        object-fit: cover;
+      }
+    }
+
+    .text-container {
+      position: relative;
+      padding: 0.75rem;
+      min-height: 120px;
+      max-height: 120px;
+
+      .card-title-cartouche {
+        position: absolute;
+        z-index: 5;
+        top: -30px;
+        left: 16px;
+        font-size: 0.95rem !important;
+        padding: 4px !important;
+        margin-top: 8px;
+        margin-left: -16px;
+        width: 100%;
+        letter-spacing: -0.5px;
+        color: var(--color-white);
+        font-weight: bold;
+        text-shadow: 0px 2px 8px black;
+        text-align: center;
+      }
+
+      .card-text {
+        font-size: 0.9rem;
+        color: var(--color-gray);
+        margin-bottom: 0.5rem;
+      }
+    }
+
+    button.btn-medium {
+      margin-top: auto;
+      margin-bottom: 0.5rem;
+      align-self: center;
+    }
+
+    @media (max-width: 991.98px) {
+      --episode-image-height: 90px;
+
+      min-height: auto;
+      max-height: none;
+
+      .image-container { height: var(--episode-image-height); }
+
+      .card-image {
+        height: 100%;
+        object-position: center;
+      }
+
+      .card-number {
+        top: calc(var(--episode-image-height) / 2);
+        left: 1rem;
+        transform: translateY(-50%);
+      }
+
+      .text-container {
+        min-height: 72px;
+        max-height: 72px;
+      }
+    }
+  }
+}

@@ -28,7 +28,6 @@
 
             {% block child %}
 
-                {# Ordre des sections : celui de la navigation visiteur. #}
                 {% if app.user and is_granted("ROLE_MJ") %}
                     {% for section in [
                         {cle: 'AVENTURE',    titre: 'Aventure',    texte: "Éléments ajoutés pour le descriptif de l'aventure."},

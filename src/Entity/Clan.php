@@ -9,9 +9,12 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass=ClanRepository::class)
+ * @ORM\HasLifecycleCallbacks
  */
 class Clan
 {
+    use PublishableTrait;
+
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
@@ -103,11 +106,6 @@ class Clan
      * @ORM\Column(type="string", length=1, nullable=true)
      */
     private $genre;
-
-    /**
-     * @ORM\Column(type="boolean")
-     */
-    private $locked = false;
 
     /**
      * @ORM\OneToMany(targetEntity=Avantage::class, mappedBy="discountClan")
@@ -460,18 +458,6 @@ class Clan
                 $avantages2->setDiscountClan2(null);
             }
         }
-
-        return $this;
-    }
-
-    public function getLocked(): ?bool
-    {
-        return $this->locked;
-    }
-
-    public function setLocked(bool $locked): self
-    {
-        $this->locked = $locked;
 
         return $this;
     }

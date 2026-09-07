@@ -7,6 +7,7 @@ use App\Service\FileHandler;
 use App\Service\Numeroteur;
 use App\Service\Baliseur;
 use App\Service\ParticipationHandler;
+use App\Service\Unlocker;
 use App\Form\AdminSceneType;
 use App\Entity\Participation;
 use App\Repository\EpisodeRepository;
@@ -54,11 +55,10 @@ class AdminSceneController extends AbstractController
      */
     public function addScene(Request $request, EntityManagerInterface $em, FileHandler $fileHandler, Baliseur $baliseur,
                             ParticipationHandler $participationHandler, PersonnageRepository $personnageRepository,
-                            EpisodeRepository $episodeRepository, Numeroteur $numeroteur, SceneRepository $sceneRepository) {
+                            EpisodeRepository $episodeRepository, Numeroteur $numeroteur, SceneRepository $sceneRepository, Unlocker $unlocker) {
 
         $scene = new Scene;
 
-        // List of Character for Adding them as Participants in JS — triés par clan puis nom pour grouping en optgroup
         $tout_pjs  = $personnageRepository->findAllPJsSorted();
         $tout_pnjs = $personnageRepository->findAllPNJsSorted();
 
@@ -88,17 +88,16 @@ class AdminSceneController extends AbstractController
                                                                                     $request->get('participants_mort'), $request->get('participants_pnjs'),
                                                                                     $request->get('participants_pnjs_mort'), $request->get('participants_xpBonus'));
 
-            // Create and Add Participations Entity from Participants
             $participationHandler->ajouterParticipations($participants_a_ajoutes, $scene);
 
-            // CHARACTER TAGGER : capture words between [], check if character exists, replace with Link
-            $scene->setTexte($baliseur->baliserPersonnages($scene->getTexte()));
-
-            // LOCATION TAGGER : capture words between {}, check if location exists, replace with Link
-            $scene->setTexte($baliseur->baliserLieux($scene->getTexte()));
+            $scene->setTexte($baliseur->baliser($scene->getTexte()));
             
             $em->persist($scene);
             $em->flush();
+
+            $unlocker->syncScene($scene);
+            $em->flush();
+
             $this->addFlash('success', 'La scène a bien été crée.');
 
             $fratrieArrivee = $sceneRepository->findBy(['episodeParent' => $scene->getEpisodeParent()->getId()]);
@@ -128,20 +127,17 @@ class AdminSceneController extends AbstractController
      */
     public function editScene(Request $request, Scene $scene, FileHandler $fileHandler, Numeroteur $numeroteur, Baliseur $baliseur,
                                 ParticipationHandler $participationHandler, PersonnageRepository $personnageRepository,
-                                ParticipationRepository $participationRepository, SceneRepository $sceneRepository): Response {
+                                ParticipationRepository $participationRepository, SceneRepository $sceneRepository, Unlocker $unlocker): Response {
 
         $numeroDepart = $scene->getNumero();
         $fratrieDepartId = $scene->getEpisodeParent()->getId();
         
-        // Preparing all Characters for JS lists — triés par clan puis nom pour grouping en optgroup
         $tout_pjs  = $personnageRepository->findAllPJsSorted();
         $tout_pnjs = $personnageRepository->findAllPNJsSorted();
         $participations_pjs = $participationRepository->findBy(array('scene' => $scene, 'estPj' => true));
         $participations_pnjs = $participationRepository->findBy(array('scene' => $scene, 'estPj' => false));
 
-        $scene->setTexte($baliseur->debaliserPersonnages($scene->getTexte()));
-
-        $scene->setTexte($baliseur->debaliserLieux($scene->getTexte()));
+        $scene->setTexte($baliseur->debaliser($scene->getTexte()));
 
         $form = $this->createForm(AdminSceneType::class, $scene);
         $form->handleRequest($request);
@@ -159,14 +155,12 @@ class AdminSceneController extends AbstractController
                 $scene->setImage(null);
             }
 
-            // Formating and Fusioning Data from Meta from Participants
             $participants_modifies = $participationHandler->fusionnerParticipants($request->get('participants'), $request->get('participants_xp'),
                                                                                     $request->get('participants_mort'), $request->get('participants_pnjs'),
                                                                                     $request->get('participants_pnjs_mort'), $request->get('participants_xpBonus'));
 
             $toutes_participations = array_merge($participations_pjs, $participations_pnjs);
 
-            // If Participants from Data exists, edit them or delete them
             foreach ($toutes_participations as $une_participation) {
                 $trouvee = false;
 
@@ -219,11 +213,8 @@ class AdminSceneController extends AbstractController
                 }
             }
 
-            $scene->setTexte($baliseur->baliserPersonnages($scene->getTexte()));
+            $scene->setTexte($baliseur->baliser($scene->getTexte()));
 
-            $scene->setTexte($baliseur->baliserLieux($scene->getTexte()));
-
-            // RE-ORDERING if Number has changed or if Parent has changed
             if ($numeroDepart != $scene->getNumero() || $fratrieDepartId != $scene->getEpisodeParent()->getId())
             {
                 $fratrieDepart = $sceneRepository->findBy(['episodeParent' => $fratrieDepartId]);
@@ -232,6 +223,10 @@ class AdminSceneController extends AbstractController
             }
 
             $this->getDoctrine()->getManager()->flush();
+
+            $unlocker->syncScene($scene);
+            $this->getDoctrine()->getManager()->flush();
+
             $this->addFlash('success', 'La scène a bien été modifiée.');
 
             if (!empty($request->query->get('redirect')) && $request->query->get('redirect') == 'episode')
@@ -261,7 +256,7 @@ class AdminSceneController extends AbstractController
      */
     public function deleteScene(Request $request, Scene $scene, Numeroteur $numeroteur, SceneRepository $sceneRepository, FileHandler $fileHandler): Response {
         
-        $episodeParent = $scene->getEpisodeParent(); // Saving Parent for later Redirection after deletion
+        $episodeParent = $scene->getEpisodeParent();
 
         if ($this->isCsrfTokenValid('delete' . $scene->getId(), $request->request->get('_csrf_token'))) {
 

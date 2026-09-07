@@ -28,8 +28,6 @@
     color: var(--color-strong);
 }
 
-/* Bootstrap pose -15px de marge sur `.row` : sur une colonne, qui fait deja
-   100% de large, ca decale la boite vers la gauche au lieu de l'elargir. */
 .library-row {
     display: flex;
     flex-wrap: wrap;

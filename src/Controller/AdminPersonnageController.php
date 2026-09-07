@@ -13,6 +13,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use App\Service\Unlocker;
 
 class AdminPersonnageController extends AbstractController
 {
@@ -41,8 +42,9 @@ class AdminPersonnageController extends AbstractController
               'famille.nom:Famille',
               'ecole.nom:Ecole',
               'clan.nom:Clan',
-              'locked:Bloqué:boolInt',
-              'estMort:Mort:bool',
+              'access:Accès:access',
+              'publishedAt:Publié le:date',
+              'status:Statut:status',
               'description:Text:bool',
             ],
         ]);
@@ -52,7 +54,7 @@ class AdminPersonnageController extends AbstractController
      * @Route("/admin/personnage/create", name="admin_personnage_create")
      * @IsGranted("ROLE_MJ")
      */
-    public function addPersonnage(Request $request, EntityManagerInterface $em, FileHandler $fileHandler, Baliseur $baliseur) {
+    public function addPersonnage(Request $request, EntityManagerInterface $em, FileHandler $fileHandler, Baliseur $baliseur, Unlocker $unlocker) {
 
         $personnage = new Personnage;
         $form = $this->createForm(AdminPersonnageType::class, $personnage);
@@ -88,13 +90,13 @@ class AdminPersonnageController extends AbstractController
                 $personnage->setIllustration($fileHandler->handle($nouvelleIllustration, null, $prefix, 'personnages', 'vertical450'));
             }
 
-            // CHARACTER & LOCATION TAGGER (skip if description is empty/null)
-            if (!empty($personnage->getDescription())) {
-                $personnage->setDescription($baliseur->baliserPersonnages($personnage->getDescription()));
-                $personnage->setDescription($baliseur->baliserLieux($personnage->getDescription()));
-            }
+            $personnage->setDescription($baliseur->baliser($personnage->getDescription()));
 
             $em->persist($personnage);
+            $em->flush();
+
+            $unlocker->sync($personnage, $form->get('unlockedBy')->getData());
+            $unlocker->syncAccess($personnage);
             $em->flush();
             $this->addFlash('success', 'Le personnage a bien été ajouté.');
 
@@ -118,15 +120,12 @@ class AdminPersonnageController extends AbstractController
      * @Route("/admin/personnage/{id}/edit", name="admin_personnage_edit")
      * @IsGranted("ROLE_MJ")
      */
-    public function editPersonnage(Request $request, Personnage $personnage, FileHandler $fileHandler, Baliseur $baliseur): Response {
+    public function editPersonnage(Request $request, Personnage $personnage, FileHandler $fileHandler, Baliseur $baliseur, Unlocker $unlocker): Response {
 
-        // CHARACTER & LOCATION UNTAGGER (skip if description is empty/null)
-        if (!empty($personnage->getDescription())) {
-            $personnage->setDescription($baliseur->debaliserPersonnages($personnage->getDescription()));
-            $personnage->setDescription($baliseur->debaliserLieux($personnage->getDescription()));
-        }
+        $personnage->setDescription($baliseur->debaliser($personnage->getDescription()));
 
         $form = $this->createForm(AdminPersonnageType::class, $personnage);
+        $form->get('unlockedBy')->setData($unlocker->charactersOf($personnage));
         $form->handleRequest($request);
 
         if($form->isSubmitted() && $form->isValid()) {
@@ -165,11 +164,10 @@ class AdminPersonnageController extends AbstractController
                 $personnage->setIllustration(null);
             }
 
-            // CHARACTER & LOCATION TAGGER (skip if description is empty/null)
-            if (!empty($personnage->getDescription())) {
-                $personnage->setDescription($baliseur->baliserPersonnages($personnage->getDescription()));
-                $personnage->setDescription($baliseur->baliserLieux($personnage->getDescription()));
-            }
+            $personnage->setDescription($baliseur->baliser($personnage->getDescription()));
+
+            $unlocker->sync($personnage, $form->get('unlockedBy')->getData());
+            $unlocker->syncAccess($personnage);
 
             $this->getDoctrine()->getManager()->flush();
             $this->addFlash('success', 'Le personnage a bien été modifié.');
@@ -195,7 +193,7 @@ class AdminPersonnageController extends AbstractController
      * @Route("/admin/personnage/{id}/delete", name="admin_personnage_delete", methods={"POST"})
      * @IsGranted("ROLE_MJ")
      */
-    public function deletePersonnage(Request $request, Personnage $personnage, FileHandler $fileHandler): Response {
+    public function deletePersonnage(Request $request, Personnage $personnage, FileHandler $fileHandler, Unlocker $unlocker): Response {
 
         if ($this->isCsrfTokenValid('delete' . $personnage->getId(), $request->request->get('_csrf_token'))) {
 
@@ -204,6 +202,7 @@ class AdminPersonnageController extends AbstractController
             $fileHandler->handle(null, $personnage->getIcone(), null, 'personnages');
             $fileHandler->handle(null, $personnage->getIllustration(), null, 'personnages');
 
+            $unlocker->forget($personnage);
             $entityManager->remove($personnage);
             $entityManager->flush();
             $this->addFlash('success', 'Le personnage a bien été supprimé.');

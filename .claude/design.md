@@ -85,12 +85,17 @@ Le `text-shadow` seul ne suffit pas : il sauve un mot sur un fond moyen, pas un
 paragraphe sur un fond clair.
 
 **Un dégradé se règle pour la hauteur qu'il couvre, il ne se partage donc pas
-entre deux étendues différentes.** Le bandeau de chapitre de l'accueil a besoin
-de noir en haut et en bas — « CHAPITRE N » d'un côté, la citation et le bouton
-de l'autre. Le même dégradé sur le fond de la page Épisode, qui court jusqu'en
-bas de page, s'étirerait sur une hauteur sans rapport. Les deux gardent donc
-leur assombrissement, et c'est la seule raison pour laquelle ce bandeau n'est
-pas factorisé entre les deux pages.
+entre deux étendues différentes.** Le bandeau de chapitre de la page Aventure a
+besoin de noir en haut et en bas — « CHAPITRE N » d'un côté, la citation et le
+bouton de l'autre. Le même dégradé sur le fond de la page Épisode, qui court
+jusqu'en bas de page, s'étirerait sur une hauteur sans rapport. Les deux gardent
+donc leur assombrissement, et c'est la seule raison pour laquelle **le markup**
+du bandeau n'est pas partagé entre les deux pages.
+
+Tout le reste l'est : `components/chapter.css` porte la présentation commune et
+est chargé par les deux, et `aventure/chapter-characters.html.twig` rend les
+deux grilles de portraits pour l'une comme pour l'autre. Ne pas en conclure que
+le bandeau est dupliqué — seul son enveloppe l'est, pour ce seul motif.
 
 ### Titre de page en surimpression sur une image (mobile)
 
@@ -136,35 +141,91 @@ Exception : `pages/profil.css` et `pages/character-sheet.css`, qui ont leur band
 et gardent leur propre règle — elles sont encore sur l'ancien mécanisme et
 mériteraient le même traitement.
 
-## Vocabulaire : les trois variantes de la grille d'images
+## Vocabulaire : les cinq variantes de la grille d'images
 
-`parts/picture-grid.html.twig` rend les trois motifs du site, choisis par
-`variant` — utiliser ces noms pour s'y référer. Ils partagent la grille, le lien,
-l'état verrouillé et le réglage des colonnes, et ne diffèrent que par la forme de
-l'image et par le nom.
+`parts/picture-grid.html.twig` rend tous les motifs de grille du site, choisis
+par `variant` — utiliser ces noms pour s'y référer. Ils partagent la grille, le
+lien, l'ordre d'affichage, l'état d'accès et le réglage des colonnes, et ne
+diffèrent que par la forme de l'image et par le nom.
 
-- **`thumbnail`** — coins arrondis en diagonale (haut-gauche + bas-droite, les
-  deux autres restent carrés) et **le nom sous l'image**.
-  En place : Archives, Lieux, Lores (`empire/index.html.twig`), Règles de Bases,
-  Bibliothèques, Règles Annexes (`regles/index.html.twig`), Écoles d'un clan et
-  d'une classe, Lieux d'un clan, et tous les blocs « Autres X ».
+Deux d'entre eux sont la même vignette à deux formats : ils partagent le cadre
+`.frame` aux **coins arrondis en diagonale** (haut-gauche + bas-droite, les deux
+autres restent carrés), **le nom sous l'image**, et la révélation de l'icône de
+l'élément au survol (l'illustration passe alors à `brightness(0.35)`).
+
+- **`landscape`** — ratio **16:10**. C'est le **défaut** : un appel sans
+  `variant` rend un `landscape`.
+  En place : Archives, Lieux, Lores (`empire/index.html.twig`), Lieux d'un clan,
+  et tous les blocs « Autres X ».
+- **`rule`** — ratio **4:3**, et un nom en `--fontsize-medium`. C'est ce format
+  qui signale une règle.
+  En place : Règles de Bases, Bibliothèques, Règles Annexes
+  (`regles/index.html.twig`), Écoles d'un clan et d'une classe, et les blocs
+  Objets / Règles / Sorts / Compétences / Avantages de l'accueil.
+
+Les trois autres n'ont pas de cadre :
+
+- **`icon`** — l'**icône** de l'élément à nu, sans recadrage, le nom dessous :
+  le bâtiment ou le symbole tel qu'il figure sur la carte. Un élément qui n'a
+  pas d'icône retombe sur la vignette encadrée, en **1:1** — seul usage du ratio
+  carré, et seule raison pour laquelle `icon` porte quand même les styles de
+  cadre.
+  En place : les lieux visités de la dernière séance (`news/index.html.twig`).
 - **`emblem`** — l'image seule, souvent transparente, détachée sur le fond de
-  page, son nom dessous, zoom et reflet au survol. Ni carte ni cartouche.
-  En place : Clans Majeurs et Autres factions (Empire), Les Classes (Règles).
-- **`portrait`** — planche contact de portraits **carrés, sans nom** : fond sombre
-  et images bord à bord sans gouttière sous 992px, liseré interne.
+  page, son nom dessous, zoom et reflet au survol. Ni carte ni cartouche. Le
+  paramètre `field` choisit la propriété qui porte l'image (défaut `mon`), et
+  `max_size` plafonne sa largeur.
+  En place : Clans Majeurs et Autres factions (Empire), Les Classes (Règles),
+  Factions de l'accueil.
+- **`portrait`** — planche contact de portraits **carrés, seule variante sans
+  nom** (il passe en infobulle au survol) : fond sombre et images bord à bord
+  sans gouttière sous 992px dans une page Element, liseré interne, et la
+  surimpression de mort quand le personnage l'est.
   En place : Autres PJs/PNJs (profil), Personnages d'une classe, d'une école,
-  d'un clan.
+  d'un clan, et les rencontres de la dernière séance.
 
 Un même type de contenu peut apparaître dans l'un ou l'autre selon la page —
-c'est le contexte qui décide, pas le type d'entité. Les Lieux et les Écoles d'un
-clan sont passés en `thumbnail` : plus cohérent avec le rendu de ces entités
-ailleurs, et le nom y apparaît.
+c'est le contexte qui décide, pas le type d'entité.
 
 **Avec `title`, le composant s'enrobe d'une carte** — titre
 `h2.heading-cardtitle`, divider, puis la grille, avec `btn_add` en option. C'est
 le bloc « Autres X » qui ferme les pages de détail. Sans `title`, il ne rend que
 la grille, et `wrapper` passe alors sur elle.
+
+### Où pointe une vignette, et quelle image elle montre
+
+Trois paramètres, à ne pas confondre :
+
+- **`route`** — un nom de route pour toute la grille, quand elle est homogène :
+  `path(route, {id: item.id})`.
+- **sans `route`** — chaque item résout son URL tout seul, par `element_url()` :
+  c'est ce qui permet à un fil mélangé de l'accueil de rendre des entités de
+  types différents dans la même grille. Un élément dont l'entité n'a pas de page
+  propre (Objet, Sort, Compétence, Avantage) part sur la bibliothèque qui le
+  liste.
+- **`na_image`** — le placeholder quand l'item n'a pas d'image (défaut
+  `NA_ICON`).
+
+L'image affichée est `item.imageAffichee` s'il en a une, sinon `item.image`,
+sinon le placeholder. Une Règle ou un Lore qui n'a **que** son PDF — `pdf`
+rempli et `hasParts()` faux — prend `NA_PDF`, une icône PDF en coin, et son lien
+mène droit au document.
+
+**`empty_message`** rend une ligne en italique à la place de la grille quand
+elle est vide. Sans lui, une grille vide ne rend rien du tout — pas même son
+enrobage de carte.
+
+### L'ordre des éléments n'est pas celui du contrôleur
+
+La grille repasse ses items dans `element_sort()` (`Visibility::sortByAccess`) :
+**les lisibles d'abord, du palier le plus fermé au plus ouvert** — ce qu'on a
+mérité passe devant ce qui est public — **puis les autres dans l'ordre
+inverse**, pour que le teasé se voie avant le caché. Un contrôleur qui trie par
+date voit donc son ordre reclassé par accès ; c'est voulu, ne pas le contourner
+en écrivant le tri dans la vue.
+
+Elle filtre aussi par `element_listed()` : un élément non listé pour ce visiteur
+ne rend pas de vignette du tout.
 
 ### Le réglage des colonnes
 
@@ -198,15 +259,70 @@ le cadre recadre.
 **Les coins arrondis vivent sur le cadre, pas sur l'image** : `.frame` porte le
 rayon et `overflow: hidden`, sinon la règle attrape le cadenas et le badge PDF.
 
+### Les coins d'une vignette
+
+Chaque coin est réservé, sinon deux surimpressions se recouvrent :
+
+- **haut-gauche** — le badge « Nouveau » (`parts/badge-new.html.twig`), posé
+  pendant quatorze jours après la mise à disposition ;
+- **haut-droite** — l'icône d'état, `.badge-access` : une seule pour tous les
+  états, posée par `parts/badge-access.html.twig`. Le badge PDF partage ce coin
+  mais déborde hors du cadre, les deux ne se recouvrent pas ;
+- **centre** — le cadenas battant de l'état teasé, et l'icône de l'élément
+  révélée au survol sur les variantes à cadre.
+
+**Le badge « Nouveau » se déplace selon la variante**, parce que le coin
+haut-gauche n'est pas libre partout. Il porte donc ses variantes dans
+`badges.css`, jamais une surcharge écrite depuis la page :
+
+- par défaut, à 1rem du haut, débordant à gauche ;
+- `pin-topleft` sur un `portrait`, collé à l'angle — la planche contact n'a pas
+  de gouttière où déborder ;
+- `pin-downcenter` sur un `icon`, en bas au centre — l'icône occupe le milieu du
+  cadre.
+
+`.badge-access` a de même une variante `mini`, pour les contextes où la vignette
+est petite.
+
 ### Deux autres paramètres communs
 
 **`limit`** coupe la liste à N éléments côté vue, quand le contrôleur n'a pas de
-raison de le faire — Personnages d'une classe en montre 16.
+raison de le faire — Personnages d'une classe en montre 16. Il s'applique
+**après** le tri par accès, donc ce qui est coupé est ce qui compte le moins
+pour ce visiteur.
 
-**L'état verrouillé** est le même dans les trois variantes : pour un joueur,
-l'élément n'est plus cliquable, il est grisé, un cadenas y bat, une infobulle
-annonce « À débloquer » et le nom devient « ??? ». Le MJ le voit normalement, avec
-un simple cadenas en coin qui signale qu'il est caché aux joueurs.
+**L'état d'accès** est le même dans les cinq variantes. Le palier de l'élément
+et le déblocage du visiteur se croisent en huit états, calculés une fois par
+`Visibility::state()` et rendus par `parts/badge-access.html.twig` :
+
+| état | palier | quand | icône |
+| --- | --- | --- | --- |
+| `secret` | Secret | pas encore révélé — le MJ seul le voit | œil barré |
+| `discovered` | Secret | révélé à mon personnage | œil ouvert |
+| `locked` | Bloqué | pas encore ouvert — teasé pour tous | cadenas fermé **jaune** |
+| `unlocked` | Bloqué | ouvert à mon personnage | cadenas ouvert |
+| `auto-unlockable` | Automatique | pas encore croisé — le MJ seul le voit | engrenage |
+| `auto-unlocked` | Automatique | croisé en jeu par mon personnage | engrenage |
+| `public` | Public | date atteinte ou absente | aucune |
+| `hidden` | Secret, Automatique, Public | rien de ce qui précède | aucune, la vignette n'est pas rendue |
+
+**Le jaune ne marque que `locked`**, le seul état montré sans être lisible : il
+appelle une action, les autres constatent. Tout le reste est blanc — les deux
+états `auto-*` partagent même leur engrenage, la vignette translucide de
+`auto-unlockable` suffisant à les départager.
+
+**La date de publication ne conditionne que le palier Public** : un élément public
+daté du futur reste `hidden` jusqu'à l'heure dite, le MJ excepté. Aux trois autres
+paliers elle ne sert qu'au badge « Nouveau ».
+
+**`locked` est le seul état teasé** — listé sans être lisible : grisé, non
+cliquable, cadenas central, infobulle « À débloquer », et la page de détail rend
+`element-locked.html.twig`. Un visiteur sans compte le voit comme les autres.
+`secret` et `auto-unlockable` ne sont pas teasés : hors MJ ils tombent en
+`hidden`, donc en 404.
+
+`element_unseen()` regroupe `hidden`, `secret` et `auto-unlockable` — ce que le MJ
+seul voit — et pose `access-hidden` sur la vignette.
 
 ## Un titre de section porte toujours son divider
 
@@ -255,7 +371,7 @@ partir de chaînes décrites par le contrôleur, une par colonne :
 ```
 - path                    → propriété ou chemin pointé (ex: "saisonParent.titre")
 - Label                   → en-tête, défaut = path
-- format ∈ {string (defaut), number, symbol, image, bool, boolInt, color}
+- format ∈ {string (defaut), number, symbol, image, bool, boolInt, color, access, date, status}
     string   : texte (gauche)
     number   : texte aligné à droite
     symbol   : image carrée 48×48 (mon, icone…)
@@ -263,6 +379,9 @@ partir de chaînes décrites par le contrôleur, une par colonne :
     bool     : check verte si la valeur est remplie, vide sinon (test de présence)
     boolInt  : "Oui" si val == 1, "Non" si val == 0 (booléen stocké en smallint)
     color    : code hex + swatch
+    access   : libellé du palier de publication (Secret, Bloqué, Automatique, Public)
+    date     : jj/mm/aaaa hh:mm, vide si la date est nulle
+    status   : libellé de l'état d'un personnage (Vivant, Disparu, Mort)
 - extra → sens différent selon le format :
     pour symbol/image : nom complet du placeholder (ex: "NA_SAISON")
                         défaut = NA_ICON (symbol) ou NA_169 (image)
@@ -345,16 +464,17 @@ ignoré au calcul de la contribution max-content : le conteneur se dimensionne
 sur la taille intrinsèque du fichier, puis l'image se recadre correctement
 dedans. Si le conteneur porte un fond ou une bordure, on voit une grande zone
 colorée à côté d'une image à la bonne taille — c'était le cas de l'avatar de la
-navbar (`header.css`, `#user-zone avatar`), où `.img-96` restait à 96px dans un
-bloc `bg-secondary` de 300 à 540px selon le fichier. Largeur en **px** ici, pas
-en rem : la base du site est à 18px, donc `6rem` dépasserait `.img-96` de 12px.
+navbar, où `.img-96` restait à 96px dans un bloc `bg-secondary` de 300 à 540px
+selon le fichier. `.avatar` (`icons.css`) pose désormais une largeur et une
+hauteur en dur, et l'image les remplit en `object-fit: cover`. Largeur en **px**
+ici, pas en rem : la base du site est à 18px, donc `6rem` dépasserait de 12px.
 
 ## Libellés qui débordent sur mobile
 
 Masquer le texte, garder l'icône, via un `<span class="d-none d-lg-inline">`
 autour du libellé. Ne pas dupliquer le libellé en deux variantes.
 
-Exemples en place : boutons MJ « Ajouter X » (`parts/btn-ajouter-element.html.twig`,
+Exemples en place : boutons MJ « Ajouter X » (`btns/btn-add-element.html.twig`,
 `.btn-add-label`), navigation de saison réduite aux chevrons
 (`aventure/index.html.twig`).
 
@@ -405,7 +525,7 @@ Rappels utiles :
   la cause la plus fréquente des problèmes de responsive du projet. Toujours
   écrire des paires (`col-6 col-lg-4`). Pour une grille d'éléments, ne pas
   écrire de colonnes du tout : passer `per_row` ou `min_size` à
-  `parts/picture-grid.html.twig`, cf. « les trois variantes de la grille ».
+  `parts/picture-grid.html.twig`, cf. « les cinq variantes de la grille ».
 - Les CSS spécifiques à une page vivent dans `public/css/pages/` (ex.
   `pages/location.css`) et ne sont chargés que par leur template, via un bloc
   `stylesheets` : leurs sélecteurs y sont donc de fait limités à cette page.

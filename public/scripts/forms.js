@@ -13,18 +13,17 @@ if (document.getElementsByClassName('input-plan')[0])
 if (document.getElementsByClassName('input-video')[0])
     previewHandler('input-video', 'video');
 
-// IMAGE PREVIEW HANDLER
 function previewHandler(inputClassNameString, prefixName) {
-    var input_file = document.getElementsByClassName(inputClassNameString)[0]; // get the input HTML by searching by classnames and taking the first element of the array
-    input_file.addEventListener( "change", // track the event on change
+    var input_file = document.getElementsByClassName(inputClassNameString)[0];
+    input_file.addEventListener( "change",
         function () {
-            if ($(this).val()) { // if the input HTML has a value
+            if ($(this).val()) {
 
-                var filename = $(this).val().split("\\"); // split the file name
-                filename = filename[filename.length-1]; // choose the last part of the splitted filename
-                $('#' + prefixName + '-filename').text(filename); // print the filename
+                var filename = $(this).val().split("\\");
+                filename = filename[filename.length-1];
+                $('#' + prefixName + '-filename').text(filename);
 
-                if (prefixName == 'video') { // if it is a video
+                if (prefixName == 'video') {
                     var media = URL.createObjectURL(this.files[0]);
                     var video = document.getElementById("video");
                     video.src = media;
@@ -32,16 +31,15 @@ function previewHandler(inputClassNameString, prefixName) {
                     video.controls = true;
                     video.play();
                 } else
-                    readURL(this, '#' + prefixName + '-preview'); // Read the image file and put it in IMG src attributes
+                    readURL(this, '#' + prefixName + '-preview');
             }
         }
     );
 }
 
-// FILE READER AND PREVIEW LOADER
 function readURL(input, imgPreviewIDnameString) {
-    if (input.files && input.files[0]) { // check if the arraw exists and if the first element exist
-        var reader = new FileReader(); // creating a new FileReader object
+    if (input.files && input.files[0]) {
+        var reader = new FileReader();
         reader.onload = function (e) { $(imgPreviewIDnameString).attr('src', e.target.result); }
         reader.readAsDataURL(input.files[0]);
     }

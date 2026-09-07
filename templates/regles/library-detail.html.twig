@@ -10,8 +10,6 @@
 {% block element_content %}
 
     {% set accueil = app.request.get('tab') is not defined or app.request.get('tab') is empty %}
-    {# Au pluriel les onglets qui nomment des choses denombrables, pas ceux qui
-       qualifient (Magie, Mental...). Table des formes que le `s` par defaut manque. #}
     {% set pluriel_onglet = un_element.entity in ['avantage', 'competence', 'objet'] ? 's' : '' %}
     {% set pluriel_sous_onglet = un_element.entity == 'objet' ? 's' : '' %}
     {% set pluriels = {
@@ -19,8 +17,6 @@
         'HAST': 'Hast', 'MARCHAND': 'Marchand', 'NINJUTSU': 'Ninjutsu',
     } %}
 
-    {# On repart du premier sous-onglet des qu'on ne peut pas garder le courant :
-       hors bibliotheque mixable, il n'a aucune raison d'exister sous le nouvel onglet. #}
     {% set a_sous_onglets = un_element.subTabField is defined and un_element.subTabField is not empty %}
     {% set subtab = a_sous_onglets and (app.request.get('subtab') is empty or un_element.mixable != true)
         ? 'first' : app.request.get('subtab') %}
@@ -34,8 +30,6 @@
         }]) %}
     {% endfor %}
 
-    {# Sur l'accueil le sommaire pose sur l'image remplace les onglets, mais lui
-       n'existe qu'au-dessus de 992px : sous ce palier la barre reste seule a naviguer. #}
     <nav class="mb-3{% if accueil %} d-lg-none{% endif %}">
         <div class="col-12 p-0 m-0">
             <ul id="tabs">
@@ -107,7 +101,7 @@
 
                 <div class="relative">
 
-                    {{ include('parts/sommaire.html.twig', {items: onglets}) }}
+                    {{ include('rule-lore-library/summary.html.twig', {items: onglets}) }}
 
                     {{ include('/parts/card-top-image.html.twig', {
                         image: un_element.image,
@@ -159,7 +153,6 @@
                     </select>
                 </div>
 
-
             </div>
         {% endif %}
 
@@ -172,10 +165,10 @@
     {% endif %}
 
     {{ include('/parts/picture-grid.html.twig', {
+        variant: 'rule',
         title: 'Autres Bibliothèques',
         items: otherLibraries, route: 'regles_library',
         na_image: NA_LIBRARY,
-        ratio: '43',
     }) }}
 
 {% endblock %}

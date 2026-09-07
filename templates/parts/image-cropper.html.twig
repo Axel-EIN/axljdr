@@ -1,5 +1,3 @@
-{# Params : input_id (le file input), width, height. Gere N croppers par
-   formulaire sans race condition. #}
 
 <div id="{{ input_id }}-cropper-container" style="display:none; max-width:100%; margin-top:1rem;">
     <div style="max-height: 480px; background: #222;">
@@ -49,8 +47,6 @@
         reader.readAsDataURL(file);
     });
 
-    // Coordination multi-croppers : un seul handler de submit par form,
-    // qui attend que tous les crops en attente soient résolus avant de soumettre.
     if (!form._pendingCrops) {
         form._pendingCrops = [];
         form.addEventListener('submit', function (e) {

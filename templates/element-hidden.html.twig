@@ -1,0 +1,20 @@
+{% extends 'other.html.twig' %}
+
+{% set titre = 'Élément introuvable' %}
+
+{% block contenu %}
+  <p class="card-description texte-attente">
+    Cette page n'existe pas, ou n'est pas accessible depuis votre compte.
+  </p>
+
+  <p class="card-description texte-attente">
+    S'il s'agit d'un élément de l'aventure, le Maître de Jeu ne l'a pas encore
+    mis à disposition.
+  </p>
+
+  <div class="text-center">
+    <a class="btn-primary-style btn-medium" href="{{ path('news') }}">
+      <i class="fas fa-home" aria-hidden="true"></i>&nbsp;&nbsp;Retour à l'accueil
+    </a>
+  </div>
+{% endblock %}

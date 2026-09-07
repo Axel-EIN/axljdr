@@ -1,0 +1,28 @@
+{% set mine = mine|default([]) %}
+
+<div class="ranking-list">
+  {% set xp_precedent, rang = null, 0 %}
+  {% for un_personnage in items %}
+    {% if xp_precedent != un_personnage.xp %}{% set rang = loop.index %}{% endif %}
+    {% set xp_precedent = un_personnage.xp %}
+
+    <a class="ranking-line" href="{{ path('personnage_profil', {id: un_personnage.id}) }}" title="{{ un_personnage.prenom }}">
+      <span class="ranking-rank">{{ rang }}</span>
+      <span class="portrait-slot">
+        <img class="character-portrait medium outlined {{ un_personnage.id in mine ? '' : 'player' }} {{ un_personnage.estMort ? 'effect-dead' }}"
+             src="{{ asset(un_personnage.icone|default(NA_PERSO_PORTRAIT)) }}"
+             alt="Portrait de {{ un_personnage.prenom }}" />
+        {% if un_personnage.estMort %}
+          <img class="character-icon-dead" src="{{ asset(MORT_ICO) }}" alt="est mort" />
+        {% elseif un_personnage.missing|default(false) %}
+          <i class="absolute icon-missing fas fa-person-circle-question" title="Disparu"></i>
+        {% endif %}
+      </span>
+      <span class="ranking-name">
+        <strong>{{ un_personnage.prenom }}</strong>
+        {% if un_personnage.joueur %}<span class="ranking-player">({{ un_personnage.joueur.pseudo }})</span>{% endif %}
+      </span>
+      <span class="ranking-xp">{{ un_personnage.xp }}&nbsp;xp</span>
+    </a>
+  {% endfor %}
+</div>

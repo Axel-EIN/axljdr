@@ -13,8 +13,6 @@
 
 .profil-creation { margin-left: 1rem; }
 
-/* L'espacement interne vient de la marge haute des en-tetes : le dernier
-   episode n'a donc rien sous lui. */
 .profil-historique {
     @media (max-width: 991.98px) { padding-bottom: 1rem; }
 }
@@ -59,5 +57,70 @@
         align-items: flex-end;
         justify-content: center;
         color: var(--color-white);
+    }
+}
+
+/* ----- EDITION EN PLACE ------- */
+
+textarea.edit-only {
+    width: 100%;
+    margin-bottom: 1rem;
+}
+
+.edit-mode textarea.edit-only { display: block; }
+
+.zone-actions {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 1rem;
+}
+
+/* ----- DEVELOPPEMENT ---------- */
+
+.profil-developments {
+    .development-line + .development-line { margin-top: 1.5rem; }
+
+    .development-head {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: baseline;
+        gap: 0.5rem;
+    }
+
+    .development-meta {
+        margin-left: auto;
+        text-align: right;
+        font-size: var(--fontsize-small);
+        color: var(--color-body);
+    }
+
+    .development-content {
+        display: flex;
+        align-items: flex-start;
+        gap: 1rem;
+        margin-top: 0.25rem;
+
+        .card-description { padding: 0; }
+    }
+
+    .card-description {
+        flex: 1;
+        min-width: 0;
+        margin: 0;
+    }
+
+    .development-image {
+        flex: 0 0 10rem;
+
+        img {
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            object-fit: cover;
+            border-radius: 0.5rem;
+        }
+
+        @media (max-width: 575.98px) { flex-basis: 6rem; }
     }
 }

@@ -75,6 +75,8 @@ class AdminLibraryType extends AbstractType
             ->add('aside', TextareaType::class, [
                 'required' => false ] )
         ;
+
+        PublishableFields::add($builder);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

@@ -55,11 +55,8 @@ class Uploader extends AbstractController
 
         $prefix = strtolower(strtr($prefix, $accents));
 
-        // La table d'accents ne retire ni le point ni les séparateurs de chemin :
-        // sans ce filtre un pseudo « shell.php » donne « avatar-shell.php.jpg ».
         $prefix = trim(preg_replace('/[^a-z0-9-]+/', '-', $prefix), '-');
 
-        // Préfixe entièrement non latin (la table d'accents ne l'a pas traduit).
         if ($prefix === '') {
             $prefix = 'fichier-' . bin2hex(random_bytes(8));
         }
@@ -79,9 +76,6 @@ class Uploader extends AbstractController
         return $nouveau_nomFichier;
     }
 
-    /**
-     * Détecte le type MIME réel du fichier via finfo (analyse du contenu binaire, pas le header client).
-     */
     private function detectRealMimeType(UploadedFile $fichier): string
     {
         $finfo = new \finfo(FILEINFO_MIME_TYPE);
@@ -89,9 +83,6 @@ class Uploader extends AbstractController
         return $finfo->file($fichier->getPathname());
     }
 
-    /**
-     * Résout l'extension à partir du MIME type réel détecté, pas celui déclaré par le client.
-     */
     private function resolveExtension(UploadedFile $fichier, string $mimeType): ?string
     {
         $mimeTypes = new MimeTypes();

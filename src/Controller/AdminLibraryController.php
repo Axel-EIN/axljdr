@@ -13,6 +13,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use App\Service\Unlocker;
 
 class AdminLibraryController extends AbstractController
 {
@@ -39,6 +40,8 @@ class AdminLibraryController extends AbstractController
                 'pdf:PDF:bool',
                 'numero:Ordre:number',
                 'description:Text:bool',
+                'access:Accès:access',
+                'publishedAt:Publié le:date',
             ],
         ]);
     }
@@ -47,7 +50,7 @@ class AdminLibraryController extends AbstractController
      * @Route("/admin/library/create", name="admin_library_create")
      * @IsGranted("ROLE_MJ")
      */
-    public function addLibrary(Request $request, FileHandler $fileHandler, EntityManagerInterface $em, LibraryRepository $libraryRepository, Numeroteur $numeroteur)
+    public function addLibrary(Request $request, FileHandler $fileHandler, EntityManagerInterface $em, LibraryRepository $libraryRepository, Numeroteur $numeroteur, Unlocker $unlocker)
     {
         $library = new Library;
         $form = $this->createForm(AdminLibraryType::class, $library);
@@ -68,6 +71,8 @@ class AdminLibraryController extends AbstractController
             }
 
             $em->persist($library);
+            $em->flush();
+            $unlocker->sync($library, $form->get('unlockedBy')->getData());
             $em->flush();
             $this->addFlash('success', 'La Bibliothèque a bien été ajoutée');
 
@@ -94,12 +99,13 @@ class AdminLibraryController extends AbstractController
      * @Route("/admin/library/{id}/edit", name="admin_library_edit")
      * @IsGranted("ROLE_MJ")
      */
-    public function editLibrary(Request $request, Library $library, FileHandler $fileHandler, LibraryRepository $libraryRepository, Numeroteur $numeroteur): Response
+    public function editLibrary(Request $request, Library $library, FileHandler $fileHandler, LibraryRepository $libraryRepository, Numeroteur $numeroteur, Unlocker $unlocker): Response
     {
         $numeroDepart = $library->getNumero();
         $fratrieDepartId = $library->getBase();
 
         $form = $this->createForm(AdminLibraryType::class, $library);
+        $form->get('unlockedBy')->setData($unlocker->charactersOf($library));
         $form->handleRequest($request);
 
         if ( $form->isSubmitted() && $form->isValid() ) {
@@ -119,7 +125,6 @@ class AdminLibraryController extends AbstractController
                 $library->setPdf($fileHandler->handle($nouveauPDF, $library->getPdf(), $prefix, 'libraries-pdfs'));
             }
 
-            // RE-ORDERING : if number has changed or if parent has changed
             if ($numeroDepart != $library->getNumero() || $fratrieDepartId != $library->getBase())
             {
                 $fratrieDepart = $libraryRepository->findBy(['base' => $fratrieDepartId]);
@@ -127,6 +132,7 @@ class AdminLibraryController extends AbstractController
                 $numeroteur->reordonnerNumero($library->getId(), $numeroDepart, $library->getNumero(), $fratrieDepart, $fratrieArrivee);
             }
 
+            $unlocker->sync($library, $form->get('unlockedBy')->getData());
             $this->getDoctrine()->getManager()->flush();
             $this->addFlash('success', 'La Bibliothèque a bien été modifiée');
 
@@ -151,7 +157,7 @@ class AdminLibraryController extends AbstractController
      * @Route("/admin/library/{id}/delete", name="admin_library_delete", methods={"POST"})
      * @IsGranted("ROLE_MJ")
      */
-    public function deleteLibrary(Request $request, Library $library, FileHandler $fileHandler, LibraryRepository $libraryRepository, Numeroteur $numeroteur): Response
+    public function deleteLibrary(Request $request, Library $library, FileHandler $fileHandler, LibraryRepository $libraryRepository, Numeroteur $numeroteur, Unlocker $unlocker): Response
     {
         if ( $this->isCsrfTokenValid('delete' . $library->getId(), $request->request->get('_csrf_token')))
         {
@@ -163,6 +169,7 @@ class AdminLibraryController extends AbstractController
             $fratrieDepart = $libraryRepository->findBy(['base' => $fratrieDepartId]);
             $numeroteur->reordonnerNumero($library->getId(), $library->getNumero(), -1, $fratrieDepart, []);
 
+            $unlocker->forget($library);
             $this->getDoctrine()->getManager()->remove($library);
             $this->getDoctrine()->getManager()->flush();
             $this->addFlash('success', 'La Bibliothèque a bien été supprimée');    

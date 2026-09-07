@@ -43,6 +43,8 @@ class AdminEpisodeType extends AbstractType
                     "Échec" => "Lose"]
             ])
         ;
+
+        PublishableFields::add($builder);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

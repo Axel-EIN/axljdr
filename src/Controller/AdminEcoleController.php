@@ -15,6 +15,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 use function PHPUnit\Framework\fileExists;
+use App\Service\Unlocker;
 
 class AdminEcoleController extends AbstractController
 {
@@ -50,7 +51,8 @@ class AdminEcoleController extends AbstractController
                 'tech1Desc:T5:bool',
                 'affinite:A:bool',
                 'deficience:D:bool',
-                'locked:Bloqué:boolInt',
+                'access:Accès:access',
+                'publishedAt:Publié le:date',
             ],
         ]);
     }
@@ -59,7 +61,7 @@ class AdminEcoleController extends AbstractController
      * @Route("/admin/ecole/create", name="admin_ecole_create")
      * @IsGranted("ROLE_MJ")
      */
-    public function addEcole(Request $request, EntityManagerInterface $em, ClanRepository $clanRepository, FileHandler $fileHandler) {
+    public function addEcole(Request $request, EntityManagerInterface $em, ClanRepository $clanRepository, FileHandler $fileHandler, Unlocker $unlocker) {
 
         $ecole = new Ecole;
 
@@ -83,6 +85,9 @@ class AdminEcoleController extends AbstractController
 
             $em->persist($ecole);
             $em->flush();
+
+            $unlocker->sync($ecole, $form->get('unlockedBy')->getData());
+            $em->flush();
             $this->addFlash('success', 'L\'école a bien été ajoutée.');
 
             if (!empty($request->query->get('redirect')) && $request->query->get('redirect') == 'ecole')
@@ -105,9 +110,10 @@ class AdminEcoleController extends AbstractController
      * @Route("/admin/ecole/{id}/edit", name="admin_ecole_edit")
      * @IsGranted("ROLE_MJ")
      */
-    public function editEcole(Request $request, Ecole $ecole, FileHandler $fileHandler): Response {
+    public function editEcole(Request $request, Ecole $ecole, FileHandler $fileHandler, Unlocker $unlocker): Response {
 
         $form = $this->createForm(AdminEcoleType::class, $ecole);
+        $form->get('unlockedBy')->setData($unlocker->charactersOf($ecole));
         
         $form->handleRequest($request);
 
@@ -121,6 +127,8 @@ class AdminEcoleController extends AbstractController
                 $fileHandler->handle(null, $ecole->getImage(), null, 'ecoles');
                 $ecole->setImage(null);
             }
+
+            $unlocker->sync($ecole, $form->get('unlockedBy')->getData());
 
             $this->getDoctrine()->getManager()->flush();
             $this->addFlash('success', 'L\'école a bien été modifiée.');
@@ -146,7 +154,7 @@ class AdminEcoleController extends AbstractController
      * @Route("/admin/ecole/{id}/delete", name="admin_ecole_delete", methods={"POST"})
      * @IsGranted("ROLE_MJ")
      */
-    public function deleteEcole(Request $request, Ecole $ecole, FileHandler $fileHandler): Response {
+    public function deleteEcole(Request $request, Ecole $ecole, FileHandler $fileHandler, Unlocker $unlocker): Response {
 
         if ($this->isCsrfTokenValid('delete' . $ecole->getId(), $request->request->get('_csrf_token'))) {
 
@@ -158,6 +166,7 @@ class AdminEcoleController extends AbstractController
             $fileHandler->handle(null, $ecole->getImage(), null, 'ecoles');
 
             $entityManager = $this->getDoctrine()->getManager();
+            $unlocker->forget($ecole);
             $entityManager->remove($ecole);
             $entityManager->flush();
             $this->addFlash('success', 'L\'école a bien été supprimée.');

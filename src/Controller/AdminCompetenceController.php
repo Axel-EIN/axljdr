@@ -11,6 +11,7 @@ use Symfony\Component\HttpFoundation\Request;
 use App\Entity\Competence;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Form\AdminCompetenceType;
+use App\Service\Unlocker;
 
 class AdminCompetenceController extends AbstractController
 {
@@ -41,6 +42,8 @@ class AdminCompetenceController extends AbstractController
                 'specialisation3:S3',
                 'specialisation4:S4',
                 'specialisation5:S5',
+                'access:Accès:access',
+                'publishedAt:Publié le:date',
             ],
         ]);
     }
@@ -49,7 +52,7 @@ class AdminCompetenceController extends AbstractController
      * @Route("/admin/competence/create", name="admin_competence_create")
      * @IsGranted("ROLE_MJ")
      */
-    public function addCompetence(Request $request, EntityManagerInterface $em) {
+    public function addCompetence(Request $request, EntityManagerInterface $em, Unlocker $unlocker) {
 
         $competence = new Competence;
         $form = $this->createForm(AdminCompetenceType::class, $competence);
@@ -58,6 +61,9 @@ class AdminCompetenceController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
 
             $em->persist($competence);
+            $em->flush();
+
+            $unlocker->sync($competence, $form->get('unlockedBy')->getData());
             $em->flush();
             $this->addFlash('success', "La compétence a bien été ajoutée.");
 
@@ -83,12 +89,15 @@ class AdminCompetenceController extends AbstractController
      * @Route("/admin/competence/{id}/edit", name="admin_competence_edit")
      * @IsGranted("ROLE_MJ")
      */
-    public function editCompetence(Request $request, Competence $competence): Response {
+    public function editCompetence(Request $request, Competence $competence, Unlocker $unlocker): Response {
 
         $form = $this->createForm(AdminCompetenceType::class, $competence);
+        $form->get('unlockedBy')->setData($unlocker->charactersOf($competence));
         $form->handleRequest($request);
 
         if($form->isSubmitted() && $form->isValid()) {
+
+            $unlocker->sync($competence, $form->get('unlockedBy')->getData());
 
             $this->getDoctrine()->getManager()->flush();
             $this->addFlash('success', 'La compétence a bien été modifiée.');
@@ -115,11 +124,12 @@ class AdminCompetenceController extends AbstractController
      * @Route("/admin/competence/{id}/delete", name="admin_competence_delete", methods={"POST"})
      * @IsGranted("ROLE_MJ")
      */
-    public function deleteCompetence(Request $request, Competence $competence): Response {
+    public function deleteCompetence(Request $request, Competence $competence, Unlocker $unlocker): Response {
 
         if ($this->isCsrfTokenValid('delete' . $competence->getId(), $request->request->get('_csrf_token'))) {
 
             $entityManager = $this->getDoctrine()->getManager();
+            $unlocker->forget($competence);
             $entityManager->remove($competence);
             $entityManager->flush();
             $this->addFlash('success', 'La compétence a bien été supprimée.');

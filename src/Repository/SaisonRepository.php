@@ -39,7 +39,6 @@ class SaisonRepository extends ServiceEntityRepository
         ;
     }
 
-    /** La saison en cours, c'est-a-dire la derniere creee. */
     public function findCourante(): ?Saison {
         return $this->findOneBy([], ['numero' => 'DESC']);
     }

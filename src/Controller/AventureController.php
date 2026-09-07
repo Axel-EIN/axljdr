@@ -15,7 +15,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class AventureController extends AbstractController
 {
     /**
-     * @Route("/", name="aventure")
+     * @Route("/aventure", name="aventure")
      */
     public function viewAventure(SaisonRepository $saisonRepository): Response
     {

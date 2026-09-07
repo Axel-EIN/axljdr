@@ -38,7 +38,7 @@
             {{ include('/parts/picture-grid.html.twig', {
                 variant: 'emblem',
                 items: clansAutres, route: 'empire_clan', na_image: NA_MON,
-                label: false, max_size: '6rem',
+                max_size: '6rem',
                 per_row: {desktop: 2, mobile: 3},
             }) }}
         </div>
@@ -48,7 +48,7 @@
 
 {% block section_content3 %}
     {{ include('/parts/picture-grid.html.twig', {
-        items: lieux, route: 'empire_lieu', na_image: NA_LIEU, force_image: true,
+        items: lieux, route: 'empire_lieu', na_image: NA_LIEU,
         wrapper: 'col-12', per_row: {desktop: 6, mobile: 2},
         empty_message: 'Pas de lieux disponibles.',
     }) }}

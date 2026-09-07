@@ -1,6 +1,7 @@
 <?php
 namespace App\Service;
 
+use App\Entity\Personnage;
 use App\Entity\Scene;
 use App\Entity\Episode;
 use App\Entity\Chapitre;
@@ -14,6 +15,30 @@ class ClasseurXP
     public function __construct(PersonnageRepository $personnageRepository)
     {
         $this->persoRepo = $personnageRepository;
+    }
+
+    public function total(Personnage $personnage): int
+    {
+        $total = 0;
+
+        foreach ($personnage->getParticipations() as $participation) {
+            $total += $participation->getXpEffectif();
+        }
+
+        $fiche = $personnage->getFichePersonnage();
+
+        return $total + ($fiche !== null ? (int) $fiche->getCreationExp() : 0);
+    }
+
+    public function rank(int $total): int
+    {
+        foreach ([5 => 360, 4 => 240, 3 => 140, 2 => 60] as $rang => $seuil) {
+            if ($total >= $seuil) {
+                return $rang;
+            }
+        }
+
+        return 1;
     }
 
     public function classerPersosAventure(Saison $saisons)
@@ -127,9 +152,6 @@ class ClasseurXP
             $totalXpAvecBonus = 0;
             $estMort = 0;
 
-            // Pour chaque participations cumul de l'XP pour chaque personnage différent.
-            // Le tri reste basé sur l'XP brut (équité en session) ; le total avec bonus
-            // est exposé séparément pour affichage informatif.
             foreach($participations as $une_participation) {
                 if ($une_participation->getPersonnage()->getId() == $un_personnage_id) {
                     $totalXp          += $une_participation->getXpGagne();

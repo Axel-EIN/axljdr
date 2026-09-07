@@ -5,6 +5,7 @@ namespace App\Form;
 use App\Entity\Famille;
 use App\Entity\Clan;
 use App\Entity\Personnage;
+use Doctrine\ORM\EntityRepository;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
@@ -54,7 +55,9 @@ class AdminFamilleType extends AbstractType
                 'choice_label' => 'prenom',
                 'group_by' => 'clan.nom',
                 'placeholder' => 'Non défini',
-                'required' => false
+                'required' => false,
+                'query_builder' => fn(EntityRepository $er) => $er->createQueryBuilder('p')
+                    ->leftJoin('p.clan', 'c')->orderBy('c.nom', 'ASC')->addOrderBy('p.prenom', 'ASC'),
             ])
         ;
     }

@@ -21,8 +21,8 @@
   font-family: 'Amerigo';
   font-size: var(--fontsize-plus);
   text-transform: uppercase;
-  background-color: var(--color-black-tar);
-  color: var(--color-white-fog);
+  background-color: var(--color-blacktar);
+  color: var(--color-fade);
   padding: 0.5rem 1rem;
   margin: 0;
 }
@@ -37,8 +37,8 @@
   margin: 0;
   padding: 1rem 3rem;
   text-align: justify;
-  font-size: var(--fontsize-regular);
-  line-height: 1.5;
+  font-size: var(--fontsize-base);
+  line-height: var(--leading-15);
 
   &.condensed {
     padding: 1rem;
@@ -46,14 +46,14 @@
 
   &.compact {
     padding: 3rem 4rem;
-    font-size: var(--fontsize-normal);
-    line-height: 1.6;
+    font-size: var(--fontsize-regular);
+    line-height: var(--leading-16);
   }
 
   &.aerated {
     padding: 3rem 6rem;
     font-size: var(--fontsize-medium);
-    line-height: 1.75;
+    line-height: var(--leading-18);
   }
 
   @media (max-width: 991.98px) {

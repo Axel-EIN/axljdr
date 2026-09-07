@@ -1,31 +1,22 @@
 /* --------- PAGE PERSONNAGES --------- */
 
-/* .card-img-overlay est une classe Bootstrap : la regle plus bas la surcharge,
-   et n'a de sens que pour ces cartes. */
-
 .character-card {
   border: unset;
   transition: 0.5s var(--ease);
 }
 
-/* Bande horizontale : le ratio 9:16 tombe au quart (177.78% → 44%) et l'image
-   se recadre sur le visage, vers 16% du haut. */
 @media (max-width: 575.98px) {
   .character-card .ratio-916 { padding-top: 44%; }
 
-  /* .ratio-916 n'est pas decoratif : sans ce troisieme niveau, effects.css
-     l'emporte et l'image reste centree. */
   .character-card .ratio-916 .ratio-cropped { object-position: center 16%; }
-
-  /* Calibrees pour un portrait haut : sur une bande large, elles depassent. */
-  .character-card .icon-lock-character {
-    width: 15%;
-    top: 25%;
-    left: 42%;
-  }
 
   .character-card .icon-dead-big {
     width: 78px;
+    top: 1rem;
+  }
+
+  .character-card .icon-missing-big {
+    font-size: 48px;
     top: 1rem;
   }
 
@@ -48,8 +39,6 @@
 
 /* ----- FILTRES SAISON / CHAPITRE / EPISODE ----- */
 
-/* Bloc a cheval sur la frontiere banniere / contenu. Le position:relative du
-   main n'existe que pour lui servir de repere. */
 main.container-fluid { position: relative; }
 
 .characters-filters {
@@ -71,13 +60,9 @@ main.container-fluid { position: relative; }
   font-size: 0.9rem;
 }
 
-/* .label-amerigo declare sa couleur : l'heritage ne peut pas l'emporter, il
-   faut la viser directement. */
 .characters-filters label,
 .characters-filters .label-amerigo { color: var(--color-white); }
 
-/* Le min() de .img-32 n'est pas resoluble au calcul intrinseque : l'icone
-   comptait pour ses 128px natifs. */
 .characters-filters label img { width: 32px; }
 
 .characters-filters .form-control:disabled,
@@ -106,7 +91,7 @@ main.container-fluid { position: relative; }
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  line-height: 1;
+  line-height: var(--leading-1);
   font-size: var(--fontsize-small);
   text-decoration: none;
 }
@@ -116,10 +101,7 @@ main.container-fluid { position: relative; }
   color: var(--color-white);
 }
 
-/* relative et non static : le bouton reset en absolute a besoin du repere. */
 @media (max-width: 991.98px) {
-  /* Le cartouche deborde jusqu'aux bords de l'ecran, d'ou l'impression de
-     coupure. --bleed reprend le padding du .container. */
   .characters-filters {
     --bleed: 1rem;
 
@@ -131,19 +113,16 @@ main.container-fluid { position: relative; }
     max-width: none;
     margin: 0 calc(-1 * var(--bleed)) 1rem;
     margin-top: -4rem;
-    /* 3rem a droite : le bouton de reinitialisation y est en absolute. */
     padding: 1.25rem calc(3rem + var(--bleed)) 0.75rem calc(1rem + var(--bleed));
 
     @media (max-width: 575.98px) { --bleed: 0.5rem; }
   }
 
-  /* Base nulle : sinon l'option la plus longue pilote la repartition. */
   .characters-filters select {
     flex: 1 1 0;
     min-width: 0;
   }
 
-  /* Rentre du coin : le bouton s'y confondait avec la texture dechiree. */
   .characters-filters .btn-reset-icon {
     top: 1rem;
     right: calc(1.25rem + var(--bleed));
@@ -166,10 +145,30 @@ main.container-fluid { position: relative; }
     width: 156px;
 }
 
-.icon-lock-character {
+.icon-missing-big {
     z-index: 10;
-    top: 35%;
-    left: 35%;
-    width: 30%;
-    filter: grayscale(100%);
+    top: 4rem;
+    left: 50%;
+    transform: translateX(-50%);
+    color: var(--color-white);
+    font-size: 96px;
+    text-shadow: 0 2px 8px var(--color-black);
+}
+
+/* ----- MORTS ET DISPARUS ----- */
+
+.perso-inactif { display: none; }
+
+.category-page:has(#voir-inactifs:checked) .perso-inactif { display: block; }
+
+.voir-inactifs {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin: 0;
+    color: var(--color-strong);
+    font-size: var(--fontsize-base);
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 1rem;
 }

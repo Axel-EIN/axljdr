@@ -8,14 +8,14 @@
 
 {% block element_content %}
 
-    {{ include('parts/clan-banner.html.twig', {clan, toutClans}) }}
+    {{ include('empire/clan-banner.html.twig', {clan, toutClans}) }}
 
     <div class="col-12 col-lg-8">
         <div class="card card-body relative">
 
-            {{ include('/parts/btn-ajouter-element.html.twig', {
+            {{ include('/btns/btn-add-element.html.twig', {
                 entity: 'famille', label_one: 'une famille',
-                position: 'right-corner-16', options: 'clanID=' ~ clan.id,
+                position: 'topright-corner-inside-more', options: 'clanID=' ~ clan.id,
             }) }}
 
             <h2 class="heading-cardtitle">Familles</h2>
@@ -26,14 +26,13 @@
                     <article id="{{ une_famille.nom }}" class="famille relative">
 
                         {% if app.user and is_granted("ROLE_MJ") %}
-                            {% set redirect, entity, un_element, size, color, position = 'clan', 'famille', une_famille, 'btn-icon-small', 'text-accent', 'right-corner-snap' %}
-                            {{ include('/parts/btn-icon-edit.html.twig') }}
+                            {% set redirect, entity, un_element, size, color, position = 'clan', 'famille', une_famille, 'btn-icon-small', 'text-accent', 'topright-corner-snap' %}
+                            {{ include('/btns/btn-icon-edit.html.twig') }}
                         {% endif %}
 
                         <div class="famille-mon">
                             <img class="img-fluid circle-crop" src="{{ asset(une_famille.mon|default(NA_MON)) }}" alt="Mon Famille" />
 
-                            {# Masque sur mobile : pas la place a cote du logo. #}
                             {% if une_famille.chef is not empty %}
                                 <a class="famille-daimyo hover-no-under hover-zoom" href="{{ path('personnage_profil', {id: une_famille.chef.id} ) }}" title="{{une_famille.chef.nom}} {{une_famille.chef.prenom}}">
                                     <span class="text-muted">Daimyo</span>
@@ -63,13 +62,12 @@
 
     {{ include('/parts/picture-grid.html.twig', {
         title: 'Écoles',
+        variant: 'rule',
         items: clan.ecoles, route: 'regles_ecole',
         na_image: NA_ECOLE,
-        force_image: true,
-        ratio: '43',
         per_row: 1,
         wrapper: 'col-12 col-lg-4',
-        btn_add: {entity: 'ecole', label_one: 'une école', position: 'right-corner-16', options: 'clanID=' ~ clan.id},
+        btn_add: {entity: 'ecole', label_one: 'une école', position: 'topright-corner-inside-more', options: 'clanID=' ~ clan.id},
         empty_message: 'Écoles à venir.',
     }) }}
 
@@ -97,7 +95,6 @@
         title: 'Lieux',
         items: clan.lieux, route: 'empire_lieu',
         na_image: NA_LIEU,
-        force_image: true,
         per_row: {desktop: 4, tablet: 3, mobile: 2},
         empty_message: "Il n'y a pas encore de lieu rattaché à ce clan.",
     }) }}

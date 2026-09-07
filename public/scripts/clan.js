@@ -1,4 +1,3 @@
-// Clan Banner Mon Play Video Icon
 
 $('#zone-mon').hover(playVisible, playInvisible);
 
@@ -13,9 +12,6 @@ function playInvisible() {
     $('#icon-play').removeClass('visible');
     $('#icon-play').addClass('invisible');
 };
-
-
-// Clan Banner Video Focus+Unmute / UnFocus+Mute Top Left Icon
 
 function focusVideo() {
     document.getElementById('banner-video').style.zIndex = 4;

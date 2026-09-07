@@ -12,13 +12,14 @@ use App\Repository\LoreRepository;
 use App\Repository\ArchiveRepository;
 use App\Repository\SaisonRepository;
 use App\Service\ClasseurHistorique;
+use App\Service\Visibility;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class EmpireController extends AbstractController
 {
-  use LockedTrait;
+  use VisibilityTrait;
 
   /**
    * @Route("/empire", name="empire")
@@ -65,7 +66,7 @@ class EmpireController extends AbstractController
 
     $header_classname = 'empire';
     $header_up = "Univers du Jeu";
-    $header_down = "L'Empire de Rokugan";
+    $header_down = "L'Empire d'Emeraude";
     $category = 'empire';
 
     return $this->render('empire/index.html.twig', [
@@ -85,9 +86,9 @@ class EmpireController extends AbstractController
   /**
    * @Route("/empire/clan/{id}", name="empire_clan")
    */
-  public function afficherClan(Clan $clan, ClanRepository $clanRepository): Response
+  public function afficherClan(Clan $clan, ClanRepository $clanRepository, Visibility $visibility): Response
   {
-    if ($response = $this->lockedPage($clan, 'clan', 'empire')) {
+    if ($response = $this->accessGuard($visibility, $clan, 'clan', 'empire')) {
       return $response;
     }
 
@@ -109,9 +110,9 @@ class EmpireController extends AbstractController
   /**
    * @Route("/empire/archive/{id}", name="empire_archive")
    */
-  public function afficherArchive(Archive $archive, ArchiveRepository $archiveRepository): Response
+  public function afficherArchive(Archive $archive, ArchiveRepository $archiveRepository, Visibility $visibility): Response
   {
-    if ($response = $this->lockedPage($archive, 'archive', 'empire')) {
+    if ($response = $this->accessGuard($visibility, $archive, 'archive', 'empire')) {
       return $response;
     }
 
@@ -131,9 +132,9 @@ class EmpireController extends AbstractController
   /**
    * @Route("/empire/lieu/{id}", name="empire_lieu")
    */
-  public function afficherLocation(Lieu $lieu, LieuRepository $lieuRepository, ClasseurHistorique $classeur, SaisonRepository $saisonRepository): Response
+  public function afficherLocation(Lieu $lieu, LieuRepository $lieuRepository, ClasseurHistorique $classeur, SaisonRepository $saisonRepository, Visibility $visibility): Response
   {
-    if ($response = $this->lockedPage($lieu, 'lieu', 'empire')) {
+    if ($response = $this->accessGuard($visibility, $lieu, 'lieu', 'empire')) {
       return $response;
     }
 
@@ -159,9 +160,9 @@ class EmpireController extends AbstractController
   /**
    * @Route("/empire/lore/{id}", name="empire_lore")
    */
-  public function afficherLore(Lore $lore, LoreRepository $loreRepository): Response
+  public function afficherLore(Lore $lore, LoreRepository $loreRepository, Visibility $visibility): Response
   {
-    if ($response = $this->lockedPage($lore, 'lore', 'empire')) {
+    if ($response = $this->accessGuard($visibility, $lore, 'lore', 'empire')) {
       return $response;
     }
 

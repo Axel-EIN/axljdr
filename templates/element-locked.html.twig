@@ -1,16 +1,17 @@
 {% extends 'element.html.twig' %}
 
 {% set labels = {
-  archive: 'Archive', clan: 'Faction', ecole: 'École', lieu: 'Lieu',
-  lore: 'Lore', objet: 'Objet', personnage: 'Personnage', rule: 'Règle',
+  archive: 'Archive', clan: 'Faction', ecole: 'École', library: 'Bibliothèque',
+  lieu: 'Lieu', lore: 'Lore', objet: 'Objet', personnage: 'Personnage',
+  rule: 'Règle',
 } %}
 {% set nom = labels[entity]|default('Élément') ~ ' à découvrir' %}
 
 {% block element_content %}
 
   {% set placeholders = {
-    archive: NA_ARCHIVE, clan: NA_CLAN, ecole: NA_ECOLE, lieu: NA_LIEU,
-    lore: NA_LORE, objet: NA_OBJET, rule: NA_RULE,
+    archive: NA_ARCHIVE, clan: NA_CLAN, ecole: NA_ECOLE, library: NA_LIBRARY,
+    lieu: NA_LIEU, lore: NA_LORE, objet: NA_OBJET, rule: NA_RULE,
   } %}
 
   {% set attentes = {
@@ -22,13 +23,14 @@
     objet:      "Cet objet n'a pas encore été déverrouillé dans l'aventure. Seules vos actions, jeunes samuraïs, vous permettront un jour de le tenir.",
     personnage: "Ce personnage n'a pas encore été déverrouillé dans l'aventure. Seules vos actions, jeunes samuraïs, vous permettront un jour de le rencontrer.",
     rule:       "Cette règle n'a pas encore été déverrouillée dans l'aventure. Seules vos actions, jeunes samuraïs, vous permettront un jour de la maîtriser.",
+    library:    "Cette bibliothèque n'a pas encore été déverrouillée dans l'aventure. Seules vos actions, jeunes samuraïs, vous en ouvriront un jour les pages.",
   } %}
 
   <div class="col-12">
     <div class="card card-page">
 
       <div class="relative">
-        <img class="absolute icon-lock grayscale fa-beat-fade" src="{{ asset(LOCKED_ICO) }}" alt="Cadenas" title="À débloquer !" />
+        <img class="icon-lock fa-beat-fade" src="{{ asset(LOCKED_ICO) }}" alt="Cadenas" title="À débloquer !" />
         {{ include('/parts/card-top-image.html.twig', {
           image: placeholders[entity]|default(NA_1610),
           na_image: NA_1610,

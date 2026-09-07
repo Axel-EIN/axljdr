@@ -5,18 +5,8 @@ use App\Entity\Lieu;
 use App\Entity\Personnage;
 use App\Entity\Scene;
 
-/**
- * Historique affiché sur les pages Lieu et Profil : les scènes groupées par
- * épisode, du plus récent au plus ancien. Faute d'horodatage en base, « récent »
- * se lit sur les numéros donnés par le MJ, du plus élevé au plus bas, à chacun
- * des quatre niveaux : saison, chapitre, épisode, scène.
- *
- * Forme rendue : [ ['episode' => Episode, 'xp' => int, 'lignes' => [
- *   ['scene' => Scene, 'xp' => int, 'bonus' => bool, 'mort' => bool], … ]], … ]
- */
 class ClasseurHistorique
 {
-    /** Scènes où un lieu apparaît. */
     public function pourLieu(Lieu $lieu): array
     {
         $scenes = $lieu->getScenes()->toArray();
@@ -30,7 +20,6 @@ class ClasseurHistorique
         return $this->grouperParEpisode($lignes);
     }
 
-    /** Participations d'un personnage, avec l'XP gagné et la mort éventuelle. */
     public function pourPersonnage(Personnage $personnage): array
     {
         $participations = $personnage->getParticipations()->toArray();
@@ -52,7 +41,6 @@ class ClasseurHistorique
         return $this->grouperParEpisode($lignes);
     }
 
-    /** Ordre décroissant : le plus récent d'abord. */
     public function comparer(Scene $a, Scene $b): int
     {
         return $this->rang($b) <=> $this->rang($a);

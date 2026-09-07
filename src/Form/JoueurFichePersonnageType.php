@@ -2,6 +2,7 @@
 
 namespace App\Form;
 
+use App\Entity\Access;
 use App\Entity\Avantage;
 use App\Entity\Competence;
 use App\Entity\FichePersonnage;
@@ -23,7 +24,6 @@ class JoueurFichePersonnageType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $fiche = $builder->getData();
-        // Une arme verrouillée déjà équipée reste proposée, sinon l'enregistrement l'effacerait.
         $equipped = array_filter([
             $fiche?->getArme()?->getId(),
             $fiche?->getArme2()?->getId(),
@@ -38,7 +38,10 @@ class JoueurFichePersonnageType extends AbstractType
             }
 
             if (!$options['sees_locked']) {
-                $qb->andWhere('o.locked = false OR o.id IN (:equipped)')->setParameter('equipped', $equipped);
+                $qb->andWhere('(o.access = :palier AND (o.publishedAt IS NULL OR o.publishedAt <= :maintenant)) OR o.id IN (:autorises)')
+                    ->setParameter('palier', Access::PUBLIC)
+                    ->setParameter('maintenant', new \DateTime())
+                    ->setParameter('autorises', array_merge($equipped, $options['unlocked']));
             }
 
             return $qb;
@@ -157,6 +160,7 @@ class JoueurFichePersonnageType extends AbstractType
         $resolver->setDefaults([
             'data_class' => FichePersonnage::class,
             'sees_locked' => false,
+            'unlocked' => [],
         ]);
     }
 }

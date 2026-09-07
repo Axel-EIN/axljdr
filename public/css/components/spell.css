@@ -19,7 +19,7 @@
     border-radius: 1rem;
     font-weight: bold;
     min-width: 24px;
-    font-size: var(--fontsize-regular);
+    font-size: var(--fontsize-base);
     text-align: center;
 
     &.reduced {
@@ -41,7 +41,6 @@
     padding: 0.125rem 0.25rem;
     font-size: var(--fontsize-small);
 
-    /* Pousse le badge de niveau, et la croix d'edition, contre le bord droit. */
     & .spell-link, & .spell-name { flex: 1; }
 }
 
@@ -50,6 +49,5 @@
 .popover-body {
     overflow-y: auto;
 
-    /* Le corps du popover porte deja son padding. */
     .spell-description { padding: 0; }
 }

@@ -1,5 +1,3 @@
-{# Ligne de vignettes des episodes du chapitre : carrousel sur desktop,
-   menu deroulant sur mobile. Param : episode (le courant). #}
 <div class="episodes-line">
   <span class="text-light">Il y a <strong class="text-accent-light">{{ episode.chapitreParent.episodes|length }} ÉPISODES</strong> dans ce chapitre.</span>
   <div class="carrousel mt-2 d-none d-lg-flex">
@@ -18,8 +16,6 @@
     {% endfor %}
   </div>
 
-  {# Mobile : le carrousel est remplace par l'episode courant + un menu
-     deroulant vers les autres, meme composant que la nav des bandeaux. #}
   <div class="dropdown d-lg-none mt-2">
     <a  class="banner-nav-toggle chevron-toggle text-white py-2 px-3 d-inline-flex align-items-center"
         style="background-color: {{ episode.chapitreParent.couleur }}"

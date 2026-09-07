@@ -9,7 +9,7 @@
         z-index: 10;
         left: 24px;
         top: -28px;
-        filter: drop-shadow(2px 2px 4px var(--color-black-50));
+        filter: drop-shadow(2px 2px 4px var(--color-black50));
     
         .location {
             position: absolute;
@@ -49,7 +49,6 @@
     }
 }
 
-
 .characters-line {
   position: absolute;
   z-index: 10;
@@ -75,9 +74,9 @@
         border-top-left-radius: 0;
         border-top-right-radius: 0;
         bottom: -2.75rem;
-        &.pj { background-color: var(--flash-blue); }
-        &.pnj { background-color: var(--primary-darker-more); }
-        &.gray { background-color: var(--color-gray-ash); }
+        &.pj { background-color: var(--color-flashblue); }
+        &.pnj { background-color: var(--color-primarydarken); }
+        &.gray { background-color: var(--color-grayash); }
         &.me {
           visibility: visible;
           background-color: var(--flash-green);

@@ -1,5 +1,14 @@
 # AXL-JDR
 
+**Lire [`.claude/code.md`](.claude/code.md) avant toute intervention sur le
+code**, à chaque fois : la langue, l'arborescence, les noms et les conventions y
+sont, et elles prévalent sur les habitudes.
+
+**Ne jamais écrire de commentaire dans le code.** Ni pour justifier un choix, ni
+pour documenter les paramètres d'un partial, ni pour signaler un piège : ça se
+dit dans le compte rendu. Vaut aussi quand le fichier réécrit en contenait déjà
+un. Si un cas semble vraiment justifier une exception, la demander avant.
+
 Gestionnaire de campagne de jeu de rôle (univers de Rokugan). Symfony + Twig,
 CSS custom dans `public/css/`, Bootstrap 4.6 en CDN pour quelques utilitaires.
 Pas de build tool : les fichiers de `public/css/` sont servis tels quels.
@@ -18,7 +27,7 @@ vont à l'essentiel : ce qui change, et le pourquoi quand il n'est pas évident.
 
 ## Philosophie de code
 
-Ces deux règles passent avant tout le reste. Elles s'appliquent au CSS, au
+Ces règles passent avant tout le reste. Elles s'appliquent au CSS, au
 Twig et au PHP.
 
 ### 1. Aller au plus simple et au plus concis
@@ -100,6 +109,39 @@ Concrètement :
 - Toutes les quelques tâches, refaire un tour d'ensemble du code (pas
   seulement des fichiers du jour) pour repérer ce qui peut être factorisé.
 
+### 4. Imbriquer le CSS, ne pas l'éparpiller
+
+**Une classe ne se déclare qu'une fois, et ses descendants s'imbriquent dedans.**
+Le réflexe à éviter est de poser les sélecteurs à plat, chacun de son côté, puis
+une troisième règle pour les relier :
+
+```css
+/* non */
+.ranking-card {}
+
+.ranking-list {}
+
+.ranking-card > .ranking-list {}
+```
+
+```css
+/* oui */
+.ranking-card {
+  .ranking-list {}
+}
+```
+
+Vaut aussi quand la règle relationnelle est la seule qu'on écrit : un
+`.parent > .enfant {}` isolé s'écrit `.parent { > .enfant {} }`. Et quand une
+classe est déjà déclarée plus loin dans le même fichier, on fusionne les deux
+blocs au lieu d'en ajouter un troisième.
+
+Ce qu'on y gagne : tout ce qui concerne un bloc tient à quelques lignes d'écart,
+son comportement complet se lit d'un coup d'œil, et aucune règle oubliée ne
+vient agir en silence depuis l'autre bout de la feuille. C'est la même raison
+qui fait vivre une variante dans le fichier de son composant (cf.
+[`.claude/code.md`](.claude/code.md)) : un seul endroit à ouvrir.
+
 ## Architecture et nomenclature
 
 L'arborescence du projet, les conventions de nommage et la bascule progressive
@@ -122,6 +164,14 @@ docker compose exec -T app php -l <fichier.php>
 ```
 
 `php` n'est pas disponible sur l'hôte : tout passe par le conteneur `app`.
+
+**Toute commande qui écrit dans `var/` — `cache:clear`, une migration — se lance
+en `www-data`**, sinon elle recrée le cache en root et Apache ne peut plus y
+écrire : la page suivante tombe en 500 sur le répertoire du profiler.
+
+```bash
+docker compose exec -T -u www-data app php bin/console cache:clear
+```
 
 Ne jamais démarrer/arrêter les conteneurs Docker (`docker compose up`,
 `stop`, `restart`...) de sa propre initiative — l'utilisateur gère leur

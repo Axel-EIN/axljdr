@@ -15,6 +15,16 @@ class Baliseur
         $this->lieuRepo = $lieuRepository;
     }
 
+    public function baliser(?string $texte): ?string
+    {
+        return empty($texte) ? $texte : $this->baliserLieux($this->baliserPersonnages($texte));
+    }
+
+    public function debaliser(?string $texte): ?string
+    {
+        return empty($texte) ? $texte : $this->debaliserLieux($this->debaliserPersonnages($texte));
+    }
+
     public function baliserPersonnages($texte)
     {
         $tableau = [];
@@ -24,7 +34,6 @@ class Baliseur
         $tableau_de_regexp = array_fill(0, count($tableau[1]), '#\[(.*)\]#Ui');
         $tableau_remplacement = [];
 
-        // Remplace par un lien HTML vers la fiche du personnage
         foreach ($tableau[1] as $key => $un_match) {
             $personnage_trouve = $this->persoRepo->findOneBy(array('prenom' => $un_match));
 
@@ -79,7 +88,6 @@ class Baliseur
         $tableau_de_regexp = array_fill(0, count($tableau[1]), '#\{(.*)\}#Ui');
         $tableau_remplacement = [];
 
-        // Remplace par un lien HTML vers la fiche du Lieu
         foreach ($tableau[1] as $key => $un_match) {
             $lieu_trouve = $this->lieuRepo->findOneBy(array('nom' => $un_match));
 

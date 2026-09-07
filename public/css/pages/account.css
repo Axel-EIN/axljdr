@@ -1,6 +1,10 @@
 /* ----- ESPACE DE COMPTE --- */
 
-.compte-infos {
+@media (min-width: 992px) {
+  .other-page .card-page { padding: 2rem; }
+}
+
+.account-infos {
   margin: 0;
 
   dt {
@@ -17,7 +21,34 @@
   }
 }
 
-.compte-personnages {
+.account-main {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+
+  > a { flex: 0 0 8rem; }
+  > a img { width: 100%; border-radius: 0.5rem; }
+
+  div {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem;
+  }
+}
+
+.account-choice {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 1.5rem 0 2rem;
+
+  label { margin: 0 }
+  select { flex: 1 1 10rem }
+}
+
+.account-characters {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: var(--gap, 1rem);
@@ -35,4 +66,12 @@
     max-width: 8rem;
     border-radius: 0.5rem;
   }
+}
+
+.account-choice-toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0;
+  font-size: var(--fontsize-small);
 }

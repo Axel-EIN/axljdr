@@ -30,7 +30,6 @@ body {
   @media (max-width: 1199.98px) { padding-left: 1rem; padding-right: 1rem; }
   @media (max-width: 575.98px) {
     padding-left: 0.5rem; padding-right: 0.5rem;
-    /* Compense les -15px du .row de Bootstrap, le padding du container ayant change. */
     .row { margin-left: -0.5rem; margin-right: -0.5rem; }
   }
 }

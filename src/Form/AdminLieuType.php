@@ -13,7 +13,6 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Validator\Constraints\File;
 
 class AdminLieuType extends AbstractType
@@ -84,8 +83,9 @@ class AdminLieuType extends AbstractType
         'placeholder' => 'Non défini',
         'required' => false
       ])
-      ->add('locked', CheckboxType::class, ['required' => false])
     ;
+
+    PublishableFields::add($builder);
   }
 
   public function configureOptions(OptionsResolver $resolver): void

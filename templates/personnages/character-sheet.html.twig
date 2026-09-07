@@ -3,13 +3,12 @@
 {% block stylesheets %}
   {{parent()}}
   <link rel="stylesheet" href="{{asset('css/components/spell.css')}}" />
+  <link rel="stylesheet" href="{{asset('css/components/edit-mode.css')}}" />
   <link rel="stylesheet" href="{{asset('css/pages/character-sheet.css')}}" />
 {% endblock %}
 
 {% set cout_par_spe = 2 %}
 
-{# Avantages / Désavantages : applique discount si le clan/classe du personnage qualifie.
-   Défini hors bloc pour être accessible aux blocs element_content ET javascripts. #}
 {% set perso_clan_id   = fiche.personnage.clan   ? fiche.personnage.clan.id   : 0 %}
 {% set perso_classe_id = fiche.personnage.classe ? fiche.personnage.classe.id : 0 %}
 {% set effective_costs = {av1: 0, av2: 0, dv1: 0, dv2: 0} %}
@@ -26,8 +25,6 @@
 {% set cout_avantages_total    = effective_costs.av1 + effective_costs.av2 %}
 {% set gain_desavantages_total = effective_costs.dv1 + effective_costs.dv2 %}
 
-{# initiativeModifier est un INT (modifie le resultat), attaqueModifier et
-   dmgModifier des "XgY" (modifient le jet). #}
 {% set initMod = fiche.initiativeModifier ?? 0 %}
 {% set atkModL, atkModG = 0, 0 %}
 {% if fiche.attaqueModifier %}
@@ -47,7 +44,6 @@
 {% set bonusNomFamille = (fiche.personnage.famille is not empty) ? fiche.personnage.famille.bonusStatNom : null %}
 {% set bonusNomEcole   = (fiche.personnage.ecole is not empty) ? fiche.personnage.ecole.bonusStatNom : null %}
 
-{# nb_bonus_X = nombre de sources (famille/école) offrant un rang gratuit sur ce trait (0, 1 ou 2). #}
 {% set nb_bonus_constitution = (bonusNomFamille == 'constitution'  ? 1 : 0) + (bonusNomEcole == 'constitution'  ? 1 : 0) %}
 {% set nb_bonus_volonte      = (bonusNomFamille == 'volonte'       ? 1 : 0) + (bonusNomEcole == 'volonte'       ? 1 : 0) %}
 {% set nb_bonus_reflexes     = (bonusNomFamille == 'reflexes'      ? 1 : 0) + (bonusNomEcole == 'reflexes'      ? 1 : 0) %}
@@ -68,7 +64,6 @@
 {% set eff_perception    = fiche.perception    + nb_bonus_perception %}
 {% set eff_vide          = fiche.vide          + nb_bonus_vide %}
 
-{# Rang de départ gratuit (base 2, +1 par bonus cumulé) : chaque bonus décale la franchise d'un rang. #}
 {% set libre_constitution = 2 + nb_bonus_constitution %}
 {% set libre_volonte      = 2 + nb_bonus_volonte %}
 {% set libre_reflexes     = 2 + nb_bonus_reflexes %}
@@ -121,14 +116,12 @@
 {% set cout_total        = cout_traits_total + cout_competences_total + cout_avantages_total %}
 
 <div class="col-12">
-  <div id="character-sheet" class="card card-page text-gray-slate">
+  <div id="character-sheet" class="card card-page text-grayslate">
 
   <div class="row">
 
     <div class="col-12 col-lg-8">
 
-      {# mb-3 sur mobile : le mandala qui suivait est masque, la liste donne
-         donc directement sur les competences. #}
       <div class="row mb-2 mb-lg-4">
         <div class="col-12 col-lg-6">
           <ul class="list-decored">
@@ -177,8 +170,6 @@
             </li>
             <li>
               <span class="label">Ecole :</span>
-              {# Mobile : la ligne Classe est masquee, son icone la represente ici
-                 et garde son lien vers la page de classe. #}
               {% if fiche.personnage.classe %}
                 <a class="d-lg-none" href="{{ path('regles_classe', {id: fiche.personnage.classe.id}) }}"
                    title="Classe {{ fiche.personnage.classe.nom }}">
@@ -248,10 +239,8 @@
         </div>
       </div>
 
-      {# Separe les infos du mandala, masque avec lui sous 992px. #}
       <hr class="my-2 d-none d-lg-block">
 
-      {# Masque sur la rangee et non ses enfants : sinon son mt-4 creuse un vide. #}
       <div class="row mt-4 d-none d-lg-flex">
         <div class="col-12 anneaux-board"
              style="--mon-clan: url('{{ asset(fiche.personnage.clan.mon|default(NA_MON)) }}');">
@@ -260,7 +249,6 @@
             <img class="anneaux-glow" src="{{ asset(fiche.personnage.classe.icone|default(NA_MON)) }}" />
           {% endfor %}
 
-          {# Mandala : les 12 colonnes se repartissent en 2 + 4 + 4 + 2. #}
           <div class="row text-center">
             <div class="col-2"></div>
 
@@ -583,7 +571,6 @@
 
         <div class="fiche-traits d-lg-none">
           {% for anneau in anneaux_mobile %}
-            {# Le Vide n'a pas de trait : c'est ce qui lui vaut la pleine largeur. #}
             <div class="fiche-anneau-groupe{% if anneau.traits is empty %} fiche-anneau-solo{% endif %}">
               <div class="fiche-anneau-line">
                 <img class="fiche-anneau-ico" src="{{ anneau.icone }}" alt="" />
@@ -664,7 +651,7 @@
                       <span data-av-name class="text-strong extrabold">
                         {{ item ? item.nom : '' }}
                       </span>
-                      <i class="fas fa-info-circle text-gray-dust ml-1{% if not item %} d-none{% endif %}"
+                      <i class="fas fa-info-circle text-graydust ml-1{% if not item %} d-none{% endif %}"
                         data-toggle="tooltip" data-placement="right" data-av-tooltip
                         title="{{ item ? item.description : '' }}">
                       </i>
@@ -715,18 +702,15 @@
               {% endif %}
             {% endfor %}
 
-            {# Ordre des catégories : Bugei → Noble → Marchand → Dégradante (toute autre catégorie en queue, alpha) #}
             {% set CAT_ORDER = ['Bugei', 'Noble', 'Marchand', 'Dégradante'] %}
             {% set ordered_cats = CAT_ORDER|filter(c => filled_by_cat[c] is defined) %}
             {% set extra_cats = filled_by_cat|keys|filter(c => c not in CAT_ORDER)|sort %}
 
             {% for cat in ordered_cats|merge(extra_cats) %}
-              {# |u.ascii replie les accents : sans lui la comparaison est octet par octet
-                 et « Etiquette » passe derriere « Sincerite ». #}
               {% set slots = filled_by_cat[cat]|sort((a, b) =>
                   a.comp.nom|u.ascii|lower <=> b.comp.nom|u.ascii|lower
               ) %}
-              <tr class="comp-cat-header bg-gray-edge border-0">
+              <tr class="comp-cat-header bg-grayedge border-0">
                 <th colspan="5" scope="colgroup">{{ cat }}{% if cat == 'Bugei' %} (combat){% endif %}</th>
               </tr>
               {% for slot in slots %}
@@ -855,7 +839,7 @@
               <h6>Sorts universels</h6>
               <ul class="spell-list" data-spell-list="UNIVERSEL">
                 {% for spell in spells_by_ring['UNIVERSEL']|default([]) %}
-                  {{ include('/parts/spell-line.html.twig', {spell: spell}) }}
+                  {{ include('/personnages/character-sheet-spell-line.html.twig', {spell: spell}) }}
                 {% endfor %}
               </ul>
               <div class="spell-add edit-only" data-spell-add="UNIVERSEL"></div>
@@ -871,7 +855,7 @@
                 </h6>
                 <ul class="spell-list" data-spell-list="{{ ring }}">
                   {% for spell in spells_by_ring[ring]|default([]) %}
-                    {{ include('/parts/spell-line.html.twig', {spell: spell}) }}
+                    {{ include('/personnages/character-sheet-spell-line.html.twig', {spell: spell}) }}
                   {% endfor %}
                 </ul>
                 <div class="spell-add edit-only" data-spell-add="{{ ring }}"></div>
@@ -959,7 +943,6 @@
               </div>
             </li>
 
-            {# Détermine la valeur de la compétence active de combat (compCombatActuelle) en cherchant dans les slots #}
             {% set comp_combat_val = 0 %}
             {% if fiche.compCombatActuelle %}
               {% for i in 1..20 %}
@@ -986,7 +969,7 @@
             {% set JetAtkG = eff_agilite + atkModG %}
             <li class="list-group-item p-0 px-3 py-1 flex gap-2">
               <div class="flex-grow-1 stat-attaque-with-comp{% if not fiche.compCombatActuelle %} d-none{% endif %}">
-                Attaque <span class="text-small text-gray-ash">(<span data-stat="comp-combat-nom">{{ fiche.compCombatActuelle ? fiche.compCombatActuelle.nom : '' }}</span>)</span>
+                Attaque <span class="text-small text-grayash">(<span data-stat="comp-combat-nom">{{ fiche.compCombatActuelle ? fiche.compCombatActuelle.nom : '' }}</span>)</span>
                 <br/>
                 <span>
                   <strong class="text-strong ml-2" data-stat="attaque">{{JetAtkL}}g{{JetAtkG}}</strong>
@@ -1042,9 +1025,9 @@
             <li class="list-group-item px-3 py-2 flex gap-2">
               <div class="flex-grow-1 flex-col stat-dommages-with-arme{% if not fiche.armeActuelle %} d-none{% endif %}">
                 <span>
-                  Dommages <span class="text-small text-gray-ash">(<span data-stat="arme-actuelle-nom">{{ fiche.armeActuelle ? fiche.armeActuelle.nom : '' }}</span>)</span>
+                  Dommages <span class="text-small text-grayash">(<span data-stat="arme-actuelle-nom">{{ fiche.armeActuelle ? fiche.armeActuelle.nom : '' }}</span>)</span>
                 </span>
-                <span class="ml-2 text-gray-ash">
+                <span class="ml-2 text-grayash">
                   <strong class="text-strong" data-stat="dommages">{{ JetDmglances ~ 'g' ~ JetDmgGardes }}</strong>
                   &nbsp;
                   <i class="fa-solid fa-dice text-accent"
@@ -1108,7 +1091,7 @@
             {% if fiche.armure %}
               <li class="list-group-item px-3 py-2 flex">
                 <div class="flex-grow-1" >
-                  Armure <span class="text-small text-gray-ash">({{ fiche.armure.nom }})</span>
+                  Armure <span class="text-small text-grayash">({{ fiche.armure.nom }})</span>
                   <br/><strong class="text-strong ml-2">+{{ fiche.armure.ndArmure }} au ND pour être touché</strong>
                   <br/><strong class="text-strong ml-2">-{{ fiche.armure.reduction }} Réduction de dommages</strong>
                 </div>
@@ -1287,8 +1270,6 @@
         const btnValider = document.getElementById('btn-fiche-valider');
         const article = document.getElementById('character-sheet');
 
-        // === Calcul du coût d'un trait ===
-        // bonusCount = nombre de sources (famille/école) offrant un rang gratuit sur ce trait (0, 1 ou 2).
         function traitCost(eff, bonusCount, multiplier) {
             const freeRank = 2 + bonusCount;
             if (eff <= freeRank) return 0;
@@ -1296,7 +1277,6 @@
             return Math.round(multiplier * (eff * (eff + 1) / 2 - baseDeduct));
         }
 
-        // === Récupère la valeur courante d'un trait (base) ===
         function getTraitBase(name) {
             const span = document.querySelector(`[data-trait-eff="${name}"]`);
             if (!span) return 0;
@@ -1305,8 +1285,6 @@
             return parseInt(span.dataset.base, 10);
         }
 
-        // === Coût d'une compétence (val * (val + 1) / 2), avec décalage si offerte ===
-        // n = nb de rangs offerts par l'école (0, 1, 2). Le coût démarre au rang n+1.
         function compCost(val, nEcole) {
             if (!val || val < 1) return 0;
             const n = parseInt(nEcole, 10) || 0;
@@ -1315,14 +1293,9 @@
             return Math.max(0, raw - offset);
         }
 
-        // === Lookup du score moyen d'un jet XgY dans la matrice fournie par PHP ===
-        // Miroir JS de AppExtension::calculerJet. Le map est partagé via cfg.jetMap ;
-        // seule cette logique wrapper doit être maintenue des deux côtés.
         function jeterMap(rolled, kept) {
             if (kept < 1) return 0;
-            // Plus de dés gardés que lancés : on cap les gardés au nombre de lancés
             if (rolled < kept) kept = rolled;
-            // Dés surnuméraires au dessus de 10 : +1 par dé lancé, +2 par dé gardé
             let bonus = 0;
             if (rolled > 10) { bonus += rolled - 10; rolled = 10; }
             if (kept   > 10) { bonus += (kept - 10) * 2; kept = 10; }
@@ -1331,7 +1304,6 @@
             return (row[kept] ?? 0) + bonus;
         }
 
-        // === ID actuellement choisi pour la compétence de combat (Bugei) ===
         function getCompCombatId() {
             const row = document.querySelector('[data-comp-combat-row]');
             const select = row ? row.querySelector('select.comp-combat-select') : null;
@@ -1339,7 +1311,6 @@
             return parseInt(cfg.compCombatActuelleId, 10) || 0;
         }
 
-        // === Valeur du slot dont la compétence == compCombatActuelle ===
         function getCompCombatVal() {
             const compId = getCompCombatId();
             if (!compId) return 0;
@@ -1355,7 +1326,6 @@
             return 0;
         }
 
-        // === ID et VD de l'arme actuellement utilisée pour le jet de dommages ===
         function getArmeActuelleId() {
             const row = document.querySelector('[data-arme-actuelle-row]');
             const select = row ? row.querySelector('select.arme-actuelle-select') : null;
@@ -1370,9 +1340,6 @@
             return arme ? arme.vd : null;
         }
 
-        // === Mise à jour du tooltip Bootstrap ===
-        // BS4 cache le titre rendu dans data-original-title après init ; on l'écrase
-        // pour que le prochain hover reflète les valeurs courantes.
         function setTooltipHtml(el, html) {
             if (!el) return;
             el.setAttribute('data-original-title', html);
@@ -1410,7 +1377,6 @@
                 + `</div>`;
         }
 
-        // === Recalcul global ===
         function recalculate() {
             let totalTraits = 0;
             const eff = {};
@@ -1424,15 +1390,12 @@
                 eff[name] = effVal;
                 const cost = traitCost(effVal, bonus, mult);
                 totalTraits += cost;
-                // Mettre à jour l'affichage de la valeur effective
                 const valNode = span.querySelector('.eff-display');
                 if (valNode) valNode.textContent = effVal;
-                // Mettre à jour le coût affiché
                 const costSpan = document.querySelector(`[data-cost-for="${name}"]`);
                 if (costSpan) costSpan.textContent = cost > 0 ? `-${cost} xp` : '';
             });
 
-            // Mettre à jour les anneaux (min des 2 traits associés)
             const rings = {
                 terre: Math.min(eff.constitution, eff.volonte),
                 air:   Math.min(eff.reflexes, eff.intuition),
@@ -1444,7 +1407,6 @@
                 if (node) node.textContent = rings[r];
             });
 
-            // Marquer en noir le trait le plus élevé de chaque paire
             const pairs = {
                 constitution: 'volonte', volonte: 'constitution',
                 reflexes: 'intuition',   intuition: 'reflexes',
@@ -1459,8 +1421,6 @@
                 span.classList.toggle('extrabold', isHigher);
             });
 
-            // === Statistiques de combat ===
-            // Initiative : Réflexes + RangGen, avec un modificateur flat (initiativeModifier int)
             const initLances = cfg.rang + eff.reflexes;
             const initGardes = eff.reflexes;
             const initMod    = cfg.initiativeModifier || 0;
@@ -1470,7 +1430,6 @@
                 initNode.textContent = `${initLances}g${initGardes}${suffix}`;
             }
 
-            // Attaque : Agilité + CompCombat/2 (avec attaqueModifier sur lancers et gardés)
             const compCombatId  = getCompCombatId();
             const compCombatVal = getCompCombatVal();
             const attaqueLances = eff.agilite + Math.ceil(compCombatVal / 2) + cfg.atkModL;
@@ -1478,18 +1437,15 @@
             const attaqueNode = document.querySelector('[data-stat="attaque"]');
             if (attaqueNode) attaqueNode.textContent = `${attaqueLances}g${attaqueGardes}`;
 
-            // Moyennes (lookup dans la matrice exposée par PHP)
             const initAvgNode = document.querySelector('[data-stat="initiative-avg"]');
             if (initAvgNode) initAvgNode.textContent = jeterMap(initLances, initGardes) + initMod;
 
             const attaqueAvgNode = document.querySelector('[data-stat="attaque-avg"]');
             if (attaqueAvgNode) attaqueAvgNode.textContent = jeterMap(attaqueLances, attaqueGardes);
 
-            // En Assaut : +2 dés lancés, +1 dé gardé
             const attaqueAssautAvgNode = document.querySelector('[data-stat="attaque-assaut-avg"]');
             if (attaqueAssautAvgNode) attaqueAssautAvgNode.textContent = jeterMap(attaqueLances + 2, attaqueGardes + 1);
 
-            // Bascule comp combat sélectionnée / absente + mise à jour du nom
             const compCombat = compCombatId
                 ? (cfg.competences || []).find(c => c.id === compCombatId)
                 : null;
@@ -1508,12 +1464,10 @@
             const dommagesAug3AvgNode  = document.querySelector('[data-stat="dommages-aug3-avg"]');
             if (armeVd) {
                 const parts = armeVd.split('g');
-                // VD de l'arme + Force + dmgModifier (lancers et gardés)
                 const rolled = (parseInt(parts[0], 10) || 0) + eff.forceStat + cfg.dmgModL;
                 const kept   = (parseInt(parts[1], 10) || 0) + cfg.dmgModG;
                 if (dommagesNode)        dommagesNode.textContent        = `${rolled}g${kept}`;
                 if (dommagesAvgNode)     dommagesAvgNode.textContent     = jeterMap(rolled, kept);
-                // 3 Augmentations : +3 dés lancés (dés gardés inchangés)
                 if (dommagesAug3AvgNode) dommagesAug3AvgNode.textContent = jeterMap(rolled + 3, kept);
             }
             document.querySelectorAll('.stat-dommages-with-arme').forEach(el => el.classList.toggle('d-none', !armeActuelle));
@@ -1521,7 +1475,6 @@
             const armeNomNode = document.querySelector('[data-stat="arme-actuelle-nom"]');
             if (armeNomNode) armeNomNode.textContent = armeActuelle ? armeActuelle.nom : '';
 
-            // ND pour être touché : Réflexes × 5 (base) + ndModifier ; +ndArmure si armure
             const ndBase = eff.reflexes * 5 + (cfg.ndModifier || 0);
             const ndNode = document.querySelector('[data-stat="nd-touche"]');
             if (ndNode) ndNode.textContent = ndBase;
@@ -1537,7 +1490,6 @@
             const hpTotal = document.querySelector('[data-stat="hp-total"]');
             if (hpTotal) hpTotal.textContent = 5 * terre + 7 * (2 * terre);
 
-            // Récupération : Constitution × 2 + RangGen
             const recupNode = document.querySelector('[data-stat="recuperation"]');
             if (recupNode) recupNode.textContent = eff.constitution * 2 + cfg.rang;
 
@@ -1562,10 +1514,8 @@
                 }
                 const rowCost = (compId > 0 && val > 0) ? compCost(val, nEcole) : 0;
                 if (rowCost > 0) totalComps += rowCost;
-                // Mettre à jour la cellule de coût du rang
                 const costCell = row.querySelector('[data-comp-cost-cell]');
                 if (costCell) costCell.textContent = rowCost > 0 ? `-${rowCost}xp` : '';
-                // Comptage des spécialisations achetées payantes (state === 1 = achetée non offerte)
                 let paidSpecs = 0;
                 const specsRow = document.querySelector(`[data-comp-specs-row="${row.dataset.compRow}"]`);
                 if (compId > 0 && specsRow) {
@@ -1583,7 +1533,6 @@
                     }
                     totalSpecs += paidSpecs * COUT_PAR_SPE;
                 }
-                // Mettre à jour la cellule de coût des spés sur la ligne des spés
                 const specsCostCell = specsRow ? specsRow.querySelector('[data-comp-specs-cost-cell]') : null;
                 if (specsCostCell) {
                     specsCostCell.innerHTML = paidSpecs > 0 ? `<small>-${paidSpecs * COUT_PAR_SPE}xp (spé)</small>` : '';
@@ -1591,7 +1540,6 @@
             });
             totalComps = totalComps + totalSpecs;
 
-            // === Coût/gain des avantages/désavantages (dynamique) ===
             const avantageById    = new Map((cfg.avantages    || []).map(a => [a.id, a]));
             const desavantageById = new Map((cfg.desavantages || []).map(a => [a.id, a]));
             function effectiveCost(av) {
@@ -1614,7 +1562,6 @@
                 if (av) {
                     if (kind === 'avantage') coutAvantages += cost; else gainDesavantages += cost;
                 }
-                // Mise à jour de l'affichage du coût/gain sur la ligne
                 const costSpan = li.querySelector('[data-av-cost]');
                 if (costSpan) {
                     if (av) {
@@ -1631,7 +1578,6 @@
             const xpEffectif = cfg.xpTotal + gainDesavantages;
             const remaining = xpEffectif - totalSpent;
 
-            // Mettre à jour les totaux affichés
             const tt = document.getElementById('xp-traits-total');
             if (tt) tt.textContent = `-${totalTraits}xp`;
             const tc = document.getElementById('xp-comps-total');
@@ -1660,7 +1606,6 @@
                 tr.classList.toggle('text-success', remaining >= 0);
             });
 
-            // Mise à jour des tooltips dynamiques (initiative, attaque, dommages)
             setTooltipHtml(
                 document.querySelector('[data-tooltip-stat="initiative"]'),
                 buildInitiativeTooltip(eff.reflexes, cfg.rang)
@@ -1674,7 +1619,6 @@
                 setTooltipHtml(dmgTooltipEl, buildDommagesTooltip(eff.forceStat, armeActuelle));
             }
 
-            // Désactiver le bouton Valider si XP restant négatif
             if (btnValider) {
                 btnValider.disabled = remaining < 0;
                 btnValider.classList.toggle('btn-danger', remaining < 0);
@@ -1682,9 +1626,6 @@
             }
         }
 
-        // === Construit un <select> de compétences (avec optgroups par catégorie) ===
-        // Ordre des catégories : Bugei, Noble, Marchand, Dégradante (puis le reste alphabétique).
-        // À l'intérieur de chaque catégorie : tri alphabétique par nom.
         const COMP_CAT_ORDER = ['Bugei', 'Noble', 'Marchand', 'Dégradante'];
         function buildCompSelect(selectedId) {
             const select = document.createElement('select');
@@ -1722,15 +1663,11 @@
             return select;
         }
 
-        // === Construit un <select> d'avantages/désavantages pour un slot ===
-        // kind = 'avantage' | 'desavantage' ; filtre les exclusifs incompatibles avec la classe.
-        // === Sorts connus : ids presents dans le bloc Magie ===
         function knownSpellIds() {
             return Array.from(document.querySelectorAll('[data-spell-id]'))
                 .map(li => parseInt(li.dataset.spellId, 10));
         }
 
-        // === <select> d'ajout d'un sort, groupe par niveau, sans les sorts deja connus ===
         function buildSpellSelect(ring) {
             const select = document.createElement('select');
             select.className = 'form-control form-control-sm spell-select';
@@ -1771,8 +1708,6 @@
             return btn;
         }
 
-        // Un sort ajoute n'a pas son detail cote client : son popover revient au
-        // rechargement qui suit la validation.
         function insertSpellLine(spell, ring) {
             const list = document.querySelector(`[data-spell-list="${ring}"]`);
             if (!list) return;
@@ -1821,7 +1756,6 @@
             select.appendChild(emptyOpt);
             const list = (kind === 'avantage') ? (cfg.avantages || []) : (cfg.desavantages || []);
             list.forEach(a => {
-                // Exclusif à une autre classe → on masque (sauf si c'est l'avantage actuellement sélectionné)
                 if (a.exclusiveId && a.exclusiveId !== cfg.persoClasseId && a.id !== selectedId) return;
                 const opt = document.createElement('option');
                 opt.value = a.id;
@@ -1832,7 +1766,6 @@
             return select;
         }
 
-        // === Construit un <select> de compétences Bugei pour le compCombat ===
         function buildCompCombatSelect(selectedId) {
             const select = document.createElement('select');
             select.className = 'form-control form-control-sm comp-combat-select';
@@ -1852,7 +1785,6 @@
             return select;
         }
 
-        // === Construit un <select> d'armes : arme, arme2 + "Mains Nues" (universel) ===
         function buildArmeActuelleSelect(armeId, arme2Id, selectedId) {
             const select = document.createElement('select');
             select.className = 'form-control form-control-sm arme-actuelle-select';
@@ -1879,7 +1811,6 @@
             return select;
         }
 
-        // === Construit un <select> de rang (1-10, pas de vide) ===
         function buildValSelect(selectedVal) {
             const select = document.createElement('select');
             select.className = 'form-control form-control-sm val-select';
@@ -1894,11 +1825,6 @@
             return select;
         }
 
-        // En lecture les competences sont groupees par categorie ; en edition les
-        // en-tetes disparaissent et un simple ordre alphabetique
-        // se lit mieux. Chaque ligne emmene sa ligne de specialisations. Les
-        // emplacements vides n'ont pas encore de nom : ils ferment la liste.
-        // Pas de restauration a prevoir, Annuler recharge la page.
         function sortCompRowsAlphabetically() {
             const tbody = document.querySelector('#comp-table tbody');
             if (!tbody) return;
@@ -1917,15 +1843,12 @@
         }
 
         function enterEditMode() {
-            article.classList.add('fiche-edit-mode');
+            article.classList.add('edit-mode');
             sortCompRowsAlphabetically();
             btnEdit.style.display = 'none';
             btnCancel.style.display = '';
             btnValider.style.display = '';
 
-            // Traits : préfixer la valeur effective d'un <select> pour la base.
-            // On conserve .eff-display dans le span pour que recalculate() puisse
-            // l'actualiser (affichage base+bonus pendant l'édition).
             traits.forEach(name => {
                 const span = document.querySelector(`[data-trait-eff="${name}"]`);
                 if (!span) return;
@@ -1943,7 +1866,6 @@
                 span.prepend(select);
             });
 
-            // Compétences : remplacer chaque ligne par des selects
             document.querySelectorAll('[data-comp-row]').forEach(row => {
                 const compId = parseInt(row.dataset.compId, 10) || 0;
                 const val = parseInt(row.dataset.compVal, 10) || 0;
@@ -1962,7 +1884,6 @@
                 valCell.innerHTML = '';
                 valCell.appendChild(valSelect);
 
-                // Tri-state "école" : posé dans sa propre cellule (colonne École)
                 ecoleCell.innerHTML = '';
                 const ecoleWrap = document.createElement('span');
                 ecoleWrap.className = 'comp-ecole-tri';
@@ -1989,7 +1910,6 @@
                     traitCell.textContent = opt && opt.dataset.trait ? opt.dataset.trait : '';
                     valSelect.style.display = newCompId > 0 ? '' : 'none';
                     ecoleWrap.style.display = newCompId > 0 ? '' : 'none';
-                    // Reset des spés + école quand la compétence change
                     renderSpecsCheckboxes(specsCell, newCompId, '', '');
                     recalculate();
                 });
@@ -1997,7 +1917,6 @@
                 nameCell.appendChild(compSelect);
             });
 
-            // Compétence de combat (Jet d'Attaque) : insérer un <select> Bugei
             const compCombatRow = document.querySelector('[data-comp-combat-row]');
             if (compCombatRow) {
                 const cell = compCombatRow.querySelector('[data-comp-combat-select-cell]');
@@ -2010,7 +1929,6 @@
                 }
             }
 
-            // Arme actuelle (Jet de Dommages) : insérer un <select> arme/arme2
             const armeActuelleRow = document.querySelector('[data-arme-actuelle-row]');
             if (armeActuelleRow) {
                 const cell = armeActuelleRow.querySelector('[data-arme-actuelle-select-cell]');
@@ -2025,7 +1943,6 @@
                 }
             }
 
-            // Avantages / Désavantages : remplacer le nom par un select
             document.querySelectorAll('[data-av-slot]').forEach(li => {
                 const kind = li.dataset.avKind;
                 const currentId = parseInt(li.dataset.avId, 10) || 0;
@@ -2034,7 +1951,6 @@
                 const select = buildAvantageSelect(kind, currentId);
                 select.addEventListener('change', () => {
                     const newId = parseInt(select.value, 10) || 0;
-                    // Met à jour le tooltip avec la nouvelle description
                     if (tooltip) {
                         const list = (kind === 'avantage') ? (cfg.avantages || []) : (cfg.desavantages || []);
                         const av = list.find(a => a.id === newId);
@@ -2054,7 +1970,6 @@
                 }
             });
 
-            // Sorts : une croix par ligne et un select d'ajout par colonne
             document.querySelectorAll('.spell-line').forEach(li => li.appendChild(buildSpellRemove()));
             refreshSpellSelects();
         }
@@ -2064,9 +1979,6 @@
             return specsRow ? specsRow.querySelector('[data-comp-specs-cell]') : null;
         }
 
-        // Câble un wrap qui cycle entre 3 états au clic (0 → 1 → 2 → 0).
-        // L'icône Font Awesome est swappée selon l'état via la table passée en paramètre.
-        // onState(state) est appelé à chaque application pour mettre à jour les libellés annexes.
         const COMP_ECOLE_ICONS = {
             0: 'tri-icon fa-regular fa-square',
             1: 'tri-icon fa-solid fa-graduation-cap',
@@ -2113,7 +2025,6 @@
                 tag.textContent = 'offerte école';
                 wrap.appendChild(tag);
 
-                // État initial : 2 si école, 1 si achetée sans école, 0 sinon
                 let initial = 0;
                 if (bitmaskEcole && bitmaskEcole[idx] === '1') initial = 2;
                 else if (bitmask && bitmask[idx] === '1') initial = 1;
@@ -2176,7 +2087,6 @@
                 const valSelect = row.querySelector('.val-select');
                 const ecoleWrap = row.querySelector('.comp-ecole-tri');
                 const compId = compSelect && parseInt(compSelect.value, 10) > 0 ? compSelect.value : '';
-                // N'envoie un rang que si une compétence est sélectionnée
                 const valVal = compId !== '' && valSelect && valSelect.value ? valSelect.value : '';
                 const specsVal     = compId !== '' ? readBitmask(row) : '';
                 const speEcVal     = compId !== '' ? readSpeEcoleBitmask(row) : '';
@@ -2190,7 +2100,6 @@
                 addInput(`joueur_fiche_personnage[speEcole${i}]`, speEcVal);
             });
 
-            // Avantages / Désavantages
             const slotToField = {av1: 'avantage1', av2: 'avantage2', dv1: 'desavantage1', dv2: 'desavantage2'};
             Object.keys(slotToField).forEach(slot => {
                 const li = document.querySelector(`[data-av-slot="${slot}"]`);
@@ -2200,7 +2109,6 @@
                 addInput(`joueur_fiche_personnage[${slotToField[slot]}]`, id);
             });
 
-            // Compétence de combat et arme actuelle
             const compCombatSelect = document.querySelector('select.comp-combat-select');
             const compCombatId = compCombatSelect && parseInt(compCombatSelect.value, 10) > 0 ? compCombatSelect.value : '';
             addInput('joueur_fiche_personnage[compCombatActuelle]', compCombatId);
@@ -2209,10 +2117,8 @@
             const armeActuelleId = armeActuelleSelect && parseInt(armeActuelleSelect.value, 10) > 0 ? armeActuelleSelect.value : '';
             addInput('joueur_fiche_personnage[armeActuelle]', armeActuelleId);
 
-            // arme2 n'est pas éditable ici mais doit être renvoyée pour ne pas être écrasée par Symfony
             addInput('joueur_fiche_personnage[arme2]', cfg.arme2Id || '');
 
-            // Modificateurs (init/attaque/dmg/ND/réduction)
             const modIds = {
                 initiativeModifier: 'mod-input-initiative',
                 attaqueModifier:    'mod-input-attaque',
@@ -2225,7 +2131,6 @@
                 addInput(`joueur_fiche_personnage[${field}]`, el ? el.value.trim() : '');
             });
 
-            // Sorts connus : ce qui est affiche est ce qui est enregistre
             document.querySelectorAll('[data-spell-id]').forEach(li => {
                 addInput('joueur_fiche_personnage[knownSpells][]', li.dataset.spellId);
             });

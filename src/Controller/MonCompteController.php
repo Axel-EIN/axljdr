@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Personnage;
 use App\Service\FileHandler;
 use App\Form\MonCompteMdpType;
 use App\Form\MonCompteAvatarType;
@@ -57,6 +58,29 @@ class MonCompteController extends AbstractController
     }
 
     /**
+     * @Route("/mon_compte/main-character", name="mon_compte_main_character", methods={"POST"})
+     */
+    public function choisirPersonnagePrincipal(Request $request): Response
+    {
+        $utilisateur = $this->getUser();
+
+        if ($this->isCsrfTokenValid('main-character', $request->request->get('_csrf_token'))) {
+
+            $choisi = $utilisateur->getPersonnages()->filter(
+                fn (Personnage $personnage) => $personnage->getId() === $request->request->getInt('personnage')
+            )->first();
+
+            $utilisateur->setWithoutCharacter($request->request->getBoolean('sans_personnage'));
+            $utilisateur->setMainCharacter($choisi ?: null);
+            $this->getDoctrine()->getManager()->flush();
+
+            $this->addFlash('success', 'Votre personnage principal a bien été modifié !');
+        }
+
+        return $this->redirectToRoute('mon_compte');
+    }
+
+    /**
      * @Route("/mon_compte/avatar/edit", name="mon_compte_avatar")
      */
     public function modifierAvatar(Request $request, FileHandler $fileHandler): Response
@@ -70,8 +94,6 @@ class MonCompteController extends AbstractController
 
             $nouveauAvatar = $form->get('avatar')->getData();
 
-            // Passe par FileHandler pour le ré-encodage GD : c'est le seul upload
-            // ouvert aux joueurs, donc le seul où les octets sont hostiles.
             if (!empty($nouveauAvatar)) {
                 $utilisateur->setAvatar($fileHandler->handle(
                     $nouveauAvatar,

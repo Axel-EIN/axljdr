@@ -16,12 +16,11 @@
   </div>
 {% endif %}
 
-{# Sections du site : libelle, route cible, et routes qui rendent la section
-   active. Source unique pour la liste desktop et le menu deroulant mobile. #}
 {% set nav_sections = [
+  { label: 'ACCUEIL',      route: 'news',       actives: ['news'] },
   { label: 'AVENTURE',    route: 'aventure',    actives: ['aventure', 'aventure_saison', 'aventure_episode'] },
   { label: 'PERSONNAGES', route: 'personnages', actives: ['personnages', 'personnage_profil', 'personnage_fiche', 'personnage_fiche_edit'] },
-  { label: 'EMPIRE',      route: 'empire',      actives: ['empire', 'empire_clan', 'empire_archive', 'empire_lieu', 'empire_lore'] },
+  { label: 'UNIVERS',      route: 'empire',      actives: ['empire', 'empire_clan', 'empire_archive', 'empire_lieu', 'empire_lore'] },
   { label: 'RÈGLES',      route: 'regles',      actives: ['regles', 'regles_rule', 'regles_library', 'regles_classe', 'regles_ecole'] },
 ] %}
 {% set route_courante = app.request.get('_route') %}
@@ -31,7 +30,7 @@
   <div class="container">
     <nav class="navbar navbar-expand-lg">
 
-      <a id="logo" class="navbar-brand hover-shine" href="{{ path('aventure') }}">
+      <a id="logo" class="navbar-brand hover-shine" href="{{ path('news') }}">
         <img  class="img-fluid" src="{{ asset(LOGO) }}" alt="Logo AXL-JDR" title="Retour à l'Accueil" />
       </a>
 
@@ -66,34 +65,33 @@
         </ul>
 
         {% if app.user %}
+          {% set main_character = app.user.mainCharacter %}
           <div id="user-zone" class="connected">
 
-            <div>
-              <strong>{{ app.user.pseudo }}</strong><br/>
-              <a
-                class="{% if app.request.get('_route') == 'mon_compte'
-                  or app.request.get('_route') == 'mon_compte_mdp'
-                  or app.request.get('_route') == 'mon_compte_avatar' %}active{% endif %}"
-                href="{{ path('mon_compte') }}">
-                  <i class="fas fa-torii-gate couleur-primaire"></i>
-                  &nbsp;&nbsp;
-                  MON COMPTE
+            <div class="user-infos">
+              <strong>{{ app.user.pseudo }}</strong>
+
+              {% if main_character %}
+                <a class="main-character" href="{{ path('personnage_profil', {id: main_character.id}) }}">
+                  <img class="img-24" src="{{ asset(main_character.clan ? main_character.clan.mon|default(NA_MON) : NA_MON) }}" alt="Mon du clan" />
+                  ({{ main_character.nom }} {{ main_character.prenom }})
+                </a>
+              {% endif %}
+
+              <a class="{% if route_courante starts with 'mon_compte' %}active{% endif %}" href="{{ path('mon_compte') }}">
+                <i class="fas fa-torii-gate couleur-primaire"></i>
+                &nbsp;&nbsp;
+                MON COMPTE
               </a>
-              <br/>
+
               <small>
                 <a href="{{ path('app_logout') }}">Se Déconnecter</a>
               </small>
             </div>
 
-            <div class="avatar ml-3 bg-secondary rounded-8 border border-secondary">
-              <a class="hover-shine" href="{{ path('mon_compte') }}">
-                {% if app.user.avatar is defined and app.user.avatar is not empty %}
-                  <img class="img-96 rounded-8" src="{{ asset(app.user.avatar) }}" alt="Avatar de l'utilisateur" title="{{app.user.pseudo}}" />
-                {% else %}
-                  <img class="img-96 rounded-8" src="https://i.pravatar.cc/300" alt="Avatar de l'utilisateur" title="{{app.user.pseudo}}" />
-                {% endif %}
-              </a>
-            </div>
+            <a class="avatar-link hover-shine" href="{{ path('mon_compte') }}">
+              {{ include('parts/avatar.html.twig', {user: app.user, character: true}) }}
+            </a>
 
           </div>
         {% else %}

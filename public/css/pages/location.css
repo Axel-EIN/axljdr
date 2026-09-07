@@ -27,7 +27,7 @@
       top: -24px;
       left: 50%;
       transform: translate(-50%, -50%);
-      color: var(--primary-lighter);
+      color: var(--color-primarylighter);
     }
     &:hover .hover-tooltip { visibility: visible; }
   }
@@ -75,13 +75,12 @@
   pointer-events: auto;
 }
 
-
 #minimap {
   z-index: 4;
   top: 0.5rem;
   right: 0.5rem;
   width: 280px;
-  border: 2px solid var(--color-white-50);
+  border: 2px solid var(--color-white50);
   pointer-events: none;
 }
 
@@ -91,7 +90,6 @@
   transform: translate(-50%, -50%);
 }
 
-
 .map-toggle-btn {
   z-index: 8;
   top: 0.5rem;
@@ -100,7 +98,7 @@
   align-items: center;
   gap: 0.4rem;
   padding: 0.4rem 0.8rem;
-  border: 2px solid var(--color-white-50);
+  border: 2px solid var(--color-white50);
   background-color: rgba(0, 0, 0, 0.65);
   color: var(--color-white);
   border-radius: 4px;
@@ -116,15 +114,14 @@
 }
 
 .map-toggle-btn.active {
-  background-color: var(--primary-darker-more);
-  border-color: var(--primary-lighter);
+  background-color: var(--color-primarydarken);
+  border-color: var(--color-primarylighter);
 }
 
 /* --- OUTLINE COLORE PAR CLAN --- */
-/* Pile de drop-shadow : simule un contour solide autour du PNG transparent. */
 
 .lieu-pulse-icon,
-.lieu-other-icon img {
+.lieu-other-icon img:not(.badge-access) {
   filter:
     drop-shadow( 0    2px 0 var(--clan-color, #ffffff))
     drop-shadow( 0   -2px 0 var(--clan-color, #ffffff))
@@ -132,7 +129,6 @@
     drop-shadow(-2px  0   0 var(--clan-color, #ffffff))
     drop-shadow(0 0 6px rgba(0, 0, 0, 0.8));
 }
-
 
 .lieu-pulse-icon {
   z-index: 6;
@@ -149,12 +145,11 @@
   50%      { transform: translate(-50%, -50%) scale(1.15); }
 }
 
-
 .lieu-current-label {
   z-index: 7;
   transform: translate(-50%, calc(-50% - 70px));
   pointer-events: none;
-  background-color: var(--clan-color, var(--primary-darker-more));
+  background-color: var(--clan-color, var(--color-primarydarken));
   color: #fff;
   font-size: var(--fontsize-small);
   font-weight: bold;
@@ -166,15 +161,17 @@
   box-shadow: 0 0 6px rgba(0, 0, 0, 0.6);
 }
 
-
 .lieu-other-icon {
   z-index: 3;
   width: 84px;
   height: 84px;
   transform: translate(-50%, -50%);
   display: block;
-  cursor: pointer;
-  transition: transform 0.15s ease;
+
+  &[href] {
+    cursor: pointer;
+    transition: transform 0.15s ease;
+  }
 }
 
 .lieu-other-icon img {
@@ -187,6 +184,9 @@
 
 .lieu-other-icon:hover {
   z-index: 7;
+}
+
+.lieu-other-icon[href]:hover {
   transform: translate(-50%, -50%) scale(1.15);
 }
 
@@ -194,28 +194,65 @@
   top: 0;
   left: 50%;
   transform: translate(-50%, -110%);
-  background-color: var(--clan-color, var(--primary-darker-more));
+  background-color: var(--clan-color, var(--color-primarydarken));
 }
 
 .lieu-other-icon:hover .hover-tooltip {
   visibility: visible;
 }
 
-/* --- LIEU VERROUILLE SUR LA CARTE (joueur non-MJ) --- */
-
-.lieu-other-icon.locked img:not(.lieu-other-lock) {
-  filter: grayscale(100%) brightness(0.6) drop-shadow(0 0 5px rgba(0, 0, 0, 0.85));
-  opacity: 0.85;
+.lieu-other-icon .hover-tooltip small {
+  display: block;
+  font-style: italic;
 }
 
-.lieu-other-icon .lieu-other-lock {
+/* --- LIEU NON LISIBLE SUR LA CARTE --- */
+
+.lieu-other-unknown {
   position: absolute;
-  z-index: 8;
-  top: 22%;
-  left: 22%;
-  width: 56%;
-  height: 56%;
-  object-fit: contain;
-  pointer-events: none;
-  filter: grayscale(100%) drop-shadow(0 0 4px rgba(0, 0, 0, 0.95));
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 60%;
+  height: 60%;
+  border: 2px solid var(--color-white50);
+  border-radius: 50%;
+  background-color: var(--color-grayiron);
+  box-shadow: 0 0 6px rgba(0, 0, 0, 0.8);
+  color: var(--color-white50);
+  font-size: var(--fontsize-bigger);
+  font-weight: bold;
 }
+
+.lieu-other-icon:not([href]) .hover-tooltip {
+  top: 20%;
+  background-color: var(--color-grayiron);
+}
+
+.lieu-other-icon.locked img:not(.badge-access) {
+  filter: grayscale(100%) brightness(0.85) drop-shadow(0 0 5px rgba(0, 0, 0, 0.85));
+}
+
+.lieu-other-icon .badge-access {
+  top: auto;
+  bottom: -8px;
+  right: -8px;
+  width: 32px;
+  height: 32px;
+  pointer-events: none;
+}
+
+.lieu-other-icon.locked .badge-access {
+  top: 50%;
+  bottom: auto;
+  left: 50%;
+  right: auto;
+  transform: translate(-50%, -50%);
+  width: 80%;
+  height: 80%;
+  border: 2px solid var(--color-white50);
+}
+

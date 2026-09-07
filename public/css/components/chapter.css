@@ -16,7 +16,7 @@
 
     @media (max-width: 480px) {
         .chapter-number {
-            font-size: var(--fontsize-regular);
+            font-size: var(--fontsize-base);
         }
     }
 }
@@ -68,7 +68,7 @@
 
 @media (max-width: 991.98px) { .quote-chapter { width: 90%; } }
 
-/* GRILLE DE PORTRAITS DU CHAPITRE — s'ancre sur le `.header` parent. */
+/* GRILLE DE PORTRAITS DU CHAPITRE */
 /* ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾ */
 
 .chapter-characters {
@@ -77,8 +77,6 @@
   z-index: 10;
   padding: 2px 16px 16px;
   border-radius: 8px;
-  /* max-content : sans lui, l'absolute borne la grille a la distance entre son
-     ancrage et le bord oppose du parent. */
   width: max-content;
   
   &.pjs  { right: 80%; text-align: right; }
@@ -89,16 +87,16 @@
 
 .label-du-groupe {
   font-family: 'Present';
-  color: var(--color-white-50);
+  color: var(--color-white50);
   text-shadow: var(--shadow-text);
 }
 
 .chapter-portrait, .chapter-lieu-icon {
   opacity: 0.4;
-  background-color: var(--color-black-50);
+  background-color: var(--color-black50);
   object-fit: cover;
   border-radius: 4px;
-  box-shadow: 8px 8px 16px var(--color-black-25);
+  box-shadow: 8px 8px 16px var(--color-black25);
   transition: 0.2s var(--ease);
 }
 
@@ -113,6 +111,7 @@
   backdrop-filter: blur(16px);
 
   .chapter-portrait-link {
+    position: relative;
     display: block;
     line-height: 0;
   }
@@ -124,14 +123,13 @@
     &.chapter-view { filter: brightness(1);}
   }
 
-  /* N'a d'effet que la ou la classe est posee, soit la page episode. */
   .chapter-portrait.in-episode {
     opacity: 1;
     filter: grayscale(0);
   }
 
   .chapter-portrait-link:hover .chapter-portrait {
-    border-color: var(--primary, #fff);
+    border-color: var(--color-primary, #fff);
   }
 }
 
@@ -141,8 +139,6 @@
   opacity: 1;
 }
 
-/* direction pilote le sens de remplissage : les PJ s'etendent vers la gauche
-   depuis leur ancrage a droite, les PNJ l'inverse. */
 .chapter-characters.pjs  .chapter-portraits-grid { direction: rtl; }
 .chapter-characters.pnjs .chapter-portraits-grid { direction: ltr; }
 

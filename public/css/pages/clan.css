@@ -24,7 +24,7 @@
   .famille-description {
     margin: 0.5rem 0 0;
     text-align: justify;
-    font-size: var(--fontsize-regular);
+    font-size: var(--fontsize-base);
   }
 
   @media (max-width: 991.98px) {

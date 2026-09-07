@@ -108,7 +108,6 @@
 
   map.addEventListener('dragstart', function (e) { e.preventDefault(); });
 
-  // TOGGLE TERRITOIRES — bascule entre la carte clean et la carte frontier
   if (toggleBtn && mapImage) {
     const cleanSrc = toggleBtn.dataset.mapClean;
     const frontierSrc = toggleBtn.dataset.mapFrontier;

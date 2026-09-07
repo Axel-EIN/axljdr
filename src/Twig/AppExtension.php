@@ -2,12 +2,26 @@
 
 namespace App\Twig;
 
+use App\Entity\Access;
+use App\Entity\Status;
+use App\Service\ElementUrl;
+use App\Service\EntityRegistry;
+use App\Service\Visibility;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
 use Twig\TwigFunction;
 
 class AppExtension extends AbstractExtension
 {
+    private $visibility;
+    private $elementUrl;
+
+    public function __construct(Visibility $visibility, ElementUrl $elementUrl)
+    {
+        $this->visibility = $visibility;
+        $this->elementUrl = $elementUrl;
+    }
+
     public function getFilters()
     {
         return [
@@ -23,12 +37,31 @@ class AppExtension extends AbstractExtension
     {
         return [
             new TwigFunction('jet_map', [$this, 'getJetMap']),
+            new TwigFunction('element_state', [$this->visibility, 'state']),
+            new TwigFunction('element_readable', [$this->visibility, 'isReadable']),
+            new TwigFunction('element_unseen', [$this->visibility, 'isUnseen']),
+            new TwigFunction('element_listed', [$this->visibility, 'isListed']),
+            new TwigFunction('element_fresh', [$this->visibility, 'isFresh']),
+            new TwigFunction('element_sort', [$this->visibility, 'sortByAccess']),
+            new TwigFunction('element_key', [EntityRegistry::class, 'keyOf']),
+            new TwigFunction('element_url', [$this->elementUrl, 'of']),
+            new TwigFunction('access_label', [$this, 'accessLabel']),
+            new TwigFunction('status_label', [$this, 'statusLabel']),
         ];
+    }
+
+    public function accessLabel($access): string
+    {
+        return Access::LABELS[$access] ?? '';
+    }
+
+    public function statusLabel($status): string
+    {
+        return Status::LABELS[$status] ?? '';
     }
 
     public function getJetMap()
     {
-        // Table de correspondance des scores moyens pour chaque combinaison XgY
         return [
             1  => [1 => 6.10],
             2  => [1 => 8.37,  2 => 12.31],
@@ -43,17 +76,12 @@ class AppExtension extends AbstractExtension
         ];
     }
 
-    /* Un mot outil et l'espace qui le suit sont reduits ensemble ; celui qui le
-       precede reste au mot fort d'avant. */
-    private const MOTS_OUTILS = ['à', 'le', 'la', 'les', 'du', 'de', 'des', 'dans', 'et', 'son'];
+    private const MOTS_OUTILS = ['à', 'a', 'le', 'la', 'les', 'du', 'de', 'des', 'dans', 'et', 'son'];
 
-    /* L'elision prend de l'air en milieu de titre, reste collee en tete. */
-    private const ELISIONS = ["l'" => "l'&nbsp;", "L'" => "L'"];
+    private const ELISIONS = ["l'" => "l'&nbsp;", "L'" => "L'", "d'" => "d'&nbsp;", "D'" => "D'"];
 
     public function titreRelief($titre)
     {
-        // Le lookbehind ne consomme pas le separateur de gauche : deux mots
-        // outils qui se suivent sont donc reduits tous les deux.
         $titre = preg_replace(
             '/(?<!\p{L})(' . implode('|', self::MOTS_OUTILS) . ')\s+/ui',
             '<span class="small-word">$1&nbsp;</span>',
@@ -69,7 +97,6 @@ class AppExtension extends AbstractExtension
 
     public function listerRetourChariot($text)
     {
-        // Cette fonction prend un texte et pour chaque retour chariot il va l'entourer de balise <li> pour créer une liste HTML
     
         $string = "line 1\nline 2\nline3";
         
@@ -87,7 +114,6 @@ class AppExtension extends AbstractExtension
 
     public function distribuerPrix($prix)
     {
-        // Cette fonction distribue le prix selon les différentes pièces de monnaie
 
         $reste = $prix;
         $html = '';
@@ -114,35 +140,30 @@ class AppExtension extends AbstractExtension
 
     public function calculerJet($jetOuVD, $traitOuBonusD = 0)
     {
-      $jetDecompose = explode('g', $jetOuVD); // On décompose le jet ou la VD (format XgY)
+      $jetDecompose = explode('g', $jetOuVD);
       $lancesDFinal = $jetDecompose[0];
       $gardesDFinal = $jetDecompose[1];
 
-      // === Moins de 1 dé gardé
       if ($gardesDFinal < 1 )
         return 0;
 
-      // === Trait ou Bonus au dés lancés présent
-      if ($traitOuBonusD >= 1) // Si le trait ou les bonus aux dés sont supérieur à 1, alors on les ajoute au total des dés lancés
+      if ($traitOuBonusD >= 1)
         $lancesDFinal += $traitOuBonusD;
 
-      // === Plus de dés gardés que lancés
       if ($lancesDFinal < $gardesDFinal)
         $gardesDFinal = $lancesDFinal;
 
-      // === Dés surnuméraires au dessus de 10
       $bonus = 0;
       if ($lancesDFinal > 10) {
-        $bonus += ($lancesDFinal - 10) * 2;  // On donne un bonus de +2 par dés surnuméraires
-        $lancesDFinal = 10; // On cap à 10 le nombre de dés lancés
+        $bonus += ($lancesDFinal - 10) * 2;
+        $lancesDFinal = 10;
       }
 
       if ($gardesDFinal > 10) {
-        $bonus += ($gardesDFinal - 10) * 3; // On donne un bonus de +3 par dés surnuméraires
-        $gardesDFinal = 10; // On cap à 10 le nombre de dés gardés
+        $bonus += ($gardesDFinal - 10) * 3;
+        $gardesDFinal = 10;
       }
 
-      // === On fait correspondance le jet sur la matrice pour avoir le score moyen
       $map = $this->getJetMap();
       return ($map[$lancesDFinal][$gardesDFinal] ?? 0) + $bonus;
     }

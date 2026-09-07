@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\ParticipationRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -10,7 +12,6 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Participation
 {
-    /** Multiplicateur appliqué à xpGagne quand xpBonus = true (boost pour les retardataires). */
     public const XP_BONUS_MULTIPLIER = 2;
 
     /**
@@ -51,6 +52,16 @@ class Participation
      * @ORM\Column(type="boolean", options={"default": false})
      */
     private $xpBonus = false;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Development::class, mappedBy="participation", orphanRemoval=true)
+     */
+    private $developments;
+
+    public function __construct()
+    {
+        $this->developments = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -129,7 +140,14 @@ class Participation
         return $this;
     }
 
-    /** XP réellement crédité (xpGagne multiplié par le bonus si applicable). */
+    /**
+     * @return Collection|Development[]
+     */
+    public function getDevelopments(): Collection
+    {
+        return $this->developments;
+    }
+
     public function getXpEffectif(): int
     {
         return (int) $this->xpGagne * ($this->getXpBonus() ? self::XP_BONUS_MULTIPLIER : 1);

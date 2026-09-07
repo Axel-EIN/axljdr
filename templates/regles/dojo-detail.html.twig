@@ -22,10 +22,9 @@
                     img_class: 'crop-169 top',
                     titre: nom,
                     classes: 'gradient-desktop',
+                    state: element_state(ecole),
                 }) }}
 
-                {# Place APRES l'image : sur mobile la zone revient dans le flux et s'empile
-                   sous elle ; en desktop elle est en absolute, l'ordre n'y change rien. #}
                 <div id="text-zone">
 
                     <div>
@@ -118,10 +117,10 @@
     }) }}
 
     {{ include('/parts/picture-grid.html.twig', {
+        variant: 'rule',
         title: 'Autres Écoles',
         items: autresEcoles, route: 'regles_ecole',
         na_image: NA_ECOLE,
-        ratio: '43',
     }) }}
 
 {% endblock %}

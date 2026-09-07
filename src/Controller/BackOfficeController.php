@@ -19,6 +19,7 @@ use App\Repository\LibraryRepository;
 use App\Repository\AvantageRepository;
 use App\Repository\ChapitreRepository;
 use App\Repository\CompetenceRepository;
+use App\Repository\DevelopmentRepository;
 use App\Repository\PersonnageRepository;
 use App\Repository\UtilisateurRepository;
 use App\Repository\FichePersonnageRepository;
@@ -56,13 +57,13 @@ class BackOfficeController extends AbstractController
 
         PersonnageRepository $personnageRepository,
         FichePersonnageRepository $fichePersonnageRepository,
+        DevelopmentRepository $developmentRepository,
 
         UtilisateurRepository $utilisateurRepository ): Response
     {
         $admin_elements = [];
         $i = 0;
 
-        // SAISON
         $admin_elements[$i]['element'] = 'saison' ;
         $admin_elements[$i]['label'] = 'Saisons';
         $admin_elements[$i]['genre'] = 'F';
@@ -79,7 +80,6 @@ class BackOfficeController extends AbstractController
             $admin_elements[$i]['image'] = '';
         }
 
-        // CHAPITRE
         $i++;
         $admin_elements[$i]['element'] = 'chapitre' ;
         $admin_elements[$i]['label'] = 'Chapitres';
@@ -97,7 +97,6 @@ class BackOfficeController extends AbstractController
             $admin_elements[$i]['image'] = '';
         }
 
-        // EPISODE
         $i++;
         $admin_elements[$i]['element'] = 'episode' ;
         $admin_elements[$i]['label'] = 'Épisodes';
@@ -115,7 +114,6 @@ class BackOfficeController extends AbstractController
             $admin_elements[$i]['image'] = '';
         }
 
-        // SCENE
         $i++;
         $admin_elements[$i]['element'] = 'scene' ;
         $admin_elements[$i]['label'] = 'Scènes';
@@ -133,7 +131,6 @@ class BackOfficeController extends AbstractController
             $admin_elements[$i]['image'] = '';
         }
 
-        // CLAN
         $i++;
         $admin_elements[$i]['element'] = 'clan' ;
         $admin_elements[$i]['label'] = 'Factions';
@@ -151,7 +148,6 @@ class BackOfficeController extends AbstractController
             $admin_elements[$i]['image'] = '';
         }
 
-        // FAMILLE
         $i++;
         $admin_elements[$i]['element'] = 'famille' ;
         $admin_elements[$i]['label'] = 'Familles';
@@ -169,7 +165,6 @@ class BackOfficeController extends AbstractController
             $admin_elements[$i]['image'] = '';
         }
         
-        // ARCHIVE
         $i++;
         $admin_elements[$i]['element'] = 'archive' ;
         $admin_elements[$i]['label'] = 'Archives';
@@ -187,7 +182,6 @@ class BackOfficeController extends AbstractController
             $admin_elements[$i]['image'] = '';
         }
 
-        // LIEU
         $i++;
         $admin_elements[$i]['element'] = 'lieu' ;
         $admin_elements[$i]['label'] = 'Lieux';
@@ -205,7 +199,6 @@ class BackOfficeController extends AbstractController
             $admin_elements[$i]['image'] = '';
         }
 
-        // LORE
         $i++;
         $admin_elements[$i]['element'] = 'lore' ;
         $admin_elements[$i]['label'] = 'Lores';
@@ -223,7 +216,6 @@ class BackOfficeController extends AbstractController
             $admin_elements[$i]['image'] = '';
         }
 
-        // PERSONNAGE
         $i++;
         $admin_elements[$i]['element'] = 'personnage' ;
         $admin_elements[$i]['label'] = 'Personnages';
@@ -241,7 +233,6 @@ class BackOfficeController extends AbstractController
             $admin_elements[$i]['image'] = '';
         }
 
-        // FICHE
         $i++;
         $admin_elements[$i]['element'] = 'fiche' ;
         $admin_elements[$i]['label'] = 'Fiches';
@@ -259,7 +250,23 @@ class BackOfficeController extends AbstractController
             $admin_elements[$i]['image'] = '';
         }
 
-        // REGLES
+        $i++;
+        $admin_elements[$i]['element'] = 'development' ;
+        $admin_elements[$i]['label'] = 'Développements';
+        $admin_elements[$i]['genre'] = 'M';
+        $admin_elements[$i]['categorie'] = 'PERSONNAGES';
+        $admin_elements[$i]['nbr'] = count($developmentRepository->findAll());
+        $lastDevelopment = $developmentRepository->findOneBy(array(),array('id' => 'DESC'));
+        if (!empty($lastDevelopment)) {
+            $admin_elements[$i]['last'] = $lastDevelopment;
+            $admin_elements[$i]['nom'] = $lastDevelopment->getPersonnage()->getPrenom();
+            $admin_elements[$i]['image'] = $lastDevelopment->getPersonnage()->getIllustration();
+        } else {
+            $admin_elements[$i]['last'] = '';
+            $admin_elements[$i]['nom'] = '';
+            $admin_elements[$i]['image'] = '';
+        }
+
         $i++;
         $admin_elements[$i]['element'] = 'rule' ;
         $admin_elements[$i]['label'] = 'Règles';
@@ -277,7 +284,6 @@ class BackOfficeController extends AbstractController
             $admin_elements[$i]['image'] = '';
         }
 
-        // LIBRARY
         $i++;
         $admin_elements[$i]['element'] = 'library' ;
         $admin_elements[$i]['label'] = 'Bibliothèques';
@@ -295,7 +301,6 @@ class BackOfficeController extends AbstractController
             $admin_elements[$i]['image'] = '';
         }
 
-        // CLASSE
         $i++;
         $admin_elements[$i]['element'] = 'classe' ;
         $admin_elements[$i]['label'] = 'Classes';
@@ -313,7 +318,6 @@ class BackOfficeController extends AbstractController
             $admin_elements[$i]['image'] = '';
         }
 
-        // ECOLE
         $i++;
         $admin_elements[$i]['element'] = 'ecole' ;
         $admin_elements[$i]['label'] = 'Écoles';
@@ -331,7 +335,6 @@ class BackOfficeController extends AbstractController
             $admin_elements[$i]['image'] = '';
         }
 
-        // AVANTAGE
         $i++;
         $admin_elements[$i]['element'] = 'avantage' ;
         $admin_elements[$i]['label'] = 'Avantages/Dés.';
@@ -349,7 +352,6 @@ class BackOfficeController extends AbstractController
             $admin_elements[$i]['image'] = '';
         }
 
-        // COMPETENCE
         $i++;
         $admin_elements[$i]['element'] = 'competence' ;
         $admin_elements[$i]['label'] = 'Compétences';
@@ -367,7 +369,6 @@ class BackOfficeController extends AbstractController
             $admin_elements[$i]['image'] = '';
         }
 
-        // OBJET
         $i++;
         $admin_elements[$i]['element'] = 'objet' ;
         $admin_elements[$i]['label'] = 'Objets';
@@ -385,7 +386,6 @@ class BackOfficeController extends AbstractController
             $admin_elements[$i]['image'] = '';
         }
 
-        // SORT
         $i++;
         $admin_elements[$i]['element'] = 'sort' ;
         $admin_elements[$i]['label'] = 'Sorts';
@@ -403,7 +403,6 @@ class BackOfficeController extends AbstractController
             $admin_elements[$i]['image'] = '';
         }
 
-        // USER
         $nbrUtilisateurs = $utilisateurRepository->countUtilisateurs();
         $lastUtilisateur = $utilisateurRepository->findOneBy(array(),array('id' => 'DESC'));
 

@@ -49,9 +49,8 @@
     }
 }
 
-/* Le masque cantonne le reflet a la silhouette de l'embleme, sans quoi la
-   bande blanche traverserait le rectangle transparent autour. */
 .hover-ray {
+    display: block;
     position: relative;
     overflow: hidden;
     mask-image: url('../assets/ui/mon-mask.png');

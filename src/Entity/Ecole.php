@@ -9,9 +9,12 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass=EcoleRepository::class)
+ * @ORM\HasLifecycleCallbacks
  */
 class Ecole
 {
+    use PublishableTrait;
+
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
@@ -145,11 +148,6 @@ class Ecole
      * @ORM\Column(type="smallint", nullable=true)
      */
     private $valeurCompetencesDepart;
-
-    /**
-     * @ORM\Column(type="boolean")
-     */
-    private $locked = false;
 
     public function __construct()
     {
@@ -387,10 +385,6 @@ class Ecole
         return $this->image;
     }
 
-    /**
-     * Illustration de l'école, ou le placeholder de sa classe à défaut : les
-     * trois vues qui affichent une école construisaient ce chemin chacune.
-     */
     public function getImageAffichee(): string
     {
         if (!empty($this->image)) {
@@ -489,18 +483,6 @@ class Ecole
     public function setValeurCompetencesDepart(?int $valeurCompetencesDepart): self
     {
         $this->valeurCompetencesDepart = $valeurCompetencesDepart;
-
-        return $this;
-    }
-
-    public function getLocked(): ?bool
-    {
-        return $this->locked;
-    }
-
-    public function setLocked(bool $locked): self
-    {
-        $this->locked = $locked;
 
         return $this;
     }

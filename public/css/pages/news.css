@@ -1,0 +1,321 @@
+.heading-category .small-word { font-size: 0.45em; }
+
+.category-page > .container > section > .row {
+  --gap: 0.5rem;
+
+  row-gap: var(--gap);
+  margin-left: calc(var(--gap) / -2);
+  margin-right: calc(var(--gap) / -2);
+
+  > * {
+    padding-left: calc(var(--gap) / 2);
+    padding-right: calc(var(--gap) / 2);
+  }
+}
+
+.session-card {
+  color: var(--color-white);
+
+  .heading-cardtitle { color: var(--color-white); }
+
+  hr { border-top-color: rgb(255 255 255 / 0.25); }
+
+  .ranking-rank,
+  .ranking-xp { color: var(--color-fade); }
+
+  .ranking-player { color: rgb(255 255 255 / 0.7); }
+
+  .ranking-line {
+    border-radius: 0;
+    padding-right: 1rem;
+
+    &:hover {
+      color: var(--color-flashblue);
+      background-color: rgba(255,255,255,0.05);
+    }
+  }
+}
+
+.session-card {
+  background-color: var(--chapter-color, var(--color-black));
+  background-image:
+    linear-gradient(rgb(0 0 0 / 0.4), rgb(0 0 0 / 0.8)),
+    var(--chapter-image);
+  background-size: cover;
+  background-position: center;
+
+  .session-link:hover { background-color: rgb(255 255 255 / 0.12); }
+
+  .session-link {
+    color: var(--color-white);
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.5rem;
+  }
+}
+
+.session-split {
+  display: flex;
+  gap: var(--gap);
+  margin-bottom: 1rem;
+
+  > * {
+    flex: 1 1 0;
+    min-width: 0;
+  }
+
+  .ranking-list { justify-content: center; }
+
+  @media (max-width: 767.98px) { flex-direction: column; }
+}
+
+.news-aside {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap);
+
+  > .card {
+    height: auto;
+    flex: none;
+  }
+}
+
+
+
+.session-groups {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.portrait-slot {
+  position: relative;
+  flex: none;
+  line-height: 0;
+
+  > .character-icon-dead {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 40px;
+  }
+}
+
+.ranking-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.ranking-line {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.5rem;
+
+  &:hover { background-color: var(--color-whitefog); }
+
+  .ranking-rank {
+    width: 1.25rem;
+    color: var(--color-alternate);
+    font-weight: bold;
+    text-align: center;
+  }
+
+  .ranking-name {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-width: 0;
+    line-height: var(--leading-12);
+
+    > * {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+  }
+
+  .ranking-player {
+    color: var(--color-body);
+    font-size: var(--fontsize-small);
+  }
+
+  .ranking-xp {
+    color: var(--color-body);
+    white-space: nowrap;
+  }
+}
+
+.session-links {
+  margin-top: auto;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--gap);
+}
+
+.session-link {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+
+  & > img { width: 32px; }
+}
+
+.participations-card, .news-secrets {
+  --faction-tint:
+    color-mix(in srgb, var(--faction-color, transparent) 60%, transparent);
+
+  background-image:
+  linear-gradient(
+    to bottom,
+    rgb(255 255 255 / 0) 0%,
+    var(--color-white) 60%),
+    linear-gradient(var(--faction-tint), var(--faction-tint)),
+    var(--character-image);
+  background-position: top right;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-color: var(--faction-tint);
+}
+
+.participations-card {
+  gap: 0.25rem;
+
+  > .news-subtitle {
+    margin-top: 0.25rem;
+    margin-bottom: 0.5rem;
+  }
+}
+
+.ranking-card {
+  height: 100%;
+
+  .ranking-list {
+    --rows: 14;
+
+    max-height: calc(var(--rows) * 3.75rem);
+    overflow-y: auto;
+  }
+
+  &:only-child .ranking-list { --rows: 22; }
+}
+
+.episode-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  background-color: var(--color-white25);
+
+  &:hover { background-color: var(--color-white50); }
+  & + .episode-row { margin-top: 0.25rem; }
+
+  &.inverted {
+    background-color: rgb(255 255 255 / 0.08);
+
+    &:hover { background-color: rgb(255 255 255 / 0.16); }
+
+    .episode-sub { color: rgb(255 255 255 / 0.7); }
+  }
+
+  .episode-number {
+    color: var(--color-fade);
+    font-weight: bold;
+    white-space: nowrap;
+  }
+
+  .episode-sub { color: var(--color-body); }
+
+  .episode-xp {
+    position: absolute;
+    z-index: 5;
+    left: 8px;
+    bottom: 0;
+    transform: translate(-50%, 50%);
+    padding: 1px 6px;
+    border-radius: 1rem;
+    background-color: var(--color-blacktar);
+    color: var(--flash-green);
+    font-size: var(--fontsize-mini);
+    font-weight: bold;
+    line-height: var(--leading-base);
+    white-space: nowrap;
+  }
+
+  .episode-text {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-width: 0;
+
+    & > * {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+  }
+
+  .episode-picture {
+    max-height: 64px;
+    width: auto;
+    border-radius: 0.25rem;
+  }
+}
+
+.outlined.player {
+  box-shadow:
+    2px 2px 0 var(--color-flashblue),
+    -2px -2px 0 var(--color-flashblue),
+    2px -2px 0 var(--color-flashblue),
+    -2px 2px 0 var(--color-flashblue);
+}
+
+.news-subsection {
+  .picture-grid {
+    --row: 6rem;
+
+    align-content: start;
+
+    &:has(.emblem) { --row: 9rem; }
+    &:has(.icon) { --image-max: 8rem; }
+
+    &:has(.portrait) {
+      --row: 92px;
+      --item-size: var(--row);
+    }
+
+    .label {
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 2;
+      overflow: hidden;
+    }
+  }
+}
+
+.news-subtitle {
+  margin-top: 0;
+  margin-bottom: 0.75rem;
+  text-transform: uppercase;
+}
+
+.news-qualifier {
+  font-family: 'Barlow';
+  font-size: var(--fontsize-small);
+  font-weight: normal;
+  color: var(--color-body);
+  text-transform: none;
+}
+
+.encounter-row {
+  margin-top: 1rem;
+  margin-left: 1rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}

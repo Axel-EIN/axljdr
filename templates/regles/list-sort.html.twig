@@ -31,7 +31,7 @@
 
         {% if app.user and is_granted("ROLE_MJ") %}
             {% set numero = items|length + 1 %}
-            {% set action, entity, position, color, size = 'create', 'sort', 'left-overflow', 'text-accent', 'btn-icon-mini' %}
+            {% set action, entity, position, color, size = 'create', 'sort', 'topleft-overflow', 'text-accent', 'btn-icon-mini' %}
             {% set redirect = 'library&libraryID=' ~ library.id ~ '&tab=' ~ app.request.get('tab') ~ '&subtab=' ~ app.request.get('subtab') ~ '&numero=' ~ numero %}
             {{ include('/btns/btn-icon.html.twig') }}
         {% endif %}
@@ -99,8 +99,8 @@
     <div class="col-12 p-0 m-0 {% if past_rank != item.niveau %}mt-3{% endif %} relative">
 
         {% if app.user and is_granted("ROLE_MJ") %}
-            {% set position, size, color, entity, un_element, redirect = 'left-overflow', 'btn-icon-mini', 'text-accent', 'sort', item, 'library&libraryID=' ~ library.id %}
-            {{ include('/parts/btn-icon-edit.html.twig') }}
+            {% set position, size, color, entity, un_element, redirect = 'topleft-overflow', 'btn-icon-mini', 'text-accent', 'sort', item, 'library&libraryID=' ~ library.id %}
+            {{ include('/btns/btn-icon-edit.html.twig') }}
         {% endif %}
 
         <a href="#collapse{{i}}" class="card item" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="collapse{{i}}">
@@ -154,7 +154,7 @@
             </div>
 
             <div id="collapse{{i}}" class="collapse">
-                {{ include('/parts/spell-detail.html.twig', {spell: item}) }}
+                {{ include('/personnages/character-sheet-spell-detail.html.twig', {spell: item}) }}
             </div>
 
         </a>

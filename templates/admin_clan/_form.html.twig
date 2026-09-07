@@ -2,41 +2,29 @@
     {{ form_start(form) }}
         <div class="row form-wrapper">
 
+            {{ include('parts/form-publication.html.twig', {form: form}) }}
+
             <div class="col-4">{{ form_row(form.nom) }}</div>
             <div class="col-2">{{ form_row(form.genre) }}</div>
 
             <div class="col-3">{{ form_row(form.chef) }}</div>
             <div class="col-1">{{ form_row(form.couleur) }}</div>
             <div class="col-2 align-self-center">{{ form_row(form.estMajeur) }}</div>
-            <div class="col-2 align-self-center">{{ form_row(form.locked) }}</div>
 
             <div class="col-12">{{ form_row(form.citation,{ 'attr': {'rows': '2'} }) }}</div>
             <div class="col-12">{{ form_row(form.description,{ 'attr': {'rows': '7'} }) }}</div>
 
             <div class="col-4 text-center d-flex flex-column">
-                {{ form_label(form.mon, 'Mon (320×320 1:1 recommandé)') }}
-                <label for="admin_clan_mon" class="preview-label hover-slight-fade hover-pointer hover-icon-visible">
-                    <span class="btn-icon-medium right-corner-16"><i class="fas fa-edit semi-visible text-white"></i></span>
-                    <img id="icon-preview" class="img-fluid border-soft" src="{{ asset(clan.mon|default(NA_MON)) }}" />
-                    <span id="icon-filename" class="filename"></span>
-                </label>
-                <div class="browser">{{ form_widget(form.mon, { 'attr': { 'class' : 'input-icon' }}) }}</div>
-
-                {{ include('parts/image-cropper.html.twig', {input_id: 'admin_clan_mon', width: 320, height: 320}) }}
-                {{ include('parts/image-delete-button.html.twig', {input_id: 'admin_clan_mon', field_name: 'mon', current: clan.mon|default(null)}) }}
+                {{ include('parts/image-field.html.twig', {
+                    field: form.mon, input_id: 'admin_clan_mon', prefix: 'icon', current: clan.mon|default(null),
+                    fallback: NA_MON, label: 'Mon (320×320 1:1 recommandé)', width: 320, height: 320 }) }}
             </div>
 
             <div class="col-8">
-                {{ form_label(form.image, 'Image (1280×720 16:9 recommandé)') }}
-                <label for="admin_clan_image" class="preview-label hover-slight-fade hover-pointer hover-icon-visible">
-                    <span class="btn-icon-medium right-corner-16"><i class="fas fa-edit semi-visible text-white"></i></span>
-                    <img id="image-preview" class="img-fluid border-soft" src="{{ asset(clan.image|default(NA_CLAN)) }}" />
-                    <span id="image-filename" class="filename"></span>
-                </label>
-                <div class="browser">{{form_widget(form.image, {'attr': {'class': 'input-image'}}) }}</div>
-
-                {{ include('parts/image-cropper.html.twig', {input_id: 'admin_clan_image', width: 1280, height: 720}) }}
-                {{ include('parts/image-delete-button.html.twig', {input_id: 'admin_clan_image', field_name: 'image', current: clan.image|default(null)}) }}
+                {{ include('parts/image-field.html.twig', {
+                    field: form.image, input_id: 'admin_clan_image', prefix: 'image',
+                    current: clan.image|default(null), fallback: NA_CLAN,
+                    label: 'Image (1280×720 16:9 recommandé)', width: 1280, height: 720 }) }}
             </div>
 
             <div class="col-12 mt-5">
@@ -60,13 +48,9 @@
 
                     
                     <div class="col-12 mt-3 mb-5">
-                        {{ form_label(form.territoireCarte) }}
-                        <label for="admin_clan_territoireCarte" class="preview-label hover-slight-fade hover-pointer hover-icon-visible">
-                            <span class="btn-icon-medium right-corner-16"><i class="fas fa-edit semi-visible text-white"></i></span>
-                            <img id="map-preview" class="img-fluid border-soft" src="{{ asset(clan.territoireCarte|default(NA_MAP)) }}" />
-                            <span id="map-filename" class="filename"></span>
-                        </label>
-                        <div class="browser">{{form_widget(form.territoireCarte, {'attr': {'class': 'input-map'}}) }}</div> 
+                        {{ include('parts/image-field.html.twig', {
+                            field: form.territoireCarte, input_id: 'admin_clan_territoireCarte', prefix: 'map',
+                            current: clan.territoireCarte|default(null), fallback: NA_MAP, deletable: false }) }}
                     </div>
 
                     <div class="col-12">{{ form_row(form.territoireDesc,{ 'attr': {'rows': '7'} }) }}</div>
@@ -74,7 +58,7 @@
                     <div class="col-12 mt-3 mb-5">
                         {{ form_label(form.video) }}
                         <label id="video-preview-label" for="admin_clan_video" class="preview-label hover-slight-fade hover-pointer hover-icon-visible">
-                            <span class="btn-icon-medium right-corner-16"><i class="fas fa-edit semi-visible text-white"></i></span>
+                            <span class="btn-icon-medium topright-corner-inside-more"><i class="fas fa-edit semi-visible text-white"></i></span>
                             <video id="video" class="img-fluid" muted
                                 {% if clan.video is defined and clan.video is empty %}
                                     poster="{{ asset(NA_CLAN) }}"
@@ -95,7 +79,8 @@
                 
             </div>
             
-            {{ include('/parts/btn-form.html.twig') }}
+
+            {{ include('/btns/btn-form.html.twig') }}
         </div>
     {{ form_end(form) }}
 </div>

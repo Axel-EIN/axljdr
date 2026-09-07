@@ -31,10 +31,6 @@ class ImageNormalizer
         return self::PRESETS[$name];
     }
 
-    /**
-     * Réécrit l'image en place aux dimensions du preset. Mode 'cover' = remplit
-     * le cadre en cropant les bords excédentaires (centré).
-     */
     public function normalize(string $absolutePath, string $presetName): bool
     {
         $preset = $this->getPreset($presetName);
@@ -65,7 +61,6 @@ class ImageNormalizer
             imagealphablending($dst, true);
         }
 
-        // Calcule le rectangle source en mode "cover" centré
         [$srcX, $srcY, $copyW, $copyH] = $this->coverCrop($srcW, $srcH, $dstW, $dstH);
 
         imagecopyresampled($dst, $src, 0, 0, $srcX, $srcY, $dstW, $dstH, $copyW, $copyH);
@@ -84,13 +79,11 @@ class ImageNormalizer
         $dstRatio = $dstW / $dstH;
 
         if ($srcRatio > $dstRatio) {
-            // Source plus large que la cible : on crope sur les côtés
             $copyH = $srcH;
             $copyW = (int) round($srcH * $dstRatio);
             $srcX = (int) round(($srcW - $copyW) / 2);
             $srcY = 0;
         } else {
-            // Source plus haute que la cible : on crope en haut/bas
             $copyW = $srcW;
             $copyH = (int) round($srcW / $dstRatio);
             $srcX = 0;

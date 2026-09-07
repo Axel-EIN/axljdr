@@ -1,0 +1,154 @@
+{% extends 'category.html.twig' %}
+{% block title %}Accueil {{ parent() }}{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{asset('css/components/picture-grid.css')}}" />
+    <link rel="stylesheet" href="{{asset('css/components/episode-card.css')}}" />
+    <link rel="stylesheet" href="{{asset('css/pages/news.css')}}" />
+{% endblock %}
+
+{% block section_content1 %}
+
+    {% set chapitre = dernier_episode ? dernier_episode.chapitreParent : null %}
+    {% set chapter_image = chapitre ? chapitre.image|default(NA_CHAPITRE) : null %}
+
+    <div class="col-12 col-lg-7">
+        <div class="card card-body session-card on-dark{{ image_bright(chapter_image) ? ' bright' }}"
+            {% if chapitre %}style="--chapter-color: {{ chapitre.couleur }}; --chapter-image: url('{{ asset(chapter_image) }}');"{% endif %}>
+
+            {% if dernier_episode %}
+                <div class="session-split">
+                    <div>
+                        {{ include('/aventure/episode-card.html.twig', {
+                            un_episode: dernier_episode,
+                            wrapper: 'w-100',
+                            user_personnages_cumul_episodes: [],
+                        }) }}
+                    </div>
+
+                    {% if classement %}
+                        {{ include('/news/ranking.html.twig', {items: classement, mine: mes_personnages}) }}
+                    {% endif %}
+                </div>
+
+                <div class="session-groups">
+                    <div class="session-group">
+                        <h3 class="label-amerigo news-subtitle text-white mt-4">Lieux visités</h3>
+                        {{ include('/parts/picture-grid.html.twig', {
+                            items: session_locations,
+                            reveal_auto: true,
+                            variant: 'icon',
+                            per_row: {desktop: 4, tablet: 4, mobile: 3},
+                            empty_message: 'Aucun lieu visité',
+                        }) }}
+                    </div>
+
+                    <div class="session-group">
+                        <h3 class="label-amerigo news-subtitle text-white mt-4">Personnages rencontrés</h3>
+                        {{ include('/parts/picture-grid.html.twig', {
+                            items: session_characters,
+                            reveal_auto: true,
+                            variant: 'portrait',
+                            per_row: {desktop: 8, tablet: 6, mobile: 4},
+                            empty_message: 'Aucune rencontre',
+                        }) }}
+                    </div>
+
+                    <div class="session-group">
+                        <h3 class="label-amerigo news-subtitle text-white mt-4">Objets découverts</h3>
+                        {{ include('/parts/picture-grid.html.twig', {
+                            items: session_objects,
+                            reveal_auto: true,
+                            variant: 'rule',
+                            per_row: {desktop: 4, tablet: 4, mobile: 3},
+                            empty_message: 'Aucun objet découvert',
+                        }) }}
+                    </div>
+
+                    {% if session_previous is not empty %}
+                        <div class="session-group">
+                            <h3 class="label-amerigo news-subtitle text-white mt-4">Séances précédentes</h3>
+                            {% for un_episode in session_previous %}
+                                <a class="episode-row inverted" href="{{ path('aventure_episode', {id: un_episode.id}) }}">
+                                    <span class="episode-number">#{{ un_episode.numeroSaison }}</span>
+                                    <span class="episode-text">
+                                        <strong>{{ un_episode.titre }}</strong>
+                                        <span class="episode-sub">{{ un_episode.chapitreParent.titre }}</span>
+                                    </span>
+                                    <img class="episode-picture" src="{{ asset(un_episode.image|default(NA_SESSION)) }}" alt="" />
+                                </a>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+
+                {% if chapitre %}
+                    {% set saison = chapitre.saisonParent %}
+                    <div class="session-links">
+                        <a class="session-link" href="{{ path('aventure_saison', {id: saison.id}) }}">
+                            <img src="{{ asset(AVENTURE_SAISON_ICO) }}" alt="Icône de saison" />
+                            <span>Saison {{ saison.numero }}</span>
+                        </a>
+
+                        <a class="session-link" href="{{ path('aventure_saison', {id: saison.id}) }}#read-head-ch-id{{ chapitre.id }}">
+                            <img src="{{ asset(AVENTURE_CHAPITRE_ICO) }}" alt="Icône de chapitre" />
+                            <span>Chapitre {{ chapitre.numero }} — {{ chapitre.titre }}</span>
+                        </a>
+                    </div>
+                {% endif %}
+            {% else %}
+                <p class="texte-attente">Le premier résumé de séance n'a pas encore été publié.</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="col-12 col-lg-5 news-aside">
+
+        {% if mes_participations is not empty %}
+            <div class="card card-body participations-card"
+                style="--character-image: url('{{ asset(mon_personnage.illustration|default(NA_PERSO_ILLU)) }}');{% if mon_personnage.clan %} --faction-color: {{ mon_personnage.clan.couleur }};{% endif %}">
+                <h3 class="label-amerigo news-subtitle">Mes Dernières Participations</h3>
+                {% for participation in mes_participations %}
+                    {% set scene = participation.scene %}
+                    {% set episode = scene.episodeParent %}
+                    {% set perso = participation.personnage %}
+                    {% set cumul = participations_xp[participation.id]|default(null) %}
+                    <a class="episode-row" href="{{ path('aventure_episode', {id: episode.id}) }}">
+                        <span class="portrait-slot">
+                            <img class="character-portrait medium outlined {{ participation.estMort ? 'effect-dead' }}"
+                                 src="{{ asset(perso.icone|default(NA_PERSO_PORTRAIT)) }}"
+                                 alt="Portrait de {{ perso.prenom }}" title="{{ perso.prenom }}" />
+                            {% if participation.estMort %}<img class="character-icon-dead" src="{{ asset(MORT_ICO) }}" alt="est mort" />{% endif %}
+                            {% if cumul %}<span class="episode-xp">+{{ cumul.xp }}&nbsp;xp</span>{% endif %}
+                        </span>
+                        <span class="episode-text">
+                            <strong>{{ episode.titre }}</strong>
+                            {% if scene.lieu %}<span class="episode-sub">{{ scene.lieu.nom }}</span>{% endif %}
+                        </span>
+                        <img class="episode-picture" src="{{ asset(episode.image|default(NA_SESSION)) }}" alt="" />
+                    </a>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        <div class="card card-body ranking-card">
+            <h3 class="label-amerigo news-subtitle">Classement Général</h3>
+            {{ include('/news/ranking.html.twig', {items: classement_general, mine: mes_personnages}) }}
+        </div>
+
+    </div>
+
+{% endblock %}
+
+{% block section_content2 %}
+    {{ include('news/news-subsection.html.twig', {rubrique: rubriques[0], secrets_visibles: mes_personnages is not empty, mon_personnage: mon_personnage}) }}
+{% endblock %}
+
+{% block section_content3 %}
+    {{ include('news/news-subsection.html.twig', {rubrique: rubriques[1], secrets_visibles: mes_personnages is not empty, mon_personnage: mon_personnage}) }}
+{% endblock %}
+
+{% block section_content4 %}
+    {{ include('news/news-subsection.html.twig', {rubrique: rubriques[2], secrets_visibles: mes_personnages is not empty, mon_personnage: mon_personnage}) }}
+{% endblock %}

@@ -13,6 +13,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use App\Service\Unlocker;
 
 class AdminSortController extends AbstractController
 {
@@ -47,6 +48,8 @@ class AdminSortController extends AbstractController
                 'keyword1:K1:bool',
                 'keyword2:K2:bool',
                 'keyword3:K3:bool',
+                'access:Accès:access',
+                'publishedAt:Publié le:date',
             ],
         ]);
     }
@@ -55,7 +58,7 @@ class AdminSortController extends AbstractController
      * @Route("/admin/sort/create", name="admin_sort_create")
      * @IsGranted("ROLE_MJ")
      */
-    public function addSort(Request $request, EntityManagerInterface $em, FileHandler $fileHandler, SortRepository $sortRepository, Numeroteur $numeroteur) {
+    public function addSort(Request $request, EntityManagerInterface $em, FileHandler $fileHandler, SortRepository $sortRepository, Numeroteur $numeroteur, Unlocker $unlocker) {
 
         $sort = new Sort;
 
@@ -86,6 +89,9 @@ class AdminSortController extends AbstractController
 
             $em->persist($sort);
             $em->flush();
+
+            $unlocker->sync($sort, $form->get('unlockedBy')->getData());
+            $em->flush();
             $this->addFlash('success', "Le sort a bien été ajouté.");
 
             if (!empty($request->query->get('redirect')) && $request->query->get('redirect') == 'library'
@@ -110,7 +116,7 @@ class AdminSortController extends AbstractController
      * @Route("/admin/sort/{id}/edit", name="admin_sort_edit")
      * @IsGranted("ROLE_MJ")
      */
-    public function editSort(Request $request, Sort $sort, SortRepository $sortRepository, Numeroteur $numeroteur): Response {
+    public function editSort(Request $request, Sort $sort, SortRepository $sortRepository, Numeroteur $numeroteur, Unlocker $unlocker): Response {
 
         if ( empty( $sort->getNumero() ) || !is_numeric( $sort->getNumero() ) || $sort->getNumero() < 0)
             $numeroDepart = -1;
@@ -120,17 +126,19 @@ class AdminSortController extends AbstractController
         $fratrieDepartId = $sort->getAnneau();
 
         $form = $this->createForm(AdminSortType::class, $sort);
+        $form->get('unlockedBy')->setData($unlocker->charactersOf($sort));
         $form->handleRequest($request);
 
         if($form->isSubmitted() && $form->isValid()) {
 
-            // RE-ORDERING : if number has changed or if parent has changed
             if ($numeroDepart != $sort->getNumero() || $fratrieDepartId != $sort->getAnneau())
             {
                 $fratrieDepart = $sortRepository->findBy(['anneau' => $fratrieDepartId]);
                 $fratrieArrivee = $sortRepository->findBy(['anneau' => $sort->getAnneau()]);
                 $numeroteur->reordonnerNumero($sort->getId(), $numeroDepart, $sort->getNumero(), $fratrieDepart, $fratrieArrivee);
             }
+
+            $unlocker->sync($sort, $form->get('unlockedBy')->getData());
 
             $this->getDoctrine()->getManager()->flush();
             $this->addFlash('success', "Le Sort a bien été modifié.");
@@ -157,11 +165,12 @@ class AdminSortController extends AbstractController
      * @Route("/admin/sort/{id}/delete", name="admin_sort_delete", methods={"POST"})
      * @IsGranted("ROLE_MJ")
      */
-    public function deleteSort(Request $request, Sort $sort, FileHandler $fileHandler): Response {
+    public function deleteSort(Request $request, Sort $sort, FileHandler $fileHandler, Unlocker $unlocker): Response {
 
         if ($this->isCsrfTokenValid('delete' . $sort->getId(), $request->request->get('_csrf_token'))) {
 
             $entityManager = $this->getDoctrine()->getManager();
+            $unlocker->forget($sort);
             $entityManager->remove($sort);
             $entityManager->flush();
             $this->addFlash('success', "Le Sort a bien été supprimé.");

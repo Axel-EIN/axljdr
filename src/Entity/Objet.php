@@ -7,9 +7,12 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass=ObjetRepository::class)
+ * @ORM\HasLifecycleCallbacks
  */
 class Objet
 {
+    use PublishableTrait;
+
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
@@ -96,11 +99,6 @@ class Objet
      * @ORM\Column(type="string", length=60)
      */
     private $categorie;
-
-    /**
-     * @ORM\Column(type="boolean")
-     */
-    private $locked = false;
 
     public function getId(): ?int
     {
@@ -295,18 +293,6 @@ class Objet
     public function setCategorie(string $categorie): self
     {
         $this->categorie = $categorie;
-
-        return $this;
-    }
-
-    public function getLocked(): ?bool
-    {
-        return $this->locked;
-    }
-
-    public function setLocked(bool $locked): self
-    {
-        $this->locked = $locked;
 
         return $this;
     }

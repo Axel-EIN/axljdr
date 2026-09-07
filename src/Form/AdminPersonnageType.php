@@ -7,6 +7,7 @@ use App\Entity\Ecole;
 use App\Entity\Classe;
 use App\Entity\Famille;
 use App\Entity\Personnage;
+use App\Entity\Status;
 use App\Entity\Utilisateur;
 use Doctrine\DBAL\Types\BooleanType;
 use Symfony\Component\Form\AbstractType;
@@ -59,11 +60,9 @@ class AdminPersonnageType extends AbstractType
             ->add('estPj', CheckboxType::class, [
                 'required' => false,
             ])
-            ->add('estMort', CheckboxType::class, [
-                'required' => false,
-            ])
-            ->add('locked', CheckboxType::class, [
-                'required' => false,
+            ->add('status', ChoiceType::class, [
+                'label' => 'Statut',
+                'choices' => array_flip(Status::LABELS),
             ])
             ->add('clan', EntityType::class, [
                 'class' => Clan::class,
@@ -95,6 +94,8 @@ class AdminPersonnageType extends AbstractType
                 'required' => false,
             ])
         ;
+
+        PublishableFields::add($builder);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

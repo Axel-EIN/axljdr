@@ -37,8 +37,8 @@
           {% endif %}
 
           {% if app.user and is_granted("ROLE_MJ") %}
-            {% set redirect, size, color, position = entity, 'btn-icon-medium', 'text-accent', 'right-snap' %}
-            {{ include('/parts/btn-icon-edit.html.twig') }}
+            {% set redirect, size, color, position = entity, 'btn-icon-medium', 'text-accent', 'topright-corner-snap' %}
+            {{ include('/btns/btn-icon-edit.html.twig') }}
           {% endif %}
         </h1>
         <hr class="hr-title">

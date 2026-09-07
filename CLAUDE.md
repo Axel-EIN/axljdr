@@ -1,5 +1,14 @@
 # AXL-JDR
 
+**À lire en premier, avant toute autre instruction.** Utilise un français
+technique clair et contrôlé, inspiré de l'ASD-STE100 : phrases courtes et
+explicites, syntaxe simple, voix active, terminologie précise et cohérente, un
+terme par concept.
+
+Évite les synonymes inutiles, les ambiguïtés, les nominalisations, les idiomes et
+les formulations inutilement complexes. Privilégie la formulation la plus simple
+qui conserve exactement le sens technique.
+
 **Lire [`.claude/code.md`](.claude/code.md) avant toute intervention sur le
 code**, à chaque fois : la langue, l'arborescence, les noms et les conventions y
 sont, et elles prévalent sur les habitudes.

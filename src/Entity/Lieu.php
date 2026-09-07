@@ -10,9 +10,12 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass=LieuRepository::class)
+ * @ORM\HasLifecycleCallbacks
  */
 class Lieu
 {
+  use PublishableTrait;
+
   /**
    * @ORM\Id
    * @ORM\GeneratedValue
@@ -85,11 +88,6 @@ class Lieu
    * @ORM\Column(type="integer", nullable=true)
    */
   private $population;
-
-  /**
-   * @ORM\Column(type="boolean")
-   */
-  private $locked;
 
   public function __construct()
   {
@@ -270,18 +268,6 @@ class Lieu
   public function setPopulation(?int $population): self
   {
     $this->population = $population;
-
-    return $this;
-  }
-
-  public function getLocked(): ?bool
-  {
-    return $this->locked;
-  }
-
-  public function setLocked(bool $locked): self
-  {
-    $this->locked = $locked;
 
     return $this;
   }

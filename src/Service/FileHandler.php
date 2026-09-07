@@ -23,7 +23,7 @@ class FileHandler extends AbstractController
             throw new \InvalidArgumentException('Nom de dossier invalide');
         }
 
-        if (empty($fichier)) { // Cas de la suppression seulement
+        if (empty($fichier)) {
             $this->supprimer($ancienFichier, $dossier);
 
             return null;
@@ -35,8 +35,6 @@ class FileHandler extends AbstractController
             return $ancienFichier;
         }
 
-        // Après l'upload seulement : un type refusé ne doit pas détruire le fichier
-        // en place. Et jamais à nom identique, l'upload vient de l'écraser.
         if (basename((string) $ancienFichier) !== $nouveauNomFichier) {
             $this->supprimer($ancienFichier, $dossier);
         }

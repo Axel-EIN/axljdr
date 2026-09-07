@@ -97,6 +97,9 @@ class AdminUtilisateurController extends AbstractController
             if (!empty($nouvelleAvatar)) {
                 $prefix = 'avatar-' . $utilisateur->getPseudo();
                 $utilisateur->setAvatar($fileHandler->handle($nouvelleAvatar, $utilisateur->getAvatar(), $prefix, 'avatars', 'square320'));
+            } elseif ($request->request->get('remove_avatar') === '1' && $utilisateur->getAvatar()) {
+                $fileHandler->handle(null, $utilisateur->getAvatar(), null, 'avatars');
+                $utilisateur->setAvatar(null);
             }
 
             $this->getDoctrine()->getManager()->flush();

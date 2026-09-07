@@ -11,6 +11,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use App\Entity\Avantage;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use App\Form\AdminAvantageType;
+use App\Service\Unlocker;
 
 class AdminAvantageController extends AbstractController
 {
@@ -36,6 +37,8 @@ class AdminAvantageController extends AbstractController
                 'cout:Coût',
                 'exclusive.nom:Exclusif',
                 'description:Description:bool',
+                'access:Accès:access',
+                'publishedAt:Publié le:date',
             ],
         ]);
     }
@@ -44,7 +47,7 @@ class AdminAvantageController extends AbstractController
      * @Route("/admin/avantage/create", name="admin_avantage_create")
      * @IsGranted("ROLE_MJ")
      */
-    public function addAvantage(Request $request, EntityManagerInterface $em) {
+    public function addAvantage(Request $request, EntityManagerInterface $em, Unlocker $unlocker) {
 
         $avantage = new Avantage;
         $form = $this->createForm(AdminAvantageType::class, $avantage);
@@ -53,6 +56,9 @@ class AdminAvantageController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
 
             $em->persist($avantage);
+            $em->flush();
+
+            $unlocker->sync($avantage, $form->get('unlockedBy')->getData());
             $em->flush();
             $this->addFlash('success', "L'Avantage a bien été ajouté.");
 
@@ -78,12 +84,15 @@ class AdminAvantageController extends AbstractController
      * @Route("/admin/avantage/{id}/edit", name="admin_avantage_edit")
      * @IsGranted("ROLE_MJ")
      */
-    public function editAvantage(Request $request, Avantage $avantage): Response {
+    public function editAvantage(Request $request, Avantage $avantage, Unlocker $unlocker): Response {
 
         $form = $this->createForm(AdminAvantageType::class, $avantage);
+        $form->get('unlockedBy')->setData($unlocker->charactersOf($avantage));
         $form->handleRequest($request);
 
         if($form->isSubmitted() && $form->isValid()) {
+
+            $unlocker->sync($avantage, $form->get('unlockedBy')->getData());
 
             $this->getDoctrine()->getManager()->flush();
             $this->addFlash('success', 'La Avantage a bien été modifiée.');
@@ -110,11 +119,12 @@ class AdminAvantageController extends AbstractController
      * @Route("/admin/avantage/{id}/delete", name="admin_avantage_delete", methods={"POST"})
      * @IsGranted("ROLE_MJ")
      */
-    public function deleteAvantage(Request $request, Avantage $avantage): Response {
+    public function deleteAvantage(Request $request, Avantage $avantage, Unlocker $unlocker): Response {
 
         if ($this->isCsrfTokenValid('delete' . $avantage->getId(), $request->request->get('_csrf_token'))) {
 
             $entityManager = $this->getDoctrine()->getManager();
+            $unlocker->forget($avantage);
             $entityManager->remove($avantage);
             $entityManager->flush();
             $this->addFlash('success', 'La Avantage a bien été supprimée.');

@@ -109,7 +109,6 @@ class AdminSaisonController extends AbstractController
                 $saison->setImage(null);
             }
 
-            // RE-ORDERING : if Number or Parent has changed
             if ($numeroDepart != $saison->getNumero())
             {
                 $fratrieDepart = $saisonRepository->findAll();

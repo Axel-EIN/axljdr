@@ -9,9 +9,12 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass=PersonnageRepository::class)
+ * @ORM\HasLifecycleCallbacks
  */
 class Personnage
 {
+    use PublishableTrait;
+
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
@@ -48,6 +51,16 @@ class Personnage
      * @ORM\Column(type="text", nullable=true)
      */
     private $description;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $playerNotes;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $gmNotes;
 
     /**
      * @ORM\Column(type="boolean")
@@ -99,14 +112,9 @@ class Personnage
     private $participations;
 
     /**
-     * @ORM\Column(type="boolean")
+     * @ORM\Column(type="smallint")
      */
-    private $estMort;
-
-    /**
-     * @ORM\Column(type="boolean")
-     */
-    private $locked;
+    private $status = Status::ALIVE;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
@@ -191,6 +199,30 @@ class Personnage
     public function setDescription(?string $description): self
     {
         $this->description = $description;
+
+        return $this;
+    }
+
+    public function getPlayerNotes(): ?string
+    {
+        return $this->playerNotes;
+    }
+
+    public function setPlayerNotes(?string $playerNotes): self
+    {
+        $this->playerNotes = $playerNotes;
+
+        return $this;
+    }
+
+    public function getGmNotes(): ?string
+    {
+        return $this->gmNotes;
+    }
+
+    public function setGmNotes(?string $gmNotes): self
+    {
+        $this->gmNotes = $gmNotes;
 
         return $this;
     }
@@ -303,7 +335,6 @@ class Personnage
 
     public function setFichePersonnage(FichePersonnage $fichePersonnage): self
     {
-        // set the owning side of the relation if necessary
         if ($fichePersonnage->getPersonnage() !== $this) {
             $fichePersonnage->setPersonnage($this);
         }
@@ -342,26 +373,24 @@ class Personnage
         return $this;
     }
 
-    public function getEstMort(): ?bool
+    public function getStatus(): ?int
     {
-        return $this->estMort;
+        return $this->status;
     }
 
-    public function setEstMort(bool $estMort): self
+    public function isDead(): bool
     {
-        $this->estMort = $estMort;
-
-        return $this;
+        return $this->status === Status::DEAD;
     }
 
-    public function getLocked(): ?bool
+    public function isMissing(): bool
     {
-        return $this->locked;
+        return $this->status === Status::MISSING;
     }
 
-    public function setLocked(bool $locked): self
+    public function setStatus(int $status): self
     {
-        $this->locked = $locked;
+        $this->status = $status;
 
         return $this;
     }

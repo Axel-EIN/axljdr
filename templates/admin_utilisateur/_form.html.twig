@@ -1,10 +1,11 @@
 <div class="col-12">
     {{ form_start(form) }}
         {% if utilisateur is defined %}
-            <img class="img-fluid" src="{{ utilisateur.avatar ? asset(utilisateur.avatar) : 'https://i.pravatar.cc/300' }}" alt="Avatar de l'utilisateur" />
+            {{ include('parts/avatar.html.twig', {user: utilisateur, size: 128}) }}
         {% endif %}
         {{ form_row(form.avatar) }}
+        {{ include('parts/image-delete-button.html.twig', {input_id: 'admin_utilisateur_avatar', field_name: 'avatar', current: utilisateur.avatar|default(null)}) }}
             {{ form_widget(form) }}
-        {{ include('/parts/btn-form.html.twig') }}
+        {{ include('/btns/btn-form.html.twig') }}
     {{ form_end(form) }}
 </div>

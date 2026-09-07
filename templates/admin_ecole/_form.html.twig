@@ -2,12 +2,13 @@
     {{ form_start(form) }}
         <div class="row form-wrapper">
 
+            {{ include('parts/form-publication.html.twig', {form: form}) }}
+
             <div class="col-3">{{ form_row(form.nom) }}</div>
             <div class="col-3">{{ form_row(form.clan) }}</div>
             <div class="col-3">{{ form_row(form.classe) }}</div>
             <div class="col-3">{{ form_row(form.bonusStatNom) }}</div>
             <div class="col-3">{{ form_row(form.valeurCompetencesDepart) }}</div>
-            <div class="col-3 align-self-center">{{ form_row(form.locked) }}</div>
 
             <div class="col-12 mt-4">{{ form_row(form.description,{ 'attr': {'rows': '8'} }) }}</div>
 
@@ -15,16 +16,10 @@
             <div class="col-6 mt-3">{{ form_row(form.equipements,{ 'attr': {'rows': '8'} }) }}</div>
 
             <div class="col-12 mt-3 mb-4">
-                {{ form_label(form.image, 'Image (1200×900 4:3 recommandé)') }}
-                <label for="admin_ecole_image" class="preview-label hover-slight-fade hover-pointer hover-icon-visible">
-                    <span class="btn-icon-medium right-corner-16"><i class="fas fa-edit semi-visible text-white"></i></span>
-                    <img id="image-preview" class="img-fluid border-soft" src="{{ asset(ecole.image|default(NA_169)) }}" />
-                    <span id="image-filename" class="filename"></span>
-                </label>
-                <div class="browser">{{form_widget(form.image, {'attr': {'class': 'input-image'}}) }}</div>
-
-                {{ include('parts/image-cropper.html.twig', {input_id: 'admin_ecole_image', width: 1200, height: 900}) }}
-                {{ include('parts/image-delete-button.html.twig', {input_id: 'admin_ecole_image', field_name: 'image', current: ecole.image|default(null)}) }}
+                {{ include('parts/image-field.html.twig', {
+                    field: form.image, input_id: 'admin_ecole_image', prefix: 'image',
+                    current: ecole.image|default(null), fallback: NA_169, label: 'Image (1200×900 4:3 recommandé)',
+                    width: 1200, height: 900 }) }}
             </div>
 
             <div class="col-12 mt-5">
@@ -78,7 +73,7 @@
                 {{ form_row(form.techSpecialDesc,{ 'attr': {'rows': '9'} }) }}
             </div>
 
-            {{ include('/parts/btn-form.html.twig') }}
+            {{ include('/btns/btn-form.html.twig') }}
         </div>
     {{ form_end(form) }}
 </div>

@@ -12,6 +12,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use App\Service\Unlocker;
 
 class AdminClanController extends AbstractController
 {
@@ -43,7 +44,8 @@ class AdminClanController extends AbstractController
                 'territoireCarte:Carte:bool',
                 'territoireDesc:CarteText:bool',
                 'video:Video:bool',
-                'locked:Bloqué:boolInt',
+                'access:Accès:access',
+                'publishedAt:Publié le:date',
             ],
         ]);
     }
@@ -52,15 +54,7 @@ class AdminClanController extends AbstractController
      * @Route("/admin/clan/create", name="admin_clan_create")
      * @IsGranted("ROLE_MJ")
      */
-    public function addClan(Request $request, EntityManagerInterface $em, FileHandler $fileHandler) {
-
-        // // TIPS Première manière de faire : DENYACCESS redirige vers page erreur 500 automatiquement
-        // $this->denyAccessUnlessGranted('ROLE_MJ'); // Test si Admin sinon affiche 500
-        // $this->denyAccessUnlessGranted('ROLE_JOUEUR'); // Puis test si Joueur sinon affiche 500
-
-        // // Deuxième manière de faire : ISGRANTED renvoi true, false donc on peut faire de la logique comme on veut
-        // if( !$this->isGranted('ROLE_MJ') || !$this->isGranted('ROLE_JOUEUR') ) // Ici on test si l'un ou l'autre renvoi faux on redirige vers une autre page de notre choix
-        //     return $this->redirectToRoute('admin_clan');
+    public function addClan(Request $request, EntityManagerInterface $em, FileHandler $fileHandler, Unlocker $unlocker) {
 
         $clan = new Clan;
         $form = $this->createForm(AdminClanType::class, $clan);
@@ -74,7 +68,6 @@ class AdminClanController extends AbstractController
                 $clan->setMon($fileHandler->handle($nouveauMon, null, $prefix, 'clans', 'square320'));
             }
 
-            // Banner Image Handling
             $nouvelleImage = $form->get('image')->getData();
             if (!empty($nouvelleImage)) {
                 $prefix = 'clan-' . $clan->getNom() . '-image';
@@ -94,6 +87,9 @@ class AdminClanController extends AbstractController
             }
 
             $em->persist($clan);
+            $em->flush();
+
+            $unlocker->sync($clan, $form->get('unlockedBy')->getData());
             $em->flush();
             $this->addFlash('success', 'Le clan a bien été ajouté.');
 
@@ -115,9 +111,10 @@ class AdminClanController extends AbstractController
      * @Route("/admin/clan/{id}/edit", name="admin_clan_edit")
      * @IsGranted("ROLE_MJ")
      */
-    public function editClan(Request $request, Clan $clan, FileHandler $fileHandler): Response {
+    public function editClan(Request $request, Clan $clan, FileHandler $fileHandler, Unlocker $unlocker): Response {
 
         $form = $this->createForm(AdminClanType::class, $clan);
+        $form->get('unlockedBy')->setData($unlocker->charactersOf($clan));
         $form->handleRequest($request);
 
         if($form->isSubmitted() && $form->isValid()) {
@@ -153,6 +150,8 @@ class AdminClanController extends AbstractController
                 $clan->setVideo($fileHandler->handle($nouvelleVideo, $clan->getVideo(), $prefix, 'video'));
             }
 
+            $unlocker->sync($clan, $form->get('unlockedBy')->getData());
+
             $this->getDoctrine()->getManager()->flush();
             $this->addFlash('success', 'Le clan a bien été modifié.');
 
@@ -177,7 +176,7 @@ class AdminClanController extends AbstractController
      * @Route("/admin/clan/{id}/delete", name="admin_clan_delete", methods={"POST"})
      * @IsGranted("ROLE_MJ")
      */
-    public function deleteClan(Request $request, Clan $clan, FileHandler $fileHandler): Response {
+    public function deleteClan(Request $request, Clan $clan, FileHandler $fileHandler, Unlocker $unlocker): Response {
 
         if ($this->isCsrfTokenValid('delete' . $clan->getId(), $request->request->get('_csrf_token'))) {
 
@@ -193,6 +192,7 @@ class AdminClanController extends AbstractController
             $fileHandler->handle(null, $clan->getTerritoireCarte(), null, 'clans');
             $fileHandler->handle(null, $clan->getVideo(), null, 'video');
 
+            $unlocker->forget($clan);
             $entityManager->remove($clan);
             $entityManager->flush();
             $this->addFlash('success', 'La faction a bien été supprimée.');

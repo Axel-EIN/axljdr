@@ -1,4 +1,3 @@
-{# Params : un_chapitre ; episode (grise les absents) et avec_lieux optionnels. #}
 
 {% set pj_ids, pjs, pnj_ids, pnjs = [], [], [], [] %}
 {% set lieu_ids, lieux_chapitre = [], [] %}
@@ -8,10 +7,10 @@
   {% for une_scene in un_episode.scenes %}
     {% for une_participation in une_scene.participations %}
       {% set perso = une_participation.personnage %}
-      {% if une_participation.estPj and perso.id not in pj_ids %}
+      {% if element_listed(perso) and une_participation.estPj and perso.id not in pj_ids %}
         {% set pj_ids = pj_ids|merge([perso.id]) %}
         {% set pjs = pjs|merge([perso]) %}
-      {% elseif not une_participation.estPj and perso.id not in pnj_ids %}
+      {% elseif element_listed(perso) and not une_participation.estPj and perso.id not in pnj_ids %}
         {% set pnj_ids = pnj_ids|merge([perso.id]) %}
         {% set pnjs = pnjs|merge([perso]) %}
       {% endif %}
@@ -19,7 +18,7 @@
         {% set episode_perso_ids = episode_perso_ids|merge([perso.id]) %}
       {% endif %}
     {% endfor %}
-    {% if avec_lieux|default(false) and une_scene.lieu is not null and une_scene.lieu.id not in lieu_ids %}
+    {% if avec_lieux|default(false) and une_scene.lieu is not null and une_scene.lieu.id not in lieu_ids and element_listed(une_scene.lieu) %}
       {% set lieu_ids = lieu_ids|merge([une_scene.lieu.id]) %}
       {% set lieux_chapitre = lieux_chapitre|merge([une_scene.lieu]) %}
     {% endif %}
@@ -54,6 +53,7 @@
           <a class="chapter-portrait-link" href="{{ path('personnage_profil', {id: perso.id}) }}" title="{{ perso.prenom }}">
             <img class="chapter-portrait{{ vue }}{% if episode is defined and perso.id in episode_perso_ids %} in-episode{% endif %}"
                  src="{{ asset(perso.icone|default(fallback)) }}" alt="Portrait de {{ perso.prenom }}" />
+            {{ include('parts/badge-access.html.twig', {state: element_state(perso), variant: 'mini'}) }}
           </a>
         {% endfor %}
       </div>

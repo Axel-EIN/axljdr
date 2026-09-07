@@ -12,7 +12,6 @@ use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
-use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 
 class AdminLoreType extends AbstractType
 {
@@ -38,8 +37,9 @@ class AdminLoreType extends AbstractType
             ->add('part3titre', TextType::class, ['required' => false, 'constraints' => [ new Length( [ 'max' => 100 ] ) ] ] )
             ->add('part3', TextareaType::class, ['required' => false])
             ->add('part3aside', textareaType::class, ['required' => false])
-            ->add('locked', CheckboxType::class, ['required' => false])
         ;
+
+        PublishableFields::add($builder);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

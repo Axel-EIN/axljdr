@@ -65,6 +65,8 @@ class AdminAvantageType extends AbstractType
             'required' => false
             ])
         ;
+
+        PublishableFields::add($builder);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

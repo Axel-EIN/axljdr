@@ -118,7 +118,6 @@ class AdminChapitreController extends AbstractController
                 $chapitre->setImage(null);
             }
 
-            // RE-ORDERING : If Order Number has changed OR ParentID have changed, then it needs RE-ORDERING
             if ($numeroDepart != $chapitre->getNumero() || $fratrieDepartId != $chapitre->getSaisonParent()->getId())
             {
                 $fratrieDepart = $chapitreRepository->findBy(['saisonParent' => $fratrieDepartId]);
@@ -152,7 +151,7 @@ class AdminChapitreController extends AbstractController
      */
     public function deleteChapitre(Request $request, Chapitre $chapitre, Numeroteur $numeroteur, FileHandler $fileHandler, ChapitreRepository $chapitreRepository): Response {
 
-        $saisonParent = $chapitre->getSaisonParent(); // Saving Parent before deletion to be able to redirect after
+        $saisonParent = $chapitre->getSaisonParent();
 
         if ($this->isCsrfTokenValid('delete' . $chapitre->getId(), $request->request->get('_csrf_token'))) {
 

@@ -5,6 +5,8 @@ namespace App\Form;
 use App\Entity\Scene;
 use App\Entity\Episode;
 use App\Entity\Lieu;
+use App\Entity\Objet;
+use Doctrine\ORM\EntityRepository;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
@@ -50,6 +52,17 @@ class AdminSceneType extends AbstractType
                     'Jours suivants' => 'Jours suivants',
                     'Intemporel' => 'Intemporel',
                 ], ])
+            ->add('foundObjects', EntityType::class, [
+                'class' => Objet::class,
+                'label' => 'Objets découverts (Ctrl + clic pour en sélectionner plusieurs)',
+                'choice_label' => 'nom',
+                'group_by' => 'type',
+                'multiple' => true,
+                'required' => false,
+                'attr' => ['size' => 12],
+                'query_builder' => fn(EntityRepository $er) => $er->createQueryBuilder('o')
+                    ->orderBy('o.type', 'ASC')->addOrderBy('o.nom', 'ASC'),
+            ])
             ->add('texte', TextareaType::class)
             ->add('image', FileType::class, [
                 'label' => "Image ( idéal 1280x720 )",

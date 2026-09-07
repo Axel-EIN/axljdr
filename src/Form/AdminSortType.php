@@ -130,6 +130,8 @@ class AdminSortType extends AbstractType
             ],
         ])
         ;
+
+        PublishableFields::add($builder);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

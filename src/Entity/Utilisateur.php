@@ -70,6 +70,17 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
     private $personnages;
 
     /**
+     * @ORM\ManyToOne(targetEntity=Personnage::class)
+     * @ORM\JoinColumn(onDelete="SET NULL")
+     */
+    private $mainCharacter;
+
+    /**
+     * @ORM\Column(type="boolean", options={"default": false})
+     */
+    private $withoutCharacter = false;
+
+    /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $reset_token;
@@ -120,7 +131,6 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
     public function getRoles(): array
     {
         $roles = $this->roles;
-        // guarantee every user at least has ROLE_USER
         $roles[] = 'ROLE_USER';
 
         return array_unique($roles);
@@ -164,7 +174,6 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
      */
     public function eraseCredentials()
     {
-        // If you store any temporary, sensitive data on the user, clear it here
 
     }
 
@@ -229,6 +238,30 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
                 $personnage->setJoueur(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getMainCharacter(): ?Personnage
+    {
+        return $this->mainCharacter;
+    }
+
+    public function setMainCharacter(?Personnage $mainCharacter): self
+    {
+        $this->mainCharacter = $mainCharacter;
+
+        return $this;
+    }
+
+    public function isWithoutCharacter(): bool
+    {
+        return (bool) $this->withoutCharacter;
+    }
+
+    public function setWithoutCharacter(bool $withoutCharacter): self
+    {
+        $this->withoutCharacter = $withoutCharacter;
 
         return $this;
     }

@@ -1,11 +1,22 @@
+{% set has_pdf = pdf is defined and pdf is not empty %}
+{% set has_parts = pdf_button|default(false) %}
+
 <div class="gradient-after-down {{ classes|default('') }}">
-  {% if pdf is defined and pdf is not empty %}
+  {% if has_pdf and not has_parts %}
     <a href="{{ asset(pdf) }}">
       <img class="img-fluid {{ img_class|default('') }}" src="{{ asset(image|default(NA_PDF)) }}" alt="{{ alt }}" />
     </a>
   {% else %}
     <img class="img-fluid {{ img_class|default('') }}" src="{{ asset(image|default(na_image)) }}" alt="{{ alt }}" />
   {% endif %}
+
+  {% if has_pdf and has_parts and app.user %}
+    <a class="btn-pdf-source" href="{{ asset(pdf) }}" title="Ouvrir le document source">
+      <img src="{{ asset(PDF) }}" alt="" />Voir la source PDF
+    </a>
+  {% endif %}
+
+  {% if state is defined %}{{ include('parts/badge-access.html.twig', {state: state, title: state_title|default(null)}) }}{% endif %}
 
   {% if titre is defined %}
     <span class="heading-elementdetail card-top-titre d-lg-none" aria-hidden="true">{{ titre }}</span>

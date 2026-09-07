@@ -24,6 +24,13 @@
   background-position: center;
 }
 
+.header-bg-news {
+  background-image:
+    linear-gradient(rgb(40,0,0,0.5),rgb(40,0,0,0.5)),
+    url('../assets/rubriques/empire.jpg');
+  background-position: center;
+}
+
 .header-bg-rules {
   background-image:
     linear-gradient(rgb(40,0,0,0.5),rgb(40,0,0,0.5)),

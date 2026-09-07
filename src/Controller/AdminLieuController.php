@@ -13,6 +13,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use App\Service\Baliseur;
+use App\Service\Unlocker;
 
 class AdminLieuController extends AbstractController
 {
@@ -43,7 +44,8 @@ class AdminLieuController extends AbstractController
         'locX:LocX:number',
         'locY:LocY:number',
         'quartiers:QuartiersText:bool',
-        'locked:Bloqué:boolInt',
+        'access:Accès:access',
+        'publishedAt:Publié le:date',
       ],
     ]);
   }
@@ -52,7 +54,7 @@ class AdminLieuController extends AbstractController
    * @Route("/admin/lieu/create", name="admin_lieu_create")
    * @IsGranted("ROLE_MJ")
    */
-  public function addLieu(Request $request, EntityManagerInterface $em, FileHandler $fileHandler, Baliseur $baliseur) {
+  public function addLieu(Request $request, EntityManagerInterface $em, FileHandler $fileHandler, Baliseur $baliseur, Unlocker $unlocker) {
 
     $lieu = new Lieu;
     $form = $this->createForm(AdminLieuType::class, $lieu);
@@ -78,14 +80,15 @@ class AdminLieuController extends AbstractController
         $lieu->setIcone($fileHandler->handle($nouvelleIcone, null, $prefix, 'lieux', 'square192'));
       }
 
-      // CHARACTER TAGGER : capture words between [], check if character exist, replace by a link
-      $lieu->setDescription($baliseur->baliserPersonnages($lieu->getDescription()));
-
-      // LOCATION TAGGER: capture words between {}, check if location exist, replace by a link
-      $lieu->setDescription($baliseur->baliserLieux($lieu->getDescription()));
+      $lieu->setDescription($baliseur->baliser($lieu->getDescription()));
 
       $em->persist($lieu);
       $em->flush();
+
+      $unlocker->sync($lieu, $form->get('unlockedBy')->getData());
+      $unlocker->syncAccess($lieu);
+      $em->flush();
+
       $this->addFlash('success', 'Le Lieu a bien été ajouté.');
 
       if (!empty($request->query->get('redirect')) && $request->query->get('redirect') == 'lieu')
@@ -108,15 +111,12 @@ class AdminLieuController extends AbstractController
    * @Route("/admin/lieu/{id}/edit", name="admin_lieu_edit")
    * @IsGranted("ROLE_MJ")
    */
-  public function editLieu(Request $request, Lieu $lieu, FileHandler $fileHandler, Baliseur $baliseur): Response {
+  public function editLieu(Request $request, Lieu $lieu, FileHandler $fileHandler, Baliseur $baliseur, Unlocker $unlocker): Response {
 
-    // CHARACTER UNTAGGER : capture words in character-links, check if character exist and replace with []
-    $lieu->setDescription($baliseur->debaliserPersonnages($lieu->getDescription()));
-
-    // LOCATION UNTAGGER : capture words in location-links, check if location exist and replace with {}
-    $lieu->setDescription($baliseur->debaliserLieux($lieu->getDescription()));
+    $lieu->setDescription($baliseur->debaliser($lieu->getDescription()));
 
     $form = $this->createForm(AdminLieuType::class, $lieu);
+    $form->get('unlockedBy')->setData($unlocker->charactersOf($lieu));
     $form->handleRequest($request);
 
     if($form->isSubmitted() && $form->isValid()) {
@@ -145,11 +145,10 @@ class AdminLieuController extends AbstractController
         $lieu->setIcone(null);
       }
 
-      // CHARACTER TAGGER : capture words between [], check if character exist, replace by a link
-      $lieu->setDescription($baliseur->baliserPersonnages($lieu->getDescription()));
+      $lieu->setDescription($baliseur->baliser($lieu->getDescription()));
 
-      // LOCATION TAGGER: capture words between {}, check if location exist, replace by a link
-      $lieu->setDescription($baliseur->baliserLieux($lieu->getDescription()));
+      $unlocker->sync($lieu, $form->get('unlockedBy')->getData());
+      $unlocker->syncAccess($lieu);
 
       $this->getDoctrine()->getManager()->flush();
       $this->addFlash('success', 'Le Lieu a bien été modifié.');
@@ -175,7 +174,7 @@ class AdminLieuController extends AbstractController
    * @Route("/admin/lieu/{id}/delete", name="admin_lieu_delete", methods={"POST"})
    * @IsGranted("ROLE_MJ")
    */
-  public function deleteLieu(Request $request, Lieu $lieu, FileHandler $fileHandler): Response {
+  public function deleteLieu(Request $request, Lieu $lieu, FileHandler $fileHandler, Unlocker $unlocker): Response {
 
     if ($this->isCsrfTokenValid('delete' . $lieu->getId(), $request->request->get('_csrf_token'))) {
 
@@ -185,6 +184,7 @@ class AdminLieuController extends AbstractController
       $fileHandler->handle(null, $lieu->getCarte(), null, 'lieux');
       $fileHandler->handle(null, $lieu->getIcone(), null, 'lieux');
 
+      $unlocker->forget($lieu);
       $entityManager->remove($lieu);
       $entityManager->flush();
       $this->addFlash('success', 'Le Lieu a bien été supprimé.');

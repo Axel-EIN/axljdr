@@ -7,9 +7,12 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass=AvantageRepository::class)
+ * @ORM\HasLifecycleCallbacks
  */
 class Avantage
 {
+    use PublishableTrait;
+
     /**
      * @ORM\Id
      * @ORM\GeneratedValue

@@ -2,7 +2,6 @@
 
 /* ----- SOMMAIRE ----- */
 
-/* Sa lisibilite vient de .blur-cartouche, pas d'un degrade sur l'image. */
 #sommaire {
     display: flex;
     flex-direction: column;
@@ -36,6 +35,36 @@
     }
 }
 
+/* ----- SOURCE PDF ----- */
+
+.btn-pdf-source {
+    position: absolute;
+    z-index: 10;
+    right: 1rem;
+    bottom: 1rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.4rem 1rem;
+    border-radius: 2rem;
+    background-color: rgb(from var(--color-primary) r g b / 0.5);
+    backdrop-filter: blur(8px);
+    color: var(--color-white);
+    font-size: var(--fontsize-small);
+
+    & > img { width: 20px; }
+
+    &:hover {
+        background-color: rgb(from var(--color-primary) r g b / 0.75);
+        color: var(--color-white);
+    }
+
+    @media (max-width: 991.98px) {
+        top: 1rem;
+        bottom: auto;
+    }
+}
+
 .part-header {
     position: relative;
     margin-top: 2rem;
@@ -51,8 +80,6 @@
         width: 30%;
     }
 
-    /* L'encadre est place AVANT le texte dans le template, le float:right le
-       remontant a droite : d'ou le flex + order pour l'envoyer dessous. */
     @media (max-width: 991.98px) {
         display: flex;
         flex-direction: column;
@@ -69,5 +96,5 @@
 
 .aside > p {
     font-size: var(--fontsize-small);
-    line-height: 1.6;
+    line-height: var(--leading-16);
 }

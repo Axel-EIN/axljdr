@@ -5,56 +5,51 @@ volontairement en cours de route avec la raison — pour ne pas le reproposer
 tant que ce n'est pas à l'ordre du jour, et pour retrouver le contexte le jour
 où ça le devient.
 
-## Brouillon et publication des saisons
+## Publication des saisons et des chapitres
 
-Aujourd'hui « la saison en cours » se déduit d'un seul fait : c'est la dernière
-créée. La barre de saison de l'accueil le lit à l'envers — pas de saison
-suivante, donc celle-ci est en cours — et le partial Historique s'appuie sur la
-même règle pour cacher son titre.
+Le palier `access` et ses dates couvrent treize entités, dont l'épisode, mais
+**pas Saison ni Chapitre** : cf. « Accueil » dans
+[specs.md](specs.md) pour ce qui est en place.
 
-Conséquence acceptée : créer une saison à l'avance ferait immédiatement perdre
-son « en cours » à la saison réellement jouée. Ça ne gêne pas tant que le MJ
-crée les saisons au fil du jeu.
+Conséquence, « la saison en cours » se déduit toujours d'un seul fait : c'est la
+dernière créée. La barre de saison de l'accueil Aventure le lit à l'envers — pas
+de saison suivante, donc celle-ci est en cours — et le partial Historique
+s'appuie sur la même règle pour cacher son titre. Créer une saison à l'avance lui
+ferait donc perdre son « en cours » au profit de celle qu'on prépare.
 
-Le jour où on voudra préparer une saison à l'avance, il faudra un état de
-publication (brouillon / publiée) plutôt qu'une déduction sur le numéro. Ça
-donnerait aussi de quoi préparer chapitres et épisodes sans les exposer.
+Le jour où on voudra préparer une saison à l'avance : le palier sur Saison et
+Chapitre, et « en cours » qui bascule sur la dernière saison publiée.
 
-## Chronologie
+## Date rokuganaise
 
-Deux dates différentes à ne pas confondre.
+Une date dans le jeu — « Fondation de l'Empire, An 10 » — sur `Archive`, sur les
+scènes et sur les épisodes. Elle ouvrirait deux vues : la chronologie de l'Empire
+côté Archives, et le déroulé de la campagne côté Aventure.
 
-**La date réelle.** Il n'y a pas de date en base : « le plus récent » se déduit
-du numéro donné par le MJ. L'accueil affiche donc les chapitres du numéro le
-plus élevé au plus bas, et c'est cet ordre-là qui définit la récence. Avec des
-dates, on pourrait distinguer l'ordre de lecture (le numéro, choisi par le MJ)
-de la chronologie réelle, et calculer « récent » sur autre chose qu'un rang.
+À ne pas confondre avec les dates réelles, `createdAt` et `publishedAt`, qui sont
+en place et ne parlent que de la vie du site.
 
-**La date dans le jeu.** Une date rokuganaise sur `Archive` (« Fondation de
-l'Empire — An 10 ») et sur les scènes et épisodes ouvre deux vues : la
-chronologie de l'Empire côté Archives, et le déroulé de la campagne côté
-Aventure.
+## Objets du personnage
 
-## Rubrique « Quoi de neuf »
+Les sorts connus sont en place — `FichePersonnage.knownSpells`, groupés par
+anneau, mécanique révélée dans un popover au clic, cf. « Personnages › Fiche »
+dans [specs.md](specs.md). **Il manque le pendant côté objets** : une table de
+liaison vers `Objet`, pour dire ce que le personnage possède. La fiche ne
+référence aujourd'hui que `arme`, `arme2` et `armure`.
 
-L'accueil du site est pour l'instant la page Aventure de la saison courante.
-Elle doit céder la place à une rubrique « Quoi de neuf », qui reste à définir.
-
-## Sorts et objets du personnage
-
-Deux tables de liaison depuis `FichePersonnage` : une vers `Sort`, une vers
-`Objet`. La fiche ne référence aujourd'hui que `arme`, `arme2` et `armure` —
-rien ne dit ce que le personnage possède, ni ce qu'il sait lancer.
-
-Les sorts s'affichent groupés par élément, leur mécanique se révélant au survol
-sur desktop et au clic sur mobile. Les objets reprennent ce qui a été choisi à
-la création du personnage.
+À ne pas confondre avec `Scene.foundObjects` (table `found_object`), qui est en
+place : elle dit ce qui a été **trouvé pendant une scène**, et alimente le bloc
+« Objets découverts » de l'accueil. Elle ne dit rien de qui le garde.
 
 ## Notes des joueurs
 
-Aucune entité `Note` n'existe. Premier palier : une seule zone éditable par
-joueur. Ensuite une table, avec une visibilité privée ou partagée, et un
-rattachement à une entité — PNJ, lieu, épisode, chapitre.
+Le premier palier est en place, mais **sur le personnage et non sur le joueur** :
+`Personnage.playerNotes` et `Personnage.gmNotes`, éditées en place sur le Profil,
+cf. « Personnages › Profil » dans [specs.md](specs.md).
+
+Reste à faire, le jour où ça se justifie : une entité `Note` à part, avec une
+visibilité privée ou partagée, et un rattachement à une autre entité — PNJ, lieu,
+épisode, chapitre.
 
 ## Recherche globale
 
@@ -69,19 +64,16 @@ Carte à part entière. Une table de liaison personnage ↔ lieu, alimentée par
 scène où le lieu est visité, permettrait de retracer le chemin parcouru.
 
 À vérifier avant de créer la table : le trajet est déjà déductible en suivant
-`participations → scène → lieu`.
+`participations → scène → lieu`. Et `character_unlock` écrit déjà ce lien pour
+débloquer les lieux visités, avec sa date et son drapeau `by_meeting` — la table
+de liaison demandée ici existe donc en partie, pour les seuls lieux au palier
+automatique.
 
 ## Timeline du personnage
 
 Les données sont déjà en base dans `Participation` (XP par scène, mort, bonus) :
 il ne manque que la vue — progression d'XP, épisodes traversés, changements de
 rang.
-
-## Personnage principal du joueur
-
-Un joueur peut avoir plusieurs personnages ; en désigner un comme principal
-donnerait un avatar par défaut à qui n'en a pas choisi. Le repli actuel est un
-portrait aléatoire servi par `pravatar.cc`.
 
 ## Export et impression de la fiche
 

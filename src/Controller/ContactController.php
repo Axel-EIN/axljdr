@@ -24,7 +24,7 @@ class ContactController extends AbstractController
 
         if ($formulaire->isSubmitted() && $formulaire->isValid()) {
 
-            $data = $formulaire->getData(); // Pour récupérer toutes les infos (en tableau associatif)
+            $data = $formulaire->getData();
 
             $email = new Email;
             $email

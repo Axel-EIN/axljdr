@@ -41,7 +41,6 @@ class LoginAuthenticator extends AbstractLoginFormAuthenticator
             new PasswordCredentials($request->request->get('password', '')),
             [
                 new CsrfTokenBadge('authenticate', $request->request->get('_csrf_token')),
-                // new RememberMeBadge(), // add this to make RememberMe Cookie working on Symfony 5.3
             ]
         );
     }
@@ -52,14 +51,11 @@ class LoginAuthenticator extends AbstractLoginFormAuthenticator
             return new RedirectResponse($targetPath);
         }
 
-        // For example:
-        return new RedirectResponse($this->urlGenerator->generate('aventure'));
-        // throw new \Exception('TODO: provide a valid redirect inside '.__FILE__);
+        return new RedirectResponse($this->urlGenerator->generate('news'));
     }
 
     protected function getLoginUrl(Request $request): string
     {
-        // dd($this->urlGenerator->generate(self::LOGIN_ROUTE), $request->getPathInfo());
         return $this->urlGenerator->generate(self::LOGIN_ROUTE);
     }
 }

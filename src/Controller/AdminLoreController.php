@@ -13,6 +13,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use App\Service\Unlocker;
 
 class AdminLoreController extends AbstractController
 {
@@ -39,7 +40,8 @@ class AdminLoreController extends AbstractController
                 'part1:part1text:bool',
                 'part2:part1text:bool',
                 'part3:part1text:bool',
-                'locked:Bloqué:boolInt',
+                'access:Accès:access',
+                'publishedAt:Publié le:date',
             ],
         ]);
     }
@@ -48,7 +50,7 @@ class AdminLoreController extends AbstractController
      * @Route("/admin/lore/create", name="admin_lore_create")
      * @IsGranted("ROLE_MJ")
      */
-    public function addLore(Request $request, EntityManagerInterface $em, FileHandler $fileHandler, LoreRepository $loreRepository, Numeroteur $numeroteur): Response
+    public function addLore(Request $request, EntityManagerInterface $em, FileHandler $fileHandler, LoreRepository $loreRepository, Numeroteur $numeroteur, Unlocker $unlocker): Response
     {
         $lore = new Lore;
         $form = $this->createForm(AdminLoreType::class, $lore);
@@ -69,6 +71,9 @@ class AdminLoreController extends AbstractController
             }
 
             $em->persist($lore);
+            $em->flush();
+
+            $unlocker->sync($lore, $form->get('unlockedBy')->getData());
             $em->flush();
             $this->addFlash('success', 'Le Lore a bien été ajouté');
 
@@ -95,11 +100,12 @@ class AdminLoreController extends AbstractController
      * @Route("/admin/lore/{id}/edit", name="admin_lore_edit")
      * @IsGranted("ROLE_MJ")
      */
-    public function editLore(Request $request, Lore $lore, FileHandler $fileHandler, LoreRepository $loreRepository, Numeroteur $numeroteur): Response
+    public function editLore(Request $request, Lore $lore, FileHandler $fileHandler, LoreRepository $loreRepository, Numeroteur $numeroteur, Unlocker $unlocker): Response
     {
         $numeroDepart = $lore->getNumero();
 
         $form = $this->createForm(AdminLoreType::class, $lore);
+        $form->get('unlockedBy')->setData($unlocker->charactersOf($lore));
         $form->handleRequest($request);
 
         if ( $form->isSubmitted() && $form->isValid() ) {
@@ -119,12 +125,13 @@ class AdminLoreController extends AbstractController
                 $lore->setPdf($fileHandler->handle($nouveauPDF, $lore->getPdf(), $prefix, 'pdf-lores'));
             }
 
-            // RE-ORDERING : if number has changed or if parent has changed
             if ($numeroDepart != $lore->getNumero())
             {
                 $fratrie = $loreRepository->findAll();
                 $numeroteur->reordonnerNumero($lore->getId(), $numeroDepart, $lore->getNumero(), $fratrie, $fratrie);
             }
+
+            $unlocker->sync($lore, $form->get('unlockedBy')->getData());
 
             $this->getDoctrine()->getManager()->flush();
             $this->addFlash('success', 'Le Lore a bien été modifiée');
@@ -150,7 +157,7 @@ class AdminLoreController extends AbstractController
      * @Route("/admin/lore/{id}/delete", name="admin_lore_delete", methods={"POST"})
      * @IsGranted("ROLE_MJ")
      */
-    public function deleteLore(Request $request, Lore $lore, FileHandler $fileHandler, EntityManagerInterface $em, LoreRepository $loreRepository, Numeroteur $numeroteur): Response
+    public function deleteLore(Request $request, Lore $lore, FileHandler $fileHandler, EntityManagerInterface $em, LoreRepository $loreRepository, Numeroteur $numeroteur, Unlocker $unlocker): Response
     {
         if ( $this->isCsrfTokenValid('delete' . $lore->getId(), $request->request->get('_csrf_token')))
         {
@@ -161,6 +168,7 @@ class AdminLoreController extends AbstractController
             $fratrie = $loreRepository->findAll();
             $numeroteur->reordonnerNumero($lore->getId(), $lore->getNumero(), -1, $fratrie, []);
 
+            $unlocker->forget($lore);
             $em->remove($lore);
             $em->flush();
             $this->addFlash('success', 'Le Lore a bien été supprimé');    

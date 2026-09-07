@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\Entity\Clan;
 use App\Entity\Personnage;
+use Doctrine\ORM\EntityRepository;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\CallbackTransformer;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -60,23 +61,24 @@ class AdminClanType extends AbstractType
                 'choice_label' => 'prenom',
                 'group_by' => 'clan.nom',
                 'placeholder' => 'Non défini',
-                'required' => false
+                'required' => false,
+                'query_builder' => fn(EntityRepository $er) => $er->createQueryBuilder('p')
+                    ->leftJoin('p.clan', 'c')->orderBy('c.nom', 'ASC')->addOrderBy('p.prenom', 'ASC'),
             ])
-            ->add('locked', CheckboxType::class, ['required' => false])
         ;
 
         $builder
             ->get('estMajeur')
             ->addModelTransformer(new CallbackTransformer(
                 function ($activeAsString) {
-                    // transform the string to boolean
                     return (bool)(int)$activeAsString;
                 },
                 function ($activeAsBoolean) {
-                    // transform the boolean to string
                     return (string)(int)$activeAsBoolean;
                 }
             ));
+
+        PublishableFields::add($builder);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

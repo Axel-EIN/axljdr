@@ -9,12 +9,14 @@
 
 {% block cartes %}
 
+  {% set principal = app.user.mainCharacter %}
+
   <div class="col-12 col-lg-6">
     <div class="card card-page">
       <h2 class="heading-cardtitle">Informations Personnelles</h2>
       <hr>
 
-      <dl class="compte-infos">
+      <dl class="account-infos">
         <dt>Votre Pseudo</dt>
         <dd><strong>{{ app.user.pseudo }}</strong></dd>
 
@@ -28,7 +30,7 @@
         </dd>
 
         <dt>Votre statut de compte</dt>
-        <dd><strong>{{ app.user.isVerified == 1 ? 'Vérifié' : 'Non-vérifié' }}</strong></dd>
+        <dd><strong>{{ app.user.isVerified ? 'Vérifié' : 'Non-vérifié' }}</strong></dd>
 
         <dt>Vos rôles</dt>
         <dd>
@@ -41,7 +43,7 @@
 
         <dt>Votre avatar</dt>
         <dd>
-          <img class="img-128" src="{{ asset(app.user.avatar|default(NA_PERSO_PORTRAIT)) }}" alt="Avatar de l'utilisateur" />
+          {{ include('parts/avatar.html.twig', {user: app.user, size: 128}) }}
           <a href="{{ path('mon_compte_avatar') }}"><i class="fas fa-edit" aria-hidden="true"></i> Modifier</a>
         </dd>
       </dl>
@@ -50,13 +52,56 @@
 
   <div class="col-12 col-lg-6">
     <div class="card card-page">
-      <h2 class="heading-cardtitle">Mes Personnages ({{ app.user.personnages|length }})</h2>
+      <h2 class="heading-cardtitle">Mon Personnage Principal</h2>
       <hr>
 
-      {# Grille propre a cette carte : c'est le seul endroit du site ou un
-         personnage est montre avec le lien vers sa fiche privee. #}
-      <div class="compte-personnages">
-        {% for un_personnage in app.user.personnages %}
+      {% if principal %}
+        <div class="account-main">
+          <a href="{{ path('personnage_profil', {id: principal.id}) }}" class="hover-zoom">
+            <img src="{{ asset(principal.icone|default(NA_PERSO_PORTRAIT)) }}" alt="Portrait de {{ principal.prenom }}" />
+          </a>
+          <div>
+            {% if principal.clan %}
+              <img class="img-24" src="{{ asset(principal.clan.mon|default(NA_MON)) }}" alt="Mon du Clan {{ principal.clan.nom }}" />
+            {% endif %}
+            <strong>{{ principal.nom }} {{ principal.prenom }}</strong>
+            {% if principal.fichePersonnage is not empty %}
+              <a href="{{ path('personnage_fiche', {id: principal.fichePersonnage.id}) }}">
+                <i class="fas fa-user-secret" aria-hidden="true"></i> Fiche privée
+              </a>
+            {% endif %}
+          </div>
+        </div>
+      {% else %}
+        <p class="text-muted font-italic">Vous n'avez pas encore choisi de personnage principal.</p>
+      {% endif %}
+
+      {% if app.user.personnages|length %}
+        <form class="account-choice" method="post" action="{{ path('mon_compte_main_character') }}">
+          <input type="hidden" name="_csrf_token" value="{{ csrf_token('main-character') }}" />
+          <label for="main-character">Choisir mon personnage principal</label>
+          <select id="main-character" name="personnage">
+            <option value="">Automatique — le plus récent</option>
+            {% for un_personnage in app.user.personnages %}
+              <option value="{{ un_personnage.id }}"{% if principal and un_personnage.id == principal.id %} selected{% endif %}>
+                {{ un_personnage.nom }} {{ un_personnage.prenom }}
+              </option>
+            {% endfor %}
+          </select>
+          <label class="account-choice-toggle" for="sans-personnage">
+            <input type="checkbox" id="sans-personnage" name="sans_personnage" value="1"{{ app.user.withoutCharacter ? ' checked' }} />
+            Naviguer sans personnage
+          </label>
+
+          <button type="submit" class="btn-primary-style btn-medium">Valider</button>
+        </form>
+      {% endif %}
+
+      <h2 class="heading-cardtitle">Mes Autres Personnages</h2>
+      <hr>
+
+      <div class="account-characters">
+        {% for un_personnage in app.user.personnages|filter(p => principal is empty or p.id != principal.id) %}
           <article>
             <a href="{{ path('personnage_profil', {id: un_personnage.id}) }}" class="hover-zoom">
               <img src="{{ asset(un_personnage.icone|default(NA_PERSO_PORTRAIT)) }}" alt="Portrait de {{ un_personnage.prenom }}" />
@@ -71,7 +116,7 @@
             {% endif %}
           </article>
         {% else %}
-          <p class="text-muted font-italic">Il n'y a pas encore de personnage sur ce compte.</p>
+          <p class="text-muted font-italic">Il n'y a pas d'autre personnage sur ce compte.</p>
         {% endfor %}
       </div>
     </div>

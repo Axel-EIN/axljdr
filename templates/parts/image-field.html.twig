@@ -1,0 +1,16 @@
+
+{{ form_label(field, label|default(null)) }}
+<label for="{{ input_id }}" class="preview-label {{ preview_class|default('') }} hover-slight-fade hover-pointer hover-icon-visible">
+    <span class="btn-icon-medium topright-corner-inside-more"><i class="fas fa-edit semi-visible text-white"></i></span>
+    <img id="{{ prefix }}-preview" class="img-fluid border-soft" src="{{ asset(current|default(fallback)) }}" />
+    <span id="{{ prefix }}-filename" class="filename"></span>
+</label>
+<div class="browser">{{ form_widget(field, {'attr': {'class': 'input-' ~ prefix}}) }}</div>
+
+{% if width is defined and height is defined %}
+    {{ include('parts/image-cropper.html.twig', {input_id: input_id, width: width, height: height}) }}
+{% endif %}
+
+{% if deletable is defined ? deletable : true %}
+    {{ include('parts/image-delete-button.html.twig', {input_id: input_id, field_name: field.vars.name, current: current}) }}
+{% endif %}

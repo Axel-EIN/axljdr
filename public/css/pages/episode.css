@@ -20,12 +20,12 @@
       filter: brightness(0.66) saturate(0);
       transition: 0.5s var(--ease);
       width: 120px;
-      border: solid var(--primary-trans) 1px;
+      border: solid var(--color-primary40) 1px;
 
       &:hover { z-index: 100; }
       &.active {
         width: 180px;
-        border: solid var(--primary) 1px;
+        border: solid var(--color-primary) 1px;
       }
 
       &:hover .titre { visibility: visible; }
@@ -43,7 +43,7 @@
         color: var(--color-white);
         font-weight: bold;
         font-size: var(--fontsize-small);
-        background-color: var(--primary);
+        background-color: var(--color-primary);
         border-radius: 4px;
         padding: 4px 8px;
       }

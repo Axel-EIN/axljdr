@@ -1,0 +1,7 @@
+/* -------- BASCULE LECTURE / EDITION -------- */
+
+.edit-only { display: none; }
+
+.edit-mode .edit-only { display: revert; }
+
+.edit-mode .read-only { display: none; }

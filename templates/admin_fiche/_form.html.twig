@@ -56,7 +56,7 @@
                 {{ form_row(form.knownSpells) }}
             </div>
 
-            {{ include('/parts/btn-form.html.twig') }}
+            {{ include('/btns/btn-form.html.twig') }}
     {{ form_end(form) }}
 
     <script>
@@ -103,9 +103,7 @@
                 });
             }
 
-            // Premier rendu sur valeur initiale
             render(hiddenSpe.value || '');
-            // Re-render si la compétence change : on repart sur le bitmask déjà saisi (rebind labels)
             compSelect.addEventListener('change', () => {
                 const current = readBitmask() || hiddenSpe.value || '';
                 render(current);

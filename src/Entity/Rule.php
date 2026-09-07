@@ -7,9 +7,13 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass=RuleRepository::class)
+ * @ORM\HasLifecycleCallbacks
  */
 class Rule
 {
+    use PublishableTrait;
+    use PartsTrait;
+
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
@@ -116,11 +120,6 @@ class Rule
      * @ORM\Column(type="integer")
      */
     private $numero;
-
-    /**
-     * @ORM\Column(type="boolean")
-     */
-    private $locked = false;
 
     public function getId(): ?int
     {
@@ -363,18 +362,6 @@ class Rule
     public function setNumero(int $numero): self
     {
         $this->numero = $numero;
-
-        return $this;
-    }
-
-    public function getLocked(): ?bool
-    {
-        return $this->locked;
-    }
-
-    public function setLocked(bool $locked): self
-    {
-        $this->locked = $locked;
 
         return $this;
     }

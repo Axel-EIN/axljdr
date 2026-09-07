@@ -7,9 +7,12 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass=ArchiveRepository::class)
+ * @ORM\HasLifecycleCallbacks
  */
 class Archive
 {
+    use PublishableTrait;
+
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
@@ -36,11 +39,6 @@ class Archive
      * @ORM\Column(type="text")
      */
     private $contenu;
-
-    /**
-     * @ORM\Column(type="boolean")
-     */
-    private $locked;
 
     public function getId(): ?int
     {
@@ -91,18 +89,6 @@ class Archive
     public function setContenu(string $contenu): self
     {
         $this->contenu = $contenu;
-
-        return $this;
-    }
-
-    public function getLocked(): ?bool
-    {
-        return $this->locked;
-    }
-
-    public function setLocked(bool $locked): self
-    {
-        $this->locked = $locked;
 
         return $this;
     }

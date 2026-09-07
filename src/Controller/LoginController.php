@@ -98,7 +98,6 @@ class LoginController extends AbstractController
 
             $this->addFlash('success', 'E-mail de réinitialisation du mot de passe a été envoyé !');
 
-            // On redirige vers la page de login
             return $this->redirectToRoute('app_login');
         }
 
@@ -134,10 +133,8 @@ class LoginController extends AbstractController
 
             $this->addFlash('success', 'Mot de passe mis à jour');
 
-            // On redirige vers la page de connexion
             return $this->redirectToRoute('app_login');
         }else {
-            // Si on n'a pas reçu les données, on affiche le formulaire
             return $this->render('mon_compte/modifier_mdp.html.twig',['form' => $form->createView()]);
         }
     }

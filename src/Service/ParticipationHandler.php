@@ -11,12 +11,14 @@ class ParticipationHandler
     private $repo;
     private $entity;
     private $sessionFlash;
+    private $unlocker;
 
-    public function __construct(PersonnageRepository $personnageRepository, EntityManagerInterface $entityManagerInterface, RequestStack $requestStack )
+    public function __construct(PersonnageRepository $personnageRepository, EntityManagerInterface $entityManagerInterface, RequestStack $requestStack, Unlocker $unlocker )
     {
         $this->repo = $personnageRepository;
         $this->entity = $entityManagerInterface;
         $this->sessionFlash = $requestStack->getSession()->getFlashBag();
+        $this->unlocker = $unlocker;
     }
 
     public function ajouterParticipations($participants_a_ajoutes, $scene)
@@ -33,6 +35,7 @@ class ParticipationHandler
                     $nouvelle_participation->setEstPj($participants_a_ajoutes[$cle]['estPj']);
                     $nouvelle_participation->setXpBonus(!empty($participants_a_ajoutes[$cle]['xpBonus']));
                     $this->entity->persist($nouvelle_participation);
+
                     $this->sessionFlash->add('success', 'Le personnage ' . $personnage->getPrenom() . ' a bien été ajouté en participant !');
                 } else {
                     $this->sessionFlash->add('danger', 'Le personnage n\'a pu être ajouté en participant !');

@@ -18,7 +18,6 @@
     @media (max-width: 991.98px) {
         background-size: cover;
 
-        /* `svh` et non `vh` : sur mobile `vh` ignore la barre d'adresse. */
         min-height: calc(100svh - var(--nav-height));
     }
 }
@@ -31,7 +30,6 @@
     margin-top: auto;
 }
 
-/* display obligatoire : en inline, la width des classes col-* est inerte. */
 #right-part {
     display: flex;
     flex-direction: column;
@@ -128,7 +126,7 @@
     z-index: 5;
     top: 1rem;
     left: 2rem;
-    color: var(--color-white-50);
+    color: var(--color-white50);
 
     &:hover {
         cursor: pointer;

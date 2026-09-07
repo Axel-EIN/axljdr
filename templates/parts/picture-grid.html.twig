@@ -1,10 +1,14 @@
 {% if items is defined and (items is not empty or empty_message is defined) %}
 
-  {% set variant = variant|default('thumbnail') %}
+  {% set reveal_auto = reveal_auto|default(false) %}
+  {% set items = element_sort(items|filter(item => element_listed(item, reveal_auto))) %}
+  {% set variant = variant|default('landscape') %}
+  {% set shape = {landscape: '1610', rule: '43', icon: '11'}[variant]|default('1610') %}
+  {% set pin = {portrait: 'pin-topleft', icon: 'pin-downcenter'}[variant]|default('') %}
+  {% set show_label = variant != 'portrait' %}
 
   {% if per_row is defined %}
     {% set cols = per_row is iterable ? per_row : {desktop: per_row} %}
-    {# Largeur mini a zero, sinon la rangee imposee deborderait sur mobile. #}
     {% set style = '--grid-min: 0' %}
     {% for palier, nombre in cols %}
       {% set style = style ~ '; --cols-' ~ palier ~ ': ' ~ nombre %}
@@ -17,63 +21,68 @@
   {% if title is defined %}
     <div class="{{ wrapper|default('col-12') }}">
       <div class="card card-body">
-        {% if btn_add is defined %}{{ include('/parts/btn-ajouter-element.html.twig', btn_add) }}{% endif %}
+        {% if btn_add is defined %}{{ include('/btns/btn-add-element.html.twig', btn_add) }}{% endif %}
         <h2 class="heading-cardtitle">{{ title }}</h2>
         <hr>
   {% endif %}
 
-  <div class="picture-grid {{ variant }} {{ title is not defined ? wrapper|default('') }}" style="{{ style }}">
+  <div class="picture-grid {{ title is not defined ? wrapper|default('') }}" style="{{ style }}">
     {% for item in limit is defined ? items|slice(0, limit) : items %}
 
-      {% set locked = item.locked|default(false) %}
-      {% set hidden = locked and not is_granted('ROLE_MJ') %}
-      {% set grayscale = hidden ? 'grayscale' : '' %}
+      {% set state = element_state(item, reveal_auto) %}
+      {% set hidden = not element_readable(item) %}
+      {% set locked = state == 'locked' %}
+      {% set item_class = (element_unseen(item) ? 'access-hidden ' : '') ~ (locked ? 'locked ' : '') ~ (hidden ? '' : 'hover-zoom') %}
       {% set name = item.nom is defined ? item.nom : item.titre %}
       {% if item.prenom is defined %}{% set name = (name ? name ~ ' ' : '') ~ item.prenom %}{% endif %}
       {% set alt = hidden ? 'À découvrir' : name %}
-      {% set image_na = item.pdf|default(null) ? NA_PDF : na_image|default(NA_ICON) %}
+      {% set pdf_only = item.pdf|default(null) and not item.hasParts|default(false) %}
+      {% set image_na = pdf_only ? NA_PDF : na_image|default(NA_ICON) %}
+      {% set href = pdf_only ? asset(item.pdf) : (route is defined ? path(route, {id: item.id}) : element_url(item)) %}
 
-      <a class="{{ hidden ? 'translucide locked' : 'hover-zoom' }}"
-         {% if hidden %}aria-disabled="true"{% else %}title="{{ name }}"
-           href="{{ item.pdf|default(null) ? asset(item.pdf) : path(route, {id: item.id}) }}"{% endif %}>
+      <a class="picture-item {{ variant }} {{ item_class }}"
+         {% if hidden or not href %}aria-disabled="true"{% else %}{% if show_label %}title="{{ name }}" {% endif %}href="{{ href }}"{% endif %}>
+        <div class="image-container {% if locked %}slight-fade{% endif %}">
 
-        {% if locked %}
-          {% if hidden %}
-            <img class="absolute icon-lock grayscale fa-beat-fade" src="{{ asset(LOCKED_ICO) }}" alt="Cadenas" />
-            <span class="hover-tooltip">À débloquer</span>
-          {% else %}
-            <img class="absolute icon-lock-corner" src="{{ asset(LOCKED_ICO) }}" alt="Verrouillé" title="Verrouillé pour les joueurs" />
+          {{ include('parts/badge-access.html.twig', {state: state}) }}
+
+          {% if locked %}
+            <img class="icon-lock fa-beat-fade" src="{{ asset(LOCKED_ICO) }}" alt="Cadenas" />
           {% endif %}
-        {% endif %}
 
-        {% if variant == 'portrait' %}
-          {% set na_genre = item.genre == 'F' ? NA_PERSO_PORTRAIT_F : (item.genre == 'M' ? NA_PERSO_PORTRAIT_M : NA_PERSO_PORTRAIT) %}
-          <img class="picture {{ grayscale }}" src="{{ asset(item.icone|default(na_genre)) }}" alt="{{ alt }}" />
+          {% if element_fresh(item) %}{{ include('parts/badge-new.html.twig', {variant: pin}) }}{% endif %}
 
-        {% elseif variant == 'emblem' %}
-          <span class="hover-ray">
-            <img class="picture {{ grayscale }}" src="{{ asset(attribute(item, field|default('mon'))|default(image_na)) }}" alt="{{ alt }}" />
-          </span>
-
-        {% elseif not force_image|default(false) and item.icone|default(null) %}
-          <div class="frame ratio-{{ ratio|default('1610') }}">
-            <img class="badge-center img-128 {{ grayscale }}" src="{{ asset(item.icone) }}" alt="{{ alt }}" />
-          </div>
-
-        {% else %}
-          {% if item.pdf|default(null) %}<img class="badge-corner" src="{{ asset(PDF) }}" alt="Icône PDF" />{% endif %}
-          <div class="frame ratio-{{ ratio|default('1610') }}">
-            <img class="ratio-cropped {{ grayscale }}" src="{{ asset(item.imageAffichee|default(item.image|default(image_na))) }}" alt="{{ alt }}" />
-            {% if not hidden and item.icone|default(null) %}
-              <img class="badge-center img-128 icon-on-hover" src="{{ asset(item.icone) }}" alt="" />
+          {% if variant == 'portrait' %}
+            {% set na_genre = item.genre == 'F' ? NA_PERSO_PORTRAIT_F : (item.genre == 'M' ? NA_PERSO_PORTRAIT_M : NA_PERSO_PORTRAIT) %}
+            <img class="picture {{ item.dead|default(false) ? 'effect-dead' }}" src="{{ asset(item.icone|default(na_genre)) }}" alt="{{ alt }}" />
+            {% if not hidden and item.dead|default(false) %}
+              <img class="character-icon-dead" src="{{ asset(MORT_ICO) }}" alt="est mort" />
             {% endif %}
-          </div>
-        {% endif %}
 
-        {% if label is defined ? label : variant != 'portrait' %}
-          <div class="label {{ size is defined ? 'text-' ~ size }}">{{ name }}</div>
-        {% endif %}
+          {% elseif variant == 'emblem' %}
+            <span class="hover-ray">
+              <img class="picture" src="{{ asset(attribute(item, field|default('mon'))|default(image_na)) }}" alt="{{ alt }}" />
+            </span>
 
+          {% elseif variant == 'icon' and item.icone|default(null) %}
+            <img class="picture" src="{{ asset(item.icone) }}" alt="{{ alt }}" />
+
+          {% else %}
+            {% if pdf_only %}<img class="badge-corner" src="{{ asset(PDF) }}" alt="Icône PDF" />{% endif %}
+            <div class="frame ratio-{{ shape }}">
+              <img class="ratio-cropped" src="{{ asset(item.imageAffichee|default(item.image|default(image_na))) }}" alt="{{ alt }}" />
+              {% if not hidden and item.icone|default(null) %}
+                <img class="hover-icon" src="{{ asset(item.icone) }}" alt="" />
+              {% endif %}
+            </div>
+          {% endif %}
+
+          {% if not show_label and not hidden %}
+            <span class="hover-tooltip"><span class="label">{{ name }}</span></span>
+          {% endif %}
+        </div>
+
+        {% if show_label %}<div class="label">{{ name }}</div>{% endif %}
       </a>
 
     {% else %}

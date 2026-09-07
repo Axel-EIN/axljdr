@@ -39,7 +39,7 @@ class PersonnageRepository extends ServiceEntityRepository
         $this->applySaisonChapitreEpisodeFilter($qb, $saisonId, $chapitreId, $episodeId);
 
         return $qb
-            ->addOrderBy('p.estMort', 'ASC')
+            ->addOrderBy('p.status', 'ASC')
             ->addOrderBy('c.estMajeur', 'DESC')
             ->addOrderBy('c.nom', 'ASC')
             ->addOrderBy('p.nom', 'ASC')
@@ -57,7 +57,7 @@ class PersonnageRepository extends ServiceEntityRepository
         $this->applySaisonChapitreEpisodeFilter($qb, $saisonId, $chapitreId, $episodeId);
 
         return $qb
-            ->addOrderBy('p.estMort', 'ASC')
+            ->addOrderBy('p.status', 'ASC')
 
             ->addOrderBy('c.estMajeur', 'DESC')
             ->addOrderBy('c.nom', 'ASC')
@@ -136,5 +136,13 @@ class PersonnageRepository extends ServiceEntityRepository
             ->getSingleScalarResult();
     }
 
-    // ->getOneOrNullResult permet de récupérer qu'un seul élément ou bien null
+    public function findRankable(): array
+    {
+        return $this->createQueryBuilder('p')
+            ->andWhere('p.estPj = true')
+            ->addOrderBy('p.prenom', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
+
 }

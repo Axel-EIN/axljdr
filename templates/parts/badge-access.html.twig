@@ -1,0 +1,14 @@
+{% set marks = {
+  'secret':          ['fa-eye-slash', 'Secret'],
+  'discovered':      ['fa-eye', 'Découvert'],
+  'locked':          ['fa-lock', 'Bloqué'],
+  'unlocked':        ['fa-lock-open', 'Débloqué'],
+  'auto-unlockable': ['fa-gear', 'À débloquer automatiquement'],
+  'auto-unlocked':   ['fa-gear', 'Débloqué automatiquement'],
+} %}
+
+{% if marks[state|default('')] is defined %}
+  <div class="badge-access {{ variant|default('') }}">
+    <i class="badge-font-icon {{ state }} fas {{ marks[state][0] }}" title="{{ title|default(marks[state][1]) }}"></i>
+  </div>
+{% endif %}

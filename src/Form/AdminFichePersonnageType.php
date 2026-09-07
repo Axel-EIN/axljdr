@@ -28,7 +28,9 @@ class AdminFichePersonnageType extends AbstractType
             ->add('personnage', EntityType::class, [
                 'class' => Personnage::class,
                 'choice_label' => 'prenom',
-                'required' => true
+                'required' => true,
+                'query_builder' => fn(EntityRepository $er) => $er->createQueryBuilder('p')
+                    ->orderBy('p.prenom', 'ASC'),
             ])
             ->add('creationExp', IntegerType::class)
             ->add('avantage1', EntityType::class, [

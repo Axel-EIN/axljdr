@@ -60,9 +60,17 @@ class Scene
      */
     private $lieu;
 
+    /**
+     * @ORM\ManyToMany(targetEntity=Objet::class)
+     * @ORM\JoinTable(name="found_object")
+     * @ORM\OrderBy({"nom" = "ASC"})
+     */
+    private $foundObjects;
+
     public function __construct()
     {
         $this->participations = new ArrayCollection();
+        $this->foundObjects = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -179,6 +187,30 @@ class Scene
     public function setLieu(?Lieu $lieu): self
     {
         $this->lieu = $lieu;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Objet[]
+     */
+    public function getFoundObjects(): Collection
+    {
+        return $this->foundObjects;
+    }
+
+    public function addFoundObject(Objet $foundObject): self
+    {
+        if (!$this->foundObjects->contains($foundObject)) {
+            $this->foundObjects[] = $foundObject;
+        }
+
+        return $this;
+    }
+
+    public function removeFoundObject(Objet $foundObject): self
+    {
+        $this->foundObjects->removeElement($foundObject);
 
         return $this;
     }

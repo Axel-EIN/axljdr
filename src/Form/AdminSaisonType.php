@@ -26,8 +26,6 @@ class AdminSaisonType extends AbstractType
                 'mapped' => false, 'data_class' => null, 'required' => false,
                 'constraints' => [new File(['maxSize' => '5M'])],
             ])
-            // mapped => false permet de ne pas le considerer comme un file ou string
-            // data_class => null permet d'avoir un null
             ->add('couleur', ColorType::class)
         ;
     }

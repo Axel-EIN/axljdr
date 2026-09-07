@@ -45,8 +45,9 @@ class AdminRuleType extends AbstractType
             ->add('part5titre', TextType::class, ['required' => false, 'constraints' => [ new Length( [ 'max' => 100 ] ) ] ] )
             ->add('part5', TextareaType::class, ['required' => false])
             ->add('part5aside', textareaType::class, ['required' => false])
-            ->add('locked', CheckboxType::class, ['required' => false])
         ;
+
+        PublishableFields::add($builder);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

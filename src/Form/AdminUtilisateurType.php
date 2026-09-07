@@ -2,9 +2,13 @@
 
 namespace App\Form;
 
+use App\Entity\Personnage;
 use App\Entity\Utilisateur;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -32,7 +36,6 @@ class AdminUtilisateurType extends AbstractType
             ])
             ->add('password', TextType::class)
             ->add('email', EmailType::class)
-            // required=false, sinon la case ne pourrait jamais être décochée.
             ->add('isVerified', CheckboxType::class, [
                 'label' => 'Compte vérifié — autorise la connexion sans confirmation par e-mail',
                 'required' => false,
@@ -42,6 +45,19 @@ class AdminUtilisateurType extends AbstractType
                 'constraints' => [new File(['maxSize' => '5M'])],
             ])
         ;
+
+        $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) {
+            $utilisateur = $event->getData();
+
+            $event->getForm()->add('mainCharacter', EntityType::class, [
+                'label' => 'personnage principal',
+                'class' => Personnage::class,
+                'choices' => $utilisateur ? $utilisateur->getPersonnages() : [],
+                'choice_label' => fn (Personnage $personnage) => $personnage->getNom() . ' ' . $personnage->getPrenom(),
+                'placeholder' => 'Automatique — le plus récent',
+                'required' => false,
+            ]);
+        });
     }
 
     public function configureOptions(OptionsResolver $resolver): void

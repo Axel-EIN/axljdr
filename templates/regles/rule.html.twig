@@ -12,26 +12,29 @@
 
             <div class="relative">
 
-                {{ include('parts/sommaire.html.twig', {un_element: rule, parts: 5}) }}
+                {{ include('rule-lore-library/summary.html.twig', {un_element: rule, parts: 5}) }}
 
                 {{ include('/parts/card-top-image.html.twig', {
                     image: rule.image,
                     na_image: NA_RULE,
                     alt: 'Image de ' ~ nom,
                     pdf: rule.pdf,
+                    state: element_state(rule),
+                    pdf_button: rule.hasParts,
                     img_class: 'crop-169',
                     titre: nom,
                 }) }}
             </div>
 
             {% for i in 1..5 %}
-                {{ include('parts/rule-lore-part.html.twig', {un_element: rule, i, entity: 'rule'}) }}
+                {{ include('rule-lore-library/part-row.html.twig', {un_element: rule, i, entity: 'rule'}) }}
             {% endfor %}
 
         </div>
     </div>
 
     {{ include('/parts/picture-grid.html.twig', {
+        variant: 'rule',
         title: 'Autres Règles ' ~ (rule.base ? 'de Bases' : 'Annexes'),
         items: autresRules, route: 'regles_rule',
         na_image: NA_RULE,

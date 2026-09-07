@@ -17,20 +17,19 @@
 
 .alert-persist {
     display: inline-block;
-    font-size: var(--fontsize-regular);
-    color: var(--color-white-50);
-    background-color: var(--color-black-50) !important;
-    border-color: var(--color-white-25) !important;
+    font-size: var(--fontsize-base);
+    color: var(--color-white50);
+    background-color: var(--color-black50) !important;
+    border-color: var(--color-white25) !important;
     margin-bottom: 0;
 }
 
-
 .dropdown-dark {
-    background-color: var(--secondary-pastel-darker);
-    border: 1px solid var(--color-white-25);
+    background-color: var(--color-secondarypasteldark);
+    border: 1px solid var(--color-white25);
 
     .dropdown-item {
-        color: var(--color-white-50);
+        color: var(--color-white50);
 
         
         &.active {
@@ -40,7 +39,7 @@
 
         &:hover, &:focus {
             color: var(--color-white);
-            background-color: var(--primary-darker);
+            background-color: var(--color-primarydarker);
         }
     }
 }
@@ -84,7 +83,7 @@
     font-size: var(--fontsize-small);
     padding: 0.2rem 0.5rem;
     border-radius: 0.5rem;
-    background-color: var(--primary-darker-more);
+    background-color: var(--color-primarydarken);
 }
 
 /* ------ CHARACTER PORTAITS ICONS ------ */
@@ -98,7 +97,7 @@
     &.large {
         width: 64px;
         border-radius: 5px;
-        box-shadow: 1px 1px 8px 2px var(--color-black-50);
+        box-shadow: 1px 1px 8px 2px var(--color-black50);
     }
 }
 

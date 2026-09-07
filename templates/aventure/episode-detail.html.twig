@@ -46,10 +46,11 @@
       </div>
 
       <div class="col-12 bg-stroke-container relative">
+        {{ include('parts/badge-access.html.twig', {state: element_state(episode)}) }}
         <h1 class="heading-episodedetail mb-0 mt-3 py-3">
           {{episode.titre}}
-          {% if app.user and is_granted("ROLE_MJ") %}            {% set color, position, redirect, entity, un_element, size = 'text-white-50', '', 'aventure', 'episode', episode, 'btn-icon-medium' %}
-            {{ include('/parts/btn-icon-edit.html.twig') }}
+          {% if app.user and is_granted("ROLE_MJ") %}            {% set color, position, redirect, entity, un_element, size = 'text-white50', '', 'aventure', 'episode', episode, 'btn-icon-medium' %}
+            {{ include('/btns/btn-icon-edit.html.twig') }}
           {% endif %}
         </h1>
       </div>

@@ -73,7 +73,7 @@
 
 /* ----- STYLE AMERIGO ----- */
 
-.label-amerigo, .heading-scene {
+.label-amerigo, .heading-scene, .heading-articlepart {
     font-family: "Amerigo";
     font-size: var(--fontsize-plus);
     color: var(--color-strong);
@@ -83,6 +83,13 @@
     @media (max-width: 991.98px) {
         font-size: var(--fontsize-regular);
     }
+}
+
+.heading-articlepart {
+    display: inline-block;
+    text-transform: uppercase;
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
 }
 
 .heading-scene {

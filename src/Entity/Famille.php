@@ -119,7 +119,7 @@ class Famille
         return $this->chef;
     }
 
-    public function setChef(Personnage $chef): self
+    public function setChef(?Personnage $chef): self
     {
         $this->chef = $chef;
 

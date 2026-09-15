@@ -26,7 +26,6 @@ class AdminLibraryType extends AbstractType
                 'required' => false])
             ->add('numero', IntegerType::class)
             ->add('entity', ChoiceType::class, [
-                'required' => false,
                 'label' => 'Bibliothèque', 
                 'choices'  => [
                     'Avantages / Désavantages' => 'avantage',

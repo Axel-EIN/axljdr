@@ -189,7 +189,7 @@ class Sort
         return $this->augmentations;
     }
 
-    public function setAugmentations(string $augmentations): self
+    public function setAugmentations(?string $augmentations): self
     {
         $this->augmentations = $augmentations;
 

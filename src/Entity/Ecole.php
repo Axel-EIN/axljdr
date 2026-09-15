@@ -28,7 +28,7 @@ class Ecole
     private $nom;
 
     /**
-     * @ORM\Column(type="text")
+     * @ORM\Column(type="text", nullable=true)
      */
     private $description;
 
@@ -176,7 +176,7 @@ class Ecole
         return $this->description;
     }
 
-    public function setDescription(string $description): self
+    public function setDescription(?string $description): self
     {
         $this->description = $description;
 
@@ -408,7 +408,7 @@ class Ecole
         return $this->competences;
     }
 
-    public function setCompetences(string $competences): self
+    public function setCompetences(?string $competences): self
     {
         $this->competences = $competences;
 
@@ -420,7 +420,7 @@ class Ecole
         return $this->Equipements;
     }
 
-    public function setEquipements(string $Equipements): self
+    public function setEquipements(?string $Equipements): self
     {
         $this->Equipements = $Equipements;
 

@@ -1,25 +1,31 @@
 # Code, architecture et nomenclature
 
-**Ne jamais écrire de commentaire dans le code.** Ni pour justifier un choix, ni
-pour documenter les paramètres d'un partial, ni pour signaler un piège : ça se dit
-dans le compte rendu, pas dans le fichier. Vaut aussi quand le fichier réécrit en
-contenait déjà un. Si un cas semble vraiment justifier une exception, la demander
-avant de l'écrire.
+Ici : les migrations, la langue, l'arborescence, les noms et les conventions du
+projet. La philosophie de code — aller au plus simple, une règle vit là où elle
+sert, factoriser, imbriquer le CSS — et l'interdiction d'écrire des commentaires
+sont dans [CLAUDE.md](../CLAUDE.md).
 
-La philosophie de code — aller au plus simple, une règle vit là où elle sert,
-factoriser — est dans [CLAUDE.md](../CLAUDE.md). Ici : la langue, l'arborescence,
-les noms, les commentaires et les conventions du projet.
+## Migrations
+
+La règle — **une par entité**, écrite à la main, avec sa description, et
+rejouable sur une base déjà à jour — est dans [CLAUDE.md](../CLAUDE.md). Ce
+qu'elle implique en écrivant le fichier : le nom porte l'horodatage
+(`Version20260915140001`), les derniers chiffres ordonnant les migrations d'une
+même passe ; un `CREATE TABLE` renuméroté a besoin d'un garde `tablesExist()`
+suivi d'un `return` — jamais `skipIf`, qui n'enregistre pas la version.
+
+Elles se comptent par centaines ; les plus récentes portent le palier d'accès et
+son remaniement en plusieurs passes, la table `character_unlock`, le statut du
+personnage et la table `found_object`.
 
 ## Priorité haute : les variantes d'un composant vivent dans son fichier
 
 **Ne jamais surcharger un composant depuis le CSS d'une page.** Quand une vue a
 besoin qu'un composant partagé se comporte autrement, la tentation est d'écrire
-dans `pages/<page>.css` un sélecteur qui vient le cibler et l'écraser. C'est
-exactement ce qu'il faut éviter : le composant se met à exister en morceaux
-éparpillés, et son fichier ne dit plus quelles formes il peut prendre.
-
-La variante s'écrit **dans le fichier du composant**, imbriquée dans sa règle,
-sous une classe à part :
+dans `pages/<page>.css` un sélecteur qui vient l'écraser. Le composant se met
+alors à exister en morceaux éparpillés, et son fichier ne dit plus quelles
+formes il peut prendre. La variante s'écrit **dans le fichier du composant**,
+imbriquée dans sa règle, sous une classe à part :
 
 ```css
 /* badges.css */
@@ -35,52 +41,17 @@ sous une classe à part :
 La page n'écrit alors **aucun CSS** : elle pose `badge-new rounded` dans son
 gabarit, et c'est tout.
 
-**Ça ne contredit pas « une règle vit là où elle sert »** (cf. [CLAUDE.md](../CLAUDE.md)) :
-cette règle-là départage ce qui est partagé de ce qui ne l'est pas. Un bloc qui
-n'appartient qu'à une page va dans `pages/`. Mais **une variante d'un composant
-partagé appartient au composant**, pas à la page qui l'utilise en premier — la
-seconde page qui en aura besoin la trouvera au lieu de la réécrire.
-
-Ce qu'on y gagne : un seul fichier à ouvrir pour connaître tous les
-comportements d'un composant, et les implications d'un changement visibles d'un
-coup d'œil. Une surcharge écrite ailleurs ne se découvre qu'en fouillant, et se
-casse en silence le jour où le composant bouge.
+**Ça ne contredit pas « une règle vit là où elle sert »** : cette règle-là
+départage ce qui est partagé de ce qui ne l'est pas. Un bloc qui n'appartient
+qu'à une page va dans `pages/` ; une variante d'un composant partagé appartient
+au composant, pas à la page qui l'utilise en premier — la seconde page qui en
+aura besoin la trouvera au lieu de la réécrire.
 
 L'éparpillement est aujourd'hui **partout dans le projet** : chaque fois qu'on
 croise une page qui cible un composant pour l'écraser, on rapatrie la variante.
-
-## Imbriquer le CSS, ne pas l'éparpiller
-
-**Une classe ne se déclare qu'une fois dans un fichier, et ses descendants
-s'imbriquent dedans.** Le réflexe à éviter est de poser les sélecteurs à plat,
-chacun de son côté, puis une troisième règle pour les relier :
-
-```css
-/* non */
-.ranking-card {}
-
-.ranking-list {}
-
-.ranking-card > .ranking-list {}
-```
-
-```css
-/* oui */
-.ranking-card {
-  .ranking-list {}
-}
-```
-
-Vaut aussi quand la règle relationnelle est la seule qu'on écrit : un
-`.parent > .enfant {}` isolé s'écrit `.parent { > .enfant {} }`. Et quand une
-classe est déjà déclarée plus loin dans le même fichier — `.session-card` l'est
-deux fois dans `pages/news.css` — on fusionne les blocs au lieu d'en ajouter un
-troisième.
-
-C'est la même raison que la section précédente : un seul endroit à ouvrir pour
-connaître tous les comportements d'un bloc, et les implications d'un changement
-visibles d'un coup d'œil. Une règle posée à l'autre bout de la feuille ne se
-découvre qu'en fouillant, et agit en silence.
+Même logique à l'intérieur d'un fichier — une classe ne s'y déclare qu'une fois
+et ses blocs fusionnent (règle dans [CLAUDE.md](../CLAUDE.md)) : `.session-card`
+est encore déclarée deux fois dans `pages/news.css`.
 
 ## Langue : le code passe à l'anglais
 
@@ -94,25 +65,23 @@ un code entièrement en anglais, atteinte au fil de l'eau et non en une passe.
   qu'on passe à côté : renommer oblige à suivre tous les appels, ça se décide.
 - **Un renommage se tranche au coût.** Aucun impact base ni migration, et moins
   d'une dizaine d'occurrences à reprendre : on le fait dans la foulée, fichier
-  compris. Au-delà, on remonte le compte et l'utilisateur décide — un service
-  autowiré ne coûte rien en configuration, mais chaque appelant reste à relire.
+  compris. Au-delà, on remonte le compte et l'utilisateur décide.
 - **Le français reste pour ce que lit l'utilisateur** — libellés d'interface,
-  textes, back-office — et pour les commentaires et la documentation.
+  textes, back-office — et pour la documentation.
 
-Ce qui est passé à l'anglais : les nouvelles entités (`Development`, `Unlock`,
-`Access`, `Status`, `PartsTrait`, `PublishableTrait`), tous les services de
-`src/Service`, les partials refaits (`parts/picture-grid`, `parts/history`,
-`parts/badge-access`, `btns/*`, `rule-lore-library/*`) et les gabarits de page
-des rubriques (`empire/location`, `regles/dojo-detail`, `regles/class-detail`,
-`personnages/character-profil`…).
+Déjà en anglais : les nouvelles entités (`Development`, `Unlock`, `Access`,
+`Status`, `PartsTrait`, `PublishableTrait`), tout `src/Service`, les partials
+refaits (`parts/picture-grid`, `parts/history`, `parts/badge-access`, `btns/*`,
+`rule-lore-library/*`) et les gabarits de page des rubriques (`empire/location`,
+`regles/dojo-detail`, `regles/class-detail`, `personnages/character-profil`…).
 
 Attendent leur tour : les entités historiques et leurs champs (chantier avec
-migration de tables, entité pilote d'abord — cf. `Personnage`, `Lieu`,
-`Ecole`…), les **routes et leurs préfixes d'URL** (`/personnages`, `/regles`,
-`empire_lieu`, `admin_ecole`), le **dossier `templates/personnages/`**, les
-utilitaires CSS globaux (`translucide`, `grayscale`…). Un dossier de templates
-et une route se renomment ensemble ou pas du tout : le premier coûte un `grep`,
-la seconde casse les liens externes.
+migration de tables, entité pilote d'abord — `Personnage`, `Lieu`, `Ecole`…),
+les **routes et leurs préfixes d'URL** (`/personnages`, `/regles`, `empire_lieu`,
+`admin_ecole`), le **dossier `templates/personnages/`** et les utilitaires CSS
+globaux (`translucide`, `grayscale`…). Un dossier de templates et une route se
+renomment ensemble ou pas du tout : le premier coûte un `grep`, la seconde casse
+les liens externes.
 
 ## Arborescence
 
@@ -120,16 +89,15 @@ la seconde casse les liens externes.
 est homogène, pas d'attributs), plus ce qu'elles partagent : un trait par
 comportement — `PublishableTrait` pour le palier de publication et ses dates,
 `PartsTrait` pour un document en parties — et des classes de constantes sans
-table, `Access` pour le palier de publication et `Status` pour l'état d'un
-personnage (vivant / disparu / mort) ; `src/Repository` les requêtes nommées,
-rien de métier ; `src/Controller` un contrôleur par rubrique publique et un
-`Admin<Entity>Controller` par entité éditable, plus `VisibilityTrait` pour la
-garde d'accès des pages de détail ; `src/Form` un `Admin<Entity>Type` pour le
-MJ, un `Joueur<Entity>Type` quand le joueur édite, et `PublishableFields` pour
-le bloc de publication commun aux treize entités publiables ; `src/Service` le
-calcul qui n'est ni du contrôleur ni de l'entité ; `src/Command` les commandes
-console de reprise de données (`app:unlocks:backfill`) ; `src/Twig/AppExtension.php`
-les filtres et fonctions de gabarit.
+table, `Access` et `Status` (vivant / disparu / mort). `src/Repository` les
+requêtes nommées, rien de métier ; `src/Controller` un contrôleur par rubrique
+publique et un `Admin<Entity>Controller` par entité éditable, plus
+`VisibilityTrait` pour la garde d'accès des pages de détail ; `src/Form` un
+`Admin<Entity>Type` pour le MJ, un `Joueur<Entity>Type` quand le joueur édite,
+et `PublishableFields` pour le bloc de publication commun aux treize entités
+publiables ; `src/Service` le calcul qui n'est ni du contrôleur ni de l'entité ;
+`src/Command` les commandes de reprise de données (`app:unlocks:backfill`) ;
+`src/Twig/AppExtension.php` les filtres et fonctions de gabarit.
 
 **Les services, et ce que chacun porte.** `Visibility` la règle de lecture et
 les huit états d'accès ; `Unlocker` l'écriture des débloquages ;
@@ -143,17 +111,16 @@ visiteur ; `NewsFeed` les fils de l'accueil ; `ClasseurXP` et
 
 **Templates.** `base.html.twig` porte le socle et **les constantes d'images**
 (`NA_*`, `LOCKED_ICO`…), posées en `set` hors bloc. Trois gabarits :
-`element.html.twig` (page de détail), `category.html.twig` (page de rubrique),
-`other.html.twig` (page de texte). À la racine aussi les deux variantes d'état
-rendues à la place d'une page : `element-locked.html.twig` (listé mais pas
-lisible) et `element-hidden.html.twig` (ni listé ni lisible, rendu avec un
-statut 404). `parts/` les composants réutilisables, `btns/` les boutons,
-`rule-lore-library/` ce que partagent Règle, Lore et Bibliothèque,
-`back_office/` le panneau du MJ, `<rubrique>/` les pages.
+`element.html.twig` (détail), `category.html.twig` (rubrique),
+`other.html.twig` (texte). À la racine aussi les deux variantes d'état rendues à
+la place d'une page : `element-locked.html.twig` (listé mais pas lisible) et
+`element-hidden.html.twig` (ni listé ni lisible, rendu en 404). `parts/` les
+composants réutilisables, `btns/` les boutons, `rule-lore-library/` ce que
+partagent Règle, Lore et Bibliothèque, `back_office/` le panneau du MJ,
+`<rubrique>/` les pages.
 
-**CSS.** Pas de build : les fichiers de `public/css/` sont servis tels quels et
-chaque page déclare ce qu'elle charge. À la racine les fichiers globaux, chargés
-sur toutes les pages du site par `parts/head.html.twig` (cf.
+**CSS.** Chaque page déclare ce qu'elle charge. À la racine les fichiers
+globaux, chargés sur toutes les pages par `parts/head.html.twig` (cf.
 [sitemap.md](sitemap.md)) — n'y mettre que du partagé ; `components/` un
 composant réutilisé par plusieurs pages, chargé par elles ou par leur gabarit ;
 `pages/` ce qui ne sert qu'à une page.
@@ -169,7 +136,8 @@ pages qui portent un formulaire.
 - **Fichiers CSS et partials** : le nom du composant, deux mots séparés d'un
   tiret (`picture-grid`, `element-locked`).
 - **Classes CSS** : deux mots au maximum, une variante ou un état en classe à
-  part (`.picture-grid.emblem`, `a.locked`), cf. CLAUDE.md.
+  part (`.picture-grid.emblem`, `a.locked`) — détail dans
+  [CLAUDE.md](../CLAUDE.md).
 - **Variables CSS** : `--<domaine>-<propriété>` (`--grid-min`, `--cols-desktop`,
   `--image-max`).
 - **Routes** : `<rubrique>_<entity>` (`empire_lieu`, `regles_ecole`) et
@@ -179,19 +147,12 @@ pages qui portent un formulaire.
   `wrapper`, `per_row`, `min_size`.
 
 **Un partial ne lit rien du contexte de l'appelant** : tout ce qu'il utilise
-arrive en paramètre. C'est ce qui rendait l'ancien `element-vignette` illisible —
-il pêchait `category`, `entity`, `ratio` et `size` dans le contexte de la page.
-
-Il en reste : `btns/btn-icon-edit.html.twig` et `btns/btn-line.html.twig` lisent
-`entity`, `un_element`, `redirect`, `color` et `size` dans le contexte —
-`btn-line` sans même un `|default` sur `color`. Le premier a fait tomber
-l'accueil le jour où un nouvel appelant ne posait pas `color` ; un `|default('')`
-a colmaté, le passage en paramètres reste à faire.
-
-`aventure/episode-card.html.twig` est à mi-chemin : l'accueil lui passe
-`un_episode`, `wrapper` et `user_personnages_cumul_episodes` en paramètres,
-`aventure/chapter-detail.html.twig` les lui laisse encore pêcher dans son
-contexte de boucle.
+arrive en paramètre. Dette connue : `btns/btn-icon-edit.html.twig` et
+`btns/btn-line.html.twig` pêchent encore `entity`, `un_element`, `redirect`,
+`color` et `size` dans le contexte — le premier a fait tomber l'accueil le jour
+où un appelant ne posait pas `color` ; `aventure/episode-card.html.twig` est à
+mi-chemin, l'accueil lui passe ses paramètres, `chapter-detail` les lui laisse
+pêcher.
 
 ## Conventions
 
@@ -199,25 +160,16 @@ contexte de boucle.
 lit le `table_cols` déclaré par le contrôleur, au format
 `champ:Libellé:format:extra` — formats `string` (défaut), `number`, `symbol`,
 `image`, `bool`, `boolInt`, `color`, `access`, `date`, `status`. Un point dans le
-champ traverse une relation (`clan.nom`). Le détail de chaque format est dans
+champ traverse une relation (`clan.nom`). Détail de chaque format dans
 [design.md](design.md), « Colonnes des listes du back-office ».
-
-**Une migration par entité**, écrite à la main, avec sa description. Elles se
-comptent aujourd'hui par centaines : les plus récentes portent le palier
-d'accès et son remaniement en plusieurs passes, la table `character_unlock`, le
-statut du personnage et la table `found_object`. Le
-déploiement OVH lance `doctrine:migrations:migrate` tout seul et il n'y a pas de
-SSH : une migration doit passer sans échec sur une base déjà à jour. Un
-`CREATE TABLE` renuméroté a besoin d'un garde `tablesExist()` suivi d'un
-`return` — jamais `skipIf`, qui n'enregistre pas la version.
 
 **L'accès se contrôle dans le contrôleur, pas dans le gabarit.** `@IsGranted`
 pour une rubrique entière, et `VisibilityTrait::accessGuard()` pour un élément :
 il rend `element-locked.html.twig` — la page « à découvrir » — si l'élément est
-listé sans être lisible, et `element-hidden.html.twig` avec un statut 404 s'il
-n'est même pas listé. Le service `Visibility` porte cette règle et lui seul ;
-les gabarits l'interrogent par `element_state`, `element_readable` et
-`element_listed` pour décider de l'affichage, jamais du droit.
+listé sans être lisible, et `element-hidden.html.twig` en 404 s'il n'est même pas
+listé. Le service `Visibility` porte cette règle et lui seul ; les gabarits
+l'interrogent par `element_state`, `element_readable` et `element_listed` pour
+décider de l'affichage, jamais du droit.
 
 **`|default()` ne sait pas distinguer `false` de « pas fourni ».** En Twig,
 `false`, `''`, `null` et `[]` sont tous « empty » : `label|default(true)` rend

@@ -38,7 +38,7 @@ class AdminClanType extends AbstractType
             ->add('citation', TextType::class, [ 'required' => false, 'constraints' => [ new Length( [ 'max' => 100 ] ) ] ] )
             ->add('description', TextareaType::class, ['required' => false, 'constraints' => [ new Length( [ 'max' => 600 ] ) ] ] )
             ->add('longDescription', TextareaType::class, ['required' => false] )
-            ->add('couleur', ColorType::class, ['required' => false] )
+            ->add('couleur', ColorType::class)
             ->add('mon', FileType::class, [
                 'mapped' => false, 'data_class' => null, 'required' => false,
                 'constraints' => [new File(['maxSize' => '5M'])],

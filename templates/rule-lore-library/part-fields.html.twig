@@ -1,0 +1,16 @@
+{% for i in 1..5 %}
+  {% set rempli = un_element is not empty and attribute(un_element, 'part' ~ i) is not empty %}
+
+  <section id="part{{ i }}" class="col-12 mt-5">
+    <a class="w-100" data-toggle="collapse" href="#part{{ i }}collapse" role="button" aria-expanded="{{ rempli ? 'true' : 'false' }}" aria-controls="part{{ i }}collapse">
+      <h2 class="heading-cardtitle">Part {{ i }}</h2>
+    </a>
+    <hr>
+
+    <div id="part{{ i }}collapse" class="collapse{{ rempli ? ' show' }} row">
+      <div class="col-12">{{ form_row(attribute(form, 'part' ~ i ~ 'titre')) }}</div>
+      <div class="col-8">{{ form_row(attribute(form, 'part' ~ i), {'attr': {'rows': '20'}}) }}</div>
+      <div class="col-4">{{ form_row(attribute(form, 'part' ~ i ~ 'aside'), {'attr': {'rows': '20'}}) }}</div>
+    </div>
+  </section>
+{% endfor %}

@@ -12,7 +12,7 @@
 
       <div class="relative">
 
-        {{ include('rule-lore-library/summary.html.twig', {un_element, parts: 3}) }}
+        {{ include('rule-lore-library/summary.html.twig', {un_element}) }}
 
         {{ include('/parts/card-top-image.html.twig', {
           image: un_element.image,
@@ -26,9 +26,7 @@
         }) }}
       </div>
 
-      {% for i in 1..3 %}
-        {{ include('rule-lore-library/part-row.html.twig', {un_element, i, entity: 'lore'}) }}
-      {% endfor %}
+      {{ include('rule-lore-library/parts.html.twig', {un_element, entity: 'lore'}) }}
 
     </div>
   </div>

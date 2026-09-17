@@ -37,6 +37,12 @@ class AdminLoreType extends AbstractType
             ->add('part3titre', TextType::class, ['required' => false, 'constraints' => [ new Length( [ 'max' => 100 ] ) ] ] )
             ->add('part3', TextareaType::class, ['required' => false])
             ->add('part3aside', textareaType::class, ['required' => false])
+            ->add('part4titre', TextType::class, ['required' => false, 'constraints' => [ new Length( [ 'max' => 100 ] ) ] ] )
+            ->add('part4', TextareaType::class, ['required' => false])
+            ->add('part4aside', textareaType::class, ['required' => false])
+            ->add('part5titre', TextType::class, ['required' => false, 'constraints' => [ new Length( [ 'max' => 100 ] ) ] ] )
+            ->add('part5', TextareaType::class, ['required' => false])
+            ->add('part5aside', textareaType::class, ['required' => false])
         ;
 
         PublishableFields::add($builder);

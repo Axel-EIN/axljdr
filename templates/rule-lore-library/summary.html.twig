@@ -1,7 +1,7 @@
 {% if items is not defined %}
   {% set items = [] %}
-  {% for i in 1..parts %}
-    {% if attribute(un_element, 'part' ~ i ~ 'titre') is defined and attribute(un_element, 'part' ~ i ~ 'titre') is not empty %}
+  {% for i in 1..5 %}
+    {% if attribute(un_element, 'part' ~ i ~ 'titre') is not empty %}
       {% set items = items|merge([{label: i ~ '. ' ~ attribute(un_element, 'part' ~ i ~ 'titre'), path: '#part' ~ i}]) %}
     {% endif %}
   {% endfor %}

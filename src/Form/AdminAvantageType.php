@@ -38,6 +38,7 @@ class AdminAvantageType extends AbstractType
             ],
         ])
         ->add('cout', IntegerType::class, array('label' => 'Coût (Avantage) / Gain (Désavantage)') )
+        ->add('summary', TextType::class, array( 'label' => 'Résumé pour la fiche PDF', 'required' => false, 'constraints' => [ new Length( [ 'max' => 255 ] ) ] ))
         ->add('description', TextareaType::class, array( 'constraints' => [ new Length( [ 'max' => 3000 ] ) ] ))
         ->add('exclusive', EntityType::class, [
             'class' => Classe::class,

@@ -28,6 +28,7 @@
                 {{ form_row(form.tech1Nom) }}
             </div>
             <div class="col-12">{{ form_row(form.tech1Desc,{ 'attr': {'rows': '6'} }) }}</div>
+            <div class="col-12">{{ form_row(form.tech1Summary) }}</div>
 
             <div class="col-12 mt-5">
                 <h2 class="heading-cardtitle">Technique #2</h2>
@@ -35,6 +36,7 @@
                 {{ form_row(form.tech2Nom) }}
             </div>
             <div class="col-12">{{ form_row(form.tech2Desc,{ 'attr': {'rows': '6'} }) }}</div>
+            <div class="col-12">{{ form_row(form.tech2Summary) }}</div>
 
             <div class="col-12 mt-5">
                 <h2 class="heading-cardtitle">Technique #3</h2>
@@ -42,6 +44,7 @@
                 {{ form_row(form.tech3Nom) }}
             </div>
             <div class="col-12">{{ form_row(form.tech3Desc,{ 'attr': {'rows': '6'} }) }}</div>
+            <div class="col-12">{{ form_row(form.tech3Summary) }}</div>
 
             <div class="col-12 mt-5">
                 <h2 class="heading-cardtitle">Technique #4</h2>
@@ -49,6 +52,7 @@
                 {{ form_row(form.tech4Nom) }}
             </div>
             <div class="col-12">{{ form_row(form.tech4Desc,{ 'attr': {'rows': '6'} }) }}</div>
+            <div class="col-12">{{ form_row(form.tech4Summary) }}</div>
 
             <div class="col-12 mt-5">
                 <h2 class="heading-cardtitle">Technique #5</h2>
@@ -56,6 +60,7 @@
                 {{ form_row(form.tech5Nom) }}
             </div>
             <div class="col-12 mt-3">{{ form_row(form.tech5Desc,{ 'attr': {'rows': '6'} }) }}</div>
+            <div class="col-12">{{ form_row(form.tech5Summary) }}</div>
 
             <div class="col-12 mt-5">
                 <h2 class="heading-cardtitle">Magie</h2>
@@ -71,6 +76,7 @@
             <div class="col-8 mt-3">
                 {{ form_row(form.techSpecialNom) }}
                 {{ form_row(form.techSpecialDesc,{ 'attr': {'rows': '9'} }) }}
+                {{ form_row(form.techSpecialSummary) }}
             </div>
 
             {{ include('/btns/btn-form.html.twig') }}

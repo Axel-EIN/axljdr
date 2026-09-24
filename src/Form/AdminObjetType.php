@@ -97,10 +97,21 @@ class AdminObjetType extends AbstractType
                 'required' => false,
                 'constraints' => [ new Length( [ 'max' => 60 ] ) ]
             ])
+            ->add('quality', ChoiceType::class, [
+                'label' => 'Qualité',
+                'required' => false,
+                'placeholder' => '— Non précisée —',
+                'choices'  => [
+                    'Commun' => 'Commun',
+                    'Rare' => 'Rare',
+                    'Mythique' => 'Mythique',
+                ],
+            ])
             ->add('taille', ChoiceType::class, [
                 'required' => false,
                 'choices'  => [
                     'PETITE' => 'PETITE',
+                    'MOYENNE' => 'MOYENNE',
                     'GRANDE' => 'GRANDE',
                     'DOUBLE' => 'DOUBLE',
                 ],
@@ -109,6 +120,7 @@ class AdminObjetType extends AbstractType
                 'required' => false,
                 'choices'  => [
                     'LÉGÈRE' => 'LÉGÈRE',
+                    'MOYENNE' => 'MOYENNE',
                     'LOURDE' => 'LOURDE',
                 ],
             ])

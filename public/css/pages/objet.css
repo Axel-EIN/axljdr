@@ -1,0 +1,53 @@
+.objet-stats {
+  position: absolute;
+  z-index: 2;
+  top: 1rem;
+  right: 1rem;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.35rem;
+  text-align: right;
+  text-shadow: 0 1px 3px rgb(0 0 0 / 70%);
+
+  strong { font-size: var(--fontsize-medium); }
+
+  .objet-prix br { display: none; }
+}
+
+.objet-categorie,
+.objet-quality {
+  padding: 0.15rem 0.75rem;
+  border-radius: 1rem;
+  font-family: 'Amerigo';
+  font-size: var(--fontsize-small);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.objet-categorie {
+  background-color: var(--color-primarydarken);
+  color: var(--color-white);
+}
+
+.objet-quality {
+  background-color: var(--color-graygraphite);
+  color: var(--color-white);
+
+  &.quality-rare { background-color: var(--color-secondarypastellight); }
+  &.quality-mythique { background-color: var(--color-yellow-gold); color: var(--color-primarydarken); }
+}
+
+.objet-mobile-info {
+  padding: 1rem;
+
+  .list-decored {
+    display: inline-block;
+    margin-top: 0.75rem;
+  }
+}
+
+.objet-motscles {
+  margin: 0;
+  padding: 1rem 1rem 0;
+  text-align: center;
+}

@@ -134,6 +134,61 @@ class FichePersonnage
     private $souillure;
 
     /**
+     * @ORM\Column(type="decimal", precision=3, scale=1, nullable=true, options={"default": "1.0"})
+     */
+    private $statut = '1.0';
+
+    /**
+     * @ORM\Column(type="integer", nullable=true, options={"default": 0})
+     */
+    private $koku = 0;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true, options={"default": 0})
+     */
+    private $bu = 0;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true, options={"default": 0})
+     */
+    private $zeni = 0;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $age;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    private $height;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    private $weight;
+
+    /**
+     * @ORM\Column(type="string", length=40, nullable=true)
+     */
+    private $hair;
+
+    /**
+     * @ORM\Column(type="string", length=40, nullable=true)
+     */
+    private $eyes;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $appearance;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $notes;
+
+    /**
      * @ORM\Column(type="smallint")
      */
     private $constitution;
@@ -184,6 +239,13 @@ class FichePersonnage
      * @ORM\OrderBy({"niveau" = "ASC", "nom" = "ASC"})
      */
     private $knownSpells;
+
+    /**
+     * @ORM\ManyToMany(targetEntity=Objet::class)
+     * @ORM\JoinTable(name="inventory_item")
+     * @ORM\OrderBy({"nom" = "ASC"})
+     */
+    private $inventoryItems;
 
     /** @ORM\ManyToOne(targetEntity=Competence::class) @ORM\JoinColumn(nullable=true) */ private $competence1;
     /** @ORM\Column(type="smallint", nullable=true) */ private $valeur1;
@@ -292,6 +354,7 @@ class FichePersonnage
     public function __construct()
     {
         $this->knownSpells = new ArrayCollection();
+        $this->inventoryItems = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -376,6 +439,39 @@ class FichePersonnage
 
     public function getSouillure(): ?string { return $this->souillure; }
     public function setSouillure(?string $s): self { $this->souillure = $s; return $this; }
+
+    public function getStatut(): ?string { return $this->statut; }
+    public function setStatut(?string $s): self { $this->statut = $s; return $this; }
+
+    public function getKoku(): ?int { return $this->koku; }
+    public function setKoku(?int $v): self { $this->koku = $v; return $this; }
+
+    public function getBu(): ?int { return $this->bu; }
+    public function setBu(?int $v): self { $this->bu = $v; return $this; }
+
+    public function getZeni(): ?int { return $this->zeni; }
+    public function setZeni(?int $v): self { $this->zeni = $v; return $this; }
+
+    public function getAge(): ?int { return $this->age; }
+    public function setAge(?int $v): self { $this->age = $v; return $this; }
+
+    public function getHeight(): ?string { return $this->height; }
+    public function setHeight(?string $v): self { $this->height = $v; return $this; }
+
+    public function getWeight(): ?string { return $this->weight; }
+    public function setWeight(?string $v): self { $this->weight = $v; return $this; }
+
+    public function getHair(): ?string { return $this->hair; }
+    public function setHair(?string $v): self { $this->hair = $v; return $this; }
+
+    public function getEyes(): ?string { return $this->eyes; }
+    public function setEyes(?string $v): self { $this->eyes = $v; return $this; }
+
+    public function getAppearance(): ?string { return $this->appearance; }
+    public function setAppearance(?string $v): self { $this->appearance = $v; return $this; }
+
+    public function getNotes(): ?string { return $this->notes; }
+    public function setNotes(?string $v): self { $this->notes = $v; return $this; }
 
     public function getConstitution(): ?int
     {
@@ -728,6 +824,30 @@ class FichePersonnage
     public function removeKnownSpell(Sort $spell): self
     {
         $this->knownSpells->removeElement($spell);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Objet[]
+     */
+    public function getInventoryItems(): Collection
+    {
+        return $this->inventoryItems;
+    }
+
+    public function addInventoryItem(Objet $objet): self
+    {
+        if (!$this->inventoryItems->contains($objet)) {
+            $this->inventoryItems[] = $objet;
+        }
+
+        return $this;
+    }
+
+    public function removeInventoryItem(Objet $objet): self
+    {
+        $this->inventoryItems->removeElement($objet);
 
         return $this;
     }

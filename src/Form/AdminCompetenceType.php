@@ -69,6 +69,8 @@ class AdminCompetenceType extends AbstractType
         ->add('specialisation6', TextType::class, array( 'required' => false, 'constraints' => [ new Length( [ 'max' => 60 ] ) ] ) )
         ->add('capacite', TextareaType::class, array( 'required' => false, 'constraints' => [ new Length( [ 'max' => 3000 ] ) ] ))
         ->add('capacite2', TextareaType::class, array( 'required' => false, 'constraints' => [ new Length( [ 'max' => 3000 ] ) ] ))
+        ->add('mastery3Summary', TextType::class, array( 'label' => 'Capacité de Rang 3, résumée pour la fiche PDF', 'required' => false, 'constraints' => [ new Length( [ 'max' => 120 ] ) ] ))
+        ->add('mastery6Summary', TextType::class, array( 'label' => 'Capacité de Rang 6, résumée pour la fiche PDF', 'required' => false, 'constraints' => [ new Length( [ 'max' => 120 ] ) ] ))
         ->add('description', TextareaType::class, array( 'constraints' => [ new Length( [ 'max' => 3000 ] ) ] ))
         ;
 

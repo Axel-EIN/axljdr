@@ -100,6 +100,11 @@ class Objet
      */
     private $categorie;
 
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    private $quality;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -293,6 +298,18 @@ class Objet
     public function setCategorie(string $categorie): self
     {
         $this->categorie = $categorie;
+
+        return $this;
+    }
+
+    public function getQuality(): ?string
+    {
+        return $this->quality;
+    }
+
+    public function setQuality(?string $quality): self
+    {
+        $this->quality = $quality;
 
         return $this;
     }

@@ -18,6 +18,8 @@ use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\Regex;
 
 class AdminFichePersonnageType extends AbstractType
@@ -121,6 +123,17 @@ class AdminFichePersonnageType extends AbstractType
             ->add('gloire', NumberType::class, ['required' => false, 'scale' => 1, 'attr' => ['min' => 0, 'max' => 10, 'step' => 0.1]])
             ->add('infamie', NumberType::class, ['required' => false, 'scale' => 1, 'attr' => ['min' => 0, 'max' => 10, 'step' => 0.1]])
             ->add('souillure', NumberType::class, ['required' => false, 'scale' => 1, 'attr' => ['min' => 0, 'max' => 10, 'step' => 0.1]])
+            ->add('statut', NumberType::class, ['required' => false, 'scale' => 1, 'attr' => ['min' => 0, 'max' => 10, 'step' => 0.1]])
+            ->add('koku', IntegerType::class, ['required' => false, 'attr' => ['min' => 0]])
+            ->add('bu', IntegerType::class, ['required' => false, 'attr' => ['min' => 0]])
+            ->add('zeni', IntegerType::class, ['required' => false, 'attr' => ['min' => 0]])
+            ->add('age', IntegerType::class, ['required' => false, 'attr' => ['min' => 0]])
+            ->add('height', TextType::class, ['label' => 'Taille', 'required' => false, 'constraints' => [ new Length(['max' => 20]) ]])
+            ->add('weight', TextType::class, ['label' => 'Poids', 'required' => false, 'constraints' => [ new Length(['max' => 20]) ]])
+            ->add('hair', TextType::class, ['label' => 'Cheveux', 'required' => false, 'constraints' => [ new Length(['max' => 40]) ]])
+            ->add('eyes', TextType::class, ['label' => 'Yeux', 'required' => false, 'constraints' => [ new Length(['max' => 40]) ]])
+            ->add('appearance', TextareaType::class, ['label' => 'Apparence', 'required' => false, 'constraints' => [ new Length(['max' => 3000]) ]])
+            ->add('notes', TextareaType::class, ['label' => 'Notes', 'required' => false, 'constraints' => [ new Length(['max' => 3000]) ]])
             ->add('constitution', IntegerType::class)
             ->add('volonte', IntegerType::class)
             ->add('reflexes', IntegerType::class)
@@ -130,17 +143,24 @@ class AdminFichePersonnageType extends AbstractType
             ->add('forceStat', IntegerType::class)
             ->add('perception', IntegerType::class)
             ->add('vide', IntegerType::class)
+            ->add('inventoryItems', EntityType::class, [
+                'class' => Objet::class,
+                'choice_label' => 'nom',
+                'multiple' => true,
+                'required' => false,
+                'query_builder' => fn(EntityRepository $er) => $er->createQueryBuilder('o')->orderBy('o.nom', 'ASC'),
+            ])
             ->add('knownSpells', EntityType::class, [
                 'class' => Sort::class,
-                'label' => 'Sorts connus (Ctrl + clic pour en sélectionner plusieurs)',
+                'label' => 'Sorts et kihos connus (Ctrl + clic pour en sélectionner plusieurs)',
                 'choice_label' => fn(Sort $sort) => $sort->getNom() . ' (' . $sort->getNiveau() . ')',
-                'group_by' => 'anneau',
+                'group_by' => fn(Sort $sort) => ($sort->getCategorie() === 'KIHO' ? 'Kiho ' : '') . $sort->getAnneau(),
                 'multiple' => true,
                 'required' => false,
                 'attr' => ['size' => 20],
                 'query_builder' => fn(EntityRepository $er) => $er->createQueryBuilder('s')
-                    ->where('s.categorie = :categorie')->setParameter('categorie', 'MAGIE')
-                    ->orderBy('s.anneau', 'ASC')->addOrderBy('s.niveau', 'ASC')->addOrderBy('s.nom', 'ASC'),
+                    ->where('s.categorie IN (:categories)')->setParameter('categories', ['MAGIE', 'KIHO'])
+                    ->orderBy('s.categorie', 'ASC')->addOrderBy('s.anneau', 'ASC')->addOrderBy('s.niveau', 'ASC')->addOrderBy('s.nom', 'ASC'),
             ])
         ;
 

@@ -85,6 +85,36 @@ class Ecole
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
+    private $tech1Summary;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $tech2Summary;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $tech3Summary;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $tech4Summary;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $tech5Summary;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $techSpecialSummary;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
     private $techSpecialNom;
 
     /**
@@ -483,6 +513,78 @@ class Ecole
     public function setValeurCompetencesDepart(?int $valeurCompetencesDepart): self
     {
         $this->valeurCompetencesDepart = $valeurCompetencesDepart;
+
+        return $this;
+    }
+
+    public function getTech1Summary(): ?string
+    {
+        return $this->tech1Summary;
+    }
+
+    public function setTech1Summary(?string $tech1Summary): self
+    {
+        $this->tech1Summary = $tech1Summary;
+
+        return $this;
+    }
+
+    public function getTech2Summary(): ?string
+    {
+        return $this->tech2Summary;
+    }
+
+    public function setTech2Summary(?string $tech2Summary): self
+    {
+        $this->tech2Summary = $tech2Summary;
+
+        return $this;
+    }
+
+    public function getTech3Summary(): ?string
+    {
+        return $this->tech3Summary;
+    }
+
+    public function setTech3Summary(?string $tech3Summary): self
+    {
+        $this->tech3Summary = $tech3Summary;
+
+        return $this;
+    }
+
+    public function getTech4Summary(): ?string
+    {
+        return $this->tech4Summary;
+    }
+
+    public function setTech4Summary(?string $tech4Summary): self
+    {
+        $this->tech4Summary = $tech4Summary;
+
+        return $this;
+    }
+
+    public function getTech5Summary(): ?string
+    {
+        return $this->tech5Summary;
+    }
+
+    public function setTech5Summary(?string $tech5Summary): self
+    {
+        $this->tech5Summary = $tech5Summary;
+
+        return $this;
+    }
+
+    public function getTechSpecialSummary(): ?string
+    {
+        return $this->techSpecialSummary;
+    }
+
+    public function setTechSpecialSummary(?string $techSpecialSummary): self
+    {
+        $this->techSpecialSummary = $techSpecialSummary;
 
         return $this;
     }

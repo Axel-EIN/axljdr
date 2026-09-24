@@ -16,7 +16,9 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Validator\Constraints\Regex;
 
 class JoueurFichePersonnageType extends AbstractType
@@ -93,6 +95,13 @@ class JoueurFichePersonnageType extends AbstractType
                 'required' => false,
                 'query_builder' => fn(EntityRepository $er) => $armes($er, 'ARME'),
             ])
+            ->add('armure', EntityType::class, [
+                'class' => Objet::class,
+                'choice_label' => 'nom',
+                'placeholder' => '— Aucune —',
+                'required' => false,
+                'query_builder' => fn(EntityRepository $er) => $armes($er, 'ARMURE'),
+            ])
             ->add('armeActuelle', EntityType::class, [
                 'class' => Objet::class,
                 'choice_label' => 'nom',
@@ -100,6 +109,20 @@ class JoueurFichePersonnageType extends AbstractType
                 'required' => false,
                 'query_builder' => fn(EntityRepository $er) => $armes($er, null),
             ])
+            ->add('honneur', NumberType::class, ['required' => false, 'scale' => 1])
+            ->add('gloire', NumberType::class, ['required' => false, 'scale' => 1])
+            ->add('infamie', NumberType::class, ['required' => false, 'scale' => 1])
+            ->add('statut', NumberType::class, ['required' => false, 'scale' => 1])
+            ->add('age', IntegerType::class, ['required' => false])
+            ->add('height', TextType::class, ['required' => false])
+            ->add('weight', TextType::class, ['required' => false])
+            ->add('hair', TextType::class, ['required' => false])
+            ->add('eyes', TextType::class, ['required' => false])
+            ->add('appearance', TextareaType::class, ['required' => false])
+            ->add('notes', TextareaType::class, ['required' => false])
+            ->add('koku', IntegerType::class, ['required' => false])
+            ->add('bu', IntegerType::class, ['required' => false])
+            ->add('zeni', IntegerType::class, ['required' => false])
             ->add('initiativeModifier', IntegerType::class, ['required' => false])
             ->add('ndModifier', IntegerType::class, ['required' => false])
             ->add('reductionModifier', IntegerType::class, ['required' => false])
@@ -112,13 +135,20 @@ class JoueurFichePersonnageType extends AbstractType
                     ]),
                 ],
             ])
+            ->add('inventoryItems', EntityType::class, [
+                'class' => Objet::class,
+                'choice_label' => 'nom',
+                'multiple' => true,
+                'required' => false,
+                'query_builder' => fn(EntityRepository $er) => $er->createQueryBuilder('o')->orderBy('o.nom', 'ASC'),
+            ])
             ->add('knownSpells', EntityType::class, [
                 'class' => Sort::class,
                 'choice_label' => 'nom',
                 'multiple' => true,
                 'required' => false,
                 'query_builder' => fn(EntityRepository $er) => $er->createQueryBuilder('s')
-                    ->where('s.categorie = :categorie')->setParameter('categorie', 'MAGIE')
+                    ->where('s.categorie IN (:categories)')->setParameter('categories', ['MAGIE', 'KIHO'])
                     ->orderBy('s.nom', 'ASC'),
             ])
             ->add('dmgModifier', TextType::class, [

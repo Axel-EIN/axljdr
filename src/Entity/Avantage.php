@@ -46,6 +46,11 @@ class Avantage
     private $description;
 
     /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $summary;
+
+    /**
      * @ORM\Column(type="integer", nullable=true)
      */
     private $discount;
@@ -191,6 +196,18 @@ class Avantage
     public function setDiscountClan2(?Clan $discountClan2): self
     {
         $this->discountClan2 = $discountClan2;
+
+        return $this;
+    }
+
+    public function getSummary(): ?string
+    {
+        return $this->summary;
+    }
+
+    public function setSummary(?string $summary): self
+    {
+        $this->summary = $summary;
 
         return $this;
     }

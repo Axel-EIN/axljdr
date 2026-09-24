@@ -61,6 +61,16 @@ class Competence
     private $capacite2;
 
     /**
+     * @ORM\Column(type="string", length=120, nullable=true)
+     */
+    private $mastery3Summary;
+
+    /**
+     * @ORM\Column(type="string", length=120, nullable=true)
+     */
+    private $mastery6Summary;
+
+    /**
      * @ORM\Column(type="string", length=255)
      */
     private $categorie;
@@ -293,6 +303,30 @@ class Competence
     public function setSpecialisation6(?string $specialisation6): self
     {
         $this->specialisation6 = $specialisation6;
+
+        return $this;
+    }
+
+    public function getMastery3Summary(): ?string
+    {
+        return $this->mastery3Summary;
+    }
+
+    public function setMastery3Summary(?string $mastery3Summary): self
+    {
+        $this->mastery3Summary = $mastery3Summary;
+
+        return $this;
+    }
+
+    public function getMastery6Summary(): ?string
+    {
+        return $this->mastery6Summary;
+    }
+
+    public function setMastery6Summary(?string $mastery6Summary): self
+    {
+        $this->mastery6Summary = $mastery6Summary;
 
         return $this;
     }

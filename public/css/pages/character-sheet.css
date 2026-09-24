@@ -184,7 +184,6 @@
 .comp-row-empty { display: none; }
 .edit-mode .comp-row-empty { display: table-row; }
 
-.edit-mode .comp-cat-header { display: none; }
 .edit-mode [data-trait-eff] select { width: 3em; display: inline-block; vertical-align: middle; }
 .edit-mode select.comp-select { min-width: 14em; }
 
@@ -193,10 +192,6 @@
 .edit-mode select.av-select { min-width: 14em; }
 .edit-mode [data-av-slot] > * { display: flex; justify-content:flex-start; align-items:center; }
 
-.comp-specs-row { display: none; }
-.comp-specs-row.has-specs { display: table-row; }
-.edit-mode .comp-specs-row { display: table-row; }
-.comp-specs-row td { border-top: 0; }
 
 .comp-ecole-tri,
 .comp-spec-tri {
@@ -207,11 +202,29 @@
     cursor: pointer;
     user-select: none;
     vertical-align: middle;
+
+    &[data-state="2"] .comp-ecole-tag,
+    &[data-state="2"] .spec-ecole-tag {
+        display: inline-flex;
+        justify-content: center;
+        align-items: center;
+    }
 }
+
+.comp-ecole-tri {
+    &[data-state="1"] .tri-icon { color: var(--color-green-success); }
+    &[data-state="2"] .tri-icon,
+    &[data-state="2"]           { color: var(--color-yellow-gold); }
+}
+
 .comp-spec-tri {
     margin-right: 1em;
     font-size: 0.9em;
     gap: 0.3em;
+
+    &[data-state="1"] .tri-icon { color: var(--color-reddanger); }
+    &[data-state="2"] .tri-icon,
+    &[data-state="2"]           { color: var(--color-green-success); }
 }
 
 .comp-ecole-tag,
@@ -226,29 +239,222 @@
     margin-bottom: 1px;
     pointer-events: none;
 }
-.comp-ecole-tag      { color: var(--color-yellow-gold); }
-.spec-ecole-tag      { color: var(--color-green-success); }
 
-.comp-ecole-tri[data-state="1"] .tri-icon { color: var(--color-green-success); }
-.comp-ecole-tri[data-state="2"] .tri-icon,
-.comp-ecole-tri[data-state="2"]           { color: var(--color-yellow-gold); }
-.comp-ecole-tri[data-state="2"] .comp-ecole-tag { display: inline-flex; justify-content: center; align-items: center; }
+.comp-ecole-tag { color: var(--color-yellow-gold); }
+.spec-ecole-tag { color: var(--color-green-success); }
 
-.comp-spec-tri[data-state="1"] .tri-icon { color: var(--color-reddanger); }
-.comp-spec-tri[data-state="2"] .tri-icon,
-.comp-spec-tri[data-state="2"]           { color: var(--color-green-success); }
-.comp-spec-tri[data-state="2"] .spec-ecole-tag { display: inline-flex; justify-content: center; align-items: center; }
+.av-summary {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
 
-#comp-table td,
-#comp-table th { vertical-align: middle; }
+.fiche-standings {
+  display: flex;
+  margin: var(--gap-bloc) 0 0;
+  padding: 0;
+  gap: 0.35rem;
+  list-style: none;
 
-#comp-table .comp-cat-header th {
-    background: rgba(0,0,0,0.06);
-    font-variant: small-caps;
-    letter-spacing: 0.05em;
-    font-size: 0.85em;
-    padding-top: 0.5rem;
-    padding-bottom: 0.25rem;
+  li {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    align-items: center;
+    padding: 0.4rem 0.25rem;
+    border-radius: 0.5rem;
+    background-color: rgba(0, 0, 0, 0.04);
+  }
+
+  .label {
+    font-size: var(--fontsize-small);
+    text-transform: uppercase;
+  }
+
+  strong { font-size: var(--fontsize-medium); }
+
+  input {
+    width: 100%;
+    padding: 0 0.25rem;
+    text-align: center;
+  }
+}
+
+.signalement-board {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0;
+  padding: 0.75rem 0.75rem 0;
+  gap: 0.5rem;
+  list-style: none;
+
+  li {
+    display: flex;
+    flex: 1 1 8rem;
+    flex-direction: column;
+    gap: 0.15rem;
+    padding: 0.4rem 0.5rem;
+    border-radius: 0.5rem;
+    background-color: rgba(0, 0, 0, 0.04);
+  }
+
+  .label {
+    font-size: var(--fontsize-small);
+    text-transform: uppercase;
+  }
+}
+
+.signalement-texte {
+  padding: 0.75rem;
+
+  p { margin: 0; }
+}
+
+.technique-list {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0.75rem;
+  gap: 0.5rem;
+  list-style: none;
+
+  li {
+    display: flex;
+    align-items: baseline;
+    gap: 0.75rem;
+  }
+
+  .number-skillrank-effect {
+    flex: 0 0 1.5rem;
+    font-size: var(--fontsize-large);
+    text-align: center;
+  }
+
+  p { margin: 0; }
+}
+
+.inventory-weapons {
+  width: 100%;
+  margin: 0;
+  font-size: var(--fontsize-small);
+
+  th, td {
+    padding: 0.2rem 0.75rem;
+    border-bottom: 1px solid var(--color-border-base);
+  }
+
+  thead th {
+    font-family: 'Amerigo';
+    text-transform: uppercase;
+    opacity: 0.6;
+  }
+
+  tbody th { text-align: left; }
+
+  td { text-align: center; }
+}
+
+.inventory-list {
+  margin: 0;
+  padding: 0.75rem 0.75rem 0;
+  list-style: none;
+
+  li {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.2rem 0;
+    border-bottom: 1px solid var(--color-border-base);
+  }
+
+  .inventory-name { flex: 1; }
+
+  .inventory-empty {
+    border: 0;
+    font-style: italic;
+  }
+
+  .inventory-remove {
+    padding: 0;
+    border: 0;
+    background: none;
+    cursor: pointer;
+  }
+}
+
+.inventory-add { padding: 0.5rem 0.75rem 0; }
+
+.purse-board {
+  display: flex;
+  margin: 0;
+  padding: 0.75rem;
+  gap: 0.5rem;
+  list-style: none;
+
+  li {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.5rem 0.25rem;
+    border-radius: 0.5rem;
+    background-color: rgba(0, 0, 0, 0.04);
+  }
+
+  img { width: 32px; }
+
+  .purse-label {
+    font-size: var(--fontsize-small);
+    text-transform: uppercase;
+  }
+
+  strong { font-size: var(--fontsize-medium); }
+
+  input { width: 4.5rem; text-align: center; }
+}
+
+.purse-rate {
+  margin: 0;
+  padding: 0 0.75rem 0.75rem;
+  text-align: center;
+}
+
+#comp-table {
+  .comp-legende {
+    margin-left: 0.75rem;
+    font-size: var(--fontsize-small);
+    text-transform: none;
+    white-space: nowrap;
+  }
+
+  .comp-pastille {
+    display: inline-block;
+    width: 0.6rem;
+    height: 0.6rem;
+    margin-right: 0.35rem;
+    border-radius: 50%;
+    background-color: var(--color-reddanger);
+  }
+
+  td, th {
+    padding: 0.25rem;
+    vertical-align: middle;
+  }
+
+  .comp-specs-row {
+    display: none;
+
+    &.has-specs { display: table-row; }
+    .edit-mode & { display: table-row; }
+
+    td {
+      padding-top: 0;
+      padding-bottom: 0.3rem;
+      border-top: 0;
+      line-height: var(--leading-1);
+    }
+  }
 }
 
 /* ----- BLOC MAGIE ----- */
@@ -292,6 +498,17 @@
 }
 
 .spell-add { margin-top: 0.5rem; }
+
+.tattoo-board {
+  padding: 0.75rem;
+
+  > .spell-list { columns: 3 12rem; }
+
+  .spell-empty {
+    font-size: var(--fontsize-small);
+    font-style: italic;
+  }
+}
 
 .spell-select { font-size: var(--fontsize-small); }
 

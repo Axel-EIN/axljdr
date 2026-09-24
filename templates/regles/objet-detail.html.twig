@@ -1,0 +1,99 @@
+{% extends 'element.html.twig' %}
+
+{% block stylesheets %}
+  {{parent()}}
+  <link rel="stylesheet" href="{{asset('css/pages/objet.css')}}" />
+{% endblock %}
+
+{% block element_content %}
+
+  {% set categories = {ARME: 'Arme', ARMURE: 'Armure', PROJECTILE: 'Projectile', OBJET: 'Divers'} %}
+  {% set stats = [
+    {label: 'Taille',    valeur: un_element.taille|lower|capitalize},
+    {label: 'Poids',     valeur: un_element.poids|lower|capitalize},
+    {label: 'VD',        valeur: un_element.vd},
+    {label: 'Force Arc', valeur: un_element.forceArc},
+    {label: '+ND',       valeur: un_element.ndArmure},
+    {label: 'Réduction', valeur: un_element.reduction}
+  ]|filter(s => s.valeur is not empty) %}
+
+  <div class="col-12">
+    <div class="card card-page">
+
+      <div class="relative">
+
+        <div class="objet-stats d-none d-lg-flex">
+          <span class="objet-categorie">{{ categories[un_element.categorie]|default(un_element.categorie) }}</span>
+          {% if un_element.quality %}
+            <span class="objet-quality quality-{{ un_element.quality|lower }}">{{ un_element.quality }}</span>
+          {% endif %}
+          {% for stat in stats %}
+            <span>{{ stat.label }} : <strong>{{ stat.valeur }}</strong></span>
+          {% endfor %}
+          {% if un_element.prix %}<span class="objet-prix">{{ un_element.prix|pricer|raw }}</span>{% endif %}
+        </div>
+
+        {{ include('/parts/card-top-image.html.twig', {
+          image: un_element.image, na_image: NA_169, alt: 'Image de ' ~ un_element.nom,
+          img_class: 'crop-169', titre: nom, classes: 'gradient-desktop', state: element_state(un_element)
+        }) }}
+      </div>
+
+      <div class="objet-mobile-info d-lg-none text-center">
+        <span class="objet-categorie">{{ categories[un_element.categorie]|default(un_element.categorie) }}</span>
+        {% if un_element.quality %}
+          <span class="objet-quality quality-{{ un_element.quality|lower }}">{{ un_element.quality }}</span>
+        {% endif %}
+
+        <ul class="list-decored text-left">
+          {% for stat in stats %}
+            <li><span class="label">{{ stat.label }} :</span> <strong>{{ stat.valeur }}</strong></li>
+          {% endfor %}
+          {% if un_element.prix %}
+            <li><span class="label">Prix :</span> {{ un_element.prix|pricer|raw }}</li>
+          {% endif %}
+          {% if un_element.motCle1 or un_element.motCle2 %}
+            <li>
+              <span class="label">Mots-clés :</span>
+              {{ [un_element.motCle1, un_element.motCle2]|filter(m => m is not empty)|join(', ') }}
+            </li>
+          {% endif %}
+        </ul>
+      </div>
+
+      {% if un_element.motCle1 or un_element.motCle2 %}
+        <p class="objet-motscles d-none d-lg-block">
+          {% for mot in [un_element.motCle1, un_element.motCle2]|filter(m => m is not empty) %}
+            <span class="badge badge-secondary">{{ mot }}</span>
+          {% endfor %}
+        </p>
+      {% endif %}
+
+      {% if un_element.description %}
+        <p class="card-description aerated">{{ un_element.description|raw|nl2br }}</p>
+      {% endif %}
+
+      {% if un_element.regles %}
+        {{ include('/parts/divider-ornament.html.twig', {classes: 'my-3'}) }}
+
+        <h2 class="heading-elementpart decorated">Règles</h2>
+        <p class="card-description aerated">{{ un_element.regles|raw|nl2br }}</p>
+      {% endif %}
+
+    </div>
+  </div>
+
+  {% if autresObjets is not empty %}
+    <div class="col-12">
+      {{ include('/parts/picture-grid.html.twig', {
+        items: autresObjets,
+        title: 'Autres ' ~ (categories[un_element.categorie]|default(un_element.categorie))|lower ~ 's',
+        route: 'regles_objet',
+        variant: 'rule',
+        na_image: NA_43,
+        per_row: 6
+      }) }}
+    </div>
+  {% endif %}
+
+{% endblock %}

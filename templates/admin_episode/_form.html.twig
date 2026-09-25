@@ -2,8 +2,6 @@
     {{ form_start(form) }}
         <div class="row form-wrapper">
 
-            {{ include('parts/form-publication.html.twig', {form: form}) }}
-
             <div class="col-3">{{ form_row(form.titre) }}</div>
             <div class="col-3">{{ form_row(form.chapitreParent) }}</div>
             <div class="col-2">{{ form_row(form.numero) }}</div>
@@ -18,6 +16,8 @@
                     current: episode.image|default(null), fallback: NA_SESSION,
                     label: 'Image (1280×720 16:9 recommandé)', width: 1280, height: 720 }) }}
             </div>
+
+            {{ include('parts/form-publication.html.twig', {form: form}) }}
 
             {{ include('/btns/btn-form.html.twig') }}
         </div>

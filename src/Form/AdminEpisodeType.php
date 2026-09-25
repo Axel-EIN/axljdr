@@ -21,8 +21,8 @@ class AdminEpisodeType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('numero', IntegerType::class)
-            ->add('numeroSaison', IntegerType::class)
+            ->add('numero', IntegerType::class, ['label' => 'Ordre du Chapitre'])
+            ->add('numeroSaison', IntegerType::class, ['label' => 'Numéro Général'])
             ->add('titre', TextType::class)
             ->add('resume', TextareaType::class, ['required' => false, 'empty_data' => null, 'constraints' => [ new Length( [ 'max' => 200 ] ) ]])
             ->add('image', FileType::class, [

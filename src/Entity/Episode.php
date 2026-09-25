@@ -67,6 +67,7 @@ class Episode
     public function __construct()
     {
         $this->scenes = new ArrayCollection();
+        $this->access = Access::PUBLIC;
     }
 
     public function getId(): ?int

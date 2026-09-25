@@ -152,14 +152,18 @@ class AdminFichePersonnageType extends AbstractType
             ])
             ->add('knownSpells', EntityType::class, [
                 'class' => Sort::class,
-                'label' => 'Sorts et kihos connus (Ctrl + clic pour en sélectionner plusieurs)',
-                'choice_label' => fn(Sort $sort) => $sort->getNom() . ' (' . $sort->getNiveau() . ')',
-                'group_by' => fn(Sort $sort) => ($sort->getCategorie() === 'KIHO' ? 'Kiho ' : '') . $sort->getAnneau(),
+                'label' => 'Sorts, kihos et tatouages connus (Ctrl + clic pour en sélectionner plusieurs)',
+                'choice_label' => fn(Sort $sort) => $sort->getNom() . ($sort->getNiveau() !== null ? ' (' . $sort->getNiveau() . ')' : ''),
+                'group_by' => fn(Sort $sort) => match ($sort->getCategorie()) {
+                    'KIHO' => 'Kiho ' . $sort->getAnneau(),
+                    'TATOUAGE' => 'Tatouages',
+                    default => $sort->getAnneau(),
+                },
                 'multiple' => true,
                 'required' => false,
                 'attr' => ['size' => 20],
                 'query_builder' => fn(EntityRepository $er) => $er->createQueryBuilder('s')
-                    ->where('s.categorie IN (:categories)')->setParameter('categories', ['MAGIE', 'KIHO'])
+                    ->where('s.categorie IN (:categories)')->setParameter('categories', ['MAGIE', 'KIHO', 'TATOUAGE'])
                     ->orderBy('s.categorie', 'ASC')->addOrderBy('s.anneau', 'ASC')->addOrderBy('s.niveau', 'ASC')->addOrderBy('s.nom', 'ASC'),
             ])
         ;

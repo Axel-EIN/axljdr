@@ -2,8 +2,6 @@
     {{ form_start(form) }}
         <div class="row form-wrapper">
 
-            {{ include('parts/form-publication.html.twig', {form: form}) }}
-
             <div class="col-12">{{ form_row(form.genre) }}</div>
 
             <div class="col-6">{{ form_row(form.nom) }}</div>
@@ -18,7 +16,8 @@
 
             <div class="col-12">{{ form_row(form.summary) }}</div>
             <div class="col-12">{{ form_row(form.description,{ 'attr': {'rows': '10'} }) }}</div>
-            
+
+            {{ include('parts/form-publication.html.twig', {form: form}) }}
 
             {{ include('/btns/btn-form.html.twig') }}
         </div>

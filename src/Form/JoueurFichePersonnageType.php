@@ -26,6 +26,9 @@ class JoueurFichePersonnageType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $fiche = $builder->getData();
+        $spellCategories = $fiche?->getPersonnage()?->getEcole()?->hasTattoos()
+            ? ['MAGIE', 'KIHO', 'TATOUAGE']
+            : ['MAGIE', 'KIHO'];
         $equipped = array_filter([
             $fiche?->getArme()?->getId(),
             $fiche?->getArme2()?->getId(),
@@ -148,7 +151,7 @@ class JoueurFichePersonnageType extends AbstractType
                 'multiple' => true,
                 'required' => false,
                 'query_builder' => fn(EntityRepository $er) => $er->createQueryBuilder('s')
-                    ->where('s.categorie IN (:categories)')->setParameter('categories', ['MAGIE', 'KIHO'])
+                    ->where('s.categorie IN (:categories)')->setParameter('categories', $spellCategories)
                     ->orderBy('s.nom', 'ASC'),
             ])
             ->add('dmgModifier', TextType::class, [

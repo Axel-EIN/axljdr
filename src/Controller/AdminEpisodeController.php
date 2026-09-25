@@ -64,6 +64,8 @@ class AdminEpisodeController extends AbstractController
                     $episode->setChapitreParent($chapitreParent);
         }
 
+        $episode->setNumeroSaison($episodeRepository->nextCampaignNumber());
+
         $form = $this->createForm(AdminEpisodeType::class, $episode);
         $form->handleRequest($request);
 

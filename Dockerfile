@@ -23,6 +23,7 @@ RUN docker-php-ext-configure gd --with-jpeg --with-webp \
     && docker-php-ext-install -j$(nproc) pdo_mysql gd intl zip
 
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
+COPY docker/php.ini /usr/local/etc/php/conf.d/uploads.ini
 
 # Point Apache's docroot at public/, as required by the Symfony skeleton.
 ENV APACHE_DOCUMENT_ROOT /var/www/html/public

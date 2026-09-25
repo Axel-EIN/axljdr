@@ -588,4 +588,9 @@ class Ecole
 
         return $this;
     }
+
+    public function hasTattoos(): bool
+    {
+        return str_contains((string) $this->nom, 'Togashi');
+    }
 }

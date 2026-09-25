@@ -7,6 +7,7 @@ use App\Form\AdminFichePersonnageType;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\CompetenceRepository;
 use App\Repository\FichePersonnageRepository;
+use App\Repository\PersonnageRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -53,9 +54,14 @@ class AdminFicheController extends AbstractController
      * @Route("/admin/fiche/create", name="admin_fiche_create")
      * @IsGranted("ROLE_MJ")
      */
-    public function addFiche(Request $request, EntityManagerInterface $em, CompetenceRepository $competenceRepository) {
+    public function addFiche(Request $request, EntityManagerInterface $em, CompetenceRepository $competenceRepository, PersonnageRepository $personnageRepository) {
 
         $fiche = new FichePersonnage;
+        $personnage = $personnageRepository->find($request->query->getInt('personnage'));
+        if ($personnage !== null) {
+            $fiche->setPersonnage($personnage);
+        }
+
         $form = $this->createForm(AdminFichePersonnageType::class, $fiche);
         $form->handleRequest($request);
 
@@ -64,6 +70,10 @@ class AdminFicheController extends AbstractController
             $em->persist($fiche);
             $em->flush();
             $this->addFlash('success', 'La Fiche a bien été ajoutée.');
+
+            if ($request->query->get('redirect') === 'fiche') {
+                return $this->redirectToRoute('personnage_fiche', ['id' => $fiche->getId()]);
+            }
 
             return $this->redirectToRoute('admin_fiche');
         }

@@ -43,6 +43,14 @@ class EpisodeRepository extends ServiceEntityRepository
         ;
     }
 
+    public function nextCampaignNumber(): int
+    {
+        return 1 + (int) $this->createQueryBuilder('e')
+            ->select('MAX(e.numeroSaison)')
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
+
     public function countEpisodes() {
         return $this->createQueryBuilder('e')
             ->select('count(e.id)')

@@ -163,7 +163,7 @@ class PersonnagesController extends AbstractController
             $form->get('description')->setData($baliseur->debaliser($personnage->getDescription()));
         }
 
-        return $this->render('personnages/character-profil.html.twig', [
+        return $this->render('personnages/character-profile.html.twig', [
             'personnage' => $personnage,
             'est_le_joueur' => $estLeJoueur,
             'peut_editer' => $peutEditer,

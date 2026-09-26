@@ -822,6 +822,10 @@
         {% endif %}
       {% endfor %}
 
+    {# ====================================== #}
+    {# ===== [CARD-BLOC-SECTION] SPELLS ===== #}
+    {# ====================================== #}
+
       {% if classe_nom == 'Shugenja' or spells_by_ring is not empty %}
 
         {% set rings = {TERRE: FLAT_TERRE, AIR: FLAT_AIR, FEU: FLAT_FEU, EAU: FLAT_EAU} %}
@@ -878,7 +882,7 @@
             {% for ring, icone in rings %}
               <div class="col-6 col-lg knownspells-column">
                 <h6 class="element-header text-{{ ring }}-lighten bg-{{ ring }}-darken extrabold">
-                  <img class="img-24 invert" src="{{ asset(icone) }}" />{{ ring|lower|capitalize }}
+                  <img class="img-24" src="{{ asset(icone) }}" />{{ ring|lower|capitalize }}
                 </h6>
                 <ul class="spell-list" data-spell-list="{{ ring }}">
                   {% for spell in spells_by_ring[ring]|default([]) %}
@@ -894,6 +898,10 @@
 
       {% endif %}
 
+        {# ===================================== #}
+        {# ===== [CARD-BLOC-SECTION] KIHOS ===== #}
+        {# ===================================== #}
+
       {% if classe_nom == 'Moine' or kihos_by_ring is not empty %}
 
         <div class="card card-bloc">
@@ -904,7 +912,7 @@
             {% for ring, icone in {TERRE: FLAT_TERRE, AIR: FLAT_AIR, FEU: FLAT_FEU, EAU: FLAT_EAU, VIDE: FLAT_VIDE} %}
               <div class="col-6 col-lg knownspells-column">
                 <h6 class="element-header text-{{ ring }}-lighten bg-{{ ring }}-darken extrabold">
-                  <img class="img-24 invert" src="{{ asset(icone) }}" />{{ ring|lower|capitalize }}
+                  <img class="img-24" src="{{ asset(icone) }}" />{{ ring|lower|capitalize }}
                 </h6>
                 <ul class="spell-list" data-spell-list="KIHO_{{ ring }}">
                   {% for kiho in kihos_by_ring[ring]|default([]) %}

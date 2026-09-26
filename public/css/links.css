@@ -2,6 +2,11 @@
 
 a {
     color: var(--color-link);
+
+    &.bold {
+        font-weight: bold;
+    }
+
     &:hover {
         color: var(--color-link-hover);
         text-decoration: none;

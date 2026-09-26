@@ -13,6 +13,6 @@
         <i class="fa-solid fa-circle-info"></i>
     </a>
     {% if spell.niveau is not null %}
-        <strong class="text-rank reduced bg-{{ ring }}">{{ spell.niveau }}</strong>
+        <strong class="text-rank reduced bg-{{ ring|lower }}">{{ spell.niveau }}</strong>
     {% endif %}
 </li>

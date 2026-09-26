@@ -465,17 +465,18 @@
 }
 
 .magie-anneaux {
-  display: flex;
+    display: flex;
 }
 
 .knownspells-column {
-  padding-left: 0.125rem !important;
-  padding-right: 0.125rem !important;
-
-  .element-header {
-    padding: 0.25rem;
-    border-radius: 0.25rem;
-    text-transform: uppercase;
+    padding-left: 0.125rem !important;
+    padding-right: 0.125rem !important;
+    
+    .element-header {
+        padding: 0.25rem;
+        border-radius: 0.25rem;
+        text-transform: uppercase;
+        background-color: var(--color-fade);
   }
 
   .element-spell {

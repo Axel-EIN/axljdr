@@ -105,6 +105,6 @@
             width: auto;
             margin: 1rem;
         }
-        .card-description { order: 1; }
+        .articlepart { order: 1; }
     }
 }

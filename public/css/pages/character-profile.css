@@ -1,5 +1,22 @@
 .element-page { --profil-banner-h: 125px; }
 
+.profile-xp-and-rank {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    .xp-number {
+        font-size: var(--fontsize-larger);
+        color: var(--color-strong);
+        font-weight: bold;
+    }
+
+    .xp-rank {
+        font-size: var(--fontsize-medium);
+    }
+}
+
 .profile-maincontent {
     padding: 0 1.5rem;
 
@@ -72,13 +89,23 @@
     }
 }
 
-/* ----- CARTES DU PROFIL ------- */
+/* ===================================== */
+/* ===== PROFILE INFOS CARD (LEFT) ===== */
+/* ===================================== */
 
-.profil-infos {
+.profile-infos {
     padding: 0;
     overflow: hidden;
 
-    .list-group-item > a > img { margin-left: 0.5rem; }
+    .profile-infos-list {
+        .infos-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            a > img { margin-left: 0.5rem; }
+        }
+    }
 }
 
 .profil-btn-fiche { margin-top: 1rem; }
@@ -89,9 +116,11 @@
     @media (max-width: 991.98px) { padding-bottom: 1rem; }
 }
 
-/* ----- PROFIL BANNER MOBILE --- */
+/* ================================= */
+/* ===== PROFILE BANNER MOBILE ===== */
+/* ================================= */
 
-.profil-banner-mobile {
+.profile-banner-mobile {
     position: relative;
     height: var(--profil-banner-h);
     overflow: hidden;
@@ -108,7 +137,7 @@
     }
 }
 
-.profil-banner-mobile::after {
+.profile-banner-mobile::after {
     content: '';
     position: absolute;
     inset: 0;

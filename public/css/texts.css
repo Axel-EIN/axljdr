@@ -5,15 +5,16 @@
   --fontsize-small: 0.875rem;       /* 14px */
   --fontsize-base : 1rem;           /* 16px */
   --fontsize-regular : 1.125rem;    /* 18px */
-  --fontsize-medium: 1.2rem;
-  --fontsize-plus: 1.25rem;
-  --fontsize-pluser: 1.4rem;
-  --fontsize-large: 1.5rem;
-  --fontsize-big: 1.75rem;
-  --fontsize-bigger: 2rem;
-  --fontsize-huge: 3rem;
-  --fontsize-hero: 4rem;
-  --fontsize-giant: 6rem;
+  --fontsize-medium: 1.25rem;       /* 20px */
+  --fontsize-plus: 1.375rem;        /* 22px */
+  --fontsize-pluser: 1.5rem;        /* 24px */
+  --fontsize-large: 1.75rem;        /* 28px */
+  --fontsize-larger: 2rem;          /* 32px */
+  --fontsize-big: 2.25rem;          /* 36px */
+  --fontsize-bigger: 2.5rem;        /* 40px */
+  --fontsize-huge: 3rem;            /* 48px */
+  --fontsize-hero: 4rem;            /* 64px */
+  --fontsize-giant: 6rem;           /* 96px */
 
   --leading-1: 1;
   --leading-12: 1.2;
@@ -22,6 +23,7 @@
   --leading-15: 1.5;
   --leading-16: 1.6;
   --leading-18: 1.8;
+  --leading-20: 2;
 
   .text-mini { font-size: var(--fontsize-mini); }
   .text-small { font-size: var(--fontsize-small); }

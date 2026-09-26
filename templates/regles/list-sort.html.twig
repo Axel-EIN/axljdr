@@ -145,8 +145,8 @@
 
                 {% if app.request.get('tab') != 'TATOUAGE' %}
                     {% set ring = item.anneau in ['TERRE', 'AIR', 'FEU', 'EAU', 'VIDE'] ? item.anneau : 'black' %}
-                    <div class="col-1 p-0 m-0 text-{{ ring }}">
-                        <strong class="text-rank font-present bg-{{ ring }}">{{ item.niveau }}</strong>
+                    <div class="col-1 p-0 m-0 text-{{ ring|lower }}">
+                        <strong class="text-rank font-present bg-{{ ring|lower }}">{{ item.niveau }}</strong>
                     </div>
                 {% endif %}
 

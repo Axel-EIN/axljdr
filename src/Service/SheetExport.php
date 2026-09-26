@@ -56,9 +56,9 @@ class SheetExport
     private const COMBAT_ND = [1556, 985];
     private const COMBAT_ARMOUR = [1317, 1063];
     private const COMBAT_REDUCTION = [1556, 1063];
-    private const COMBAT_RECOVERY = [1556, 1652];
+    private const COMBAT_RECOVERY = [1556, 1666];
     private const HP_COLUMN = 1437;
-    private const HP_FIRST = 1212;
+    private const HP_FIRST = 1177;
     private const HP_STEP = 49;
     private const HP_ROWS = 8;
 
@@ -80,7 +80,7 @@ class SheetExport
         'cap6' => [888, 217],
     ];
 
-    private const WEAPON_FIRST = 1778;
+    private const WEAPON_FIRST = 1785;
     private const WEAPON_STEP = 37;
     private const WEAPON_ROWS = 4;
     private const WEAPON_CATEGORY = 'ARME';
@@ -293,7 +293,7 @@ class SheetExport
         }
 
         $pdf->text($initiative, self::COMBAT_INITIATIVE[0], self::COMBAT_INITIATIVE[1], 32, $centered);
-        $pdf->text((string) ($reflexes * 5 + (int) $fiche->getNdModifier()), self::COMBAT_ND[0], self::COMBAT_ND[1], 30, $centered);
+        $pdf->text((string) (5 + $reflexes * 5 + (int) $fiche->getNdModifier()), self::COMBAT_ND[0], self::COMBAT_ND[1], 30, $centered);
 
         if ($armure) {
             $pdf->text('+' . (int) $armure->getNdArmure(), self::COMBAT_ARMOUR[0], self::COMBAT_ARMOUR[1], 30, $centered);
@@ -305,9 +305,15 @@ class SheetExport
             $pdf->text((string) $reduction, self::COMBAT_REDUCTION[0], self::COMBAT_REDUCTION[1], 30, $centered);
         }
 
+        $total = 0;
+
         for ($i = 0; $i < self::HP_ROWS; $i++) {
-            $pdf->text((string) ($i === 0 ? $terre * 5 : $terre * 2), self::HP_COLUMN, self::HP_FIRST + $i * self::HP_STEP, 28, $centered);
+            $hp = $i === 0 ? $terre * 5 : $terre * 2;
+            $total += $hp;
+            $pdf->text((string) $hp, self::HP_COLUMN, self::HP_FIRST + $i * self::HP_STEP, 28, $centered);
         }
+
+        $pdf->text((string) $total, self::HP_COLUMN, self::HP_FIRST + self::HP_ROWS * self::HP_STEP, 28, $centered);
 
         $pdf->text((string) ($traits['constitution']['value'] * 2 + $rang), self::COMBAT_RECOVERY[0], self::COMBAT_RECOVERY[1], 30, $centered);
     }

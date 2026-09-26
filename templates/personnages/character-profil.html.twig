@@ -4,7 +4,7 @@
   {{parent()}}
   <link rel="stylesheet" href="{{asset('css/components/history.css')}}" />
   <link rel="stylesheet" href="{{asset('css/components/edit-mode.css')}}" />
-  <link rel="stylesheet" href="{{asset('css/pages/profil.css')}}" />
+  <link rel="stylesheet" href="{{asset('css/pages/character-profile.css')}}" />
 {% endblock %}
 
 {% block element_content %}
@@ -23,6 +23,10 @@
   {{ include('parts/badge-access.html.twig', {state: element_state(personnage)}) }}
 </div>
 
+{# ============================= #}
+{# ===== [CARD] LEFT INFOS ===== #}
+{# ============================= #}
+
 <div class="col-12 col-lg-4 order-2 order-lg-1">
   <div class="card card-body profil-infos">
 
@@ -38,7 +42,7 @@
           <span class="text-muted text-small">Création : <strong class="extrabold">{{xp_creation}}</strong></span>
           <span class="text-muted text-small">Progression : <strong class="extrabold">{{xp_progression}}</strong></span>
         </div>
-        <div class="text-big text-flash-green-darker extrabold">
+        <div class="text-big text-strong extrabold">
           {% if xp > 0 %}
             {{xp}} XP
           {% endif %}
@@ -101,147 +105,175 @@
   </div>
 </div>
 
+{# ======================= #}
+{# ===== [CARD] MAIN ===== #}
+{# ======================= #}
+
 <div class="col-12 col-lg-8 order-1 order-lg-2">
-  <div class="card card-body">
+    <div class="card card-body">
 
-    {% if peut_editer %}
-      {{ form_start(form, {action: path('personnage_profil_edit', {id: personnage.id})}) }}
-    {% endif %}
+        {% if peut_editer %}
+        {{ form_start(form, {action: path('personnage_profil_edit', {id: personnage.id})}) }}
+        {% endif %}
 
-    <h2 class="heading-elementpart decorated mt-3">Histoire</h2>
+        <div class="profile-maincontent profil-zone">
 
-    <div class="profil-zone">
-      {% if personnage.titres is defined and personnage.titres is not empty %}
-        <h4 class="card-title-cartouche">{{ personnage.titres }}</h4>
-      {% endif %}
-      <p class="card-description condensed read-only">{{ personnage.description|default('')|raw|nl2br }}</p>
-      {% if peut_editer %}
-        <p class="text-muted text-small edit-only">Lisible par tous les visiteurs du site.</p>
-        {{ form_widget(form.description, {attr: {class: 'edit-only'}}) }}
-        {{ include('/btns/btn-interactive-edit-actions.html.twig', {label: 'Éditer (Joueur ou MJ)'}) }}
-      {% endif %}
-    </div>
+            {# ================================ #}
+            {# ===== [CARD-SECTION] STORY ===== #}
+            {# ================================ #}
 
-    {% if developments is not empty or is_granted('ROLE_MJ') %}
+            <h2 class="profile-description-title">Histoire</h2>
 
-    {{ include('/parts/divider-ornament.html.twig') }}
-    <h2 class="heading-elementpart decorated">Développement</h2>
-
-    <div class="profil-developments">
-      {% for development in developments %}
-        {% set scene = development.scene %}
-        {% set episode = scene.episodeParent %}
-        {% set chapitre = episode.chapitreParent %}
-        {% set scene_url = path('aventure_episode', {id: episode.id, '_fragment': 'scn' ~ scene.numero}) %}
-        <article class="development-line">
-          <div class="development-head">
-            <span class="development-title">
-              <a href="{{ scene_url }}"><strong>{{ scene.titre }}</strong></a>
-              {% if is_granted('ROLE_MJ') %}
-                {{ include('/btns/btn-icon-edit.html.twig', {
-                  entity: 'development', un_element: development, position: 'align-middle',
-                  redirect: 'development', size: 'btn-icon-mini', color: 'text-accent',
-                }) }}
-              {% endif %}
-            </span>
-
-            <span class="development-meta">{{ chapitre.titre }} — EP #{{ episode.numeroSaison }} - Scène {{ scene.numero }}</span>
-            {% if development.estMort %}
-              <strong class="text-dead">MORT</strong>
+            {% if personnage.titres is defined and personnage.titres is not empty %}
+                <h4 class="card-title-cartouche">{{ personnage.titres }}</h4>
             {% endif %}
-          </div>
 
-          <div class="development-content">
-            <p class="card-description condensed">{{ development.content|raw|nl2br }}</p>
+            <p class="profile-description read-only">{{ personnage.description|default('')|raw|nl2br }}</p>
 
-            <a class="development-image" href="{{ scene_url }}" title="Voir la scène {{ scene.numero }}">
-              <img src="{{ asset(scene.image|default(NA_SCENE)) }}" alt="Scène {{ scene.numero }} — {{ scene.titre }}" />
-            </a>
-          </div>
-        </article>
-      {% else %}
-        <p class="text-muted">Rien pour le moment.</p>
-      {% endfor %}
-    </div>
+            {% if peut_editer %}
+                {{ form_widget(form.description, {attr: {class: 'edit-only'}}) }}
+                {{ include('/btns/btn-interactive-edit-actions.html.twig', {label: 'Éditer'}) }}
+            {% endif %}
 
-    <div class="zone-actions">
-      {{ include('/btns/btn-add-element.html.twig', {
-        entity: 'development', label_one: '',
-        position: '', options: 'personnage=' ~ personnage.id,
-        variant: 'btn-quaternary-style text-accent',
-      }) }}
-    </div>
+            {# ========================================= #}
+            {# ===== [CARD-SECTION] DEVELOPPEMENTS ===== #}
+            {# ========================================= #}
 
-    {% endif %}
+            <div class="profil-developments">
+                {% for development in developments %}
+                    {% set scene = development.scene %}
+                    {% set episode = scene.episodeParent %}
+                    {% set chapitre = episode.chapitreParent %}
+                    {% set scene_url = path('aventure_episode', {id: episode.id, '_fragment': 'scn' ~ scene.numero}) %}
 
-    {% if peut_editer %}
-      <div class="profil-zone">
-        {{ include('/parts/divider-ornament.html.twig') }}
-        <h2 class="heading-elementpart decorated">Histoire (secret)</h2>
+                    <article class="development-line">
+                        <div class="development-head">
+                            <span class="development-title">
+                                <a href="{{ scene_url }}"><strong>{{ scene.titre }}</strong></a>
+                                {% if is_granted('ROLE_MJ') %}
+                                    {{ include('/btns/btn-icon-edit.html.twig', {
+                                    entity: 'development', un_element: development, position: 'align-middle',
+                                    redirect: 'development', size: 'btn-icon-mini', color: 'text-accent',
+                                    }) }}
+                                {% endif %}
+                            </span>
 
-        <p class="text-muted text-small">Écrite par le joueur, lisible du Maître de Jeu seul.</p>
-        <p class="card-description condensed read-only">{{ personnage.playerNotes|default('Rien pour le moment.')|nl2br }}</p>
-        {{ form_widget(form.playerNotes, {attr: {class: 'edit-only'}}) }}
-        {{ include('/btns/btn-interactive-edit-actions.html.twig', {
-          label: 'Éditer (Joueurs ou MJ)',
-        }) }}
-      </div>
+                            <span class="development-meta">{{ chapitre.titre }} — EP #{{ episode.numeroSaison }} - Scène {{ scene.numero }}</span>
+                            {% if development.estMort %}
+                                <strong class="text-dead">MORT</strong>
+                            {% endif %}
+                        </div>
 
-      {% if form.gmNotes is defined %}
-        <div class="profil-zone">
-          {{ include('/parts/divider-ornament.html.twig') }}
-          <h2 class="heading-elementpart decorated">Notes du Maître de Jeu</h2>
+                        <div class="development-content">
+                            <p class="profile-description">{{ development.content|raw|nl2br }}</p>
+                            <a class="development-image" href="{{ scene_url }}" title="Voir la scène {{ scene.numero }}">
+                                <img src="{{ asset(scene.image|default(NA_SCENE)) }}" alt="Scène {{ scene.numero }} — {{ scene.titre }}" />
+                            </a>
+                        </div>
+                    </article>
+                {% endfor %}
 
-          <p class="text-muted text-small">Lisible du Maître de Jeu seul, le joueur n'y a pas accès.</p>
-          <p class="card-description condensed read-only">{{ personnage.gmNotes|default('Rien pour le moment.')|nl2br }}</p>
-          {{ form_widget(form.gmNotes, {attr: {class: 'edit-only'}}) }}
-          {{ include('/btns/btn-interactive-edit-actions.html.twig', {label: 'Éditer (MJ)'}) }}
+                <div class="zone-actions">
+                    {{ include('/btns/btn-add-element.html.twig', {
+                        entity: 'development', label_one: 'développement',
+                        position: '', options: 'personnage=' ~ personnage.id,
+                        variant: 'btn-quaternary-style text-accent',
+                    }) }}
+                </div>
+            </div>
+
+            {% if peut_editer %}
+
+                {# ========================================= #}
+                {# ===== [CARD-SECTION] PLAYER'S NOTES ===== #}
+                {# ========================================= #}
+
+                <div class="profil-zone">
+                    {{ include('/parts/divider-ornament.html.twig') }}
+                    <h2 class="profile-description-title">Secrets</h2>
+
+                    {% if personnage.playerNotes is not empty %}
+                        <p class="card-description condensed read-only">{{ personnage.playerNotes|nl2br }}</p>
+                    {% else %}
+                        <p class="profile-description-na">Rien pour le moment.</p>
+                    {% endif %}
+
+                    {{ form_widget(form.playerNotes, {attr: {class: 'edit-only'}}) }}
+                    {{ include('/btns/btn-interactive-edit-actions.html.twig', {label: 'Éditer'}) }}
+                </div>
+
+
+                {% if app.user and is_granted("ROLE_MJ") %}
+                    {# ===================================== #}
+                    {# ===== [CARD-SECTION] GM's NOTES ===== #}
+                    {# ===================================== #}
+
+                    <div class="profil-zone">
+                        {{ include('/parts/divider-ornament.html.twig') }}
+                        <h2 class="profile-description-title">Notes du Maître de Jeu</h2>
+
+                        {% if personnage.gmNotes is not empty %}
+                            <p class="card-description condensed read-only">{{ personnage.gmNotes|nl2br }}</p>
+                        {% else %}
+                            <p class="profile-description-na">Rien pour le moment.</p>
+                        {% endif %}
+
+                        {{ form_widget(form.gmNotes, {attr: {class: 'edit-only'}}) }}
+                        {{ include('/btns/btn-interactive-edit-actions.html.twig', {label: 'Éditer'}) }}
+                    </div>
+                {% endif %}
+
+                {{ form_end(form) }}
+            {% endif %}
+
         </div>
-      {% endif %}
-
-      {{ form_end(form) }}
-    {% endif %}
-
-  </div>
+    </div>
 </div>
+
+{# ========================== #}
+{# ===== [CARD] HISTORY ===== #}
+{# ========================== #}
 
 <div class="col-12 col-lg-8 order-3">
-  <div class="card card-body">
-
-    <h2 class="heading-cardtitle">Historique</h2>
-    <hr>
-    <div class="card-text profil-historique">
-      {{ include('parts/history.html.twig', {historique, saison_courante}) }}
-      {% if xp_creation > 0 %}
-        <p class="profil-creation">Création du personnage {{ personnage.prenom }} avec <strong>{{ xp_creation }}xp</strong>.</p>
-      {% endif %}
+    <div class="card card-body">
+        <h2 class="heading-cardtitle">Historique</h2>
+        <hr>
+        <div class="card-text profil-historique">
+            {{ include('parts/history.html.twig', {historique, saison_courante}) }}
+            {% if xp_creation > 0 %}
+            <p class="profil-creation">Création du personnage {{ personnage.prenom }} avec <strong>{{ xp_creation }}xp</strong>.</p>
+            {% endif %}
+        </div>
     </div>
-  </div>
 </div>
 
+{# =================================== #}
+{# ===== [CARD] OTHER CHARACTERS ===== #}
+{# =================================== #}
+
 {{ include('/parts/picture-grid.html.twig', {
-  variant: 'portrait',
-  title: personnage.estPj ? 'Autres PJs' : 'Autres PNJs',
-  items: autresPersonnages, route: 'personnage_profil',
-  limit: 12,
-  wrapper: 'col-12 col-lg-4 order-4',
-  per_row: {desktop: 2, tablet: 4, mobile: 2},
-  empty_message: "Il n'y a pas d'autres personnage.",
+    variant: 'portrait',
+    title: personnage.estPj ? 'Autres PJs' : 'Autres PNJs',
+    items: autresPersonnages, route: 'personnage_profil',
+    limit: 12,
+    wrapper: 'col-12 col-lg-4 order-4',
+    per_row: {desktop: 2, tablet: 4, mobile: 2},
+    empty_message: "Il n'y a pas d'autres personnage.",
 }) }}
 
 {% endblock %}
 
 {% block javascripts %}
-  {{ parent() }}
-  {% if peut_editer %}
-    <script>
-      (function () {
-        const bascule = (selecteur, action) => document.querySelectorAll(selecteur).forEach(
-          btn => btn.addEventListener('click', () => btn.closest('.profil-zone').classList[action]('edit-mode'))
-        );
-        bascule('[data-edit-open]', 'add');
-        bascule('[data-edit-cancel]', 'remove');
-      })();
-    </script>
-  {% endif %}
+    {{ parent() }}
+    {% if peut_editer %}
+        <script>
+            (function () {
+            const bascule = (selecteur, action) => document.querySelectorAll(selecteur).forEach(
+                btn => btn.addEventListener('click', () => btn.closest('.profil-zone').classList[action]('edit-mode'))
+            );
+            bascule('[data-edit-open]', 'add');
+            bascule('[data-edit-cancel]', 'remove');
+            })();
+        </script>
+    {% endif %}
 {% endblock %}

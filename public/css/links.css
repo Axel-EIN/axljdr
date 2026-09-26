@@ -2,7 +2,6 @@
 
 a {
     color: var(--color-link);
-    font-weight: bold;
     &:hover {
         color: var(--color-link-hover);
         text-decoration: none;
@@ -21,18 +20,6 @@ a.text-white50:hover { color: var(--color-white);}
 }
 
 .hover-no-under:hover { text-decoration: none; }
-
-/* --------- PAGES  ---------- */
-
-h5 a:hover,
-h4 a:hover,
-h3 a:hover,
-h2 a:hover,
-h1 a:hover
-{
-    text-decoration: none;
-    color: var(--color-secondary);
-}
 
 /* ---- TEXT BLOCKS CHAR LINKS  ---- */
 

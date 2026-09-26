@@ -14,10 +14,10 @@
     --color-stamp: var(--color-blackonyx);
     --color-border-base: var(--color-grayedge);
     
-    --color-link: var(--color-primarydarken);
+    --color-link: var(--color-primarydarker);
     --color-link-hover: var(--color-primary);
     --color-linkondark: var(--color-primary);
-    --color-linkondark-hover: var(--color-primarydark);
+    --color-linkondark-hover: var(--color-primarylighter);
     --color-linkgm: var(--accent);
     --color-linkgm-hover: var(--accent-light);
 
@@ -135,7 +135,7 @@
     --color-primarylight: hsl(from var(--color-primary) h calc(s + 15) calc(l + 10));
     --color-primary: #EA2027;
     --color-primarydark: hsl(from var(--color-primary) h calc(s - 15) calc(l - 10));
-    --color-primarydarker: hsl(from var(--color-primary) h calc(s - 10) calc(l - 15));
+    --color-primarydarker: hsl(from var(--color-primary) h calc(s - 20) calc(l - 15));
     --color-primarydarken: hsl(from var(--color-primary) h s calc(l - 33));
     --color-reddanger: #DC3545;
 
@@ -234,11 +234,11 @@
     --color-waterdark: hsl(from var(--EAU) h s calc(l - 20));
 
     .text-waterlight { color: var(--color-waterlight); }
-    .text-water { color: var(--color-water); }
+    .text-water, .text-eau { color: var(--color-water); }
     .text-waterdark { color: var(--color-waterdark); }
 
     .bg-waterlight { background-color: var(--color-waterlight); }
-    .bg-water { background-color: var(--color-water); }
+    .bg-water, .bg-eau { background-color: var(--color-water); }
     .bg-waterdark { background-color: var(--color-waterdark); }
 
 /* --- ELEMENT FIRE --- */
@@ -248,11 +248,11 @@
     --color-firedark: hsl(from var(--FEU) h s calc(l - 20));
 
     .text-firelight { color: var(--color-firelight); }
-    .text-fire { color: var(--color-fire); }
+    .text-fire, .text-feu { color: var(--color-fire); }
     .text-firedark { color: var(--color-firedark); }
 
     .bg-firelight { background-color: var(--color-firelight); }
-    .bg-fire { background-color: var(--color-fire); }
+    .bg-fire, .bg-feu { background-color: var(--color-fire); }
     .bg-firedark { background-color: var(--color-firedark); }
 
 /* --- ELEMENT EARTH --- */
@@ -262,11 +262,11 @@
     --color-earthdark: hsl(from var(--color-earth) h s calc(l - 20));
 
     .text-earthlight { color: var(--color-earthlight); }
-    .text-earth { color: var(--color-earth); }
+    .text-earth, .text-terre { color: var(--color-earth); }
     .text-earthdark { color: var(--color-earthdark); }
 
     .bg-earthlight { background-color: var(--color-eathlight); }
-    .bg-earth { background-color: var(--color-earth); }
+    .bg-earth, .bg-terre { background-color: var(--color-earth); }
     .bg-earth-dark { background-color: var(--color-earthdark); }
 
 /* --- ELEMENT VOID --- */
@@ -276,10 +276,10 @@
     --color-voiddark: hsl(from var(--color-void) h s calc(l - 20));
 
     .text-voidlight { color: var(--color-voidlight); }
-    .text-void { color: var(--color-void); }
+    .text-void, .text-vide { color: var(--color-void); }
     .text-voiddark { color: var(--color-voiddark); }
 
     .bg-voidlight { background-color: var(--color-voidlight); }
-    .bg-void { background-color: var(--color-void); }
+    .bg-void, .bg-vide { background-color: var(--color-void); }
     .bg-voiddark { background-color: var(--color-voiddark); }
 }

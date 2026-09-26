@@ -1,5 +1,77 @@
 .element-page { --profil-banner-h: 125px; }
 
+.profile-maincontent {
+    padding: 0 1.5rem;
+
+    @media (max-width: 991.98px) {
+        padding: 0 0;
+    }
+}
+
+.profile-description-title {
+    display: block;
+    font-size: var(--fontsize-huge);
+    font-family: 'Present';
+    color: var(--color-strong);
+    text-align: center;
+    margin: 2rem 0 1rem 0;
+    line-height: 1;
+}
+
+.profile-description-na {
+    text-align: center;
+    color: var(--color-alternate);
+    font-style: italic;
+}
+
+.profile-description {
+    font-size: var(--fontsize-regular);
+    line-height: var(--leading-16);
+    text-align: justify;
+}
+
+/* ----- DEVELOPPEMENT ---------- */
+
+.profil-developments {
+    display: block;
+
+    .development-line + .development-line { margin-top: 1.5rem; }
+
+    .development-head {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: baseline;
+        gap: 0.5rem;
+    }
+
+    .development-meta {
+        margin-left: auto;
+        text-align: right;
+        font-size: var(--fontsize-small);
+        color: var(--color-body);
+    }
+
+    .development-content {
+        display: flex;
+        align-items: flex-start;
+        gap: 1rem;
+        margin-top: 0.25rem;
+    }
+
+    .development-image {
+        flex: 0 0 10rem;
+
+        img {
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            object-fit: cover;
+            border-radius: 0.5rem;
+        }
+
+        @media (max-width: 575.98px) { flex-basis: 6rem; }
+    }
+}
+
 /* ----- CARTES DU PROFIL ------- */
 
 .profil-infos {
@@ -11,7 +83,7 @@
 
 .profil-btn-fiche { margin-top: 1rem; }
 
-.profil-creation { margin-left: 1rem; }
+.profil-creation {margin: 1rem; text-align: center; }
 
 .profil-historique {
     @media (max-width: 991.98px) { padding-bottom: 1rem; }
@@ -75,52 +147,4 @@ textarea.edit-only {
     align-items: center;
     gap: 0.5rem;
     margin-top: 1rem;
-}
-
-/* ----- DEVELOPPEMENT ---------- */
-
-.profil-developments {
-    .development-line + .development-line { margin-top: 1.5rem; }
-
-    .development-head {
-        display: flex;
-        flex-wrap: wrap;
-        align-items: baseline;
-        gap: 0.5rem;
-    }
-
-    .development-meta {
-        margin-left: auto;
-        text-align: right;
-        font-size: var(--fontsize-small);
-        color: var(--color-body);
-    }
-
-    .development-content {
-        display: flex;
-        align-items: flex-start;
-        gap: 1rem;
-        margin-top: 0.25rem;
-
-        .card-description { padding: 0; }
-    }
-
-    .card-description {
-        flex: 1;
-        min-width: 0;
-        margin: 0;
-    }
-
-    .development-image {
-        flex: 0 0 10rem;
-
-        img {
-            width: 100%;
-            aspect-ratio: 16 / 9;
-            object-fit: cover;
-            border-radius: 0.5rem;
-        }
-
-        @media (max-width: 575.98px) { flex-basis: 6rem; }
-    }
 }

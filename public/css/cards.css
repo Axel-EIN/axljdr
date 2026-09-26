@@ -35,7 +35,7 @@
 
 .card-description {
   margin: 0;
-  padding: 1rem 3rem;
+  padding: 1rem;
   text-align: justify;
   font-size: var(--fontsize-base);
   line-height: var(--leading-15);

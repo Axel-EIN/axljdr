@@ -15,7 +15,7 @@
     --color-border-base: var(--color-grayedge);
     
     --color-link: var(--color-primarydarken);
-    --color-link-hover: var(--color-primarydark);
+    --color-link-hover: var(--color-primary);
     --color-linkondark: var(--color-primary);
     --color-linkondark-hover: var(--color-primarydark);
     --color-linkgm: var(--accent);

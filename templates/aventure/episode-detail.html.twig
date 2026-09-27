@@ -134,9 +134,9 @@
                       </span>
                     </div>
                     <div class="ml-auto text-right">
-                      <span class="badge badge-pill text-large text-gray">{{un_personnage.xp}}xp</span>
-                      {% if un_personnage.xpWithBonus is defined and un_personnage.xpWithBonus > un_personnage.xp %}
-                        <div class="text-regular extrabold text-flash-green-darker mt-1">Total avec Bonus XP*2 : {{ un_personnage.xpWithBonus }}xp</div>
+                      <span class="badge badge-pill text-large text-gray">{{ include('parts/xp-gain.html.twig', {xp: un_personnage.xp, total: un_personnage.xpWithBonus}) }}</span>
+                      {% if un_personnage.xpWithBonus > un_personnage.xp %}
+                        <div class="text-regular extrabold text-flash-green-darker mt-1">{{ include('parts/xp-gain.html.twig', {xp: un_personnage.xp, total: un_personnage.xpWithBonus, format: 'total'}) }}</div>
                       {% endif %}
                     </div>
                   </a>

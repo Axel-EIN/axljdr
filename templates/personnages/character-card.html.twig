@@ -52,7 +52,7 @@
                 </div>
 
                 <div class="card-img-overlay">
-                    <h4 class="card-title-cartouche {{text}}">{{ perso.nom }} {{ perso.prenom }}</h4>
+                    <h4 class="card-title-cartouche {{text}}">{{ perso.nomComplet }}</h4>
                     {% if perso.estPj == 1 %}
                         <p class="card-text {{text}}"><small>{{ perso.joueur.pseudo }}</small></p>
                     {% endif %}

@@ -74,7 +74,7 @@
               {% if main_character %}
                 <a class="main-character" href="{{ path('personnage_profil', {id: main_character.id}) }}">
                   <img class="img-24" src="{{ asset(main_character.clan ? main_character.clan.mon|default(NA_MON) : NA_MON) }}" alt="Mon du clan" />
-                  ({{ main_character.nom }} {{ main_character.prenom }})
+                  ({{ main_character.nomComplet }})
                 </a>
               {% endif %}
 

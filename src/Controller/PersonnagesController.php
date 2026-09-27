@@ -210,7 +210,7 @@ class PersonnagesController extends AbstractController
                 $competences[] = [
                     'id' => $c->getId(),
                     'nom' => $c->getNom(),
-                    'trait' => $c->getTrait(),
+                    'traitCourt' => $c->getTraitCourt(),
                     'categorie' => $c->getCategorie(),
                     'specialisations' => [
                         $c->getSpecialisation1(),
@@ -300,6 +300,7 @@ class PersonnagesController extends AbstractController
                     'id' => $o->getId(),
                     'nom' => $o->getNom(),
                     'categorie' => $o->getCategorie(),
+                    'type' => $o->getType(),
                     'taille' => $o->getTaille(),
                     'poids' => $o->getPoids(),
                     'vd' => $o->getVd(),

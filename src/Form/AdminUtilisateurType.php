@@ -53,7 +53,7 @@ class AdminUtilisateurType extends AbstractType
                 'label' => 'personnage principal',
                 'class' => Personnage::class,
                 'choices' => $utilisateur ? $utilisateur->getPersonnages() : [],
-                'choice_label' => fn (Personnage $personnage) => $personnage->getNom() . ' ' . $personnage->getPrenom(),
+                'choice_label' => 'nomComplet',
                 'placeholder' => 'Automatique — le plus récent',
                 'required' => false,
             ]);

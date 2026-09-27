@@ -14,7 +14,7 @@
       {% if category == 'personnages' and entity == 'fiche' %}
         {% set fil = [
           { label: category|capitalize, path: path(category) },
-          { label: nom|capitalize, path: path('personnage_profil', {id: fiche.personnage.id}) },
+          { label: nom, path: path('personnage_profil', {id: fiche.personnage.id}) },
           { label: 'Fiche de Jeu' },
         ] %}
       {% else %}

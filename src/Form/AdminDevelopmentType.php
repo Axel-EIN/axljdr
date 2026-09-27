@@ -22,7 +22,7 @@ class AdminDevelopmentType extends AbstractType
                 'mapped' => false,
                 'label' => 'Personnage',
                 'placeholder' => '— Choisir un personnage —',
-                'choice_label' => fn(Personnage $p) => trim($p->getPrenom() . ' ' . $p->getNom()),
+                'choice_label' => 'nomComplet',
                 'query_builder' => fn(EntityRepository $er) => $er->createQueryBuilder('p')
                     ->innerJoin('p.participations', 'part')
                     ->groupBy('p.id')

@@ -59,22 +59,10 @@ class Classe
      */
     private $image;
 
-    /**
-     * @ORM\OneToMany(targetEntity=Avantage::class, mappedBy="discountClasse")
-     */
-    private $avantages;
-
-    /**
-     * @ORM\OneToMany(targetEntity=Avantage::class, mappedBy="exclusive")
-     */
-    private $exclusiveAvantages;
-
     public function __construct()
     {
         $this->ecoles = new ArrayCollection();
         $this->personnages = new ArrayCollection();
-        $this->avantages = new ArrayCollection();
-        $this->exclusiveAvantages = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -208,64 +196,6 @@ class Classe
     public function setImage(?string $image): self
     {
         $this->image = $image;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Avantage>
-     */
-    public function getAvantages(): Collection
-    {
-        return $this->avantages;
-    }
-
-    public function addAvantage(Avantage $avantage): self
-    {
-        if (!$this->avantages->contains($avantage)) {
-            $this->avantages[] = $avantage;
-            $avantage->setDiscountClasse($this);
-        }
-
-        return $this;
-    }
-
-    public function removeAvantage(Avantage $avantage): self
-    {
-        if ($this->avantages->removeElement($avantage)) {
-            if ($avantage->getDiscountClasse() === $this) {
-                $avantage->setDiscountClasse(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Avantage>
-     */
-    public function getExclusiveAvantages(): Collection
-    {
-        return $this->exclusiveAvantages;
-    }
-
-    public function addExclusiveAvantage(Avantage $exclusiveAvantage): self
-    {
-        if (!$this->exclusiveAvantages->contains($exclusiveAvantage)) {
-            $this->exclusiveAvantages[] = $exclusiveAvantage;
-            $exclusiveAvantage->setExclusive($this);
-        }
-
-        return $this;
-    }
-
-    public function removeExclusiveAvantage(Avantage $exclusiveAvantage): self
-    {
-        if ($this->exclusiveAvantages->removeElement($exclusiveAvantage)) {
-            if ($exclusiveAvantage->getExclusive() === $this) {
-                $exclusiveAvantage->setExclusive(null);
-            }
-        }
 
         return $this;
     }

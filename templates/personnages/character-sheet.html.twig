@@ -606,10 +606,10 @@
                 Compétences
                 <span class="comp-legende text-reddanger"><span class="comp-pastille"></span>compétence dégradante</span>
               </th>
-              <th class="px-1 py-2 text-small semi-visible text-center" scope="col">Rang</th>
-              <th class="px-1 py-2 text-small semi-visible text-center d-none d-lg-table-cell" scope="col">Trait</th>
-              <th class="comp-cap px-1 py-2 text-small semi-visible" scope="col">Cap. R3</th>
-              <th class="comp-cap px-1 py-2 text-small semi-visible" scope="col">Cap. R6</th>
+              <th class="px-1 py-2 text-small font-barlow semi-visible text-center" scope="col">Rang</th>
+              <th class="px-1 py-2 text-small font-barlow semi-visible text-center d-none d-lg-table-cell" scope="col">Trait</th>
+              <th class="comp-cap px-1 py-2 text-small font-barlow semi-visible text-center" scope="col">Capacité R3</th>
+              <th class="comp-cap px-1 py-2 text-small font-barlow semi-visible text-center" scope="col">Capacité R6</th>
               <th class="px-0 py-2 text-small semi-visible edit-only" scope="col">Coût XP</th>
             </tr>
           </thead>
@@ -664,7 +664,7 @@
                   <td class="text-strong extrabold text-center" data-comp-val-cell>{{ slot.val ?? '' }}</td>
                   <td class="text-body-c text-mini text-center d-none d-lg-table-cell" title="{{ slot.comp.trait }}" data-comp-trait-cell>{{ slot.comp.traitCourt }}</td>
                   {% for rang_cap, texte_cap in {3: slot.comp.mastery3Text, 6: slot.comp.mastery6Text} %}
-                    <td class="comp-cap text-mini text-body-c" rowspan="2">
+                    <td class="comp-cap text-mini text-body-c text-center" rowspan="2">
                       {% if slot.val >= rang_cap %}<span class="comp-cap-text">{{ texte_cap|striptags }}</span>{% endif %}
                     </td>
                   {% endfor %}

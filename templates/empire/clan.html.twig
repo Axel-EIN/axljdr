@@ -34,7 +34,7 @@
                             <img class="img-fluid circle-crop" src="{{ asset(une_famille.mon|default(NA_MON)) }}" alt="Mon Famille" />
 
                             {% if une_famille.chef is not empty %}
-                                <a class="famille-daimyo hover-no-under hover-zoom" href="{{ path('personnage_profil', {id: une_famille.chef.id} ) }}" title="{{une_famille.chef.nom}} {{une_famille.chef.prenom}}">
+                                <a class="famille-daimyo hover-no-under hover-zoom" href="{{ path('personnage_profil', {id: une_famille.chef.id} ) }}" title="{{ une_famille.chef.nomComplet }}">
                                     <span class="text-muted">Daimyo</span>
                                     <img class="character-portrait medium" src="{{ asset(une_famille.chef.icone|default(NA_PERSO_PORTRAIT)) }}" alt="Icône du personnage" />
                                 </a>

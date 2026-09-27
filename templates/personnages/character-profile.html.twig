@@ -93,7 +93,7 @@
 
       {% if personnage.fichePersonnage is not null and (est_le_joueur or is_granted('ROLE_MJ')) %}
         <li class="list-group-item d-flex justify-content-center profil-btn-fiche">
-          <a class="btn-primary-style btn-medium" href="{{ path('personnage_fiche', {id: personnage.fichePersonnage.id}) }}">
+          <a class="btn-primary-style btn-medium{% if not est_le_joueur %} gm{% endif %}" href="{{ path('personnage_fiche', {id: personnage.fichePersonnage.id}) }}">
             <i class="fas fa-scroll"></i> Voir la Fiche de Jeu
           </a>
         </li>

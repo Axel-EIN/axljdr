@@ -22,7 +22,7 @@
         <strong>{{ un_personnage.prenom }}</strong>
         {% if un_personnage.joueur %}<span class="ranking-player">({{ un_personnage.joueur.pseudo }})</span>{% endif %}
       </span>
-      <span class="ranking-xp">{{ un_personnage.xp }}&nbsp;xp</span>
+      <span class="ranking-xp">{{ include('parts/xp-gain.html.twig', {xp: un_personnage.xp, total: un_personnage.xpWithBonus|default(un_personnage.xp)}) }}</span>
     </a>
   {% endfor %}
 </div>

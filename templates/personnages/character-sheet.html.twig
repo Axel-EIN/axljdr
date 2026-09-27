@@ -1135,21 +1135,21 @@
             <li class="list-group-item px-3 py-2 flex gap-2">
               <div class="flex-grow-1">
                 ND pour être touché
-                <br/><strong class="text-strong ml-2" data-stat="nd-touche">{{ eff_reflexes * 5 + nd_mod }}</strong>
+                <br/><strong class="text-strong ml-2" data-stat="nd-touche">{{ eff_reflexes * 5 + rang + nd_mod }}</strong>
                 &nbsp;
                 <i
                   class="fa-solid fa-arrow-trend-up"
                   data-toggle="tooltip" data-placement="right" data-html="true"
                   title="
                     <div class='text-mini'>
-                      5 x Réflexes{% if nd_mod != 0 %}<br/>Modificateur : {{ nd_mod > 0 ? '+' : '' }}{{ nd_mod }}{% endif %}
+                      5 x Réflexes + Rang Général{% if nd_mod != 0 %}<br/>Modificateur : {{ nd_mod > 0 ? '+' : '' }}{{ nd_mod }}{% endif %}
                     </div>"
                 >
                 </i>
               </div>
               {% if fiche.armure %}
                 <small class="text-right">
-                  <strong data-stat="nd-touche-armure">{{ eff_reflexes * 5 + fiche.armure.ndArmure + nd_mod }}</strong>
+                  <strong data-stat="nd-touche-armure">{{ eff_reflexes * 5 + rang + fiche.armure.ndArmure + nd_mod }}</strong>
                   <br/>
                   Avec Armure
                 </small>
@@ -1606,7 +1606,7 @@
             const armeNomNode = document.querySelector('[data-stat="arme-actuelle-nom"]');
             if (armeNomNode) armeNomNode.textContent = armeActuelle ? armeActuelle.nom : '';
 
-            const ndBase = eff.reflexes * 5 + (cfg.ndModifier || 0);
+            const ndBase = eff.reflexes * 5 + cfg.rang + (cfg.ndModifier || 0);
             const ndNode = document.querySelector('[data-stat="nd-touche"]');
             if (ndNode) ndNode.textContent = ndBase;
             const ndArmureNode = document.querySelector('[data-stat="nd-touche-armure"]');

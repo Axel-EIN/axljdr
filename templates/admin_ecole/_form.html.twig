@@ -8,7 +8,6 @@
             <div class="col-3">{{ form_row(form.clan) }}</div>
             <div class="col-3">{{ form_row(form.classe) }}</div>
             <div class="col-3">{{ form_row(form.bonusStatNom) }}</div>
-            <div class="col-3">{{ form_row(form.valeurCompetencesDepart) }}</div>
 
             <div class="col-12 mt-4">{{ form_row(form.description,{ 'attr': {'rows': '8'} }) }}</div>
 
@@ -22,64 +21,96 @@
                     width: 1200, height: 900 }) }}
             </div>
 
-            <div class="col-12 mt-5">
-                <h2 class="heading-cardtitle">Technique #1</h2>
-                <hr>
-                {{ form_row(form.tech1Nom) }}
-            </div>
-            <div class="col-12">{{ form_row(form.tech1Desc,{ 'attr': {'rows': '6'} }) }}</div>
-            <div class="col-12">{{ form_row(form.tech1Summary) }}</div>
+            <div class="col-12" data-ecole-bloc="techniques">
+                <div class="row">
+                    <div class="col-12 mt-5">
+                        <h2 class="heading-cardtitle">Technique #1</h2>
+                        <hr>
+                        {{ form_row(form.tech1Nom) }}
+                    </div>
+                    <div class="col-12">{{ form_row(form.tech1Desc,{ 'attr': {'rows': '6'} }) }}</div>
+                    <div class="col-12">{{ form_row(form.tech1Summary) }}</div>
 
-            <div class="col-12 mt-5">
-                <h2 class="heading-cardtitle">Technique #2</h2>
-                <hr>
-                {{ form_row(form.tech2Nom) }}
-            </div>
-            <div class="col-12">{{ form_row(form.tech2Desc,{ 'attr': {'rows': '6'} }) }}</div>
-            <div class="col-12">{{ form_row(form.tech2Summary) }}</div>
+                    <div class="col-12 mt-5">
+                        <h2 class="heading-cardtitle">Technique #2</h2>
+                        <hr>
+                        {{ form_row(form.tech2Nom) }}
+                    </div>
+                    <div class="col-12">{{ form_row(form.tech2Desc,{ 'attr': {'rows': '6'} }) }}</div>
+                    <div class="col-12">{{ form_row(form.tech2Summary) }}</div>
 
-            <div class="col-12 mt-5">
-                <h2 class="heading-cardtitle">Technique #3</h2>
-                <hr>
-                {{ form_row(form.tech3Nom) }}
-            </div>
-            <div class="col-12">{{ form_row(form.tech3Desc,{ 'attr': {'rows': '6'} }) }}</div>
-            <div class="col-12">{{ form_row(form.tech3Summary) }}</div>
+                    <div class="col-12 mt-5">
+                        <h2 class="heading-cardtitle">Technique #3</h2>
+                        <hr>
+                        {{ form_row(form.tech3Nom) }}
+                    </div>
+                    <div class="col-12">{{ form_row(form.tech3Desc,{ 'attr': {'rows': '6'} }) }}</div>
+                    <div class="col-12">{{ form_row(form.tech3Summary) }}</div>
 
-            <div class="col-12 mt-5">
-                <h2 class="heading-cardtitle">Technique #4</h2>
-                <hr>
-                {{ form_row(form.tech4Nom) }}
-            </div>
-            <div class="col-12">{{ form_row(form.tech4Desc,{ 'attr': {'rows': '6'} }) }}</div>
-            <div class="col-12">{{ form_row(form.tech4Summary) }}</div>
+                    <div class="col-12 mt-5">
+                        <h2 class="heading-cardtitle">Technique #4</h2>
+                        <hr>
+                        {{ form_row(form.tech4Nom) }}
+                    </div>
+                    <div class="col-12">{{ form_row(form.tech4Desc,{ 'attr': {'rows': '6'} }) }}</div>
+                    <div class="col-12">{{ form_row(form.tech4Summary) }}</div>
 
-            <div class="col-12 mt-5">
-                <h2 class="heading-cardtitle">Technique #5</h2>
-                <hr>
-                {{ form_row(form.tech5Nom) }}
-            </div>
-            <div class="col-12 mt-3">{{ form_row(form.tech5Desc,{ 'attr': {'rows': '6'} }) }}</div>
-            <div class="col-12">{{ form_row(form.tech5Summary) }}</div>
-
-            <div class="col-12 mt-5">
-                <h2 class="heading-cardtitle">Magie</h2>
-                <hr>
-            </div>
-
-            <div class="col-4 mt-3">
-                {{ form_row(form.affinite) }}
-                {{ form_row(form.deficience) }}
-                {{ form_row(form.sorts,{ 'attr': {'rows': '5'} }) }}
+                    <div class="col-12 mt-5">
+                        <h2 class="heading-cardtitle">Technique #5</h2>
+                        <hr>
+                        {{ form_row(form.tech5Nom) }}
+                    </div>
+                    <div class="col-12 mt-3">{{ form_row(form.tech5Desc,{ 'attr': {'rows': '6'} }) }}</div>
+                    <div class="col-12">{{ form_row(form.tech5Summary) }}</div>
+                </div>
             </div>
 
-            <div class="col-8 mt-3">
-                {{ form_row(form.techSpecialNom) }}
-                {{ form_row(form.techSpecialDesc,{ 'attr': {'rows': '9'} }) }}
-                {{ form_row(form.techSpecialSummary) }}
+            <div class="col-12" data-ecole-bloc="technique-speciale">
+                <div class="row">
+                    <div class="col-12 mt-5">
+                        <h2 class="heading-cardtitle">Technique Spéciale</h2>
+                        <hr>
+                        {{ form_row(form.techSpecialNom) }}
+                    </div>
+                    <div class="col-12">{{ form_row(form.techSpecialDesc,{ 'attr': {'rows': '6'} }) }}</div>
+                    <div class="col-12">{{ form_row(form.techSpecialSummary) }}</div>
+                </div>
+            </div>
+
+            <div class="col-12" data-ecole-bloc="magie">
+                <div class="row">
+                    <div class="col-12 mt-5">
+                        <h2 class="heading-cardtitle">Magie</h2>
+                        <hr>
+                    </div>
+                    <div class="col-6">{{ form_row(form.affinite) }}</div>
+                    <div class="col-6">{{ form_row(form.deficience) }}</div>
+                    <div class="col-12">{{ form_row(form.sorts,{ 'attr': {'rows': '5'} }) }}</div>
+                </div>
             </div>
 
             {{ include('/btns/btn-form.html.twig') }}
         </div>
     {{ form_end(form) }}
+
+    <script type="text/javascript">
+    (function() {
+        const classe = document.getElementById('{{ form.classe.vars.id }}');
+        const visibles = {
+            'techniques': nom => nom !== 'Shugenja',
+            'technique-speciale': nom => ['Shugenja', 'Moine'].includes(nom),
+            'magie': nom => nom === 'Shugenja',
+        };
+
+        function refresh() {
+            const nom = classe.options[classe.selectedIndex]?.text.trim() ?? '';
+            document.querySelectorAll('[data-ecole-bloc]').forEach(bloc => {
+                bloc.hidden = !visibles[bloc.dataset.ecoleBloc](nom);
+            });
+        }
+
+        refresh();
+        classe.addEventListener('change', refresh);
+    })();
+    </script>
 </div>

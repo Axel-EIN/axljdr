@@ -464,7 +464,7 @@
 
         {% if est_le_joueur or is_granted('ROLE_MJ') %}
           <div class="my-4 d-flex w-100 justify-content-center align-items-center">
-            <button type="button" id="btn-fiche-edit" class="btn-primary-style btn-large">
+            <button type="button" id="btn-fiche-edit" class="btn-primary-style btn-large{% if not est_le_joueur %} gm{% endif %}">
               <i class="fas fa-edit"></i> {{ est_le_joueur ? 'Éditer ma fiche' : 'Éditer la fiche' }}
             </button>
             <button type="button" id="btn-fiche-cancel" class="btn btn-secondary btn-sm ml-3" style="display:none;">
@@ -473,7 +473,7 @@
             <button type="button" id="btn-fiche-valider" class="btn btn-success btn-sm ml-3" style="display:none;">
               <i class="fas fa-check"></i> Valider
             </button>
-            <a class="btn-icon-medium primary ml-3" href="{{ path('personnage_fiche_pdf', {id: fiche.id}) }}">
+            <a class="btn-icon-medium primary{% if not est_le_joueur %} gm{% endif %} ml-3" href="{{ path('personnage_fiche_pdf', {id: fiche.id}) }}">
               <i class="fas fa-print" title="Imprimer la fiche en PDF"></i>
             </a>
           </div>

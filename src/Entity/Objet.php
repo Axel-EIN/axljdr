@@ -194,6 +194,15 @@ class Objet
         return $this;
     }
 
+    public function getVdOuForce(): ?string
+    {
+        if ($this->type === 'ARC' && $this->forceArc !== null) {
+            return 'Force ' . $this->forceArc;
+        }
+
+        return $this->vd;
+    }
+
     public function getRegles(): ?string
     {
         return $this->regles;

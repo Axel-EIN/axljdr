@@ -22,7 +22,7 @@
     {{ include('/parts/picture-grid.html.twig', {
         variant: 'portrait',
         title: 'Personnages',
-        items: personnagesClasse, route: 'personnage_profil',
+        items: personnagesClasse, route: 'personnage_profil', hide_dead: true,
         limit: 16,
         wrapper: 'col-12 col-lg-4',
         per_row: {desktop: 2, tablet: 4, mobile: 2},

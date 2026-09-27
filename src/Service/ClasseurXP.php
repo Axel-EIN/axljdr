@@ -12,7 +12,9 @@ use App\Repository\PersonnageRepository;
 
 class ClasseurXP
 {
-    private const SPECIALISATION_COST = 2;
+    public const SPECIALISATION_COST = 2;
+
+    private const TRAITS = ['constitution', 'volonte', 'reflexes', 'intuition', 'agilite', 'intelligence', 'forceStat', 'perception', 'vide'];
 
     private $persoRepo;
 
@@ -23,38 +25,84 @@ class ClasseurXP
 
     public function total(Personnage $personnage): int
     {
+        $fiche = $personnage->getFichePersonnage();
+
+        return $this->progression($personnage)
+            + ($fiche !== null ? $this->creation($fiche) + $this->disadvantagesGain($fiche) : 0);
+    }
+
+    public function creation(FichePersonnage $fiche): int
+    {
+        return (int) $fiche->getCreationExp();
+    }
+
+    public function disadvantagesGain(FichePersonnage $fiche): int
+    {
+        return $this->advantageCost($fiche, $fiche->getDesavantage1())
+            + $this->advantageCost($fiche, $fiche->getDesavantage2());
+    }
+
+    public function progression(Personnage $personnage): int
+    {
         $total = 0;
 
         foreach ($personnage->getParticipations() as $participation) {
             $total += $participation->getXpEffectif();
         }
 
-        $fiche = $personnage->getFichePersonnage();
-
-        return $total + ($fiche !== null ? (int) $fiche->getCreationExp() : 0);
-    }
-
-    public function earned(FichePersonnage $fiche): int
-    {
-        return $this->total($fiche->getPersonnage())
-            + $this->advantageCost($fiche, $fiche->getDesavantage1())
-            + $this->advantageCost($fiche, $fiche->getDesavantage2());
+        return $total;
     }
 
     public function spent(FichePersonnage $fiche): int
     {
         return $this->traitsCost($fiche)
             + $this->skillsCost($fiche)
-            + $this->advantageCost($fiche, $fiche->getAvantage1())
-            + $this->advantageCost($fiche, $fiche->getAvantage2());
+            + $this->advantagesCost($fiche);
     }
 
     public function remaining(FichePersonnage $fiche): int
     {
-        return $this->earned($fiche) - $this->spent($fiche);
+        return $this->total($fiche->getPersonnage()) - $this->spent($fiche);
+    }
+
+    public function sheet(FichePersonnage $fiche): array
+    {
+        $skills = [];
+
+        for ($i = 1; $i <= 20; $i++) {
+            $skills[$i] = [
+                'rang' => $this->skillRankCost($fiche, $i),
+                'specialisations' => $this->specialisationsCost($fiche, $i),
+            ];
+        }
+
+        return [
+            'creation' => $this->creation($fiche),
+            'desavantages' => $this->disadvantagesGain($fiche),
+            'progression' => $this->progression($fiche->getPersonnage()),
+            'total' => $this->total($fiche->getPersonnage()),
+            'traits' => $this->traitsCost($fiche),
+            'trait' => array_combine(self::TRAITS, array_map(fn (string $trait) => $this->traitCost($fiche, $trait), self::TRAITS)),
+            'competences' => $this->skillsCost($fiche),
+            'avantages' => $this->advantagesCost($fiche),
+            'depense' => $this->spent($fiche),
+            'restant' => $this->remaining($fiche),
+            'slots' => [
+                'av1' => $this->advantageCost($fiche, $fiche->getAvantage1()),
+                'av2' => $this->advantageCost($fiche, $fiche->getAvantage2()),
+                'dv1' => $this->advantageCost($fiche, $fiche->getDesavantage1()),
+                'dv2' => $this->advantageCost($fiche, $fiche->getDesavantage2()),
+            ],
+            'competence' => $skills,
+        ];
     }
 
     private function traitsCost(FichePersonnage $fiche): int
+    {
+        return array_sum(array_map(fn (string $trait) => $this->traitCost($fiche, $trait), self::TRAITS));
+    }
+
+    private function traitCost(FichePersonnage $fiche, string $trait): int
     {
         $personnage = $fiche->getPersonnage();
         $bonuses = array_filter([
@@ -62,20 +110,17 @@ class ClasseurXP
             $personnage->getEcole() ? $personnage->getEcole()->getBonusStatNom() : null,
         ]);
 
-        $total = 0;
+        $bonus = count(array_keys($bonuses, $trait, true));
+        $effective = (int) $fiche->{'get' . ucfirst($trait)}() + $bonus;
+        $free = 2 + $bonus;
 
-        foreach (['constitution', 'volonte', 'reflexes', 'intuition', 'agilite', 'intelligence', 'forceStat', 'perception', 'vide'] as $trait) {
-            $bonus = count(array_keys($bonuses, $trait, true));
-            $effective = (int) $fiche->{'get' . ucfirst($trait)}() + $bonus;
-            $free = 2 + $bonus;
-
-            if ($effective > $free) {
-                $factor = $trait === 'vide' ? 6 : 4;
-                $total += (int) round($factor * ($effective * ($effective + 1) / 2 - $free * ($free + 1) / 2));
-            }
+        if ($effective <= $free) {
+            return 0;
         }
 
-        return $total;
+        $factor = $trait === 'vide' ? 6 : 4;
+
+        return (int) round($factor * ($effective * ($effective + 1) / 2 - $free * ($free + 1) / 2));
     }
 
     private function skillsCost(FichePersonnage $fiche): int
@@ -83,27 +128,49 @@ class ClasseurXP
         $total = 0;
 
         for ($i = 1; $i <= 20; $i++) {
-            $competence = $fiche->{'getCompetence' . $i}();
+            $total += $this->skillRankCost($fiche, $i) + $this->specialisationsCost($fiche, $i);
+        }
 
-            if ($competence === null) {
-                continue;
-            }
+        return $total;
+    }
 
-            $value = (int) $fiche->{'getValeur' . $i}();
-            $free = (int) $fiche->{'getCompEcole' . $i}();
-            $total += max(0, (int) round($value * ($value + 1) / 2) - (int) round($free * ($free + 1) / 2));
+    private function skillRankCost(FichePersonnage $fiche, int $i): int
+    {
+        if ($fiche->{'getCompetence' . $i}() === null) {
+            return 0;
+        }
 
-            $bought = (string) $fiche->{'getSpecialisations' . $i}();
-            $offered = (string) $fiche->{'getSpeEcole' . $i}();
+        $value = (int) $fiche->{'getValeur' . $i}();
+        $free = (int) $fiche->{'getCompEcole' . $i}();
 
-            for ($k = 1; $k <= 6; $k++) {
-                if ($competence->{'getSpecialisation' . $k}() && ($bought[$k - 1] ?? '0') === '1' && ($offered[$k - 1] ?? '0') !== '1') {
-                    $total += self::SPECIALISATION_COST;
-                }
+        return max(0, (int) round($value * ($value + 1) / 2) - (int) round($free * ($free + 1) / 2));
+    }
+
+    private function specialisationsCost(FichePersonnage $fiche, int $i): int
+    {
+        $competence = $fiche->{'getCompetence' . $i}();
+
+        if ($competence === null) {
+            return 0;
+        }
+
+        $bought = (string) $fiche->{'getSpecialisations' . $i}();
+        $offered = (string) $fiche->{'getSpeEcole' . $i}();
+        $total = 0;
+
+        for ($k = 1; $k <= 6; $k++) {
+            if ($competence->{'getSpecialisation' . $k}() && ($bought[$k - 1] ?? '0') === '1' && ($offered[$k - 1] ?? '0') !== '1') {
+                $total += self::SPECIALISATION_COST;
             }
         }
 
         return $total;
+    }
+
+    private function advantagesCost(FichePersonnage $fiche): int
+    {
+        return $this->advantageCost($fiche, $fiche->getAvantage1())
+            + $this->advantageCost($fiche, $fiche->getAvantage2());
     }
 
     public function advantageCost(FichePersonnage $fiche, ?Avantage $avantage): int
@@ -266,11 +333,9 @@ class ClasseurXP
             $i++;
         }
 
-        usort($classement, function ($a, $b) {
-            return strcmp($a['xp'], $b['xp']);
-        } );
+        usort($classement, fn ($a, $b) => $b['xp'] <=> $a['xp']);
 
-        return array_reverse($classement);
+        return $classement;
     }
 
     public function cumulUnPersosAventure(Saison $saisons, $persoId)
@@ -372,9 +437,11 @@ class ClasseurXP
     {
         $personnage = $this->persoRepo->find($persoId);
         $totalXp = 0;
+        $totalXpAvecBonus = 0;
         $estMort = 0;
         foreach($participations as $une_participation) {
             $totalXp += $une_participation->getXpGagne();
+            $totalXpAvecBonus += $une_participation->getXpEffectif();
             if ($une_participation->getEstMort() == true)
                 $estMort = 1;
         }
@@ -384,6 +451,7 @@ class ClasseurXP
         $cumul['icone'] = $personnage->getIcone();
         $cumul['joueur'] = $personnage->getJoueur();
         $cumul['xp'] = $totalXp;
+        $cumul['xpWithBonus'] = $totalXpAvecBonus;
         $cumul['estMort'] = $estMort;
         return $cumul;
     }

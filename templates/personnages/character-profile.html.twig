@@ -258,7 +258,7 @@
 {{ include('/parts/picture-grid.html.twig', {
     variant: 'portrait',
     title: personnage.estPj ? 'Autres PJs' : 'Autres PNJs',
-    items: autresPersonnages, route: 'personnage_profil',
+    items: autresPersonnages, route: 'personnage_profil', hide_dead: true,
     limit: 12,
     wrapper: 'col-12 col-lg-4 order-4',
     per_row: {desktop: 2, tablet: 4, mobile: 2},

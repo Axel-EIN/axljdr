@@ -41,6 +41,9 @@
             <li class="list-group-item infos-item">
                 <div class="d-flex flex-column">
                     <span class="text-muted text-small">Création : <strong>{{xp_creation}}</strong></span>
+                    {% if xp_desavantages > 0 %}
+                        <span class="text-muted text-small">Désavantages : <strong>{{xp_desavantages}}</strong></span>
+                    {% endif %}
                     <span class="text-muted text-small">Progression : <strong>{{xp_progression}}</strong></span>
                 </div>
                 {% if xp > 0 %}

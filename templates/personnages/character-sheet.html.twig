@@ -1287,7 +1287,7 @@
 
           <table class="inventory-weapons">
             <thead>
-              <tr><th>Arme</th><th>Taille</th><th>Poids</th><th>VD</th><th class="edit-only"></th></tr>
+              <tr><th>Arme</th><th>Taille</th><th>Poids</th><th>VD / Force</th><th class="edit-only"></th></tr>
             </thead>
             <tbody data-inventory-list="weapons">
               {% for arme in fiche.inventoryItems|filter(o => o.categorie == 'ARME')|sort((a, b) => a.nom|u.ascii|lower <=> b.nom|u.ascii|lower) %}
@@ -1295,7 +1295,7 @@
                   <th scope="row" class="inventory-name">{{ arme.nom }}</th>
                   <td>{{ arme.taille|lower|capitalize|default('—') }}</td>
                   <td>{{ arme.poids|lower|capitalize|default('—') }}</td>
-                  <td class="extrabold">{{ arme.vd|default('—') }}</td>
+                  <td class="extrabold">{{ arme.vdOuForce|default('—') }}</td>
                   <td class="edit-only" data-inventory-remove></td>
                 </tr>
               {% else %}
@@ -1931,7 +1931,7 @@
             tr.appendChild(name);
 
             const label = v => v ? v.charAt(0).toUpperCase() + v.slice(1).toLowerCase() : '—';
-            [label(objet.taille), label(objet.poids), objet.vd || '—'].forEach((value, i) => {
+            [label(objet.taille), label(objet.poids), objet.vdOuForce || '—'].forEach((value, i) => {
                 const td = document.createElement('td');
                 if (i === 2) td.className = 'extrabold';
                 td.textContent = value;

@@ -1,11 +1,5 @@
 /* ----- PAGE ECOLE ----- */
 
-.ecole-colonne {
-    display: flex;
-    flex-direction: column;
-    gap: var(--gap);
-}
-
 #banner-icon-clan {
     position: absolute;
     z-index: 3;

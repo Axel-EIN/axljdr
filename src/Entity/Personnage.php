@@ -155,6 +155,11 @@ class Personnage
         return $this;
     }
 
+    public function getNomComplet(): string
+    {
+        return trim($this->nom . ' ' . $this->prenom);
+    }
+
     public function getTitres(): ?string
     {
         return $this->titres;

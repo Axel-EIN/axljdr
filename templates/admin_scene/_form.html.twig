@@ -28,7 +28,7 @@
                         {% set current_clan = clan_nom %}
                     {% endif %}
                     <option value="{{ p.id }}" {% if selected_id is not null and p.id == selected_id %}selected{% endif %}>
-                        {{ p.nom }} {{ p.prenom }}
+                        {{ p.nomComplet }}
                     </option>
                 {% endfor %}
                 {% if current_clan != '__init__' %}</optgroup>{% endif %}
@@ -88,14 +88,14 @@
     {% set pjs_data = [] %}
     {% for p in tout_pjs %}
         {% set pjs_data = pjs_data|merge([{
-            id: p.id, nom: p.nom, prenom: p.prenom,
+            id: p.id, nomComplet: p.nomComplet,
             clan: p.clan ? p.clan.nom : 'Sans clan'
         }]) %}
     {% endfor %}
     {% set pnjs_data = [] %}
     {% for p in tout_pnjs %}
         {% set pnjs_data = pnjs_data|merge([{
-            id: p.id, nom: p.nom, prenom: p.prenom,
+            id: p.id, nomComplet: p.nomComplet,
             clan: p.clan ? p.clan.nom : 'Sans clan'
         }]) %}
     {% endfor %}
@@ -113,7 +113,7 @@
                     html += '<optgroup label="' + escapeHtml(p.clan) + '">';
                     currentClan = p.clan;
                 }
-                html += '<option value="' + p.id + '">' + escapeHtml(p.nom + ' ' + p.prenom) + '</option>';
+                html += '<option value="' + p.id + '">' + escapeHtml(p.nomComplet) + '</option>';
             });
             if (currentClan !== null) html += '</optgroup>';
             return html;

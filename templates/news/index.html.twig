@@ -120,7 +120,7 @@
                                  src="{{ asset(perso.icone|default(NA_PERSO_PORTRAIT)) }}"
                                  alt="Portrait de {{ perso.prenom }}" title="{{ perso.prenom }}" />
                             {% if participation.estMort %}<img class="character-icon-dead" src="{{ asset(MORT_ICO) }}" alt="est mort" />{% endif %}
-                            {% if cumul %}<span class="episode-xp">+{{ cumul.xp }}&nbsp;xp</span>{% endif %}
+                            {% if cumul %}<span class="episode-xp">{{ include('parts/xp-gain.html.twig', {xp: cumul.xp, total: cumul.xpWithBonus, signe: '+'}) }}</span>{% endif %}
                         </span>
                         <span class="episode-text">
                             <strong>{{ episode.titre }}</strong>

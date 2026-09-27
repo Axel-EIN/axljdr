@@ -185,7 +185,7 @@ class SheetExport
     public function filename(FichePersonnage $fiche): string
     {
         $personnage = $fiche->getPersonnage();
-        $ascii = @iconv('UTF-8', 'ASCII//TRANSLIT', trim($personnage->getNom() . ' ' . $personnage->getPrenom()));
+        $ascii = @iconv('UTF-8', 'ASCII//TRANSLIT', $personnage->getNomComplet());
         $slug = strtolower(preg_replace('/[^A-Za-z0-9]+/', '-', $ascii === false ? 'personnage' : $ascii) ?? '');
 
         return 'fiche-' . trim($slug, '-') . '.pdf';
@@ -219,7 +219,7 @@ class SheetExport
         $personnage = $fiche->getPersonnage();
 
         $values = [
-            'nom' => trim($personnage->getPrenom() . ' ' . $personnage->getNom()),
+            'nom' => $personnage->getNomComplet(),
             'clan' => $personnage->getClan() ? $personnage->getClan()->getNom() : '',
             'ecole' => $personnage->getEcole() ? $personnage->getEcole()->getNom() : '',
             'rang' => (string) $rang,

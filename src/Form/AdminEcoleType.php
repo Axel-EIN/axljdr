@@ -11,7 +11,6 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Validator\Constraints\File;
@@ -38,10 +37,6 @@ class AdminEcoleType extends AbstractType
                 'constraints' => [new File(['maxSize' => '5M'])],
             ])
             ->add('description', TextareaType::class, [ 'required' => false, 'constraints' => [ new Length( [ 'max' => 2000 ] ) ] ])
-            ->add('valeurCompetencesDepart', IntegerType::class, [
-                'label' => 'Valeur compétences de départ (offerts)',
-                'required' => false,
-            ])
             ->add('bonusStatNom', ChoiceType::class, [
                 'label' => 'Trait bonus (+1)',
                 'placeholder' => 'Aucun bonus',

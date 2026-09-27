@@ -52,8 +52,8 @@ class SheetExport
     private const STANDING_RIGHT = 1116;
     private const STANDINGS = ['honneur' => 684, 'gloire' => 716, 'infamie' => 750, 'statut' => 782];
 
-    private const COMBAT_INITIATIVE = [1556, 900];
-    private const COMBAT_ND = [1556, 985];
+    private const COMBAT_INITIATIVE = [1425, 900];
+    private const COMBAT_ND = [1305, 984];
     private const COMBAT_ARMOUR = [1317, 1063];
     private const COMBAT_REDUCTION = [1556, 1063];
     private const COMBAT_RECOVERY = [1556, 1666];
@@ -223,7 +223,7 @@ class SheetExport
             'clan' => $personnage->getClan() ? $personnage->getClan()->getNom() : '',
             'ecole' => $personnage->getEcole() ? $personnage->getEcole()->getNom() : '',
             'rang' => (string) $rang,
-            'exp' => (string) $this->classeurXP->earned($fiche),
+            'exp' => (string) $this->classeurXP->total($fiche->getPersonnage()),
             'reste' => (string) $this->classeurXP->remaining($fiche),
             'joueur' => $personnage->getJoueur() ? $personnage->getJoueur()->getPseudo() : '',
         ];
@@ -293,7 +293,7 @@ class SheetExport
         }
 
         $pdf->text($initiative, self::COMBAT_INITIATIVE[0], self::COMBAT_INITIATIVE[1], 32, $centered);
-        $pdf->text((string) (5 + $reflexes * 5 + (int) $fiche->getNdModifier()), self::COMBAT_ND[0], self::COMBAT_ND[1], 30, $centered);
+        $pdf->text('= ' . (5 + $reflexes * 5 + (int) $fiche->getNdModifier()), self::COMBAT_ND[0], self::COMBAT_ND[1], 30, ['bold' => true]);
 
         if ($armure) {
             $pdf->text('+' . (int) $armure->getNdArmure(), self::COMBAT_ARMOUR[0], self::COMBAT_ARMOUR[1], 30, $centered);

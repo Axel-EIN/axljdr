@@ -606,8 +606,10 @@
                 Compétences
                 <span class="comp-legende text-reddanger"><span class="comp-pastille"></span>compétence dégradante</span>
               </th>
-              <th class="px-0 py-2 text-small semi-visible" scope="col">Rang</th>
-              <th class="px-0 py-2 text-small semi-visible d-none d-lg-table-cell" scope="col">Trait</th>
+              <th class="px-1 py-2 text-small semi-visible text-center" scope="col">Rang</th>
+              <th class="px-1 py-2 text-small semi-visible text-center d-none d-lg-table-cell" scope="col">Trait</th>
+              <th class="comp-cap px-1 py-2 text-small semi-visible" scope="col">Cap. R3</th>
+              <th class="comp-cap px-1 py-2 text-small semi-visible" scope="col">Cap. R6</th>
               <th class="px-0 py-2 text-small semi-visible edit-only" scope="col">Coût XP</th>
             </tr>
           </thead>
@@ -659,16 +661,21 @@
                   <th class="text-strong extrabold" scope="row" data-comp-name>
                     <a href="{{ element_url(slot.comp) }}"><strong{% if slot.comp.degradante %} class="text-reddanger"{% endif %}>{{ slot.comp.nom }}</strong></a>
                   </th>
-                  <td class="text-strong extrabold" data-comp-val-cell>{{ slot.val ?? '' }}</td>
-                  <td class="text-body-c d-none d-lg-table-cell" data-comp-trait-cell>{{ slot.comp.trait }}</td>
+                  <td class="text-strong extrabold text-center" data-comp-val-cell>{{ slot.val ?? '' }}</td>
+                  <td class="text-body-c text-mini text-center d-none d-lg-table-cell" title="{{ slot.comp.trait }}" data-comp-trait-cell>{{ slot.comp.traitCourt }}</td>
+                  {% for rang_cap, texte_cap in {3: slot.comp.mastery3Text, 6: slot.comp.mastery6Text} %}
+                    <td class="comp-cap text-mini text-body-c" rowspan="2">
+                      {% if slot.val >= rang_cap %}<span class="comp-cap-text">{{ texte_cap|striptags }}</span>{% endif %}
+                    </td>
+                  {% endfor %}
                   <td class="edit-only text-alternate" data-comp-cost-cell>{% if cout_slot.rang > 0 %}-{{ cout_slot.rang }}xp{% endif %}</td>
                 </tr>
-                <tr data-comp-specs-row="{{ slot.i }}" class="comp-specs-row{% if bought_specs|length > 0 %} has-specs{% endif %}">
+                <tr data-comp-specs-row="{{ slot.i }}" class="comp-specs-row">
                   <td></td>
                   <td colspan="3" data-comp-specs-cell>
                     {% if bought_specs|length > 0 %}
                       <small class="text-body-c">
-                        <span class="text-alternate">Spécialisations :</span>
+                        <span class="text-alternate">Spé. :</span>
                         {% for s in bought_specs %}
                           <span{% if 'dégradante' in s.label|lower %} class="text-reddanger extrabold"{% endif %}>{{ s.label }}</span>{% if not loop.last %}, {% endif %}
                         {% endfor %}
@@ -687,8 +694,10 @@
               <tr data-comp-row="{{ slot.i }}" data-comp-id="0" data-comp-val="0" data-comp-specs="" data-comp-ecole="0" data-comp-spe-ecole="" class="comp-row-empty">
                 <td class="text-center" data-comp-ecole-cell></td>
                 <th class="text-strong extrabold" scope="row" data-comp-name></th>
-                <td class="text-strong extrabold" data-comp-val-cell></td>
-                <td class="text-body-c d-none d-lg-table-cell" data-comp-trait-cell></td>
+                <td class="text-strong extrabold text-center" data-comp-val-cell></td>
+                <td class="text-body-c text-mini text-center d-none d-lg-table-cell" data-comp-trait-cell></td>
+                <td class="comp-cap" rowspan="2"></td>
+                <td class="comp-cap" rowspan="2"></td>
                 <td class="edit-only text-alternate" data-comp-cost-cell></td>
               </tr>
               <tr data-comp-specs-row="{{ slot.i }}" class="comp-specs-row comp-row-empty">
@@ -1126,21 +1135,21 @@
             <li class="list-group-item px-3 py-2 flex gap-2">
               <div class="flex-grow-1">
                 ND pour être touché
-                <br/><strong class="text-strong ml-2" data-stat="nd-touche">{{ 5 + eff_reflexes * 5 + nd_mod }}</strong>
+                <br/><strong class="text-strong ml-2" data-stat="nd-touche">{{ eff_reflexes * 5 + nd_mod }}</strong>
                 &nbsp;
                 <i
                   class="fa-solid fa-arrow-trend-up"
                   data-toggle="tooltip" data-placement="right" data-html="true"
                   title="
                     <div class='text-mini'>
-                      5 + (Réflexes * 5){% if nd_mod != 0 %}<br/>Modificateur : {{ nd_mod > 0 ? '+' : '' }}{{ nd_mod }}{% endif %}
+                      5 x Réflexes{% if nd_mod != 0 %}<br/>Modificateur : {{ nd_mod > 0 ? '+' : '' }}{{ nd_mod }}{% endif %}
                     </div>"
                 >
                 </i>
               </div>
               {% if fiche.armure %}
                 <small class="text-right">
-                  <strong data-stat="nd-touche-armure">{{ fiche.armure.ndArmure + 5 + (eff_reflexes * 5) + nd_mod }}</strong>
+                  <strong data-stat="nd-touche-armure">{{ eff_reflexes * 5 + fiche.armure.ndArmure + nd_mod }}</strong>
                   <br/>
                   Avec Armure
                 </small>
@@ -1597,7 +1606,7 @@
             const armeNomNode = document.querySelector('[data-stat="arme-actuelle-nom"]');
             if (armeNomNode) armeNomNode.textContent = armeActuelle ? armeActuelle.nom : '';
 
-            const ndBase = 5 + eff.reflexes * 5 + (cfg.ndModifier || 0);
+            const ndBase = eff.reflexes * 5 + (cfg.ndModifier || 0);
             const ndNode = document.querySelector('[data-stat="nd-touche"]');
             if (ndNode) ndNode.textContent = ndBase;
             const ndArmureNode = document.querySelector('[data-stat="nd-touche-armure"]');
@@ -1766,7 +1775,7 @@
                     .forEach(c => {
                         const opt = document.createElement('option');
                         opt.value = c.id;
-                        opt.dataset.trait = c.trait;
+                        opt.dataset.traitCourt = c.traitCourt;
                         opt.textContent = c.nom;
                         if (parseInt(selectedId, 10) === c.id) opt.selected = true;
                         group.appendChild(opt);
@@ -1988,13 +1997,20 @@
 
                 const libres = (cfg.objets || [])
                     .filter(o => !owned.includes(o.id) && inventoryKind(o.categorie) === kind);
+                const cleDe = o => kind === 'weapons' ? (o.type || 'DIVERS') : o.categorie;
                 const groupes = new Map();
 
-                INVENTORY_GROUPS.forEach(([categorie, titre]) => groupes.set(categorie, titre));
-                libres.forEach(o => { if (!groupes.has(o.categorie)) groupes.set(o.categorie, o.categorie); });
+                if (kind === 'weapons') {
+                    libres.map(cleDe)
+                        .sort((a, b) => a.localeCompare(b, 'fr'))
+                        .forEach(type => groupes.set(type, type.charAt(0) + type.slice(1).toLowerCase()));
+                } else {
+                    INVENTORY_GROUPS.forEach(([categorie, titre]) => groupes.set(categorie, titre));
+                    libres.forEach(o => { if (!groupes.has(o.categorie)) groupes.set(o.categorie, o.categorie); });
+                }
 
-                groupes.forEach((titre, categorie) => {
-                    const objets = libres.filter(o => o.categorie === categorie);
+                groupes.forEach((titre, cle) => {
+                    const objets = libres.filter(o => cleDe(o) === cle);
                     if (!objets.length) return;
 
                     const group = document.createElement('optgroup');
@@ -2207,7 +2223,7 @@
                 compSelect.addEventListener('change', () => {
                     const opt = compSelect.options[compSelect.selectedIndex];
                     const newCompId = parseInt(compSelect.value, 10) || 0;
-                    traitCell.textContent = opt && opt.dataset.trait ? opt.dataset.trait : '';
+                    traitCell.textContent = opt && opt.dataset.traitCourt ? opt.dataset.traitCourt : '';
                     valSelect.style.display = newCompId > 0 ? '' : 'none';
                     ecoleWrap.style.display = newCompId > 0 ? '' : 'none';
                     renderSpecsCheckboxes(specsCell, newCompId, '', '');

@@ -148,9 +148,10 @@ class PersonnagesController extends AbstractController
         shuffle($autresPersonnages);
 
         $fiche = $personnage->getFichePersonnage();
-        $xp_creation = ($fiche !== null) ? (int) $fiche->getCreationExp() : 0;
+        $xp_creation = ($fiche !== null) ? $classeurXP->creation($fiche) : 0;
+        $xp_desavantages = ($fiche !== null) ? $classeurXP->disadvantagesGain($fiche) : 0;
+        $xp_progression = $classeurXP->progression($personnage);
         $xp_total = $classeurXP->total($personnage);
-        $xp_progression = $xp_total - $xp_creation;
         $rang = $classeurXP->rank($xp_total);
 
         $estLeJoueur = $this->estLeJoueur($personnage);
@@ -175,6 +176,7 @@ class PersonnagesController extends AbstractController
             'un_element' => $personnage,
             'xp' => $xp_total,
             'xp_creation' => $xp_creation,
+            'xp_desavantages' => $xp_desavantages,
             'xp_progression' => $xp_progression,
             'rang' => $rang,
             'autresPersonnages' => $autresPersonnages,
@@ -194,10 +196,7 @@ class PersonnagesController extends AbstractController
             return $this->render('element-hidden.html.twig', [], new Response('', Response::HTTP_NOT_FOUND));
         }
 
-        $xp_creation = (int) ($fiche->getCreationExp() ?? 0);
-        $xp_total = $classeurXP->total($fiche->getPersonnage());
-        $xp_progression = $xp_total - $xp_creation;
-        $rang = $classeurXP->rank($xp_total);
+        $xp = $classeurXP->sheet($fiche);
 
         $competences = [];
         $avantagesJson = [];
@@ -224,17 +223,14 @@ class PersonnagesController extends AbstractController
                 ];
             }
 
-            $serialize = function ($a) {
+            $serialize = function ($a) use ($classeurXP, $fiche) {
                 return [
                     'id'                => $a->getId(),
                     'nom'               => $a->getNom(),
                     'description'       => $a->getDescription(),
                     'summary'           => $a->getSummary(),
                     'cout'              => $a->getCout(),
-                    'discount'          => $a->getDiscount(),
-                    'discountClanId'    => $a->getDiscountClan()   ? $a->getDiscountClan()->getId()   : null,
-                    'discountClan2Id'   => $a->getDiscountClan2()  ? $a->getDiscountClan2()->getId()  : null,
-                    'discountClasseId'  => $a->getDiscountClasse() ? $a->getDiscountClasse()->getId() : null,
+                    'coutEffectif'      => $classeurXP->advantageCost($fiche, $a),
                     'exclusiveId'       => $a->getExclusive()      ? $a->getExclusive()->getId()      : null,
                 ];
             };
@@ -318,10 +314,8 @@ class PersonnagesController extends AbstractController
 
         return $this->render('personnages/character-sheet.html.twig', [
             'fiche'          => $fiche,
-            'xp_total'       => $xp_total,
-            'xp_creation'    => $xp_creation,
-            'xp_progression' => $xp_progression,
-            'rang'           => $rang,
+            'xp'             => $xp,
+            'rang'           => $classeurXP->rank($xp['total']),
             'est_le_joueur'  => $estLeJoueur,
             'competences_json' => $competences,
             'avantages_json'    => $avantagesJson,

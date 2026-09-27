@@ -4,7 +4,6 @@ namespace App\Form;
 
 use App\Entity\Objet;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\MoneyType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -48,11 +47,9 @@ class AdminObjetType extends AbstractType
                     'DIVERS' => 'DIVERS',
                 ],
             ])
-            ->add('prix', MoneyType::class, [
-                'required' => false,
-                'currency' => 'JPY',
-                'scale' => 0,
-                'label' => 'Prix zeni ( 1 koku = 5 bu = 50 zeni )',
+            ->add('prix', PrixType::class, [
+                'label' => 'Prix',
+                'help' => '1 koku = 5 bu = 50 zeni',
             ])
             ->add('numero', IntegerType::class, [
                 'required' => false ] )

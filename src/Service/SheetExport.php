@@ -53,7 +53,7 @@ class SheetExport
     private const STANDINGS = ['honneur' => 684, 'gloire' => 716, 'infamie' => 750, 'statut' => 782];
 
     private const COMBAT_INITIATIVE = [1425, 900];
-    private const COMBAT_ND = [1305, 984];
+    private const COMBAT_ND = [1276, 984];
     private const COMBAT_ARMOUR = [1317, 1063];
     private const COMBAT_REDUCTION = [1556, 1063];
     private const COMBAT_RECOVERY = [1556, 1666];
@@ -293,7 +293,7 @@ class SheetExport
         }
 
         $pdf->text($initiative, self::COMBAT_INITIATIVE[0], self::COMBAT_INITIATIVE[1], 32, $centered);
-        $pdf->text('= ' . (5 + $reflexes * 5 + (int) $fiche->getNdModifier()), self::COMBAT_ND[0], self::COMBAT_ND[1], 30, ['bold' => true]);
+        $pdf->text('= ' . ($reflexes * 5), self::COMBAT_ND[0], self::COMBAT_ND[1], 30, ['bold' => true]);
 
         if ($armure) {
             $pdf->text('+' . (int) $armure->getNdArmure(), self::COMBAT_ARMOUR[0], self::COMBAT_ARMOUR[1], 30, $centered);
@@ -338,11 +338,11 @@ class SheetExport
             $this->specialisationLine($pdf, $skill['specialisations'], $baseline);
 
             if ($skill['valeur'] >= 3) {
-                $this->masteryBlock($pdf, $competence->getMastery3Summary() ?: (string) $competence->getCapacite(), self::SKILL_COLUMNS['cap3'], $line);
+                $this->masteryBlock($pdf, $competence->getMastery3Text(), self::SKILL_COLUMNS['cap3'], $line);
             }
 
             if ($skill['valeur'] >= 6) {
-                $this->masteryBlock($pdf, $competence->getMastery6Summary() ?: (string) $competence->getCapacite2(), self::SKILL_COLUMNS['cap6'], $line);
+                $this->masteryBlock($pdf, $competence->getMastery6Text(), self::SKILL_COLUMNS['cap6'], $line);
             }
         }
     }

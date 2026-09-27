@@ -41,7 +41,6 @@ class AdminEcoleController extends AbstractController
                 'clan.nom:Clan',
                 'bonusStatNom:Bonus',
                 'description:Description:bool',
-                'valeurCompetencesDepart:reducXP',
                 'competences:Comp.:bool',
                 'equipements:Equip.:bool',
                 'tech1Desc:T1:bool',

@@ -161,8 +161,6 @@
   .fiche-anneau-rang { margin-left: auto; }
 }
 
-.fiche-titre-ico { font-size: 0.8em; }
-
 .anneau-rang {
   font-family: 'Present';
   font-size: var(--fontsize-hero);

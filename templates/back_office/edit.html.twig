@@ -2,5 +2,5 @@
 {% block title %}Modifier {{determinant}} {{label}} | {{ parent() }}{% endblock %}
 {% block h1 %}Modifier {{determinant}} {{label}}{% endblock %}
 {% block child %}
-    {{ include('admin_' ~ entity ~ '/_form.html.twig', {'button_label': 'Modifier'}) }}
+    {{ include('admin_' ~ entity ~ '/_form.html.twig', {'button_label': 'Modifier', 'button_gm': true}) }}
 {% endblock %}

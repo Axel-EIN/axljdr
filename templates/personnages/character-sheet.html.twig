@@ -7,24 +7,8 @@
   <link rel="stylesheet" href="{{asset('css/pages/character-sheet.css')}}" />
 {% endblock %}
 
-{% set cout_par_spe = 2 %}
-
-{% set perso_clan_id   = fiche.personnage.clan   ? fiche.personnage.clan.id   : 0 %}
 {% set perso_classe_id = fiche.personnage.classe ? fiche.personnage.classe.id : 0 %}
-{% set effective_costs = {av1: 0, av2: 0, dv1: 0, dv2: 0} %}
 {% set av_items = {av1: fiche.avantage1, av2: fiche.avantage2, dv1: fiche.desavantage1, dv2: fiche.desavantage2} %}
-{% for key, item in av_items %}
-  {% if item %}
-    {% set qualifies = item.discount and (
-      (item.discountClan   and item.discountClan.id   == perso_clan_id)
-      or (item.discountClan2  and item.discountClan2.id  == perso_clan_id)
-      or (item.discountClasse and item.discountClasse.id == perso_classe_id)
-    ) %}
-    {% set effective_costs = effective_costs|merge({(key): (qualifies ? item.discount : item.cout)}) %}
-  {% endif %}
-{% endfor %}
-{% set cout_avantages_total    = effective_costs.av1 + effective_costs.av2 %}
-{% set gain_desavantages_total = effective_costs.dv1 + effective_costs.dv2 %}
 
 {% set initMod = fiche.initiativeModifier ?? 0 %}
 {% set atkModL, atkModG = 0, 0 %}
@@ -64,57 +48,6 @@
 {% set eff_forceStat     = fiche.forceStat     + nb_bonus_forceStat %}
 {% set eff_perception    = fiche.perception    + nb_bonus_perception %}
 {% set eff_vide          = fiche.vide          + nb_bonus_vide %}
-
-{% set libre_constitution = 2 + nb_bonus_constitution %}
-{% set libre_volonte      = 2 + nb_bonus_volonte %}
-{% set libre_reflexes     = 2 + nb_bonus_reflexes %}
-{% set libre_intuition    = 2 + nb_bonus_intuition %}
-{% set libre_agilite      = 2 + nb_bonus_agilite %}
-{% set libre_intelligence = 2 + nb_bonus_intelligence %}
-{% set libre_forceStat    = 2 + nb_bonus_forceStat %}
-{% set libre_perception   = 2 + nb_bonus_perception %}
-{% set libre_vide         = 2 + nb_bonus_vide %}
-
-{% set cout_constitution = eff_constitution > libre_constitution ? (4 * (eff_constitution * (eff_constitution + 1) / 2 - (libre_constitution * (libre_constitution + 1) / 2)))|round : 0 %}
-{% set cout_volonte      = eff_volonte      > libre_volonte      ? (4 * (eff_volonte      * (eff_volonte      + 1) / 2 - (libre_volonte      * (libre_volonte      + 1) / 2)))|round : 0 %}
-{% set cout_reflexes     = eff_reflexes     > libre_reflexes     ? (4 * (eff_reflexes     * (eff_reflexes     + 1) / 2 - (libre_reflexes     * (libre_reflexes     + 1) / 2)))|round : 0 %}
-{% set cout_intuition    = eff_intuition    > libre_intuition    ? (4 * (eff_intuition    * (eff_intuition    + 1) / 2 - (libre_intuition    * (libre_intuition    + 1) / 2)))|round : 0 %}
-{% set cout_agilite      = eff_agilite      > libre_agilite      ? (4 * (eff_agilite      * (eff_agilite      + 1) / 2 - (libre_agilite      * (libre_agilite      + 1) / 2)))|round : 0 %}
-{% set cout_intelligence = eff_intelligence > libre_intelligence ? (4 * (eff_intelligence * (eff_intelligence + 1) / 2 - (libre_intelligence * (libre_intelligence + 1) / 2)))|round : 0 %}
-{% set cout_forceStat    = eff_forceStat    > libre_forceStat    ? (4 * (eff_forceStat    * (eff_forceStat    + 1) / 2 - (libre_forceStat    * (libre_forceStat    + 1) / 2)))|round : 0 %}
-{% set cout_perception   = eff_perception   > libre_perception   ? (4 * (eff_perception   * (eff_perception   + 1) / 2 - (libre_perception   * (libre_perception   + 1) / 2)))|round : 0 %}
-{% set cout_vide         = eff_vide         > libre_vide         ? (6 * (eff_vide         * (eff_vide         + 1) / 2 - (libre_vide         * (libre_vide         + 1) / 2)))|round : 0 %}
-
-{% set cout_traits_total = cout_constitution + cout_volonte + cout_reflexes + cout_intuition + cout_forceStat + cout_perception + cout_agilite + cout_intelligence + cout_vide %}
-{% set cout_competences_total = 0 %}
-{% set cout_specialisations_total = 0 %}
-{% for i in 1..20 %}
-  {% set val = attribute(fiche, 'valeur' ~ i) %}
-  {% set comp_i = attribute(fiche, 'competence' ~ i) %}
-  {% set n_ecole = attribute(fiche, 'compEcole' ~ i)|default(0) %}
-  {% if comp_i is not empty and val %}
-    {% set raw_cost = (val * (val + 1) / 2)|round %}
-    {% set offset  = (n_ecole * (n_ecole + 1) / 2)|round %}
-    {% set net = raw_cost - offset %}
-    {% set cout_competences_total = cout_competences_total + (net > 0 ? net : 0) %}
-  {% endif %}
-  {% if comp_i is not empty %}
-    {% set bm     = attribute(fiche, 'specialisations' ~ i)|default('') %}
-    {% set bm_ec  = attribute(fiche, 'speEcole' ~ i)|default('') %}
-    {% for k in 1..6 %}
-      {% set lab_k     = attribute(comp_i, 'specialisation' ~ k) %}
-      {% set bit_k     = (bm|length     >= k) ? bm|slice(k - 1, 1)    : '0' %}
-      {% set bit_ec_k  = (bm_ec|length  >= k) ? bm_ec|slice(k - 1, 1) : '0' %}
-      {% if lab_k and bit_k == '1' and bit_ec_k != '1' %}
-        {% set cout_specialisations_total = cout_specialisations_total + cout_par_spe %}
-      {% endif %}
-    {% endfor %}
-  {% endif %}
-{% endfor %}
-{% set cout_competences_total = cout_competences_total + cout_specialisations_total %}
-
-{% set xp_total_effectif = xp_total + gain_desavantages_total %}
-{% set cout_total        = cout_traits_total + cout_competences_total + cout_avantages_total %}
 
 <div class="col-12">
   <div id="character-sheet" class="card card-page text-grayslate">
@@ -201,38 +134,38 @@
 
               <li>
                 <span class="label">Expérience :</span>
-                <strong><span class="xp-total-value">{{ xp_total_effectif }}</span>xp</strong>
+                <strong><span class="xp-total-value">{{ xp.total }}</span>xp</strong>
                 &nbsp;
                 <small>
                   (
-                  {{ xp_creation }}
-                  {% if gain_desavantages_total > 0 %}
-                    + <span class="xp-desav-value text-success">{{ gain_desavantages_total }}</span>
+                  {{ xp.creation }}
+                  {% if xp.desavantages > 0 %}
+                    + <span class="xp-desav-value text-success">{{ xp.desavantages }}</span>
                   {% endif %}
-                  + {{ xp_progression }}
+                  + {{ xp.progression }}
                   )
                 </small>
               </li>
               <li>
                 <span class="label">Dépensés :</span>
-                <strong><span class="xp-spent-value">{{ cout_total }}</span>xp</strong>
+                <strong><span class="xp-spent-value">{{ xp.depense }}</span>xp</strong>
                 &nbsp;
                 <small>
                   (
                   <span class="xp-traits-value">
-                    {% if cout_avantages_total > 0 %}
-                      <span class="xp-avant-value text-danger">{{ cout_avantages_total }} +</span>
+                    {% if xp.avantages > 0 %}
+                      <span class="xp-avant-value text-danger">{{ xp.avantages }} +</span>
                     {% endif %}
-                    {{ cout_traits_total }}
+                    {{ xp.traits }}
                   </span>
                   +
-                  <span class="xp-comps-value">{{ cout_competences_total }}</span>
+                  <span class="xp-comps-value">{{ xp.competences }}</span>
                   )
                 </small>
               </li>
               <li>
                 <span class="label">Restants :</span>
-                <strong><span class="xp-remaining text-success">{{ xp_total_effectif - cout_total }}xp</span></strong>
+                <strong><span class="xp-remaining text-success">{{ xp.restant }}xp</span></strong>
               </li>
             {% endif %}
 
@@ -277,7 +210,7 @@
                 {% endif %}
                 {% if est_le_joueur or is_granted('ROLE_MJ') %}
                   <span class="text-alternate edit-only" data-cost-for="constitution">
-                    {% if cout_constitution > 0 %}-{{ cout_constitution }}xp{% endif %}
+                    {% if xp.trait.constitution > 0 %}-{{ xp.trait.constitution }}xp{% endif %}
                   </span>
                 {% endif %}
               </div>
@@ -298,7 +231,7 @@
                 {% endif %}
                 {% if est_le_joueur or is_granted('ROLE_MJ') %}
                   <span class="text-alternate edit-only" data-cost-for="volonte">
-                    {% if cout_volonte > 0 %}-{{ cout_volonte }}xp{% endif %}
+                    {% if xp.trait.volonte > 0 %}-{{ xp.trait.volonte }}xp{% endif %}
                   </span>
                 {% endif %}
               </div>
@@ -315,7 +248,7 @@
               <div class="align-self-end">
                 {% if est_le_joueur or is_granted('ROLE_MJ') %}
                   <span class="text-alternate edit-only" data-cost-for="reflexes">
-                    {% if cout_reflexes > 0 %}-{{ cout_reflexes }}xp{% endif %}
+                    {% if xp.trait.reflexes > 0 %}-{{ xp.trait.reflexes }}xp{% endif %}
                   </span>
                 {% endif %}
                 Réflèxes
@@ -336,7 +269,7 @@
               <div class="align-self-end">
                 {% if est_le_joueur or is_granted('ROLE_MJ') %}
                   <span class="text-alternate edit-only" data-cost-for="intuition">
-                    {% if cout_intuition > 0 %}-{{ cout_intuition }}xp{% endif %}
+                    {% if xp.trait.intuition > 0 %}-{{ xp.trait.intuition }}xp{% endif %}
                   </span>
                 {% endif %}
                 Intuition
@@ -386,7 +319,7 @@
                 {% endif %}
                 {% if est_le_joueur or is_granted('ROLE_MJ') %}
                   <span class="text-alternate edit-only" data-cost-for="forceStat">
-                    {% if cout_forceStat > 0 %}-{{ cout_forceStat }}xp{% endif %}
+                    {% if xp.trait.forceStat > 0 %}-{{ xp.trait.forceStat }}xp{% endif %}
                   </span>
                 {% endif %}
               </div>
@@ -407,7 +340,7 @@
                 {% endif %}
                 {% if est_le_joueur or is_granted('ROLE_MJ') %}
                   <span class="text-alternate edit-only" data-cost-for="perception">
-                    {% if cout_perception > 0 %}-{{ cout_perception }}xp{% endif %}
+                    {% if xp.trait.perception > 0 %}-{{ xp.trait.perception }}xp{% endif %}
                   </span>
                 {% endif %}
               </div>
@@ -417,25 +350,25 @@
               {% if est_le_joueur or is_granted('ROLE_MJ') %}
                 <div class="flex-col p-1 bg-strong text-fade text-small rounded-8 edit-only">
                   <div class="label-amerigo">Exp.</div>
-                  <div class="flex w-100 justify-content-between {% if gain_desavantages_total == 0 %}d-none{% endif %}" id="xp-desav-row">
+                  <div class="flex w-100 justify-content-between {% if xp.desavantages == 0 %}d-none{% endif %}" id="xp-desav-row">
                     Désavantages
-                    <span id="xp-desav-total" class="text-success">+{{ gain_desavantages_total }}xp</span>
+                    <span id="xp-desav-total" class="text-success">+{{ xp.desavantages }}xp</span>
                   </div>
-                  <div class="flex w-100 justify-content-between {% if cout_avantages_total == 0 %}d-none{% endif %}" id="xp-avant-row">
+                  <div class="flex w-100 justify-content-between {% if xp.avantages == 0 %}d-none{% endif %}" id="xp-avant-row">
                     Avantages
-                    <span id="xp-avant-total" class="text-danger">-{{ cout_avantages_total }}xp</span>
+                    <span id="xp-avant-total" class="text-danger">-{{ xp.avantages }}xp</span>
                   </div>
                   <div class="flex w-100 justify-content-between">
                     Traits
-                    <span id="xp-traits-total">-{{ cout_traits_total }}xp</span>
+                    <span id="xp-traits-total">-{{ xp.traits }}xp</span>
                   </div>
                   <div class="flex w-100 justify-content-between">
                     Compétences
-                    <span id="xp-comps-total">-{{ cout_competences_total }}xp</span>
+                    <span id="xp-comps-total">-{{ xp.competences }}xp</span>
                   </div>
                   <div class="flex w-100 justify-content-between extrabold">
                     Restants
-                    <span class="xp-remaining text-success">{{ xp_total_effectif - cout_total }}xp</span>
+                    <span class="xp-remaining text-success">{{ xp.restant }}xp</span>
                   </div>
                 </div>
               {% endif %}
@@ -452,7 +385,7 @@
               <div class="align-self-end">
                 {% if est_le_joueur or is_granted('ROLE_MJ') %}
                   <span class="text-alternate edit-only" data-cost-for="agilite">
-                    {% if cout_agilite > 0 %}-{{ cout_agilite }}xp{% endif %}
+                    {% if xp.trait.agilite > 0 %}-{{ xp.trait.agilite }}xp{% endif %}
                   </span>
                 {% endif %}
                 Agilité
@@ -473,7 +406,7 @@
               <div class="align-self-end">
                 {% if est_le_joueur or is_granted('ROLE_MJ') %}
                   <span class="text-alternate edit-only" data-cost-for="intelligence">
-                    {% if cout_intelligence > 0 %}-{{ cout_intelligence }}xp{% endif %}
+                    {% if xp.trait.intelligence > 0 %}-{{ xp.trait.intelligence }}xp{% endif %}
                   </span>
                 {% endif %}
                 Intelligence
@@ -512,7 +445,7 @@
               <div class="flex align-items-center">
                 {% if est_le_joueur or is_granted('ROLE_MJ') %}
                   <span class="text-alternate edit-only" data-cost-for="vide">
-                    {% if cout_vide > 0 %}-{{ cout_vide }}xp{% endif %}
+                    {% if xp.trait.vide > 0 %}-{{ xp.trait.vide }}xp{% endif %}
                   </span>
                   &nbsp;
                 {% endif %}
@@ -646,8 +579,8 @@
                         {{ item ? (item.summary ?: item.description|striptags) : '' }}
                       </div>
                       <span class="edit-only {{ bloc.color }} text-small ml-2" data-av-cost>
-                        {% if item %}{{ bloc.sign }}{{ effective_costs[slot] }}xp
-                          {% if effective_costs[slot] != item.cout %}
+                        {% if item %}{{ bloc.sign }}{{ xp.slots[slot] }}xp
+                          {% if xp.slots[slot] != item.cout %}
                             (promo)
                           {% endif %}
                         {% endif %}
@@ -710,11 +643,7 @@
                     {% set bought_specs = bought_specs|merge([{label: lab, ecole: bit_ec == '1'}]) %}
                   {% endif %}
                 {% endfor %}
-                {% set raw_cost = slot.val ? (slot.val * (slot.val + 1) / 2)|round : 0 %}
-                {% set offset   = (slot.compEcole * (slot.compEcole + 1) / 2)|round %}
-                {% set net_cost = raw_cost - offset > 0 ? raw_cost - offset : 0 %}
-                {% set paid_specs_count = 0 %}
-                {% for s in bought_specs %}{% if not s.ecole %}{% set paid_specs_count = paid_specs_count + 1 %}{% endif %}{% endfor %}
+                {% set cout_slot = xp.competence[slot.i] %}
                 <tr
                   class="p-0" data-comp-row="{{ slot.i }}" data-comp-id="{{ slot.comp.id }}"
                   data-comp-val="{{ slot.val ?? 0 }}" data-comp-specs="{{ bitmask }}"
@@ -732,7 +661,7 @@
                   </th>
                   <td class="text-strong extrabold" data-comp-val-cell>{{ slot.val ?? '' }}</td>
                   <td class="text-body-c d-none d-lg-table-cell" data-comp-trait-cell>{{ slot.comp.trait }}</td>
-                  <td class="edit-only text-alternate" data-comp-cost-cell>{% if slot.val %}-{{ net_cost }}xp{% endif %}</td>
+                  <td class="edit-only text-alternate" data-comp-cost-cell>{% if cout_slot.rang > 0 %}-{{ cout_slot.rang }}xp{% endif %}</td>
                 </tr>
                 <tr data-comp-specs-row="{{ slot.i }}" class="comp-specs-row{% if bought_specs|length > 0 %} has-specs{% endif %}">
                   <td></td>
@@ -747,8 +676,8 @@
                     {% endif %}
                   </td>
                   <td class="edit-only text-alternate" data-comp-specs-cost-cell>
-                    {% if paid_specs_count > 0 %}
-                      <small>-{{ paid_specs_count * cout_par_spe }}xp (spé)</small>
+                    {% if cout_slot.specialisations > 0 %}
+                      <small>-{{ cout_slot.specialisations }}xp (spé)</small>
                     {% endif %}
                   </td>
                 </tr>
@@ -1424,8 +1353,7 @@
     {% if est_le_joueur or is_granted('ROLE_MJ') %}
     <script>
         window.FICHE_CONFIG = {
-            xpTotal: {{ xp_total }},
-            persoClanId: {{ perso_clan_id }},
+            xpBase: {{ xp.creation + xp.progression }},
             persoClasseId: {{ perso_classe_id }},
             rang: {{ rang }},
             armureNd: {{ fiche.armure and fiche.armure.ndArmure ? fiche.armure.ndArmure : 0 }},
@@ -1457,7 +1385,7 @@
     <script>
     (function () {
         const cfg = window.FICHE_CONFIG;
-        const COUT_PAR_SPE = {{ cout_par_spe }};
+        const COUT_PAR_SPE = {{ constant('App\\Service\\ClasseurXP::SPECIALISATION_COST') }};
         const traits = ['constitution','volonte','reflexes','intuition','agilite','intelligence','forceStat','perception','vide'];
         const btnEdit = document.getElementById('btn-fiche-edit');
         const btnCancel = document.getElementById('btn-fiche-cancel');
@@ -1736,15 +1664,6 @@
 
             const avantageById    = new Map((cfg.avantages    || []).map(a => [a.id, a]));
             const desavantageById = new Map((cfg.desavantages || []).map(a => [a.id, a]));
-            function effectiveCost(av) {
-                if (!av) return 0;
-                const qualifies = av.discount && (
-                    (av.discountClanId   && av.discountClanId   === cfg.persoClanId)
-                    || (av.discountClan2Id  && av.discountClan2Id  === cfg.persoClanId)
-                    || (av.discountClasseId && av.discountClasseId === cfg.persoClasseId)
-                );
-                return qualifies ? av.discount : av.cout;
-            }
             let coutAvantages = 0;
             let gainDesavantages = 0;
             document.querySelectorAll('[data-av-slot]').forEach(li => {
@@ -1752,7 +1671,7 @@
                 const id = select ? parseInt(select.value, 10) : parseInt(li.dataset.avId, 10);
                 const kind = li.dataset.avKind;
                 const av = id ? (kind === 'avantage' ? avantageById.get(id) : desavantageById.get(id)) : null;
-                const cost = effectiveCost(av);
+                const cost = av ? av.coutEffectif : 0;
                 if (av) {
                     if (kind === 'avantage') coutAvantages += cost; else gainDesavantages += cost;
                 }
@@ -1760,7 +1679,7 @@
                 if (costSpan) {
                     if (av) {
                         const sign = kind === 'avantage' ? '-' : '+';
-                        const promo = (av.discount && cost !== av.cout) ? ' <small class="text-success">(promo)</small>' : '';
+                        const promo = cost !== av.cout ? ' <small class="text-success">(promo)</small>' : '';
                         costSpan.innerHTML = `${sign}${cost}xp${promo}`;
                     } else {
                         costSpan.innerHTML = '';
@@ -1769,7 +1688,7 @@
             });
 
             const totalSpent = totalTraits + totalComps + coutAvantages;
-            const xpEffectif = cfg.xpTotal + gainDesavantages;
+            const xpEffectif = cfg.xpBase + gainDesavantages;
             const remaining = xpEffectif - totalSpent;
 
             const tt = document.getElementById('xp-traits-total');

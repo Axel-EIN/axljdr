@@ -65,6 +65,12 @@ class AdminAvantageType extends AbstractType
             'placeholder' => '',
             'required' => false
             ])
+        ->add('discountClasse2', EntityType::class, [
+            'class' => Classe::class,
+            'choice_label' => 'nom',
+            'placeholder' => '',
+            'required' => false
+            ])
         ;
 
         PublishableFields::add($builder);

@@ -1,7 +1,8 @@
 {% if items is defined and (items is not empty or empty_message is defined) %}
 
   {% set reveal_auto = reveal_auto|default(false) %}
-  {% set items = element_sort(items|filter(item => element_listed(item, reveal_auto))) %}
+  {% set hide_dead = hide_dead|default(false) %}
+  {% set items = element_sort(items|filter(item => element_listed(item, reveal_auto) and not (hide_dead and item.dead))) %}
   {% set variant = variant|default('landscape') %}
   {% set shape = {landscape: '1610', rule: '43', icon: '11'}[variant]|default('1610') %}
   {% set pin = {portrait: 'pin-topleft', icon: 'pin-downcenter'}[variant]|default('') %}

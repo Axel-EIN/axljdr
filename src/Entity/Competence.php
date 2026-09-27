@@ -5,6 +5,8 @@ namespace App\Entity;
 use App\Repository\CompetenceRepository;
 use Doctrine\ORM\Mapping as ORM;
 
+use function Symfony\Component\String\u;
+
 /**
  * @ORM\Entity(repositoryClass=CompetenceRepository::class)
  * @ORM\HasLifecycleCallbacks
@@ -137,6 +139,11 @@ class Competence
         $this->trait = $trait;
 
         return $this;
+    }
+
+    public function getTraitCourt(): string
+    {
+        return u($this->trait ?? '')->ascii()->slice(0, 4)->toString();
     }
 
     public function getDescription(): ?string
@@ -329,5 +336,15 @@ class Competence
         $this->mastery6Summary = $mastery6Summary;
 
         return $this;
+    }
+
+    public function getMastery3Text(): string
+    {
+        return $this->mastery3Summary ?: (string) $this->capacite;
+    }
+
+    public function getMastery6Text(): string
+    {
+        return $this->mastery6Summary ?: (string) $this->capacite2;
     }
 }

@@ -19,7 +19,7 @@
 
 <div class="col-12 d-lg-none order-0 relative">
     <div class="profile-banner-mobile">
-        <img src="{{ illustration_src }}" alt="{{personnage.nom}} {{personnage.prenom}}" title="{{personnage.nom}} {{personnage.prenom}}" />
+        <img src="{{ illustration_src }}" alt="{{ personnage.nomComplet }}" title="{{ personnage.nomComplet }}" />
     </div>
     {{ include('parts/badge-access.html.twig', {state: element_state(personnage)}) }}
 </div>
@@ -32,7 +32,7 @@
     <div class="card card-body profile-infos">
 
         <div class="relative d-none d-lg-block">
-            <img class="img-fluid w-100" src="{{ illustration_src }}" alt="{{personnage.nom}} {{personnage.prenom}}" title="{{personnage.nom}} {{personnage.prenom}}" />
+            <img class="img-fluid w-100" src="{{ illustration_src }}" alt="{{ personnage.nomComplet }}" title="{{ personnage.nomComplet }}" />
             {{ include('parts/badge-access.html.twig', {state: element_state(personnage)}) }}
         </div>
 

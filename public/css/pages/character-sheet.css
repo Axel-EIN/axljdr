@@ -242,9 +242,10 @@
 .spec-ecole-tag { color: var(--color-green-success); }
 
 .av-summary {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
   overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
 }
 
 .fiche-standings {
@@ -441,16 +442,31 @@
   }
 
   .comp-specs-row {
-    display: none;
-
-    &.has-specs { display: table-row; }
+    &.comp-row-empty { display: none; }
     .edit-mode & { display: table-row; }
 
     td {
+      height: 1.25rem;
       padding-top: 0;
       padding-bottom: 0.3rem;
       border-top: 0;
       line-height: var(--leading-1);
+    }
+  }
+
+  .comp-cap {
+    display: none;
+    width: 25%;
+    line-height: var(--leading-1);
+
+    @media (min-width: 992px) { display: table-cell; }
+    .edit-mode & { display: none; }
+
+    .comp-cap-text {
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 2;
+      overflow: hidden;
     }
   }
 }

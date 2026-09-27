@@ -115,7 +115,7 @@
     {{ include('/parts/picture-grid.html.twig', {
         variant: 'portrait',
         title: 'Personnages',
-        items: clan.personnages, route: 'personnage_profil',
+        items: clan.personnages, route: 'personnage_profil', hide_dead: true,
         wrapper: col_side,
         per_row: {desktop: 2, tablet: 4, mobile: 2},
         empty_message: "Il n'y a pas encore de personnage rattaché à ce clan.",

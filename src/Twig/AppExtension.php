@@ -3,6 +3,7 @@
 namespace App\Twig;
 
 use App\Entity\Access;
+use App\Entity\Monnaie;
 use App\Entity\Status;
 use App\Service\ElementUrl;
 use App\Service\EntityRegistry;
@@ -122,16 +123,16 @@ class AppExtension extends AbstractExtension
         $reste = $prix;
         $html = '';
 
-        if ( $reste >= 50  ) {
-            $html = '<strong class="text-medium">' . floor($reste / 50) . '</strong>'
+        if ( $reste >= Monnaie::ZENI_PAR_KOKU  ) {
+            $html = '<strong class="text-medium">' . floor($reste / Monnaie::ZENI_PAR_KOKU) . '</strong>'
                   . '<img class="ml-1 img-24 align-text-bottom" src="/assets/icons/money/koku.png" alt="image pièce koku" title="Koku" /><br>';
-            $reste = $reste % 50;
+            $reste = $reste % Monnaie::ZENI_PAR_KOKU;
         }
 
-        if ( $reste >= 10 ) {
-            $html = $html . '<strong class="align-middle">' . floor($reste / 10) . '</strong>'
+        if ( $reste >= Monnaie::ZENI_PAR_BU ) {
+            $html = $html . '<strong class="align-middle">' . floor($reste / Monnaie::ZENI_PAR_BU) . '</strong>'
                           . '<img class="ml-1 img-18 align-middle" src="/assets/icons/money/bu.png" alt="image pièce bu" title="Bu" /><br>';
-            $reste = $reste % 10;
+            $reste = $reste % Monnaie::ZENI_PAR_BU;
         }
 
         if ( $reste > 0 ) {

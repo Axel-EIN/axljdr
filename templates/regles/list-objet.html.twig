@@ -51,13 +51,7 @@
             <div class="col-3"></div>
             <div class="col-1">Taille</div>
             <div class="col-1">Poids</div>
-            <div class="col-1">
-                {% if app.request.get('tab') is defined and app.request.get('tab') == 'ARC' %}
-                    Force Arc
-                {% else %}
-                    VD
-                {% endif %}
-            </div>
+            <div class="col-1">VD / Force</div>
 
             <div class="col-1 text-small">Dmg. Moy.<br><span class="text-mini">
                 {% if app.request.get('tab') is defined and app.request.get('tab') == 'ARC' %}

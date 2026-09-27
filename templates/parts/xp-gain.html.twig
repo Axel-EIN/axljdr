@@ -1,0 +1,9 @@
+{% set total = total|default(xp) %}
+{% set bonus = total > xp ? '×' ~ constant('App\\Entity\\Participation::XP_BONUS_MULTIPLIER') : null %}
+{%- if format|default('court') == 'court' -%}
+  {{ signe|default('') }}{{ xp }}&nbsp;xp{% if bonus %}&nbsp;{{ bonus }}{% endif %}
+{%- elseif format == 'moyen' -%}
+  {{ signe|default('') }}{{ xp }}&nbsp;xp{% if bonus %} (Total avec bonus&nbsp;{{ bonus }} = {{ signe|default('') }}{{ total }}&nbsp;xp){% endif %}
+{%- elseif bonus -%}
+  Total avec bonus&nbsp;{{ bonus }} : {{ total }}&nbsp;xp
+{%- endif -%}

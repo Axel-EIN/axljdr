@@ -48,9 +48,9 @@
             <div class="col-1 text-small">+ND Armure</div>
             <div class="col-1">Reduction</div>
         {% else %}
-            <div class="col-3"></div>
-            <div class="col-1">Taille</div>
-            <div class="col-1">Poids</div>
+            <div class="col-1"></div>
+            <div class="col-2">Taille</div>
+            <div class="col-2">Poids</div>
             <div class="col-1">VD / Force</div>
 
             <div class="col-1 text-small">Dmg. Moy.<br><span class="text-mini">
@@ -89,9 +89,9 @@
                         <div class="col-1 text-center"><strong class="text-medium">{{item.ndArmure}}</strong></div>
                         <div class="col-1 text-center"><strong class="text-medium">{{item.reduction}}</strong></div>
                     {% else %}
-                        <div class="col-3"></div>
-                        <div class="col-1 text-center"><strong class="align-text-middle">{{item.taille}}</strong></div>
-                        <div class="col-1 text-center"><strong class="align-text-middle">{{item.poids}}</strong></div>
+                        <div class="col-1"></div>
+                        <div class="col-2 text-center"><strong class="align-text-middle">{{item.taille}}</strong></div>
+                        <div class="col-2 text-center"><strong class="align-text-middle">{{item.poids}}</strong></div>
                         <div class="col-1 text-center">
                             <strong class="text-medium text-dead">
                                 {% if app.request.get('subtab') is defined and app.request.get('subtab') == 'ARC' %}

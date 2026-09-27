@@ -56,24 +56,29 @@ class Avantage
     private $discount;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Clan::class, inversedBy="avantages")
+     * @ORM\ManyToOne(targetEntity=Clan::class)
      */
     private $discountClan;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Classe::class, inversedBy="avantages")
+     * @ORM\ManyToOne(targetEntity=Classe::class)
      */
     private $discountClasse;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Classe::class, inversedBy="exclusiveAvantages")
+     * @ORM\ManyToOne(targetEntity=Classe::class)
      */
     private $exclusive;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Clan::class, inversedBy="avantages2")
+     * @ORM\ManyToOne(targetEntity=Clan::class)
      */
     private $discountClan2;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Classe::class)
+     */
+    private $discountClasse2;
 
     public function getId(): ?int
     {
@@ -196,6 +201,18 @@ class Avantage
     public function setDiscountClan2(?Clan $discountClan2): self
     {
         $this->discountClan2 = $discountClan2;
+
+        return $this;
+    }
+
+    public function getDiscountClasse2(): ?Classe
+    {
+        return $this->discountClasse2;
+    }
+
+    public function setDiscountClasse2(?Classe $discountClasse2): self
+    {
+        $this->discountClasse2 = $discountClasse2;
 
         return $this;
     }

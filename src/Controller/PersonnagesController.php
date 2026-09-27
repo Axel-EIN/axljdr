@@ -170,7 +170,7 @@ class PersonnagesController extends AbstractController
             'peut_editer' => $peutEditer,
             'form' => $form?->createView(),
             'developments' => $developmentRepository->findByPersonnage($personnage),
-            'nom' => $personnage->getNom() . ' ' . $personnage->getPrenom(),
+            'nom' => $personnage->getNomComplet(),
             'entity' => 'personnage',
             'category' => 'personnages',
             'un_element' => $personnage,
@@ -327,7 +327,7 @@ class PersonnagesController extends AbstractController
             'category' => 'personnages',
             'entity' => 'fiche',
             'un_element' => $fiche,
-            'nom' => $fiche->getPersonnage()->getNom() . ' ' . $fiche->getPersonnage()->getPrenom(),
+            'nom' => $fiche->getPersonnage()->getNomComplet(),
         ]);
     }
 

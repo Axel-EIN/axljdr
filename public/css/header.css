@@ -11,7 +11,7 @@
     text-align: center;
 
     &.mj {
-        background-color: var(--color-primarydarker);
+        background-color: var(--accent);
     }
     &.admin {
         background-color: var(--green);

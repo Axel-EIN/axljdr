@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Personnage;
+use App\Entity\Status;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -108,8 +109,10 @@ class PersonnageRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('p')
             ->andWhere('p.estPj = :val')
             ->andWhere('p.id != :value_id')
+            ->andWhere('p.status != :dead')
             ->setParameter('val', 1)
             ->setParameter('value_id', $id)
+            ->setParameter('dead', Status::DEAD)
             ->getQuery()
             ->getResult();
     }

@@ -53,7 +53,7 @@ class SheetExport
     private const STANDINGS = ['honneur' => 684, 'gloire' => 716, 'infamie' => 750, 'statut' => 782];
 
     private const COMBAT_INITIATIVE = [1425, 900];
-    private const COMBAT_ND = [1276, 984];
+    private const COMBAT_ND = [1372, 984];
     private const COMBAT_ARMOUR = [1317, 1063];
     private const COMBAT_REDUCTION = [1556, 1063];
     private const COMBAT_RECOVERY = [1556, 1666];
@@ -293,7 +293,7 @@ class SheetExport
         }
 
         $pdf->text($initiative, self::COMBAT_INITIATIVE[0], self::COMBAT_INITIATIVE[1], 32, $centered);
-        $pdf->text('= ' . ($reflexes * 5), self::COMBAT_ND[0], self::COMBAT_ND[1], 30, ['bold' => true]);
+        $pdf->text('= ' . ($reflexes * 5 + $rang), self::COMBAT_ND[0], self::COMBAT_ND[1], 30, ['bold' => true]);
 
         if ($armure) {
             $pdf->text('+' . (int) $armure->getNdArmure(), self::COMBAT_ARMOUR[0], self::COMBAT_ARMOUR[1], 30, $centered);

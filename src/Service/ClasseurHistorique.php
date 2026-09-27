@@ -14,7 +14,7 @@ class ClasseurHistorique
 
         $lignes = [];
         foreach ($scenes as $scene) {
-            $lignes[] = ['scene' => $scene, 'xp' => 0, 'bonus' => false, 'mort' => false];
+            $lignes[] = ['scene' => $scene, 'xp' => 0, 'xpWithBonus' => 0, 'mort' => false];
         }
 
         return $this->grouperParEpisode($lignes);
@@ -32,8 +32,8 @@ class ClasseurHistorique
         foreach ($participations as $participation) {
             $lignes[] = [
                 'scene' => $participation->getScene(),
-                'xp' => $participation->getXpEffectif(),
-                'bonus' => $participation->getXpBonus(),
+                'xp' => (int) $participation->getXpGagne(),
+                'xpWithBonus' => $participation->getXpEffectif(),
                 'mort' => $participation->getEstMort(),
             ];
         }
@@ -68,6 +68,7 @@ class ClasseurHistorique
             $id = $episode->getId();
             $historique[$id]['episode'] = $episode;
             $historique[$id]['xp'] = ($historique[$id]['xp'] ?? 0) + $ligne['xp'];
+            $historique[$id]['xpWithBonus'] = ($historique[$id]['xpWithBonus'] ?? 0) + $ligne['xpWithBonus'];
             $historique[$id]['lignes'][] = $ligne;
         }
 

@@ -13,7 +13,7 @@
           {% if joue.estMort == 1 %}
             <strong class="text-dead">MORT</strong>
           {% elseif joue.xp != 0 %}
-            <strong class="text-your-xp">+{{ joue.xp }}&nbsp;xp</strong>
+            <strong class="text-your-xp">{{ include('parts/xp-gain.html.twig', {xp: joue.xp, total: joue.xpWithBonus, signe: '+'}) }}</strong>
           {% endif %}
           <a href="{{ path('personnage_profil', {id: joue.id}) }}">
             <img class="character-portrait medium outlined {% if joue.estMort == 1 %}effect-dead{% elseif joue.xp == 0 %}grayscale{% else %}hover-shine{% endif %}"

@@ -29,7 +29,7 @@
       {{ un_episode.titre }}
       <i class="fas fa-chevron-down ml-2 text-small"></i>
       {% if un_bloc.xp > 0 %}
-        <strong class="ml-auto extrabold text-flash-green-darker text-nowrap">+{{ un_bloc.xp }}xp</strong>
+        <strong class="ml-auto extrabold text-flash-green-darker text-nowrap">{{ include('parts/xp-gain.html.twig', {xp: un_bloc.xp, total: un_bloc.xpWithBonus, format: 'moyen', signe: '+'}) }}</strong>
       {% endif %}
     </a>
     <a class="ml-2 mr-2 mr-lg-0 text-small" href="{{ path('aventure_episode', {id: un_episode.id}) }}" title="Voir l'épisode">
@@ -48,7 +48,7 @@
           <strong class="text-dead">MORT</strong>
         {% elseif ligne.xp > 0 %}
           <strong class="extrabold text-flash-green-darker text-nowrap">
-            +{{ ligne.xp }}xp{% if ligne.bonus %} <small>(×{{ constant('App\\Entity\\Participation::XP_BONUS_MULTIPLIER') }})</small>{% endif %}
+            {{ include('parts/xp-gain.html.twig', {xp: ligne.xp, signe: '+'}) }}
           </strong>
         {% endif %}
       </div>

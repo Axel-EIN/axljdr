@@ -45,9 +45,22 @@
   margin-bottom: 0;
 }
 
-.element-page > .container > section > .row > * > .card,
-.other-page > .container > section > .row > * > .card {
-  height: 100%;
+.element-page > .container > section > .row > *,
+.other-page > .container > section > .row > * {
+  > .card { height: 100%; }
+
+  &.card-stack {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap);
+
+    > .card {
+      height: auto;
+      flex: 0 0 auto;
+
+      &:last-child { flex-grow: 1; }
+    }
+  }
 }
 
 .hr-title {

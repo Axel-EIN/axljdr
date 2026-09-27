@@ -42,9 +42,7 @@ final class PublishableFields
                         ->orderBy('p.nom', 'ASC')
                         ->addOrderBy('p.prenom', 'ASC');
                 },
-                'choice_label' => function (Personnage $personnage) {
-                    return trim($personnage->getNom() . ' ' . $personnage->getPrenom());
-                },
+                'choice_label' => 'nomComplet',
                 'multiple' => true,
                 'expanded' => true,
                 'mapped' => false,

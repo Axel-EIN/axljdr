@@ -437,7 +437,7 @@ class SheetExport
                 $weapon->getNom(),
                 mb_convert_case((string) $weapon->getTaille(), MB_CASE_TITLE, 'UTF-8'),
                 mb_convert_case((string) $weapon->getPoids(), MB_CASE_TITLE, 'UTF-8'),
-                (string) $weapon->getVd(),
+                (string) $weapon->getVdOuForce(),
             ];
 
             foreach (self::WEAPON_COLUMNS as $column => [$x, $width, $align]) {

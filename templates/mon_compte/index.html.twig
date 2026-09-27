@@ -64,7 +64,7 @@
             {% if principal.clan %}
               <img class="img-24" src="{{ asset(principal.clan.mon|default(NA_MON)) }}" alt="Mon du Clan {{ principal.clan.nom }}" />
             {% endif %}
-            <strong>{{ principal.nom }} {{ principal.prenom }}</strong>
+            <strong>{{ principal.nomComplet }}</strong>
             {% if principal.fichePersonnage is not empty %}
               <a href="{{ path('personnage_fiche', {id: principal.fichePersonnage.id}) }}">
                 <i class="fas fa-user-secret" aria-hidden="true"></i> Fiche privée
@@ -84,7 +84,7 @@
             <option value="">Automatique — le plus récent</option>
             {% for un_personnage in app.user.personnages %}
               <option value="{{ un_personnage.id }}"{% if principal and un_personnage.id == principal.id %} selected{% endif %}>
-                {{ un_personnage.nom }} {{ un_personnage.prenom }}
+                {{ un_personnage.nomComplet }}
               </option>
             {% endfor %}
           </select>
@@ -106,7 +106,7 @@
             <a href="{{ path('personnage_profil', {id: un_personnage.id}) }}" class="hover-zoom">
               <img src="{{ asset(un_personnage.icone|default(NA_PERSO_PORTRAIT)) }}" alt="Portrait de {{ un_personnage.prenom }}" />
             </a>
-            <strong>{{ un_personnage.nom }} {{ un_personnage.prenom }}</strong>
+            <strong>{{ un_personnage.nomComplet }}</strong>
             {% if un_personnage.fichePersonnage is not empty %}
               <a href="{{ path('personnage_fiche', {id: un_personnage.fichePersonnage.id}) }}">
                 <i class="fas fa-user-secret" aria-hidden="true"></i> Fiche privée

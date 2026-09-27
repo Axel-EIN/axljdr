@@ -1,5 +1,5 @@
 {% extends 'base.html.twig' %}
-{% block title %}{{entity|capitalize}} {{nom}} {{parent()}} {% endblock %}
+{% block title %}{{ entity == 'fiche' ? 'Fiche de Jeu : ' ~ nom : entity|capitalize ~ ' ' ~ nom }} {{parent()}} {% endblock %}
 
 {% block stylesheets %}
   {{ parent() }}
@@ -15,7 +15,7 @@
         {% set fil = [
           { label: category|capitalize, path: path(category) },
           { label: nom|capitalize, path: path('personnage_profil', {id: fiche.personnage.id}) },
-          { label: 'Fiche Personnage' },
+          { label: 'Fiche de Jeu' },
         ] %}
       {% else %}
         {% set fil = [
@@ -31,7 +31,7 @@
 
         <h1 class="heading-elementdetail relative">
           {% if category == 'personnages' and entity == 'fiche' %}
-            <strong><i class="fas fa-address-card fiche-titre-ico mr-2"></i>Fiche de {{ nom }}</strong>
+            <strong>Fiche de Jeu : {{ nom }}</strong>
           {% else %}
             <strong>{{ nom }}</strong>
           {% endif %}

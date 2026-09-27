@@ -303,7 +303,7 @@ class PersonnagesController extends AbstractController
                     'type' => $o->getType(),
                     'taille' => $o->getTaille(),
                     'poids' => $o->getPoids(),
-                    'vd' => $o->getVd(),
+                    'vdOuForce' => $o->getVdOuForce(),
                 ];
             }
 

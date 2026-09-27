@@ -33,8 +33,7 @@
       {% set hidden = not element_readable(item) %}
       {% set locked = state == 'locked' %}
       {% set item_class = (element_unseen(item) ? 'access-hidden ' : '') ~ (locked ? 'locked ' : '') ~ (hidden ? '' : 'hover-zoom') %}
-      {% set name = item.nom is defined ? item.nom : item.titre %}
-      {% if item.prenom is defined %}{% set name = (name ? name ~ ' ' : '') ~ item.prenom %}{% endif %}
+      {% set name = item.nomComplet is defined ? item.nomComplet : (item.nom is defined ? item.nom : item.titre) %}
       {% set alt = hidden ? 'À découvrir' : name %}
       {% set pdf_only = item.pdf|default(null) and not item.hasParts|default(false) %}
       {% set image_na = pdf_only ? NA_PDF : na_image|default(NA_ICON) %}

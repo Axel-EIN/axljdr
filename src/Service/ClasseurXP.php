@@ -187,6 +187,7 @@ class ClasseurXP
             ($avantage->getDiscountClan() && $avantage->getDiscountClan()->getId() === $clan)
             || ($avantage->getDiscountClan2() && $avantage->getDiscountClan2()->getId() === $clan)
             || ($avantage->getDiscountClasse() && $avantage->getDiscountClasse()->getId() === $classe)
+            || ($avantage->getDiscountClasse2() && $avantage->getDiscountClasse2()->getId() === $classe)
         );
 
         return (int) ($discounted ? $avantage->getDiscount() : $avantage->getCout());

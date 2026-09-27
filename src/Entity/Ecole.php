@@ -174,11 +174,6 @@ class Ecole
      */
     private $bonusStatNom;
 
-    /**
-     * @ORM\Column(type="smallint", nullable=true)
-     */
-    private $valeurCompetencesDepart;
-
     public function __construct()
     {
         $this->personnages = new ArrayCollection();
@@ -501,18 +496,6 @@ class Ecole
     public function setBonusStatNom(?string $bonusStatNom): self
     {
         $this->bonusStatNom = $bonusStatNom;
-
-        return $this;
-    }
-
-    public function getValeurCompetencesDepart(): ?int
-    {
-        return $this->valeurCompetencesDepart;
-    }
-
-    public function setValeurCompetencesDepart(?int $valeurCompetencesDepart): self
-    {
-        $this->valeurCompetencesDepart = $valeurCompetencesDepart;
 
         return $this;
     }

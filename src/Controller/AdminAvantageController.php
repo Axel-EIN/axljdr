@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Repository\AvantageRepository;
+use App\Repository\FichePersonnageRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -135,9 +136,18 @@ class AdminAvantageController extends AbstractController
      * @Route("/admin/desavantage/{id}/delete", name="admin_desavantage_delete", methods={"POST"})
      * @IsGranted("ROLE_MJ")
      */
-    public function deleteAvantage(Request $request, Avantage $avantage, Unlocker $unlocker): Response {
+    public function deleteAvantage(Request $request, Avantage $avantage, Unlocker $unlocker, FichePersonnageRepository $ficheRepository): Response {
 
         if ($this->isCsrfTokenValid('delete' . $avantage->getId(), $request->request->get('_csrf_token'))) {
+
+            $fiches = $ficheRepository->findByAvantage($avantage);
+
+            if (!empty($fiches)) {
+                $personnages = array_map(fn($fiche) => $fiche->getPersonnage()->getNom(), $fiches);
+                $this->addFlash('danger', 'Impossible de supprimer « ' . $avantage->getNom() . ' », utilisé par : ' . implode(', ', $personnages) . '.');
+
+                return $this->redirectToRoute($this->listRoute($avantage));
+            }
 
             $entityManager = $this->getDoctrine()->getManager();
             $unlocker->forget($avantage);

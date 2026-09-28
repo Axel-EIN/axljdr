@@ -45,6 +45,7 @@ class AdminAvantageController extends AbstractController
                 'nom:Nom',
                 'type:Type',
                 'cout:Coût',
+                'discount:Coût Discount',
                 'exclusive.nom:Exclusif',
                 'discountClans:Discount Clan:list',
                 'discountClasses:Discount Classe:list',

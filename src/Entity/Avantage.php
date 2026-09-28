@@ -217,6 +217,16 @@ class Avantage
         return $this;
     }
 
+    public function getDiscountClans(): array
+    {
+        return array_filter([$this->discountClan, $this->discountClan2]);
+    }
+
+    public function getDiscountClasses(): array
+    {
+        return array_filter([$this->discountClasse, $this->discountClasse2]);
+    }
+
     public function getSummary(): ?string
     {
         return $this->summary;

@@ -10,6 +10,7 @@ class SheetExport
 {
     private const CANVAS_WIDTH = 1654;
     private const SHEETS = '/assets/sheets/';
+    private const DICE_ICON = '/assets/ui/dice.png';
     private const RECTO = 'Character Sheet Recto Base.png';
     private const VERSO = 'Character Sheet Verso Base.png';
     private const FRAME = 'Cadre Illu.png';
@@ -48,12 +49,18 @@ class SheetExport
         'feu' => [663, 537],
         'vide' => [572, 600],
     ];
+    private const VOID_BONUS = [624, 784];
 
     private const STANDING_RIGHT = 1116;
     private const STANDINGS = ['honneur' => 684, 'gloire' => 716, 'infamie' => 750, 'statut' => 782];
 
-    private const COMBAT_INITIATIVE = [1425, 900];
-    private const COMBAT_ND = [1372, 984];
+    private const COMBAT_LABEL = [1152, 1178];
+    private const COMBAT_LABEL_SIZE = 19;
+    private const COMBAT_VALUE = [1447, 94];
+    private const COMBAT_VALUE_SIZE = 28;
+    private const COMBAT_DICE = [1152, 870, 20];
+    private const COMBAT_INITIATIVE = [887, 908, 902];
+    private const COMBAT_ND = [982, 986];
     private const COMBAT_ARMOUR = [1317, 1063];
     private const COMBAT_REDUCTION = [1556, 1063];
     private const COMBAT_RECOVERY = [1556, 1666];
@@ -249,9 +256,7 @@ class SheetExport
         foreach (self::TRAITS as $name => [$x, $y, $labelX, $labelY]) {
             $pdf->text((string) $traits[$name]['value'], $x, $y + 12, 34, ['bold' => true, 'align' => PdfWriter::ALIGN_CENTER]);
 
-            if ($traits[$name]['bonus'] > 0) {
-                $pdf->text('+' . $traits[$name]['bonus'], $labelX, $labelY, 22, ['align' => PdfWriter::ALIGN_CENTER]);
-            }
+            $this->traitBonus($pdf, $traits[$name]['bonus'], $labelX, $labelY);
         }
 
         $rings = [
@@ -264,6 +269,15 @@ class SheetExport
 
         foreach (self::RINGS as $name => [$x, $y]) {
             $pdf->text((string) $rings[$name], $x, $y + 12, 34, ['bold' => true, 'align' => PdfWriter::ALIGN_CENTER]);
+        }
+
+        $this->traitBonus($pdf, $traits['vide']['bonus'], self::VOID_BONUS[0], self::VOID_BONUS[1]);
+    }
+
+    private function traitBonus(PdfWriter $pdf, int $bonus, int $x, int $y): void
+    {
+        if ($bonus > 0) {
+            $pdf->text('+' . $bonus, $x, $y, 22, ['align' => PdfWriter::ALIGN_CENTER]);
         }
     }
 
@@ -292,8 +306,18 @@ class SheetExport
             $initiative .= ($modifier > 0 ? '+' : '') . $modifier;
         }
 
-        $pdf->text($initiative, self::COMBAT_INITIATIVE[0], self::COMBAT_INITIATIVE[1], 32, $centered);
-        $pdf->text('= ' . ($reflexes * 5 + $rang), self::COMBAT_ND[0], self::COMBAT_ND[1], 30, ['bold' => true]);
+        [$left, $indent] = self::COMBAT_LABEL;
+        [$line1, $line2, $initiativeBaseline] = self::COMBAT_INITIATIVE;
+        [$ndLine, $ndBaseline] = self::COMBAT_ND;
+        [$diceX, $diceY, $diceSize] = self::COMBAT_DICE;
+
+        $pdf->overlay($this->publicDirectory . self::DICE_ICON, $diceX, $diceY, $diceSize, $diceSize);
+        $pdf->text('Réflexes + Rang Général', $indent, $line1, self::COMBAT_LABEL_SIZE);
+        $pdf->text('/garder Réflexes', $indent, $line2, self::COMBAT_LABEL_SIZE);
+        $pdf->text('Réflexes x 5 + Rang Général', $left, $ndLine, self::COMBAT_LABEL_SIZE);
+
+        $this->combatValue($pdf, $initiative, $initiativeBaseline);
+        $this->combatValue($pdf, (string) ($reflexes * 5 + $rang), $ndBaseline);
 
         if ($armure) {
             $pdf->text('+' . (int) $armure->getNdArmure(), self::COMBAT_ARMOUR[0], self::COMBAT_ARMOUR[1], 30, $centered);
@@ -316,6 +340,17 @@ class SheetExport
         $pdf->text((string) $total, self::HP_COLUMN, self::HP_FIRST + self::HP_ROWS * self::HP_STEP, 28, $centered);
 
         $pdf->text((string) ($traits['constitution']['value'] * 2 + $rang), self::COMBAT_RECOVERY[0], self::COMBAT_RECOVERY[1], 30, $centered);
+    }
+
+    private function combatValue(PdfWriter $pdf, string $value, int $baseline): void
+    {
+        [$x, $width] = self::COMBAT_VALUE;
+
+        $pdf->text($value, $x, $baseline, self::COMBAT_VALUE_SIZE, [
+            'bold' => true,
+            'align' => PdfWriter::ALIGN_CENTER,
+            'width' => $width,
+        ]);
     }
 
     private function skills(PdfWriter $pdf, FichePersonnage $fiche): void

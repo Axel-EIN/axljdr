@@ -34,6 +34,10 @@
     cursor: pointer;
     width: 40px;
     height: 40px;
+
+    &.edit { color: var(--color-yellow-gold); }
+
+    &.delete { color: var(--color-primarydarker); }
 }
 
 .btn-icon-medium {

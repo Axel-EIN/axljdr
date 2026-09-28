@@ -31,3 +31,7 @@ $('#caption').click(function (e) {
     alert(xPourcent + '% ,' + yPourcent + '%');
 
 });
+
+$('.modal').on('shown.bs.modal', function () {
+    $(this).find('[autofocus]').trigger('focus');
+});

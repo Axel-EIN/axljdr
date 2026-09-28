@@ -60,6 +60,8 @@
                             <td class="text-center align-middle{{ bold_class }}">{{ access_label(val) }}</td>
                         {% elseif format == 'date' %}
                             <td class="text-center align-middle{{ bold_class }}">{{ val ? val|date('d/m/Y H:i') : '' }}</td>
+                        {% elseif format == 'list' %}
+                            <td class="text-left align-middle{{ bold_class }}">{{ val|map(v => v.nom)|join(', ') }}</td>
                         {% elseif format == 'number' %}
                             <td class="text-right align-middle{{ bold_class }}">{{ val }}</td>
                         {% elseif format == 'symbol' %}
@@ -101,7 +103,7 @@
                     {% endfor %}
 
                     <td class="text-center align-middle">
-                        <a class="wrapper-icon-btn-small" href="{{ path('admin_' ~ element ~ '_edit', {id: un_element.id}) }}">
+                        <a class="wrapper-icon-btn-small edit" href="{{ path('admin_' ~ element ~ '_edit', {id: un_element.id}) }}">
                             <i class="fas fa-edit"></i>
                         </a>
                     </td>
@@ -110,7 +112,7 @@
                               onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cet élément ?');"
                               style="display:inline;">
                             <input type="hidden" name="_csrf_token" value="{{ csrf_token('delete' ~ un_element.id) }}" />
-                            <button type="submit" class="wrapper-icon-btn-small" style="background:transparent; border:0; padding:0;">
+                            <button type="submit" class="wrapper-icon-btn-small delete" style="background:transparent; border:0; padding:0;">
                                 <i class="fas fa-trash-alt"></i>
                             </button>
                         </form>

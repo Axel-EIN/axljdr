@@ -335,21 +335,23 @@ class BackOfficeController extends AbstractController
             $admin_elements[$i]['image'] = '';
         }
 
-        $i++;
-        $admin_elements[$i]['element'] = 'avantage' ;
-        $admin_elements[$i]['label'] = 'Avantages/Dés.';
-        $admin_elements[$i]['genre'] = 'M';
-        $admin_elements[$i]['categorie'] = 'REGLES';
-        $admin_elements[$i]['nbr'] = $avantageRepository->countAvantages();
-        $lastAvantage = $avantageRepository->findOneBy(array(),array('id' => 'DESC'));
-        if (!empty($lastAvantage)) {
-            $admin_elements[$i]['last'] = $lastAvantage;
-            $admin_elements[$i]['nom'] = $lastAvantage->getNom();
-            $admin_elements[$i]['image'] = '';
-        } else {
-            $admin_elements[$i]['last'] = '';
-            $admin_elements[$i]['nom'] = '';
-            $admin_elements[$i]['image'] = '';
+        foreach (['Avantage' => ['avantage', 'Avantages'], 'Désavantage' => ['desavantage', 'Désavantages']] as $genreAvantage => [$element, $label]) {
+            $i++;
+            $admin_elements[$i]['element'] = $element;
+            $admin_elements[$i]['label'] = $label;
+            $admin_elements[$i]['genre'] = 'M';
+            $admin_elements[$i]['categorie'] = 'REGLES';
+            $admin_elements[$i]['nbr'] = $avantageRepository->countAvantages($genreAvantage);
+            $lastAvantage = $avantageRepository->findOneBy(array('genre' => $genreAvantage),array('id' => 'DESC'));
+            if (!empty($lastAvantage)) {
+                $admin_elements[$i]['last'] = $lastAvantage;
+                $admin_elements[$i]['nom'] = $lastAvantage->getNom();
+                $admin_elements[$i]['image'] = '';
+            } else {
+                $admin_elements[$i]['last'] = '';
+                $admin_elements[$i]['nom'] = '';
+                $admin_elements[$i]['image'] = '';
+            }
         }
 
         $i++;

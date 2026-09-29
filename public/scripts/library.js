@@ -1,15 +1,27 @@
 $(document).ready(function ()
 {   
+    function reloadWith(removedParams, param, value) {
+        var url = new URL(window.location.href);
+        removedParams.forEach(function(removedParam) {
+            url.searchParams.delete(removedParam);
+        });
+        if (value)
+            url.searchParams.set(param, value);
+        url.hash = "";
+        window.location = url;
+    }
+
     $("#filter-select").change(function() {
-        var optionValue = $(this).val();
-        var url = window.location.href.split("&filter=")[0];
-        window.location = url + "&filter=" + optionValue;
+        reloadWith(["filter"], "filter", $(this).val());
     });
 
     $("#keyword-select").change(function() {
-        var optionValue = $(this).val();
-        var url = window.location.href.split("&keyword=")[0];
-        window.location = url + "&keyword=" + optionValue;
+        reloadWith(["keyword"], "keyword", $(this).val());
+    });
+
+    $(".discount-select").change(function() {
+        var discountParams = $(".discount-select").map(function() { return $(this).data("param"); }).get();
+        reloadWith(discountParams, $(this).data("param"), $(this).val());
     });
 
     var target = document.getElementById(window.location.hash.slice(1));

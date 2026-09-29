@@ -216,6 +216,34 @@ class ReglesController extends AbstractController
             }
         }
 
+        $discounts = [];
+
+        if ( $entity_name == 'avantage' ) {
+            $discount_getters = [
+                'clan' => ['label' => 'Discount Clan/Faction', 'getter' => 'getDiscountClans'],
+                'classe' => ['label' => 'Discount Classe', 'getter' => 'getDiscountClasses'],
+            ];
+
+            foreach ( $discount_getters as $param => $discount ) {
+                $options = [];
+                foreach ( $items as $item )
+                    foreach ( $item->{ $discount['getter'] }() as $entite )
+                        $options[$entite->getId()] = $entite->getNom();
+
+                asort($options);
+
+                if ( !empty( $options ) )
+                    $discounts[$param] = ['label' => $discount['label'], 'options' => $options];
+            }
+
+            foreach ( $discount_getters as $param => $discount ) {
+                $discount_url_param = $request->query->get($param);
+
+                if ( !empty( $discount_url_param ) )
+                    $items = array_filter($items, fn($item) => in_array($discount_url_param, array_map(fn($entite) => $entite->getId(), $item->{ $discount['getter'] }())));
+            }
+        }
+
         if ( !empty( $filter_url_param ) && !empty( $filter_field_name ) )
             $items = array_filter($items, function ($obj) use ($filter_url_param, $filter_field_name) { return $obj->{ 'get' .  ucfirst( $filter_field_name ) }() == $filter_url_param; });
 
@@ -248,6 +276,7 @@ class ReglesController extends AbstractController
             'subtabs' => $subtabs,
             'filters' => $filters,
             'keywords' => $keywords,
+            'discounts' => $discounts,
         ]);
     }
 

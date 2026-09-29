@@ -135,7 +135,7 @@
 
                 <div class="col-12 col-md-4">
                     <label for="keyword-select">Filtrer par Mot Clés :</label>
-                    <select name="filter" id="keyword-select" >
+                    <select name="keyword" id="keyword-select" >
                         <option value="">TOUS</option>
                         {% for keyword in keywords %}
                             <option value={{keyword}} {% if app.request.get('keyword') == keyword %}selected{% endif %}>{{keyword}}</option>
@@ -153,6 +153,22 @@
                     </select>
                 </div>
 
+            </div>
+        {% endif %}
+
+        {% if discounts is not empty %}
+            <div class="col-12 mt-3 library-row">
+                {% for param, discount in discounts %}
+                    <div class="col-12 col-md-4">
+                        <label for="discount-{{param}}-select">Filtrer par {{discount.label}} :</label>
+                        <select id="discount-{{param}}-select" class="discount-select" data-param="{{param}}">
+                            <option value="">TOUS</option>
+                            {% for id, nom in discount.options %}
+                                <option value="{{id}}" {% if app.request.get(param) == id %}selected{% endif %}>{{nom}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                {% endfor %}
             </div>
         {% endif %}
 

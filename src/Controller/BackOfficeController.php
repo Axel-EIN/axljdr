@@ -216,21 +216,23 @@ class BackOfficeController extends AbstractController
             $admin_elements[$i]['image'] = '';
         }
 
-        $i++;
-        $admin_elements[$i]['element'] = 'personnage' ;
-        $admin_elements[$i]['label'] = 'Personnages';
-        $admin_elements[$i]['genre'] = 'M';
-        $admin_elements[$i]['categorie'] = 'PERSONNAGES';
-        $admin_elements[$i]['nbr'] = $personnageRepository->countPJs();
-        $lastPersonnage = $personnageRepository->findOneBy(array(),array('id' => 'DESC'));
-        if (!empty($lastPersonnage)) {
-            $admin_elements[$i]['last'] = $lastPersonnage;
-            $admin_elements[$i]['nom'] = $lastPersonnage->getNom();
-            $admin_elements[$i]['image'] = $lastPersonnage->getIcone();
-        } else {
-            $admin_elements[$i]['last'] = '';
-            $admin_elements[$i]['nom'] = '';
-            $admin_elements[$i]['image'] = '';
+        foreach (['PJs' => ['personnage', true], 'PNJs' => ['pnj', false]] as $label => [$element, $estPj]) {
+            $i++;
+            $admin_elements[$i]['element'] = $element;
+            $admin_elements[$i]['label'] = $label;
+            $admin_elements[$i]['genre'] = 'M';
+            $admin_elements[$i]['categorie'] = 'PERSONNAGES';
+            $admin_elements[$i]['nbr'] = $personnageRepository->countPersonnages($estPj);
+            $lastPersonnage = $personnageRepository->findOneBy(array('estPj' => $estPj),array('id' => 'DESC'));
+            if (!empty($lastPersonnage)) {
+                $admin_elements[$i]['last'] = $lastPersonnage;
+                $admin_elements[$i]['nom'] = $lastPersonnage->getNomComplet();
+                $admin_elements[$i]['image'] = $lastPersonnage->getIcone();
+            } else {
+                $admin_elements[$i]['last'] = '';
+                $admin_elements[$i]['nom'] = '';
+                $admin_elements[$i]['image'] = '';
+            }
         }
 
         $i++;
@@ -242,7 +244,7 @@ class BackOfficeController extends AbstractController
         $lastFiche = $fichePersonnageRepository->findOneBy(array(),array('id' => 'DESC'));
         if (!empty($lastFiche)) {
             $admin_elements[$i]['last'] = $lastFiche;
-            $admin_elements[$i]['nom'] = $lastFiche->getPersonnage()->getNom();
+            $admin_elements[$i]['nom'] = $lastFiche->getPersonnage()->getNomComplet();
             $admin_elements[$i]['image'] = $lastFiche->getPersonnage()->getIcone();
         } else {
             $admin_elements[$i]['last'] = '';

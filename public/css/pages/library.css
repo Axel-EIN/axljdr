@@ -61,7 +61,9 @@
 .item-line {
     display: flex;
     flex-direction: row;
+    overflow-wrap: normal;
     &>div { text-align: center; }
+    &.row>div { padding: 0 .5rem; }
 }
 
 .item-name { color: var(--color-strong); }

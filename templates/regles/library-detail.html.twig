@@ -18,8 +18,9 @@
     } %}
 
     {% set a_sous_onglets = un_element.subTabField is defined and un_element.subTabField is not empty %}
-    {% set subtab = a_sous_onglets and (app.request.get('subtab') is empty or un_element.mixable != true)
-        ? 'first' : app.request.get('subtab') %}
+    {% set subtab = a_sous_onglets
+        ? (un_element.mixable == true ? app.request.get('subtab')|default('all') : 'first')
+        : app.request.get('subtab') %}
 
     {% set onglets = [] %}
     {% for tab in tabs %}

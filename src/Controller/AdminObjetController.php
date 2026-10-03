@@ -87,6 +87,7 @@ class AdminObjetController extends AbstractController
             $em->flush();
 
             $unlocker->sync($objet, $form->get('unlockedBy')->getData());
+            $unlocker->syncAccess($objet);
             $em->flush();
             $this->addFlash('success', "L'Objet a bien été ajouté.");
 
@@ -149,6 +150,7 @@ class AdminObjetController extends AbstractController
             }
 
             $unlocker->sync($objet, $form->get('unlockedBy')->getData());
+            $unlocker->syncAccess($objet);
 
             $this->getDoctrine()->getManager()->flush();
             $this->addFlash('success', "L'objet a bien été modifié.");

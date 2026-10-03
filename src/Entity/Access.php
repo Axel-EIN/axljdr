@@ -6,30 +6,37 @@ final class Access
 {
     public const SECRET = 0;
     public const LOCKED = 1;
-    public const AUTO = 2;
+    public const COMMON = 2;
     public const PUBLIC = 3;
 
     public const LABELS = [
         self::SECRET => 'Secret',
         self::LOCKED => 'Bloqué',
-        self::AUTO => 'Automatique',
+        self::COMMON => 'Commun',
         self::PUBLIC => 'Public',
     ];
 
     public const CHOICES = [
-        self::SECRET => 'Secret — invisible, révélé individuellement par le MJ',
-        self::LOCKED => 'Bloqué — teasé sous cadenas, ouvert individuellement par le MJ',
-        self::AUTO => 'Automatique — invisible, révélé par une rencontre ou une visite',
+        self::SECRET => 'Secret — invisible, élément de valeur',
+        self::LOCKED => 'Bloqué — teasé sous cadenas',
+        self::COMMON => 'Commun — invisible, élément sans valeur particulière',
         self::PUBLIC => 'Public — lisible par tout le monde ; la date de publication, si elle est remplie, programme sa mise en ligne',
     ];
 
+    public const MANUAL_LABEL = 'individuel';
+
     public static function needsUnlock(int $access): bool
     {
-        return $access <= self::AUTO;
+        return $access <= self::COMMON;
     }
 
     public static function isHidden(int $access): bool
     {
-        return $access === self::SECRET || $access === self::AUTO;
+        return $access === self::SECRET || $access === self::COMMON;
+    }
+
+    public static function unlocksByMeeting($element): bool
+    {
+        return self::needsUnlock((int) $element->getAccess()) && !$element->isManualUnlock();
     }
 }

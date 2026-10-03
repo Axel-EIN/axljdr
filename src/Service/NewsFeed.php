@@ -144,7 +144,7 @@ class NewsFeed
                 $class,
                 $limit,
                 'e.access = :palier AND e.id IN (:croises)',
-                ['palier' => Access::AUTO, 'croises' => array_slice(array_keys($rencontres), 0, $limit)]
+                ['palier' => Access::COMMON, 'croises' => array_slice(array_keys($rencontres), 0, $limit)]
             ));
         }
 
@@ -221,7 +221,7 @@ class NewsFeed
         $dates = [];
         $elements = [];
 
-        foreach ($this->unlockRepository->mapForCharacters($personnages, false) as $key => $lignes) {
+        foreach ($this->unlockRepository->mapForCharacters($personnages) as $key => $lignes) {
             $class = EntityRegistry::className($key);
 
             if ($class === null) {

@@ -1,10 +1,10 @@
 {% set marks = {
-  'secret':          ['fa-eye-slash', 'Secret'],
-  'discovered':      ['fa-eye', 'Découvert'],
-  'locked':          ['fa-lock', 'Bloqué'],
-  'unlocked':        ['fa-lock-open', 'Débloqué'],
-  'auto-unlockable': ['fa-gear', 'À débloquer automatiquement'],
-  'auto-unlocked':   ['fa-gear', 'Débloqué automatiquement'],
+  'secret':            ['fa-eye-slash', 'Secret'],
+  'discovered':        ['fa-eye', 'Découvert'],
+  'locked':            ['fa-lock', 'Bloqué'],
+  'unlocked':          ['fa-lock-open', 'Débloqué'],
+  'common':            ['fa-gear', 'Commun'],
+  'common-discovered': ['fa-gear', 'Découvert'],
 } %}
 
 {% if marks[state|default('')] is defined %}

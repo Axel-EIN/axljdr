@@ -57,6 +57,16 @@ class AdminPersonnageType extends AbstractType
                 'required' => false,
                 'empty_data' => null,
             ])
+            ->add('playerNotes', TextareaType::class, [
+                'label' => 'Secrets',
+                'required' => false,
+                'empty_data' => null,
+            ])
+            ->add('gmNotes', TextareaType::class, [
+                'label' => 'Notes du Maître de Jeu',
+                'required' => false,
+                'empty_data' => null,
+            ])
             ->add('estPj', CheckboxType::class, [
                 'required' => false,
             ])

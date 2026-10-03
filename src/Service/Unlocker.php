@@ -4,6 +4,7 @@ namespace App\Service;
 
 use App\Entity\Access;
 use App\Entity\Lieu;
+use App\Entity\Objet;
 use App\Entity\Personnage;
 use App\Entity\Scene;
 use App\Entity\Unlock;
@@ -72,7 +73,7 @@ class Unlocker
             return;
         }
 
-        if ($element->getAccess() === Access::AUTO) {
+        if (Access::unlocksByMeeting($element)) {
             foreach ($rencontres as $joueur) {
                 $this->unlock($joueur, $element, true, $quand);
             }
@@ -91,6 +92,10 @@ class Unlocker
 
         if ($element instanceof Lieu) {
             return $this->participationRepository->findPlayersWhoVisited($element);
+        }
+
+        if ($element instanceof Objet) {
+            return $this->participationRepository->findPlayersWhoFound($element);
         }
 
         return [];
@@ -115,9 +120,13 @@ class Unlocker
             $croises[] = $scene->getLieu();
         }
 
+        foreach ($scene->getFoundObjects() as $objet) {
+            $croises[] = $objet;
+        }
+
         foreach ($joueurs as $joueur) {
             foreach ($croises as $element) {
-                if ($element !== $joueur && $element->getAccess() === Access::AUTO) {
+                if ($element !== $joueur && Access::unlocksByMeeting($element)) {
                     $this->unlock($joueur, $element, true);
                 }
             }

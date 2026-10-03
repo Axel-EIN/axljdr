@@ -1,17 +1,17 @@
 {% set has_pdf = pdf is defined and pdf is not empty %}
-{% set has_parts = pdf_button|default(false) %}
+{% set show_button = pdf_button|default(false) or (app.user and is_granted('ROLE_MJ')) %}
 
 <div class="gradient-after-down {{ classes|default('') }}">
-  {% if has_pdf and not has_parts %}
-    <a href="{{ asset(pdf) }}">
+  {% if has_pdf and not show_button %}
+    <a href="{{ asset(pdf) }}" target="_blank" rel="noopener">
       <img class="img-fluid {{ img_class|default('') }}" src="{{ asset(image|default(NA_PDF)) }}" alt="{{ alt }}" />
     </a>
   {% else %}
     <img class="img-fluid {{ img_class|default('') }}" src="{{ asset(image|default(na_image)) }}" alt="{{ alt }}" />
   {% endif %}
 
-  {% if has_pdf and has_parts and app.user %}
-    <a class="btn-pdf-source" href="{{ asset(pdf) }}" title="Ouvrir le document source">
+  {% if has_pdf and show_button and app.user %}
+    <a class="btn-pdf-source" href="{{ asset(pdf) }}" target="_blank" rel="noopener" title="Ouvrir le document source">
       <img src="{{ asset(PDF) }}" alt="" />Voir la source PDF
     </a>
   {% endif %}

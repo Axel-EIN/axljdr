@@ -22,6 +22,11 @@ final class PublishableFields
                 'label' => 'Accès',
                 'choices' => array_flip(Access::CHOICES),
             ])
+            ->add('manualUnlock', CheckboxType::class, [
+                'label' => 'Déblocage individuel uniquement',
+                'required' => false,
+                'help' => 'Décoché : la rencontre, la visite ou la découverte en scène débloque l\'élément. Coché : seul le MJ le débloque, personnage par personnage. Sans effet sur un élément public.',
+            ])
             ->add('publishedAt', DateType::class, [
                 'label' => 'Publié le',
                 'widget' => 'single_text',

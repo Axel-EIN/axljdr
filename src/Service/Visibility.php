@@ -3,6 +3,7 @@
 namespace App\Service;
 
 use App\Entity\Access;
+use App\Entity\Personnage;
 use App\Repository\UnlockRepository;
 use Symfony\Component\Security\Core\Security;
 
@@ -13,26 +14,26 @@ class Visibility
     public const DISCOVERED = 'discovered';
     public const LOCKED = 'locked';
     public const UNLOCKED = 'unlocked';
-    public const AUTO_UNLOCKABLE = 'auto-unlockable';
-    public const AUTO_UNLOCKED = 'auto-unlocked';
+    public const COMMON = 'common';
+    public const COMMON_DISCOVERED = 'common-discovered';
     public const PUBLIC = 'public';
 
     public const FRAICHEUR_JOURS = 14;
 
-    private const READABLE = [self::PUBLIC, self::UNLOCKED, self::DISCOVERED, self::AUTO_UNLOCKED];
+    private const READABLE = [self::PUBLIC, self::UNLOCKED, self::DISCOVERED, self::COMMON_DISCOVERED];
 
-    private const UNSEEN = [self::HIDDEN, self::SECRET, self::AUTO_UNLOCKABLE];
+    private const UNSEEN = [self::HIDDEN, self::SECRET, self::COMMON];
 
     private const REVEALED = [
         Access::SECRET => self::DISCOVERED,
         Access::LOCKED => self::UNLOCKED,
-        Access::AUTO => self::AUTO_UNLOCKED,
+        Access::COMMON => self::COMMON_DISCOVERED,
     ];
 
     private const PALIERS = [
         Access::SECRET => self::SECRET,
         Access::LOCKED => self::LOCKED,
-        Access::AUTO => self::AUTO_UNLOCKABLE,
+        Access::COMMON => self::COMMON,
         Access::PUBLIC => self::PUBLIC,
     ];
 
@@ -69,8 +70,8 @@ class Visibility
             return $this->isPublished($element) ? self::PUBLIC : self::HIDDEN;
         }
 
-        if ($revealAuto && $access === Access::AUTO) {
-            return self::AUTO_UNLOCKABLE;
+        if ($revealAuto && $access === Access::COMMON && Access::unlocksByMeeting($element)) {
+            return self::COMMON;
         }
 
         return Access::isHidden($access) ? self::HIDDEN : self::LOCKED;
@@ -198,7 +199,7 @@ class Visibility
         $this->owned = [];
 
         foreach ($this->currentPlayer->allCharacters() as $personnage) {
-            foreach ([$personnage, $personnage->getEcole()] as $element) {
+            foreach ($this->possessionsOf($personnage) as $element) {
                 $key = EntityRegistry::keyOf($element);
 
                 if ($key !== null) {
@@ -208,6 +209,24 @@ class Visibility
         }
 
         return $this->owned;
+    }
+
+    private function possessionsOf(Personnage $personnage): array
+    {
+        $possessions = [$personnage, $personnage->getEcole(), $personnage->getClan()];
+        $fiche = $personnage->getFichePersonnage();
+
+        if ($fiche === null) {
+            return $possessions;
+        }
+
+        return array_merge(
+            $possessions,
+            [$fiche->getArme(), $fiche->getArme2(), $fiche->getArmeActuelle(), $fiche->getArmure()],
+            [$fiche->getAvantage1(), $fiche->getAvantage2(), $fiche->getDesavantage1(), $fiche->getDesavantage2()],
+            $fiche->getInventoryItems()->toArray(),
+            $fiche->getKnownSpells()->toArray()
+        );
     }
 
     private function unlocks(): array

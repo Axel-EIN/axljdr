@@ -55,9 +55,11 @@ class AppExtension extends AbstractExtension
         ];
     }
 
-    public function accessLabel($access): string
+    public function accessLabel($access, bool $manualUnlock = false): string
     {
-        return Access::LABELS[$access] ?? '';
+        $label = Access::LABELS[$access] ?? '';
+
+        return $manualUnlock && Access::needsUnlock((int) $access) ? $label . ' · ' . Access::MANUAL_LABEL : $label;
     }
 
     public function statusLabel($status): string

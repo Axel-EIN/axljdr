@@ -57,7 +57,7 @@
                         {% elseif format == 'status' %}
                             <td class="text-center align-middle{{ bold_class }}">{{ status_label(val) }}</td>
                         {% elseif format == 'access' %}
-                            <td class="text-center align-middle{{ bold_class }}">{{ access_label(val) }}</td>
+                            <td class="text-center align-middle{{ bold_class }}">{{ access_label(val, un_element.manualUnlock|default(false)) }}</td>
                         {% elseif format == 'date' %}
                             <td class="text-center align-middle{{ bold_class }}">{{ val ? val|date('d/m/Y H:i') : '' }}</td>
                         {% elseif format == 'list' %}

@@ -20,6 +20,7 @@ final class BackfillUnlocksCommand extends Command
     private const CIBLES = [
         'personnage' => 'e.estPj = false',
         'lieu' => null,
+        'objet' => null,
     ];
 
     private $entityManager;
@@ -36,7 +37,7 @@ final class BackfillUnlocksCommand extends Command
     protected function configure(): void
     {
         $this
-            ->setDescription('Peuple les déblocages des éléments en palier automatique à partir des rencontres et visites déjà jouées.')
+            ->setDescription('Peuple les déblocages des éléments en déblocage automatique à partir des rencontres, visites et découvertes déjà jouées.')
             ->addOption(
                 'date',
                 null,
@@ -56,8 +57,9 @@ final class BackfillUnlocksCommand extends Command
             $qb = $this->entityManager->createQueryBuilder()
                 ->select('e')
                 ->from(EntityRegistry::className($cle), 'e')
-                ->andWhere('e.access = :palier')
-                ->setParameter('palier', Access::AUTO);
+                ->andWhere('e.access < :public')
+                ->andWhere('e.manualUnlock = false')
+                ->setParameter('public', Access::PUBLIC);
 
             if ($condition !== null) {
                 $qb->andWhere($condition);
@@ -69,7 +71,7 @@ final class BackfillUnlocksCommand extends Command
                 $this->unlocker->syncAccess($element, $quand);
             }
 
-            $io->writeln(sprintf('%-12s %4d élément(s) en palier automatique', $cle, count($elements)));
+            $io->writeln(sprintf('%-12s %4d élément(s) en déblocage automatique', $cle, count($elements)));
         }
 
         $this->entityManager->flush();

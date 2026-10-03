@@ -9,7 +9,12 @@ trait PublishableTrait
     /**
      * @ORM\Column(type="smallint")
      */
-    private $access = Access::AUTO;
+    private $access = Access::COMMON;
+
+    /**
+     * @ORM\Column(type="boolean", options={"default": false})
+     */
+    private $manualUnlock = false;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
@@ -29,6 +34,18 @@ trait PublishableTrait
     public function setAccess(int $access): self
     {
         $this->access = $access;
+
+        return $this;
+    }
+
+    public function isManualUnlock(): bool
+    {
+        return $this->manualUnlock;
+    }
+
+    public function setManualUnlock(bool $manualUnlock): self
+    {
+        $this->manualUnlock = $manualUnlock;
 
         return $this;
     }

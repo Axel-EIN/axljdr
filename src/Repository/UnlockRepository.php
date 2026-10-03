@@ -19,22 +19,18 @@ class UnlockRepository extends ServiceEntityRepository
         parent::__construct($registry, Unlock::class);
     }
 
-    public function mapForCharacters(array $characterIds, ?bool $byMeeting = null): array
+    public function mapForCharacters(array $characterIds): array
     {
         if (empty($characterIds)) {
             return [];
         }
 
-        $qb = $this->createQueryBuilder('u')
+        $lignes = $this->createQueryBuilder('u')
             ->select('u.entity AS entity', 'u.elementId AS elementId', 'u.unlockedAt AS unlockedAt')
             ->andWhere('u.character IN (:ids)')
-            ->setParameter('ids', $characterIds);
-
-        if ($byMeeting !== null) {
-            $qb->andWhere('u.byMeeting = :parRencontre')->setParameter('parRencontre', $byMeeting);
-        }
-
-        $lignes = $qb->getQuery()->getArrayResult();
+            ->setParameter('ids', $characterIds)
+            ->getQuery()
+            ->getArrayResult();
 
         $map = [];
         foreach ($lignes as $ligne) {

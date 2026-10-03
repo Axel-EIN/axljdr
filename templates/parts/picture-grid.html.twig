@@ -7,6 +7,7 @@
   {% set shape = {landscape: '1610', rule: '43', icon: '11'}[variant]|default('1610') %}
   {% set pin = {portrait: 'pin-topleft', icon: 'pin-downcenter'}[variant]|default('') %}
   {% set show_label = variant != 'portrait' %}
+  {% set is_mj = app.user and is_granted('ROLE_MJ') %}
 
   {% if per_row is defined %}
     {% set cols = per_row is iterable ? per_row : {desktop: per_row} %}
@@ -38,10 +39,11 @@
       {% set alt = hidden ? 'À découvrir' : name %}
       {% set pdf_only = item.pdf|default(null) and not item.hasParts|default(false) %}
       {% set image_na = pdf_only ? NA_PDF : na_image|default(NA_ICON) %}
-      {% set href = pdf_only ? asset(item.pdf) : (route is defined ? path(route, {id: item.id}) : element_url(item)) %}
+      {% set pdf_link = pdf_only and not is_mj %}
+      {% set href = pdf_link ? asset(item.pdf) : (route is defined ? path(route, {id: item.id}) : element_url(item)) %}
 
       <a class="picture-item {{ variant }} {{ item_class }}"
-         {% if hidden or not href %}aria-disabled="true"{% else %}{% if show_label %}title="{{ name }}" {% endif %}href="{{ href }}"{% endif %}>
+         {% if hidden or not href %}aria-disabled="true"{% else %}{% if show_label %}title="{{ name }}" {% endif %}{% if pdf_link %}target="_blank" rel="noopener" {% endif %}href="{{ href }}"{% endif %}>
         <div class="image-container {% if locked %}slight-fade{% endif %}">
 
           {{ include('parts/badge-access.html.twig', {state: state}) }}

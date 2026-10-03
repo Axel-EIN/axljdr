@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Lieu;
+use App\Entity\Objet;
 use App\Entity\Participation;
 use App\Entity\Personnage;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
@@ -85,6 +86,21 @@ class ParticipationRepository extends ServiceEntityRepository
             ->andWhere('s.lieu = :lieu')
             ->andWhere('p.estPj = true')
             ->setParameter('lieu', $lieu)
+            ->getQuery()
+            ->getResult();
+
+        return $this->dedoublonner($participations);
+    }
+
+    public function findPlayersWhoFound(Objet $objet): array
+    {
+        $participations = $this->createQueryBuilder('p')
+            ->join('p.personnage', 'joueur')
+            ->addSelect('joueur')
+            ->join('p.scene', 's')
+            ->andWhere(':objet MEMBER OF s.foundObjects')
+            ->andWhere('p.estPj = true')
+            ->setParameter('objet', $objet)
             ->getQuery()
             ->getResult();
 

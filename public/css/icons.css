@@ -104,8 +104,8 @@
 .badge-corner {
     position: absolute;
     z-index: 10;
-    top: -14px;
-    right: -14px;
+    bottom: -14px;
+    left: -14px;
     width: 48px;
     filter: drop-shadow(0px 0px 4px #00000080);
 }

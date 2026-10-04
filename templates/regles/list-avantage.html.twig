@@ -16,65 +16,70 @@
 
 {% for item in items %}
 
-    <div class="col-12 p-0 m-0 relative">
+    {% if not element_readable(item) %}
+        {{ include('regles/list-item-locked.html.twig', {entity: 'avantage'}) }}
+    {% else %}
+        <div class="col-12 p-0 m-0 relative">
 
-        {% if app.user and is_granted("ROLE_MJ") %}
-            {% set position, size, color, entity, un_element, redirect = 'topleft-overflow', 'btn-icon-mini', 'text-accent', 'avantage', item, 'library&libraryID=' ~ library.id %}
-            {{ include('/btns/btn-icon-edit.html.twig') }}
-        {% endif %}
+            {% if app.user and is_granted("ROLE_MJ") %}
+                {% set position, size, color, entity, un_element, redirect = 'topleft-overflow', 'btn-icon-mini', 'text-accent', 'avantage', item, 'library&libraryID=' ~ library.id %}
+                {{ include('/btns/btn-icon-edit.html.twig') }}
+            {% endif %}
 
-        <a href="#avantage{{ item.id }}" class="card item" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="avantage{{ item.id }}">
+            <a href="#avantage{{ item.id }}" class="card item" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="avantage{{ item.id }}">
 
-            <div class="item-line">
-                <strong class="item-name">{{ item.nom }}</strong>
-                {% if item.exclusive %}
-                    <div class="ml-2">
-                        <span class="badge badge-secondary">{{item.exclusive.nom}}</span>
-                    </div>
-                {% endif %}
-                <span class="ml-auto">
-                    {% if item.discountClasse %}<span class="badge badge-info">{{item.discountClasse.nom}}</span>{% endif %}
-                    {% if item.discountClasse2 %}<span class="badge badge-info">{{item.discountClasse2.nom}}</span>{% endif %}
-                    {% if item.discountClan %}<span class="badge badge-success">{{item.discountClan.nom}}</span>{% endif %}
-                    {% if item.discountClan2 %}<span class="badge badge-success">{{item.discountClan2.nom}}</span>{% endif %}
-                    <strong class="ml-3 {% if item.genre == 'Avantage' %}text-dead{% elseif item.genre == 'Désavantage' %}text-your-xp{% endif %}">
-                        {% if item.genre == 'Avantage' %}-{% elseif item.genre == 'Désavantage' %}+{% endif %}{{ item.cout }} xp
-                    </strong>
-                </span>
-            </div>
+                <div class="item-line">
+                    {{ include('parts/badge-access.html.twig', {state: element_state(item), variant: 'inline'}) }}
+                    <strong class="item-name">{{ item.nom }}</strong>
+                    {% if item.exclusive %}
+                        <div class="ml-2">
+                            <span class="badge badge-secondary">{{item.exclusive.nom}}</span>
+                        </div>
+                    {% endif %}
+                    <span class="ml-auto">
+                        {% if item.discountClasse %}<span class="badge badge-info">{{item.discountClasse.nom}}</span>{% endif %}
+                        {% if item.discountClasse2 %}<span class="badge badge-info">{{item.discountClasse2.nom}}</span>{% endif %}
+                        {% if item.discountClan %}<span class="badge badge-success">{{item.discountClan.nom}}</span>{% endif %}
+                        {% if item.discountClan2 %}<span class="badge badge-success">{{item.discountClan2.nom}}</span>{% endif %}
+                        <strong class="ml-3 {% if item.genre == 'Avantage' %}text-dead{% elseif item.genre == 'Désavantage' %}text-your-xp{% endif %}">
+                            {% if item.genre == 'Avantage' %}-{% elseif item.genre == 'Désavantage' %}+{% endif %}{{ item.cout }} xp
+                        </strong>
+                    </span>
+                </div>
 
-            <div id="avantage{{ item.id }}" class="collapse">
-                <span class="badge badge-pill badge-dark mt-2">{{item.type}}</span>
-                <p class="p-2 m-0 item-description">
-                    {{ item.description|raw|nl2br }}
-                </p>
-                {% if item.discount %}
-                    {% set groupes = {
-                        'du clan': [item.discountClan, item.discountClan2]|filter(e => e),
-                        'de la classe': [item.discountClasse, item.discountClasse2]|filter(e => e),
-                    }|filter(g => g is not empty) %}
-                    <div class="text-small text-green ml-2">
-                        Les personnages
-                        {% for prefixe, entites in groupes %}
-                            {% if not loop.first %}ou{% endif %}
-                            {{ prefixe }}
-                            {% for entite in entites %}<strong>{{ entite.nom }}</strong>{% if not loop.last %}, {% endif %}{% endfor %}
-                        {% endfor %}
-                            {% if item.genre == 'Avantage' %}
-                                peuvent dépenser <strong>{{item.discount}} xp</strong>
-                            {% elseif item.genre == 'Désavantage' %}
-                                peuvent gagner jusqu'à <strong>{{item.discount}} xp</strong> en prenant ce Désavantage
-                            {% endif %}
-                    </div>
-                {% endif %}
-                {% if item.exclusive %}
-                    <div class="text-small text-secondary ml-2">
-                        Exclusif aux personnages <strong>{{item.exclusive.nom}}</strong>
-                    </div>
-                {% endif %}
-            </div>
+                <div id="avantage{{ item.id }}" class="collapse">
+                    <span class="badge badge-pill badge-dark mt-2">{{item.type}}</span>
+                    <p class="p-2 m-0 item-description">
+                        {{ item.description|raw|nl2br }}
+                    </p>
+                    {% if item.discount %}
+                        {% set groupes = {
+                            'du clan': [item.discountClan, item.discountClan2]|filter(e => e),
+                            'de la classe': [item.discountClasse, item.discountClasse2]|filter(e => e),
+                        }|filter(g => g is not empty) %}
+                        <div class="text-small text-green ml-2">
+                            Les personnages
+                            {% for prefixe, entites in groupes %}
+                                {% if not loop.first %}ou{% endif %}
+                                {{ prefixe }}
+                                {% for entite in entites %}<strong>{{ entite.nom }}</strong>{% if not loop.last %}, {% endif %}{% endfor %}
+                            {% endfor %}
+                                {% if item.genre == 'Avantage' %}
+                                    peuvent dépenser <strong>{{item.discount}} xp</strong>
+                                {% elseif item.genre == 'Désavantage' %}
+                                    peuvent gagner jusqu'à <strong>{{item.discount}} xp</strong> en prenant ce Désavantage
+                                {% endif %}
+                        </div>
+                    {% endif %}
+                    {% if item.exclusive %}
+                        <div class="text-small text-secondary ml-2">
+                            Exclusif aux personnages <strong>{{item.exclusive.nom}}</strong>
+                        </div>
+                    {% endif %}
+                </div>
 
-        </a>
-    </div>
+            </a>
+        </div>
+    {% endif %}
 
 {% endfor %}

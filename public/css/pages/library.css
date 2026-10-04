@@ -15,12 +15,21 @@
         background-color: var(--accent-lightest);
         color: var(--color-strong);
     }
-}
 
-.item.AIR {
-    box-shadow:
-        inset 2px 2px 0 0 var(--color-background),
-        0px 0px .5rem 0 var(--AIR);
+    &.locked {
+        cursor: default;
+        color: var(--color-alternate);
+
+        &:hover { background-color: var(--color-surface); }
+
+        .item-name { color: var(--color-alternate); }
+    }
+
+    &.AIR {
+        box-shadow:
+            inset 2px 2px 0 0 var(--color-background),
+            0px 0px .5rem 0 var(--AIR);
+    }
 }
 
 .item-no-hover {

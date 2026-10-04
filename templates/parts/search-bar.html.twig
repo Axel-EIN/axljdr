@@ -1,0 +1,9 @@
+<form class="search-bar {{ variant|default('') }}" action="{{ path('search') }}" method="get" role="search">
+  <i class="search-bar-icon fas fa-magnifying-glass" aria-hidden="true"></i>
+  <input
+    class="search-bar-input" type="search" name="q" value="{{ term|default('') }}"
+    placeholder="Rechercher…" aria-label="Rechercher" autocomplete="off"
+    data-suggest="{{ path('search_suggest') }}" data-min="{{ constant('App\\Service\\Search::MIN_LENGTH') }}"
+  />
+  <div class="search-bar-suggestions dropdown-menu dropdown-dark"></div>
+</form>

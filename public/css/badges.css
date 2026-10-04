@@ -71,6 +71,11 @@
 
         .badge-font-icon { font-size: var(--fontsize-mini); }
     }
+
+    &.inline {
+        position: static;
+        flex-shrink: 0;
+    }
 }
 
 /* ----- BADGE NOUVEAU ----- */

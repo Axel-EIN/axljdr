@@ -220,10 +220,16 @@ class Visibility
             return $possessions;
         }
 
+        $competences = [$fiche->getCompCombatActuelle()];
+        for ($i = 1; $i <= 20; $i++) {
+            $competences[] = $fiche->{'getCompetence' . $i}();
+        }
+
         return array_merge(
             $possessions,
             [$fiche->getArme(), $fiche->getArme2(), $fiche->getArmeActuelle(), $fiche->getArmure()],
             [$fiche->getAvantage1(), $fiche->getAvantage2(), $fiche->getDesavantage1(), $fiche->getDesavantage2()],
+            $competences,
             $fiche->getInventoryItems()->toArray(),
             $fiche->getKnownSpells()->toArray()
         );

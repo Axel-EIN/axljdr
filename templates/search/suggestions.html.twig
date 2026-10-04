@@ -1,0 +1,13 @@
+{% for result in results %}
+  <a class="dropdown-item search-suggestion" href="{{ result.url }}">
+    <span class="search-suggestion-label">{{ result.label }}</span>
+    <small class="search-suggestion-group">{{ result.groupLabel }}</small>
+    {{ include('parts/badge-access.html.twig', {state: result.state, variant: 'inline'}) }}
+  </a>
+{% else %}
+  <span class="dropdown-item-text search-suggestion-empty">Aucun résultat</span>
+{% endfor %}
+
+{% if results is not empty %}
+  <a class="dropdown-item search-suggestion all" href="{{ path('search', {q: term}) }}">Tous les résultats</a>
+{% endif %}

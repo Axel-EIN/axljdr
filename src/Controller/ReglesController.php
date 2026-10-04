@@ -125,7 +125,7 @@ class ReglesController extends AbstractController
         $keyword_url_param = $request->query->get('keyword');
 
         $entity_name = $library->getEntity();
-        $items = ${ $entity_name . 'Repository' }->findAll();
+        $items = $visibility->listedOnly(${ $entity_name . 'Repository' }->findAll());
 
         $tabs = [];
         $subtabs = [];

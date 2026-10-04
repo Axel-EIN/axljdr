@@ -1,0 +1,37 @@
+{% extends 'other.html.twig' %}
+
+{% set titre = 'Recherche' %}
+
+{% block contenu %}
+
+  {{ include('parts/search-bar.html.twig', {variant: 'page', term}) }}
+
+  {% if tooShort %}
+    <p>Saisissez au moins {{ constant('App\\Service\\Search::MIN_LENGTH') }} caractères.</p>
+  {% elseif groups is empty %}
+    <p>Aucun résultat pour « {{ term }} ».</p>
+  {% else %}
+    {% for group in groups %}
+      <section class="search-group">
+        <h2 class="label-amerigo">{{ group.label }} <small>({{ group.results|length }})</small></h2>
+        <hr>
+
+        <ul class="search-results">
+          {% for result in group.results %}
+            <li class="search-result">
+              <a class="search-result-title" href="{{ result.url }}">
+                {{ result.label }}
+                {{ include('parts/badge-access.html.twig', {state: result.state, variant: 'inline'}) }}
+              </a>
+              {% if result.excerpt %}
+                {% set excerpt = result.excerpt %}
+                <p class="search-result-excerpt">{{ excerpt.cutStart ? '…' }}{{ excerpt.before }}<mark>{{ excerpt.match }}</mark>{{ excerpt.after }}{{ excerpt.cutEnd ? '…' }}</p>
+              {% endif %}
+            </li>
+          {% endfor %}
+        </ul>
+      </section>
+    {% endfor %}
+  {% endif %}
+
+{% endblock %}

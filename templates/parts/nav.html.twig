@@ -50,6 +50,13 @@
         </div>
       </div>
 
+      <button
+        class="search-toggle d-lg-none" type="button"
+        data-toggle="collapse" data-target="#search-mobile" aria-controls="search-mobile" aria-expanded="false" aria-label="Ouvrir la recherche"
+      >
+        <i class="fas fa-magnifying-glass"></i>
+      </button>
+
       <div class="navbar-collapse d-lg-flex justify-content-lg-between align-items-lg-center w-100" id="navbarNav">
 
         <ul class="navbar-nav d-none d-lg-flex">
@@ -63,6 +70,8 @@
             </li>
           {% endfor %}
         </ul>
+
+        {{ include('parts/search-bar.html.twig', {variant: 'd-none d-lg-flex'}) }}
 
         {% if app.user %}
           {% set main_character = app.user.mainCharacter %}
@@ -102,5 +111,9 @@
         {% endif %}
       </div>
     </nav>
+
+    <div id="search-mobile" class="search-collapse collapse d-lg-none">
+      {{ include('parts/search-bar.html.twig', {variant: 'mobile'}) }}
+    </div>
   </div>
 </header>

@@ -1,0 +1,9 @@
+<div id="{{ entity }}{{ item.id }}" class="col-12 p-0 m-0 relative {{ classes|default('') }}">
+    <div class="card item locked">
+        <div class="item-line">
+            {{ include('parts/badge-access.html.twig', {state: 'locked', variant: 'inline'}) }}
+            <strong class="item-name ml-2">{{ item.nom }}</strong>
+            <span class="ml-auto text-small">À débloquer</span>
+        </div>
+    </div>
+</div>

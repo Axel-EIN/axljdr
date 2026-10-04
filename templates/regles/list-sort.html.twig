@@ -95,69 +95,74 @@
 
     {% endif %}
 
-    <div class="col-12 p-0 m-0 {% if past_rank != item.niveau %}mt-3{% endif %} relative">
+    {% if not element_readable(item) %}
+        {{ include('regles/list-item-locked.html.twig', {entity: 'sort', classes: past_rank != item.niveau ? 'mt-3'}) }}
+    {% else %}
+        <div class="col-12 p-0 m-0 {% if past_rank != item.niveau %}mt-3{% endif %} relative">
 
-        {% if app.user and is_granted("ROLE_MJ") %}
-            {% set position, size, color, entity, un_element, redirect = 'topleft-overflow', 'btn-icon-mini', 'text-accent', 'sort', item, 'library&libraryID=' ~ library.id %}
-            {{ include('/btns/btn-icon-edit.html.twig') }}
-        {% endif %}
+            {% if app.user and is_granted("ROLE_MJ") %}
+                {% set position, size, color, entity, un_element, redirect = 'topleft-overflow', 'btn-icon-mini', 'text-accent', 'sort', item, 'library&libraryID=' ~ library.id %}
+                {{ include('/btns/btn-icon-edit.html.twig') }}
+            {% endif %}
 
-        <a href="#sort{{ item.id }}" class="card item" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="sort{{ item.id }}">
+            <a href="#sort{{ item.id }}" class="card item" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="sort{{ item.id }}">
 
-            <div class="item-line">
+                <div class="item-line">
 
-                <div class="col-6 p-0 m-0 ml-2 text-left">
-                    {% if app.request.get('tab') != 'TATOUAGE' %}
-                        <img class="img-24" src="{{asset(icone|default(NA_ICON))}}" />
-                    {% endif %}
-                    <strong class="item-name ml-1">{{ item.nom }}</strong>
-                    {% if app.user and is_granted("ROLE_MJ") %}<em class="ml-2 text-muted">- {{ item.originalName }}</em>{% endif %}
-                </div>
-
-                {% if app.request.get('tab') == 'KIHO' %}
-                    <div class="col-2 p-0 m-0"></div>
-                    <div class="col-2 p-0 m-0 text-small">{{item.kihoType|upper}}</div>
-                {% elseif app.request.get('tab') == 'TATOUAGE' %}
-                    <div class="col-5 p-0 m-0"></div>
-                {% else %}
-                    <div class="col-4 p-0 m-0"></div>
-                {% endif %}
-
-                <div class="col-1 p-0 m-0 align-bottom text-{{item.anneau}}">
-
-                    {% if item.keyword1 %}
-                        {{ icones.mot_cle(item.keyword1) }}
-                    {% endif %}
-
-                    {% if item.keyword2 %}
-                        <span class="ml-1">
-                            {{ icones.mot_cle(item.keyword2) }}
-                        </span>
-                    {% endif %}
-
-                    {% if item.keyword3 %}
-                        <span class="ml-1">
-                            {{ icones.mot_cle(item.keyword3) }}
-                        </span>
-                    {% endif %}
-
-                </div>
-
-                {% if app.request.get('tab') != 'TATOUAGE' %}
-                    {% set ring = item.anneau in ['TERRE', 'AIR', 'FEU', 'EAU', 'VIDE'] ? item.anneau : 'black' %}
-                    <div class="col-1 p-0 m-0 text-{{ ring|lower }}">
-                        <strong class="text-rank font-present bg-{{ ring|lower }}">{{ item.niveau }}</strong>
+                    <div class="col-6 p-0 m-0 ml-2 text-left">
+                        {% if app.request.get('tab') != 'TATOUAGE' %}
+                            <img class="img-24" src="{{asset(icone|default(NA_ICON))}}" />
+                        {% endif %}
+                        {{ include('parts/badge-access.html.twig', {state: element_state(item), variant: 'inline'}) }}
+                        <strong class="item-name ml-1">{{ item.nom }}</strong>
+                        {% if app.user and is_granted("ROLE_MJ") %}<em class="ml-2 text-muted">- {{ item.originalName }}</em>{% endif %}
                     </div>
-                {% endif %}
 
-            </div>
+                    {% if app.request.get('tab') == 'KIHO' %}
+                        <div class="col-2 p-0 m-0"></div>
+                        <div class="col-2 p-0 m-0 text-small">{{item.kihoType|upper}}</div>
+                    {% elseif app.request.get('tab') == 'TATOUAGE' %}
+                        <div class="col-5 p-0 m-0"></div>
+                    {% else %}
+                        <div class="col-4 p-0 m-0"></div>
+                    {% endif %}
 
-            <div id="sort{{ item.id }}" class="collapse">
-                {{ include('/personnages/character-sheet-spell-detail.html.twig', {spell: item}) }}
-            </div>
+                    <div class="col-1 p-0 m-0 align-bottom text-{{item.anneau}}">
 
-        </a>
-    </div>
+                        {% if item.keyword1 %}
+                            {{ icones.mot_cle(item.keyword1) }}
+                        {% endif %}
+
+                        {% if item.keyword2 %}
+                            <span class="ml-1">
+                                {{ icones.mot_cle(item.keyword2) }}
+                            </span>
+                        {% endif %}
+
+                        {% if item.keyword3 %}
+                            <span class="ml-1">
+                                {{ icones.mot_cle(item.keyword3) }}
+                            </span>
+                        {% endif %}
+
+                    </div>
+
+                    {% if app.request.get('tab') != 'TATOUAGE' %}
+                        {% set ring = item.anneau in ['TERRE', 'AIR', 'FEU', 'EAU', 'VIDE'] ? item.anneau : 'black' %}
+                        <div class="col-1 p-0 m-0 text-{{ ring|lower }}">
+                            <strong class="text-rank font-present bg-{{ ring|lower }}">{{ item.niveau }}</strong>
+                        </div>
+                    {% endif %}
+
+                </div>
+
+                <div id="sort{{ item.id }}" class="collapse">
+                    {{ include('/personnages/character-sheet-spell-detail.html.twig', {spell: item}) }}
+                </div>
+
+            </a>
+        </div>
+    {% endif %}
 
     {% set past_rank = item.niveau %}
 {% endfor %}

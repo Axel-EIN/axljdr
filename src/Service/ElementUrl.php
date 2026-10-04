@@ -2,6 +2,8 @@
 
 namespace App\Service;
 
+use App\Entity\Famille;
+use App\Entity\Scene;
 use App\Repository\LibraryRepository;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
@@ -19,6 +21,14 @@ class ElementUrl
 
     public function of($element): ?string
     {
+        if ($element instanceof Famille) {
+            return $this->router->generate('empire_clan', ['id' => $element->getClan()->getId(), '_fragment' => $element->getNom()]);
+        }
+
+        if ($element instanceof Scene) {
+            return $this->router->generate('aventure_episode', ['id' => $element->getEpisodeParent()->getId(), '_fragment' => 'scn' . $element->getNumero()]);
+        }
+
         $key = EntityRegistry::keyOf($element);
 
         if ($key === null) {
@@ -31,7 +41,13 @@ class ElementUrl
             return $this->router->generate($route, ['id' => $element->getId()]);
         }
 
-        $library = $this->libraries()[$key] ?? null;
+        return $this->inLibrary($element);
+    }
+
+    public function inLibrary($element): ?string
+    {
+        $key = EntityRegistry::keyOf($element);
+        $library = $key === null ? null : ($this->libraries()[$key] ?? null);
 
         if ($library === null) {
             return null;

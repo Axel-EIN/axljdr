@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Service\TableFilter;
 use App\Entity\Sort;
 use App\Form\AdminSortType;
 use App\Service\Numeroteur;
@@ -17,6 +18,10 @@ use App\Service\Unlocker;
 
 class AdminSortController extends AbstractController
 {
+    private const TABLE_FILTERS = [
+        'categorie:Catégorie',
+    ];
+
     /**
      * @Route("/admin/sort", name="admin_sort")
      * @IsGranted("ROLE_MJ")
@@ -32,6 +37,7 @@ class AdminSortController extends AbstractController
             'genre' => 'M',
             'determinant' => 'un',
             'element' => 'sort',
+            'table_filters' => self::TABLE_FILTERS,
             'table_cols' => [
                 'nom:Nom::bold',
                 'originalName:NomOri:bool',
@@ -58,9 +64,10 @@ class AdminSortController extends AbstractController
      * @Route("/admin/sort/create", name="admin_sort_create")
      * @IsGranted("ROLE_MJ")
      */
-    public function addSort(Request $request, EntityManagerInterface $em, FileHandler $fileHandler, SortRepository $sortRepository, Numeroteur $numeroteur, Unlocker $unlocker) {
+    public function addSort(Request $request, EntityManagerInterface $em, FileHandler $fileHandler, SortRepository $sortRepository, Numeroteur $numeroteur, Unlocker $unlocker, TableFilter $tableFilter) {
 
         $sort = new Sort;
+        $tableFilter->prefill($sort, self::TABLE_FILTERS, $request->query->all('filter'));
 
         $param_numero = $request->query->get('numero');
         if ( !empty($param_numero) && is_numeric($param_numero) && $param_numero > 0 )

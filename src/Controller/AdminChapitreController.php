@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Service\TableFilter;
 use App\Entity\Chapitre;
 use App\Service\FileHandler;
 use App\Service\Numeroteur;
@@ -17,6 +18,10 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class AdminChapitreController extends AbstractController
 {
+    private const TABLE_FILTERS = [
+        'saisonParent.titre:Saison',
+    ];
+
     /**
      * @Route("/admin/chapitre", name="admin_chapitre")
      * @IsGranted("ROLE_MJ")
@@ -32,6 +37,7 @@ class AdminChapitreController extends AbstractController
             'labels' => "Chapitres",
             'genre' => 'M',
             'determinant' => 'un',
+            'table_filters' => self::TABLE_FILTERS,
             'table_cols' => [
                 'image:Image:image:NA_CHAPITRE',
                 'titre:Titre::bold',
@@ -47,9 +53,10 @@ class AdminChapitreController extends AbstractController
      * @Route("/admin/chapitre/create", name="admin_chapitre_create")
      * @IsGranted("ROLE_MJ")
      */
-    public function addChapitre(Request $request, EntityManagerInterface $em, FileHandler $fileHandler, SaisonRepository $saisonRepository, Numeroteur $numeroteur, ChapitreRepository $chapitreRepository) {
+    public function addChapitre(Request $request, EntityManagerInterface $em, FileHandler $fileHandler, SaisonRepository $saisonRepository, Numeroteur $numeroteur, ChapitreRepository $chapitreRepository, TableFilter $tableFilter) {
 
         $chapitre = new Chapitre;
+        $tableFilter->prefill($chapitre, self::TABLE_FILTERS, $request->query->all('filter'));
 
         if ( !empty($request->query->get('numero')) && $request->query->get('numero') > 0
           && !empty($request->query->get('saisonID')) && $request->query->get('saisonID') > 0 )

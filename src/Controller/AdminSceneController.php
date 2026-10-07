@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Service\TableFilter;
 use App\Entity\Scene;
 use App\Service\FileHandler;
 use App\Service\Numeroteur;
@@ -23,6 +24,11 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class AdminSceneController extends AbstractController
 {
+    private const TABLE_FILTERS = [
+        'episodeParent.chapitreParent.titre:Chapitre',
+        'episodeParent.titre:Épisode',
+    ];
+
     /**
      * @Route("/admin/scene", name="admin_scene")
      * @IsGranted("ROLE_MJ")
@@ -38,6 +44,7 @@ class AdminSceneController extends AbstractController
             'labels' => 'Scènes',
             'genre' => 'F',
             'determinant' => 'une',
+            'table_filters' => self::TABLE_FILTERS,
             'table_cols' => [
                 'image:Image:image:NA_SCENE',
                 'titre:Titre::bold',
@@ -55,9 +62,10 @@ class AdminSceneController extends AbstractController
      */
     public function addScene(Request $request, EntityManagerInterface $em, FileHandler $fileHandler, Baliseur $baliseur,
                             ParticipationHandler $participationHandler, PersonnageRepository $personnageRepository,
-                            EpisodeRepository $episodeRepository, Numeroteur $numeroteur, SceneRepository $sceneRepository, Unlocker $unlocker) {
+                            EpisodeRepository $episodeRepository, Numeroteur $numeroteur, SceneRepository $sceneRepository, Unlocker $unlocker, TableFilter $tableFilter) {
 
         $scene = new Scene;
+        $tableFilter->prefill($scene, self::TABLE_FILTERS, $request->query->all('filter'));
 
         $tout_pjs  = $personnageRepository->findAllPJsSorted();
         $tout_pnjs = $personnageRepository->findAllPNJsSorted();

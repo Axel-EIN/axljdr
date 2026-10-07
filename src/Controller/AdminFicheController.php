@@ -31,6 +31,10 @@ class AdminFicheController extends AbstractController
             'labels' => 'Fiches',
             'genre' => 'F',
             'determinant' => 'une',
+            'table_filters' => [
+                'personnage.estPj:Type:PJ|PNJ',
+                'personnage.clan.nom:Clan',
+            ],
             'table_cols' => [
                 'personnage.icone:Portrait:symbol',
                 'personnage.prenom:Prénom::bold',

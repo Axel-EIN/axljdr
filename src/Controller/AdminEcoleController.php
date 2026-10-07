@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Service\TableFilter;
 use App\Entity\Ecole;
 use App\Service\FileHandler;
 use App\Form\AdminEcoleType;
@@ -19,6 +20,11 @@ use App\Service\Unlocker;
 
 class AdminEcoleController extends AbstractController
 {
+    private const TABLE_FILTERS = [
+        'classe.nom:Classe',
+        'clan.nom:Clan',
+    ];
+
     /**
      * @Route("/admin/ecole", name="admin_ecole")
      * @IsGranted("ROLE_MJ")
@@ -34,6 +40,7 @@ class AdminEcoleController extends AbstractController
             'labels' => 'Écoless',
             'genre' => 'F',
             'determinant' => 'une',
+            'table_filters' => self::TABLE_FILTERS,
             'table_cols' => [
                 'image:Image:image:NA_ECOLE',
                 'nom:Nom::bold',
@@ -60,9 +67,10 @@ class AdminEcoleController extends AbstractController
      * @Route("/admin/ecole/create", name="admin_ecole_create")
      * @IsGranted("ROLE_MJ")
      */
-    public function addEcole(Request $request, EntityManagerInterface $em, ClanRepository $clanRepository, FileHandler $fileHandler, Unlocker $unlocker) {
+    public function addEcole(Request $request, EntityManagerInterface $em, ClanRepository $clanRepository, FileHandler $fileHandler, Unlocker $unlocker, TableFilter $tableFilter) {
 
         $ecole = new Ecole;
+        $tableFilter->prefill($ecole, self::TABLE_FILTERS, $request->query->all('filter'));
 
         if ( !empty($request->query->get('clanID')) && $request->query->get('clanID') > 0 )
         {

@@ -127,11 +127,9 @@ class PersonnageRepository extends ServiceEntityRepository
 
     
 
-    public function countPersonnages(bool $estPj) {
+    public function countPersonnages() {
         return $this->createQueryBuilder('p')
             ->select('count(p.id)')
-            ->andWhere('p.estPj = :val')
-            ->setParameter('val', $estPj)
             ->getQuery()
             ->getSingleScalarResult();
     }

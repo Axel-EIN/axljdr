@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Service\TableFilter;
 use App\Entity\Lieu;
 use App\Service\FileHandler;
 use App\Form\AdminLieuType;
@@ -17,6 +18,10 @@ use App\Service\Unlocker;
 
 class AdminLieuController extends AbstractController
 {
+  private const TABLE_FILTERS = [
+    'clan.nom:Clan',
+  ];
+
   /**
    * @Route("/admin/lieu", name="admin_lieu")
    * @IsGranted("ROLE_MJ")
@@ -31,6 +36,7 @@ class AdminLieuController extends AbstractController
       'labels' => 'Lieux',
       'genre' => 'M',
       'determinant' => 'un',
+      'table_filters' => self::TABLE_FILTERS,
       'table_cols' => [
         'icone:Icone:symbol:NA_LIEU_ICO',
         'nom:Nom::bold',
@@ -54,9 +60,10 @@ class AdminLieuController extends AbstractController
    * @Route("/admin/lieu/create", name="admin_lieu_create")
    * @IsGranted("ROLE_MJ")
    */
-  public function addLieu(Request $request, EntityManagerInterface $em, FileHandler $fileHandler, Baliseur $baliseur, Unlocker $unlocker) {
+  public function addLieu(Request $request, EntityManagerInterface $em, FileHandler $fileHandler, Baliseur $baliseur, Unlocker $unlocker, TableFilter $tableFilter) {
 
     $lieu = new Lieu;
+    $tableFilter->prefill($lieu, self::TABLE_FILTERS, $request->query->all('filter'));
     $form = $this->createForm(AdminLieuType::class, $lieu);
     $form->handleRequest($request);
 

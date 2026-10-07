@@ -36,11 +36,9 @@ class AvantageRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-    public function countAvantages(string $genre) {
+    public function countAvantages() {
         return $this->createQueryBuilder('a')
             ->select('count(a.id)')
-            ->where('a.genre = :genre')
-            ->setParameter('genre', $genre)
             ->getQuery()
             ->getSingleScalarResult();
     }

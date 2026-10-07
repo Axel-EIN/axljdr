@@ -8,6 +8,7 @@ use App\Entity\Status;
 use App\Service\ElementUrl;
 use App\Service\EntityRegistry;
 use App\Service\ImageBrightness;
+use App\Service\TableFilter;
 use App\Service\Visibility;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
@@ -18,12 +19,14 @@ class AppExtension extends AbstractExtension
     private $visibility;
     private $elementUrl;
     private $imageBrightness;
+    private $tableFilter;
 
-    public function __construct(Visibility $visibility, ElementUrl $elementUrl, ImageBrightness $imageBrightness)
+    public function __construct(Visibility $visibility, ElementUrl $elementUrl, ImageBrightness $imageBrightness, TableFilter $tableFilter)
     {
         $this->visibility = $visibility;
         $this->elementUrl = $elementUrl;
         $this->imageBrightness = $imageBrightness;
+        $this->tableFilter = $tableFilter;
     }
 
     public function getFilters()
@@ -52,6 +55,8 @@ class AppExtension extends AbstractExtension
             new TwigFunction('access_label', [$this, 'accessLabel']),
             new TwigFunction('status_label', [$this, 'statusLabel']),
             new TwigFunction('image_bright', [$this->imageBrightness, 'isBright']),
+            new TwigFunction('table_filters', [$this->tableFilter, 'build']),
+            new TwigFunction('table_value', [$this->tableFilter, 'valueOf']),
         ];
     }
 

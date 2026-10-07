@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Service\TableFilter;
 use App\Repository\CompetenceRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -15,6 +16,10 @@ use App\Service\Unlocker;
 
 class AdminCompetenceController extends AbstractController
 {
+    private const TABLE_FILTERS = [
+        'categorie:Catégorie',
+    ];
+
     /**
      * @Route("/admin/competence", name="admin_competence")
      * @IsGranted("ROLE_MJ")
@@ -30,6 +35,7 @@ class AdminCompetenceController extends AbstractController
             'labels' => 'Compétences',
             'genre' => 'F',
             'determinant' => 'une',
+            'table_filters' => self::TABLE_FILTERS,
             'table_cols' => [
                 'nom:Nom',
                 'trait:Trait',
@@ -52,9 +58,10 @@ class AdminCompetenceController extends AbstractController
      * @Route("/admin/competence/create", name="admin_competence_create")
      * @IsGranted("ROLE_MJ")
      */
-    public function addCompetence(Request $request, EntityManagerInterface $em, Unlocker $unlocker) {
+    public function addCompetence(Request $request, EntityManagerInterface $em, Unlocker $unlocker, TableFilter $tableFilter) {
 
         $competence = new Competence;
+        $tableFilter->prefill($competence, self::TABLE_FILTERS, $request->query->all('filter'));
         $form = $this->createForm(AdminCompetenceType::class, $competence);
         $form->handleRequest($request);
 

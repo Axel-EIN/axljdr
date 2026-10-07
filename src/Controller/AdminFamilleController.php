@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Service\TableFilter;
 use App\Entity\Famille;
 use App\Service\FileHandler;
 use App\Form\AdminFamilleType;
@@ -16,6 +17,10 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
 class AdminFamilleController extends AbstractController
 {
+    private const TABLE_FILTERS = [
+        'clan.nom:Clan',
+    ];
+
     /**
      * @Route("/admin/famille", name="admin_famille")
      * @IsGranted("ROLE_MJ")
@@ -31,6 +36,7 @@ class AdminFamilleController extends AbstractController
             'labels' => 'Familles',
             'genre' => 'F',
             'determinant' => 'une',
+            'table_filters' => self::TABLE_FILTERS,
             'table_cols' => [
                 'mon:Mon:symbol:NA_MON',
                 'nom:Nom::bold',
@@ -46,9 +52,10 @@ class AdminFamilleController extends AbstractController
      * @Route("/admin/famille/create", name="admin_famille_create")
      * @IsGranted("ROLE_MJ")
      */
-    public function addFamille(Request $request, EntityManagerInterface $em, ClanRepository $clanRepository, FileHandler $fileHandler) {
+    public function addFamille(Request $request, EntityManagerInterface $em, ClanRepository $clanRepository, FileHandler $fileHandler, TableFilter $tableFilter) {
 
         $famille = new Famille;
+        $tableFilter->prefill($famille, self::TABLE_FILTERS, $request->query->all('filter'));
 
         if ( !empty($request->query->get('clanID')) && $request->query->get('clanID') > 0 )
         {

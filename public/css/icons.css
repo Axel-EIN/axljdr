@@ -59,19 +59,6 @@
     }
 }
 
-.localisator-icon {
-    z-index: 10;
-    text-align: center;
-    color: var(--color-primary);
-    width: 48px;
-    max-height: 48px;
-    font-size: var(--fontsize-bigger);
-    transform:
-            translate(-50%, -50%)
-            translate(0px, -48px);
-    text-shadow: 1px 1px var(--color-primarydarken);
-}
-
 /* ------ PIXEL ICONS  ------ */
 
 .icon-lock {

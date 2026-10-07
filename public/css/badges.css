@@ -60,8 +60,6 @@
     .badge-font-icon {
         color: var(--color-white);
         font-size: var(--fontsize-small);
-
-        &.locked { color: var(--color-white); }
     }
 
     &.mini {
@@ -75,6 +73,28 @@
     &.inline {
         position: static;
         flex-shrink: 0;
+    }
+
+    &.glass {
+        border: 1px solid var(--color-white50);
+        background-color: rgb(from var(--color-blackonyx) r g b / 45%);
+        backdrop-filter: blur(6px);
+        box-shadow: 0 4px 12px var(--color-black50);
+        transition: border-color 0.3s ease;
+
+        :hover > & { border-color: var(--color-white); }
+    }
+
+    &.cover {
+        top: 50%;
+        right: auto;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 80%;
+        height: 80%;
+        pointer-events: none;
+
+        .badge-font-icon { font-size: var(--fontsize-pluser); }
     }
 }
 

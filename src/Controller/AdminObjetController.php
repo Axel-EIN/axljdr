@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Service\TableFilter;
 use App\Entity\Objet;
 use App\Service\Numeroteur;
 use App\Form\AdminObjetType;
@@ -17,6 +18,10 @@ use App\Service\Unlocker;
 
 class AdminObjetController extends AbstractController
 {
+    private const TABLE_FILTERS = [
+        'categorie:Catégorie',
+    ];
+
     /**
      * @Route("/admin/objet", name="admin_objet")
      * @IsGranted("ROLE_MJ")
@@ -32,6 +37,7 @@ class AdminObjetController extends AbstractController
             'labels' => 'Objets',
             'genre' => 'M',
             'determinant' => 'un',
+            'table_filters' => self::TABLE_FILTERS,
             'table_cols' => [
                 'image:Image:image:NA_ICON',
                 'nom:Nom::bold',
@@ -57,9 +63,10 @@ class AdminObjetController extends AbstractController
      * @Route("/admin/objet/create", name="admin_objet_create")
      * @IsGranted("ROLE_MJ")
      */
-    public function addObjet(Request $request, EntityManagerInterface $em, FileHandler $fileHandler, ObjetRepository $objetRepository, Numeroteur $numeroteur, Unlocker $unlocker) {
+    public function addObjet(Request $request, EntityManagerInterface $em, FileHandler $fileHandler, ObjetRepository $objetRepository, Numeroteur $numeroteur, Unlocker $unlocker, TableFilter $tableFilter) {
 
         $objet = new Objet;
+        $tableFilter->prefill($objet, self::TABLE_FILTERS, $request->query->all('filter'));
 
         if ( !empty($request->query->get('tab')) )
                 $objet->setType($request->query->get('tab'));

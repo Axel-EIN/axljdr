@@ -14,10 +14,24 @@
     {% endif %}
 
     {% set table_cols = table_cols|default([])|filter(c => c is not empty) %}
+    {% set filters = table_filters(elements, table_filters|default([])) %}
 
     <section>
-        <div class="text-right my-3">
-            <a href="{{ path('admin_' ~ element ~ '_create') }}" class="btn-medium btn-primary-style gm">
+        <div class="d-flex flex-wrap align-items-center my-3">
+            {% if filters is not empty %}
+                <form class="table-filters form-inline" data-key="{{ element }}">
+                    {% for filter in filters %}
+                        <label class="mr-2" for="table-filter-{{ loop.index0 }}">{{ filter.label }}</label>
+                        <select class="form-control form-control-sm mr-4" id="table-filter-{{ loop.index0 }}">
+                            <option value="">— Tous —</option>
+                            {% for option in filter.options %}
+                                <option value="{{ option }}">{{ option }}</option>
+                            {% endfor %}
+                        </select>
+                    {% endfor %}
+                </form>
+            {% endif %}
+            <a href="{{ path('admin_' ~ element ~ '_create') }}" class="btn-medium btn-primary-style gm ml-auto" data-table-filters-create>
                 <i class="fas fa-plus-square"></i>&nbsp;&nbsp;{{create_label}} {{label}}
             </a>
         </div>
@@ -34,17 +48,15 @@
             </tr>
 
             {% for un_element in elements %}
-                <tr>
+                {% set row = loop.index0 %}
+                <tr{% for filter in filters %} data-filter-{{ loop.index0 }}="{{ filter.values[row] }}"{% endfor %}>
                     {% for col in table_cols %}
                         {% set parts = col|split(':') %}
                         {% set path = parts[0] %}
                         {% set format = parts[2]|default(null) %}
                         {% set extra = parts[3]|default(null) %}
                         {% set bold_class = (format not in ['symbol','image'] and extra == 'bold') ? ' extrabold' : '' %}
-                        {% set val = un_element %}
-                        {% for prop in path|split('.') %}
-                            {% if val is not null %}{% set val = attribute(val, prop) %}{% endif %}
-                        {% endfor %}
+                        {% set val = table_value(un_element, path) %}
 
                         {% if format == 'bool' %}
                             <td class="text-center align-middle{{ bold_class }}">
@@ -126,4 +138,9 @@
         </table>
     </section>
 
+{% endblock %}
+
+{% block javascripts %}
+    {{parent()}}
+    <script src="{{ asset('scripts/table-filters.js') }}"></script>
 {% endblock %}

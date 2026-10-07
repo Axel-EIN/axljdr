@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Service\TableFilter;
 use App\Repository\AvantageRepository;
 use App\Repository\FichePersonnageRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -16,34 +17,29 @@ use App\Service\Unlocker;
 
 class AdminAvantageController extends AbstractController
 {
-    private const LISTS = [
-        'Avantage' => ['element' => 'avantage', 'labels' => 'Avantages'],
-        'Désavantage' => ['element' => 'desavantage', 'labels' => 'Désavantages'],
+    private const TABLE_FILTERS = [
+        'genre:Genre',
     ];
 
-    private function listRoute(Avantage $avantage): string
-    {
-        return 'admin_' . self::LISTS[$avantage->getGenre()]['element'];
-    }
-
     /**
-     * @Route("/admin/avantage", name="admin_avantage", defaults={"genre": "Avantage"})
-     * @Route("/admin/desavantage", name="admin_desavantage", defaults={"genre": "Désavantage"})
+     * @Route("/admin/avantage", name="admin_avantage")
      * @IsGranted("ROLE_MJ")
      */
-    public function viewAdminAvantages(string $genre, AvantageRepository $avantageRepository): Response
+    public function viewAdminAvantages(AvantageRepository $avantageRepository): Response
     {
-        $avantages = $avantageRepository->findBy(array('genre' => $genre), array('id' => 'DESC'));
+        $avantages = $avantageRepository->findBy(array(), array('id' => 'DESC'));
 
         return $this->render('back_office/list-element.html.twig', [
             'elements' => $avantages,
-            'element' => self::LISTS[$genre]['element'],
-            'label' => $genre,
-            'labels' => self::LISTS[$genre]['labels'],
+            'element' => 'avantage',
+            'label' => 'Avantage',
+            'labels' => 'Avantages / Désavantages',
             'genre' => 'M',
             'determinant' => 'un',
+            'table_filters' => self::TABLE_FILTERS,
             'table_cols' => [
                 'nom:Nom',
+                'genre:Genre',
                 'type:Type',
                 'cout:Coût',
                 'discount:Coût Discount',
@@ -57,14 +53,13 @@ class AdminAvantageController extends AbstractController
     }
 
     /**
-     * @Route("/admin/avantage/create", name="admin_avantage_create", defaults={"genre": "Avantage"})
-     * @Route("/admin/desavantage/create", name="admin_desavantage_create", defaults={"genre": "Désavantage"})
+     * @Route("/admin/avantage/create", name="admin_avantage_create")
      * @IsGranted("ROLE_MJ")
      */
-    public function addAvantage(string $genre, Request $request, EntityManagerInterface $em, Unlocker $unlocker) {
+    public function addAvantage(Request $request, EntityManagerInterface $em, Unlocker $unlocker, TableFilter $tableFilter) {
 
         $avantage = new Avantage;
-        $avantage->setGenre($genre);
+        $tableFilter->prefill($avantage, self::TABLE_FILTERS, $request->query->all('filter'));
         $form = $this->createForm(AdminAvantageType::class, $avantage);
         $form->handleRequest($request);
 
@@ -81,7 +76,7 @@ class AdminAvantageController extends AbstractController
                 && !empty($request->query->get('libraryID')) && $request->query->get('libraryID') > 0)
                 return $this->redirectToRoute( 'regles_library', [ 'id' => $request->query->get('libraryID') , 'tab' => $avantage->getGenre(), 'subtab' => $avantage->getType() ] );
 
-            return $this->redirectToRoute($this->listRoute($avantage));
+            return $this->redirectToRoute('admin_avantage');
         }
         
 
@@ -97,7 +92,6 @@ class AdminAvantageController extends AbstractController
 
     /**
      * @Route("/admin/avantage/{id}/edit", name="admin_avantage_edit")
-     * @Route("/admin/desavantage/{id}/edit", name="admin_desavantage_edit")
      * @IsGranted("ROLE_MJ")
      */
     public function editAvantage(Request $request, Avantage $avantage, Unlocker $unlocker): Response {
@@ -117,7 +111,7 @@ class AdminAvantageController extends AbstractController
                 && !empty($request->query->get('libraryID')) && $request->query->get('libraryID') > 0)
                 return $this->redirectToRoute( 'regles_library', [ 'id' => $request->query->get('libraryID') , 'tab' => $avantage->getGenre(), 'subtab' => $avantage->getType() ] );
 
-            return $this->redirectToRoute($this->listRoute($avantage));
+            return $this->redirectToRoute('admin_avantage');
         }
 
         return $this->renderForm('back_office/edit.html.twig', [
@@ -133,7 +127,6 @@ class AdminAvantageController extends AbstractController
 
     /**
      * @Route("/admin/avantage/{id}/delete", name="admin_avantage_delete", methods={"POST"})
-     * @Route("/admin/desavantage/{id}/delete", name="admin_desavantage_delete", methods={"POST"})
      * @IsGranted("ROLE_MJ")
      */
     public function deleteAvantage(Request $request, Avantage $avantage, Unlocker $unlocker, FichePersonnageRepository $ficheRepository): Response {
@@ -146,7 +139,7 @@ class AdminAvantageController extends AbstractController
                 $personnages = array_map(fn($fiche) => $fiche->getPersonnage()->getNom(), $fiches);
                 $this->addFlash('danger', 'Impossible de supprimer « ' . $avantage->getNom() . ' », utilisé par : ' . implode(', ', $personnages) . '.');
 
-                return $this->redirectToRoute($this->listRoute($avantage));
+                return $this->redirectToRoute('admin_avantage');
             }
 
             $entityManager = $this->getDoctrine()->getManager();
@@ -156,6 +149,6 @@ class AdminAvantageController extends AbstractController
             $this->addFlash('success', 'La Avantage a bien été supprimée.');
         }
 
-        return $this->redirectToRoute($this->listRoute($avantage));
+        return $this->redirectToRoute('admin_avantage');
     }
 }

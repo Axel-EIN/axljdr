@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Service\TableFilter;
 use App\Entity\Episode;
 use App\Service\FileHandler;
 use App\Service\Numeroteur;
@@ -18,6 +19,10 @@ use App\Service\Unlocker;
 
 class AdminEpisodeController extends AbstractController
 {
+    private const TABLE_FILTERS = [
+        'chapitreParent.titre:Chapitre',
+    ];
+
     /**
      * @Route("/admin/episode", name="admin_episode")
      * @IsGranted("ROLE_MJ")
@@ -33,6 +38,7 @@ class AdminEpisodeController extends AbstractController
             'labels' => 'Épisodes',
             'genre' => 'M',
             'determinant' => 'un',
+            'table_filters' => self::TABLE_FILTERS,
             'table_cols' => [
                 'image:Image:image:NA_SESSION',
                 'titre:Titre::bold',
@@ -51,9 +57,10 @@ class AdminEpisodeController extends AbstractController
      * @Route("/admin/episode/create", name="admin_episode_create")
      * @IsGranted("ROLE_MJ")
      */
-    public function addEpisode(Request $request, EntityManagerInterface $em, FileHandler $fileHandler, ChapitreRepository $chapitreRepository, Numeroteur $numeroteur, EpisodeRepository $episodeRepository, Unlocker $unlocker) {
+    public function addEpisode(Request $request, EntityManagerInterface $em, FileHandler $fileHandler, ChapitreRepository $chapitreRepository, Numeroteur $numeroteur, EpisodeRepository $episodeRepository, Unlocker $unlocker, TableFilter $tableFilter) {
 
         $episode = new Episode;
+        $tableFilter->prefill($episode, self::TABLE_FILTERS, $request->query->all('filter'));
 
         if ( !empty($request->query->get('numero')) && $request->query->get('numero') > 0
           && !empty($request->query->get('chapitreID')) && $request->query->get('chapitreID') > 0 )

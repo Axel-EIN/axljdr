@@ -20,6 +20,7 @@ class AdminSortController extends AbstractController
 {
     private const TABLE_FILTERS = [
         'categorie:Catégorie',
+        'anneau:Anneau',
     ];
 
     /**

@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Service\TableFilter;
 use App\Service\FileHandler;
 use App\Service\Baliseur;
 use App\Entity\Personnage;
@@ -17,33 +18,30 @@ use App\Service\Unlocker;
 
 class AdminPersonnageController extends AbstractController
 {
-    private const LISTS = [
-        'PJ' => ['element' => 'personnage', 'labels' => 'PJs'],
-        'PNJ' => ['element' => 'pnj', 'labels' => 'PNJs'],
+    private const TABLE_FILTERS = [
+        'estPj:Type:PJ|PNJ',
+        'clan.nom:Clan',
     ];
 
-    private function listRoute(Personnage $personnage): string
-    {
-        return 'admin_' . self::LISTS[$personnage->getEstPj() ? 'PJ' : 'PNJ']['element'];
-    }
-
     /**
-     * @Route("/admin/personnage", name="admin_personnage", defaults={"type": "PJ"})
-     * @Route("/admin/pnj", name="admin_pnj", defaults={"type": "PNJ"})
+     * @Route("/admin/personnage", name="admin_personnage")
      * @IsGranted("ROLE_MJ")
      */
-    public function viewAdminPersonnages(string $type, PersonnageRepository $personnageRepository): Response
+    public function viewAdminPersonnages(PersonnageRepository $personnageRepository): Response
     {
-        $personnages = $personnageRepository->findBy( ['estPj' => $type === 'PJ'] , ['id' => 'DESC'] );
+        $personnages = $personnageRepository->findBy( [] , ['id' => 'DESC'] );
 
         return $this->render('back_office/list-element.html.twig', [
             'elements' => $personnages,
-            'element' => self::LISTS[$type]['element'],
-            'label' => $type,
-            'labels' => self::LISTS[$type]['labels'],
+            'element' => 'personnage',
+            'label' => 'Personnage',
+            'labels' => 'Personnages',
             'genre' => 'M',
             'determinant' => 'un',
-            'table_cols' => array_merge($type === 'PJ' ? ['joueur.pseudo:Player'] : [], [
+            'table_filters' => self::TABLE_FILTERS,
+            'table_cols' => [
+              'estPj:PJ:bool',
+              'joueur.pseudo:Player',
               'icone:Portrait:symbol:NA_PERSO_PORTRAIT_{genre}',
               'nom:Nom',
               'prenom:Prénom::bold',
@@ -55,19 +53,18 @@ class AdminPersonnageController extends AbstractController
               'publishedAt:Publié le:date',
               'status:Statut:status',
               'description:Text:bool',
-            ]),
+            ],
         ]);
     }
 
     /**
-     * @Route("/admin/personnage/create", name="admin_personnage_create", defaults={"type": "PJ"})
-     * @Route("/admin/pnj/create", name="admin_pnj_create", defaults={"type": "PNJ"})
+     * @Route("/admin/personnage/create", name="admin_personnage_create")
      * @IsGranted("ROLE_MJ")
      */
-    public function addPersonnage(string $type, Request $request, EntityManagerInterface $em, FileHandler $fileHandler, Baliseur $baliseur, Unlocker $unlocker) {
+    public function addPersonnage(Request $request, EntityManagerInterface $em, FileHandler $fileHandler, Baliseur $baliseur, Unlocker $unlocker, TableFilter $tableFilter) {
 
         $personnage = new Personnage;
-        $personnage->setEstPj($type === 'PJ');
+        $tableFilter->prefill($personnage, self::TABLE_FILTERS, $request->query->all('filter'));
         $form = $this->createForm(AdminPersonnageType::class, $personnage);
         $form->handleRequest($request);
 
@@ -114,7 +111,7 @@ class AdminPersonnageController extends AbstractController
             if (!empty($request->query->get('redirect')) && $request->query->get('redirect') == 'personnage')
                 return $this->redirectToRoute('personnages');
 
-            return $this->redirectToRoute($this->listRoute($personnage));
+            return $this->redirectToRoute('admin_personnage');
         }
 
         return $this->render('back_office/create.html.twig', [
@@ -129,7 +126,6 @@ class AdminPersonnageController extends AbstractController
 
     /**
      * @Route("/admin/personnage/{id}/edit", name="admin_personnage_edit")
-     * @Route("/admin/pnj/{id}/edit", name="admin_pnj_edit")
      * @IsGranted("ROLE_MJ")
      */
     public function editPersonnage(Request $request, Personnage $personnage, FileHandler $fileHandler, Baliseur $baliseur, Unlocker $unlocker): Response {
@@ -187,7 +183,7 @@ class AdminPersonnageController extends AbstractController
             if (!empty($request->query->get('redirect')) && $request->query->get('redirect') == 'personnage')
                 return $this->redirectToRoute('personnage_profil', ['id' => $personnage->getId()]);
 
-            return $this->redirectToRoute($this->listRoute($personnage));
+            return $this->redirectToRoute('admin_personnage');
         }
 
         return $this->renderForm('back_office/edit.html.twig', [
@@ -203,7 +199,6 @@ class AdminPersonnageController extends AbstractController
 
     /**
      * @Route("/admin/personnage/{id}/delete", name="admin_personnage_delete", methods={"POST"})
-     * @Route("/admin/pnj/{id}/delete", name="admin_pnj_delete", methods={"POST"})
      * @IsGranted("ROLE_MJ")
      */
     public function deletePersonnage(Request $request, Personnage $personnage, FileHandler $fileHandler, Unlocker $unlocker): Response {
@@ -221,6 +216,6 @@ class AdminPersonnageController extends AbstractController
             $this->addFlash('success', 'Le personnage a bien été supprimé.');
         }
 
-        return $this->redirectToRoute($this->listRoute($personnage));
+        return $this->redirectToRoute('admin_personnage');
     }
 }

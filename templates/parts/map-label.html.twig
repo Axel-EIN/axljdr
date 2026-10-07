@@ -1,0 +1,16 @@
+{% set details = (details|default([]))|filter(detail => detail is not empty) %}
+
+<span class="map-label {{ variant|default('') }}"{% if style is defined %} style="{{ style }}"{% endif %}>
+  {% if mon is defined and mon is not empty %}
+    <img class="map-label-mon" src="{{ asset(mon) }}" alt="" />
+  {% endif %}
+  <span>
+    <span class="map-label-name">{{ name }}</span>
+    {% if details is not empty %}
+      <span class="map-label-details">{{ details|join(' · ') }}</span>
+    {% endif %}
+  </span>
+  {% if state is defined and state is not empty %}
+    {{ include('parts/badge-access.html.twig', {state: state, variant: 'inline glass'}) }}
+  {% endif %}
+</span>

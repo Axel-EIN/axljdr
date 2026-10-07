@@ -4,6 +4,8 @@
   const pointer = document.querySelector('#minimap .localisator-ui');
   const mapImage = map ? map.querySelector('.map-image') : null;
   const toggleBtn = document.getElementById('map-toggle-territoires');
+  const labelsBtn = document.getElementById('map-toggle-labels');
+  const fullscreenBtn = document.getElementById('map-toggle-fullscreen');
   if (!frame || !map) return;
 
   const baseLocX = parseFloat(frame.dataset.locx);
@@ -111,13 +113,38 @@
   if (toggleBtn && mapImage) {
     const cleanSrc = toggleBtn.dataset.mapClean;
     const frontierSrc = toggleBtn.dataset.mapFrontier;
-    const label = toggleBtn.querySelector('.label');
     let showingFrontier = false;
     toggleBtn.addEventListener('click', function () {
       showingFrontier = !showingFrontier;
       mapImage.src = showingFrontier ? frontierSrc : cleanSrc;
       toggleBtn.classList.toggle('active', showingFrontier);
-      if (label) label.textContent = showingFrontier ? 'Masquer territoires' : 'Afficher territoires';
     });
+  }
+
+  if (labelsBtn) {
+    labelsBtn.addEventListener('click', function () {
+      const shown = !frame.classList.toggle('labels-hidden');
+      labelsBtn.classList.toggle('active', shown);
+      labelsBtn.setAttribute('aria-pressed', shown);
+    });
+  }
+
+  if (fullscreenBtn) {
+    if (!frame.requestFullscreen) {
+      fullscreenBtn.hidden = true;
+    } else {
+      fullscreenBtn.addEventListener('click', function () {
+        if (document.fullscreenElement) {
+          document.exitFullscreen();
+        } else {
+          frame.requestFullscreen();
+        }
+      });
+      document.addEventListener('fullscreenchange', function () {
+        const active = document.fullscreenElement === frame;
+        fullscreenBtn.classList.toggle('active', active);
+        fullscreenBtn.setAttribute('aria-pressed', active);
+      });
+    }
   }
 })();

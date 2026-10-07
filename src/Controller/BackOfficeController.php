@@ -216,23 +216,21 @@ class BackOfficeController extends AbstractController
             $admin_elements[$i]['image'] = '';
         }
 
-        foreach (['PJs' => ['personnage', true], 'PNJs' => ['pnj', false]] as $label => [$element, $estPj]) {
-            $i++;
-            $admin_elements[$i]['element'] = $element;
-            $admin_elements[$i]['label'] = $label;
-            $admin_elements[$i]['genre'] = 'M';
-            $admin_elements[$i]['categorie'] = 'PERSONNAGES';
-            $admin_elements[$i]['nbr'] = $personnageRepository->countPersonnages($estPj);
-            $lastPersonnage = $personnageRepository->findOneBy(array('estPj' => $estPj),array('id' => 'DESC'));
-            if (!empty($lastPersonnage)) {
-                $admin_elements[$i]['last'] = $lastPersonnage;
-                $admin_elements[$i]['nom'] = $lastPersonnage->getNomComplet();
-                $admin_elements[$i]['image'] = $lastPersonnage->getIcone();
-            } else {
-                $admin_elements[$i]['last'] = '';
-                $admin_elements[$i]['nom'] = '';
-                $admin_elements[$i]['image'] = '';
-            }
+        $i++;
+        $admin_elements[$i]['element'] = 'personnage' ;
+        $admin_elements[$i]['label'] = 'Personnages';
+        $admin_elements[$i]['genre'] = 'M';
+        $admin_elements[$i]['categorie'] = 'PERSONNAGES';
+        $admin_elements[$i]['nbr'] = $personnageRepository->countPersonnages();
+        $lastPersonnage = $personnageRepository->findOneBy(array(),array('id' => 'DESC'));
+        if (!empty($lastPersonnage)) {
+            $admin_elements[$i]['last'] = $lastPersonnage;
+            $admin_elements[$i]['nom'] = $lastPersonnage->getNomComplet();
+            $admin_elements[$i]['image'] = $lastPersonnage->getIcone();
+        } else {
+            $admin_elements[$i]['last'] = '';
+            $admin_elements[$i]['nom'] = '';
+            $admin_elements[$i]['image'] = '';
         }
 
         $i++;
@@ -337,23 +335,21 @@ class BackOfficeController extends AbstractController
             $admin_elements[$i]['image'] = '';
         }
 
-        foreach (['Avantage' => ['avantage', 'Avantages'], 'Désavantage' => ['desavantage', 'Désavantages']] as $genreAvantage => [$element, $label]) {
-            $i++;
-            $admin_elements[$i]['element'] = $element;
-            $admin_elements[$i]['label'] = $label;
-            $admin_elements[$i]['genre'] = 'M';
-            $admin_elements[$i]['categorie'] = 'REGLES';
-            $admin_elements[$i]['nbr'] = $avantageRepository->countAvantages($genreAvantage);
-            $lastAvantage = $avantageRepository->findOneBy(array('genre' => $genreAvantage),array('id' => 'DESC'));
-            if (!empty($lastAvantage)) {
-                $admin_elements[$i]['last'] = $lastAvantage;
-                $admin_elements[$i]['nom'] = $lastAvantage->getNom();
-                $admin_elements[$i]['image'] = '';
-            } else {
-                $admin_elements[$i]['last'] = '';
-                $admin_elements[$i]['nom'] = '';
-                $admin_elements[$i]['image'] = '';
-            }
+        $i++;
+        $admin_elements[$i]['element'] = 'avantage' ;
+        $admin_elements[$i]['label'] = 'Avantages / Dés.';
+        $admin_elements[$i]['genre'] = 'M';
+        $admin_elements[$i]['categorie'] = 'REGLES';
+        $admin_elements[$i]['nbr'] = $avantageRepository->countAvantages();
+        $lastAvantage = $avantageRepository->findOneBy(array(),array('id' => 'DESC'));
+        if (!empty($lastAvantage)) {
+            $admin_elements[$i]['last'] = $lastAvantage;
+            $admin_elements[$i]['nom'] = $lastAvantage->getNom();
+            $admin_elements[$i]['image'] = '';
+        } else {
+            $admin_elements[$i]['last'] = '';
+            $admin_elements[$i]['nom'] = '';
+            $admin_elements[$i]['image'] = '';
         }
 
         $i++;

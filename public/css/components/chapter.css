@@ -2,23 +2,9 @@
     font-size: var(--fontsize-bigger);
     color: var(--color-white);
 
-    @media (max-width: 991.98px) {
-        .chapter-number {
-            font-size: var(--fontsize-large);
-        }
-    }
-
-    @media (max-width: 575.98px) {
-        .chapter-number {
-            font-size: var(--fontsize-plus);
-        }
-    }
-
-    @media (max-width: 480px) {
-        .chapter-number {
-            font-size: var(--fontsize-base);
-        }
-    }
+    @media (max-width: 991.98px) { font-size: var(--fontsize-large); }
+    @media (max-width: 575.98px) { font-size: var(--fontsize-plus); }
+    @media (max-width: 480px) { font-size: var(--fontsize-base); }
 }
 
 .chapter-backbtn {
@@ -36,6 +22,8 @@
   display: flex;
   gap: 0.75rem;
   align-items: center;
+
+  @media (max-width: 991.98px) { display: none; }
 }
 
 .chapter-lieux-row {
@@ -47,6 +35,11 @@
   .chapter-lieu-link {
     display: block;
     line-height: 0;
+
+    &:hover .chapter-lieu-icon {
+      transform: scale(1.1);
+      opacity: 1;
+    }
   }
 
   .chapter-lieu-icon {
@@ -54,19 +47,16 @@
     height: 48px;
     filter: brightness(1);
   }
-
 }
-
-@media (max-width: 991.98px) { .chapter-lieux { display: none; } }
 
 .quote-chapter {
   width: 60%;
   margin: 16px auto;
   padding-left: 1rem;
   padding-right: 1rem;
-}
 
-@media (max-width: 991.98px) { .quote-chapter { width: 90%; } }
+  @media (max-width: 991.98px) { width: 90%; }
+}
 
 /* GRILLE DE PORTRAITS DU CHAPITRE */
 /* ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾ */
@@ -79,10 +69,12 @@
   border-radius: 8px;
   width: max-content;
   
-  &.pjs  { right: 80%; text-align: right; }
-  &.pnjs { left:  80%; text-align: left;  }
+  &.pjs  { right: 80%; text-align: right; .chapter-portraits-grid { direction: rtl; } }
+  &.pnjs { left:  80%; text-align: left;  .chapter-portraits-grid { direction: ltr; } }
   &.chapter-view { margin-top: 72px;}
   &.episode-view { top: 0; }
+
+  @media (max-width: 991.98px) { display: none; }
 }
 
 .label-du-groupe {
@@ -107,13 +99,19 @@
   grid-auto-columns: 40px;
   margin-top: 4px;
   gap: 6px;
-    max-width: calc(10 * 40px + 15 * 6px);
+  max-width: calc(10 * 40px + 15 * 6px);
   backdrop-filter: blur(16px);
 
   .chapter-portrait-link {
     position: relative;
     display: block;
     line-height: 0;
+
+    &:hover .chapter-portrait {
+      border-color: var(--color-primary, #fff);
+      transform: scale(1.1);
+      opacity: 1;
+    }
   }
 
   .chapter-portrait {
@@ -121,25 +119,9 @@
     height: 40px;
     filter: grayscale(1) brightness(0.5);
     &.chapter-view { filter: brightness(1);}
-  }
-
-  .chapter-portrait.in-episode {
-    opacity: 1;
-    filter: grayscale(0);
-  }
-
-  .chapter-portrait-link:hover .chapter-portrait {
-    border-color: var(--color-primary, #fff);
+    &.in-episode {
+      opacity: 1;
+      filter: grayscale(0);
+    }
   }
 }
-
-.chapter-portrait-link:hover .chapter-portrait,
-.chapter-lieu-link:hover .chapter-lieu-icon {
-  transform: scale(1.1);
-  opacity: 1;
-}
-
-.chapter-characters.pjs  .chapter-portraits-grid { direction: rtl; }
-.chapter-characters.pnjs .chapter-portraits-grid { direction: ltr; }
-
-@media (max-width: 991.98px) { .chapter-characters { display: none; } }

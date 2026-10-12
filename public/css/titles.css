@@ -73,7 +73,7 @@
 
 /* ----- STYLE AMERIGO ----- */
 
-.label-amerigo, .heading-scene, .heading-articlepart {
+.label-amerigo, .heading-amerigo, .heading-scene, .heading-articlepart {
     font-family: "Amerigo";
     font-size: var(--fontsize-plus);
     color: var(--color-strong);

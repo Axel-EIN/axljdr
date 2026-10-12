@@ -97,6 +97,16 @@
   flex-direction: column;
   gap: 1rem;
   margin-bottom: 1rem;
+
+  .session-pair {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+
+    > * { min-width: 0; }
+
+    @media (max-width: 575.98px) { grid-template-columns: 1fr; }
+  }
 }
 
 .portrait-slot {

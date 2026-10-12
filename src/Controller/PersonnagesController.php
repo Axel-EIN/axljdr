@@ -58,18 +58,6 @@ class PersonnagesController extends AbstractController
                     $episodeId = $rawEpisode !== '' && $rawEpisode !== null ? (int) $rawEpisode : null;
                 }
             }
-        } else {
-            $latestSaison = $saisonRepository->findCourante();
-            if ($latestSaison !== null) {
-                $saisonId = $latestSaison->getId();
-                $latestChapitre = $chapitreRepository->findOneBy(
-                    ['saisonParent' => $saisonId],
-                    ['numero' => 'DESC']
-                );
-                if ($latestChapitre !== null) {
-                    $chapitreId = $latestChapitre->getId();
-                }
-            }
         }
 
         if ($chapitreId !== null && $saisonId !== null) {

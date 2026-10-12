@@ -24,9 +24,14 @@
 
     &:hover, &:focus { color: var(--color-link); }
   }
+
+  .historique-numero { font-weight: normal; }
 }
 
-.historique-xp { color: var(--color-strong); }
+.historique-xp {
+  color: var(--color-strong);
+  font-weight: normal;
+}
 
 .historique-scene {
   display: flex;

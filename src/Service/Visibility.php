@@ -108,13 +108,25 @@ class Visibility
 
     private function rankOf($element): int
     {
+        if ($element instanceof Personnage && $element->isDead()) {
+            return 5;
+        }
+
+        if ($element instanceof Personnage && $element->isMissing()) {
+            return 4;
+        }
+
         $state = $this->state($element);
 
         if ($state === self::PUBLIC) {
             return 0;
         }
 
-        return in_array($state, self::READABLE, true) ? 1 : 2;
+        if (in_array($state, self::READABLE, true)) {
+            return 1;
+        }
+
+        return in_array($state, self::UNSEEN, true) ? 3 : 2;
     }
 
     public function isListed($element, bool $revealSession = false): bool

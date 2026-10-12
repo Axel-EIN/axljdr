@@ -52,7 +52,7 @@ class NewsController extends AbstractController
 
     private const PARTICIPATIONS = 5;
 
-    private const SEANCES_PRECEDENTES = 5;
+    private const SEANCES_PRECEDENTES = 3;
 
     private const RUBRIQUES = [
         [

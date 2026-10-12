@@ -40,6 +40,10 @@ class NewsFeed
         $classement = [];
 
         foreach ($this->personnageRepository->findRankable() as $personnage) {
+            if ($personnage->isDead() || $personnage->isMissing()) {
+                continue;
+            }
+
             $classement[] = [
                 'id' => $personnage->getId(),
                 'prenom' => $personnage->getPrenom(),

@@ -153,7 +153,10 @@
                     <article class="development-line">
                         <div class="development-head">
                             <span class="development-title">
-                                <a href="{{ scene_url }}"><strong>{{ scene.titre }}</strong></a>
+                                <a href="{{ scene_url }}">
+                                    <img class="img-18 invert mr-1 align-middle" src="{{ asset(AVENTURE_EPISODE_ICO) }}" alt="" />
+                                    <strong>{{ scene.titre }}</strong>
+                                </a>
                                 {% if is_granted('ROLE_MJ') %}
                                     {{ include('/btns/btn-icon-edit.html.twig', {
                                     entity: 'development', un_element: development, position: 'align-middle',

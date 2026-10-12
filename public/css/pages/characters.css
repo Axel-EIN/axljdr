@@ -166,6 +166,8 @@ main.container-fluid { position: relative; }
 }
 
 .pnj-clan-group {
+    margin-top: var(--spacer-double);
+
     &:not(:has(article:not(.perso-inactif))) { display: none; }
 
     .category-page:has(#voir-inactifs:checked) & { display: block; }

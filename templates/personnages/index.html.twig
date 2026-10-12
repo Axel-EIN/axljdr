@@ -54,7 +54,7 @@
 {% endblock %}
 
 {% block section_content1 %}
-    {% for perso in pjs %}
+    {% for perso in pjs|filter(p => element_readable(p))|merge(pjs|filter(p => not element_readable(p))) %}
         {{ include('/personnages/character-card.html.twig', {perso}) }}
     {% endfor %}
     {% if pjs is empty %}

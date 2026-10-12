@@ -77,6 +77,13 @@ class Visibility
         return Access::isHidden($access) ? self::HIDDEN : self::LOCKED;
     }
 
+    public function isIndividuallyRevealed($element): bool
+    {
+        return Access::isHidden($this->accessOf($element))
+            && $element->isManualUnlock()
+            && in_array($this->state($element), self::READABLE, true);
+    }
+
     public function isUnseen($element): bool
     {
         return in_array($this->state($element), self::UNSEEN, true);
@@ -93,19 +100,21 @@ class Visibility
         $elements = is_array($elements) ? array_values($elements) : iterator_to_array($elements, false);
 
         usort($elements, function ($a, $b) {
-            $lisibleA = in_array($this->state($a), self::READABLE, true);
-            $lisibleB = in_array($this->state($b), self::READABLE, true);
-
-            if ($lisibleA !== $lisibleB) {
-                return $lisibleA ? -1 : 1;
-            }
-
-            return $lisibleA
-                ? $this->accessOf($a) <=> $this->accessOf($b)
-                : $this->accessOf($b) <=> $this->accessOf($a);
+            return $this->rankOf($a) <=> $this->rankOf($b);
         });
 
         return $elements;
+    }
+
+    private function rankOf($element): int
+    {
+        $state = $this->state($element);
+
+        if ($state === self::PUBLIC) {
+            return 0;
+        }
+
+        return in_array($state, self::READABLE, true) ? 1 : 2;
     }
 
     public function isListed($element, bool $revealSession = false): bool

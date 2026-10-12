@@ -9,6 +9,8 @@
   {% set show_label = variant != 'portrait' %}
   {% set is_mj = app.user and is_granted('ROLE_MJ') %}
   {% set plain = reveal_session %}
+  {% set badge_hover = badge_hover|default(false) %}
+  {% set catalog = catalog|default(false) %}
 
   {% if per_row is defined %}
     {% set cols = per_row is iterable ? per_row : {desktop: per_row} %}
@@ -35,7 +37,7 @@
       {% set state = element_state(item, reveal_session) %}
       {% set hidden = not element_readable(item) %}
       {% set locked = not plain and state == 'locked' %}
-      {% set item_class = plain ? 'hover-zoom' : (element_unseen(item) ? 'access-hidden ' : '') ~ (locked ? 'locked ' : '') ~ (hidden ? '' : 'hover-zoom') %}
+      {% set item_class = plain ? 'hover-zoom' : (element_unseen(item) ? 'access-hidden ' : '') ~ (locked ? 'locked ' : '') ~ (catalog ? 'catalog ' : '') ~ (hidden ? '' : 'hover-zoom') %}
       {% set name = item.nomComplet is defined ? item.nomComplet : (item.nom is defined ? item.nom : item.titre) %}
       {% set alt = hidden ? 'À découvrir' : name %}
       {% set pdf_only = item.pdf|default(null) and not item.hasParts|default(false) %}
@@ -47,8 +49,14 @@
          {% if (hidden and not plain) or not href %}aria-disabled="true"{% else %}{% if show_label %}title="{{ name }}" {% endif %}{% if pdf_link %}target="_blank" rel="noopener" {% endif %}href="{{ href }}"{% endif %}>
         <div class="image-container {% if locked %}slight-fade{% endif %}">
 
-          {% if not plain or is_mj or (state == 'discovered' and item.manualUnlock) %}
-            {{ include('parts/badge-access.html.twig', {state: state, variant: plain and is_mj ? 'hover-only' : ''}) }}
+          {% if catalog %}
+            {{ include('parts/badge-catalog.html.twig', {item: item}) }}
+          {% else %}
+            {% set pinned = badge_hover and not is_mj and element_individual(item) %}
+            {{ include('parts/badge-access.html.twig', {
+              state: pinned and state == 'common-discovered' ? 'unlocked' : state,
+              variant: badge_hover and not pinned ? 'hover-only' : '',
+            }) }}
           {% endif %}
 
           {% if locked %}

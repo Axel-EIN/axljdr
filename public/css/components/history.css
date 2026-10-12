@@ -6,6 +6,7 @@
   margin: 3rem -1rem 1.5rem;
   padding: 0 1rem;
   text-transform: uppercase;
+  background-color: var(--color-black);
 
   &.first { margin-top: 0; }
 
@@ -16,6 +17,13 @@
   display: flex;
   align-items: center;
   margin: 1rem 0 0 1.5rem;
+
+  .chevron-toggle {
+    color: var(--color-black);
+    font-weight: bold;
+
+    &:hover, &:focus { color: var(--color-black); }
+  }
 }
 
 .historique-scene {

@@ -57,7 +57,7 @@
 
     {% for groupe in groupes|filter(g => g.lieux|length > 0) %}
         <div class="col-12">
-            <h3 class="heading-cardtitle">{{ groupe.titre }}</h3>
+            <h3 class="heading-amerigo">{{ groupe.titre }}</h3>
             {{ include('/parts/picture-grid.html.twig', {
                 catalog: true,
                 items: groupe.lieux, route: 'empire_lieu', na_image: NA_LIEU,

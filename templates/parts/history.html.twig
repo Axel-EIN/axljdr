@@ -25,11 +25,11 @@
         data-toggle="collapse" href="#episode{{ un_episode.id }}" role="button"
         aria-expanded="false" aria-controls="episode{{ un_episode.id }}">
       <img class="img-24 invert mr-2" src="{{ asset(AVENTURE_EPISODE_ICO) }}" alt="" />
-      <span class="text-muted mr-2">#{{ un_episode.numeroSaison }}</span>
+      <span class="historique-numero text-muted mr-2">#{{ un_episode.numeroSaison }}</span>
       {{ un_episode.titre }}
       <i class="fas fa-chevron-down ml-2 text-small"></i>
       {% if un_bloc.xp > 0 %}
-        <strong class="ml-auto extrabold text-nowrap historique-xp">{{ include('parts/xp-gain.html.twig', {xp: un_bloc.xp, total: un_bloc.xpWithBonus, format: 'moyen', signe: '+'}) }}</strong>
+        <span class="ml-auto text-nowrap historique-xp">{{ include('parts/xp-gain.html.twig', {xp: un_bloc.xp, total: un_bloc.xpWithBonus, format: 'moyen', signe: '+'}) }}</span>
       {% endif %}
     </a>
     <a class="ml-2 mr-2 mr-lg-0 text-small" href="{{ path('aventure_episode', {id: un_episode.id}) }}" title="Voir l'épisode">
@@ -47,9 +47,9 @@
         {% if ligne.mort %}
           <strong class="text-dead">MORT</strong>
         {% elseif ligne.xp > 0 %}
-          <strong class="extrabold text-nowrap historique-xp">
+          <span class="text-nowrap historique-xp">
             {{ include('parts/xp-gain.html.twig', {xp: ligne.xp, signe: '+'}) }}
-          </strong>
+          </span>
         {% endif %}
       </div>
     {% endfor %}

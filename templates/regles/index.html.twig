@@ -8,6 +8,7 @@
 
 {% block section_content1 %}
     {{ include('/parts/picture-grid.html.twig', {
+        catalog: true,
         variant: 'rule',
         items: rulesBases, route: 'regles_rule', na_image: NA_RULE,
         wrapper: 'col-12', per_row: {desktop: 4, mobile: 2},
@@ -17,6 +18,7 @@
 
 {% block section_content2 %}
     {{ include('/parts/picture-grid.html.twig', {
+        catalog: true,
         variant: 'emblem',
         items: classes, route: 'regles_classe', na_image: NA_CLASS_ICO,
         field: 'icone', wrapper: 'col-12',
@@ -26,6 +28,7 @@
 
 {% block section_content3 %}
     {{ include('/parts/picture-grid.html.twig', {
+        catalog: true,
         variant: 'rule',
         items: librariesBases, route: 'regles_library', na_image: NA_LIBRARY,
         wrapper: 'col-12', per_row: {desktop: 4, mobile: 2},
@@ -35,6 +38,7 @@
 
 {% block section_content4 %}
     {{ include('/parts/picture-grid.html.twig', {
+        catalog: true,
         variant: 'rule',
         items: annexes, route: 'regles_rule', na_image: NA_RULE,
         wrapper: 'col-12', per_row: {desktop: 6, mobile: 2},

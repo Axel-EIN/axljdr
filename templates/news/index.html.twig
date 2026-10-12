@@ -38,6 +38,7 @@
                         {{ include('/parts/picture-grid.html.twig', {
                             items: session_locations,
                             reveal_session: true,
+                            badge_hover: true,
                             variant: 'icon',
                             per_row: {desktop: 4, tablet: 4, mobile: 3},
                             empty_message: 'Aucun lieu visité',
@@ -49,6 +50,7 @@
                         {{ include('/parts/picture-grid.html.twig', {
                             items: session_characters,
                             reveal_session: true,
+                            badge_hover: true,
                             variant: 'portrait',
                             per_row: {desktop: 8, tablet: 6, mobile: 4},
                             empty_message: 'Aucune rencontre',
@@ -60,6 +62,7 @@
                         {{ include('/parts/picture-grid.html.twig', {
                             items: session_objects,
                             reveal_session: true,
+                            badge_hover: true,
                             variant: 'rule',
                             per_row: {desktop: 4, tablet: 4, mobile: 3},
                             empty_message: 'Aucun objet découvert',

@@ -2,6 +2,7 @@
 
 {% set state = element_state(perso) %}
 {% set readable = element_readable(perso) %}
+{% set badge = state == 'common-discovered' and perso.manualUnlock ? 'unlocked' : state %}
 
 <article class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2 py-3 {{ perso.dead or perso.missing ? 'perso-inactif' }}">
 
@@ -29,7 +30,9 @@
                     {{ include('parts/badge-new.html.twig', { variant: 'pin-centerleft' }) }}
                 {% endif %}
 
-                {{ include('parts/badge-access.html.twig', {state: state}) }}
+                {% if badge not in ['locked', 'common-discovered'] %}
+                    {{ include('parts/badge-access.html.twig', {state: badge}) }}
+                {% endif %}
 
                 {% if perso.dead %}
                     <img class="absolute icon-dead-big" src="{{ asset(MORT_ICO) }}" alt="Icône est mort" />

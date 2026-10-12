@@ -13,7 +13,7 @@ trait VisibilityTrait
             return null;
         }
 
-        if (!$visibility->isListed($element)) {
+        if (!$visibility->isListed($element, true)) {
             return $this->render('element-hidden.html.twig', [], new Response('', Response::HTTP_NOT_FOUND));
         }
 

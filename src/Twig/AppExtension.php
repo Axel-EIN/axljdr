@@ -47,6 +47,7 @@ class AppExtension extends AbstractExtension
             new TwigFunction('element_state', [$this->visibility, 'state']),
             new TwigFunction('element_readable', [$this->visibility, 'isReadable']),
             new TwigFunction('element_unseen', [$this->visibility, 'isUnseen']),
+            new TwigFunction('element_individual', [$this->visibility, 'isIndividuallyRevealed']),
             new TwigFunction('element_listed', [$this->visibility, 'isListed']),
             new TwigFunction('element_fresh', [$this->visibility, 'isFresh']),
             new TwigFunction('element_sort', [$this->visibility, 'sortByAccess']),

@@ -2,15 +2,16 @@
 {% set pj_ids, pjs, pnj_ids, pnjs = [], [], [], [] %}
 {% set lieu_ids, lieux_chapitre = [], [] %}
 {% set episode_perso_ids = [] %}
+{% set is_mj = app.user and is_granted('ROLE_MJ') %}
 
 {% for un_episode in un_chapitre.episodes %}
   {% for une_scene in un_episode.scenes %}
     {% for une_participation in une_scene.participations %}
       {% set perso = une_participation.personnage %}
-      {% if element_listed(perso) and une_participation.estPj and perso.id not in pj_ids %}
+      {% if element_listed(perso, true) and une_participation.estPj and perso.id not in pj_ids %}
         {% set pj_ids = pj_ids|merge([perso.id]) %}
         {% set pjs = pjs|merge([perso]) %}
-      {% elseif element_listed(perso) and not une_participation.estPj and perso.id not in pnj_ids %}
+      {% elseif element_listed(perso, true) and not une_participation.estPj and perso.id not in pnj_ids %}
         {% set pnj_ids = pnj_ids|merge([perso.id]) %}
         {% set pnjs = pnjs|merge([perso]) %}
       {% endif %}
@@ -53,7 +54,10 @@
           <a class="chapter-portrait-link" href="{{ path('personnage_profil', {id: perso.id}) }}" title="{{ perso.prenom }}">
             <img class="chapter-portrait{{ vue }}{% if episode is defined and perso.id in episode_perso_ids %} in-episode{% endif %}"
                  src="{{ asset(perso.icone|default(fallback)) }}" alt="Portrait de {{ perso.prenom }}" />
-            {{ include('parts/badge-access.html.twig', {state: element_state(perso), variant: 'mini'}) }}
+            {% set state = element_state(perso) %}
+            {% if is_mj or (state == 'discovered' and perso.manualUnlock) %}
+              {{ include('parts/badge-access.html.twig', {state: state, variant: is_mj ? 'mini hover-only' : 'mini'}) }}
+            {% endif %}
           </a>
         {% endfor %}
       </div>

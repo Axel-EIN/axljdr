@@ -54,7 +54,8 @@
 {% endblock %}
 
 {% block section_content1 %}
-    {% for perso in pjs|filter(p => element_readable(p))|merge(pjs|filter(p => not element_readable(p))) %}
+    {% set pjs = pjs|filter(p => element_listed(p)) %}
+    {% for perso in element_sort(pjs) %}
         {{ include('/personnages/character-card.html.twig', {perso}) }}
     {% endfor %}
     {% if pjs is empty %}
@@ -63,41 +64,32 @@
 {% endblock %}
 
 {% block section_content2 %}
+    {% set pnjs = pnjs|filter(p => element_listed(p)) %}
     <div class="col-12">
-        {% set clans_pnjs = [
-            { nom: 'Imperial',        titre: 'Familles Impériales' },
-            { nom: 'Crabe',           titre: 'Clan du Crabe' },
-            { nom: 'Dragon',          titre: 'Clan du Dragon' },
-            { nom: 'Grue',            titre: 'Clan de la Grue' },
-            { nom: 'Licorne',         titre: 'Clan de la Licorne' },
-            { nom: 'Lion',            titre: 'Clan du Lion' },
-            { nom: 'Phénix',          titre: 'Clan du Phénix' },
-            { nom: 'Scorpion',        titre: 'Clan du Scorpion' },
-            { nom: 'Confrérie',       titre: 'Confrérie de Shinsei' },
-            { nom: 'Lièvre',          titre: 'Clan Mineur du Lièvre' },
-            { nom: 'Adeptes du Sang', titre: 'Adeptes du Sang' },
-        ] %}
-
-        {% for clan_def in clans_pnjs %}
+        {% for clan_def in FACTIONS %}
             {% set persos_du_clan = pnjs|filter(p => p.clan is not empty and p.clan.nom == clan_def.nom) %}
             {% if persos_du_clan|length > 0 %}
-                <h3 class="heading-cardtitle">{{ clan_def.titre }}</h3>
-                <div class="row">
-                    {% for perso in persos_du_clan %}
-                        {{ include('/personnages/character-card.html.twig', {perso}) }}
-                    {% endfor %}
+                <div class="pnj-clan-group">
+                    <h3 class="heading-cardtitle">{{ clan_def.titre }}</h3>
+                    <div class="row">
+                        {% for perso in element_sort(persos_du_clan) %}
+                            {{ include('/personnages/character-card.html.twig', {perso}) }}
+                        {% endfor %}
+                    </div>
                 </div>
             {% endif %}
         {% endfor %}
 
-        {% set clans_listes = clans_pnjs|map(c => c.nom) %}
+        {% set clans_listes = FACTIONS|map(c => c.nom) %}
         {% set autres = pnjs|filter(p => p.clan is empty or p.clan.nom not in clans_listes) %}
         {% if autres|length > 0 %}
-            <h3 class="heading-cardtitle">Autres</h3>
-            <div class="row">
-                {% for perso in autres %}
-                    {{ include('/personnages/character-card.html.twig', {perso}) }}
-                {% endfor %}
+            <div class="pnj-clan-group">
+                <h3 class="heading-cardtitle">Autres</h3>
+                <div class="row">
+                    {% for perso in element_sort(autres) %}
+                        {{ include('/personnages/character-card.html.twig', {perso}) }}
+                    {% endfor %}
+                </div>
             </div>
         {% endif %}
 

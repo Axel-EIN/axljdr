@@ -2,7 +2,6 @@
 
 {% set state = element_state(perso) %}
 {% set readable = element_readable(perso) %}
-{% set badge = state == 'common-discovered' and perso.manualUnlock ? 'unlocked' : state %}
 
 <article class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2 py-3 {{ perso.dead or perso.missing ? 'perso-inactif' }}">
 
@@ -20,7 +19,7 @@
         {% set zoom, translucide, hover_opaque, text, tint, grayscale = 'hover-zoom', 'translucide', 'hover-opaque', 'text-AIR', 'missing', '' %}
     {% endif %}
 
-            <div class="card character-card text-white shadow-more {{zoom}} {{translucide}} {{hover_opaque}} relative {{ element_unseen(perso) ? 'access-hidden' }}">
+            <div class="card character-card text-white shadow-more {{zoom}} {{translucide}} {{hover_opaque}} relative {{ element_unseen(perso) ? 'access-hidden' }} {{ state == 'locked' ? 'locked' }}">
 
                 {% if state == 'locked' %}
                     <img class="icon-lock in-character-card fa-beat-fade" src="{{ asset(LOCKED_ICO) }}" alt="Cadenas" />
@@ -30,9 +29,7 @@
                     {{ include('parts/badge-new.html.twig', { variant: 'pin-centerleft' }) }}
                 {% endif %}
 
-                {% if badge not in ['locked', 'common-discovered'] %}
-                    {{ include('parts/badge-access.html.twig', {state: badge}) }}
-                {% endif %}
+                {{ include('parts/badge-catalog.html.twig', {item: perso}) }}
 
                 {% if perso.dead %}
                     <img class="absolute icon-dead-big" src="{{ asset(MORT_ICO) }}" alt="Icône est mort" />

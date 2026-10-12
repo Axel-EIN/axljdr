@@ -5,6 +5,7 @@
                 <h3 class="label-amerigo news-subtitle">{{ groupe.titre }}</h3>
                 {{ include('/parts/picture-grid.html.twig', {
                     items: groupe.publie,
+                    badge_hover: true,
                     variant: groupe.variant|default('landscape'),
                     per_row: {desktop: groupe.perRow, tablet: groupe.perRow, mobile: 3},
                     empty_message: 'Rien de nouveau',
@@ -24,6 +25,7 @@
                     <h3 class="label-amerigo news-subtitle">{{ groupe.secretTitle }}</h3>
                     {{ include('/parts/picture-grid.html.twig', {
                         items: groupe.secrets,
+                        badge_hover: true,
                         variant: groupe.variant|default('landscape'),
                         per_row: {desktop: groupe.secretPerRow, tablet: groupe.perRow, mobile: 3},
                         empty_message: 'Aucun secret',

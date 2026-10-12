@@ -70,7 +70,7 @@
             {% set persos_du_clan = pnjs|filter(p => p.clan is not empty and p.clan.nom == clan_def.nom) %}
             {% if persos_du_clan|length > 0 %}
                 <div class="pnj-clan-group">
-                    <h3 class="heading-cardtitle">{{ clan_def.titre }}</h3>
+                    <h3 class="heading-amerigo">{{ clan_def.titre }}</h3>
                     <div class="row">
                         {% for perso in element_sort(persos_du_clan) %}
                             {{ include('/personnages/character-card.html.twig', {perso}) }}
@@ -84,7 +84,7 @@
         {% set autres = pnjs|filter(p => p.clan is empty or p.clan.nom not in clans_listes) %}
         {% if autres|length > 0 %}
             <div class="pnj-clan-group">
-                <h3 class="heading-cardtitle">Autres</h3>
+                <h3 class="heading-amerigo">Autres</h3>
                 <div class="row">
                     {% for perso in element_sort(autres) %}
                         {{ include('/personnages/character-card.html.twig', {perso}) }}

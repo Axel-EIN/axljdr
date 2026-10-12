@@ -75,6 +75,13 @@
         flex-shrink: 0;
     }
 
+    &.hover-only {
+        opacity: 0;
+        transition: opacity 0.3s var(--ease);
+
+        :hover > & { opacity: 1; }
+    }
+
     &.glass {
         border: 1px solid var(--color-white50);
         background-color: rgb(from var(--color-blackonyx) r g b / 45%);

@@ -61,6 +61,12 @@
         gap: 0.5rem;
     }
 
+    .development-title > a {
+        color: var(--color-black);
+
+        &:hover, &:focus { color: var(--color-link); }
+    }
+
     .development-meta {
         margin-left: auto;
         text-align: right;

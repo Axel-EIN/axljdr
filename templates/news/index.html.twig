@@ -37,7 +37,7 @@
                         <h3 class="label-amerigo news-subtitle text-white mt-4">Lieux visités</h3>
                         {{ include('/parts/picture-grid.html.twig', {
                             items: session_locations,
-                            reveal_auto: true,
+                            reveal_session: true,
                             variant: 'icon',
                             per_row: {desktop: 4, tablet: 4, mobile: 3},
                             empty_message: 'Aucun lieu visité',
@@ -48,7 +48,7 @@
                         <h3 class="label-amerigo news-subtitle text-white mt-4">Personnages rencontrés</h3>
                         {{ include('/parts/picture-grid.html.twig', {
                             items: session_characters,
-                            reveal_auto: true,
+                            reveal_session: true,
                             variant: 'portrait',
                             per_row: {desktop: 8, tablet: 6, mobile: 4},
                             empty_message: 'Aucune rencontre',
@@ -59,7 +59,7 @@
                         <h3 class="label-amerigo news-subtitle text-white mt-4">Objets découverts</h3>
                         {{ include('/parts/picture-grid.html.twig', {
                             items: session_objects,
-                            reveal_auto: true,
+                            reveal_session: true,
                             variant: 'rule',
                             per_row: {desktop: 4, tablet: 4, mobile: 3},
                             empty_message: 'Aucun objet découvert',

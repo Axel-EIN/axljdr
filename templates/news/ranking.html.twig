@@ -15,7 +15,7 @@
         {% if un_personnage.estMort %}
           <img class="character-icon-dead" src="{{ asset(MORT_ICO) }}" alt="est mort" />
         {% elseif un_personnage.missing|default(false) %}
-          <i class="absolute icon-missing fas fa-person-circle-question" title="Disparu"></i>
+          <i class="absolute icon-missing fas fa-circle-question" title="Disparu"></i>
         {% endif %}
       </span>
       <span class="ranking-name">

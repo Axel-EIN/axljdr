@@ -9,6 +9,7 @@
 
 {% block section_content1 %}
     {{ include('/parts/picture-grid.html.twig', {
+        catalog: true,
         items: archives, route: 'empire_archive', na_image: NA_ARCHIVE,
         wrapper: 'col-12', per_row: {desktop: 6, mobile: 2},
         empty_message: "Pas d'archives disponibles.",
@@ -26,6 +27,7 @@
             Chacune d'elle est héritière d'un Kami originel qui juera fidélité à l'Empereur et se répartit la majeur partie de l'Empire.
             Elles se composent de plusieurs familles et forment des miliers de Samuraïs dans leur dojos.</p>
             {{ include('/parts/picture-grid.html.twig', {
+                catalog: true,
                 variant: 'emblem',
                 items: clansMajeurs, route: 'empire_clan', na_image: NA_MON,
                 per_row: {desktop: 4, mobile: 2},
@@ -36,6 +38,7 @@
             <h4 class="text-primarydark text-center">Autres</h4>
             <p class="faction-intro">Clans Mineurs, Confrérie des Moines, Familles Impérialles, Ennemis...</p>
             {{ include('/parts/picture-grid.html.twig', {
+                catalog: true,
                 variant: 'emblem',
                 items: clansAutres, route: 'empire_clan', na_image: NA_MON,
                 max_size: '6rem',
@@ -47,15 +50,28 @@
 {% endblock %}
 
 {% block section_content3 %}
-    {{ include('/parts/picture-grid.html.twig', {
-        items: lieux, route: 'empire_lieu', na_image: NA_LIEU,
-        wrapper: 'col-12', per_row: {desktop: 6, mobile: 2},
-        empty_message: 'Pas de lieux disponibles.',
-    }) }}
+    {% set lieux = lieux|filter(l => element_listed(l)) %}
+    {% set clans_listes = FACTIONS|map(c => c.nom) %}
+    {% set groupes = FACTIONS|map(c => {titre: c.titre, lieux: lieux|filter(l => l.clan is not empty and l.clan.nom == c.nom)})
+        |merge([{titre: 'Autres', lieux: lieux|filter(l => l.clan is empty or l.clan.nom not in clans_listes)}]) %}
+
+    {% for groupe in groupes|filter(g => g.lieux|length > 0) %}
+        <div class="col-12">
+            <h3 class="heading-cardtitle">{{ groupe.titre }}</h3>
+            {{ include('/parts/picture-grid.html.twig', {
+                catalog: true,
+                items: groupe.lieux, route: 'empire_lieu', na_image: NA_LIEU,
+                per_row: {desktop: 6, mobile: 2},
+            }) }}
+        </div>
+    {% else %}
+        <p class="col-12 text-muted font-italic">Pas de lieux disponibles.</p>
+    {% endfor %}
 {% endblock %}
 
 {% block section_content4 %}
     {{ include('/parts/picture-grid.html.twig', {
+        catalog: true,
         items: lores, route: 'empire_lore', na_image: NA_ARCHIVE,
         wrapper: 'col-12', per_row: {desktop: 6, mobile: 2},
         empty_message: 'Pas de lore disponible.',

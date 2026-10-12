@@ -217,7 +217,7 @@
   height: 100%;
 
   .ranking-list {
-    --rows: 14;
+    --rows: 10;
 
     max-height: calc(var(--rows) * 3.75rem);
     overflow-y: auto;

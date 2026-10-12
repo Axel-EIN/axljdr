@@ -50,7 +50,7 @@ class Visibility
         $this->unlockRepository = $unlockRepository;
     }
 
-    public function state($element, bool $revealAuto = false): string
+    public function state($element, bool $revealSession = false): string
     {
         $access = $this->accessOf($element);
 
@@ -70,8 +70,8 @@ class Visibility
             return $this->isPublished($element) ? self::PUBLIC : self::HIDDEN;
         }
 
-        if ($revealAuto && $access === Access::COMMON && Access::unlocksByMeeting($element)) {
-            return self::COMMON;
+        if ($revealSession && !$this->isIndividualSecret($element)) {
+            return self::PALIERS[$access];
         }
 
         return Access::isHidden($access) ? self::HIDDEN : self::LOCKED;
@@ -108,9 +108,9 @@ class Visibility
         return $elements;
     }
 
-    public function isListed($element, bool $revealAuto = false): bool
+    public function isListed($element, bool $revealSession = false): bool
     {
-        return $this->security->isGranted('ROLE_MJ') || $this->state($element, $revealAuto) !== self::HIDDEN;
+        return $this->security->isGranted('ROLE_MJ') || $this->state($element, $revealSession) !== self::HIDDEN;
     }
 
     public function listedOnly(iterable $elements): array
@@ -165,6 +165,11 @@ class Visibility
         }
 
         return (int) $element->getAccess();
+    }
+
+    private function isIndividualSecret($element): bool
+    {
+        return $this->accessOf($element) === Access::SECRET && $element->isManualUnlock();
     }
 
     private function isPublished($element): bool

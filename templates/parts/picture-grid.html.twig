@@ -1,13 +1,14 @@
 {% if items is defined and (items is not empty or empty_message is defined) %}
 
-  {% set reveal_auto = reveal_auto|default(false) %}
+  {% set reveal_session = reveal_session|default(false) %}
   {% set hide_dead = hide_dead|default(false) %}
-  {% set items = element_sort(items|filter(item => element_listed(item, reveal_auto) and not (hide_dead and item.dead))) %}
+  {% set items = element_sort(items|filter(item => element_listed(item, reveal_session) and not (hide_dead and item.dead))) %}
   {% set variant = variant|default('landscape') %}
   {% set shape = {landscape: '1610', rule: '43', icon: '11'}[variant]|default('1610') %}
   {% set pin = {portrait: 'pin-topleft', icon: 'pin-downcenter'}[variant]|default('') %}
   {% set show_label = variant != 'portrait' %}
   {% set is_mj = app.user and is_granted('ROLE_MJ') %}
+  {% set plain = reveal_session %}
 
   {% if per_row is defined %}
     {% set cols = per_row is iterable ? per_row : {desktop: per_row} %}
@@ -31,10 +32,10 @@
   <div class="picture-grid {{ title is not defined ? wrapper|default('') }}" style="{{ style }}">
     {% for item in limit is defined ? items|slice(0, limit) : items %}
 
-      {% set state = element_state(item, reveal_auto) %}
+      {% set state = element_state(item, reveal_session) %}
       {% set hidden = not element_readable(item) %}
-      {% set locked = state == 'locked' %}
-      {% set item_class = (element_unseen(item) ? 'access-hidden ' : '') ~ (locked ? 'locked ' : '') ~ (hidden ? '' : 'hover-zoom') %}
+      {% set locked = not plain and state == 'locked' %}
+      {% set item_class = plain ? 'hover-zoom' : (element_unseen(item) ? 'access-hidden ' : '') ~ (locked ? 'locked ' : '') ~ (hidden ? '' : 'hover-zoom') %}
       {% set name = item.nomComplet is defined ? item.nomComplet : (item.nom is defined ? item.nom : item.titre) %}
       {% set alt = hidden ? 'À découvrir' : name %}
       {% set pdf_only = item.pdf|default(null) and not item.hasParts|default(false) %}
@@ -43,10 +44,12 @@
       {% set href = pdf_link ? asset(item.pdf) : (route is defined ? path(route, {id: item.id}) : element_url(item)) %}
 
       <a class="picture-item {{ variant }} {{ item_class }}"
-         {% if hidden or not href %}aria-disabled="true"{% else %}{% if show_label %}title="{{ name }}" {% endif %}{% if pdf_link %}target="_blank" rel="noopener" {% endif %}href="{{ href }}"{% endif %}>
+         {% if (hidden and not plain) or not href %}aria-disabled="true"{% else %}{% if show_label %}title="{{ name }}" {% endif %}{% if pdf_link %}target="_blank" rel="noopener" {% endif %}href="{{ href }}"{% endif %}>
         <div class="image-container {% if locked %}slight-fade{% endif %}">
 
-          {{ include('parts/badge-access.html.twig', {state: state}) }}
+          {% if not plain or is_mj or (state == 'discovered' and item.manualUnlock) %}
+            {{ include('parts/badge-access.html.twig', {state: state, variant: plain and is_mj ? 'hover-only' : ''}) }}
+          {% endif %}
 
           {% if locked %}
             <img class="icon-lock fa-beat-fade" src="{{ asset(LOCKED_ICO) }}" alt="Cadenas" />

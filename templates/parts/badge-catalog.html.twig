@@ -1,0 +1,9 @@
+{% set state = element_state(item) %}
+
+{% if app.user and is_granted('ROLE_MJ') %}
+  {{ include('parts/badge-access.html.twig', {state: state, variant: 'hover-only'}) }}
+{% elseif state in ['unlocked', 'discovered'] %}
+  {{ include('parts/badge-access.html.twig', {state: state}) }}
+{% elseif state == 'common-discovered' and element_individual(item) %}
+  {{ include('parts/badge-access.html.twig', {state: 'unlocked', variant: 'hover-only'}) }}
+{% endif %}

@@ -6,7 +6,7 @@
   margin: 3rem -1rem 1.5rem;
   padding: 0 1rem;
   text-transform: uppercase;
-  background-color: var(--color-black);
+  background-color: var(--color-strong);
 
   &.first { margin-top: 0; }
 
@@ -19,12 +19,14 @@
   margin: 1rem 0 0 1.5rem;
 
   .chevron-toggle {
-    color: var(--color-black);
+    color: var(--color-strong);
     font-weight: bold;
 
-    &:hover, &:focus { color: var(--color-black); }
+    &:hover, &:focus { color: var(--color-link); }
   }
 }
+
+.historique-xp { color: var(--color-strong); }
 
 .historique-scene {
   display: flex;

@@ -143,6 +143,12 @@
 
     .label { opacity: 0.45; }
 
+    &.catalog:hover {
+      .frame,
+      .picture,
+      .label { filter: none; opacity: 1; }
+    }
+
     &[href] {
       cursor: pointer;
 

@@ -1,17 +1,17 @@
+{% set compact = compact|default(false) %}
+{% set control_panel = null %}
 {% if app.user and is_granted('ROLE_ADMIN') %}
-  <div class="control-panel-bar admin">
-    <a href="{{ path('back_office') }}">
-      <i class="fas fa-tools"></i>
-      &nbsp;&nbsp;
-      Panneau d'Administration
-    </a>
-  </div>
+  {% set control_panel = {variant: 'admin', icon: 'fa-tools', label: "Panneau d'Administration"} %}
 {% elseif app.user and is_granted('ROLE_MJ') %}
-  <div class="control-panel-bar mj">
+  {% set control_panel = {variant: 'mj', icon: 'fa-scroll', label: 'Panneau du Maître'} %}
+{% endif %}
+
+{% if control_panel and not compact %}
+  <div class="control-panel-bar {{ control_panel.variant }}">
     <a href="{{ path('back_office') }}">
-      <i class="fas fa-scroll"></i>
+      <i class="fas {{ control_panel.icon }}"></i>
       &nbsp;&nbsp;
-      Panneau du Maître
+      {{ control_panel.label }}
     </a>
   </div>
 {% endif %}
@@ -22,11 +22,12 @@
   { label: 'PERSONNAGES', route: 'personnages', actives: ['personnages', 'personnage_profil', 'personnage_fiche', 'personnage_fiche_edit'] },
   { label: 'UNIVERS',      route: 'empire',      actives: ['empire', 'empire_clan', 'empire_archive', 'empire_lieu', 'empire_lore'] },
   { label: 'RÈGLES',      route: 'regles',      actives: ['regles', 'regles_rule', 'regles_library', 'regles_classe', 'regles_ecole'] },
+  { label: 'CARTE',       route: 'carte',       actives: ['carte'] },
 ] %}
 {% set route_courante = app.request.get('_route') %}
 {% set section_active = nav_sections|filter(s => route_courante in s.actives)|first %}
 
-<header class="container-fluid navigation-bar">
+<header class="container-fluid navigation-bar{% if compact %} compact{% endif %}">
   <div class="container">
     <nav class="navbar navbar-expand-lg">
 
@@ -99,7 +100,7 @@
             </div>
 
             <a class="avatar-link hover-shine" href="{{ path('mon_compte') }}">
-              {{ include('parts/avatar.html.twig', {user: app.user, character: true}) }}
+              {{ include('parts/avatar.html.twig', {user: app.user, character: true, size: compact ? 48 : 96}) }}
             </a>
 
           </div>
@@ -108,6 +109,12 @@
             <button class="btn-primary-style btn-medium" data-toggle="modal" data-target="#connexion" alt="Boutton se connecter">Se connecter</button>
             <a class="mt-1" href="{{ path('app_register') }}">Créer un compte</a>
           </div>
+        {% endif %}
+
+        {% if control_panel and compact %}
+          <a class="control-panel-bar icon {{ control_panel.variant }}" href="{{ path('back_office') }}" title="{{ control_panel.label }}" aria-label="{{ control_panel.label }}">
+            <i class="fas {{ control_panel.icon }}"></i>
+          </a>
         {% endif %}
       </div>
     </nav>

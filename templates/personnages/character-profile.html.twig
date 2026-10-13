@@ -91,6 +91,17 @@
         <li class="list-group-item infos-item">Joueur : <span class="bold">{{ personnage.joueur.pseudo }}</span></li>
       {% endif %}
 
+      {% if position_actuelle %}
+        {% set position_connue = element_state(position_actuelle) != 'hidden' %}
+        <li class="list-group-item infos-item">
+          Position :
+          <a class="hover-no-under bold" href="{{ position_connue ? path('carte', {lieu: position_actuelle.id}) : path('carte') }}" title="Voir sur la carte">
+            {{ position_connue ? position_actuelle.nom : 'Inconnue' }}
+            <i class="fa-solid fa-map-location-dot"></i>
+          </a>
+        </li>
+      {% endif %}
+
       {% if personnage.fichePersonnage is not null and (est_le_joueur or is_granted('ROLE_MJ')) %}
         <li class="list-group-item d-flex justify-content-center profil-btn-fiche">
           <a class="btn-primary-style btn-medium{% if not est_le_joueur %} gm{% endif %}" href="{{ path('personnage_fiche', {id: personnage.fichePersonnage.id}) }}">

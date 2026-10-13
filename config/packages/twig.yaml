@@ -4,6 +4,91 @@ twig:
 
     globals:
         nom_du_site: "Aventure d'Axel dans le Livre des Cinq Anneaux"
+
+        NA_ICON: &NA_ICON '/assets/placeholders/na_icon.png'
+        NA_MON: '/assets/placeholders/na_mon.png'
+        NA_LIEU_ICO: '/assets/placeholders/na_lieu_ico.png'
+        NA_CLASS_ICO: '/assets/placeholders/na_class.png'
+        NA_OBJET: *NA_ICON
+        NA_TIME: '/assets/placeholders/na_time.png'
+
+        MORNING: '/assets/icons/time/time-morning.png'
+        NOON: '/assets/icons/time/time-noon.png'
+        EVENING: '/assets/icons/time/time-evening.png'
+        NIGHT: '/assets/icons/time/time-night.png'
+        INTEMPOREL: '/assets/icons/time/time-intemporel.png'
+
+        ZENI: '/assets/icons/money/zeni.png'
+        BU: '/assets/icons/money/bu.png'
+        KOKU: '/assets/icons/money/koku.png'
+
+        PDF: '/assets/icons/pdf.png'
+        AIR: '/assets/img/rules/air.png'
+        EAU: '/assets/img/rules/eau.png'
+        FEU: '/assets/img/rules/feu.png'
+        TERRE: '/assets/img/rules/terre.png'
+        VIDE: '/assets/img/rules/vide.png'
+
+        FLAT_AIR: '/assets/icons/elements/air.png'
+        FLAT_EAU: '/assets/icons/elements/eau.png'
+        FLAT_FEU: '/assets/icons/elements/feu.png'
+        FLAT_TERRE: '/assets/icons/elements/terre.png'
+        FLAT_VIDE: '/assets/icons/elements/vide.png'
+        FLAT_AIR_MAHO: '/assets/icons/elements/air-maho.png'
+        FLAT_EAU_MAHO: '/assets/icons/elements/eau-maho.png'
+        FLAT_FEU_MAHO: '/assets/icons/elements/feu-maho.png'
+        FLAT_TERRE_MAHO: '/assets/icons/elements/terre-maho.png'
+        FLAT_AIR_KIHO: '/assets/icons/elements/air-kiho.png'
+        FLAT_EAU_KIHO: '/assets/icons/elements/eau-kiho.png'
+        FLAT_FEU_KIHO: '/assets/icons/elements/feu-kiho.png'
+        FLAT_TERRE_KIHO: '/assets/icons/elements/terre-kiho.png'
+        FLAT_VIDE_KIHO: '/assets/icons/elements/vide-kiho.png'
+
+        AVENTURE_SCENE_ICO: '/assets/icons/aventure/aventure-scene.png'
+        AVENTURE_EPISODE_ICO: '/assets/icons/aventure/aventure-episode.png'
+        AVENTURE_CHAPITRE_ICO: '/assets/icons/aventure/aventure-chapitre.png'
+        AVENTURE_SAISON_ICO: '/assets/icons/aventure/aventure-saison.png'
+
+        MORT_ICO: '/assets/ui/mort.png'
+        ORNAMENT_ICO: '/assets/ui/ornament.png'
+        LOGO: '/assets/ui/logo-axljdr.png'
+        LOCKED_ICO: '/assets/icons/locked.png'
+
+        HANDS: '/assets/ui/hands.png'
+
+        NA_43: &NA_43 '/assets/placeholders/na_43.jpg'
+        NA_1610: '/assets/placeholders/na_1610.jpg'
+        NA_169: &NA_169 '/assets/placeholders/na_169.jpg'
+
+        NA_SAISON: '/assets/placeholders/na_aventure_saison.jpg'
+        NA_CHAPITRE: '/assets/placeholders/na_aventure_chapitre.jpg'
+        NA_SESSION: '/assets/placeholders/na_aventure_session.jpg'
+        NA_SCENE: '/assets/placeholders/na_aventure_scene.jpg'
+
+        NA_CLAN: '/assets/placeholders/na_clan.jpg'
+        NA_MAP: '/assets/placeholders/na_map.jpg'
+        NA_ARCHIVE: '/assets/placeholders/na_archive.jpg'
+        NA_LIEU: '/assets/placeholders/na_lieu.jpg'
+        NA_LIEU_BG: '/assets/placeholders/na_lieu_bg.jpg'
+
+        NA_RULE: '/assets/placeholders/na_rule.jpg'
+        NA_LORE: '/assets/placeholders/na_rule.jpg'
+
+        NA_CLASS: *NA_169
+
+        NA_ECOLE: *NA_43
+
+        NA_LIBRARY: '/assets/placeholders/na_library.jpg'
+
+        NA_PDF: '/assets/placeholders/na_pdf.jpg'
+
+        NA_PERSO_PORTRAIT: '/assets/placeholders/na_perso_icon.jpg'
+        NA_PERSO_PORTRAIT_M: '/assets/placeholders/na_perso_icon_M.jpg'
+        NA_PERSO_PORTRAIT_F: '/assets/placeholders/na_perso_icon_F.jpg'
+        NA_PERSO_ILLU: '/assets/placeholders/na_perso_illu.jpg'
+        NA_PERSO_ILLU_M: '/assets/placeholders/na_perso_illu_M.jpg'
+        NA_PERSO_ILLU_F: '/assets/placeholders/na_perso_illu_F.jpg'
+
         FACTIONS:
             - { nom: 'Imperial', titre: 'Familles Impériales' }
             - { nom: 'Crabe', titre: 'Clan du Crabe' }

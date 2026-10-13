@@ -3,12 +3,11 @@
 {% block stylesheets %}
   {{parent()}}
   <link rel="stylesheet" href="{{asset('css/components/history.css')}}" />
+  <link rel="stylesheet" href="{{asset('css/components/map.css')}}" />
   <link rel="stylesheet" href="{{asset('css/pages/location.css')}}" />
 {% endblock %}
 
 {% block element_content %}
-
-  {% set lieu_color = un_element.clan.couleur ?? null %}
 
   <div class="col-12">
     <div class="card card-page">
@@ -73,80 +72,7 @@
 
         <h2 class="heading-elementpart decorated d-none d-lg-block">Carte</h2>
 
-        <div id="map-frame" class="relative labels-hidden d-none d-lg-block" data-locx="{{un_element.locX}}" data-locy="{{un_element.locY}}">
-
-          <div class="map-controls absolute">
-            <button type="button" id="map-toggle-fullscreen" class="map-toggle-btn" aria-pressed="false">
-              <i class="fa-solid fa-expand icon-off"></i>
-              <i class="fa-solid fa-compress icon-on"></i>
-              <span class="label">Plein écran</span>
-            </button>
-
-            <button type="button" id="map-toggle-labels" class="map-toggle-btn" aria-pressed="false">
-              <i class="fa-solid fa-torii-gate"></i>
-              <span class="label">Lieux</span>
-            </button>
-
-            <button type="button" id="map-toggle-territoires" class="map-toggle-btn"
-                    data-map-clean="{{ asset('assets/maps/map-rokugan-50-clean.jpg') }}"
-                    data-map-frontier="{{ asset('assets/maps/map-rokugan-50-frontier.jpg') }}">
-              <i class="fa-solid fa-map"></i>
-              <span class="label">Territoires</span>
-            </button>
-          </div>
-
-          <div id="map-drag" class="map-drag" style="transform: translate(-{{un_element.locX}}%, -{{un_element.locY}}%);">
-
-            <img class="map-image" src="{{asset('assets/maps/map-rokugan-50-clean.jpg')}}" alt="Carte de Rokugan" draggable="false" />
-
-            {% for autre in lieux %}
-              {% if autre.id != un_element.id and autre.locX is not empty and autre.locY is not empty %}
-                {% set autre_etat = element_state(autre) %}
-                {% set autre_lisible = element_readable(autre) %}
-                {% set autre_secret = autre_etat == 'hidden' %}
-                {% set autre_color = autre_secret ? null : autre.clan.couleur ?? null %}
-                <a {% if autre_secret %}aria-disabled="true"{% else %}href="{{ path('empire_lieu', {id: autre.id}) }}"{% endif %} class="absolute lieu-other-icon {% if not autre_lisible %}locked{% endif %}" style="left:{{autre.locX}}%; top:{{autre.locY}}%;{% if autre_color %} --clan-color: {{autre_color}};{% endif %}">
-                  {% if autre_secret %}
-                    <span class="lieu-other-unknown">?</span>
-                    {{ include('parts/map-label.html.twig', {name: 'Inconnu', variant: 'compact'}) }}
-                  {% else %}
-                    <img class="lieu-icon" src="{{ asset(autre.icone|default(NA_LIEU_ICO)) }}" alt="Icone de {{ autre.nom }}" />
-                    {% if not autre_lisible %}{{ include('parts/badge-access.html.twig', {state: autre_etat, variant: 'cover glass'}) }}{% endif %}
-                    {{ include('parts/map-label.html.twig', {
-                      name: autre.nom,
-                      mon: autre.clan.mon ?? null,
-                      details: [autre.type, autre.clan.nom ?? null, autre_etat == 'secret' ? 'Secret' : null],
-                      state: autre_lisible ? autre_etat : null,
-                      variant: 'compact',
-                    }) }}
-                  {% endif %}
-                  {% if element_fresh(autre) %}{{ include('parts/badge-new.html.twig', {variant: 'pin-downcenter'}) }}{% endif %}
-                </a>
-              {% endif %}
-            {% endfor %}
-
-            <img class="absolute lieu-pulse-icon" style="left:{{un_element.locX}}%; top:{{un_element.locY}}%" src="{{ asset(un_element.icone|default(NA_LIEU_ICO)) }}" alt="Icone de {{un_element.nom}}" />
-
-            <div class="absolute lieu-current-label" style="left:{{un_element.locX}}%; top:{{un_element.locY}}%">Lieu actuel</div>
-
-            {{ include('parts/map-label.html.twig', {
-              name: un_element.nom,
-              mon: un_element.clan.mon ?? null,
-              details: [un_element.type, un_element.clan.nom ?? null],
-              variant: 'absolute current',
-              style: 'left:' ~ un_element.locX ~ '%; top:' ~ un_element.locY ~ '%;' ~ (lieu_color ? ' --clan-color: ' ~ lieu_color ~ ';' : ''),
-            }) }}
-
-          </div>
-
-          <div id="minimap" class="absolute">
-            <div class="relative overflow-hidden">
-              <img class="absolute localisator-ui" style="left:{{un_element.locX}}%; top:{{un_element.locY}}%" src="{{asset('assets/maps/mini-localisator.png')}}" />
-              <img class="img-fluid" src="{{asset('assets/img/lieux/minimap.jpg')}}" alt="Carte de Rokugan">
-            </div>
-          </div>
-
-        </div>
+        {{ include('parts/map.html.twig', {lieux, current: un_element}, with_context = false) }}
       {% endif %}
 
       {% if un_element.carte is defined and un_element.carte is not empty %}
@@ -200,5 +126,5 @@
 
 {% block javascripts %}
   {{ parent() }}
-  <script src="{{ asset('scripts/lieu.js') }}"></script>
+  <script src="{{ asset('scripts/map.js') }}"></script>
 {% endblock %}

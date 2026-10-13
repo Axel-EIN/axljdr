@@ -70,7 +70,10 @@
             {% set persos_du_clan = pnjs|filter(p => p.clan is not empty and p.clan.nom == clan_def.nom) %}
             {% if persos_du_clan|length > 0 %}
                 <div class="pnj-clan-group">
-                    <h3 class="heading-amerigo text-uppercase">{{ clan_def.titre }}</h3>
+                    <h3 class="heading-amerigo category-section-sub-heading">
+                        <img class="img-40 mr-2" src="{{ asset((persos_du_clan|first).clan.mon|default(NA_MON)) }}" alt="Mon de la faction" />
+                        {{ clan_def.titre }}
+                    </h3>
                     <div class="row">
                         {% for perso in element_sort(persos_du_clan) %}
                             {{ include('/personnages/character-card.html.twig', {perso}) }}
@@ -84,7 +87,10 @@
         {% set autres = pnjs|filter(p => p.clan is empty or p.clan.nom not in clans_listes) %}
         {% if autres|length > 0 %}
             <div class="pnj-clan-group">
-                <h3 class="heading-amerigo text-uppercase">Autres</h3>
+                <h3 class="heading-amerigo category-section-sub-heading">
+                    <img class="img-40 mr-2" src="{{ asset(NA_MON) }}" alt="Mon de la faction" />
+                    Autres
+                </h3>
                 <div class="row">
                     {% for perso in element_sort(autres) %}
                         {{ include('/personnages/character-card.html.twig', {perso}) }}

@@ -1,0 +1,35 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Carte {{ parent() }}{% endblock %}
+
+{% block stylesheets %}
+  {{ parent() }}
+  <link rel="stylesheet" href="{{ asset('css/components/map.css') }}" />
+{% endblock %}
+
+{% block nav %}
+  {{ include('parts/nav.html.twig', {compact: true}) }}
+{% endblock %}
+
+{% block body %}
+  <main>
+    <h1 class="sr-only">Carte de Rokugan</h1>
+
+    {{ include('parts/map.html.twig', {
+      lieux,
+      variant: 'world',
+      center: cible ?? position_principal,
+      highlight: cible,
+      recenter: position_principal,
+      party: positions,
+      trail: chemin,
+    }, with_context = false) }}
+  </main>
+{% endblock %}
+
+{% block footer %}{% endblock %}
+
+{% block javascripts %}
+  {{ parent() }}
+  <script src="{{ asset('scripts/map.js') }}"></script>
+{% endblock %}

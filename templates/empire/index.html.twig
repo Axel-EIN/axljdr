@@ -64,6 +64,7 @@
             </h3>
             {{ include('/parts/picture-grid.html.twig', {
                 catalog: true,
+                variant: 'icon',
                 items: groupe.lieux, route: 'empire_lieu', na_image: NA_LIEU,
                 per_row: {desktop: 6, mobile: 2},
             }) }}

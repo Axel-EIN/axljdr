@@ -1,0 +1,200 @@
+{% set variant = variant|default('embedded') %}
+{% set world = variant == 'world' %}
+{% set current = current|default(null) %}
+{% set center = current ?? center|default(null) %}
+{% set highlight = highlight|default(null) %}
+{% set party = party|default({}) %}
+{% set trail = trail|default([]) %}
+{% set recenter = recenter|default(null) %}
+{% set main_character = app.user ? app.user.mainCharacter : null %}
+{% set current_color = current.clan.couleur ?? null %}
+{% set placed = lieux|filter(l => l.locX is not empty and l.locY is not empty) %}
+
+<div class="map-frame {{ variant }}{% if not world %} labels-hidden d-none d-lg-block{% endif %}"
+  {% if center %}data-locx="{{ center.locX }}" data-locy="{{ center.locY }}"{% endif %}
+  {% if highlight %}data-highlight="{{ highlight.id }}"{% endif %}
+>
+
+  {% if world %}
+    <div class="map-search absolute">
+      <div class="search-bar map">
+        <i class="search-bar-icon fas fa-magnifying-glass" aria-hidden="true"></i>
+        <input class="search-bar-input" type="search" placeholder="Chercher un lieu ou un personnage…" aria-label="Chercher un lieu ou un personnage" autocomplete="off" />
+        <div class="search-bar-suggestions dropdown-menu dropdown-dark">
+          {% for un_lieu in placed|sort((a, b) => a.nom <=> b.nom) %}
+            {% set etat = element_state(un_lieu) %}
+            {% if etat != 'hidden' %}
+              <button type="button" class="dropdown-item search-suggestion" data-lieu="{{ un_lieu.id }}" data-locx="{{ un_lieu.locX }}" data-locy="{{ un_lieu.locY }}">
+                <span class="search-suggestion-label">{{ un_lieu.nom }}</span>
+                <small class="search-suggestion-group">{{ un_lieu.type }}</small>
+                {{ include('parts/badge-access.html.twig', {state: etat, variant: 'inline'}) }}
+              </button>
+            {% endif %}
+          {% endfor %}
+          {% set joueurs = [] %}
+          {% for un_lieu in placed %}
+            {% for perso in party[un_lieu.id] ?? [] %}
+              {% set joueurs = joueurs|merge([{perso, lieu: un_lieu}]) %}
+            {% endfor %}
+          {% endfor %}
+          {% for joueur in joueurs|sort((a, b) => a.perso.nomComplet <=> b.perso.nomComplet) %}
+            <button type="button" class="dropdown-item search-suggestion" data-lieu="{{ joueur.lieu.id }}" data-personnage="{{ joueur.perso.id }}" data-locx="{{ joueur.lieu.locX }}" data-locy="{{ joueur.lieu.locY }}">
+              <img class="img-24" src="{{ asset(joueur.perso.icone|default(NA_PERSO_PORTRAIT)) }}" alt="" />
+              <span class="search-suggestion-label">{{ joueur.perso.nomComplet }}</span>
+              <small class="search-suggestion-group">{{ element_state(joueur.lieu) == 'hidden' ? 'Lieu inconnu' : joueur.lieu.nom }}</small>
+            </button>
+          {% endfor %}
+          <span class="dropdown-item-text search-suggestion-empty" hidden>Aucun résultat</span>
+        </div>
+      </div>
+    </div>
+
+    <aside class="map-panel absolute" hidden>
+      <button type="button" class="map-panel-close" aria-label="Fermer le panneau">
+        <i class="fas fa-xmark"></i>
+      </button>
+      <div class="map-panel-content"></div>
+    </aside>
+  {% endif %}
+
+  <div class="map-controls absolute">
+    {% if world %}
+      <button type="button" class="map-toggle-btn map-controls-toggle" aria-expanded="false" aria-label="Options de la carte">
+        <i class="fa-solid fa-sliders"></i>
+      </button>
+    {% endif %}
+
+    <button type="button" class="map-toggle-btn" data-map-toggle="fullscreen" aria-pressed="false">
+      <i class="fa-solid fa-expand icon-off"></i>
+      <i class="fa-solid fa-compress icon-on"></i>
+      <span class="label">Plein écran</span>
+    </button>
+
+    <button type="button" class="map-toggle-btn{% if world %} active{% endif %}" data-map-toggle="labels" aria-pressed="{{ world ? 'true' : 'false' }}">
+      <i class="fa-solid fa-torii-gate"></i>
+      <span class="label">Lieux</span>
+    </button>
+
+    <button type="button" class="map-toggle-btn" data-map-toggle="territories" aria-pressed="false"
+            data-map-clean="{{ asset('assets/maps/map-rokugan-50-clean.jpg') }}"
+            data-map-frontier="{{ asset('assets/maps/map-rokugan-50-frontier.jpg') }}">
+      <i class="fa-solid fa-map"></i>
+      <span class="label">Territoires</span>
+    </button>
+
+    {% if current %}
+      <a class="map-toggle-btn" href="{{ path('carte', {lieu: current.id}) }}">
+        <i class="fa-solid fa-map-location-dot"></i>
+        <span class="label">Voir sur la carte</span>
+      </a>
+    {% endif %}
+
+    {% if world %}
+      <button type="button" class="map-toggle-btn active" data-map-toggle="party" aria-pressed="true">
+        <i class="fa-solid fa-users"></i>
+        <span class="label">Personnages</span>
+      </button>
+    {% endif %}
+  </div>
+
+  {% if world %}
+    <div class="map-zoom absolute">
+      <button type="button" class="map-toggle-btn" data-map-zoom="in" aria-label="Zoomer">
+        <i class="fa-solid fa-plus"></i>
+      </button>
+      <button type="button" class="map-toggle-btn" data-map-zoom="out" aria-label="Dézoomer">
+        <i class="fa-solid fa-minus"></i>
+      </button>
+      {% if recenter %}
+        <button type="button" class="map-toggle-btn" data-map-recenter data-locx="{{ recenter.locX }}" data-locy="{{ recenter.locY }}" aria-label="Recentrer sur mon personnage" title="Recentrer sur mon personnage">
+          <i class="fa-solid fa-crosshairs"></i>
+        </button>
+      {% endif %}
+    </div>
+  {% endif %}
+
+  <div class="map-drag"{% if current %} style="transform: translate(-{{ current.locX }}%, -{{ current.locY }}%);"{% endif %}>
+
+    <img class="map-image" src="{{ asset('assets/maps/map-rokugan-50-clean.jpg') }}" alt="Carte de Rokugan" draggable="false" />
+
+    {% if trail|length > 1 %}
+      <svg class="map-trail" aria-hidden="true">
+        {% for un_lieu in trail|slice(1) %}
+          {% set suivant = trail[loop.index0] %}
+          <line x1="{{ un_lieu.locX }}%" y1="{{ un_lieu.locY }}%" x2="{{ suivant.locX }}%" y2="{{ suivant.locY }}%" />
+        {% endfor %}
+      </svg>
+    {% endif %}
+
+    {% for autre in placed %}
+      {% if current is null or autre.id != current.id %}
+        {% set autre_etat = element_state(autre) %}
+        {% set autre_lisible = element_readable(autre) %}
+        {% set autre_secret = autre_etat == 'hidden' %}
+        {% set autre_color = autre_secret ? null : autre.clan.couleur ?? null %}
+        <a {% if autre_secret %}aria-disabled="true"{% else %}href="{{ path('empire_lieu', {id: autre.id}) }}"{% if world %} data-panel="{{ path('carte_lieu', {id: autre.id}) }}"{% endif %}{% endif %}
+           class="absolute lieu-other-icon {% if not autre_lisible %}locked{% endif %}" data-lieu="{{ autre.id }}"
+           style="left:{{autre.locX}}%; top:{{autre.locY}}%;{% if autre_color %} --clan-color: {{autre_color}};{% endif %}">
+          {% if autre_secret %}
+            <span class="lieu-other-unknown">?</span>
+            {{ include('parts/map-label.html.twig', {name: 'Inconnu', variant: 'compact'}) }}
+          {% else %}
+            <img class="lieu-icon" src="{{ asset(autre.icone|default(NA_LIEU_ICO)) }}" alt="Icone de {{ autre.nom }}" />
+            {% if not autre_lisible %}{{ include('parts/badge-access.html.twig', {state: autre_etat, variant: 'cover glass'}) }}{% endif %}
+            {{ include('parts/map-label.html.twig', {
+              name: autre.nom,
+              mon: autre.clan.mon ?? null,
+              details: [autre.type, autre.clan.nom ?? null, autre_etat == 'secret' ? 'Secret' : null],
+              state: autre_lisible ? autre_etat : null,
+              variant: 'compact',
+            }) }}
+          {% endif %}
+          {% if element_fresh(autre) %}{{ include('parts/badge-new.html.twig', {variant: 'pin-downcenter'}) }}{% endif %}
+        </a>
+
+        {% if party[autre.id] is defined %}
+          <div class="map-party absolute" style="left:{{autre.locX}}%; top:{{autre.locY}}%;">
+            {% for perso in party[autre.id] %}
+              <div class="map-portrait{% if main_character and perso.id == main_character.id %} mine{% endif %}" data-personnage="{{ perso.id }}">
+                <button type="button" class="map-portrait-toggle" aria-expanded="false" aria-label="{{ perso.nomComplet }}">
+                  <img src="{{ asset(perso.icone|default(NA_PERSO_PORTRAIT)) }}" alt="Portrait de {{ perso.prenom }}" draggable="false" />
+                </button>
+                <div class="map-portrait-box">
+                  <strong>{{ perso.nomComplet }}</strong>
+                  <a href="{{ path('personnage_profil', {id: perso.id}) }}">Voir le profil</a>
+                </div>
+              </div>
+            {% endfor %}
+          </div>
+        {% endif %}
+      {% endif %}
+    {% endfor %}
+
+    {% if current %}
+      <img class="absolute lieu-pulse-icon" style="left:{{current.locX}}%; top:{{current.locY}}%" src="{{ asset(current.icone|default(NA_LIEU_ICO)) }}" alt="Icone de {{current.nom}}" />
+
+      <div class="absolute lieu-current-label" style="left:{{current.locX}}%; top:{{current.locY}}%">Lieu actuel</div>
+
+      {{ include('parts/map-label.html.twig', {
+        name: current.nom,
+        mon: current.clan.mon ?? null,
+        details: [current.type, current.clan.nom ?? null],
+        variant: 'absolute current',
+        style: 'left:' ~ current.locX ~ '%; top:' ~ current.locY ~ '%;' ~ (current_color ? ' --clan-color: ' ~ current_color ~ ';' : ''),
+      }) }}
+    {% endif %}
+
+  </div>
+
+  <div class="minimap absolute">
+    <div class="relative overflow-hidden">
+      {% if current %}
+        <img class="absolute localisator-ui" style="left:{{current.locX}}%; top:{{current.locY}}%" src="{{asset('assets/maps/mini-localisator.png')}}" />
+      {% else %}
+        <span class="absolute minimap-view"></span>
+      {% endif %}
+      <img class="img-fluid" src="{{asset('assets/img/lieux/minimap.jpg')}}" alt="Carte de Rokugan">
+    </div>
+  </div>
+
+</div>

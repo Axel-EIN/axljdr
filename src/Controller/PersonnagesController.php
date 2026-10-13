@@ -17,6 +17,7 @@ use App\Repository\SaisonRepository;
 use App\Repository\SortRepository;
 use App\Service\Baliseur;
 use App\Service\ClasseurHistorique;
+use App\Service\Localisateur;
 use App\Service\ClasseurXP;
 use App\Service\SheetExport;
 use App\Service\Visibility;
@@ -124,7 +125,7 @@ class PersonnagesController extends AbstractController
     /**
      * @Route("/personnages/profil/{id}", name="personnage_profil")
      */
-    public function viewPersonnageProfil(Personnage $personnage, PersonnageRepository $personnageRepository, ClasseurHistorique $classeur, SaisonRepository $saisonRepository, Visibility $visibility, DevelopmentRepository $developmentRepository, Baliseur $baliseur, ClasseurXP $classeurXP): Response {
+    public function viewPersonnageProfil(Personnage $personnage, PersonnageRepository $personnageRepository, ClasseurHistorique $classeur, SaisonRepository $saisonRepository, Visibility $visibility, DevelopmentRepository $developmentRepository, Baliseur $baliseur, ClasseurXP $classeurXP, Localisateur $localisateur): Response {
 
         if ($response = $this->accessGuard($visibility, $personnage, 'personnage', 'personnages')) {
             return $response;
@@ -170,6 +171,7 @@ class PersonnagesController extends AbstractController
             'autresPersonnages' => $autresPersonnages,
             'historique' => $classeur->pourPersonnage($personnage),
             'saison_courante' => $saisonRepository->findCourante()?->getNumero(),
+            'position_actuelle' => $localisateur->position($personnage),
         ]);
     }
 

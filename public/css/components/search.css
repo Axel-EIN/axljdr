@@ -58,6 +58,27 @@
         .search-bar-input { width: 100%; }
     }
 
+    &.map {
+        .search-bar-icon { z-index: 1; }
+
+        .search-bar-input {
+            width: 18rem;
+            max-width: 100%;
+            padding-block: 0.55rem;
+            border-color: rgb(from var(--color-earthlight) r g b / 70%);
+            background-color: rgb(from var(--color-blackonyx) r g b / 85%);
+            box-shadow: 0 4px 12px var(--color-black50);
+            backdrop-filter: blur(4px);
+        }
+
+        .search-bar-suggestions {
+            max-height: 50vh;
+            overflow-y: auto;
+
+            .search-suggestion[hidden] { display: none; }
+        }
+    }
+
     &.page {
         margin-bottom: 2rem;
 

@@ -56,8 +56,12 @@
         |merge([{titre: 'Autres', lieux: lieux|filter(l => l.clan is empty or l.clan.nom not in clans_listes)}]) %}
 
     {% for groupe in groupes|filter(g => g.lieux|length > 0) %}
+        {% set clan_groupe = groupe.titre != 'Autres' ? (groupe.lieux|first).clan : null %}
         <div class="col-12">
-            <h3 class="heading-amerigo text-uppercase">{{ groupe.titre }}</h3>
+            <h3 class="heading-amerigo category-section-sub-heading">
+                <img class="img-40 mr-2" src="{{ asset(clan_groupe ? clan_groupe.mon|default(NA_MON) : NA_MON) }}" alt="Mon de la faction" />
+                {{ groupe.titre }}
+            </h3>
             {{ include('/parts/picture-grid.html.twig', {
                 catalog: true,
                 items: groupe.lieux, route: 'empire_lieu', na_image: NA_LIEU,

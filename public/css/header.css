@@ -24,6 +24,23 @@
     a:hover {
         color: var(--color-white);
     }
+
+    &.icon {
+        z-index: auto;
+        display: flex;
+        flex-shrink: 0;
+        align-items: center;
+        justify-content: center;
+        width: 2.5rem;
+        height: 2.5rem;
+        margin-left: 1rem;
+        padding: 0;
+        border-radius: 50%;
+        color: var(--color-white50);
+        font-size: 1.1rem;
+
+        &:hover { color: var(--color-white); }
+    }
 }
 
 /* ----- NAV ----- */
@@ -58,6 +75,20 @@
             color: var(--color-background) !important;
             text-decoration: none;
         }
+    }
+
+    &.compact {
+        position: absolute;
+        top: 0;
+        right: 0;
+        left: 0;
+        background: linear-gradient(#000000CC, #00000080 60%, #00000000);
+        background-blend-mode: normal;
+        box-shadow: none;
+
+        .navbar { padding: 0.25rem 0; }
+
+        #logo { width: 48px; }
     }
 }
 

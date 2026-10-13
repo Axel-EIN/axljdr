@@ -6,6 +6,7 @@ use App\Entity\Lieu;
 use App\Entity\Objet;
 use App\Entity\Participation;
 use App\Entity\Personnage;
+use App\Entity\Status;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -105,6 +106,34 @@ class ParticipationRepository extends ServiceEntityRepository
             ->getResult();
 
         return $this->dedoublonner($participations);
+    }
+
+    public function findPlacedForLivingPlayers(): array
+    {
+        return $this->createQueryBuilder('p')
+            ->join('p.personnage', 'personnage')
+            ->addSelect('personnage')
+            ->leftJoin('personnage.fichePersonnage', 'fiche')
+            ->addSelect('fiche')
+            ->join('p.scene', 's')
+            ->addSelect('s')
+            ->join('s.lieu', 'l')
+            ->addSelect('l')
+            ->join('s.episodeParent', 'e')
+            ->addSelect('e')
+            ->join('e.chapitreParent', 'c')
+            ->join('c.saisonParent', 'sa')
+            ->andWhere('l.locX IS NOT NULL')
+            ->andWhere('l.locY IS NOT NULL')
+            ->andWhere('personnage.estPj = true')
+            ->andWhere('personnage.status = :vivant')
+            ->setParameter('vivant', Status::ALIVE)
+            ->orderBy('sa.numero', 'DESC')
+            ->addOrderBy('c.numero', 'DESC')
+            ->addOrderBy('e.numero', 'DESC')
+            ->addOrderBy('s.numero', 'DESC')
+            ->getQuery()
+            ->getResult();
     }
 
     private function dedoublonner(array $participations): array

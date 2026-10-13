@@ -1,6 +1,6 @@
 $(document).ready(function ()
 {
-    $('.search-bar').each(function () {
+    $('form.search-bar').each(function () {
         var form = this;
         var input = form.querySelector('.search-bar-input');
         var list = form.querySelector('.search-bar-suggestions');

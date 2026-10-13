@@ -1,0 +1,57 @@
+{% set etat = element_state(lieu) %}
+{% set lisible = element_readable(lieu) %}
+
+{% if lisible and lieu.image %}
+  <img class="map-panel-banner" src="{{ asset(lieu.image) }}" alt="Image de {{ lieu.nom }}" />
+{% endif %}
+
+<div class="map-panel-body">
+  <h2 class="map-panel-title">
+    {{ lieu.nom }}
+    {{ include('parts/badge-access.html.twig', {state: etat, variant: 'inline'}) }}
+  </h2>
+
+  {% if lisible %}
+    <div class="map-panel-details">
+      {% if lieu.clan %}
+        <img class="img-24" src="{{ asset(lieu.clan.mon|default(NA_MON)) }}" alt="" />
+        <span>{{ lieu.clan.nom }}</span>
+      {% endif %}
+      {% if lieu.type %}<span>{{ lieu.type }}</span>{% endif %}
+    </div>
+  {% endif %}
+
+  {% if presents is not empty %}
+    <div>
+      <h3 class="map-panel-heading">Personnages présents</h3>
+      <div class="map-panel-party">
+        {% for perso in presents %}
+          <a href="{{ path('personnage_profil', {id: perso.id}) }}" title="{{ perso.nomComplet }}">
+            <img src="{{ asset(perso.icone|default(NA_PERSO_PORTRAIT)) }}" alt="Portrait de {{ perso.prenom }}" />
+          </a>
+        {% endfor %}
+      </div>
+    </div>
+  {% endif %}
+
+  {% if historique is not empty %}
+    <div>
+      <h3 class="map-panel-heading">Dernières scènes</h3>
+      <ul class="map-panel-history">
+        {% for un_bloc in historique %}
+          {% set derniere = un_bloc.lignes|first.scene %}
+          <li>
+            <a href="{{ path('aventure_episode', {id: un_bloc.episode.id, '_fragment': 'scn' ~ derniere.numero}) }}">
+              <span class="text-muted">#{{ un_bloc.episode.numeroSaison }}</span>
+              {{ derniere.titre }}
+            </a>
+          </li>
+        {% endfor %}
+      </ul>
+    </div>
+  {% endif %}
+
+  {% if lisible %}
+    <a class="btn-primary-style btn-medium text-center" href="{{ path('empire_lieu', {id: lieu.id}) }}">Ouvrir la fiche</a>
+  {% endif %}
+</div>

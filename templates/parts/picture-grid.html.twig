@@ -83,7 +83,7 @@
           {% else %}
             {% if pdf_only %}<img class="badge-corner" src="{{ asset(PDF) }}" alt="Icône PDF" />{% endif %}
             <div class="frame ratio-{{ shape }}">
-              <img class="ratio-cropped" src="{{ asset(item.imageAffichee|default(item.image|default(image_na))) }}" alt="{{ alt }}" />
+              <img class="ratio-cropped" src="{{ asset(variant == 'icon' ? image_na : item.imageAffichee|default(item.image|default(image_na))) }}" alt="{{ alt }}" />
               {% if not hidden and item.icone|default(null) %}
                 <img class="hover-icon" src="{{ asset(item.icone) }}" alt="" />
               {% endif %}

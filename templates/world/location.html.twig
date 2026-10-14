@@ -97,7 +97,7 @@
       {% endif %}
 
       {% if app.user and is_granted("ROLE_MJ") %}
-        {% set redirect, element, un_element, color, action = 'world', 'lieu', un_element, 'text-accent', 'delete' %}
+        {% set redirect, element, un_element, color, action = 'world', 'lieu', un_element, 'link-gm', 'delete' %}
         {{ include('/btns/btn-line.html.twig', {classes: ornament is defined ? '' : 'mt-5'}) }}
       {% endif %}
 

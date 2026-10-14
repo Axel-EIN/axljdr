@@ -419,6 +419,23 @@ class ClasseurXP
             return false;
     }
 
+    public function cumulsParEpisode(array $participations, array $persoIds): array
+    {
+        $groupes = [];
+        foreach ($participations as $participation) {
+            $groupes[$participation->getPersonnage()->getId()][$participation->getScene()->getEpisodeParent()->getId()][] = $participation;
+        }
+
+        $cumuls = [];
+        foreach ($persoIds as $persoId) {
+            foreach ($groupes[$persoId] ?? [] as $episodeId => $participationsEpisode) {
+                $cumuls[$persoId][$episodeId] = $this->cumuler($persoId, $participationsEpisode);
+            }
+        }
+
+        return $cumuls;
+    }
+
     public function cumulUnPersoScene(Scene $scene, $persoId)
     {
         $participations = [];

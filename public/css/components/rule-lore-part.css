@@ -72,8 +72,6 @@
 }
 
 .part-body {
-    a { font-weight: bold; }
-
     .articlepart {
         font-size: var(--fontsize-regular);
     }

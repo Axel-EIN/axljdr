@@ -10,7 +10,6 @@
 .spell-link {
     cursor: pointer;
     font-weight: bolder;
-    &:hover { text-decoration: underline !important;}
 }
 
 .text-rank {

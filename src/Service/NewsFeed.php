@@ -8,6 +8,7 @@ use App\Repository\ParticipationRepository;
 use App\Repository\PersonnageRepository;
 use App\Repository\UnlockRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\QueryBuilder;
 
 class NewsFeed
 {
@@ -64,9 +65,7 @@ class NewsFeed
 
     public function lastEpisodes(int $limit): array
     {
-        return $this->entityManager->createQueryBuilder()
-            ->select('e')
-            ->from(Episode::class, 'e')
+        return $this->parus(Episode::class, true)
             ->andWhere('e.access = :palier')
             ->setParameter('palier', Access::PUBLIC)
             ->orderBy('e.numeroSaison', 'DESC')
@@ -161,12 +160,8 @@ class NewsFeed
 
     private function publies(string $class, int $limit, string $condition, array $parametres): array
     {
-        $qb = $this->entityManager->createQueryBuilder()
-            ->select('e')
-            ->from($class, 'e')
-            ->andWhere('e.publishedAt IS NOT NULL AND e.publishedAt <= :maintenant')
+        $qb = $this->parus($class, false)
             ->andWhere($condition)
-            ->setParameter('maintenant', new \DateTime())
             ->orderBy('e.publishedAt', 'DESC')
             ->addOrderBy('e.id', 'DESC')
             ->setMaxResults($limit);
@@ -267,5 +262,14 @@ class NewsFeed
     private function characterIds(): array
     {
         return $this->currentPlayer->characterIds();
+    }
+
+    private function parus(string $class, bool $memeSansDate): QueryBuilder
+    {
+        return $this->entityManager->createQueryBuilder()
+            ->select('e')
+            ->from($class, 'e')
+            ->andWhere($memeSansDate ? 'e.publishedAt IS NULL OR e.publishedAt <= :maintenant' : 'e.publishedAt <= :maintenant')
+            ->setParameter('maintenant', new \DateTime());
     }
 }

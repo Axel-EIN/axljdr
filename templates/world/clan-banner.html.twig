@@ -66,7 +66,7 @@
             <div class="d-none d-lg-flex justify-content-center">
                 {% for un_autre_clan in toutClans %}
                     <a class="text-white py-2 px-3" {% if un_autre_clan.id == clan.id %}style="background-color: {{clan.couleur}}"{% endif %}
-                    href="{{ path('empire_clan', { id: un_autre_clan.id, '_fragment' : 'element-banner' } ) }}">
+                    href="{{ path('world_clan', { id: un_autre_clan.id, '_fragment' : 'element-banner' } ) }}">
                         <strong>{{un_autre_clan.nom|upper}}</strong>
                     </a>
                 {% endfor %}
@@ -82,7 +82,7 @@
                 </a>
                 <div class="dropdown-menu dropdown-dark">
                     {% for un_autre_clan in toutClans|filter(c => c.id != clan.id) %}
-                        <a class="dropdown-item" href="{{ path('empire_clan', { id: un_autre_clan.id, '_fragment' : 'element-banner' } ) }}">
+                        <a class="dropdown-item" href="{{ path('world_clan', { id: un_autre_clan.id, '_fragment' : 'element-banner' } ) }}">
                             {{un_autre_clan.nom|upper}}
                         </a>
                     {% endfor %}

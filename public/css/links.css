@@ -2,54 +2,47 @@
 
 a {
     color: var(--color-link);
-
-    &.bold {
-        font-weight: bold;
-    }
+    font-weight: bold;
 
     &:hover {
         color: var(--color-link-hover);
         text-decoration: none;
     }
+
+    &.character-icon {
+        display: inline-block;
+        text-decoration: none;
+        color: var(--color-linkcharacter);
+    }
+
+    &.location-icon {
+        display: inline-block;
+        text-decoration: none;
+        color: var(--color-linklocation);
+    }
 }
 
-.on-dark {
-    --color-link: var(--color-linkondark);
-    --color-link-hover: var(--color-linkondark-hover);
+.on-image {
+    --color-link: var(--color-linkonimage);
+    --color-link-hover: var(--color-linkonimage-hover);
 }
 
-a.text-white50:hover { color: var(--color-white);}
+.link-gm {
+    color: var(--color-linkgm);
+    &:hover { color: var(--color-linkgm-hover); }
+}
 
 .link-disabled {
     pointer-events: none;
 }
 
-.hover-no-under:hover { text-decoration: none; }
-
-/* ---- TEXT BLOCKS CHAR LINKS  ---- */
-
-a.scene-text {
-    font-weight: bold;
-    &:hover { text-decoration: none; }
-}
-
-a.character-icon, a.location-icon {
-    display: inline-block;
-    font-weight: bold;
-    text-decoration: none;
-}
-
-a.character-icon { color: var(--color-secondary); }
-a.location-icon { color: var(--purple); }
-
 /* BACK OFFICE MJ LINKS TABS */
 
 .mj-link {
-    color: var(--color-primarylighter) !important;
-    font-weight: bold;
+    color: var(--color-linkondark-hover) !important;
     &:hover {
-        color: var(--color-primary) !important;
+        color: var(--color-link-hover) !important;
         text-decoration: none;
     }
-    &.active { color: var(--color-primary) !important; }
+    &.active { color: var(--color-link-hover) !important; }
 }

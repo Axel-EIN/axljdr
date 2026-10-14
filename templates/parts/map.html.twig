@@ -6,7 +6,7 @@
 {% set party = party|default({}) %}
 {% set trail = trail|default([]) %}
 {% set recenter = recenter|default(null) %}
-{% set main_character = app.user ? app.user.mainCharacter : null %}
+{% set main_character = main_character() %}
 {% set current_color = current.clan.couleur ?? null %}
 {% set placed = lieux|filter(l => l.locX is not empty and l.locY is not empty) %}
 

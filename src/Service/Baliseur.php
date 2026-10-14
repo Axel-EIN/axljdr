@@ -99,7 +99,7 @@ class Baliseur
                     $icone_lieu = '../../assets/placeholders/na_lieu_ico.png';
 
                 $tableau_remplacement[] =
-                    '<a class="tag-location hover-zoom-quick location-icon bg-background pr-1 pt-0 pb-0 pl-0" href="../../empire/lieu/' . $lieu_trouve->getId() . '">'
+                    '<a class="tag-location hover-zoom-quick location-icon bg-background pr-1 pt-0 pb-0 pl-0" href="../../world/lieu/' . $lieu_trouve->getId() . '">'
                                 . '<img class="location-icon-small" src="../../' . $icone_lieu
                                 . '" alt="Icône Lieu" title="Voir ' . $lieu_trouve->getNom() .'" /> ' . $lieu_trouve->getNom() . '</a>';
             } else

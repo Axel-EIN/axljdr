@@ -5,6 +5,7 @@ namespace App\Twig;
 use App\Entity\Access;
 use App\Entity\Monnaie;
 use App\Entity\Status;
+use App\Service\CurrentPlayer;
 use App\Service\ElementUrl;
 use App\Service\EntityRegistry;
 use App\Service\ImageBrightness;
@@ -20,13 +21,15 @@ class AppExtension extends AbstractExtension
     private $elementUrl;
     private $imageBrightness;
     private $tableFilter;
+    private $currentPlayer;
 
-    public function __construct(Visibility $visibility, ElementUrl $elementUrl, ImageBrightness $imageBrightness, TableFilter $tableFilter)
+    public function __construct(Visibility $visibility, ElementUrl $elementUrl, ImageBrightness $imageBrightness, TableFilter $tableFilter, CurrentPlayer $currentPlayer)
     {
         $this->visibility = $visibility;
         $this->elementUrl = $elementUrl;
         $this->imageBrightness = $imageBrightness;
         $this->tableFilter = $tableFilter;
+        $this->currentPlayer = $currentPlayer;
     }
 
     public function getFilters()
@@ -58,6 +61,7 @@ class AppExtension extends AbstractExtension
             new TwigFunction('image_bright', [$this->imageBrightness, 'isBright']),
             new TwigFunction('table_filters', [$this->tableFilter, 'build']),
             new TwigFunction('table_value', [$this->tableFilter, 'valueOf']),
+            new TwigFunction('main_character', [$this->currentPlayer, 'main']),
         ];
     }
 

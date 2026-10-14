@@ -1,5 +1,5 @@
 {% set variant = variant|default('embedded') %}
-{% set world = variant == 'world' %}
+{% set worldmap = variant == 'world' %}
 {% set current = current|default(null) %}
 {% set center = current ?? center|default(null) %}
 {% set highlight = highlight|default(null) %}
@@ -10,12 +10,12 @@
 {% set current_color = current.clan.couleur ?? null %}
 {% set placed = lieux|filter(l => l.locX is not empty and l.locY is not empty) %}
 
-<div class="map-frame {{ variant }}{% if not world %} labels-hidden d-none d-lg-block{% endif %}"
+<div class="map-frame {{ variant }}{% if not worldmap %} labels-hidden d-none d-lg-block{% endif %}"
   {% if center %}data-locx="{{ center.locX }}" data-locy="{{ center.locY }}"{% endif %}
   {% if highlight %}data-highlight="{{ highlight.id }}"{% endif %}
 >
 
-  {% if world %}
+  {% if worldmap %}
     <div class="map-search absolute">
       <div class="search-bar map">
         <i class="search-bar-icon fas fa-magnifying-glass" aria-hidden="true"></i>
@@ -58,7 +58,7 @@
   {% endif %}
 
   <div class="map-controls absolute">
-    {% if world %}
+    {% if worldmap %}
       <button type="button" class="map-toggle-btn map-controls-toggle" aria-expanded="false" aria-label="Options de la carte">
         <i class="fa-solid fa-sliders"></i>
       </button>
@@ -70,7 +70,7 @@
       <span class="label">Plein écran</span>
     </button>
 
-    <button type="button" class="map-toggle-btn{% if world %} active{% endif %}" data-map-toggle="labels" aria-pressed="{{ world ? 'true' : 'false' }}">
+    <button type="button" class="map-toggle-btn{% if worldmap %} active{% endif %}" data-map-toggle="labels" aria-pressed="{{ worldmap ? 'true' : 'false' }}">
       <i class="fa-solid fa-torii-gate"></i>
       <span class="label">Lieux</span>
     </button>
@@ -89,7 +89,7 @@
       </a>
     {% endif %}
 
-    {% if world %}
+    {% if worldmap %}
       <button type="button" class="map-toggle-btn active" data-map-toggle="party" aria-pressed="true">
         <i class="fa-solid fa-users"></i>
         <span class="label">Personnages</span>
@@ -97,7 +97,7 @@
     {% endif %}
   </div>
 
-  {% if world %}
+  {% if worldmap %}
     <div class="map-zoom absolute">
       <button type="button" class="map-toggle-btn" data-map-zoom="in" aria-label="Zoomer">
         <i class="fa-solid fa-plus"></i>
@@ -132,7 +132,7 @@
         {% set autre_lisible = element_readable(autre) %}
         {% set autre_secret = autre_etat == 'hidden' %}
         {% set autre_color = autre_secret ? null : autre.clan.couleur ?? null %}
-        <a {% if autre_secret %}aria-disabled="true"{% else %}href="{{ path('empire_lieu', {id: autre.id}) }}"{% if world %} data-panel="{{ path('carte_lieu', {id: autre.id}) }}"{% endif %}{% endif %}
+        <a {% if autre_secret %}aria-disabled="true"{% else %}href="{{ path('world_lieu', {id: autre.id}) }}"{% if worldmap %} data-panel="{{ path('carte_lieu', {id: autre.id}) }}"{% endif %}{% endif %}
            class="absolute lieu-other-icon {% if not autre_lisible %}locked{% endif %}" data-lieu="{{ autre.id }}"
            style="left:{{autre.locX}}%; top:{{autre.locY}}%;{% if autre_color %} --clan-color: {{autre_color}};{% endif %}">
           {% if autre_secret %}

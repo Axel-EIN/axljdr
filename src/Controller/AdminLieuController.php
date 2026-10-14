@@ -99,7 +99,7 @@ class AdminLieuController extends AbstractController
       $this->addFlash('success', 'Le Lieu a bien été ajouté.');
 
       if (!empty($request->query->get('redirect')) && $request->query->get('redirect') == 'lieu')
-        return $this->redirectToRoute('empire_lieu', ['id' => $lieu->getId()]);
+        return $this->redirectToRoute('world_lieu', ['id' => $lieu->getId()]);
 
       return $this->redirectToRoute('admin_lieu');
     }
@@ -161,7 +161,7 @@ class AdminLieuController extends AbstractController
       $this->addFlash('success', 'Le Lieu a bien été modifié.');
 
       if (!empty($request->query->get('redirect')) && $request->query->get('redirect') == 'lieu')
-        return $this->redirectToRoute('empire_lieu', ['id' => $lieu->getId()]);
+        return $this->redirectToRoute('world_lieu', ['id' => $lieu->getId()]);
 
       return $this->redirectToRoute('admin_lieu');
     }

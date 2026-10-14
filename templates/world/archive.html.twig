@@ -20,7 +20,7 @@
             {{ include('/parts/divider-ornament.html.twig') }}
 
             {% if app.user and is_granted("ROLE_MJ") %}
-                {% set redirect, element, un_element, color, action = 'empire', 'archive', un_element, 'text-accent', 'delete' %}
+                {% set redirect, element, un_element, color, action = 'world', 'archive', un_element, 'text-accent', 'delete' %}
                 {{ include('/btns/btn-line.html.twig') }}
             {% endif %}
 
@@ -29,7 +29,7 @@
 
     {{ include('/parts/picture-grid.html.twig', {
         title: 'Autres Archives',
-        items: autresArchives, route: 'empire_archive',
+        items: autresArchives, route: 'world_archive',
         na_image: NA_ARCHIVE,
     }) }}
 

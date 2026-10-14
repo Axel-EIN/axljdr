@@ -11,15 +11,16 @@
   <main class="container-fluid element-page">
     <div class="container relative">
 
+      {% set category_label = {world: 'Univers'}[category] ?? category|capitalize %}
       {% if category == 'personnages' and entity == 'fiche' %}
         {% set fil = [
-          { label: category|capitalize, path: path(category) },
+          { label: category_label, path: path(category) },
           { label: nom, path: path('personnage_profil', {id: fiche.personnage.id}) },
           { label: 'Fiche de Jeu' },
         ] %}
       {% else %}
         {% set fil = [
-          { label: category|capitalize, path: path(category, {'_fragment': entity}) },
+          { label: category_label, path: path(category, {'_fragment': entity}) },
           { label: nom },
         ] %}
       {% endif %}

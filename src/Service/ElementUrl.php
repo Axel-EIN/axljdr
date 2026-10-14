@@ -22,7 +22,7 @@ class ElementUrl
     public function of($element): ?string
     {
         if ($element instanceof Famille) {
-            return $this->router->generate('empire_clan', ['id' => $element->getClan()->getId(), '_fragment' => $element->getNom()]);
+            return $this->router->generate('world_clan', ['id' => $element->getClan()->getId(), '_fragment' => $element->getNom()]);
         }
 
         if ($element instanceof Scene) {

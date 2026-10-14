@@ -55,7 +55,7 @@
 
         &:hover { filter: contrast(200%) saturate(0%); }
 
-        &.gm { color: var(--accent); }
+        &.gm { color: var(--color-linkgm); }
     }
 }
 

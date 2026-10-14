@@ -379,6 +379,7 @@ class PersonnagesController extends AbstractController
             throw $this->createAccessDeniedException("Vous ne pouvez éditer que le profil de votre propre personnage.");
         }
 
+        $ancienneDescription = $personnage->getDescription();
         $form = $this->createForm(JoueurPersonnageType::class, $personnage, ['is_gm' => $estMj]);
         $form->handleRequest($request);
 
@@ -386,7 +387,7 @@ class PersonnagesController extends AbstractController
             if ($estMj) {
                 $personnage->setDescription($baliseur->baliser($personnage->getDescription()));
             } else {
-                $personnage->setDescription($this->sansHtml($personnage->getDescription()));
+                $personnage->setDescription($baliseur->rebaliser($this->sansHtml($personnage->getDescription()), $ancienneDescription));
                 $personnage->setPlayerNotes($this->sansHtml($personnage->getPlayerNotes()));
             }
 

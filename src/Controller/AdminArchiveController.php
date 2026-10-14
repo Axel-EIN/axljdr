@@ -69,7 +69,7 @@ class AdminArchiveController extends AbstractController
             $this->addFlash('success', 'L\'Archive a bien été ajoutée.');
 
             if (!empty($request->query->get('redirect')) && $request->query->get('redirect') == 'archive')
-                return $this->redirectToRoute('empire_archive', ['id' => $archive->getId()]);
+                return $this->redirectToRoute('world_archive', ['id' => $archive->getId()]);
 
             return $this->redirectToRoute('admin_archive');
         }
@@ -111,7 +111,7 @@ class AdminArchiveController extends AbstractController
             $this->addFlash('success', 'L\'Archive a bien été modifiée.');
 
             if (!empty($request->query->get('redirect')) && $request->query->get('redirect') == 'archive')
-                return $this->redirectToRoute('empire_archive', ['id' => $archive->getId()]);
+                return $this->redirectToRoute('world_archive', ['id' => $archive->getId()]);
             
             return $this->redirectToRoute('admin_archive');
         }
@@ -145,8 +145,8 @@ class AdminArchiveController extends AbstractController
             $this->addFlash('success', 'L\'archive a bien été supprimée.');
         }
 
-        if (!empty($request->query->get('redirect')) && $request->query->get('redirect') == 'empire')
-            return $this->redirectToRoute('empire');
+        if (!empty($request->query->get('redirect')) && $request->query->get('redirect') == 'world')
+            return $this->redirectToRoute('world');
         
         return $this->redirectToRoute('admin_archive');
     }

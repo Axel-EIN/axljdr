@@ -17,17 +17,17 @@
   background-position: center;
 }
 
-.header-bg-empire {
+.header-bg-world {
   background-image:
     linear-gradient(rgb(40,0,0,0.5),rgb(40,0,0,0.5)),
-    url('../assets/rubriques/empire.jpg');
+    url('../assets/rubriques/world.jpg');
   background-position: center;
 }
 
 .header-bg-news {
   background-image:
     linear-gradient(rgb(40,0,0,0.5),rgb(40,0,0,0.5)),
-    url('../assets/rubriques/empire.jpg');
+    url('../assets/rubriques/world.jpg');
   background-position: center;
 }
 

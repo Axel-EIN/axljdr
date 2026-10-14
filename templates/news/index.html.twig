@@ -14,7 +14,7 @@
     {% set chapter_image = chapitre ? chapitre.image|default(NA_CHAPITRE) : null %}
 
     <div class="col-12 col-lg-7">
-        <div class="card card-body session-card on-dark{{ image_bright(chapter_image) ? ' bright' }}"
+        <div class="card card-body session-card on-image{{ image_bright(chapter_image) ? ' bright' }}"
             {% if chapitre %}style="--chapter-color: {{ chapitre.couleur }}; --chapter-image: url('{{ asset(chapter_image) }}');"{% endif %}>
 
             {% if dernier_episode %}
@@ -41,6 +41,7 @@
                                 reveal_session: true,
                                 badge_hover: true,
                                 variant: 'icon',
+                                na_image: NA_LIEU_ICO,
                                 per_row: 2,
                                 limit: 4,
                                 empty_message: 'Aucun lieu visité',

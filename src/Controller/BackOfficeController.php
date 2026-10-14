@@ -67,7 +67,7 @@ class BackOfficeController extends AbstractController
         $admin_elements[$i]['element'] = 'saison' ;
         $admin_elements[$i]['label'] = 'Saisons';
         $admin_elements[$i]['genre'] = 'F';
-        $admin_elements[$i]['categorie'] = 'AVENTURE';
+        $admin_elements[$i]['categorie'] = 'Aventure';
         $admin_elements[$i]['nbr'] = $saisonRepository->countSaisons();
         $lastSaison = $saisonRepository->findOneBy(array(),array('id' => 'DESC'));
         if (!empty($lastSaison)) {
@@ -84,7 +84,7 @@ class BackOfficeController extends AbstractController
         $admin_elements[$i]['element'] = 'chapitre' ;
         $admin_elements[$i]['label'] = 'Chapitres';
         $admin_elements[$i]['genre'] = 'M';
-        $admin_elements[$i]['categorie'] = 'AVENTURE';
+        $admin_elements[$i]['categorie'] = 'Aventure';
         $admin_elements[$i]['nbr'] = $chapitreRepository->countChapitres();
         $lastChapitre = $chapitreRepository->findOneBy(array(),array('id' => 'DESC'));
         if (!empty($lastChapitre)) {
@@ -101,7 +101,7 @@ class BackOfficeController extends AbstractController
         $admin_elements[$i]['element'] = 'episode' ;
         $admin_elements[$i]['label'] = 'Épisodes';
         $admin_elements[$i]['genre'] = 'M';
-        $admin_elements[$i]['categorie'] = 'AVENTURE';
+        $admin_elements[$i]['categorie'] = 'Aventure';
         $admin_elements[$i]['nbr'] = $episodeRepository->countEpisodes();
         $lastEpisode = $episodeRepository->findOneBy(array(),array('id' => 'DESC'));
         if (!empty($lastEpisode)) {
@@ -118,7 +118,7 @@ class BackOfficeController extends AbstractController
         $admin_elements[$i]['element'] = 'scene' ;
         $admin_elements[$i]['label'] = 'Scènes';
         $admin_elements[$i]['genre'] = 'F';
-        $admin_elements[$i]['categorie'] = 'AVENTURE';
+        $admin_elements[$i]['categorie'] = 'Aventure';
         $admin_elements[$i]['nbr'] = $sceneRepository->countScenes();
         $lastScene = $sceneRepository->findOneBy(array(),array('id' => 'DESC'));
         if (!empty($lastScene)) {
@@ -135,7 +135,7 @@ class BackOfficeController extends AbstractController
         $admin_elements[$i]['element'] = 'clan' ;
         $admin_elements[$i]['label'] = 'Factions';
         $admin_elements[$i]['genre'] = 'F';
-        $admin_elements[$i]['categorie'] = 'EMPIRE';
+        $admin_elements[$i]['categorie'] = 'Univers';
         $admin_elements[$i]['nbr'] = $clanRepository->countClans();
         $lastClan = $clanRepository->findOneBy(array(),array('id' => 'DESC'));
         if (!empty($lastClan)) {
@@ -152,7 +152,7 @@ class BackOfficeController extends AbstractController
         $admin_elements[$i]['element'] = 'famille' ;
         $admin_elements[$i]['label'] = 'Familles';
         $admin_elements[$i]['genre'] = 'F';
-        $admin_elements[$i]['categorie'] = 'EMPIRE';
+        $admin_elements[$i]['categorie'] = 'Univers';
         $admin_elements[$i]['nbr'] = $familleRepository->countFamilles();
         $lastFamille = $familleRepository->findOneBy(array(),array('id' => 'DESC'));
         if (!empty($lastFamille)) {
@@ -169,7 +169,7 @@ class BackOfficeController extends AbstractController
         $admin_elements[$i]['element'] = 'archive' ;
         $admin_elements[$i]['label'] = 'Archives';
         $admin_elements[$i]['genre'] = 'F';
-        $admin_elements[$i]['categorie'] = 'EMPIRE';
+        $admin_elements[$i]['categorie'] = 'Univers';
         $admin_elements[$i]['nbr'] = $archiveRepository->countArchives();
         $lastArchive = $archiveRepository->findOneBy(array(),array('id' => 'DESC'));
         if (!empty($lastArchive)) {
@@ -186,7 +186,7 @@ class BackOfficeController extends AbstractController
         $admin_elements[$i]['element'] = 'lieu' ;
         $admin_elements[$i]['label'] = 'Lieux';
         $admin_elements[$i]['genre'] = 'M';
-        $admin_elements[$i]['categorie'] = 'EMPIRE';
+        $admin_elements[$i]['categorie'] = 'Univers';
         $admin_elements[$i]['nbr'] = $lieuRepository->countLieux();
         $lastLieu = $lieuRepository->findOneBy(array(),array('id' => 'DESC'));
         if (!empty($lastLieu)) {
@@ -203,7 +203,7 @@ class BackOfficeController extends AbstractController
         $admin_elements[$i]['element'] = 'lore' ;
         $admin_elements[$i]['label'] = 'Lores';
         $admin_elements[$i]['genre'] = 'M';
-        $admin_elements[$i]['categorie'] = 'EMPIRE';
+        $admin_elements[$i]['categorie'] = 'Univers';
         $admin_elements[$i]['nbr'] = $loreRepository->countLores();
         $lastLore = $loreRepository->findOneBy(array(),array('id' => 'DESC'));
         if (!empty($lastLore)) {
@@ -220,7 +220,7 @@ class BackOfficeController extends AbstractController
         $admin_elements[$i]['element'] = 'personnage' ;
         $admin_elements[$i]['label'] = 'Personnages';
         $admin_elements[$i]['genre'] = 'M';
-        $admin_elements[$i]['categorie'] = 'PERSONNAGES';
+        $admin_elements[$i]['categorie'] = 'Personnages';
         $admin_elements[$i]['nbr'] = $personnageRepository->countPersonnages();
         $lastPersonnage = $personnageRepository->findOneBy(array(),array('id' => 'DESC'));
         if (!empty($lastPersonnage)) {
@@ -237,7 +237,7 @@ class BackOfficeController extends AbstractController
         $admin_elements[$i]['element'] = 'fiche' ;
         $admin_elements[$i]['label'] = 'Fiches';
         $admin_elements[$i]['genre'] = 'F';
-        $admin_elements[$i]['categorie'] = 'PERSONNAGES';
+        $admin_elements[$i]['categorie'] = 'Personnages';
         $admin_elements[$i]['nbr'] = $fichePersonnageRepository->countFiches();
         $lastFiche = $fichePersonnageRepository->findOneBy(array(),array('id' => 'DESC'));
         if (!empty($lastFiche)) {
@@ -254,7 +254,7 @@ class BackOfficeController extends AbstractController
         $admin_elements[$i]['element'] = 'development' ;
         $admin_elements[$i]['label'] = 'Développements';
         $admin_elements[$i]['genre'] = 'M';
-        $admin_elements[$i]['categorie'] = 'PERSONNAGES';
+        $admin_elements[$i]['categorie'] = 'Personnages';
         $admin_elements[$i]['nbr'] = count($developmentRepository->findAll());
         $lastDevelopment = $developmentRepository->findOneBy(array(),array('id' => 'DESC'));
         if (!empty($lastDevelopment)) {
@@ -271,7 +271,7 @@ class BackOfficeController extends AbstractController
         $admin_elements[$i]['element'] = 'rule' ;
         $admin_elements[$i]['label'] = 'Règles';
         $admin_elements[$i]['genre'] = 'F';
-        $admin_elements[$i]['categorie'] = 'REGLES';
+        $admin_elements[$i]['categorie'] = 'Règles';
         $admin_elements[$i]['nbr'] = $ruleRepository->countRules();
         $lastRule = $ruleRepository->findOneBy(array(),array('id' => 'DESC'));
         if (!empty($lastRule)) {
@@ -288,7 +288,7 @@ class BackOfficeController extends AbstractController
         $admin_elements[$i]['element'] = 'library' ;
         $admin_elements[$i]['label'] = 'Bibliothèques';
         $admin_elements[$i]['genre'] = 'F';
-        $admin_elements[$i]['categorie'] = 'REGLES';
+        $admin_elements[$i]['categorie'] = 'Règles';
         $admin_elements[$i]['nbr'] = $libraryRepository->countLibraries();
         $lastLibrary = $libraryRepository->findOneBy(array(),array('id' => 'DESC'));
         if (!empty($lastLibrary)) {
@@ -305,7 +305,7 @@ class BackOfficeController extends AbstractController
         $admin_elements[$i]['element'] = 'classe' ;
         $admin_elements[$i]['label'] = 'Classes';
         $admin_elements[$i]['genre'] = 'F';
-        $admin_elements[$i]['categorie'] = 'REGLES';
+        $admin_elements[$i]['categorie'] = 'Règles';
         $admin_elements[$i]['nbr'] = $classeRepository->countClasses();
         $lastClasse = $classeRepository->findOneBy(array(),array('id' => 'DESC'));
         if (!empty($lastClasse)) {
@@ -322,7 +322,7 @@ class BackOfficeController extends AbstractController
         $admin_elements[$i]['element'] = 'ecole' ;
         $admin_elements[$i]['label'] = 'Écoles';
         $admin_elements[$i]['genre'] = 'F';
-        $admin_elements[$i]['categorie'] = 'REGLES';
+        $admin_elements[$i]['categorie'] = 'Règles';
         $admin_elements[$i]['nbr'] = $ecoleRepository->countEcoles();
         $lastEcole = $ecoleRepository->findOneBy(array(),array('id' => 'DESC'));
         if (!empty($lastEcole)) {
@@ -339,7 +339,7 @@ class BackOfficeController extends AbstractController
         $admin_elements[$i]['element'] = 'avantage' ;
         $admin_elements[$i]['label'] = 'Avantages / Dés.';
         $admin_elements[$i]['genre'] = 'M';
-        $admin_elements[$i]['categorie'] = 'REGLES';
+        $admin_elements[$i]['categorie'] = 'Règles';
         $admin_elements[$i]['nbr'] = $avantageRepository->countAvantages();
         $lastAvantage = $avantageRepository->findOneBy(array(),array('id' => 'DESC'));
         if (!empty($lastAvantage)) {
@@ -356,7 +356,7 @@ class BackOfficeController extends AbstractController
         $admin_elements[$i]['element'] = 'competence' ;
         $admin_elements[$i]['label'] = 'Compétences';
         $admin_elements[$i]['genre'] = 'F';
-        $admin_elements[$i]['categorie'] = 'REGLES';
+        $admin_elements[$i]['categorie'] = 'Règles';
         $admin_elements[$i]['nbr'] = $competenceRepository->countCompetences();
         $lastCompetence = $competenceRepository->findOneBy(array(),array('id' => 'DESC'));
         if (!empty($lastCompetence)) {
@@ -373,7 +373,7 @@ class BackOfficeController extends AbstractController
         $admin_elements[$i]['element'] = 'objet' ;
         $admin_elements[$i]['label'] = 'Objets';
         $admin_elements[$i]['genre'] = 'M';
-        $admin_elements[$i]['categorie'] = 'REGLES';
+        $admin_elements[$i]['categorie'] = 'Règles';
         $admin_elements[$i]['nbr'] = $objetRepository->countObjets();
         $lastObjet = $objetRepository->findOneBy(array(),array('id' => 'DESC'));
         if (!empty($lastObjet)) {
@@ -390,7 +390,7 @@ class BackOfficeController extends AbstractController
         $admin_elements[$i]['element'] = 'sort' ;
         $admin_elements[$i]['label'] = 'Sorts';
         $admin_elements[$i]['genre'] = 'M';
-        $admin_elements[$i]['categorie'] = 'REGLES';
+        $admin_elements[$i]['categorie'] = 'Règles';
         $admin_elements[$i]['nbr'] = $sortRepository->countSorts();
         $lastSort = $sortRepository->findOneBy(array(),array('id' => 'DESC'));
         if (!empty($lastSort)) {

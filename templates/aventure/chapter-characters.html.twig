@@ -33,7 +33,7 @@
     <div class="label-du-groupe">Lieux</div>
     <div class="chapter-lieux-row">
       {% for lieu in lieux_chapitre %}
-        <a class="chapter-lieu-link" href="{{ path('empire_lieu', {id: lieu.id}) }}" title="{{ lieu.nom }}">
+        <a class="chapter-lieu-link" href="{{ path('world_lieu', {id: lieu.id}) }}" title="{{ lieu.nom }}">
           <img class="chapter-lieu-icon" src="{{ asset(lieu.icone|default(NA_LIEU_ICO)) }}" alt="Icone de {{ lieu.nom }}" />
         </a>
       {% endfor %}

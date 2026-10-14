@@ -5,7 +5,6 @@ namespace App\Service;
 use App\Entity\Access;
 use App\Entity\Personnage;
 use App\Repository\UnlockRepository;
-use Symfony\Component\Security\Core\Security;
 
 class Visibility
 {
@@ -37,15 +36,13 @@ class Visibility
         Access::PUBLIC => self::PUBLIC,
     ];
 
-    private $security;
     private $currentPlayer;
     private $unlockRepository;
     private $unlocks;
     private $owned;
 
-    public function __construct(Security $security, CurrentPlayer $currentPlayer, UnlockRepository $unlockRepository)
+    public function __construct(CurrentPlayer $currentPlayer, UnlockRepository $unlockRepository)
     {
-        $this->security = $security;
         $this->currentPlayer = $currentPlayer;
         $this->unlockRepository = $unlockRepository;
     }
@@ -62,7 +59,7 @@ class Visibility
             return self::REVEALED[$access];
         }
 
-        if ($this->security->isGranted('ROLE_MJ')) {
+        if ($this->currentPlayer->seesAll()) {
             return self::PALIERS[$access];
         }
 
@@ -91,7 +88,7 @@ class Visibility
 
     public function isReadable($element): bool
     {
-        return $this->security->isGranted('ROLE_MJ')
+        return $this->currentPlayer->seesAll()
             || in_array($this->state($element), self::READABLE, true);
     }
 
@@ -131,7 +128,7 @@ class Visibility
 
     public function isListed($element, bool $revealSession = false): bool
     {
-        return $this->security->isGranted('ROLE_MJ') || $this->state($element, $revealSession) !== self::HIDDEN;
+        return $this->currentPlayer->seesAll() || $this->state($element, $revealSession) !== self::HIDDEN;
     }
 
     public function listedOnly(iterable $elements): array
@@ -223,14 +220,17 @@ class Visibility
         }
 
         $this->owned = [];
+        $personnage = $this->currentPlayer->main();
 
-        foreach ($this->currentPlayer->allCharacters() as $personnage) {
-            foreach ($this->possessionsOf($personnage) as $element) {
-                $key = EntityRegistry::keyOf($element);
+        if ($personnage === null) {
+            return $this->owned;
+        }
 
-                if ($key !== null) {
-                    $this->owned[$key][$element->getId()] = true;
-                }
+        foreach ($this->possessionsOf($personnage) as $element) {
+            $key = EntityRegistry::keyOf($element);
+
+            if ($key !== null) {
+                $this->owned[$key][$element->getId()] = true;
             }
         }
 

@@ -4,13 +4,13 @@
 {% block stylesheets %}
     {{parent()}}
     <link rel="stylesheet" href="{{asset('css/components/picture-grid.css')}}" />
-    <link rel="stylesheet" href="{{asset('css/pages/empire.css')}}" />
+    <link rel="stylesheet" href="{{asset('css/pages/world.css')}}" />
 {% endblock %}
 
 {% block section_content1 %}
     {{ include('/parts/picture-grid.html.twig', {
         catalog: true,
-        items: archives, route: 'empire_archive', na_image: NA_ARCHIVE,
+        items: archives, route: 'world_archive', na_image: NA_ARCHIVE,
         wrapper: 'col-12', per_row: {desktop: 6, mobile: 2},
         empty_message: "Pas d'archives disponibles.",
     }) }}
@@ -29,7 +29,7 @@
             {{ include('/parts/picture-grid.html.twig', {
                 catalog: true,
                 variant: 'emblem',
-                items: clansMajeurs, route: 'empire_clan', na_image: NA_MON,
+                items: clansMajeurs, route: 'world_clan', na_image: NA_MON,
                 per_row: {desktop: 4, mobile: 2},
             }) }}
         </div>
@@ -40,7 +40,7 @@
             {{ include('/parts/picture-grid.html.twig', {
                 catalog: true,
                 variant: 'emblem',
-                items: clansAutres, route: 'empire_clan', na_image: NA_MON,
+                items: clansAutres, route: 'world_clan', na_image: NA_MON,
                 max_size: '6rem',
                 per_row: {desktop: 2, mobile: 3},
             }) }}
@@ -65,7 +65,7 @@
             {{ include('/parts/picture-grid.html.twig', {
                 catalog: true,
                 variant: 'icon',
-                items: groupe.lieux, route: 'empire_lieu', na_image: NA_LIEU,
+                items: groupe.lieux, route: 'world_lieu', na_image: NA_LIEU,
                 per_row: {desktop: 6, mobile: 2},
             }) }}
         </div>
@@ -77,7 +77,7 @@
 {% block section_content4 %}
     {{ include('/parts/picture-grid.html.twig', {
         catalog: true,
-        items: lores, route: 'empire_lore', na_image: NA_ARCHIVE,
+        items: lores, route: 'world_lore', na_image: NA_ARCHIVE,
         wrapper: 'col-12', per_row: {desktop: 6, mobile: 2},
         empty_message: 'Pas de lore disponible.',
     }) }}

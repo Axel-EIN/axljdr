@@ -2,7 +2,7 @@
 {% set show_button = pdf_button|default(false) or (app.user and is_granted('ROLE_MJ')) %}
 
 <div class="gradient-after-down {{ classes|default('') }}">
-  {% if has_pdf and not show_button %}
+  {% if has_pdf and not show_button and app.user %}
     <a href="{{ asset(pdf) }}" target="_blank" rel="noopener">
       <img class="img-fluid {{ img_class|default('') }}" src="{{ asset(image|default(NA_PDF)) }}" alt="{{ alt }}" />
     </a>

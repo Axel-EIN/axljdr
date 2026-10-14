@@ -6,6 +6,9 @@ use App\Repository\LieuRepository;
 
 class Baliseur
 {
+    private const LIEN_PERSONNAGE = '#<a class="tag-character .*><img class="character-portrait small" .* \/> (.*)<\/a>#Ui';
+    private const LIEN_LIEU = '#<a class="tag-location .*><img class="location-icon-small" .* \/> (.*)<\/a>#Ui';
+
     private $persoRepo;
     private $lieuRepo;
 
@@ -23,6 +26,21 @@ class Baliseur
     public function debaliser(?string $texte): ?string
     {
         return empty($texte) ? $texte : $this->debaliserLieux($this->debaliserPersonnages($texte));
+    }
+
+    public function rebaliser(?string $texte, ?string $ancien): ?string
+    {
+        if (empty($texte)) {
+            return $texte;
+        }
+
+        $liens = $this->liensDe($ancien);
+
+        return preg_replace_callback(
+            '#\[[^\]]*\]|\{[^}]*\}#',
+            fn (array $marqueur) => in_array($marqueur[0], $liens, true) ? $this->baliser($marqueur[0]) : $marqueur[0],
+            $texte
+        );
     }
 
     public function baliserPersonnages($texte)
@@ -63,9 +81,9 @@ class Baliseur
     {
         $tableau = [];
 
-        preg_match_all('#<a class="tag-character .*><img class="character-portrait small" .* \/> (.*)<\/a>#Ui', $texte, $tableau);
+        preg_match_all(self::LIEN_PERSONNAGE, $texte, $tableau);
 
-        $tableau_de_regexp = array_fill(0, count($tableau[1]), '#<a class="tag-character .*><img class="character-portrait small" .* \/> (.*)<\/a>#Ui');
+        $tableau_de_regexp = array_fill(0, count($tableau[1]), self::LIEN_PERSONNAGE);
         $tableau_remplacement = [];
 
         foreach ($tableau[1] as $key => $un_match) {
@@ -113,9 +131,9 @@ class Baliseur
     {
         $tableau = [];
 
-        preg_match_all('#<a class="tag-location .*><img class="location-icon-small" .* \/> (.*)<\/a>#Ui', $texte, $tableau);
+        preg_match_all(self::LIEN_LIEU, $texte, $tableau);
 
-        $tableau_de_regexp = array_fill(0, count($tableau[1]), '#<a class="tag-location .*><img class="location-icon-small" .* \/> (.*)<\/a>#Ui');
+        $tableau_de_regexp = array_fill(0, count($tableau[1]), self::LIEN_LIEU);
         $tableau_remplacement = [];
 
         foreach ($tableau[1] as $key => $un_match) {
@@ -127,5 +145,20 @@ class Baliseur
         }
 
         return preg_replace($tableau_de_regexp, $tableau_remplacement, $texte, 1);
+    }
+
+    private function liensDe(?string $texte): array
+    {
+        if (empty($texte)) {
+            return [];
+        }
+
+        preg_match_all(self::LIEN_PERSONNAGE, $texte, $personnages);
+        preg_match_all(self::LIEN_LIEU, $texte, $lieux);
+
+        return array_merge(
+            array_map(fn (string $prenom) => '[' . $prenom . ']', $personnages[1]),
+            array_map(fn (string $nom) => '{' . $nom . '}', $lieux[1])
+        );
     }
 }

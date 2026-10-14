@@ -75,7 +75,7 @@
         {{ include('parts/search-bar.html.twig', {variant: 'd-none d-lg-flex'}) }}
 
         {% if app.user %}
-          {% set main_character = app.user.mainCharacter %}
+          {% set main_character = main_character() %}
           <div id="user-zone" class="connected">
 
             <div class="user-infos">

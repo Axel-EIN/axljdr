@@ -18,11 +18,9 @@ footer { color: var(--color-disabled); }
     padding: 0; }
 
 #footer1 a, #footer2 a {
-    color: var(--color-white50); }
-
-#footer1 a:hover, #footer2 a:hover {
-    color: var(--color-white) !important;
-    text-decoration: underline; }
+    color: var(--color-linkonimage);
+    font-weight: normal;
+    &:hover { color: var(--color-linkonimage-hover) !important; } }
 
 #social-medias {
     gap: 1rem;

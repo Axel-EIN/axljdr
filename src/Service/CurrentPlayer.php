@@ -2,6 +2,7 @@
 
 namespace App\Service;
 
+use App\Entity\Personnage;
 use Symfony\Component\Security\Core\Security;
 
 class CurrentPlayer
@@ -13,25 +14,16 @@ class CurrentPlayer
         $this->security = $security;
     }
 
-    public function isConnected(): bool
-    {
-        return $this->security->getUser() !== null;
-    }
-
-    public function characters(): array
+    public function main(): ?Personnage
     {
         $user = $this->security->getUser();
 
-        if ($user === null || !method_exists($user, 'getPersonnages')) {
-            return [];
-        }
-
-        if ($user->isWithoutCharacter()) {
-            return [];
+        if ($user === null || !method_exists($user, 'getPersonnages') || $this->isWithoutCharacter()) {
+            return null;
         }
 
         if ($user->getMainCharacter() !== null) {
-            return [$user->getMainCharacter()];
+            return $user->getMainCharacter();
         }
 
         $dernier = null;
@@ -41,27 +33,28 @@ class CurrentPlayer
             }
         }
 
-        return $dernier === null ? [] : [$dernier];
+        return $dernier;
     }
 
-    public function allCharacters(): array
+    public function seesAll(): bool
     {
-        $user = $this->security->getUser();
-
-        if ($user === null || !method_exists($user, 'getPersonnages')) {
-            return [];
-        }
-
-        return $user->getPersonnages()->toArray();
+        return $this->security->isGranted('ROLE_MJ') && !$this->isWithoutCharacter();
     }
 
     public function characterIds(): array
     {
-        $ids = [];
-        foreach ($this->characters() as $personnage) {
-            $ids[] = $personnage->getId();
-        }
+        $personnage = $this->main();
 
-        return $ids;
+        return $personnage === null ? [] : [$personnage->getId()];
+    }
+
+    private function isWithoutCharacter(): bool
+    {
+        $user = $this->security->getUser();
+
+        return $user !== null
+            && method_exists($user, 'isWithoutCharacter')
+            && $user->isWithoutCharacter()
+            && $this->security->isGranted('ROLE_MJ');
     }
 }

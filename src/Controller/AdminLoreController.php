@@ -83,7 +83,7 @@ class AdminLoreController extends AbstractController
             $numeroteur->reordonnerNumero($lore->getId(), -1, $lore->getNumero(), [], $fratrieArrivee);
 
             if (!empty($request->query->get('redirect')) && $request->query->get('redirect') == 'lore')
-                return $this->redirectToRoute('empire_lore', ['id' => $lore->getId()]);
+                return $this->redirectToRoute('world_lore', ['id' => $lore->getId()]);
 
             return $this->redirectToRoute('admin_lore');
         }
@@ -139,7 +139,7 @@ class AdminLoreController extends AbstractController
             $this->addFlash('success', 'Le Lore a bien été modifiée');
 
             if (!empty($request->query->get('redirect')) && $request->query->get('redirect') == 'lore')
-                return $this->redirectToRoute('empire_lore', ['id' => $lore->getId()]);
+                return $this->redirectToRoute('world_lore', ['id' => $lore->getId()]);
 
             return $this->redirectToRoute('admin_lore');
         }

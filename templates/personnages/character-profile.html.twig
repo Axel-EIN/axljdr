@@ -57,7 +57,7 @@
         {% if personnage.clan is defined and personnage.clan is not empty %}
             <li class="list-group-item infos-item">
                 Clan :
-                <a class="hover-no-under bold" href="{{ path('empire_clan', {id: personnage.clan.id} ) }}">
+                <a class="hover-no-under bold" href="{{ path('world_clan', {id: personnage.clan.id} ) }}">
                     {{ personnage.clan.nom }}
                     <img class="img-48" src="{{ asset(personnage.clan.mon|default(NA_MON)) }}" alt="Mon du Clan {{personnage.clan.nom}}" title="Mon du Clan {{personnage.clan.nom}}" />
                 </a>
@@ -67,7 +67,7 @@
         {% if personnage.famille is defined and personnage.famille is not empty %}
             <li class="list-group-item infos-item">
                 Famille :
-                <a class="hover-no-under bold" href="{{ path('empire_clan', {id: personnage.clan.id, '_fragment': personnage.famille.nom } ) }}">
+                <a class="hover-no-under bold" href="{{ path('world_clan', {id: personnage.clan.id, '_fragment': personnage.famille.nom } ) }}">
                     {{ personnage.famille.nom }}
                     <img
                     class="img-48 rounded-circle" src="{{ asset(personnage.famille.mon|default(NA_MON)) }}"

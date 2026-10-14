@@ -18,6 +18,7 @@
 
 .picture-item {
   position: relative;
+  font-weight: normal;
   width: var(--item-size, 100%);
   max-width: 100%;
   justify-self: center;

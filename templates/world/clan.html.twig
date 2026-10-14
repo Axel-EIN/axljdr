@@ -8,7 +8,7 @@
 
 {% block element_content %}
 
-    {{ include('empire/clan-banner.html.twig', {clan, toutClans}) }}
+    {{ include('world/clan-banner.html.twig', {clan, toutClans}) }}
 
     <div class="col-12 col-lg-8">
         <div class="card card-body relative">
@@ -93,7 +93,7 @@
 
     {{ include('/parts/picture-grid.html.twig', {
         title: 'Lieux',
-        items: clan.lieux, route: 'empire_lieu',
+        items: clan.lieux, route: 'world_lieu',
         na_image: NA_LIEU,
         per_row: {desktop: 4, tablet: 3, mobile: 2},
         empty_message: "Il n'y a pas encore de lieu rattaché à ce clan.",

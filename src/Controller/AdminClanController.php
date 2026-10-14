@@ -156,7 +156,7 @@ class AdminClanController extends AbstractController
             $this->addFlash('success', 'Le clan a bien été modifié.');
 
             if (!empty($request->query->get('redirect')) && $request->query->get('redirect') == 'clan' )
-                return $this->redirectToRoute('empire_clan', ['id' => $clan->getId()]);
+                return $this->redirectToRoute('world_clan', ['id' => $clan->getId()]);
             
             return $this->redirectToRoute('admin_clan');
         }

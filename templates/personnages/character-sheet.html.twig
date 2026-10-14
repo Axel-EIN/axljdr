@@ -67,7 +67,7 @@
             <li>
               <span class="label">Clan :</span>
               {% if fiche.personnage.clan %}
-                <a class="extrabold" href="{{ path('empire_clan', {id: fiche.personnage.clan.id}) }}">
+                <a class="extrabold" href="{{ path('world_clan', {id: fiche.personnage.clan.id}) }}">
                   <img  class="img-24" src="{{ asset(fiche.personnage.clan.mon|default(NA_MON)) }}"
                         title="Mon du clan {{ fiche.personnage.clan.nom }}" />
                   {{ fiche.personnage.clan.nom }}
@@ -79,7 +79,7 @@
             <li>
               <span class="label">Famille :</span>
               {% if fiche.personnage.famille %}
-                <a class="extrabold" href="{{ path('empire_clan', {id: fiche.personnage.clan.id, '_fragment': fiche.personnage.famille.nom}) }}">
+                <a class="extrabold" href="{{ path('world_clan', {id: fiche.personnage.clan.id, '_fragment': fiche.personnage.famille.nom}) }}">
                   <img  class="img-24 rounded-circle" src="{{ asset(fiche.personnage.famille.mon|default(NA_MON)) }}"
                         title="Mon de la famille {{ fiche.personnage.famille.nom }}" />
                   {{ fiche.personnage.famille.nom }}

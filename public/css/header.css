@@ -19,10 +19,9 @@
 
     a {
         text-decoration: none;
-        color: var(--color-white50);
-    }
-    a:hover {
-        color: var(--color-white);
+        color: var(--color-linkonimage);
+
+        &:hover { color: var(--color-linkonimage-hover); }
     }
 
     &.icon {
@@ -36,10 +35,10 @@
         margin-left: 1rem;
         padding: 0;
         border-radius: 50%;
-        color: var(--color-white50);
+        color: var(--color-linkonimage);
         font-size: 1.1rem;
 
-        &:hover { color: var(--color-white); }
+        &:hover { color: var(--color-linkonimage-hover); }
     }
 }
 
@@ -62,17 +61,18 @@
 
     .navbar { padding: 0.5rem 0 }
 
-    .nav-link.active {
-        color: var(--color-white) !important;
-        font-weight: bold;
-        border-bottom: 3px solid var(--color-primary);
-    }
-
     .nav-link {
-        color: var(--color-white50) !important;
-        &:active { color: var(--color-white) !important; }
-        &:hover {
-            color: var(--color-background) !important;
+        color: var(--color-linkonimage) !important;
+        font-weight: normal;
+
+        &.active {
+            color: var(--color-white) !important;
+            font-weight: bold;
+            border-bottom: 3px solid var(--color-primary);
+        }
+
+        &:active, &:hover {
+            color: var(--color-linkonimage-hover) !important;
             text-decoration: none;
         }
     }
@@ -97,11 +97,14 @@
     color: var(--color-white);
     align-items: center;
 
-    a { color: var(--color-gray); }
-    a:active { color: var(--color-white); }
-    a:hover {
-        color: var(--color-background);
-        text-decoration: none;
+    a {
+        color: var(--color-linkonimage);
+        font-weight: normal;
+
+        &:active, &:hover {
+            color: var(--color-linkonimage-hover);
+            text-decoration: none;
+        }
     }
 
     &.connected {
@@ -119,12 +122,6 @@
         display: flex;
         align-items: center;
         gap: 0.35rem;
-        color: var(--color-white50);
-
-        &:hover {
-            color: var(--color-white);
-            text-decoration: underline;
-        }
     }
 
     .avatar-link { margin-left: 1rem; }

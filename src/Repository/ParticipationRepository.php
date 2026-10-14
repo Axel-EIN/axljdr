@@ -6,6 +6,7 @@ use App\Entity\Lieu;
 use App\Entity\Objet;
 use App\Entity\Participation;
 use App\Entity\Personnage;
+use App\Entity\Saison;
 use App\Entity\Status;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -171,5 +172,25 @@ class ParticipationRepository extends ServiceEntityRepository
         }
 
         return array_values($rencontres);
+    }
+
+    public function findForCharactersInSaison(Saison $saison, array $characterIds): array
+    {
+        if (empty($characterIds)) {
+            return [];
+        }
+
+        return $this->createQueryBuilder('p')
+            ->addSelect('s', 'e')
+            ->join('p.scene', 's')
+            ->join('s.episodeParent', 'e')
+            ->join('e.chapitreParent', 'c')
+            ->andWhere('c.saisonParent = :saison')
+            ->andWhere('p.personnage IN (:ids)')
+            ->andWhere('p.estPj = true')
+            ->setParameter('saison', $saison)
+            ->setParameter('ids', $characterIds)
+            ->getQuery()
+            ->getResult();
     }
 }

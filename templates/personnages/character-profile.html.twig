@@ -57,7 +57,7 @@
         {% if personnage.clan is defined and personnage.clan is not empty %}
             <li class="list-group-item infos-item">
                 Clan :
-                <a class="hover-no-under bold" href="{{ path('world_clan', {id: personnage.clan.id} ) }}">
+                <a href="{{ path('world_clan', {id: personnage.clan.id} ) }}">
                     {{ personnage.clan.nom }}
                     <img class="img-48" src="{{ asset(personnage.clan.mon|default(NA_MON)) }}" alt="Mon du Clan {{personnage.clan.nom}}" title="Mon du Clan {{personnage.clan.nom}}" />
                 </a>
@@ -67,7 +67,7 @@
         {% if personnage.famille is defined and personnage.famille is not empty %}
             <li class="list-group-item infos-item">
                 Famille :
-                <a class="hover-no-under bold" href="{{ path('world_clan', {id: personnage.clan.id, '_fragment': personnage.famille.nom } ) }}">
+                <a href="{{ path('world_clan', {id: personnage.clan.id, '_fragment': personnage.famille.nom } ) }}">
                     {{ personnage.famille.nom }}
                     <img
                     class="img-48 rounded-circle" src="{{ asset(personnage.famille.mon|default(NA_MON)) }}"
@@ -80,7 +80,7 @@
         {% if personnage.ecole is defined and personnage.ecole is not empty %}
             <li class="list-group-item infos-item">
                 Ecole :
-                <a class="hover-no-under bold" href="{{ path('regles_ecole', {id: personnage.ecole.id} ) }}">
+                <a href="{{ path('regles_ecole', {id: personnage.ecole.id} ) }}">
                     {{ personnage.ecole.nom }}
                     <img class="img-48" src="{{ asset(personnage.classe.icone|default(NA_CLASS_ICO)) }}" alt="Classe {{personnage.classe.nom}}" title="Classe {{personnage.classe.nom}}" />
                 </a>           
@@ -95,7 +95,7 @@
         {% set position_connue = element_state(position_actuelle) != 'hidden' %}
         <li class="list-group-item infos-item">
           Position :
-          <a class="hover-no-under bold" href="{{ position_connue ? path('carte', {lieu: position_actuelle.id}) : path('carte') }}" title="Voir sur la carte">
+          <a href="{{ position_connue ? path('carte', {lieu: position_actuelle.id}) : path('carte') }}" title="Voir sur la carte">
             {{ position_connue ? position_actuelle.nom : 'Inconnue' }}
             <i class="fa-solid fa-map-location-dot"></i>
           </a>
@@ -171,7 +171,7 @@
                                 {% if is_granted('ROLE_MJ') %}
                                     {{ include('/btns/btn-icon-edit.html.twig', {
                                     entity: 'development', un_element: development, position: 'align-middle',
-                                    redirect: 'development', size: 'btn-icon-mini', color: 'text-accent',
+                                    redirect: 'development', size: 'btn-icon-mini', color: 'link-gm',
                                     }) }}
                                 {% endif %}
                             </span>
@@ -195,7 +195,7 @@
                     {{ include('/btns/btn-add-element.html.twig', {
                         entity: 'development', label_one: 'développement',
                         position: '', options: 'personnage=' ~ personnage.id,
-                        variant: 'btn-quaternary-style text-accent',
+                        variant: 'btn-quaternary-style link-gm',
                     }) }}
                 </div>
             </div>

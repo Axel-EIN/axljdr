@@ -2,7 +2,7 @@
   {% if attribute(un_element, 'part' ~ i ~ 'titre') is not empty %}
     <div id="part{{ i }}" class="part-header">
       {% if app.user and is_granted("ROLE_MJ") %}
-        {% set position, size, color, redirect, fragment = 'topright-corner-snap', 'btn-icon-medium', 'text-accent', entity, 'part' ~ i %}
+        {% set position, size, color, redirect, fragment = 'topright-corner-snap', 'btn-icon-medium', 'link-gm', entity, 'part' ~ i %}
         {{ include('/btns/btn-icon-edit.html.twig') }}
       {% endif %}
 

@@ -30,15 +30,15 @@
 
                 {% if app.user and is_granted("ROLE_MJ") %}
                     {% for section in [
-                        {cle: 'AVENTURE',    titre: 'Aventure',    texte: "Éléments ajoutés pour le descriptif de l'aventure."},
-                        {cle: 'PERSONNAGES', titre: 'Personnages', texte: 'Tous les personnages enregistrés.'},
-                        {cle: 'EMPIRE',      titre: 'Empire',      texte: "Éléments ajoutés pour le descriptif de l'univers de jeu."},
-                        {cle: 'REGLES',      titre: 'Règles',      texte: 'Éléments ajoutés pour les mécaniques de jeu.'},
+                        {titre: 'Aventure',    texte: "Éléments ajoutés pour le descriptif de l'aventure."},
+                        {titre: 'Personnages', texte: 'Tous les personnages enregistrés.'},
+                        {titre: 'Univers',     texte: "Éléments ajoutés pour le descriptif de l'univers de jeu."},
+                        {titre: 'Règles',      texte: 'Éléments ajoutés pour les mécaniques de jeu.'},
                     ] %}
                         <h2 class="heading-categorysubsection mt-5">{{ section.titre }}</h2>
                         <p class="mb-4 text-muted">{{ section.texte }}</p>
                         <section class="row pb-5">
-                            {% for admin_element in admin_elements|filter(e => e.categorie == section.cle) %}
+                            {% for admin_element in admin_elements|filter(e => e.categorie == section.titre) %}
                                 {{ include('back_office/card-element-resume.html.twig', admin_element) }}
                             {% endfor %}
                         </section>

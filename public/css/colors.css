@@ -16,10 +16,14 @@
     
     --color-link: var(--color-primarydarker);
     --color-link-hover: var(--color-primary);
-    --color-linkondark: var(--color-primary);
+    --color-linkondark: var(--color-primarylight);
     --color-linkondark-hover: var(--color-primarylighter);
     --color-linkgm: var(--accent);
     --color-linkgm-hover: var(--accent-light);
+    --color-linkonimage: var(--color-white50);
+    --color-linkonimage-hover: var(--color-white);
+    --color-linkcharacter: var(--color-secondary);
+    --color-linklocation: var(--purple);
 
     .text-surface { color: var(--color-surface); }
     .text-background { color: var(--color-background); }

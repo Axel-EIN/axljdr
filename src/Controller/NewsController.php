@@ -159,7 +159,7 @@ class NewsController extends AbstractController
             'session_objects' => $dernierEpisode === null ? [] : $newsFeed->episodeObjects($dernierEpisode),
             'session_previous' => array_slice($episodes, 1),
             'mes_personnages' => $mesPersonnages,
-            'mon_personnage' => $currentPlayer->characters()[0] ?? null,
+            'mon_personnage' => $currentPlayer->main(),
             'mes_participations' => $participations,
             'classement_general' => $newsFeed->generalRanking(),
             'participations_xp' => $participationsXp,

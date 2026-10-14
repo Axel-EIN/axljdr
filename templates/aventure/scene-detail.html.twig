@@ -113,7 +113,7 @@
     </div>
 
     {% if app.user and is_granted("ROLE_MJ") %}
-        {% set color, entity, un_element, redirect = 'text-accent', 'scene', une_scene, 'episode' %}
+        {% set color, entity, un_element, redirect = 'link-gm', 'scene', une_scene, 'episode' %}
         <div class="d-flex justify-content-center">
 
             {% set action = 'edit' %}

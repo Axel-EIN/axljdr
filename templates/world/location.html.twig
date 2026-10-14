@@ -21,7 +21,7 @@
 
         <div class="stats d-none d-lg-flex">
           {% if un_element.clan is defined and un_element.clan is not empty %}
-            <a class="d-flex justify-content-end" href="{{ path('empire_clan', {id:un_element.clan.id} ) }}" >
+            <a class="d-flex justify-content-end" href="{{ path('world_clan', {id:un_element.clan.id} ) }}" >
               <img class="mb-2 img-64 circle-crop" src="{{ asset(un_element.clan.mon|default(NA_MON)) }}" alt="Mon d'une faction" title="{{un_element.clan.nom|default('')}}" />
             </a>
           {% endif %}
@@ -46,7 +46,7 @@
             {% if un_element.clan is defined and un_element.clan is not empty %}
               <li>
                 <span class="label">Clan :</span>
-                <a class="extrabold" href="{{ path('empire_clan', {id:un_element.clan.id} ) }}">
+                <a class="extrabold" href="{{ path('world_clan', {id:un_element.clan.id} ) }}">
                   <img class="img-24" src="{{ asset(un_element.clan.mon|default(NA_MON)) }}" alt="" title="Mon du clan {{un_element.clan.nom}}" />
                   {{ un_element.clan.nom }}
                 </a>
@@ -97,7 +97,7 @@
       {% endif %}
 
       {% if app.user and is_granted("ROLE_MJ") %}
-        {% set redirect, element, un_element, color, action = 'empire', 'lieu', un_element, 'text-accent', 'delete' %}
+        {% set redirect, element, un_element, color, action = 'world', 'lieu', un_element, 'text-accent', 'delete' %}
         {{ include('/btns/btn-line.html.twig', {classes: ornament is defined ? '' : 'mt-5'}) }}
       {% endif %}
 
@@ -118,7 +118,7 @@
 
   {{ include('/parts/picture-grid.html.twig', {
       title: 'Autres Lieux',
-      items: autresLieux, route: 'empire_lieu',
+      items: autresLieux, route: 'world_lieu',
       na_image: NA_LIEU,
   }) }}
 

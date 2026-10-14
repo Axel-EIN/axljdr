@@ -26,7 +26,7 @@
                     <article id="{{ une_famille.nom }}" class="famille relative">
 
                         {% if app.user and is_granted("ROLE_MJ") %}
-                            {% set redirect, entity, un_element, size, color, position = 'clan', 'famille', une_famille, 'btn-icon-small', 'text-accent', 'topright-corner-snap' %}
+                            {% set redirect, entity, un_element, size, color, position = 'clan', 'famille', une_famille, 'btn-icon-small', 'link-gm', 'topright-corner-snap' %}
                             {{ include('/btns/btn-icon-edit.html.twig') }}
                         {% endif %}
 
@@ -34,7 +34,7 @@
                             <img class="img-fluid circle-crop" src="{{ asset(une_famille.mon|default(NA_MON)) }}" alt="Mon Famille" />
 
                             {% if une_famille.chef is not empty %}
-                                <a class="famille-daimyo hover-no-under hover-zoom" href="{{ path('personnage_profil', {id: une_famille.chef.id} ) }}" title="{{ une_famille.chef.nomComplet }}">
+                                <a class="famille-daimyo hover-zoom" href="{{ path('personnage_profil', {id: une_famille.chef.id} ) }}" title="{{ une_famille.chef.nomComplet }}">
                                     <span class="text-muted">Daimyo</span>
                                     <img class="character-portrait medium" src="{{ asset(une_famille.chef.icone|default(NA_PERSO_PORTRAIT)) }}" alt="Icône du personnage" />
                                 </a>

@@ -17,14 +17,14 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
-class EmpireController extends AbstractController
+class WorldController extends AbstractController
 {
   use VisibilityTrait;
 
   /**
-   * @Route("/empire", name="empire")
+   * @Route("/world", name="world")
    */
-  public function afficherEmpire(ClanRepository $clanRepository,
+  public function afficherWorld(ClanRepository $clanRepository,
                                  ArchiveRepository $archiveRepository,
                                  LieuRepository $lieuRepository,
                                  LoreRepository $loreRepository): Response
@@ -64,12 +64,12 @@ class EmpireController extends AbstractController
     $sections[$i]['titleLight'] = '';
     $sections[$i]['titleStrong'] = 'Lore';
 
-    $header_classname = 'empire';
+    $header_classname = 'world';
     $header_up = "Univers du Jeu";
     $header_down = "L'Empire d'Emeraude";
-    $category = 'empire';
+    $category = 'world';
 
-    return $this->render('empire/index.html.twig', [
+    return $this->render('world/index.html.twig', [
       'clansMajeurs' => $clansMajeurs,
       'clansAutres' => $clansAutres,
       'archives' => $archives,
@@ -84,11 +84,11 @@ class EmpireController extends AbstractController
   }
 
   /**
-   * @Route("/empire/clan/{id}", name="empire_clan")
+   * @Route("/world/clan/{id}", name="world_clan")
    */
   public function afficherClan(Clan $clan, ClanRepository $clanRepository, Visibility $visibility): Response
   {
-    if ($response = $this->accessGuard($visibility, $clan, 'clan', 'empire')) {
+    if ($response = $this->accessGuard($visibility, $clan, 'clan', 'world')) {
       return $response;
     }
 
@@ -97,44 +97,44 @@ class EmpireController extends AbstractController
     else
       $toutClans = $clanRepository->findAllAutres();
 
-    return $this->render('empire/clan.html.twig', [
+    return $this->render('world/clan.html.twig', [
       'clan' => $clan,
       'nom' => $clan->getNom(),
       'entity' => 'clan',
-      'category' => 'empire',
+      'category' => 'world',
       'un_element' => $clan,
       'toutClans' => $toutClans,
     ]);
   }
 
   /**
-   * @Route("/empire/archive/{id}", name="empire_archive")
+   * @Route("/world/archive/{id}", name="world_archive")
    */
   public function afficherArchive(Archive $archive, ArchiveRepository $archiveRepository, Visibility $visibility): Response
   {
-    if ($response = $this->accessGuard($visibility, $archive, 'archive', 'empire')) {
+    if ($response = $this->accessGuard($visibility, $archive, 'archive', 'world')) {
       return $response;
     }
 
     $archives = $archiveRepository->findall();
     $autresArchives = $archiveRepository->findAllExceptOne($archive->getId());
 
-    return $this->render('empire/archive.html.twig', [
+    return $this->render('world/archive.html.twig', [
       'un_element' => $archive,
       'nom' => $archive->getTitre(),
       'entity' => 'archive',
-      'category' => 'empire',
+      'category' => 'world',
       'archives' => $archives,
       'autresArchives' => $autresArchives
     ]);
   }
 
   /**
-   * @Route("/empire/lieu/{id}", name="empire_lieu")
+   * @Route("/world/lieu/{id}", name="world_lieu")
    */
   public function afficherLocation(Lieu $lieu, LieuRepository $lieuRepository, ClasseurHistorique $classeur, SaisonRepository $saisonRepository, Visibility $visibility): Response
   {
-    if ($response = $this->accessGuard($visibility, $lieu, 'lieu', 'empire')) {
+    if ($response = $this->accessGuard($visibility, $lieu, 'lieu', 'world')) {
       return $response;
     }
 
@@ -145,11 +145,11 @@ class EmpireController extends AbstractController
 
     $historique = $classeur->pourLieu($lieu);
 
-    return $this->render('empire/location.html.twig', [
+    return $this->render('world/location.html.twig', [
       'un_element' => $lieu,
       'nom' => $lieu->getNom(),
       'entity' => 'lieu',
-      'category' => 'empire',
+      'category' => 'world',
       'lieux' => $lieux,
       'autresLieux' => $autresLieux,
       'historique' => $historique,
@@ -158,19 +158,19 @@ class EmpireController extends AbstractController
   }
 
   /**
-   * @Route("/empire/lore/{id}", name="empire_lore")
+   * @Route("/world/lore/{id}", name="world_lore")
    */
   public function afficherLore(Lore $lore, LoreRepository $loreRepository, Visibility $visibility): Response
   {
-    if ($response = $this->accessGuard($visibility, $lore, 'lore', 'empire')) {
+    if ($response = $this->accessGuard($visibility, $lore, 'lore', 'world')) {
       return $response;
     }
 
-    return $this->render('empire/lore.html.twig', [
+    return $this->render('world/lore.html.twig', [
       'un_element' => $lore,
       'nom' => $lore->getNom(),
       'entity' => 'lore',
-      'category' => 'empire',
+      'category' => 'world',
       'autresLores' => $loreRepository->findAllExceptOne($lore->getId()),
     ]);
   }

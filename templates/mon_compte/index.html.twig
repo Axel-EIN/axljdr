@@ -9,7 +9,7 @@
 
 {% block cartes %}
 
-  {% set principal = app.user.mainCharacter %}
+  {% set principal = main_character() %}
 
   <div class="col-12 col-lg-6">
     <div class="card card-page">
@@ -83,15 +83,17 @@
           <select id="main-character" name="personnage">
             <option value="">Automatique — le plus récent</option>
             {% for un_personnage in app.user.personnages %}
-              <option value="{{ un_personnage.id }}"{% if principal and un_personnage.id == principal.id %} selected{% endif %}>
+              <option value="{{ un_personnage.id }}"{% if app.user.mainCharacter and un_personnage.id == app.user.mainCharacter.id %} selected{% endif %}>
                 {{ un_personnage.nomComplet }}
               </option>
             {% endfor %}
           </select>
-          <label class="account-choice-toggle" for="sans-personnage">
-            <input type="checkbox" id="sans-personnage" name="sans_personnage" value="1"{{ app.user.withoutCharacter ? ' checked' }} />
-            Naviguer sans personnage
-          </label>
+          {% if is_granted('ROLE_MJ') %}
+            <label class="account-choice-toggle" for="sans-personnage">
+              <input type="checkbox" id="sans-personnage" name="sans_personnage" value="1"{{ app.user.withoutCharacter ? ' checked' }} />
+              Naviguer sans personnage
+            </label>
+          {% endif %}
 
           <button type="submit" class="btn-primary-style btn-medium">Valider</button>
         </form>

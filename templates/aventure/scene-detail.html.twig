@@ -18,7 +18,7 @@
             <div class="time-and-location">
                 <div class="location">
                     {% if une_scene.lieu is not empty %}
-                        <a href="{{path('empire_lieu', {id: une_scene.lieu.id} ) }}" >
+                        <a href="{{path('world_lieu', {id: une_scene.lieu.id} ) }}" >
                             <img src="{{asset(une_scene.lieu.icone|default(NA_LIEU_ICO))}}" alt="icône du lieu" />
                         </a>
                     {% endif %}

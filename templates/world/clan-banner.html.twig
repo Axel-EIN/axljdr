@@ -42,7 +42,7 @@
                 {% endif %}
 
                 {% if clan.chef is not empty %}
-                    <a style="color: {{ clan.couleur }}" class="d-flex justify-content-center hover-no-under hover-zoom mt-3" href="{{ path('personnage_profil', {id: clan.chef.id} ) }}">
+                    <a style="color: {{ clan.couleur }}" class="d-flex justify-content-center hover-zoom mt-3" href="{{ path('personnage_profil', {id: clan.chef.id} ) }}">
                         <img class="img-48" src="{{ asset(clan.chef.icone|default(NA_PERSO_PORTRAIT)) }}" alt="Icône du personnage" />
                         <div class="d-flex flex-column text-left ml-3">
                             <strong>{{ clan.chef.nomComplet }}</strong>

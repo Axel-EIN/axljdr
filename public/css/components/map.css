@@ -234,7 +234,11 @@
 
       li + li { margin-top: 0.35rem; }
 
-      a { color: var(--color-white); }
+      a {
+        color: var(--color-linkonimage);
+
+        &:hover { color: var(--color-linkonimage-hover); }
+      }
     }
 
     @media (max-width: 767.98px) {
@@ -492,7 +496,7 @@
       transform: translateY(-50%);
       cursor: default;
 
-      a { color: var(--color-primarylighter); }
+      a { color: var(--color-linkondark-hover); }
     }
 
     &.open {

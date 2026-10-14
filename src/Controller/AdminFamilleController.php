@@ -80,7 +80,7 @@ class AdminFamilleController extends AbstractController
             $this->addFlash('success', 'Le Famille a bien été ajoutée.');
 
             if (!empty($request->query->get('redirect')) && $request->query->get('redirect') == 'clan')
-                return $this->redirectToRoute('empire_clan', ['id' => $famille->getClan()->getId()]);
+                return $this->redirectToRoute('world_clan', ['id' => $famille->getClan()->getId()]);
             
             return $this->redirectToRoute('admin_famille');
         }
@@ -120,7 +120,7 @@ class AdminFamilleController extends AbstractController
             $this->addFlash('success', 'La Famille a bien été modifiée.');
 
             if (!empty($request->query->get('redirect')) && $request->query->get('redirect') == 'clan')
-                return $this->redirectToRoute('empire_clan', ['id' => $famille->getClan()->getId()]);
+                return $this->redirectToRoute('world_clan', ['id' => $famille->getClan()->getId()]);
 
             return $this->redirectToRoute('admin_famille');
         }

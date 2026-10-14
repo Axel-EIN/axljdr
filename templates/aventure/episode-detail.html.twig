@@ -63,7 +63,7 @@
 
             {% if app.user and is_granted("ROLE_MJ") %}
               <div class="text-center mb-4">&nbsp;
-                  {% set color, entity, numero, parent, parentID, redirect, label = 'text-accent', 'scene', une_scene.numero, 'episode', episode.id, 'episode', 'Insérer' %}
+                  {% set color, entity, numero, parent, parentID, redirect, label = 'link-gm', 'scene', une_scene.numero, 'episode', episode.id, 'episode', 'Insérer' %}
                   {{ include('/btns/btn-line-insert.html.twig') }}
               </div>
             {% endif %}

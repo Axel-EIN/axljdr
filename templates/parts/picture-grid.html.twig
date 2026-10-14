@@ -42,7 +42,7 @@
       {% set alt = hidden ? 'À découvrir' : name %}
       {% set pdf_only = item.pdf|default(null) and not item.hasParts|default(false) %}
       {% set image_na = pdf_only ? NA_PDF : na_image|default(NA_ICON) %}
-      {% set pdf_link = pdf_only and not is_mj %}
+      {% set pdf_link = pdf_only and not is_mj and app.user %}
       {% set href = pdf_link ? asset(item.pdf) : (route is defined ? path(route, {id: item.id}) : element_url(item)) %}
 
       <a class="picture-item {{ variant }} {{ item_class }}"
@@ -77,13 +77,13 @@
               <img class="picture" src="{{ asset(attribute(item, field|default('mon'))|default(image_na)) }}" alt="{{ alt }}" />
             </span>
 
-          {% elseif variant == 'icon' and item.icone|default(null) %}
-            <img class="picture" src="{{ asset(item.icone) }}" alt="{{ alt }}" />
+          {% elseif variant == 'icon' %}
+            <img class="picture" src="{{ asset(item.icone|default(image_na)) }}" alt="{{ alt }}" />
 
           {% else %}
             {% if pdf_only %}<img class="badge-corner" src="{{ asset(PDF) }}" alt="Icône PDF" />{% endif %}
             <div class="frame ratio-{{ shape }}">
-              <img class="ratio-cropped" src="{{ asset(variant == 'icon' ? image_na : item.imageAffichee|default(item.image|default(image_na))) }}" alt="{{ alt }}" />
+              <img class="ratio-cropped" src="{{ asset(item.imageAffichee|default(item.image|default(image_na))) }}" alt="{{ alt }}" />
               {% if not hidden and item.icone|default(null) %}
                 <img class="hover-icon" src="{{ asset(item.icone) }}" alt="" />
               {% endif %}

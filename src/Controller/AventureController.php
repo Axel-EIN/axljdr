@@ -5,15 +5,19 @@ namespace App\Controller;
 use App\Entity\Saison;
 use App\Entity\Episode;
 use App\Service\ClasseurXP;
+use App\Service\Visibility;
 use App\Repository\SaisonRepository;
 use App\Repository\ChapitreRepository;
 use App\Repository\EpisodeRepository;
+use App\Repository\ParticipationRepository;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class AventureController extends AbstractController
 {
+    use VisibilityTrait;
+
     /**
      * @Route("/aventure", name="aventure")
      */
@@ -31,24 +35,18 @@ class AventureController extends AbstractController
     /**
      * @Route("/aventure/{id}", name="aventure_saison")
      */
-    public function viewSaison(Saison $saison, SaisonRepository $saisonRepository, ClasseurXP $classeurXP): Response
+    public function viewSaison(Saison $saison, SaisonRepository $saisonRepository, ParticipationRepository $participationRepository, ClasseurXP $classeurXP): Response
     {
         $precedent = $saisonRepository->findPrevious($saison->getNumero());
         $suivant = $saisonRepository->findNext($saison->getNumero());
         $user = $this->getUser();
         $user_personnages_cumul_episodes = [];
         if ($user != null) {
-            $user_personnages = $user->getPersonnages();
-
-            foreach($user_personnages as $un_personnage) {
-                foreach($saison->getChapitres() as $un_chapitre) {
-                    foreach($un_chapitre->getEpisodes() as $un_episode) {
-                        $cumul = $classeurXP->cumulUnPersoEpisode($un_episode, $un_personnage->getId());
-                        if ($cumul)
-                            $user_personnages_cumul_episodes[$un_personnage->getId()][$un_episode->getId()] = $cumul;
-                    }
-                }      
-            }
+            $ids = $user->getPersonnages()->map(fn ($un_personnage) => $un_personnage->getId())->toArray();
+            $user_personnages_cumul_episodes = $classeurXP->cumulsParEpisode(
+                $participationRepository->findForCharactersInSaison($saison, $ids),
+                $ids
+            );
         }
 
         return $this->render('aventure/index.html.twig', [
@@ -62,8 +60,12 @@ class AventureController extends AbstractController
     /**
      * @Route("/aventure/episode/{id}", name="aventure_episode")
      */
-    public function viewEpisode(Episode $episode, EpisodeRepository $episodeRepository, ClasseurXP $classeurXP, ChapitreRepository $chapitreRepository): Response
+    public function viewEpisode(Episode $episode, EpisodeRepository $episodeRepository, ClasseurXP $classeurXP, ChapitreRepository $chapitreRepository, Visibility $visibility): Response
     {
+        if ($response = $this->accessGuard($visibility, $episode, 'episode', 'aventure')) {
+            return $response;
+        }
+
         $suivant = $episodeRepository->findNext($episode->getChapitreParent()->getId(), $episode->getNumero());
         $classement_episode = $classeurXP->classerPersosEpisode($episode);
 

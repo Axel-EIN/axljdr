@@ -1,8 +1,3 @@
-.header-episode {
-  background-size: 100% auto;
-  background-repeat: no-repeat;
-}
-
 .episodes-line {
   display: flex;
   flex-direction: column;
@@ -24,7 +19,8 @@
 
       &:hover { z-index: 100; }
       &.active {
-        width: 180px;
+        z-index: 3;
+        width: 150px;
         border: solid var(--color-primary) 1px;
       }
 

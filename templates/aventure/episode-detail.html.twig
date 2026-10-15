@@ -122,7 +122,7 @@
                       {% set scale = 'scale-120' %}
                     {% endif %}
                   {% else %}
-                    {% set scale = 'scale-80' %}
+                    {% set scale = 'scale-sm-80' %}
                   {% endif %}
 
                   <a class="list-group-item d-flex align-items-center hover-zoom bg-transparent ranking {{scale|default('')}}" href="{{path('personnage_profil',{id:un_personnage.id})}}">

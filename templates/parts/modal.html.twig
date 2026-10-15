@@ -1,15 +1,18 @@
 <section>
   <div class="modal fade" id="connexion" tabindex="-1" aria-labelledby="form-titre" aria-hidden="true">
       <div class="modal-dialog">
-        <div class="modal-content">
+        <div class="modal-content bg-clouds">
           <div class="modal-header">
-            <h5 class="modal-title" id="form-titre">Se connecter</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <h5 class="modal-title heading-present compact" id="form-titre">Se connecter</h5>
+            {{ include('/parts/divider-ornament.html.twig', {classes: 'mt-2'}) }}
+            <button type="button" class="close" data-dismiss="modal" aria-label="Fermer">
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
           <div class="modal-body">
-            {{ include('/parts/form-se-connecter.html.twig') }}
+            <div class="w-75 mx-auto">
+              {{ include('/parts/form-se-connecter.html.twig') }}
+            </div>
           </div>
         </div>
       </div>

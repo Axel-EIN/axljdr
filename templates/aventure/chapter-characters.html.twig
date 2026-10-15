@@ -1,12 +1,12 @@
 
 {% set pj_ids, pjs, pnj_ids, pnjs = [], [], [], [] %}
 {% set lieu_ids, lieux_chapitre = [], [] %}
-{% set episode_perso_ids = [] %}
 {% set is_mj = app.user and is_granted('ROLE_MJ') %}
+{% set bloc = bloc|default('personnages') %}
 
-{% for un_episode in un_chapitre.episodes %}
+{% for un_episode in episode is defined ? [episode] : un_chapitre.episodes %}
   {% for une_scene in un_episode.scenes %}
-    {% for une_participation in une_scene.participations %}
+    {% for une_participation in bloc == 'personnages' ? une_scene.participations : [] %}
       {% set perso = une_participation.personnage %}
       {% if element_listed(perso, true) and une_participation.estPj and perso.id not in pj_ids %}
         {% set pj_ids = pj_ids|merge([perso.id]) %}
@@ -15,11 +15,8 @@
         {% set pnj_ids = pnj_ids|merge([perso.id]) %}
         {% set pnjs = pnjs|merge([perso]) %}
       {% endif %}
-      {% if episode is defined and un_episode.id == episode.id and perso.id not in episode_perso_ids %}
-        {% set episode_perso_ids = episode_perso_ids|merge([perso.id]) %}
-      {% endif %}
     {% endfor %}
-    {% if avec_lieux|default(false) and une_scene.lieu is not null and une_scene.lieu.id not in lieu_ids and element_listed(une_scene.lieu) %}
+    {% if bloc == 'lieux' and une_scene.lieu is not null and une_scene.lieu.id not in lieu_ids and element_listed(une_scene.lieu) %}
       {% set lieu_ids = lieu_ids|merge([une_scene.lieu.id]) %}
       {% set lieux_chapitre = lieux_chapitre|merge([une_scene.lieu]) %}
     {% endif %}
@@ -52,7 +49,7 @@
           {% elseif perso.icone is null and perso.genre == 'M' %}{% set fallback = attribute(_context, 'NA_PERSO_PORTRAIT_M')|default(NA_PERSO_PORTRAIT) %}
           {% endif %}
           <a class="chapter-portrait-link" href="{{ path('personnage_profil', {id: perso.id}) }}" title="{{ perso.prenom }}">
-            <img class="chapter-portrait{{ vue }}{% if episode is defined and perso.id in episode_perso_ids %} in-episode{% endif %}"
+            <img class="chapter-portrait{{ vue }}{% if episode is defined %} in-episode{% endif %}"
                  src="{{ asset(perso.icone|default(fallback)) }}" alt="Portrait de {{ perso.prenom }}" />
             {% set state = element_state(perso) %}
             {% if is_mj or (state == 'discovered' and perso.manualUnlock) %}

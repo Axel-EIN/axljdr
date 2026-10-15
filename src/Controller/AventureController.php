@@ -69,6 +69,8 @@ class AventureController extends AbstractController
         $suivant = $episodeRepository->findNext($episode->getChapitreParent()->getId(), $episode->getNumero());
         $classement_episode = $classeurXP->classerPersosEpisode($episode);
 
+        $chapitre_precedent = $chapitreRepository->findPrevious($episode->getChapitreParent()->getSaisonParent()->getId(), $episode->getChapitreParent()->getNumero());
+
         $chapitre_suivant = [];
         $chapitre_suivant = $chapitreRepository->findNext($episode->getChapitreParent()->getSaisonParent()->getId(), $episode->getChapitreParent()->getNumero());
 
@@ -84,6 +86,8 @@ class AventureController extends AbstractController
             'episode' => $episode,
             'episode_suivant' => $suivant,
             'episode_chapitre_suivant' => $episode_chapitre_suivant,
+            'chapitre_precedent' => $chapitre_precedent,
+            'chapitre_suivant' => $chapitre_suivant,
             'classement_episode' => $classement_episode,
         ]);
     }

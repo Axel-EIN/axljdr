@@ -45,15 +45,39 @@
   margin-bottom: 0;
   padding-top: 0.5rem;
   padding-bottom: 0.5rem;
-}
 
-.header:not(.header-episode) { min-height: 60vh; }
-@media (max-width: 991.98px) { .header:not(.header-episode) { min-height: 40vh; } }
+  &:not(.header-episode) {
+    min-height: 60vh;
 
-.header hr {
-  background-color: var(--color-white);
-  height: 1px;
-  margin-top: 0.5rem;
-  margin-bottom: 0.5rem;
-  opacity: 0.4;
+    @media (max-width: 991.98px) { min-height: 40vh; }
+  }
+
+  &:has(.chapter-intro) { min-height: 0; }
+
+  &.veiled {
+    --veil-extend: 14rem;
+
+    &::before {
+      content: '';
+      position: absolute;
+      inset: calc(-1 * var(--backdrop-padding, 0px)) calc(50% - 50vw) calc(-1 * var(--veil-extend));
+      z-index: -1;
+      pointer-events: none;
+      background-image: linear-gradient(
+        rgb(0 0 0 / 0.6) 0%,
+        rgb(0 0 0 / 0) 25%,
+        rgb(0 0 0 / 0) 55%,
+        rgb(0 0 0 / 0.6) 85%,
+        rgb(0 0 0 / 0) 100%
+      );
+    }
+  }
+
+  hr {
+    background-color: var(--color-white);
+    height: 1px;
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+    opacity: 0.4;
+  }
 }

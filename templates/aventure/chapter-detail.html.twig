@@ -1,7 +1,7 @@
 {% set chapter_image = un_chapitre.image|default(NA_CHAPITRE) %}
-<section class="header-bg-img chapter-banner relative{{ image_bright(chapter_image) ? ' bright' }}"
-  style="--chapter-color: {{ un_chapitre.couleur }};
-         --chapter-image: url('{{ asset(chapter_image) }}')">
+<section class="chapter-backdrop chapter-banner" style="--chapter-color: {{ un_chapitre.couleur }}">
+
+  <img class="chapter-backdrop-image zoomed{{ image_bright(chapter_image) ? ' bright' }}" src="{{ asset(chapter_image) }}" alt="" />
 
   <div class="container">
 
@@ -36,29 +36,32 @@
       </span>
       <div><hr></div>
 
-      {{ include('aventure/chapter-characters.html.twig', {un_chapitre, avec_lieux: true}) }}
+      {{ include('aventure/chapter-characters.html.twig', {un_chapitre, bloc: 'lieux'}) }}
 
       <div>
         <h2 id="read-head-ch-id{{ un_chapitre.id }}" class="heading-chapter{% if un_chapitre.titre|length > 20 %} reduced{% endif %}">{{ un_chapitre.titre|relief|raw }}</h2>
-        {% if un_chapitre.citation is not empty %}
-          <p class="quote quote-chapter">{{ un_chapitre.citation|nl2br }}</p>
-        {% endif %}
-        {% if episodes_visibles is not empty %}
-          <button type="button" class="btn-primary-style btn-large voir" data-toggle="collapse"
-             data-target="#ch{{ un_chapitre.numero }}-episodes" aria-controls="ch{{ un_chapitre.numero }}-episodes"
-             aria-expanded="false" aria-label="Voir les épisodes du chapitre {{ un_chapitre.numero }}">
-            <i class="fa-solid fa-scroll fa-bounce" aria-hidden="true"></i>&nbsp;&nbsp;Voir les Episodes
-          </button>
-        {% else %}
-          <div class="alert alert-light mx-auto alert-persist">
-            <strong>Il n'y a pas encore de session disponible !</strong>&nbsp;&nbsp;
-            {% if app.user and is_granted("ROLE_MJ") %}
-              <a class="btn-quaternary-style text-white50" href="{{path('admin_episode_create')}}?numero=1&chapitreID={{un_chapitre.id}}&redirect=aventure">
-                <i class="fas fa-plus-square" aria-hidden="true"></i>&nbsp;&nbsp;<strong>Ajouter une Session</strong>
-              </a>
-            {% endif %}
-          </div>
-        {% endif %}
+        <div class="chapter-intro relative">
+          {{ include('aventure/chapter-characters.html.twig', {un_chapitre}) }}
+          {% if un_chapitre.citation is not empty %}
+            <p class="quote quote-chapter">{{ un_chapitre.citation|nl2br }}</p>
+          {% endif %}
+          {% if episodes_visibles is not empty %}
+            <button type="button" class="btn-primary-style btn-large voir" data-toggle="collapse"
+               data-target="#ch{{ un_chapitre.numero }}-episodes" aria-controls="ch{{ un_chapitre.numero }}-episodes"
+               aria-expanded="false" aria-label="Voir les épisodes du chapitre {{ un_chapitre.numero }}">
+              <i class="fa-solid fa-scroll fa-bounce" aria-hidden="true"></i>&nbsp;&nbsp;Voir les Épisodes
+            </button>
+          {% else %}
+            <div class="alert alert-light mx-auto alert-persist">
+              <strong>Il n'y a pas encore de session disponible !</strong>&nbsp;&nbsp;
+              {% if app.user and is_granted("ROLE_MJ") %}
+                <a class="btn-quaternary-style text-white50" href="{{path('admin_episode_create')}}?numero=1&chapitreID={{un_chapitre.id}}&redirect=aventure">
+                  <i class="fas fa-plus-square" aria-hidden="true"></i>&nbsp;&nbsp;<strong>Ajouter une Session</strong>
+                </a>
+              {% endif %}
+            </div>
+          {% endif %}
+        </div>
       </div>
 
     </div>

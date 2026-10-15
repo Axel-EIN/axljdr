@@ -1,12 +1,16 @@
-$('.cacher, .voir').click(function(){
+$('.cacher, .voir').each(function () {
 
-        if ($(this).hasClass('voir')) {
-            $(this).removeClass('voir').addClass('cacher');
-            $(this).removeClass('btn-primary-style').addClass('btn-tertiary-style').html('<i class="fa-solid fa-eye-slash" aria-hidden="true"></i>&nbsp;&nbsp;Cacher');
-        } else {
-            $(this).removeClass('cacher').addClass('voir');
-            $(this).removeClass('btn-tertiary-style').addClass('btn-primary-style').html('<i class="fa-solid fa-scroll fa-bounce" aria-hidden="true"></i>&nbsp;&nbsp;Voir les Episodes');
-        }
+        const $button = $(this);
+
+        $($button.data('target'))
+            .on('show.bs.collapse', function (e) {
+                if (e.target !== this) return;
+                $button.removeClass('voir btn-primary-style').addClass('cacher btn-tertiary-style').html('<i class="fa-solid fa-eye-slash" aria-hidden="true"></i>&nbsp;&nbsp;Cacher');
+            })
+            .on('hide.bs.collapse', function (e) {
+                if (e.target !== this) return;
+                $button.removeClass('cacher btn-tertiary-style').addClass('voir btn-primary-style').html('<i class="fa-solid fa-scroll fa-bounce" aria-hidden="true"></i>&nbsp;&nbsp;Voir les Épisodes');
+            });
 
 });
 

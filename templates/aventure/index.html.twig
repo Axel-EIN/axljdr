@@ -39,8 +39,8 @@
         {{ include('/aventure/chapter-detail.html.twig') }}
     {% else %}
 
-        <section class="header-bg-img chapter-banner header-bg-no-chapter"
-                 style="--chapter-color: #400000; --chapter-image: url('{{ asset(NA_169) }}')">
+        <section class="chapter-backdrop chapter-banner" style="--chapter-color: #400000">
+            <img class="chapter-backdrop-image zoomed centered" src="{{ asset(NA_169) }}" alt="" />
             <div class="container">
                 <div class="header header-chapter d-flex flex-column justify-content-end" >
                     <div class="alert alert-light mx-auto alert-persist mt-3 mb-3">

@@ -11,25 +11,35 @@
 
 {% block body %}
 
-<div class="header-episode p-md-4"
-     style=" background-image:
-                    linear-gradient( rgb( 0,0,0,0.4 ), rgb( 0,0,0,0.4) ),
-                    url('{{ asset(episode.chapitreParent.image|default(NA_CHAPITRE)) }}');
-             background-color: {{ episode.chapitreParent.couleur }}">
+{% set chapter_image = episode.chapitreParent.image|default(NA_CHAPITRE) %}
+<div class="chapter-backdrop padded" style="--chapter-color: {{ episode.chapitreParent.couleur }}">
 
-  <header class="container header header-episode">
+  <img class="chapter-backdrop-image{{ image_bright(chapter_image) ? ' bright' }}" src="{{ asset(chapter_image) }}" alt="" />
+
+  <header class="container header header-episode veiled">
 
     {{ include('/parts/messages-flashes.html.twig') }}
 
     <div class="relative d-flex w-100 flex-column">
-      <span class="chapter-number display-5 text-left">CHAPITRE {{ episode.chapitreParent.numero }}</span>
+      {% set chapitres_voisins = {precedent: chapitre_precedent, suivant: chapitre_suivant}|map(c => c ? c.episodes|filter(e => e.scenes|length > 0 or is_granted('ROLE_MJ'))|first : null) %}
+      <span class="chapter-number navigable display-5">
+        <a class="prev btn-quaternary-style text-white50{{ chapitres_voisins.precedent is empty ? ' invisible' }}"
+           {% if chapitres_voisins.precedent is not empty %}href="{{ path('aventure_episode', {id: chapitres_voisins.precedent.id}) }}" title="Chapitre précédent"{% endif %}>
+          <i class="fa-solid fa-chevron-left"></i>
+        </a>
+        CHAPITRE {{ episode.chapitreParent.numero }}
+        <a class="btn-quaternary-style text-white50{{ chapitres_voisins.suivant is empty ? ' invisible' }}"
+           {% if chapitres_voisins.suivant is not empty %}href="{{ path('aventure_episode', {id: chapitres_voisins.suivant.id}) }}" title="Chapitre suivant"{% endif %}>
+          <i class="fa-solid fa-chevron-right"></i>
+        </a>
+      </span>
       <div><hr></div>
-      <a class="btn-primary-style btn-medium chapter-backbtn" href="{{ path('aventure_saison', {id: episode.chapitreParent.saisonParent.id, '_fragment': 'read-head-ch-id' ~ episode.chapitreParent.id } ) }}">Retour</a>
+      <a class="btn-primary-style btn-medium hue-gray chapter-backbtn" href="{{ path('aventure_saison', {id: episode.chapitreParent.saisonParent.id, '_fragment': 'read-head-ch-id' ~ episode.chapitreParent.id } ) }}" title="Retour à l'Aventure" aria-label="Retour à l'Aventure"><i class="fa-solid fa-reply" aria-hidden="true"></i></a>
     </div>
 
     <h2 id="read-head" class="heading-chapter">{{ episode.chapitreParent.titre|relief|raw }}</h2>
 
-    <div class="relative mb-5">
+    <div class="chapter-intro relative">
       {{ include('aventure/chapter-characters.html.twig', {un_chapitre: episode.chapitreParent, episode}) }}
       <p class="quote quote-chapter">{{ episode.chapitreParent.citation|nl2br }}</p>
     </div>

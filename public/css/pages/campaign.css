@@ -1,19 +1,15 @@
 .chapter-banner {
-  background-color: var(--chapter-color);
-  background-image:
-    linear-gradient(rgb(0 0 0 / 0.4), rgb(0 0 0 / 0.4)),
-    linear-gradient(rgb(0 0 0 / 0.6), rgb(0 0 0 / 0), rgb(0 0 0 / 0.3), rgb(0 0 0 / 0.6)),
-    var(--chapter-image);
+  overflow: hidden;
 
-  &.bright {
-    background-image:
-      linear-gradient(rgb(0 0 0 / 0.6), rgb(0 0 0 / 0.6)),
-      linear-gradient(rgb(0 0 0 / 0.6), rgb(0 0 0 / 0), rgb(0 0 0 / 0.3), rgb(0 0 0 / 0.6)),
-      var(--chapter-image);
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background-image: linear-gradient(rgb(0 0 0 / 0.6), rgb(0 0 0 / 0), rgb(0 0 0 / 0.3), rgb(0 0 0 / 0.6));
+    pointer-events: none;
   }
 }
-
-.header-bg-no-chapter { background-position: center; }
 
 /* ----- BARRE DE SAISON (navigation precedente/suivante) ----- */
 

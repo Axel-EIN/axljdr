@@ -126,7 +126,6 @@
 
 .scale-120 { scale: 120%; }
 .scale-100 { scale: 100%; }
-.scale-80 { scale: 80%; }
 
 .scale-sm-80 {
     @media (min-width: 576px) { scale: 80%; }

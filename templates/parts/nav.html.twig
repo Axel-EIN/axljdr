@@ -1,4 +1,5 @@
 {% set compact = compact|default(false) %}
+{% set avec_recherche = not compact %}
 {% set control_panel = null %}
 {% if app.user and is_granted('ROLE_ADMIN') %}
   {% set control_panel = {variant: 'admin', icon: 'fa-tools', label: "Panneau d'Administration"} %}
@@ -35,7 +36,7 @@
         <img  class="img-fluid" src="{{ asset(LOGO) }}" alt="Logo AXL-JDR" title="Retour à l'Accueil" />
       </a>
 
-      <div class="nav-mobile-menu dropdown d-lg-none">
+      <div class="nav-mobile-menu dropdown{{ compact ? '' : ' d-lg-none' }}">
         <button
           class="nav-link nav-mobile-toggle-full chevron-toggle{% if section_active %} active{% endif %}" type="button"
           data-toggle="dropdown" aria-expanded="false" aria-label="Ouvrir le menu des sections"
@@ -51,16 +52,18 @@
         </div>
       </div>
 
-      <button
-        class="search-toggle d-lg-none" type="button"
-        data-toggle="collapse" data-target="#search-mobile" aria-controls="search-mobile" aria-expanded="false" aria-label="Ouvrir la recherche"
-      >
-        <i class="fas fa-magnifying-glass"></i>
-      </button>
+      {% if avec_recherche %}
+        <button
+          class="search-toggle d-lg-none" type="button"
+          data-toggle="collapse" data-target="#search-mobile" aria-controls="search-mobile" aria-expanded="false" aria-label="Ouvrir la recherche"
+        >
+          <i class="fas fa-magnifying-glass"></i>
+        </button>
+      {% endif %}
 
-      <div class="navbar-collapse d-lg-flex justify-content-lg-between align-items-lg-center w-100" id="navbarNav">
+      <div class="navbar-collapse d-lg-flex {{ compact ? 'justify-content-lg-end' : 'justify-content-lg-between' }} align-items-lg-center w-100" id="navbarNav">
 
-        <ul class="navbar-nav d-none d-lg-flex">
+        <ul class="navbar-nav d-none{{ compact ? '' : ' d-lg-flex' }}">
           {% for une_section in nav_sections %}
             <li class="nav-item">
               <a  href="{{ path(une_section.route) }}"
@@ -72,7 +75,9 @@
           {% endfor %}
         </ul>
 
-        {{ include('parts/search-bar.html.twig', {variant: 'd-none d-lg-flex'}) }}
+        {% if avec_recherche %}
+          {{ include('parts/search-bar.html.twig', {variant: 'd-none d-lg-flex ml-auto mr-4'}) }}
+        {% endif %}
 
         {% if app.user %}
           {% set main_character = main_character() %}
@@ -106,8 +111,12 @@
           </div>
         {% else %}
           <div id="user-zone" class="disconnected">
-            <button class="btn-primary-style btn-medium" data-toggle="modal" data-target="#connexion" alt="Boutton se connecter">Se connecter</button>
-            <a class="mt-1" href="{{ path('app_register') }}">Créer un compte</a>
+            {% if compact %}
+              <a href="#connexion" data-toggle="modal" role="button">Se connecter</a>
+            {% else %}
+              <button class="btn-primary-style btn-medium" data-toggle="modal" data-target="#connexion">Se connecter</button>
+              <a class="mt-1" href="{{ path('app_register') }}">Créer un compte</a>
+            {% endif %}
           </div>
         {% endif %}
 
@@ -119,8 +128,10 @@
       </div>
     </nav>
 
-    <div id="search-mobile" class="search-collapse collapse d-lg-none">
-      {{ include('parts/search-bar.html.twig', {variant: 'mobile'}) }}
-    </div>
+    {% if avec_recherche %}
+      <div id="search-mobile" class="search-collapse collapse d-lg-none">
+        {{ include('parts/search-bar.html.twig', {variant: 'mobile'}) }}
+      </div>
+    {% endif %}
   </div>
 </header>

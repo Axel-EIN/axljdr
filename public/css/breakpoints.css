@@ -1,0 +1,25 @@
+/* ---------------------------------- */
+/* ----- RESPONSIVE BREAKPOINTS ----- */
+/* ---------------------------------- */
+
+/*
+  Palier          De       À          Rôle
+  --------------  -------  ---------  ------------------------------
+  Mobile-Small     320px    359.98px  Limite basse du site
+  Mobile-Medium    360px    479.98px  Cible du « Mobile »
+  Mobile-Large     480px    575.98px
+  Tablet-7p        576px    767.98px
+  Tablet-10p       768px    991.98px  Cible des tablettes
+  Tablet-Large     992px   1199.98px
+  Laptop-Small    1200px   1439.98px  Cible des laptops
+  Laptop-Medium   1440px   1559.98px
+  Laptop-Large    1560px   1919.98px
+  Desktop-HD      1920px   2559.98px  Cible du site
+  Desktop-Wide    2560px   3439.98px
+  Ultra-Wide      3440px   et plus
+
+  Préférer max-width avec la borne haute d'un palier : max-width: 575.98px.
+  Une règle en min-width prend la borne basse d'un palier : min-width: 576px.
+  Les variables CSS ne fonctionnent pas dans une media query :
+  écrire la valeur du palier en dur.
+*/

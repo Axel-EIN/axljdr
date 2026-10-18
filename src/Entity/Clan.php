@@ -28,9 +28,9 @@ class Clan
     private $nom;
 
     /**
-     * @ORM\Column(type="smallint", nullable=true)
+     * @ORM\Column(type="smallint", options={"default": 1})
      */
-    private $estMajeur;
+    private $type = FactionType::MINEUR;
 
     /**
      * @ORM\Column(type="string", length=7)
@@ -132,14 +132,14 @@ class Clan
         return $this;
     }
 
-    public function getEstMajeur(): ?int
+    public function getType(): int
     {
-        return $this->estMajeur;
+        return $this->type;
     }
 
-    public function setEstMajeur(?int $estMajeur): self
+    public function setType(int $type): self
     {
-        $this->estMajeur = $estMajeur;
+        $this->type = $type;
 
         return $this;
     }

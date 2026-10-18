@@ -159,7 +159,7 @@
   object-fit: cover;
   border-radius: 4px;
   box-shadow: 8px 8px 16px var(--color-black25);
-  transition: 0.2s var(--ease);
+  transition: var(--duration) var(--ease);
 }
 
 .chapter-portraits-grid {

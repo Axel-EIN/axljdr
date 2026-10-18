@@ -2,7 +2,7 @@
 
 .character-card {
   border: unset;
-  transition: 0.5s var(--ease);
+  transition: var(--duration) var(--ease);
 
   &.locked:hover .grayscale { filter: none; }
 }

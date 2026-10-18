@@ -88,12 +88,6 @@
               </option>
             {% endfor %}
           </select>
-          {% if is_granted('ROLE_MJ') %}
-            <label class="account-choice-toggle" for="sans-personnage">
-              <input type="checkbox" id="sans-personnage" name="sans_personnage" value="1"{{ app.user.withoutCharacter ? ' checked' }} />
-              Naviguer sans personnage
-            </label>
-          {% endif %}
 
           <button type="submit" class="btn-primary-style btn-medium">Valider</button>
         </form>

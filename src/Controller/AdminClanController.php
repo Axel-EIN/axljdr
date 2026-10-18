@@ -40,7 +40,7 @@ class AdminClanController extends AbstractController
                 'description:Description:bool',
                 'citation:Citation:bool',
                 'longDescription:LongText:bool',
-                'estMajeur:Majeur?:boolInt',
+                'type:Type:faction',
                 'territoireCarte:Carte:bool',
                 'territoireDesc:CarteText:bool',
                 'video:Video:bool',

@@ -75,9 +75,7 @@
       <span class="label">Lieux</span>
     </button>
 
-    <button type="button" class="map-toggle-btn" data-map-toggle="territories" aria-pressed="false"
-            data-map-clean="{{ asset('assets/maps/map-rokugan-50-clean.jpg') }}"
-            data-map-frontier="{{ asset('assets/maps/map-rokugan-50-frontier.jpg') }}">
+    <button type="button" class="map-toggle-btn" data-map-toggle="territories" aria-pressed="false">
       <i class="fa-solid fa-map"></i>
       <span class="label">Territoires</span>
     </button>
@@ -115,7 +113,11 @@
 
   <div class="map-drag"{% if current %} style="transform: translate(-{{ current.locX }}%, -{{ current.locY }}%);"{% endif %}>
 
-    <img class="map-image" src="{{ asset('assets/maps/map-rokugan-50-clean.jpg') }}" alt="Carte de Rokugan" draggable="false" />
+    <img class="map-image" src="{{ asset('assets/maps/map-rokugan-50-clean.jpg') }}" alt="Carte de Rokugan" draggable="false"
+         data-clean="{{ asset('assets/maps/map-rokugan-50-clean.jpg') }}"
+         data-frontier="{{ asset('assets/maps/map-rokugan-50-frontier.jpg') }}"
+         data-clean-hd="{{ asset('assets/maps/map-rokugan-100-clean.jpg') }}"
+         data-frontier-hd="{{ asset('assets/maps/map-rokugan-100-frontier.jpg') }}" />
 
     {% if trail|length > 1 %}
       <svg class="map-trail" aria-hidden="true">

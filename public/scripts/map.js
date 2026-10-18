@@ -10,7 +10,7 @@
 
   const DRAG_THRESHOLD = 5;
   const ZOOM_STEP = 1.25;
-  const MAX_SCALE = 1;
+  const MAX_SCALE = 1.25;
   const FOCUS_SCALE = 0.75;
   const ZOOMED_OUT_SCALE = 0.45;
   const MARKER_MIN_SCALE = 0.5;
@@ -319,23 +319,16 @@
     controlsToggle.setAttribute('aria-expanded', open);
   });
 
-  function closePortraits(except) {
-    frame.querySelectorAll('.map-portrait.open').forEach(function (portrait) {
-      if (portrait === except) return;
-      portrait.classList.remove('open');
-      portrait.querySelector('.map-portrait-toggle').setAttribute('aria-expanded', 'false');
+  function selectPortrait(portrait) {
+    frame.querySelectorAll('.map-portrait.selected').forEach(function (other) {
+      if (other === portrait) return;
+      other.classList.remove('selected');
+      other.querySelector('.map-portrait-toggle').setAttribute('aria-expanded', 'false');
     });
-  }
-
-  map.addEventListener('click', function (e) {
-    if (e.target.closest('.map-portrait-box')) return;
-    const toggle = e.target.closest('.map-portrait-toggle');
-    const portrait = toggle ? toggle.parentElement : null;
-    closePortraits(portrait);
     if (!portrait) return;
-    const open = portrait.classList.toggle('open');
-    toggle.setAttribute('aria-expanded', open);
-  });
+    portrait.classList.add('selected');
+    portrait.querySelector('.map-portrait-toggle').setAttribute('aria-expanded', 'true');
+  }
 
   const panel = frame.querySelector('.map-panel');
   const panelContent = panel.querySelector('.map-panel-content');
@@ -345,13 +338,16 @@
     panelRequest++;
     panel.hidden = true;
     panelContent.innerHTML = '';
+    selectPortrait(null);
   }
 
-  function openPanel(marker) {
-    if (!marker || !marker.dataset.panel) return;
+  function openPanel(trigger) {
+    if (!trigger || !trigger.dataset.panel) return;
     const current = ++panelRequest;
-    highlight(marker.dataset.lieu);
-    fetch(marker.dataset.panel)
+    const portrait = trigger.closest('.map-portrait');
+    selectPortrait(portrait);
+    if (!portrait) highlight(trigger.dataset.lieu);
+    fetch(trigger.dataset.panel)
       .then(function (response) { return response.ok ? response.text() : Promise.reject(response); })
       .then(function (html) {
         if (current !== panelRequest) return;
@@ -365,18 +361,16 @@
   }
 
   map.addEventListener('click', function (e) {
-    const marker = e.target.closest('.lieu-other-icon[data-panel]');
-    if (!marker) return;
+    const trigger = e.target.closest('.lieu-other-icon[data-panel], .map-portrait-toggle');
+    if (!trigger) return;
     e.preventDefault();
-    openPanel(marker);
+    openPanel(trigger);
   });
 
   panel.querySelector('.map-panel-close').addEventListener('click', closePanel);
 
   document.addEventListener('keydown', function (e) {
-    if (e.key !== 'Escape') return;
-    closePanel();
-    closePortraits(null);
+    if (e.key === 'Escape') closePanel();
   });
 
   const search = frame.querySelector('.map-search');
@@ -411,9 +405,7 @@
     const portrait = frame.querySelector('.map-portrait[data-personnage="' + id + '"]');
     if (!portrait) return;
     if (frame.classList.contains('party-hidden')) frame.querySelector('[data-map-toggle="party"]').click();
-    closePortraits(portrait);
-    portrait.classList.add('open');
-    portrait.querySelector('.map-portrait-toggle').setAttribute('aria-expanded', 'true');
+    openPanel(portrait.querySelector('.map-portrait-toggle'));
   }
 
   function choose(item) {
@@ -424,7 +416,6 @@
     flyTo(parseFloat(item.dataset.locx), parseFloat(item.dataset.locy));
     highlight(item.dataset.lieu);
     if (item.dataset.personnage) {
-      closePanel();
       openPortrait(item.dataset.personnage);
     } else {
       openPanel(frame.querySelector('.lieu-other-icon[data-lieu="' + item.dataset.lieu + '"]'));

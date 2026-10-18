@@ -18,6 +18,7 @@
 
 {% block section_content2 %}
     {% set majeur = constant('App\\Entity\\FactionType::MAJEUR') %}
+    {% set mineur = constant('App\\Entity\\FactionType::MINEUR') %}
     {% set titres = constant('App\\Entity\\FactionType::GROUPS') %}
     {% if factions|filter(clans => clans is not empty) is empty %}
         <p class="col-12 text-muted font-italic">Pas de factions disponibles.</p>
@@ -37,7 +38,7 @@
         </div>
 
         <div class="col-12 col-lg-3 border-left">
-            {% for type, clans in factions|filter((clans, type) => type != majeur and clans is not empty) %}
+            {% for type, clans in factions|filter((clans, type) => type not in [majeur, mineur] and clans is not empty) %}
                 <h4 class="text-primarydark text-center">{{ titres[type] }}</h4>
                 {{ include('/parts/picture-grid.html.twig', {
                     catalog: true,
@@ -48,6 +49,19 @@
                 }) }}
             {% endfor %}
         </div>
+
+        {% if factions[mineur] is not empty %}
+            <div class="col-12">
+                <h4 class="text-primarydark mt-4">{{ titres[mineur] }}</h4>
+                {{ include('/parts/picture-grid.html.twig', {
+                    catalog: true,
+                    variant: 'emblem',
+                    items: factions[mineur], route: 'world_clan', na_image: NA_MON,
+                    per_row: {desktop: 8, mobile: 3},
+                    gap: '1.5rem',
+                }) }}
+            </div>
+        {% endif %}
 
     {% endif %}
 {% endblock %}

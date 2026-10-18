@@ -41,7 +41,7 @@
                 {% for col in table_cols %}
                     {% set parts = col|split(':') %}
                     {% set format = parts[2]|default(null) %}
-                    <th class="first-letter-upper {% if format == 'number' %}text-right{% elseif format in ['symbol','image','bool','color','access','date','status'] %}text-center{% else %}text-left{% endif %}">{{ parts[1]|default(parts[0]) }}</th>
+                    <th class="first-letter-upper {% if format == 'number' %}text-right{% elseif format in ['symbol','image','bool','color','access','date','status','faction'] %}text-center{% else %}text-left{% endif %}">{{ parts[1]|default(parts[0]) }}</th>
                 {% endfor %}
                 <th>Edit</th>
                 <th>Delete</th>
@@ -62,12 +62,10 @@
                             <td class="text-center align-middle{{ bold_class }}">
                                 {% if val is not empty %}<i class="fas fa-check text-success"></i>{% endif %}
                             </td>
-                        {% elseif format == 'boolInt' %}
-                            <td class="text-center align-middle{{ bold_class }}">
-                                {% if val == 1 %}<span class="text-success">Oui</span>{% elseif val == 0 %}<span class="text-muted">Non</span>{% endif %}
-                            </td>
                         {% elseif format == 'status' %}
                             <td class="text-center align-middle{{ bold_class }}">{{ status_label(val) }}</td>
+                        {% elseif format == 'faction' %}
+                            <td class="text-center align-middle{{ bold_class }}">{{ faction_label(val) }}</td>
                         {% elseif format == 'access' %}
                             <td class="text-center align-middle{{ bold_class }}">{{ access_label(val, un_element.manualUnlock|default(false)) }}</td>
                         {% elseif format == 'date' %}

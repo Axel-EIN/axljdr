@@ -22,9 +22,7 @@
 
             <div id="left-part" class="col-12 col-lg-5 py-3 py-lg-5 pl-lg-5 pr-lg-0 m-0 d-flex flex-column justify-content-center align-items-center" >
 
-                {% if clan.estMajeur == 1 %}
-                    <strong class="text-white mb-3 text-shadow">Clan Majeur</strong>
-                {% endif %}
+                <strong class="text-white mb-3 text-shadow">{{ faction_label(clan.type) }}</strong>
 
                 {% if clan.video is defined and clan.video is not empty %}
                     <button id="btn-play" class="btn-unstyled" onclick="focusVideo()">

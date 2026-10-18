@@ -10,13 +10,16 @@
 
   const DRAG_THRESHOLD = 5;
   const ZOOM_STEP = 1.25;
-  const MAX_SCALE = 1.25;
+  const MAX_SCALE = Math.pow(ZOOM_STEP, 3);
+  const HD_SCALE = 1;
   const FOCUS_SCALE = 0.75;
   const ZOOMED_OUT_SCALE = 0.45;
   const MARKER_MIN_SCALE = 0.5;
 
   let x = 0, y = 0, scale = 1, minScale = 1;
   let mapW = 0, mapH = 0;
+  let territories = false;
+  let pendingSrc = null;
   let ready = false;
   let drag = null;
   let pinch = null;
@@ -61,9 +64,30 @@
 
   function render() {
     map.style.transform = 'translate(' + x + 'px, ' + y + 'px) scale(' + scale + ')';
-    frame.style.setProperty('--marker-scale', Math.max(scale, MARKER_MIN_SCALE) / scale);
+    frame.style.setProperty('--marker-scale', Math.min(Math.max(scale, MARKER_MIN_SCALE), 1) / scale);
     frame.classList.toggle('zoomed-out', scale < ZOOMED_OUT_SCALE);
     updateMinimap();
+    updateImage();
+  }
+
+  function imageSource() {
+    return mapImage.dataset[(territories ? 'frontier' : 'clean') + (scale > HD_SCALE ? 'Hd' : '')];
+  }
+
+  function updateImage() {
+    const src = imageSource();
+    if (src === pendingSrc || mapImage.getAttribute('src') === src) return;
+    pendingSrc = src;
+    const loader = new Image();
+    loader.src = src;
+    loader.decode()
+      .then(function () {
+        if (imageSource() === src) mapImage.src = src;
+      })
+      .catch(function () {})
+      .finally(function () {
+        if (pendingSrc === src) pendingSrc = null;
+      });
   }
 
   function animate() {
@@ -109,6 +133,8 @@
     mapW = mapImage.naturalWidth;
     mapH = mapImage.naturalHeight;
     if (!mapW || !mapH) return;
+    mapImage.style.width = mapW + 'px';
+    mapImage.style.height = mapH + 'px';
 
     const locX = parseFloat(frame.dataset.locx);
     const locY = parseFloat(frame.dataset.locy);
@@ -238,9 +264,9 @@
     labels: function (on) {
       frame.classList.toggle('labels-hidden', !on);
     },
-    territories: function (on, button) {
-      const src = on ? button.dataset.mapFrontier : button.dataset.mapClean;
-      if (mapImage.getAttribute('src') !== src) mapImage.src = src;
+    territories: function (on) {
+      territories = on;
+      updateImage();
     },
     party: function (on) {
       frame.classList.toggle('party-hidden', !on);

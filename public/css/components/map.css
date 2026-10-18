@@ -43,7 +43,6 @@
       top: var(--map-top);
       right: var(--map-gap);
       left: auto;
-      align-items: flex-end;
     }
 
     .minimap {
@@ -72,7 +71,7 @@
     left: var(--map-gap);
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
+    align-items: stretch;
     gap: 0.5rem;
     cursor: default;
 
@@ -116,7 +115,11 @@
     transition: background-color var(--duration) var(--ease), border-color var(--duration) var(--ease);
 
     i,
-    svg { font-size: var(--fontsize-regular); }
+    svg {
+      width: 1.25em;
+      font-size: var(--fontsize-regular);
+      text-align: center;
+    }
 
     .icon-on { display: none; }
 
@@ -178,6 +181,8 @@
       width: 100%;
       aspect-ratio: 16 / 9;
       object-fit: cover;
+
+      &.portrait { object-position: center 20%; }
     }
 
     .map-panel-body {
@@ -204,6 +209,17 @@
       gap: 0.5rem;
       color: var(--color-white50);
       font-size: var(--fontsize-small);
+    }
+
+    .map-panel-description {
+      display: -webkit-box;
+      margin: 0;
+      overflow: hidden;
+      color: rgba(255, 255, 255, 0.8);
+      font-size: var(--fontsize-small);
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 2;
+      line-clamp: 2;
     }
 
     .map-panel-heading {
@@ -446,13 +462,9 @@
     gap: 4px;
     transform: scale(var(--marker-scale, 1)) translate(var(--party-offset-x), var(--party-offset-y));
     transform-origin: 0 0;
-
-    &:has(.open) { z-index: 9; }
   }
 
   .map-portrait {
-    position: relative;
-
     .map-portrait-toggle {
       display: block;
       padding: 0;
@@ -479,30 +491,9 @@
       @media (prefers-reduced-motion: reduce) { animation: none; }
     }
 
-    .map-portrait-box {
-      position: absolute;
-      top: 50%;
-      left: calc(100% + 6px);
-      display: none;
-      flex-direction: column;
-      padding: 0.35rem 0.6rem;
-      border: 1px solid rgb(from var(--color-earthlight) r g b / 70%);
-      border-radius: 0.375rem;
-      background-color: rgb(from var(--color-blackonyx) r g b / 92%);
-      box-shadow: 0 4px 12px var(--color-black50);
-      color: var(--color-white);
-      font-size: var(--fontsize-small);
-      white-space: nowrap;
-      transform: translateY(-50%);
-      cursor: default;
-
-      a { color: var(--color-linkondark-hover); }
-    }
-
-    &.open {
-      z-index: 1;
-
-      .map-portrait-box { display: flex; }
+    &.selected .map-portrait-toggle {
+      border-color: var(--color-primarylighter);
+      box-shadow: 0 0 0 2px var(--color-primarylighter), 0 0 8px var(--color-black);
     }
   }
 }

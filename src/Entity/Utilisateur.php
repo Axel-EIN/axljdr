@@ -76,11 +76,6 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
     private $mainCharacter;
 
     /**
-     * @ORM\Column(type="boolean", options={"default": false})
-     */
-    private $withoutCharacter = false;
-
-    /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $reset_token;
@@ -250,18 +245,6 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
     public function setMainCharacter(?Personnage $mainCharacter): self
     {
         $this->mainCharacter = $mainCharacter;
-
-        return $this;
-    }
-
-    public function isWithoutCharacter(): bool
-    {
-        return (bool) $this->withoutCharacter;
-    }
-
-    public function setWithoutCharacter(bool $withoutCharacter): self
-    {
-        $this->withoutCharacter = $withoutCharacter;
 
         return $this;
     }

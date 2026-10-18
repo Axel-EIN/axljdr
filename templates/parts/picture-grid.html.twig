@@ -37,7 +37,7 @@
       {% set state = element_state(item, reveal_session) %}
       {% set hidden = not element_readable(item) %}
       {% set locked = not plain and state == 'locked' %}
-      {% set item_class = plain ? 'hover-zoom' : (element_unseen(item) ? 'access-hidden ' : '') ~ (locked ? 'locked ' : '') ~ (catalog ? 'catalog ' : '') ~ (hidden ? '' : 'hover-zoom') %}
+      {% set item_class = plain ? 'hover-zoom' : (element_unseen(item) ? 'access-hidden ' : '') ~ (locked ? 'locked ' : '') ~ (catalog ? 'catalog ' : '') ~ (hidden or locked ? '' : 'hover-zoom') %}
       {% set name = item.nomComplet is defined ? item.nomComplet : (item.nom is defined ? item.nom : item.titre) %}
       {% set alt = hidden ? 'À découvrir' : name %}
       {% set pdf_only = item.pdf|default(null) and not item.hasParts|default(false) %}

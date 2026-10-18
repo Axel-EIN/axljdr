@@ -287,6 +287,13 @@
     }
   }
 
+  const recenterBtn = frame.querySelector('[data-map-recenter]');
+  if (recenterBtn) {
+    recenterBtn.addEventListener('click', function () {
+      if (ready) flyTo(parseFloat(recenterBtn.dataset.locx), parseFloat(recenterBtn.dataset.locy));
+    });
+  }
+
   if (!world) return;
 
   window.addEventListener('resize', function () {
@@ -304,13 +311,6 @@
       zoomAt(scale * (button.dataset.mapZoom === 'in' ? ZOOM_STEP : 1 / ZOOM_STEP), 0, 0);
     });
   });
-
-  const recenterBtn = frame.querySelector('[data-map-recenter]');
-  if (recenterBtn) {
-    recenterBtn.addEventListener('click', function () {
-      if (ready) flyTo(parseFloat(recenterBtn.dataset.locx), parseFloat(recenterBtn.dataset.locy));
-    });
-  }
 
   const controls = frame.querySelector('.map-controls');
   const controlsToggle = controls.querySelector('.map-controls-toggle');

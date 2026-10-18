@@ -14,6 +14,8 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class PersonnageRepository extends ServiceEntityRepository
 {
+    use FactionOrderTrait;
+
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Personnage::class);
@@ -21,10 +23,8 @@ class PersonnageRepository extends ServiceEntityRepository
 
     public function findAllSorted()
     {
-        return $this->createQueryBuilder('p')
-            ->leftJoin('p.clan', 'c')
-            ->addOrderBy('c.estMajeur', 'DESC')
-            ->addOrderBy('c.nom', 'ASC')
+        return $this->orderByFaction($this->createQueryBuilder('p')
+            ->leftJoin('p.clan', 'c'))
             ->getQuery()
             ->getResult();
     }
@@ -38,10 +38,7 @@ class PersonnageRepository extends ServiceEntityRepository
 
         $this->applySaisonChapitreEpisodeFilter($qb, $saisonId, $chapitreId, $episodeId);
 
-        return $qb
-            ->addOrderBy('p.status', 'ASC')
-            ->addOrderBy('c.estMajeur', 'DESC')
-            ->addOrderBy('c.nom', 'ASC')
+        return $this->orderByFaction($qb->addOrderBy('p.status', 'ASC'))
             ->addOrderBy('p.nom', 'ASC')
             ->getQuery()
             ->getResult();
@@ -56,11 +53,7 @@ class PersonnageRepository extends ServiceEntityRepository
 
         $this->applySaisonChapitreEpisodeFilter($qb, $saisonId, $chapitreId, $episodeId);
 
-        return $qb
-            ->addOrderBy('p.status', 'ASC')
-
-            ->addOrderBy('c.estMajeur', 'DESC')
-            ->addOrderBy('c.nom', 'ASC')
+        return $this->orderByFaction($qb->addOrderBy('p.status', 'ASC'))
             ->addOrderBy('p.nom', 'ASC')
             ->getQuery()
             ->getResult();

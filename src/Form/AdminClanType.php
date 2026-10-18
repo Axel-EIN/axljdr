@@ -3,17 +3,16 @@
 namespace App\Form;
 
 use App\Entity\Clan;
+use App\Entity\FactionType;
 use App\Entity\Personnage;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\CallbackTransformer;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\ColorType;
-use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
@@ -34,7 +33,10 @@ class AdminClanType extends AbstractType
                     'Féminin' => 'F'
                 ],
             ])
-            ->add('estMajeur', CheckboxType::class, ['required' => false])
+            ->add('type', ChoiceType::class, [
+                'label' => 'Type',
+                'choices' => array_flip(FactionType::LABELS),
+            ])
             ->add('citation', TextType::class, [ 'required' => false, 'constraints' => [ new Length( [ 'max' => 100 ] ) ] ] )
             ->add('description', TextareaType::class, ['required' => false, 'constraints' => [ new Length( [ 'max' => 600 ] ) ] ] )
             ->add('longDescription', TextareaType::class, ['required' => false] )
@@ -66,17 +68,6 @@ class AdminClanType extends AbstractType
                     ->leftJoin('p.clan', 'c')->orderBy('c.nom', 'ASC')->addOrderBy('p.prenom', 'ASC'),
             ])
         ;
-
-        $builder
-            ->get('estMajeur')
-            ->addModelTransformer(new CallbackTransformer(
-                function ($activeAsString) {
-                    return (bool)(int)$activeAsString;
-                },
-                function ($activeAsBoolean) {
-                    return (string)(int)$activeAsBoolean;
-                }
-            ));
 
         PublishableFields::add($builder);
     }

@@ -6,6 +6,27 @@
 parameters:
     assets_directory: '%kernel.project_dir%/public/assets'
     image_directory: '%kernel.project_dir%/public/assets/img'
+    factions:
+        - { nom: 'Imperial', titre: 'Familles Impériales' }
+        - { nom: 'Crabe', titre: 'Clan du Crabe' }
+        - { nom: 'Dragon', titre: 'Clan du Dragon' }
+        - { nom: 'Grue', titre: 'Clan de la Grue' }
+        - { nom: 'Licorne', titre: 'Clan de la Licorne' }
+        - { nom: 'Lion', titre: 'Clan du Lion' }
+        - { nom: 'Phénix', titre: 'Clan du Phénix' }
+        - { nom: 'Scorpion', titre: 'Clan du Scorpion' }
+        - { nom: 'Confrérie', titre: 'Confrérie de Shinsei' }
+        - { nom: 'Blaireau', titre: 'Clan Mineur du Blaireau' }
+        - { nom: 'Faucon', titre: 'Clan Mineur du Faucon' }
+        - { nom: 'Guêpe', titre: 'Clan Mineur de la Guêpe' }
+        - { nom: 'Libellule', titre: 'Clan Mineur de la Libellule' }
+        - { nom: 'Lièvre', titre: 'Clan Mineur du Lièvre' }
+        - { nom: 'Mante', titre: 'Clan Mineur de la Mante' }
+        - { nom: 'Mille-pattes', titre: 'Clan Mineur du Mille-pattes' }
+        - { nom: 'Moineau', titre: 'Clan Mineur du Moineau' }
+        - { nom: 'Renard', titre: 'Clan Mineur du Renard' }
+        - { nom: 'Tortue', titre: 'Clan Mineur de la Tortue' }
+        - { nom: 'Adeptes du Sang', titre: 'Adeptes du Sang' }
 
 services:
     # default configuration for services in *this* file

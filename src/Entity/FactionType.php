@@ -24,4 +24,11 @@ final class FactionType
         self::NON_ALIGNE => 'Non alignés et autres',
         self::ENNEMI => 'Ennemis',
     ];
+
+    public static function siblingTypes(int $type): array
+    {
+        $autres = [self::NON_ALIGNE, self::ENNEMI];
+
+        return in_array($type, $autres, true) ? $autres : [$type];
+    }
 }

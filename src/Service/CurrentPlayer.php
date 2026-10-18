@@ -18,7 +18,7 @@ class CurrentPlayer
     {
         $user = $this->security->getUser();
 
-        if ($user === null || !method_exists($user, 'getPersonnages') || $this->isWithoutCharacter()) {
+        if ($user === null || !method_exists($user, 'getPersonnages')) {
             return null;
         }
 
@@ -38,7 +38,7 @@ class CurrentPlayer
 
     public function seesAll(): bool
     {
-        return $this->security->isGranted('ROLE_MJ') && !$this->isWithoutCharacter();
+        return $this->security->isGranted('ROLE_MJ');
     }
 
     public function characterIds(): array
@@ -46,15 +46,5 @@ class CurrentPlayer
         $personnage = $this->main();
 
         return $personnage === null ? [] : [$personnage->getId()];
-    }
-
-    private function isWithoutCharacter(): bool
-    {
-        $user = $this->security->getUser();
-
-        return $user !== null
-            && method_exists($user, 'isWithoutCharacter')
-            && $user->isWithoutCharacter()
-            && $this->security->isGranted('ROLE_MJ');
     }
 }

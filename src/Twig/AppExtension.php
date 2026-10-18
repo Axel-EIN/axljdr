@@ -3,6 +3,7 @@
 namespace App\Twig;
 
 use App\Entity\Access;
+use App\Entity\FactionType;
 use App\Entity\Monnaie;
 use App\Entity\Status;
 use App\Service\CurrentPlayer;
@@ -58,6 +59,7 @@ class AppExtension extends AbstractExtension
             new TwigFunction('element_url', [$this->elementUrl, 'of']),
             new TwigFunction('access_label', [$this, 'accessLabel']),
             new TwigFunction('status_label', [$this, 'statusLabel']),
+            new TwigFunction('faction_label', [$this, 'factionLabel']),
             new TwigFunction('image_bright', [$this->imageBrightness, 'isBright']),
             new TwigFunction('table_filters', [$this->tableFilter, 'build']),
             new TwigFunction('table_value', [$this->tableFilter, 'valueOf']),
@@ -75,6 +77,11 @@ class AppExtension extends AbstractExtension
     public function statusLabel($status): string
     {
         return Status::LABELS[$status] ?? '';
+    }
+
+    public function factionLabel($type): string
+    {
+        return FactionType::LABELS[$type] ?? '';
     }
 
     public function getJetMap()

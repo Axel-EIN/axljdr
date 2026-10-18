@@ -130,7 +130,7 @@ class NewsFeed
         return $this->participationRepository->findEncountersForEpisodes($episodes, $this->characterIds());
     }
 
-    public function latest(string $key, int $limit): array
+    public function latest(string $key, int $limit, array $criteres = []): array
     {
         $class = EntityRegistry::className($key);
 
@@ -138,7 +138,12 @@ class NewsFeed
             return [];
         }
 
-        $elements = $this->publies($class, $limit, 'e.access = :palier', ['palier' => Access::PUBLIC]);
+        $filtre = '';
+        foreach ($criteres as $champ => $valeur) {
+            $filtre .= ' AND e.' . $champ . (is_array($valeur) ? ' IN (:' . $champ . ')' : ' = :' . $champ);
+        }
+
+        $elements = $this->publies($class, $limit, 'e.access = :palier' . $filtre, ['palier' => Access::PUBLIC] + $criteres);
         $rencontres = $this->metDates($key);
 
         if (!empty($rencontres)) {
@@ -146,8 +151,8 @@ class NewsFeed
             $elements = array_merge($elements, $this->publies(
                 $class,
                 $limit,
-                'e.access = :palier AND e.id IN (:croises)',
-                ['palier' => Access::COMMON, 'croises' => array_slice(array_keys($rencontres), 0, $limit)]
+                'e.access = :palier AND e.id IN (:croises)' . $filtre,
+                ['palier' => Access::COMMON, 'croises' => array_slice(array_keys($rencontres), 0, $limit)] + $criteres
             ));
         }
 
@@ -178,11 +183,11 @@ class NewsFeed
         return $rencontres[$element->getId()] ?? $element->getPublishedAt();
     }
 
-    public function latestAmong(array $keys, int $limit): array
+    public function latestAmong(array $keys, int $limit, array $criteres = []): array
     {
         $elements = [];
         foreach ($keys as $key) {
-            foreach ($this->latest($key, $limit) as $element) {
+            foreach ($this->latest($key, $limit, $criteres) as $element) {
                 $elements[] = $element;
             }
         }

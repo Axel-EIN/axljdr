@@ -45,7 +45,7 @@
 }
 
 .chevron-toggle {
-    .fa-chevron-down { transition: transform 0.2s var(--ease); }
+    .fa-chevron-down { transition: transform var(--duration) var(--ease); }
 
     &[aria-expanded="true"] .fa-chevron-down { transform: rotate(180deg); }
 }

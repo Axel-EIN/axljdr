@@ -148,12 +148,12 @@ class Visibility
             return $personnel;
         }
 
-        return is_object($element) && method_exists($element, 'getPublishedAt') ? $element->getPublishedAt() : null;
+        return $this->publishedAt($element);
     }
 
     public function isFresh($element): bool
     {
-        if (!in_array($this->state($element), self::READABLE, true)) {
+        if ($this->publishedAt($element) === null || !in_array($this->state($element), self::READABLE, true)) {
             return false;
         }
 
@@ -162,6 +162,11 @@ class Visibility
         return $date !== null
             && $date <= new \DateTime()
             && $date >= new \DateTime('-' . self::FRAICHEUR_JOURS . ' days');
+    }
+
+    private function publishedAt($element): ?\DateTimeInterface
+    {
+        return is_object($element) && method_exists($element, 'getPublishedAt') ? $element->getPublishedAt() : null;
     }
 
     public function unlockedIds(string $key): array

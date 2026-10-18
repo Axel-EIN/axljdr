@@ -13,27 +13,27 @@
 
 .invisible {
     opacity: 0;
-    transition: 0.5s var(--ease);
+    transition: var(--duration) var(--ease);
 }
 
 .semi-visible {
     opacity: 0.5;
-    transition: 0.5s var(--ease);
+    transition: var(--duration) var(--ease);
 }
 
 .slight-fade {
     opacity: 0.8;
-    transition: 0.5s var(--ease);
+    transition: var(--duration) var(--ease);
 }
 
 .visible {
     opacity: 1;
-    transition: 0.5s var(--ease);
+    transition: var(--duration) var(--ease);
 }
 
 .translucide {
     filter: opacity(0.30);
-    transition: 0.5s var(--ease);
+    transition: var(--duration) var(--ease);
 
     &:hover {
         filter: opacity(1);
@@ -42,7 +42,7 @@
 
 .access-hidden {
     filter: opacity(0.30);
-    transition: 0.5s var(--ease);
+    transition: var(--duration) var(--ease);
 
     &:hover { filter: opacity(1); }
 }
@@ -135,12 +135,12 @@
 
 .grayscale {
     filter: grayscale(100%);
-    transition: 0.5s var(--ease);
+    transition: var(--duration) var(--ease);
 }
 
 .invert {
     filter: invert(1);
-    transition: 0.5s var(--ease);
+    transition: var(--duration) var(--ease);
 }
 
 .effect-dead {

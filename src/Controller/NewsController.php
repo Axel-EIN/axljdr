@@ -12,78 +12,33 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class NewsController extends AbstractController
 {
-    private const PAR_LIGNE_PERSONNAGES = 6;
-    private const PAR_LIGNE_PERSONNAGES_SECRET = 4;
+    private const VIGNETTES = 4;
+    private const VIGNETTES_PORTRAITS = 8;
 
-    private const PAR_LIGNE_LIEUX = 4;
-    private const PAR_LIGNE_LIEUX_SECRET = 3;
-
-    private const PAR_LIGNE_OBJETS = 4;
-    private const PAR_LIGNE_OBJETS_SECRET = 3;
-
-    private const PAR_LIGNE_ARCHIVES = 4;
-    private const PAR_LIGNE_ARCHIVES_SECRET = 3;
-
-    private const PAR_LIGNE_LORE = 4;
-    private const PAR_LIGNE_LORE_SECRET = 3;
-
-    private const PAR_LIGNE_FACTIONS = 4;
-    private const PAR_LIGNE_FACTIONS_SECRET = 3;
-
-    private const PAR_LIGNE_REGLES = 4;
-    private const PAR_LIGNE_REGLES_SECRET = 3;
-
-    private const PAR_LIGNE_BIBLIOTHEQUES = 4;
-    private const PAR_LIGNE_BIBLIOTHEQUES_SECRET = 3;
-
-    private const PAR_LIGNE_ECOLES = 4;
-    private const PAR_LIGNE_ECOLES_SECRET = 3;
-
-    private const PAR_LIGNE_SORTS = 5;
-    private const PAR_LIGNE_SORTS_SECRET = 4;
-
-    private const PAR_LIGNE_COMPETENCES = 5;
-    private const PAR_LIGNE_COMPETENCES_SECRET = 4;
-
-    private const PAR_LIGNE_AVANTAGES = 5;
-    private const PAR_LIGNE_AVANTAGES_SECRET = 4;
-
-    private const SECRETS_PAR_ENTITE = 12;
-
-    private const PARTICIPATIONS = 5;
+    private const PARTICIPATIONS = 3;
 
     private const SEANCES_PRECEDENTES = 3;
 
-    private const RUBRIQUES = [
-        [
-            'entity' => 'decouvertes', 'titleLight' => 'Dernières ', 'titleStrong' => 'Découvertes',
-            'groupes' => [
-                ['titre' => 'Personnages', 'secretTitle' => 'Rencontres Importantes ou Secrètes', 'variant' => 'portrait',
-                    'perRow' => self::PAR_LIGNE_PERSONNAGES, 'secretPerRow' => self::PAR_LIGNE_PERSONNAGES_SECRET, 'cles' => ['personnage']],
-                ['titre' => 'Lieux', 'secretTitle' => 'Visites Importantes ou Secrètes', 'variant' => 'icon',
-                    'perRow' => self::PAR_LIGNE_LIEUX, 'secretPerRow' => self::PAR_LIGNE_LIEUX_SECRET, 'cles' => ['lieu']],
-                ['titre' => 'Objets', 'variant' => 'rule', 'secretTitle' => 'Objets de Valeur ou Secret', 'perRow' => self::PAR_LIGNE_OBJETS, 'secretPerRow' => self::PAR_LIGNE_OBJETS_SECRET, 'cles' => ['objet']],
-            ],
-        ],
-        [
-            'entity' => 'informations', 'titleLight' => 'Dernières ', 'titleStrong' => 'Informations',
-            'groupes' => [
-                ['titre' => 'Archives', 'secretTitle' => 'Archives secrètes', 'perRow' => self::PAR_LIGNE_ARCHIVES, 'secretPerRow' => self::PAR_LIGNE_ARCHIVES_SECRET, 'cles' => ['archive']],
-                ['titre' => 'Lore', 'secretTitle' => 'Lore secrets', 'perRow' => self::PAR_LIGNE_LORE, 'secretPerRow' => self::PAR_LIGNE_LORE_SECRET, 'cles' => ['lore']],
-                ['titre' => 'Factions', 'secretTitle' => 'Factions secrètes', 'variant' => 'emblem', 'perRow' => self::PAR_LIGNE_FACTIONS, 'secretPerRow' => self::PAR_LIGNE_FACTIONS_SECRET, 'cles' => ['clan']],
-            ],
-        ],
-        [
-            'entity' => 'mecaniques', 'titleLight' => 'Dernières ', 'titleStrong' => 'Mécaniques', 'hideEmpty' => true,
-            'groupes' => [
-                ['titre' => 'Règles', 'variant' => 'rule', 'secretTitle' => 'Règles secrètes', 'perRow' => self::PAR_LIGNE_REGLES, 'secretPerRow' => self::PAR_LIGNE_REGLES_SECRET, 'cles' => ['rule']],
-                ['titre' => 'Bibliothèques', 'variant' => 'rule', 'secretTitle' => 'Bibliothèques secrètes', 'perRow' => self::PAR_LIGNE_BIBLIOTHEQUES, 'secretPerRow' => self::PAR_LIGNE_BIBLIOTHEQUES_SECRET, 'cles' => ['library']],
-                ['titre' => 'Écoles', 'variant' => 'rule', 'secretTitle' => 'Écoles secrètes', 'perRow' => self::PAR_LIGNE_ECOLES, 'secretPerRow' => self::PAR_LIGNE_ECOLES_SECRET, 'cles' => ['ecole']],
-                ['titre' => 'Sorts', 'variant' => 'rule', 'secretTitle' => 'Sorts secrets', 'perRow' => self::PAR_LIGNE_SORTS, 'secretPerRow' => self::PAR_LIGNE_SORTS_SECRET, 'cles' => ['sort']],
-                ['titre' => 'Compétences', 'variant' => 'rule', 'secretTitle' => 'Compétences secrètes', 'perRow' => self::PAR_LIGNE_COMPETENCES, 'secretPerRow' => self::PAR_LIGNE_COMPETENCES_SECRET, 'cles' => ['competence']],
-                ['titre' => 'Avantages', 'variant' => 'rule', 'secretTitle' => 'Avantages secrets', 'perRow' => self::PAR_LIGNE_AVANTAGES, 'secretPerRow' => self::PAR_LIGNE_AVANTAGES_SECRET, 'cles' => ['avantage']],
-            ],
-        ],
+    private const GROUPES = [
+        ['titre' => 'Personnages Joueurs', 'variant' => 'portrait', 'cles' => ['personnage'], 'criteres' => ['estPj' => true]],
+        ['titre' => 'Personnages Non Joueurs', 'variant' => 'portrait', 'cles' => ['personnage'], 'criteres' => ['estPj' => false]],
+        ['titre' => 'Lieux', 'variant' => 'icon', 'cles' => ['lieu']],
+        ['titre' => 'Objets & Equipements', 'variant' => 'rule', 'sections' => [
+            ['titre' => 'Divers', 'cles' => ['objet'], 'criteres' => ['categorie' => 'OBJET'], 'max' => 2],
+            ['titre' => 'Armes & Armures', 'cles' => ['objet'], 'criteres' => ['categorie' => ['ARME', 'ARMURE', 'PROJECTILE']], 'max' => 2],
+        ]],
+        ['titre' => 'Factions', 'variant' => 'emblem', 'cles' => ['clan']],
+        ['titre' => 'Écoles', 'variant' => 'rule', 'cles' => ['ecole']],
+        ['titre' => 'Archives et Lore', 'sections' => [
+            ['titre' => 'Archives', 'cles' => ['archive'], 'max' => 2],
+            ['titre' => 'Lore', 'cles' => ['lore'], 'max' => 2],
+        ]],
+        ['titre' => 'Règles', 'variant' => 'rule', 'cles' => ['rule']],
+        ['titre' => 'Bibliothèques', 'variant' => 'rule', 'large' => true, 'sections' => [
+            ['titre' => 'Avantages & Désavantages', 'cles' => ['avantage'], 'max' => 2],
+            ['titre' => 'Compétences', 'cles' => ['competence'], 'max' => 2],
+            ['titre' => 'Sorts', 'cles' => ['sort'], 'max' => 4],
+        ]],
     ];
 
     /**
@@ -92,7 +47,6 @@ class NewsController extends AbstractController
     public function viewNews(NewsFeed $newsFeed, ClasseurXP $classeurXP, CurrentPlayer $currentPlayer, Visibility $visibility): Response
     {
         $mesPersonnages = $currentPlayer->characterIds();
-        $secretsVisibles = !empty($mesPersonnages);
 
         $participations = $newsFeed->lastParticipations(self::PARTICIPATIONS);
         $episodes = $newsFeed->lastEpisodes(1 + self::SEANCES_PRECEDENTES);
@@ -108,47 +62,54 @@ class NewsController extends AbstractController
 
         $sections = [
             ['entity' => 'aventure', 'titleLight' => 'Dernière ', 'titleStrong' => 'Séance'],
+            ['entity' => 'nouveautes', 'titleLight' => '', 'titleStrong' => 'Nouveautés'],
         ];
 
-        $rubriques = [];
-        $secretsParEntite = $newsFeed->unlockedByEntity(self::SECRETS_PAR_ENTITE);
+        $groupes = [];
+        $secretsParEntite = $newsFeed->unlockedByEntity(self::VIGNETTES_PORTRAITS);
 
-        foreach (self::RUBRIQUES as $rubrique) {
-            $groupes = [];
+        $trouver = function (array $cles, int $max, array $criteres = []) use ($newsFeed, $visibility, $secretsParEntite) {
+            $elements = [];
+            foreach ($cles as $cle) {
+                $elements = array_merge($elements, $secretsParEntite[$cle] ?? []);
+            }
+            $elements = array_filter($elements, function ($element) use ($criteres) {
+                return $this->respecte($element, $criteres);
+            });
+            $elements = array_merge($elements, $newsFeed->latestAmong($cles, $max, $criteres));
 
-            foreach ($rubrique['groupes'] as $groupe) {
-                $secrets = [];
-                foreach ($groupe['cles'] as $cle) {
-                    $secrets = array_merge($secrets, $secretsParEntite[$cle] ?? []);
+            return array_slice($visibility->listedOnly($elements), 0, $max);
+        };
+
+        foreach (self::GROUPES as $groupe) {
+            if (isset($groupe['sections'])) {
+                $sectionsDuGroupe = [];
+                foreach ($groupe['sections'] as $section) {
+                    $elements = $trouver($section['cles'], $section['max'], $section['criteres'] ?? []);
+
+                    if (!empty($elements)) {
+                        $sectionsDuGroupe[] = $section + ['elements' => $elements];
+                    }
                 }
 
-                $groupe['perRow'] = $secretsVisibles
-                    ? $groupe['perRow']
-                    : $groupe['perRow'] + $groupe['secretPerRow'];
-
-                $publie = $visibility->listedOnly($newsFeed->latestAmong($groupe['cles'], $groupe['perRow']));
-                $secrets = $visibility->listedOnly(array_slice($secrets, 0, $groupe['secretPerRow']));
-
-                if (empty($publie) && empty($secrets) && ($rubrique['hideEmpty'] ?? false)) {
-                    continue;
+                if (!empty($sectionsDuGroupe)) {
+                    $groupes[] = ['sections' => $sectionsDuGroupe] + $groupe;
                 }
 
-                $groupes[] = $groupe + [
-                    'ratio' => '1610',
-                    'publie' => $publie,
-                    'secrets' => $secrets,
-                ];
+                continue;
             }
 
-            $rubriques[] = ['groupes' => $groupes];
-        }
+            $portrait = ($groupe['variant'] ?? null) === 'portrait';
+            $max = $portrait ? self::VIGNETTES_PORTRAITS : self::VIGNETTES;
+            $uneLigne = !$portrait && !($groupe['compact'] ?? false);
+            $elements = $trouver($groupe['cles'], $max, $groupe['criteres'] ?? []);
 
-        foreach (self::RUBRIQUES as $rubrique) {
-            $sections[] = [
-                'entity' => $rubrique['entity'],
-                'titleLight' => $rubrique['titleLight'],
-                'titleStrong' => $rubrique['titleStrong'],
-            ];
+            if (!empty($elements)) {
+                $groupes[] = $groupe + [
+                    'perRow' => ['desktop' => $uneLigne ? $max : $max / 2, 'tablet' => $max / 2],
+                    'elements' => $elements,
+                ];
+            }
         }
 
         return $this->render('news/index.html.twig', [
@@ -164,12 +125,25 @@ class NewsController extends AbstractController
             'classement_general' => $newsFeed->generalRanking(),
             'participations_xp' => $participationsXp,
             'rencontres' => $newsFeed->encounters($participations),
-            'rubriques' => $rubriques,
+            'groupes' => $groupes,
             'sections' => $sections,
             'header_classname' => 'news',
             'header_up' => 'Accueil',
             'header_down' => 'Bienvenue a Rokugan',
             'category' => 'news',
         ]);
+    }
+
+    private function respecte($element, array $criteres): bool
+    {
+        foreach ($criteres as $champ => $valeur) {
+            $actuelle = $element->{'get' . ucfirst($champ)}();
+
+            if (is_array($valeur) ? !in_array($actuelle, $valeur, true) : $actuelle !== $valeur) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }

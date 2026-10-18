@@ -34,9 +34,9 @@ class ClanRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-    public function findByType(int $type)
+    public function findByTypes(array $types)
     {
-        return $this->findBy(array("type" => $type), array('nom' => 'ASC'));
+        return $this->findBy(array("type" => $types), array('nom' => 'ASC'));
     }
 
     public function findAllAutres()

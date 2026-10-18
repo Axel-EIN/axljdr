@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Clan;
+use App\Entity\FactionType;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -27,20 +28,25 @@ class ClanRepository extends ServiceEntityRepository
     public function findAllSorted()
     {
         return $this->createQueryBuilder('c')
-            ->addOrderBy('c.estMajeur', 'DESC')
+            ->addOrderBy('c.type', 'ASC')
             ->addOrderBy('c.nom', 'ASC')
             ->getQuery()
             ->getResult();
     }
 
-    public function findAllMajeurs()
+    public function findByType(int $type)
     {
-        return $this->findBy(array("estMajeur" => "1"), array('nom' => 'ASC'));
+        return $this->findBy(array("type" => $type), array('nom' => 'ASC'));
     }
 
     public function findAllAutres()
     {
-        return $this->findBy(array("estMajeur" => "0"), array('nom' => 'ASC'));
+        return $this->createQueryBuilder('c')
+            ->andWhere('c.type != :majeur')
+            ->setParameter('majeur', FactionType::MAJEUR)
+            ->addOrderBy('c.nom', 'ASC')
+            ->getQuery()
+            ->getResult();
     }
 
     public function findAllExceptOne($id)

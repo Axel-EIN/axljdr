@@ -132,10 +132,10 @@ class WorldController extends AbstractController
       return $response;
     }
 
-    if ($clan->getType() === FactionType::MAJEUR)
-      $toutClans = $clanRepository->findByType(FactionType::MAJEUR);
-    else
-      $toutClans = $clanRepository->findAllAutres();
+    $toutClans = array_filter(
+      $clanRepository->findByTypes(FactionType::siblingTypes($clan->getType())),
+      fn (Clan $autre) => $visibility->isListed($autre)
+    );
 
     return $this->render('world/clan.html.twig', [
       'clan' => $clan,

@@ -83,10 +83,10 @@
     </button>
 
     {% if current %}
-      <a class="map-toggle-btn" href="{{ path('carte', {lieu: current.id}) }}">
-        <i class="fa-solid fa-map-location-dot"></i>
-        <span class="label">Voir sur la carte</span>
-      </a>
+      <button type="button" class="map-toggle-btn" data-map-recenter data-locx="{{ current.locX }}" data-locy="{{ current.locY }}">
+        <i class="fa-solid fa-crosshairs"></i>
+        <span class="label">Recentrer</span>
+      </button>
     {% endif %}
 
     {% if worldmap %}

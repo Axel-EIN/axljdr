@@ -17,49 +17,50 @@
 {% endblock %}
 
 {% block section_content2 %}
-    {% if clansMajeurs is empty and clansAutres is empty %}
+    {% set majeur = constant('App\\Entity\\FactionType::MAJEUR') %}
+    {% set titres = constant('App\\Entity\\FactionType::GROUPS') %}
+    {% if factions|filter(clans => clans is not empty) is empty %}
         <p class="col-12 text-muted font-italic">Pas de factions disponibles.</p>
     {% else %}
 
         <div class="col-12 col-lg-9">
-            <h4 class="text-primarydark">Clans Majeurs</h4>
+            <h4 class="text-primarydark">{{ titres[majeur] }}</h4>
             <p class="faction-intro">Les Clans Majeurs sont les plus grandes factions de Rokugan.
-            Chacune d'elle est héritière d'un Kami originel qui juera fidélité à l'Empereur et se répartit la majeur partie de l'Empire.
-            Elles se composent de plusieurs familles et forment des miliers de Samuraïs dans leur dojos.</p>
+            Chacune d'elles est héritière d'un Kami originel qui jura fidélité à l'Empereur et se répartit la majeure partie de l'Empire.
+            Elles se composent de plusieurs familles et forment des milliers de Samuraïs dans leurs dojos.</p>
             {{ include('/parts/picture-grid.html.twig', {
                 catalog: true,
                 variant: 'emblem',
-                items: clansMajeurs, route: 'world_clan', na_image: NA_MON,
+                items: factions[majeur], route: 'world_clan', na_image: NA_MON,
                 per_row: {desktop: 4, mobile: 2},
             }) }}
         </div>
 
         <div class="col-12 col-lg-3 border-left">
-            <h4 class="text-primarydark text-center">Autres</h4>
-            <p class="faction-intro">Clans Mineurs, Confrérie des Moines, Familles Impérialles, Ennemis...</p>
-            {{ include('/parts/picture-grid.html.twig', {
-                catalog: true,
-                variant: 'emblem',
-                items: clansAutres, route: 'world_clan', na_image: NA_MON,
-                max_size: '6rem',
-                per_row: {desktop: 2, mobile: 3},
-            }) }}
+            {% for type, clans in factions|filter((clans, type) => type != majeur and clans is not empty) %}
+                <h4 class="text-primarydark text-center">{{ titres[type] }}</h4>
+                {{ include('/parts/picture-grid.html.twig', {
+                    catalog: true,
+                    variant: 'emblem',
+                    items: clans, route: 'world_clan', na_image: NA_MON,
+                    max_size: '6rem',
+                    per_row: {desktop: 2, mobile: 3},
+                }) }}
+            {% endfor %}
         </div>
 
     {% endif %}
 {% endblock %}
 
 {% block section_content3 %}
-    {% set lieux = lieux|filter(l => element_listed(l)) %}
-    {% set clans_listes = FACTIONS|map(c => c.nom) %}
-    {% set groupes = FACTIONS|map(c => {titre: c.titre, lieux: lieux|filter(l => l.clan is not empty and l.clan.nom == c.nom)})
-        |merge([{titre: 'Autres', lieux: lieux|filter(l => l.clan is empty or l.clan.nom not in clans_listes)}]) %}
-
-    {% for groupe in groupes|filter(g => g.lieux|length > 0) %}
-        {% set clan_groupe = groupe.titre != 'Autres' ? (groupe.lieux|first).clan : null %}
+    {% for groupe in groupesLieux %}
         <div class="col-12">
-            <h3 class="heading-amerigo category-section-sub-heading">
-                <img class="img-40 mr-2" src="{{ asset(clan_groupe ? clan_groupe.mon|default(NA_MON) : NA_MON) }}" alt="Mon de la faction" />
+            <h3 class="heading-amerigo category-section-sub-heading flex-wrap">
+                {% for clan in groupe.clans|default([]) %}
+                    <img class="img-40 mr-2" src="{{ asset(clan.mon|default(NA_MON)) }}" alt="Mon de la faction" title="{{ clan.nom }}" />
+                {% else %}
+                    <img class="img-40 mr-2" src="{{ asset(NA_MON) }}" alt="Mon de la faction" />
+                {% endfor %}
                 {{ groupe.titre }}
             </h3>
             {{ include('/parts/picture-grid.html.twig', {

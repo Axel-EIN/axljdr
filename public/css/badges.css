@@ -13,10 +13,10 @@
     vertical-align: baseline;
     border-radius: 0.25rem;
     transition:
-      color 0.15s ease-in-out,
-      background-color 0.15s ease-in-out,
-      border-color 0.15s ease-in-out,
-      box-shadow 0.15s ease-in-out;
+      color var(--duration) var(--ease),
+      background-color var(--duration) var(--ease),
+      border-color var(--duration) var(--ease),
+      box-shadow var(--duration) var(--ease);
     color: #fff;
 }
 
@@ -77,7 +77,7 @@
 
     &.hover-only {
         opacity: 0;
-        transition: opacity 0.3s var(--ease);
+        transition: opacity var(--duration) var(--ease);
 
         :hover > & { opacity: 1; }
     }
@@ -87,7 +87,7 @@
         background-color: rgb(from var(--color-blackonyx) r g b / 45%);
         backdrop-filter: blur(6px);
         box-shadow: 0 4px 12px var(--color-black50);
-        transition: border-color 0.3s ease;
+        transition: border-color var(--duration) var(--ease);
 
         :hover > & { border-color: var(--color-white); }
     }

@@ -70,7 +70,6 @@ class MonCompteController extends AbstractController
                 fn (Personnage $personnage) => $personnage->getId() === $request->request->getInt('personnage')
             )->first();
 
-            $utilisateur->setWithoutCharacter($this->isGranted('ROLE_MJ') && $request->request->getBoolean('sans_personnage'));
             $utilisateur->setMainCharacter($choisi ?: null);
             $this->getDoctrine()->getManager()->flush();
 

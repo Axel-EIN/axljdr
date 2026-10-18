@@ -156,13 +156,9 @@
           <div class="map-party absolute" style="left:{{autre.locX}}%; top:{{autre.locY}}%;">
             {% for perso in party[autre.id] %}
               <div class="map-portrait{% if main_character and perso.id == main_character.id %} mine{% endif %}" data-personnage="{{ perso.id }}">
-                <button type="button" class="map-portrait-toggle" aria-expanded="false" aria-label="{{ perso.nomComplet }}">
+                <button type="button" class="map-portrait-toggle" data-panel="{{ path('carte_personnage', {id: perso.id}) }}" aria-expanded="false" aria-label="{{ perso.nomComplet }}" title="{{ perso.nomComplet }}">
                   <img src="{{ asset(perso.icone|default(NA_PERSO_PORTRAIT)) }}" alt="Portrait de {{ perso.prenom }}" draggable="false" />
                 </button>
-                <div class="map-portrait-box">
-                  <strong>{{ perso.nomComplet }}</strong>
-                  <a href="{{ path('personnage_profil', {id: perso.id}) }}">Voir le profil</a>
-                </div>
               </div>
             {% endfor %}
           </div>

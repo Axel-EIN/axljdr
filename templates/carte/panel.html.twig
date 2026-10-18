@@ -1,24 +1,37 @@
-{% set etat = element_state(lieu) %}
-{% set lisible = element_readable(lieu) %}
+{% set lieu = lieu|default(null) %}
+{% set personnage = personnage|default(null) %}
+{% set presents = presents|default([]) %}
+{% set element = lieu ?? personnage %}
+{% set etat = element_state(element) %}
+{% set lisible = element_readable(element) %}
+{% set type = personnage ? personnage.classe.nom ?? null : lieu.type %}
 
-{% if lisible and lieu.image %}
-  <img class="map-panel-banner" src="{{ asset(lieu.image) }}" alt="Image de {{ lieu.nom }}" />
+{% if lisible %}
+  {% if personnage %}
+    <img class="map-panel-banner portrait" src="{{ asset(personnage.illustration|default(NA_PERSO_ILLU)) }}" alt="Illustration de {{ personnage.nomComplet }}" />
+  {% elseif lieu.image %}
+    <img class="map-panel-banner" src="{{ asset(lieu.image) }}" alt="Image de {{ lieu.nom }}" />
+  {% endif %}
 {% endif %}
 
 <div class="map-panel-body">
   <h2 class="map-panel-title">
-    {{ lieu.nom }}
+    {{ personnage ? personnage.nomComplet : lieu.nom }}
     {{ include('parts/badge-access.html.twig', {state: etat, variant: 'inline'}) }}
   </h2>
 
   {% if lisible %}
     <div class="map-panel-details">
-      {% if lieu.clan %}
-        <img class="img-24" src="{{ asset(lieu.clan.mon|default(NA_MON)) }}" alt="" />
-        <span>{{ lieu.clan.nom }}</span>
+      {% if element.clan %}
+        <img class="img-24" src="{{ asset(element.clan.mon|default(NA_MON)) }}" alt="" />
+        <span>{{ element.clan.nom }}</span>
       {% endif %}
-      {% if lieu.type %}<span>{{ lieu.type }}</span>{% endif %}
+      {% if type %}<span>{{ type }}</span>{% endif %}
     </div>
+
+    {% if element.description %}
+      <p class="map-panel-description">{{ element.description|striptags|raw }}</p>
+    {% endif %}
   {% endif %}
 
   {% if presents is not empty %}
@@ -52,6 +65,10 @@
   {% endif %}
 
   {% if lisible %}
-    <a class="btn-primary-style btn-medium text-center" href="{{ path('world_lieu', {id: lieu.id}) }}">Ouvrir la fiche</a>
+    {% if personnage %}
+      <a class="btn-primary-style btn-medium text-center" href="{{ path('personnage_profil', {id: personnage.id}) }}">Voir le profil</a>
+    {% else %}
+      <a class="btn-primary-style btn-medium text-center" href="{{ path('world_lieu', {id: lieu.id}) }}">Ouvrir la fiche</a>
+    {% endif %}
   {% endif %}
 </div>

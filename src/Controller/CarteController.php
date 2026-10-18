@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Lieu;
+use App\Entity\Personnage;
 use App\Repository\LieuRepository;
 use App\Service\ClasseurHistorique;
 use App\Service\Localisateur;
@@ -47,17 +48,34 @@ class CarteController extends AbstractController
             throw $this->createNotFoundException();
         }
 
-        $historique = [];
-        if ($visibility->isReadable($lieu)) {
-            $historique = array_values(array_filter($classeur->pourLieu($lieu), function ($bloc) use ($visibility) {
-                return $visibility->isReadable($bloc['episode']);
-            }));
-        }
-
         return $this->render('carte/panel.html.twig', [
             'lieu' => $lieu,
             'presents' => $localisateur->positions()[$lieu->getId()] ?? [],
-            'historique' => array_slice($historique, 0, self::HISTORIQUE_PANNEAU),
+            'historique' => $visibility->isReadable($lieu) ? $this->historiqueLisible($classeur->pourLieu($lieu), $visibility) : [],
         ]);
+    }
+
+    /**
+     * @Route("/carte/personnage/{id}", name="carte_personnage")
+     */
+    public function afficherPanneauPersonnage(Personnage $personnage, Visibility $visibility, ClasseurHistorique $classeur): Response
+    {
+        if (!$visibility->isListed($personnage)) {
+            throw $this->createNotFoundException();
+        }
+
+        return $this->render('carte/panel.html.twig', [
+            'personnage' => $personnage,
+            'historique' => $visibility->isReadable($personnage) ? $this->historiqueLisible($classeur->pourPersonnage($personnage), $visibility) : [],
+        ]);
+    }
+
+    private function historiqueLisible(array $historique, Visibility $visibility): array
+    {
+        $lisible = array_filter($historique, function ($bloc) use ($visibility) {
+            return $visibility->isReadable($bloc['episode']);
+        });
+
+        return array_slice(array_values($lisible), 0, self::HISTORIQUE_PANNEAU);
     }
 }

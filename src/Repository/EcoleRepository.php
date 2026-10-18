@@ -14,6 +14,8 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class EcoleRepository extends ServiceEntityRepository
 {
+    use FactionOrderTrait;
+
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Ecole::class);
@@ -21,22 +23,18 @@ class EcoleRepository extends ServiceEntityRepository
 
     public function findAllSorted()
     {
-        return $this->createQueryBuilder('e')
-            ->leftJoin('e.clan', 'c')
-            ->addOrderBy('c.estMajeur', 'DESC')
-            ->addOrderBy('c.nom', 'ASC')
+        return $this->orderByFaction($this->createQueryBuilder('e')
+            ->leftJoin('e.clan', 'c'))
             ->getQuery()
             ->getResult();
     }
 
     public function findByClasseSorted($id)
     {
-        return $this->createQueryBuilder('e')
+        return $this->orderByFaction($this->createQueryBuilder('e')
             ->andWhere('e.classe = :value_id')
             ->setParameter('value_id', $id)
-            ->leftJoin('e.clan', 'c')
-            ->addOrderBy('c.estMajeur', 'DESC')
-            ->addOrderBy('c.nom', 'ASC')
+            ->leftJoin('e.clan', 'c'))
             ->getQuery()
             ->getResult();
     }

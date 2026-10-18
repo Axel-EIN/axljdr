@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Clan;
+use App\Entity\FactionType;
 use App\Entity\Lieu;
 use App\Entity\Lore;
 use App\Entity\Archive;
@@ -27,12 +28,17 @@ class WorldController extends AbstractController
   public function afficherWorld(ClanRepository $clanRepository,
                                  ArchiveRepository $archiveRepository,
                                  LieuRepository $lieuRepository,
-                                 LoreRepository $loreRepository): Response
+                                 LoreRepository $loreRepository,
+                                 Visibility $visibility): Response
   {
-    $clansMajeurs = $clanRepository->findAllMajeurs();
-    $clansAutres = $clanRepository->findAllAutres();
+    $factions = array_fill_keys(array_keys(FactionType::GROUPS), []);
+    foreach ($clanRepository->findAllSorted() as $clan) {
+      if ($visibility->isListed($clan)) {
+        $factions[$clan->getType()][] = $clan;
+      }
+    }
     $archives = $archiveRepository->findall();
-    $lieux = $lieuRepository->findAllSorted();
+    $groupesLieux = $this->grouperLieux($lieuRepository->findAllSorted(), $visibility);
     $lores = $loreRepository->findall();
 
     $sections = [];
@@ -70,10 +76,9 @@ class WorldController extends AbstractController
     $category = 'world';
 
     return $this->render('world/index.html.twig', [
-      'clansMajeurs' => $clansMajeurs,
-      'clansAutres' => $clansAutres,
+      'factions' => $factions,
       'archives' => $archives,
-      'lieux' => $lieux,
+      'groupesLieux' => $groupesLieux,
       'lores' => $lores,
       'sections' => $sections,
       'header_classname' => $header_classname,
@@ -81,6 +86,41 @@ class WorldController extends AbstractController
       'header_down' => $header_down,
       'category' => $category
     ]);
+  }
+
+  private function grouperLieux(array $lieux, Visibility $visibility): array
+  {
+    $titres = array_column($this->getParameter('factions'), 'titre', 'nom');
+    $ordre = array_merge(
+      array_map(fn (string $nom) => 'clan-' . $nom, array_keys($titres)),
+      array_map(fn (int $type) => 'type-' . $type, array_keys(FactionType::GROUPS)),
+      ['autres']
+    );
+
+    $groupes = [];
+    foreach ($lieux as $lieu) {
+      if (!$visibility->isListed($lieu)) {
+        continue;
+      }
+
+      $clan = $lieu->getClan();
+      $majeur = $clan !== null && $clan->getType() === FactionType::MAJEUR;
+
+      if ($clan === null || ($majeur && !isset($titres[$clan->getNom()]))) {
+        $cle = 'autres';
+        $groupes[$cle]['titre'] = 'Autres';
+      } else {
+        $cle = $majeur ? 'clan-' . $clan->getNom() : 'type-' . $clan->getType();
+        $groupes[$cle]['titre'] = $majeur ? $titres[$clan->getNom()] : FactionType::GROUPS[$clan->getType()];
+        if ($visibility->isListed($clan)) {
+          $groupes[$cle]['clans'][$clan->getId()] = $clan;
+        }
+      }
+
+      $groupes[$cle]['lieux'][] = $lieu;
+    }
+
+    return array_values(array_filter(array_map(fn (string $cle) => $groupes[$cle] ?? null, $ordre)));
   }
 
   /**
@@ -92,8 +132,8 @@ class WorldController extends AbstractController
       return $response;
     }
 
-    if ($clan->getEstMajeur() == 1)
-      $toutClans = $clanRepository->findAllMajeurs();
+    if ($clan->getType() === FactionType::MAJEUR)
+      $toutClans = $clanRepository->findByType(FactionType::MAJEUR);
     else
       $toutClans = $clanRepository->findAllAutres();
 

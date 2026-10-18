@@ -149,13 +149,48 @@
 {% endblock %}
 
 {% block section_content2 %}
-    {{ include('news/news-subsection.html.twig', {rubrique: rubriques[0], secrets_visibles: mes_personnages is not empty, mon_personnage: mon_personnage}) }}
-{% endblock %}
+    <div class="col-12">
+        <div class="news-board">
+            {% for groupe in groupes %}
+                <div class="card card-body news-group{{ groupe.compact|default(false) ? ' compact' }}{{ groupe.large|default(false) ? ' large' }}">
+                    <h3 class="label-amerigo news-subtitle">{{ groupe.titre }}</h3>
+                    {% if groupe.sections is defined %}
+                        <div class="news-sections">
+                            {% for section in groupe.sections %}
+                                <div class="news-section" style="--span: {{ section.max }}">
+                                    <h4 class="news-qualifier">{{ section.titre }}</h4>
+                                    {{ include('/parts/picture-grid.html.twig', {
+                                        items: section.elements,
+                                        badge_hover: true,
+                                        variant: groupe.variant|default('landscape'),
+                                        per_row: section.max,
+                                    }) }}
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ include('/parts/picture-grid.html.twig', {
+                            items: groupe.elements,
+                            badge_hover: true,
+                            variant: groupe.variant|default('landscape'),
+                            per_row: groupe.perRow,
+                        }) }}
+                    {% endif %}
+                </div>
+            {% endfor %}
 
-{% block section_content3 %}
-    {{ include('news/news-subsection.html.twig', {rubrique: rubriques[1], secrets_visibles: mes_personnages is not empty, mon_personnage: mon_personnage}) }}
-{% endblock %}
-
-{% block section_content4 %}
-    {{ include('news/news-subsection.html.twig', {rubrique: rubriques[2], secrets_visibles: mes_personnages is not empty, mon_personnage: mon_personnage}) }}
+            {% if mes_personnages is empty %}
+                <div class="card card-body news-group compact locked">
+                    <h3 class="label-amerigo news-subtitle">Secrets</h3>
+                    <img class="news-lock fa-beat-fade" src="{{ asset(LOCKED_ICO) }}" alt="Cadenas" />
+                    {% if app.user %}
+                        <p>Les secrets de ton personnage apparaîtront ici.</p>
+                    {% else %}
+                        <p>Connecte-toi pour voir les secrets de ton personnage.</p>
+                        <a class="btn btn-medium btn-secondary-style" href="{{ path('app_login') }}">Se connecter</a>
+                    {% endif %}
+                </div>
+            {% endif %}
+        </div>
+    </div>
 {% endblock %}

@@ -22,6 +22,7 @@
     {% set style = min_size is defined ? '--grid-min: ' ~ min_size : '' %}
   {% endif %}
   {% if max_size is defined %}{% set style = style ~ '; --image-max: ' ~ max_size %}{% endif %}
+  {% if gap is defined %}{% set style = style ~ '; --gap: ' ~ gap %}{% endif %}
 
   {% if title is defined %}
     <div class="{{ wrapper|default('col-12') }}">

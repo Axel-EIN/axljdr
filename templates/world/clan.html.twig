@@ -89,7 +89,7 @@
             {% endif %}
 
             {% if clan.territoireDesc %}
-                <p class="card-description text-description text-aerated">{{clan.territoireDesc}}</p>
+                {{ include('parts/description.html.twig', {text: clan.territoireDesc, variant: 'aerated'}, with_context = false) }}
             {% else %}
                 <p class="text-muted"><i>Description des Territoires à venir.</i></p>
             {% endif %}
@@ -142,7 +142,7 @@
             <div class="card card-body">
                 <h2 class="heading-cardtitle">Autres</h2>
                 <hr>
-                <p class="card-description text-description">{{ clan.longDescription|raw|nl2br }}</p>
+                {{ include('parts/description.html.twig', {text: clan.longDescription}, with_context = false) }}
             </div>
         </div>
     {% else %}

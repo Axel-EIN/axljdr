@@ -131,6 +131,40 @@
     }
   }
 
+  &.restricted {
+    cursor: default;
+
+    .access-tooltip {
+      position: absolute;
+      z-index: 100;
+      top: 100%;
+      left: 50%;
+      width: max-content;
+      max-width: 12rem;
+      margin-top: 0.25rem;
+      padding: 0.25rem 0.5rem;
+      border-radius: 0.5rem;
+      background-color: var(--color-primarydarken);
+      color: var(--color-white);
+      font-size: var(--fontsize-mini);
+      line-height: var(--leading-base);
+      text-align: center;
+      white-space: normal;
+      visibility: hidden;
+      opacity: 0;
+      transform: translateX(-50%);
+      pointer-events: none;
+      transition:
+        opacity var(--duration) var(--ease),
+        visibility var(--duration);
+    }
+
+    &:hover .access-tooltip {
+      visibility: visible;
+      opacity: 1;
+    }
+  }
+
   &.locked {
     cursor: default;
 

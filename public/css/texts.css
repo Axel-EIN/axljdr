@@ -84,6 +84,24 @@ p > mark {
   color: unset;
 }
 
+/* ----- DESCRIPTION ----- */
+
+.text-description {
+  text-align: justify;
+  font-size: var(--fontsize-base);
+  line-height: var(--leading-15);
+
+  &.text-compact {
+    font-size: var(--fontsize-regular);
+    line-height: var(--leading-16);
+  }
+
+  &.text-aerated {
+    font-size: var(--fontsize-medium);
+    line-height: var(--leading-18);
+  }
+}
+
 /* --------- TEXT EFFECTS  ---------- */
 
 .first-letter-upper::first-letter {

@@ -101,12 +101,11 @@ class NewsController extends AbstractController
 
             $portrait = ($groupe['variant'] ?? null) === 'portrait';
             $max = $portrait ? self::VIGNETTES_PORTRAITS : self::VIGNETTES;
-            $uneLigne = !$portrait && !($groupe['compact'] ?? false);
             $elements = $trouver($groupe['cles'], $max, $groupe['criteres'] ?? []);
 
             if (!empty($elements)) {
                 $groupes[] = $groupe + [
-                    'perRow' => ['desktop' => $uneLigne ? $max : $max / 2, 'tablet' => $max / 2],
+                    'perRow' => ['desktop' => $portrait ? $max / 2 : $max, 'tablet' => $max / 2],
                     'elements' => $elements,
                 ];
             }
@@ -124,7 +123,6 @@ class NewsController extends AbstractController
             'mes_participations' => $participations,
             'classement_general' => $newsFeed->generalRanking(),
             'participations_xp' => $participationsXp,
-            'rencontres' => $newsFeed->encounters($participations),
             'groupes' => $groupes,
             'sections' => $sections,
             'header_classname' => 'news',

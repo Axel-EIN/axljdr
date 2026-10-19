@@ -108,7 +108,7 @@
             <h2 class="heading-scene">{{ une_scene.titre }}</h2>
         </div>
 
-        <p class="card-description compact text-description text-compact">{{ une_scene.texte|raw|nl2br }}</p>
+        {{ include('parts/description.html.twig', {text: une_scene.texte, variant: 'compact'}, with_context = false) }}
 
     </div>
 

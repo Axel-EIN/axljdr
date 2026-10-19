@@ -152,7 +152,7 @@
     <div class="col-12">
         <div class="news-board">
             {% for groupe in groupes %}
-                <div class="card card-body news-group{{ groupe.compact|default(false) ? ' compact' }}{{ groupe.large|default(false) ? ' large' }}">
+                <div class="card card-body news-group{{ groupe.large|default(false) ? ' large' }}">
                     <h3 class="label-amerigo news-subtitle">{{ groupe.titre }}</h3>
                     {% if groupe.sections is defined %}
                         <div class="news-sections">
@@ -180,7 +180,7 @@
             {% endfor %}
 
             {% if mes_personnages is empty %}
-                <div class="card card-body news-group compact locked">
+                <div class="card card-body news-group large locked">
                     <h3 class="label-amerigo news-subtitle">Secrets</h3>
                     <img class="news-lock fa-beat-fade" src="{{ asset(LOCKED_ICO) }}" alt="Cadenas" />
                     {% if app.user %}

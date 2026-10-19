@@ -41,12 +41,6 @@
     font-style: italic;
 }
 
-.profile-description {
-    font-size: var(--fontsize-regular);
-    line-height: var(--leading-16);
-    text-align: justify;
-}
-
 /* ----- DEVELOPPEMENT ---------- */
 
 .profil-developments {

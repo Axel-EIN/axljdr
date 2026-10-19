@@ -411,29 +411,23 @@
       transition: filter var(--duration) var(--ease);
     }
 
-    &.locked .lieu-icon {
-      filter: grayscale(100%) brightness(0.85) drop-shadow(0 0 5px rgba(0, 0, 0, 0.85));
-    }
-
     &.focused .lieu-icon { animation: map-focus-pulse 1.6s ease-in-out 3; }
 
-    &:not(.locked) {
-      &:hover .lieu-icon {
-        filter: drop-shadow(0 0 6px rgba(0, 0, 0, 0.8)) drop-shadow(0 0 10px var(--clan-color, #ffffff));
-      }
+    &:hover .lieu-icon {
+      filter: drop-shadow(0 0 6px rgba(0, 0, 0, 0.8)) drop-shadow(0 0 10px var(--clan-color, #ffffff));
+    }
 
-      &::before {
-        content: '';
-        position: absolute;
-        z-index: -1;
-        top: 100%;
-        left: 50%;
-        width: 72px;
-        height: 30px;
-        transform: translate(-50%, -80%);
-        background-image: radial-gradient(ellipse closest-side, rgba(0, 0, 0, 0.65), transparent);
-        pointer-events: none;
-      }
+    &::before {
+      content: '';
+      position: absolute;
+      z-index: -1;
+      top: 100%;
+      left: 50%;
+      width: 72px;
+      height: 30px;
+      transform: translate(-50%, -80%);
+      background-image: radial-gradient(ellipse closest-side, rgba(0, 0, 0, 0.65), transparent);
+      pointer-events: none;
     }
 
     .lieu-other-unknown {
@@ -536,13 +530,14 @@
     z-index: -2;
     top: 0;
     left: 50%;
-    width: 14px;
-    height: 14px;
+    width: 18px;
+    height: 18px;
     border: 2px solid var(--color-black);
     background:
-      linear-gradient(var(--color-black), var(--color-black)) center / 4px 4px no-repeat,
+      linear-gradient(var(--color-white), var(--color-white)) center / 4px 4px no-repeat,
+      linear-gradient(var(--color-black), var(--color-black)) center / 8px 8px no-repeat,
       var(--map-label-color);
-    box-shadow: 0 0 0 1px var(--color-black50), 0 2px 6px var(--color-black);
+    box-shadow: 0 2px 8px var(--color-black50);
     transform: translate(-50%, -50%) rotate(45deg);
   }
 
@@ -601,7 +596,6 @@
         opacity: 0;
       }
 
-      .badge-access { display: none; }
     }
 
     :is(.labels-hidden, .zoomed-out) .lieu-other-icon:not(:hover) & {

@@ -97,6 +97,7 @@
 
   {% if worldmap %}
     <div class="map-zoom absolute">
+      <span class="map-zoom-level" aria-live="polite" title="Niveau de zoom"></span>
       <button type="button" class="map-toggle-btn" data-map-zoom="in" aria-label="Zoomer">
         <i class="fa-solid fa-plus"></i>
       </button>
@@ -142,12 +143,11 @@
             {{ include('parts/map-label.html.twig', {name: 'Inconnu', variant: 'compact'}) }}
           {% else %}
             <img class="lieu-icon" src="{{ asset(autre.icone|default(NA_LIEU_ICO)) }}" alt="Icone de {{ autre.nom }}" />
-            {% if not autre_lisible %}{{ include('parts/badge-access.html.twig', {state: autre_etat, variant: 'cover glass'}) }}{% endif %}
             {{ include('parts/map-label.html.twig', {
               name: autre.nom,
               mon: autre.clan.mon ?? null,
               details: [autre.type, autre.clan.nom ?? null, autre_etat == 'secret' ? 'Secret' : null],
-              state: autre_lisible ? autre_etat : null,
+              state: autre_etat,
               variant: 'compact',
             }) }}
           {% endif %}

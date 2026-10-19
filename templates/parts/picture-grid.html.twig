@@ -27,7 +27,7 @@
   {% if title is defined %}
     <div class="{{ wrapper|default('col-12') }}">
       <div class="card card-body">
-        {% if btn_add is defined %}{{ include('/btns/btn-add-element.html.twig', btn_add) }}{% endif %}
+        {% if btn_add is defined %}{{ include('/btns/btn-add-element.html.twig', btn_add, with_context = false) }}{% endif %}
         <h2 class="heading-cardtitle">{{ title }}</h2>
         <hr>
   {% endif %}

@@ -8,6 +8,7 @@
   const view = frame.querySelector('.minimap .minimap-view');
   const zoomLevel = frame.querySelector('.map-zoom-level');
   const world = frame.classList.contains('world');
+  const markerSize = parseFloat(getComputedStyle(frame).getPropertyValue('--marker-size')) || 1;
 
   const DRAG_THRESHOLD = 5;
   const WHEEL_PAUSE = 200;
@@ -21,7 +22,7 @@
 
   let x = 0, y = 0, scale = 1;
   let mapW = 0, mapH = 0;
-  let territories = false;
+  let territories = 'territories' in frame.dataset;
   let pendingSrc = null;
   let ready = false;
   let drag = null;
@@ -72,7 +73,7 @@
   function render() {
     map.style.transform = 'translate(' + x + 'px, ' + y + 'px) scale(' + scale + ')';
     if (zoomLevel) zoomLevel.textContent = '×' + scale.toLocaleString('fr-FR', { maximumFractionDigits: 2 });
-    frame.style.setProperty('--marker-scale', Math.min(Math.max(scale, MARKER_MIN_SCALE), 1) / scale);
+    frame.style.setProperty('--marker-scale', markerSize * Math.min(Math.max(scale, MARKER_MIN_SCALE), 1) / scale);
     frame.classList.toggle('zoomed-out', scale < ZOOMED_OUT_SCALE);
     frame.style.setProperty('--icon-scale', Math.max(scale, 1));
     updateMinimap();
@@ -157,8 +158,7 @@
         centerOn(locX, locY, FOCUS_SCALE);
       }
     } else {
-      x = -locX / 100 * mapW;
-      y = -locY / 100 * mapH;
+      centerOn(locX, locY, parseFloat(frame.dataset.zoom) || FOCUS_SCALE);
     }
 
     ready = true;

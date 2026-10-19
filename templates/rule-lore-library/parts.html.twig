@@ -18,7 +18,7 @@
           <p>{{ attribute(un_element, 'part' ~ i ~ 'aside')|raw|nl2br }}</p>
         </aside>
       {% endif %}
-      <div class="card-description articlepart">{{ attribute(un_element, 'part' ~ i)|raw|nl2br }}</div>
+      <div class="card-description articlepart text-description">{{ attribute(un_element, 'part' ~ i)|raw|nl2br }}</div>
     </div>
 
     {{ include('/parts/divider-ornament.html.twig') }}

@@ -70,14 +70,14 @@
       {% endif %}
 
       {% if un_element.description %}
-        <p class="card-description aerated">{{ un_element.description|raw|nl2br }}</p>
+        <p class="card-description aerated text-description text-aerated">{{ un_element.description|raw|nl2br }}</p>
       {% endif %}
 
       {% if un_element.regles %}
         {{ include('/parts/divider-ornament.html.twig', {classes: 'my-3'}) }}
 
         <h2 class="heading-elementpart decorated">Règles</h2>
-        <p class="card-description aerated">{{ un_element.regles|raw|nl2br }}</p>
+        <p class="card-description aerated text-description text-aerated">{{ un_element.regles|raw|nl2br }}</p>
       {% endif %}
 
     </div>

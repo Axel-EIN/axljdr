@@ -6,17 +6,19 @@
   const mapImage = map.querySelector('.map-image');
   const pointer = frame.querySelector('.minimap .localisator-ui');
   const view = frame.querySelector('.minimap .minimap-view');
+  const zoomLevel = frame.querySelector('.map-zoom-level');
   const world = frame.classList.contains('world');
 
   const DRAG_THRESHOLD = 5;
-  const ZOOM_STEP = 1.25;
-  const MAX_SCALE = Math.pow(ZOOM_STEP, 3);
+  const ZOOM_LEVELS = [0.25, 0.5, 1, 1.5, 2];
+  const MIN_SCALE = ZOOM_LEVELS[0];
+  const MAX_SCALE = ZOOM_LEVELS[ZOOM_LEVELS.length - 1];
   const HD_SCALE = 1;
-  const FOCUS_SCALE = 0.75;
+  const FOCUS_SCALE = 1;
   const ZOOMED_OUT_SCALE = 0.45;
   const MARKER_MIN_SCALE = 0.5;
 
-  let x = 0, y = 0, scale = 1, minScale = 1;
+  let x = 0, y = 0, scale = 1;
   let mapW = 0, mapH = 0;
   let territories = false;
   let pendingSrc = null;
@@ -32,11 +34,15 @@
   }
 
   function boundScale(value) {
-    return Math.min(MAX_SCALE, Math.max(minScale, value));
+    return Math.min(MAX_SCALE, Math.max(MIN_SCALE, value));
   }
 
-  function fitScale() {
-    return Math.min(frame.clientWidth / mapW, frame.clientHeight / mapH, MAX_SCALE);
+  function nextLevel(direction) {
+    const levels = direction > 0 ? ZOOM_LEVELS : ZOOM_LEVELS.slice().reverse();
+    const next = levels.find(function (level) {
+      return direction > 0 ? level > scale + 0.001 : level < scale - 0.001;
+    });
+    return next === undefined ? levels[levels.length - 1] : next;
   }
 
   function clamp() {
@@ -64,8 +70,10 @@
 
   function render() {
     map.style.transform = 'translate(' + x + 'px, ' + y + 'px) scale(' + scale + ')';
+    if (zoomLevel) zoomLevel.textContent = '×' + scale.toLocaleString('fr-FR', { maximumFractionDigits: 2 });
     frame.style.setProperty('--marker-scale', Math.min(Math.max(scale, MARKER_MIN_SCALE), 1) / scale);
     frame.classList.toggle('zoomed-out', scale < ZOOMED_OUT_SCALE);
+    frame.style.setProperty('--icon-scale', Math.max(scale, 1));
     updateMinimap();
     updateImage();
   }
@@ -140,9 +148,8 @@
     const locY = parseFloat(frame.dataset.locy);
 
     if (world) {
-      minScale = fitScale();
       if (isNaN(locX) || isNaN(locY)) {
-        scale = minScale;
+        scale = MIN_SCALE;
         x = -mapW * scale / 2;
         y = -mapH * scale / 2;
       } else {
@@ -324,8 +331,6 @@
 
   window.addEventListener('resize', function () {
     if (!ready) return;
-    minScale = fitScale();
-    scale = boundScale(scale);
     clamp();
     render();
   });
@@ -334,7 +339,7 @@
     button.addEventListener('click', function () {
       if (!ready) return;
       animate();
-      zoomAt(scale * (button.dataset.mapZoom === 'in' ? ZOOM_STEP : 1 / ZOOM_STEP), 0, 0);
+      zoomAt(nextLevel(button.dataset.mapZoom === 'in' ? 1 : -1), 0, 0);
     });
   });
 

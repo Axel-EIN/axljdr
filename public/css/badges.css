@@ -75,6 +75,15 @@
         flex-shrink: 0;
     }
 
+    &.inset {
+        --icon-base: 2.5rem;
+
+        top: 1rem;
+        right: 1rem;
+
+        .badge-font-icon { font-size: var(--fontsize-medium); }
+    }
+
     &.hover-only {
         opacity: 0;
         transition: opacity var(--duration) var(--ease);

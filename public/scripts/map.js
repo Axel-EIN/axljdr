@@ -10,6 +10,7 @@
   const world = frame.classList.contains('world');
 
   const DRAG_THRESHOLD = 5;
+  const WHEEL_PAUSE = 200;
   const ZOOM_LEVELS = [0.25, 0.5, 1, 1.5, 2];
   const MIN_SCALE = ZOOM_LEVELS[0];
   const MAX_SCALE = ZOOM_LEVELS[ZOOM_LEVELS.length - 1];
@@ -342,6 +343,19 @@
       zoomAt(nextLevel(button.dataset.mapZoom === 'in' ? 1 : -1), 0, 0);
     });
   });
+
+  let wheelLock = 0;
+  frame.addEventListener('wheel', function (e) {
+    if (!ready || e.target.closest('.map-panel, .map-search')) return;
+    e.preventDefault();
+    const now = Date.now();
+    const locked = now < wheelLock;
+    wheelLock = now + WHEEL_PAUSE;
+    if (locked || e.deltaY === 0) return;
+    const center = frameCenter(e.clientX, e.clientY);
+    animate();
+    zoomAt(nextLevel(e.deltaY < 0 ? 1 : -1), center.x, center.y);
+  }, { passive: false });
 
   const controls = frame.querySelector('.map-controls');
   const controlsToggle = controls.querySelector('.map-controls-toggle');

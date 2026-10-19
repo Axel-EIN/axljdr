@@ -143,7 +143,7 @@
                 <h4 class="card-title-cartouche">{{ personnage.titres }}</h4>
             {% endif %}
 
-            <p class="profile-description read-only">{{ personnage.description|default('')|raw|nl2br }}</p>
+            <p class="text-description text-compact read-only">{{ personnage.description|default('')|raw|nl2br }}</p>
 
             {% if peut_editer %}
                 {{ form_widget(form.description, {attr: {class: 'edit-only'}}) }}
@@ -183,7 +183,7 @@
                         </div>
 
                         <div class="development-content">
-                            <p class="profile-description">{{ development.content|raw|nl2br }}</p>
+                            <p class="text-description text-compact">{{ development.content|raw|nl2br }}</p>
                             <a class="development-image" href="{{ scene_url }}" title="Voir la scène {{ scene.numero }}">
                                 <img src="{{ asset(scene.image|default(NA_SCENE)) }}" alt="Scène {{ scene.numero }} — {{ scene.titre }}" />
                             </a>
@@ -211,7 +211,7 @@
                     <h2 class="profile-description-title">Secrets</h2>
 
                     {% if personnage.playerNotes is not empty %}
-                        <p class="profile-description read-only">{{ personnage.playerNotes|nl2br }}</p>
+                        <p class="text-description text-compact read-only">{{ personnage.playerNotes|nl2br }}</p>
                     {% else %}
                         <p class="profile-description-na">Rien pour le moment.</p>
                     {% endif %}
@@ -231,7 +231,7 @@
                         <h2 class="profile-description-title">Notes du Maître de Jeu</h2>
 
                         {% if personnage.gmNotes is not empty %}
-                            <p class="profile-description read-only">{{ personnage.gmNotes|nl2br }}</p>
+                            <p class="text-description text-compact read-only">{{ personnage.gmNotes|nl2br }}</p>
                         {% else %}
                             <p class="profile-description-na">Rien pour le moment.</p>
                         {% endif %}

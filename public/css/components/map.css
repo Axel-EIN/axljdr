@@ -387,12 +387,17 @@
   }
 
   .lieu-other-icon {
+    --icon-base: 84px;
+
     z-index: 3;
     display: block;
-    width: calc(84px * var(--icon-scale, 1));
-    height: calc(84px * var(--icon-scale, 1));
+    width: calc(var(--icon-base) * var(--icon-scale, 1));
+    height: calc(var(--icon-base) * var(--icon-scale, 1));
     transform: translate(-50%, -50%) scale(var(--marker-scale, 1));
     transition: transform var(--duration) var(--ease-bounce), width var(--duration) var(--ease), height var(--duration) var(--ease);
+
+    &.city { --icon-base: 100px; }
+    &.region { --icon-base: 110px; }
 
     &:hover {
       z-index: 7;
@@ -457,8 +462,9 @@
   }
 
   .map-party {
-    --party-offset-x: calc(42px * var(--icon-scale, 1) + 4px);
-    --party-offset-y: calc(-42px * var(--icon-scale, 1));
+    --icon-base: 84px;
+    --party-offset-x: calc(var(--icon-base) / 2 * var(--icon-scale, 1) + 4px);
+    --party-offset-y: calc(var(--icon-base) / -2 * var(--icon-scale, 1));
 
     z-index: 5;
     display: grid;
@@ -467,6 +473,9 @@
     gap: calc(4px * var(--icon-scale, 1));
     transform: scale(var(--marker-scale, 1)) translate(var(--party-offset-x), var(--party-offset-y));
     transform-origin: 0 0;
+
+    &.city { --icon-base: 100px; }
+    &.region { --icon-base: 110px; }
   }
 
   .map-portrait {

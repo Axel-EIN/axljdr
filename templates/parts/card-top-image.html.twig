@@ -16,7 +16,7 @@
     </a>
   {% endif %}
 
-  {% if state is defined %}{{ include('parts/badge-access.html.twig', {state: state, title: state_title|default(null)}) }}{% endif %}
+  {% if state is defined %}{{ include('parts/badge-access.html.twig', {state: state, title: state_title|default(null), variant: 'inset glass'}) }}{% endif %}
 
   {% if titre is defined %}
     <span class="heading-elementdetail card-top-titre d-lg-none" aria-hidden="true">{{ titre }}</span>

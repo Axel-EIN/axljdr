@@ -52,7 +52,6 @@ class NewsFeed
                 'joueur' => $personnage->getJoueur(),
                 'xp' => $this->classeurXP->total($personnage),
                 'estMort' => $personnage->isDead() ? 1 : 0,
-                'missing' => $personnage->isMissing(),
             ];
         }
 
@@ -118,16 +117,6 @@ class NewsFeed
     public function lastParticipations(int $limit): array
     {
         return $this->participationRepository->findLastByEpisode($this->characterIds(), $limit);
-    }
-
-    public function encounters(array $participations): array
-    {
-        $episodes = [];
-        foreach ($participations as $participation) {
-            $episodes[] = $participation->getScene()->getEpisodeParent()->getId();
-        }
-
-        return $this->participationRepository->findEncountersForEpisodes($episodes, $this->characterIds());
     }
 
     public function latest(string $key, int $limit, array $criteres = []): array

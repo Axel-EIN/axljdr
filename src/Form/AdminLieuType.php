@@ -41,6 +41,7 @@ class AdminLieuType extends AbstractType
           'Royaume Spirituel' => 'Royaume Spirituel',
           'Forteresse' => 'Forteresse',
           'Palais' => 'Palais',
+          'Temple' => 'Temple',
           'Structure' => 'Structure',
         ],
       ])

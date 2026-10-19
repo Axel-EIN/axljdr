@@ -6,6 +6,7 @@ use App\Repository\ClanRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=ClanRepository::class)
@@ -91,6 +92,24 @@ class Clan
      * @ORM\Column(type="text", nullable=true)
      */
     private $territoireDesc;
+
+    /**
+     * @ORM\Column(type="decimal", precision=5, scale=2, nullable=true)
+     * @Assert\Range(min=1, max=99)
+     */
+    private $locX;
+
+    /**
+     * @ORM\Column(type="decimal", precision=5, scale=2, nullable=true)
+     * @Assert\Range(min=1, max=99)
+     */
+    private $locY;
+
+    /**
+     * @ORM\Column(type="decimal", precision=3, scale=2, nullable=true)
+     * @Assert\Range(min=0.25, max=2)
+     */
+    private $zoom;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
@@ -352,6 +371,42 @@ class Clan
     public function setTerritoireDesc(?string $territoireDesc): self
     {
         $this->territoireDesc = $territoireDesc;
+
+        return $this;
+    }
+
+    public function getLocX(): ?string
+    {
+        return $this->locX;
+    }
+
+    public function setLocX(?string $locX): self
+    {
+        $this->locX = $locX;
+
+        return $this;
+    }
+
+    public function getLocY(): ?string
+    {
+        return $this->locY;
+    }
+
+    public function setLocY(?string $locY): self
+    {
+        $this->locY = $locY;
+
+        return $this;
+    }
+
+    public function getZoom(): ?string
+    {
+        return $this->zoom;
+    }
+
+    public function setZoom(?string $zoom): self
+    {
+        $this->zoom = $zoom;
 
         return $this;
     }

@@ -132,11 +132,10 @@
     {% for autre in placed %}
       {% if current is null or autre.id != current.id %}
         {% set autre_etat = element_state(autre) %}
-        {% set autre_lisible = element_readable(autre) %}
         {% set autre_secret = autre_etat == 'hidden' %}
         {% set autre_color = autre_secret ? null : autre.clan.couleur ?? null %}
         <a {% if autre_secret %}aria-disabled="true"{% else %}href="{{ path('world_lieu', {id: autre.id}) }}"{% if worldmap %} data-panel="{{ path('carte_lieu', {id: autre.id}) }}"{% endif %}{% endif %}
-           class="absolute lieu-other-icon {% if not autre_lisible %}locked{% endif %}" data-lieu="{{ autre.id }}"
+           class="absolute lieu-other-icon" data-lieu="{{ autre.id }}"
            style="left:{{autre.locX}}%; top:{{autre.locY}}%;{% if autre_color %} --clan-color: {{autre_color}};{% endif %}">
           {% if autre_secret %}
             <span class="lieu-other-unknown">?</span>

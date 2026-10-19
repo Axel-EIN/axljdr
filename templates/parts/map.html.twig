@@ -6,13 +6,20 @@
 {% set party = party|default({}) %}
 {% set trail = trail|default([]) %}
 {% set recenter = recenter|default(null) %}
+{% set zoom = zoom|default(null) %}
+{% set territories = territories|default(false) %}
+{% set labels = labels|default(false) %}
+{% set large_markers = large_markers|default(false) %}
+{% set emblem = emblem|default(null) %}
 {% set main_character = main_character() %}
 {% set current_color = current.clan.couleur ?? null %}
 {% set placed = lieux|filter(l => l.locX is not empty and l.locY is not empty) %}
 
-<div class="map-frame {{ variant }}{% if not worldmap %} labels-hidden d-none d-lg-block{% endif %}"
+<div class="map-frame {{ variant }}{% if not worldmap and not labels %} labels-hidden{% endif %}{% if not worldmap %} d-none d-lg-block{% endif %}{% if large_markers %} large-markers{% endif %}"
   {% if center %}data-locx="{{ center.locX }}" data-locy="{{ center.locY }}"{% endif %}
   {% if highlight %}data-highlight="{{ highlight.id }}"{% endif %}
+  {% if zoom %}data-zoom="{{ zoom }}"{% endif %}
+  {% if territories %}data-territories{% endif %}
 >
 
   {% if worldmap %}
@@ -70,15 +77,19 @@
       <span class="label">Plein écran</span>
     </button>
 
-    <button type="button" class="map-toggle-btn{% if worldmap %} active{% endif %}" data-map-toggle="labels" aria-pressed="{{ worldmap ? 'true' : 'false' }}">
-      <i class="fa-solid fa-torii-gate"></i>
-      <span class="label">Lieux</span>
-    </button>
+    {% if not labels %}
+      <button type="button" class="map-toggle-btn{% if worldmap %} active{% endif %}" data-map-toggle="labels" aria-pressed="{{ worldmap ? 'true' : 'false' }}">
+        <i class="fa-solid fa-torii-gate"></i>
+        <span class="label">Lieux</span>
+      </button>
+    {% endif %}
 
-    <button type="button" class="map-toggle-btn" data-map-toggle="territories" aria-pressed="false">
-      <i class="fa-solid fa-map"></i>
-      <span class="label">Territoires</span>
-    </button>
+    {% if not territories %}
+      <button type="button" class="map-toggle-btn" data-map-toggle="territories" aria-pressed="false">
+        <i class="fa-solid fa-map"></i>
+        <span class="label">Territoires</span>
+      </button>
+    {% endif %}
 
     {% if current %}
       <button type="button" class="map-toggle-btn" data-map-recenter data-locx="{{ current.locX }}" data-locy="{{ current.locY }}">
@@ -112,9 +123,9 @@
     </div>
   {% endif %}
 
-  <div class="map-drag"{% if current %} style="transform: translate(-{{ current.locX }}%, -{{ current.locY }}%);"{% endif %}>
+  <div class="map-drag"{% if center %} style="transform: scale({{ zoom ?? 1 }}) translate(-{{ center.locX }}%, -{{ center.locY }}%);"{% endif %}>
 
-    <img class="map-image" src="{{ asset('assets/maps/map-rokugan-50-clean.jpg') }}" alt="Carte de Rokugan" draggable="false"
+    <img class="map-image" src="{{ asset('assets/maps/map-rokugan-50-' ~ (territories ? 'frontier' : 'clean') ~ '.jpg') }}" alt="Carte de Rokugan" draggable="false"
          data-clean="{{ asset('assets/maps/map-rokugan-50-clean.jpg') }}"
          data-frontier="{{ asset('assets/maps/map-rokugan-50-frontier.jpg') }}"
          data-clean-hd="{{ asset('assets/maps/map-rokugan-100-clean.jpg') }}"
@@ -167,6 +178,10 @@
         {% endif %}
       {% endif %}
     {% endfor %}
+
+    {% if emblem and center %}
+      <img class="absolute map-emblem" style="left:{{center.locX}}%; top:{{center.locY}}%" src="{{ asset(emblem) }}" alt="" />
+    {% endif %}
 
     {% if current %}
       <img class="absolute lieu-pulse-icon" style="left:{{current.locX}}%; top:{{current.locY}}%" src="{{ asset(current.icone|default(NA_LIEU_ICO)) }}" alt="Icone de {{current.nom}}" />

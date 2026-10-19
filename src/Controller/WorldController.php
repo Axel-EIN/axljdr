@@ -179,7 +179,10 @@ class WorldController extends AbstractController
     }
 
     $lieux = $lieuRepository->findAllSorted();
-    $autresLieux = $lieuRepository->findAllExceptOne($lieu->getId());
+    $autresLieux = array_values(array_filter(
+      $lieuRepository->findAllExceptOne($lieu->getId()),
+      fn (Lieu $autre) => $visibility->isReadable($autre)
+    ));
     shuffle($autresLieux);
     $autresLieux = array_slice($autresLieux, 0, 12);
 

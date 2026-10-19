@@ -64,47 +64,42 @@
     </aside>
   {% endif %}
 
-  <div class="map-controls absolute">
-    {% if worldmap %}
-      <button type="button" class="map-toggle-btn map-controls-toggle" aria-expanded="false" aria-label="Options de la carte">
-        <i class="fa-solid fa-sliders"></i>
-      </button>
-    {% endif %}
+  {% if worldmap or not labels or not territories %}
+    <div class="map-controls absolute">
+      {% if worldmap %}
+        <button type="button" class="map-toggle-btn map-controls-toggle" aria-expanded="false" aria-label="Options de la carte">
+          <i class="fa-solid fa-sliders"></i>
+        </button>
 
-    <button type="button" class="map-toggle-btn" data-map-toggle="fullscreen" aria-pressed="false">
-      <i class="fa-solid fa-expand icon-off"></i>
-      <i class="fa-solid fa-compress icon-on"></i>
-      <span class="label">Plein écran</span>
-    </button>
+        <button type="button" class="map-toggle-btn" data-map-toggle="fullscreen" aria-pressed="false">
+          <i class="fa-solid fa-expand icon-off"></i>
+          <i class="fa-solid fa-compress icon-on"></i>
+          <span class="label">Plein écran</span>
+        </button>
+      {% endif %}
 
-    {% if not labels %}
-      <button type="button" class="map-toggle-btn{% if worldmap %} active{% endif %}" data-map-toggle="labels" aria-pressed="{{ worldmap ? 'true' : 'false' }}">
-        <i class="fa-solid fa-torii-gate"></i>
-        <span class="label">Lieux</span>
-      </button>
-    {% endif %}
+      {% if not labels %}
+        <button type="button" class="map-toggle-btn{% if worldmap %} active{% endif %}" data-map-toggle="labels" aria-pressed="{{ worldmap ? 'true' : 'false' }}">
+          <i class="fa-solid fa-torii-gate"></i>
+          <span class="label">Lieux</span>
+        </button>
+      {% endif %}
 
-    {% if not territories %}
-      <button type="button" class="map-toggle-btn" data-map-toggle="territories" aria-pressed="false">
-        <i class="fa-solid fa-map"></i>
-        <span class="label">Territoires</span>
-      </button>
-    {% endif %}
+      {% if not territories %}
+        <button type="button" class="map-toggle-btn" data-map-toggle="territories" aria-pressed="false">
+          <i class="fa-solid fa-map"></i>
+          <span class="label">Territoires</span>
+        </button>
+      {% endif %}
 
-    {% if current %}
-      <button type="button" class="map-toggle-btn" data-map-recenter data-locx="{{ current.locX }}" data-locy="{{ current.locY }}">
-        <i class="fa-solid fa-crosshairs"></i>
-        <span class="label">Recentrer</span>
-      </button>
-    {% endif %}
-
-    {% if worldmap %}
-      <button type="button" class="map-toggle-btn active" data-map-toggle="party" aria-pressed="true">
-        <i class="fa-solid fa-users"></i>
-        <span class="label">Personnages</span>
-      </button>
-    {% endif %}
-  </div>
+      {% if worldmap %}
+        <button type="button" class="map-toggle-btn active" data-map-toggle="party" aria-pressed="true">
+          <i class="fa-solid fa-users"></i>
+          <span class="label">Personnages</span>
+        </button>
+      {% endif %}
+    </div>
+  {% endif %}
 
   {% if worldmap %}
     <div class="map-zoom absolute">
@@ -144,7 +139,7 @@
       {% if current is null or autre.id != current.id %}
         {% set autre_etat = element_state(autre) %}
         {% set autre_secret = autre_etat == 'hidden' %}
-        {% set autre_taille = autre_secret ? '' : {'Cité': ' city', 'Ville': ' city', 'Région': ' region'}[autre.type] ?? '' %}
+        {% set autre_taille = autre_secret ? '' : {'Cité': ' city', 'Ville': ' city', 'Région': ' region', 'Temple': ' temple'}[autre.type] ?? '' %}
         {% set autre_color = autre_secret ? null : autre.clan.couleur ?? null %}
         <a {% if autre_secret %}aria-disabled="true"{% else %}href="{{ path('world_lieu', {id: autre.id}) }}"{% if worldmap %} data-panel="{{ path('carte_lieu', {id: autre.id}) }}"{% endif %}{% endif %}
            class="absolute lieu-other-icon{{ autre_taille }}" data-lieu="{{ autre.id }}"

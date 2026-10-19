@@ -6,12 +6,10 @@
 {% set lisible = element_readable(element) %}
 {% set type = personnage ? personnage.classe.nom ?? null : lieu.type %}
 
-{% if lisible %}
-  {% if personnage %}
-    <img class="map-panel-banner portrait" src="{{ asset(personnage.illustration|default(NA_PERSO_ILLU)) }}" alt="Illustration de {{ personnage.nomComplet }}" />
-  {% elseif lieu.image %}
-    <img class="map-panel-banner" src="{{ asset(lieu.image) }}" alt="Image de {{ lieu.nom }}" />
-  {% endif %}
+{% if personnage and lisible %}
+  <img class="map-panel-banner portrait" src="{{ asset(personnage.illustration|default(NA_PERSO_ILLU)) }}" alt="Illustration de {{ personnage.nomComplet }}" />
+{% elseif lieu and lieu.image %}
+  <img class="map-panel-banner" src="{{ asset(lieu.image) }}" alt="Image de {{ lieu.nom }}" />
 {% endif %}
 
 <div class="map-panel-body">

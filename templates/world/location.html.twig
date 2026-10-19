@@ -64,7 +64,7 @@
       </div>
 
       {% if un_element.description is defined and un_element.description is not empty %}
-        <p class="card-description aerated text-description text-aerated">{{ un_element.description|raw|nl2br }}</p>
+        {{ include('parts/description.html.twig', {text: un_element.description, variant: 'aerated'}, with_context = false) }}
       {% endif %}
 
       {% if un_element.locX is defined and un_element.locX is not empty and un_element.locY is defined and un_element.locY is not empty %}
@@ -84,7 +84,7 @@
       {% endif %}
 
       {% if un_element.quartiers is defined and un_element.quartiers is not empty %}
-        <p class="card-description aerated text-description text-aerated">{{ un_element.quartiers|raw|nl2br }}</p>
+        {{ include('parts/description.html.twig', {text: un_element.quartiers, variant: 'aerated'}, with_context = false) }}
       {% endif %}
 
       {% if (un_element.description is defined and un_element.description is not empty)

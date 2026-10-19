@@ -13,6 +13,11 @@
     margin: 0 auto;
     background-color: var(--color-alternate);
     text-align: center;
+
+    &.dragover {
+        outline: 2px dashed var(--color-primary);
+        outline-offset: 4px;
+    }
 }
 
 .browser {

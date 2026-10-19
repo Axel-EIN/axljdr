@@ -133,9 +133,10 @@
       {% if current is null or autre.id != current.id %}
         {% set autre_etat = element_state(autre) %}
         {% set autre_secret = autre_etat == 'hidden' %}
+        {% set autre_taille = autre_secret ? '' : {'Cité': ' city', 'Région': ' region'}[autre.type] ?? '' %}
         {% set autre_color = autre_secret ? null : autre.clan.couleur ?? null %}
         <a {% if autre_secret %}aria-disabled="true"{% else %}href="{{ path('world_lieu', {id: autre.id}) }}"{% if worldmap %} data-panel="{{ path('carte_lieu', {id: autre.id}) }}"{% endif %}{% endif %}
-           class="absolute lieu-other-icon" data-lieu="{{ autre.id }}"
+           class="absolute lieu-other-icon{{ autre_taille }}" data-lieu="{{ autre.id }}"
            style="left:{{autre.locX}}%; top:{{autre.locY}}%;{% if autre_color %} --clan-color: {{autre_color}};{% endif %}">
           {% if autre_secret %}
             <span class="lieu-other-unknown">?</span>
@@ -154,7 +155,7 @@
         </a>
 
         {% if party[autre.id] is defined %}
-          <div class="map-party absolute" style="left:{{autre.locX}}%; top:{{autre.locY}}%;">
+          <div class="map-party absolute{{ autre_taille }}" style="left:{{autre.locX}}%; top:{{autre.locY}}%;">
             {% for perso in party[autre.id] %}
               <div class="map-portrait{% if main_character and perso.id == main_character.id %} mine{% endif %}" data-personnage="{{ perso.id }}">
                 <button type="button" class="map-portrait-toggle" data-panel="{{ path('carte_personnage', {id: perso.id}) }}" aria-expanded="false" aria-label="{{ perso.nomComplet }}" title="{{ perso.nomComplet }}">

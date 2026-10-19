@@ -96,6 +96,17 @@
       width: 2.75rem;
       padding-inline: 0;
     }
+
+    .map-zoom-level {
+      padding: 0.2rem 0;
+      border: 1px solid rgb(from var(--color-earthlight) r g b / 70%);
+      border-radius: 0.375rem;
+      background-color: rgb(from var(--color-blackonyx) r g b / 85%);
+      color: var(--color-white);
+      font-size: var(--fontsize-small);
+      text-align: center;
+      white-space: nowrap;
+    }
   }
 
   .map-toggle-btn {
@@ -378,10 +389,10 @@
   .lieu-other-icon {
     z-index: 3;
     display: block;
-    width: 84px;
-    height: 84px;
+    width: calc(84px * var(--icon-scale, 1));
+    height: calc(84px * var(--icon-scale, 1));
     transform: translate(-50%, -50%) scale(var(--marker-scale, 1));
-    transition: transform var(--duration) var(--ease-bounce);
+    transition: transform var(--duration) var(--ease-bounce), width var(--duration) var(--ease), height var(--duration) var(--ease);
 
     &:hover {
       z-index: 7;
@@ -452,14 +463,14 @@
   }
 
   .map-party {
-    --party-offset-x: 46px;
-    --party-offset-y: -42px;
+    --party-offset-x: calc(42px * var(--icon-scale, 1) + 4px);
+    --party-offset-y: calc(-42px * var(--icon-scale, 1));
 
     z-index: 5;
     display: grid;
     grid-auto-flow: column;
     grid-template-rows: repeat(5, auto);
-    gap: 4px;
+    gap: calc(4px * var(--icon-scale, 1));
     transform: scale(var(--marker-scale, 1)) translate(var(--party-offset-x), var(--party-offset-y));
     transform-origin: 0 0;
   }
@@ -476,8 +487,8 @@
 
       img {
         display: block;
-        width: 24px;
-        height: 24px;
+        width: calc(24px * var(--icon-scale, 1));
+        height: calc(24px * var(--icon-scale, 1));
         border-radius: 3px;
         object-fit: cover;
         pointer-events: none;

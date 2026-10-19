@@ -47,7 +47,7 @@
 
             </div>
 
-            <p class="card-description aerated text-description text-aerated">{{ ecole.description|raw|nl2br }}</p>
+            {{ include('parts/description.html.twig', {text: ecole.description, variant: 'aerated'}, with_context = false) }}
 
         </div>
     </div>

@@ -7,7 +7,7 @@
         
             {{ include('/parts/card-top-image.html.twig', {image: un_element.image, na_image: NA_ARCHIVE, alt: 'Image de ' ~ nom, img_class: 'crop-169', titre: nom, state: element_state(un_element)}) }}
 
-            <p class="card-description aerated">{{ un_element.contenu|raw|nl2br }}</p>
+            <p class="card-description aerated text-description text-aerated">{{ un_element.contenu|raw|nl2br }}</p>
         
             {% if un_element.auteur is not empty %}
                 <ul class="list-group list-group-flush">

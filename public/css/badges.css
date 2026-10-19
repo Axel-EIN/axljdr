@@ -91,18 +91,6 @@
 
         :hover > & { border-color: var(--color-white); }
     }
-
-    &.cover {
-        top: 50%;
-        right: auto;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        width: 80%;
-        height: 80%;
-        pointer-events: none;
-
-        .badge-font-icon { font-size: var(--fontsize-pluser); }
-    }
 }
 
 /* ----- BADGE NOUVEAU ----- */

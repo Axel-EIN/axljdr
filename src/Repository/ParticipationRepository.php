@@ -147,33 +147,6 @@ class ParticipationRepository extends ServiceEntityRepository
         return array_values($personnages);
     }
 
-    public function findEncountersForEpisodes(array $episodeIds, array $characterIds): array
-    {
-        if (empty($episodeIds) || empty($characterIds)) {
-            return [];
-        }
-
-        $participations = $this->createQueryBuilder('p')
-            ->join('p.scene', 's')
-            ->join('p.personnage', 'personnage')
-            ->addSelect('personnage')
-            ->andWhere('s.episodeParent IN (:episodes)')
-            ->andWhere('personnage.id NOT IN (:miens)')
-            ->setParameter('episodes', $episodeIds)
-            ->setParameter('miens', $characterIds)
-            ->orderBy('personnage.estPj', 'DESC')
-            ->addOrderBy('personnage.prenom', 'ASC')
-            ->getQuery()
-            ->getResult();
-
-        $rencontres = [];
-        foreach ($participations as $participation) {
-            $rencontres[$participation->getPersonnage()->getId()] = $participation->getPersonnage();
-        }
-
-        return array_values($rencontres);
-    }
-
     public function findForCharactersInSaison(Saison $saison, array $characterIds): array
     {
         if (empty($characterIds)) {

@@ -15,7 +15,7 @@
 {% set current_color = current.clan.couleur ?? null %}
 {% set placed = lieux|filter(l => l.locX is not empty and l.locY is not empty) %}
 
-<div class="map-frame {{ variant }}{% if not worldmap and not labels %} labels-hidden{% endif %}{% if not worldmap %} d-none d-lg-block{% endif %}{% if large_markers %} large-markers{% endif %}"
+<div class="map-frame {{ variant }}{% if labels %} labels-shown{% elseif not worldmap %} labels-hidden{% endif %}{% if not worldmap %} d-none d-lg-block{% endif %}{% if large_markers %} large-markers{% endif %}"
   {% if center %}data-locx="{{ center.locX }}" data-locy="{{ center.locY }}"{% endif %}
   {% if highlight %}data-highlight="{{ highlight.id }}"{% endif %}
   {% if zoom %}data-zoom="{{ zoom }}"{% endif %}

@@ -38,7 +38,8 @@
       {% set state = element_state(item, reveal_session) %}
       {% set hidden = not element_readable(item) %}
       {% set locked = not plain and state == 'locked' %}
-      {% set item_class = plain ? 'hover-zoom' : (element_unseen(item) ? 'access-hidden ' : '') ~ (locked ? 'locked ' : '') ~ (catalog ? 'catalog ' : '') ~ (hidden or locked ? '' : 'hover-zoom') %}
+      {% set restricted = plain and hidden %}
+      {% set item_class = plain ? (restricted ? 'restricted' : 'hover-zoom') : (element_unseen(item) ? 'access-hidden ' : '') ~ (locked ? 'locked ' : '') ~ (catalog ? 'catalog ' : '') ~ (hidden or locked ? '' : 'hover-zoom') %}
       {% set name = item.nomComplet is defined ? item.nomComplet : (item.nom is defined ? item.nom : item.titre) %}
       {% set alt = hidden ? 'À découvrir' : name %}
       {% set pdf_only = item.pdf|default(null) and not item.hasParts|default(false) %}
@@ -47,7 +48,7 @@
       {% set href = pdf_link ? asset(item.pdf) : (route is defined ? path(route, {id: item.id}) : element_url(item)) %}
 
       <a class="picture-item {{ variant }} {{ item_class }}"
-         {% if (hidden and not plain) or not href %}aria-disabled="true"{% else %}{% if show_label %}title="{{ name }}" {% endif %}{% if pdf_link %}target="_blank" rel="noopener" {% endif %}href="{{ href }}"{% endif %}>
+         {% if hidden or not href %}aria-disabled="true"{% else %}{% if show_label %}title="{{ name }}" {% endif %}{% if pdf_link %}target="_blank" rel="noopener" {% endif %}href="{{ href }}"{% endif %}>
         <div class="image-container {% if locked %}slight-fade{% endif %}">
 
           {% if catalog %}
@@ -97,6 +98,10 @@
         </div>
 
         {% if show_label %}<div class="label">{{ name }}</div>{% endif %}
+
+        {% if restricted %}
+          <span class="access-tooltip">Connectez votre personnage pour vérifier l'accès à cet élément</span>
+        {% endif %}
       </a>
 
     {% else %}

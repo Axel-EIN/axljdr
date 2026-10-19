@@ -142,6 +142,9 @@ class AdminClanController extends AbstractController
             if (!empty($nouvelleCarte)) {
                 $prefix = 'clan-' . $clan->getNom() . '-territoire';
                 $clan->setTerritoireCarte($fileHandler->handle($nouvelleCarte, $clan->getTerritoireCarte(), $prefix, 'clans'));
+            } elseif ($request->request->get('remove_territoireCarte') === '1' && $clan->getTerritoireCarte()) {
+                $fileHandler->handle(null, $clan->getTerritoireCarte(), null, 'clans');
+                $clan->setTerritoireCarte(null);
             }
 
             $nouvelleVideo = $form->get('video')->getData();

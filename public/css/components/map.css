@@ -1,6 +1,7 @@
 .map-frame {
   --map-gap: 0.75rem;
   --map-top: var(--map-gap);
+  --marker-size: 1;
 
   position: relative;
   width: 100%;
@@ -20,6 +21,8 @@
   }
 
   &.dragging { cursor: grabbing; }
+
+  &.large-markers { --marker-size: 1.5; }
 
   &:fullscreen {
     width: 100%;
@@ -343,6 +346,17 @@
       border: 2px solid var(--color-primarylighter);
       box-shadow: 0 0 0 1px var(--color-black50);
     }
+  }
+
+  .map-emblem {
+    z-index: 2;
+    width: 160px;
+    height: 160px;
+    object-fit: contain;
+    transform: translate(-50%, -50%) scale(calc(var(--marker-scale, 1) / var(--marker-size, 1)));
+    opacity: 0.8;
+    filter: drop-shadow(0 0 6px var(--color-black50));
+    pointer-events: none;
   }
 
   .lieu-pulse-icon {

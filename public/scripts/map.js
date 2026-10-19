@@ -174,7 +174,7 @@
   }
 
   function start(clientX, clientY) {
-    if (!ready) return;
+    if (!ready || !world) return;
     drag = { x: clientX, y: clientY, offsetX: x, offsetY: y };
     dragMoved = false;
     frame.classList.add('dragging');

@@ -13,6 +13,33 @@ if (document.getElementsByClassName('input-plan')[0])
 if (document.getElementsByClassName('input-video')[0])
     previewHandler('input-video', 'video');
 
+document.querySelectorAll('.preview-label').forEach(dropHandler);
+
+function dropHandler(label) {
+    var input_file = document.getElementById(label.htmlFor);
+    if (!input_file) return;
+
+    label.addEventListener('dragover', function (e) {
+        e.preventDefault();
+        label.classList.add('dragover');
+    });
+
+    label.addEventListener('dragleave', function (e) {
+        if (!label.contains(e.relatedTarget)) label.classList.remove('dragover');
+    });
+
+    label.addEventListener('drop', function (e) {
+        e.preventDefault();
+        label.classList.remove('dragover');
+        if (!e.dataTransfer.files.length) return;
+
+        var dt = new DataTransfer();
+        dt.items.add(e.dataTransfer.files[0]);
+        input_file.files = dt.files;
+        input_file.dispatchEvent(new Event('change'));
+    });
+}
+
 function previewHandler(inputClassNameString, prefixName) {
     var input_file = document.getElementsByClassName(inputClassNameString)[0];
     input_file.addEventListener( "change",

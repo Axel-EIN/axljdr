@@ -3,7 +3,8 @@
 .famille {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 3fr);
-  column-gap: 1rem;
+  grid-template-rows: auto 1fr;
+  gap: 1rem;
   margin: 1.5rem 0;
 
   .famille-mon {
@@ -11,6 +12,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    padding: 0.5rem;
     text-align: center;
   }
 
@@ -21,11 +23,7 @@
     margin-top: 1rem;
   }
 
-  .famille-description {
-    margin: 0.5rem 0 0;
-    text-align: justify;
-    font-size: var(--fontsize-base);
-  }
+  .famille-description { margin: 0; }
 
   @media (max-width: 991.98px) {
     .famille-mon { grid-row: 1; }
@@ -33,9 +31,6 @@
 
     .famille-entete { align-self: center; }
 
-    .famille-description {
-      grid-column: 1 / -1;
-      margin-top: 1rem;
-    }
+    .famille-description { grid-column: 1 / -1; }
   }
 }

@@ -34,7 +34,8 @@
                         {% if type == 'Modifier' and
                             ( (clan.longDescription is defined and clan.longDescription is not empty)
                             or (clan.territoireCarte is defined and clan.territoireCarte is not empty)
-                            or (clan.territoireDesc is defined and clan.territoireDesc is not empty) ) %}true{% else %}false{% endif %}"
+                            or (clan.territoireDesc is defined and clan.territoireDesc is not empty)
+                            or (clan.locX is defined and clan.locX is not empty) ) %}true{% else %}false{% endif %}"
                     aria-controls="clan-options-collapse">
                     <h2 class="heading-cardtitle">Plus d'options ...</h2>
                 </a>
@@ -44,16 +45,25 @@
                     {% if type == 'Modifier'and
                             ( (clan.longDescription is defined and clan.longDescription is not empty)
                             or (clan.territoireCarte is defined and clan.territoireCarte is not empty)
-                            or (clan.territoireDesc is defined and clan.territoireDesc is not empty) ) %} show{% endif %}">
+                            or (clan.territoireDesc is defined and clan.territoireDesc is not empty)
+                            or (clan.locX is defined and clan.locX is not empty) ) %} show{% endif %}">
 
                     
                     <div class="col-12 mt-3 mb-5">
                         {{ include('parts/image-field.html.twig', {
                             field: form.territoireCarte, input_id: 'admin_clan_territoireCarte', prefix: 'map',
-                            current: clan.territoireCarte|default(null), fallback: NA_MAP, deletable: false }) }}
+                            current: clan.territoireCarte|default(null), fallback: NA_MAP }) }}
                     </div>
 
                     <div class="col-12">{{ form_row(form.territoireDesc,{ 'attr': {'rows': '7'} }) }}</div>
+
+                    <div class="col-12">
+                        <div class="row">
+                            <div class="col-4">{{ form_row(form.locX) }}</div>
+                            <div class="col-4">{{ form_row(form.locY) }}</div>
+                            <div class="col-4">{{ form_row(form.zoom) }}</div>
+                        </div>
+                    </div>
 
                     <div class="col-12 mt-3 mb-5">
                         {{ form_label(form.video) }}

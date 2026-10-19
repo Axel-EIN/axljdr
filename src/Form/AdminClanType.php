@@ -15,6 +15,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\ColorType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
 
 use Symfony\Component\Validator\Constraints\File;
 use Symfony\Component\Validator\Constraints\Length;
@@ -58,6 +59,18 @@ class AdminClanType extends AbstractType
                 'constraints' => [new File(['maxSize' => '5M'])],
             ])
             ->add('territoireDesc', TextareaType::class, ['required' => false])
+            ->add('locX', NumberType::class, [
+                'scale' => 2, 'required' => false, 'label' => 'Coord. % hori. carte',
+                'attr' => ['min' => 1, 'max' => 99, 'step' => '.05'],
+            ])
+            ->add('locY', NumberType::class, [
+                'scale' => 2, 'required' => false, 'label' => 'Coord. % vert. carte',
+                'attr' => ['min' => 1, 'max' => 99, 'step' => '.05'],
+            ])
+            ->add('zoom', NumberType::class, [
+                'scale' => 2, 'required' => false, 'label' => 'Zoom carte (0,25 à 2)',
+                'attr' => ['min' => 0.25, 'max' => 2, 'step' => '.05'],
+            ])
             ->add('chef', EntityType::class, [
                 'class' => Personnage::class,
                 'choice_label' => 'prenom',

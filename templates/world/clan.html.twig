@@ -4,6 +4,7 @@
     {{parent()}}
     <link rel="stylesheet" href="{{asset('css/components/banner-intro.css')}}" />
     <link rel="stylesheet" href="{{asset('css/pages/clan.css')}}" />
+    <link rel="stylesheet" href="{{asset('css/components/map.css')}}" />
 {% endblock %}
 
 {% block element_content %}
@@ -22,7 +23,7 @@
             <div class="card-text">
 
                 {% for une_famille in clan.familles %}
-                    <hr>
+                    <hr{% if not loop.first %} class="my-5"{% endif %}>
                     <article id="{{ une_famille.nom }}" class="famille relative">
 
                         {% if app.user and is_granted("ROLE_MJ") %}
@@ -45,11 +46,11 @@
                             <h3><strong>{{ une_famille.nom }}</strong></h3>
                             {% if une_famille.bonusStatNom %}
                                 {% set labels = {'constitution':'Constitution','volonte':'Volonté','reflexes':'Réflexes','intuition':'Intuition','agilite':'Agilité','intelligence':'Intelligence','forceStat':'Force','perception':'Perception','vide':'Vide'} %}
-                                <strong>Trait bonus : {{ labels[une_famille.bonusStatNom] ?? une_famille.bonusStatNom }} +1</strong>
+                                <strong style="color: {{ clan.couleur }}">Trait bonus : {{ labels[une_famille.bonusStatNom] ?? une_famille.bonusStatNom }} +1</strong>
                             {% endif %}
                         </div>
 
-                        <p class="famille-description">{{ une_famille.description|raw|nl2br }}</p>
+                        <p class="famille-description text-description">{{ une_famille.description|raw|nl2br }}</p>
 
                     </article>
                 {% else %}
@@ -71,18 +72,24 @@
         empty_message: 'Écoles à venir.',
     }) }}
 
-    {% if clan.territoireDesc is defined and clan.territoireDesc is not empty %}
+    {% set territoire_place = clan.locX is not empty and clan.locY is not empty %}
+
+    {% if territoire_place or clan.territoireDesc is not empty %}
     <div class="col-12">
         <div class="card card-body">
             <h2 class="heading-cardtitle">Territoires</h2>
             <hr>
 
-            {% if clan.territoireCarte %}
+            {% if territoire_place %}
+                {{ include('parts/map.html.twig', {
+                    lieux: clan.lieux.toArray, center: clan, zoom: clan.zoom, territories: true, labels: true, large_markers: true, emblem: clan.mon|default(NA_MON),
+                }, with_context = false) }}
+            {% elseif clan.territoireCarte %}
                 <img id="carte" class="img-fluid img-bleed" src="{{asset(clan.territoireCarte)}}" alt="Carte du Territoire du clan" />
             {% endif %}
 
             {% if clan.territoireDesc %}
-                <p class="card-description">{{clan.territoireDesc}}</p>
+                <p class="card-description text-description text-aerated">{{clan.territoireDesc}}</p>
             {% else %}
                 <p class="text-muted"><i>Description des Territoires à venir.</i></p>
             {% endif %}
@@ -91,25 +98,55 @@
     </div>
     {% endif %}
 
-    {{ include('/parts/picture-grid.html.twig', {
-        title: 'Lieux',
-        items: clan.lieux, route: 'world_lieu',
-        na_image: NA_LIEU,
-        per_row: {desktop: 4, tablet: 3, mobile: 2},
-        empty_message: "Il n'y a pas encore de lieu rattaché à ce clan.",
-    }) }}
+    {% set lieux_clan = clan.lieux.toArray|filter(l => element_listed(l)) %}
+    {% set groupes_lieux = [
+        {titre: 'Forteresses & Palais', colonne: '', par_ligne: 6, items: lieux_clan|filter(l => l.type in ['Forteresse', 'Palais'])},
+        {titre: 'Cités, Villes & Villages', colonne: 'col-lg-6', par_ligne: 3, items: lieux_clan|filter(l => l.type in ['Cité', 'Ville', 'Village'])},
+        {titre: 'Autres', colonne: 'col-lg-6', par_ligne: 3, items: lieux_clan|filter(l => l.type not in ['Forteresse', 'Palais', 'Cité', 'Ville', 'Village'])},
+    ] %}
+
+    <div class="col-12">
+        <div class="card card-body">
+
+            {{ include('/btns/btn-add-element.html.twig', {
+                entity: 'lieu', label_one: 'un lieu',
+                position: 'topright-corner-inside-more', options: 'filter[0]=' ~ clan.nom|url_encode,
+            }) }}
+
+            <h2 class="heading-cardtitle">Lieux</h2>
+            <hr>
+
+            {% if lieux_clan is not empty %}
+                <div class="row">
+                    {% for groupe in groupes_lieux|filter(groupe => groupe.items is not empty) %}
+                        <div class="col-12 {{ groupe.colonne }} mt-2 mb-4">
+                            <h3 class="heading-amerigo mb-3">{{ groupe.titre }}</h3>
+                            {{ include('/parts/picture-grid.html.twig', {
+                                variant: 'icon',
+                                items: groupe.items, route: 'world_lieu', na_image: NA_LIEU_ICO,
+                                per_row: {desktop: groupe.par_ligne, tablet: 4, mobile: 2},
+                            }) }}
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <span class="text-muted font-italic">Il n'y a pas encore de lieu rattaché à ce clan.</span>
+            {% endif %}
+
+        </div>
+    </div>
 
     {% if clan.longDescription is defined and clan.longDescription is not empty %}
-        {% set col_side = "col-12 col-lg-4" %}
+        {% set col_side, portraits_par_ligne = "col-12 col-lg-4", 2 %}
         <div class="col-12 col-lg-8">
             <div class="card card-body">
                 <h2 class="heading-cardtitle">Autres</h2>
                 <hr>
-                <p class="card-description">{{ clan.longDescription|raw|nl2br }}</p>
+                <p class="card-description text-description">{{ clan.longDescription|raw|nl2br }}</p>
             </div>
         </div>
     {% else %}
-        {% set col_side = "col-12" %}
+        {% set col_side, portraits_par_ligne = "col-12", 8 %}
     {% endif %}
 
     {{ include('/parts/picture-grid.html.twig', {
@@ -117,7 +154,7 @@
         title: 'Personnages',
         items: clan.personnages, route: 'personnage_profil', hide_dead: true,
         wrapper: col_side,
-        per_row: {desktop: 2, tablet: 4, mobile: 2},
+        per_row: {desktop: portraits_par_ligne, tablet: 4, mobile: 2},
         empty_message: "Il n'y a pas encore de personnage rattaché à ce clan.",
     }) }}
 
@@ -126,4 +163,5 @@
 {% block javascripts %}
     {{parent()}}
     <script src="{{ asset('scripts/clan.js') }}"></script>
+    <script src="{{ asset('scripts/map.js') }}"></script>
 {% endblock %}

@@ -111,6 +111,11 @@ class NewsController extends AbstractController
             }
         }
 
+        $colonne = 0;
+        foreach ($groupes as $groupe) {
+            $colonne = ($groupe['large'] ?? false) ? 0 : 1 - $colonne;
+        }
+
         return $this->render('news/index.html.twig', [
             'dernier_episode' => $dernierEpisode,
             'classement' => $dernierEpisode === null ? false : $classeurXP->classerPersosEpisode($dernierEpisode),
@@ -124,10 +129,11 @@ class NewsController extends AbstractController
             'classement_general' => $newsFeed->generalRanking(),
             'participations_xp' => $participationsXp,
             'groupes' => $groupes,
+            'secrets_large' => $colonne === 0,
             'sections' => $sections,
             'header_classname' => 'news',
             'header_up' => 'Accueil',
-            'header_down' => 'Bienvenue a Rokugan',
+            'header_down' => 'Bienvenue à Rokugan',
             'category' => 'news',
         ]);
     }

@@ -180,13 +180,13 @@
             {% endfor %}
 
             {% if mes_personnages is empty %}
-                <div class="card card-body news-group locked">
+                <div class="card card-body news-group{{ secrets_large ? ' large' }} locked">
                     <h3 class="label-amerigo news-subtitle">Secrets</h3>
                     <img class="news-lock fa-beat-fade" src="{{ asset(LOCKED_ICO) }}" alt="Cadenas" />
                     {% if app.user %}
-                        <p>Les secrets de ton personnage apparaîtront ici.</p>
+                        <p>Les secrets de votre personnage apparaîtront ici.</p>
                     {% else %}
-                        <p>Connecte-toi pour voir les secrets de ton personnage.</p>
+                        <p>Connectez-vous pour voir les secrets de votre personnage.</p>
                         <a class="btn btn-medium btn-secondary-style" href="{{ path('app_login') }}">Se connecter</a>
                     {% endif %}
                 </div>

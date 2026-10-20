@@ -2,7 +2,8 @@
 
   {% set reveal_session = reveal_session|default(false) %}
   {% set hide_dead = hide_dead|default(false) %}
-  {% set items = element_sort(items|filter(item => element_listed(item, reveal_session) and not (hide_dead and item.dead))) %}
+  {% set items = items|filter(item => element_listed(item, reveal_session) and not (hide_dead and item.dead)) %}
+  {% set items = keep_order|default(false) ? items : element_sort(items) %}
   {% set variant = variant|default('landscape') %}
   {% set shape = {landscape: '1610', rule: '43', icon: '11'}[variant]|default('1610') %}
   {% set pin = {portrait: 'pin-topleft', icon: 'pin-downcenter'}[variant]|default('') %}

@@ -63,7 +63,7 @@
           {% endif %}
 
           {% if locked %}
-            <img class="icon-lock fa-beat-fade" src="{{ asset(LOCKED_ICO) }}" alt="Cadenas" />
+            <img class="icon-lock" src="{{ asset(LOCKED_ICO) }}" alt="Cadenas" />
           {% endif %}
 
           {% if element_fresh(item) %}{{ include('parts/badge-new.html.twig', {variant: pin}) }}{% endif %}

@@ -99,10 +99,12 @@
     {% endif %}
 
     {% set lieux_clan = clan.lieux.toArray|filter(l => element_listed(l)) %}
+    {% set types_forts = ['Palais Fortifié', 'Forteresse', 'Palais'] %}
+    {% set types_urbains = ['Cité', 'Ville', 'Village'] %}
     {% set groupes_lieux = [
-        {titre: 'Forteresses & Palais', colonne: '', par_ligne: 6, items: lieux_clan|filter(l => l.type in ['Forteresse', 'Palais'])},
-        {titre: 'Cités, Villes & Villages', colonne: 'col-lg-6', par_ligne: 3, items: lieux_clan|filter(l => l.type in ['Cité', 'Ville', 'Village'])},
-        {titre: 'Autres', colonne: 'col-lg-6', par_ligne: 3, items: lieux_clan|filter(l => l.type not in ['Forteresse', 'Palais', 'Cité', 'Ville', 'Village'])},
+        {titre: 'Forteresses & Palais', colonne: '', par_ligne: 6, items: lieux_clan|filter(l => l.type in types_forts)},
+        {titre: 'Cités, Villes & Villages', colonne: 'col-lg-6', par_ligne: 3, items: lieux_clan|filter(l => l.type in types_urbains)},
+        {titre: 'Autres', colonne: 'col-lg-6', par_ligne: 3, items: lieux_clan|filter(l => l.type not in types_forts|merge(types_urbains))},
     ] %}
 
     <div class="col-12">

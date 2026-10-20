@@ -22,6 +22,7 @@ class Lieu
     'Village' => 'fa-solid fa-house-chimney',
     'Palais Fortifié' => 'fa-solid fa-gopuram',
     'Forteresse' => 'fa-brands fa-fort-awesome',
+    'Donjon' => 'fa-solid fa-dungeon',
     'Palais' => 'fa-solid fa-vihara',
     'Temple' => 'fa-solid fa-torii-gate',
     'Région' => 'fa-solid fa-mountain-sun',

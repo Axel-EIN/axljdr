@@ -14,7 +14,7 @@
     content: '';
     position: absolute;
     inset: -3rem;
-    background: url('../../assets/img/lieux/minimap.jpg') center / cover no-repeat;
+    background: url('../../assets/maps/map-rokugan-frontiers-mini.jpg') center / cover no-repeat;
     filter: blur(2rem) brightness(0.45) saturate(1.2);
     pointer-events: none;
   }

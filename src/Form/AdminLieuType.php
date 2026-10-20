@@ -19,6 +19,8 @@ class AdminLieuType extends AbstractType
 {
   public function buildForm(FormBuilderInterface $builder, array $options): void
   {
+    $types = array_keys(Lieu::TYPE_ICONS);
+
     $builder
       ->add('nom', TextType::class)
       ->add('surnom', TextType::class, [ 'required' => false ])
@@ -33,17 +35,7 @@ class AdminLieuType extends AbstractType
       ->add('type', ChoiceType::class, [
         'placeholder' => 'Pas de type défini',
         'required' => false,
-        'choices'  => [
-          'Village' => 'Village',
-          "Ville" => "Ville",
-          'Cité' => 'Cité',
-          'Région' => 'Région',
-          'Royaume Spirituel' => 'Royaume Spirituel',
-          'Forteresse' => 'Forteresse',
-          'Palais' => 'Palais',
-          'Temple' => 'Temple',
-          'Structure' => 'Structure',
-        ],
+        'choices'  => array_combine($types, $types),
       ])
       ->add('planMap', FileType::class, [
         'mapped' => false,

@@ -25,27 +25,51 @@
             fallback: NA_LIEU, label: 'Image (1280×720 16:9 recommandé)', width: 1280, height: 720 }) }}
       </div>
 
+      {% set region_map = lieu.regionMap|default(null) %}
+      {% set plan_rempli = lieu.planMap|default(null) or lieu.planDesc|default(null) %}
+
+      <div class="col-12 mt-5">
+        <h2 class="heading-cardtitle">Carte</h2>
+        <hr>
+      </div>
+
       <div class="col-4">{{ form_row(form.locX) }}</div>
       <div class="col-4">{{ form_row(form.locY) }}</div>
+      <div class="col-4">{{ form_row(form.zoom) }}</div>
+
+      <div class="col-12 mb-3">
+        <button type="button" class="btn btn-medium btn-secondary-style" data-toggle="collapse" data-target="#region-map-collapse"
+          aria-expanded="{{ region_map ? 'true' : 'false' }}" aria-controls="region-map-collapse">
+          <i class="fas fa-upload"></i>&nbsp;&nbsp;Uploader une image
+        </button>
+      </div>
+
+      <div id="region-map-collapse" class="col-12 mb-5 collapse{% if region_map %} show{% endif %}">
+        {{ include('parts/image-field.html.twig', {
+            field: form.regionMap, input_id: 'admin_lieu_regionMap', prefix: 'map', current: region_map,
+            fallback: NA_MAP }) }}
+      </div>
+
+      <div class="col-12">{{ form_row(form.regionDesc, {'attr': {'rows': '7'}}) }}</div>
 
       <div class="col-12 mt-5">
 
         <a class="w-100" data-toggle="collapse" href="#part-lieu-collapse" role="button"
-          aria-expanded="{% if type == 'Modifier' and lieu.quartiers is defined and lieu.quartiers is not empty %}true{% else %}false{% endif %}"
+          aria-expanded="{{ plan_rempli ? 'true' : 'false' }}"
           aria-controls="part-lieu-collapse">
-          <h2 class="heading-cardtitle">Plus d'options ...</h2>
+          <h2 class="heading-cardtitle">Plan ...</h2>
         </a>
         <hr>
 
-        <div id="part-lieu-collapse" class="collapse {% if type == 'Modifier' and lieu.quartiers is defined and lieu.quartiers is not empty %} show{% endif %}">
+        <div id="part-lieu-collapse" class="collapse{% if plan_rempli %} show{% endif %}">
 
           <div class="col-12 mt-3 mb-5">
             {{ include('parts/image-field.html.twig', {
-                field: form.carte, input_id: 'admin_lieu_carte', prefix: 'plan', current: lieu.carte|default(null),
+                field: form.planMap, input_id: 'admin_lieu_planMap', prefix: 'plan', current: lieu.planMap|default(null),
                 fallback: NA_MAP, deletable: false }) }}
           </div>
 
-          <div class="col-12">{{ form_row(form.quartiers,{ 'attr': {'rows': '16'} }) }}</div>
+          <div class="col-12">{{ form_row(form.planDesc, {'attr': {'rows': '16'}}) }}</div>
 
         </div>
 

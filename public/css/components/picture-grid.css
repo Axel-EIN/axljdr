@@ -14,6 +14,61 @@
   }
 
   > .grid-empty { grid-column: 1 / -1; }
+
+  &.scroll {
+    --scroll-gap: var(--gap, 1rem);
+    --scroll-inset: min(0.75rem, var(--scroll-gap));
+
+    flex: 1;
+    min-width: 0;
+    grid-template-columns: none;
+    grid-auto-flow: column;
+    grid-auto-columns: calc((100% - (var(--cols) - 1) * var(--scroll-gap)) / var(--cols));
+    gap: var(--scroll-gap);
+    padding: 1rem var(--scroll-inset);
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-padding-inline: var(--scroll-inset);
+    scroll-behavior: smooth;
+    scrollbar-width: none;
+
+    &::-webkit-scrollbar { display: none; }
+
+    > .picture-item { scroll-snap-align: start; }
+  }
+}
+
+.picture-scroller {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+
+  .scroller-btn {
+    flex-shrink: 0;
+    padding: 0.5rem 0.75rem;
+    border: 0;
+    border-radius: 0.5rem;
+    background-color: transparent;
+    color: var(--color-primary);
+    font-size: var(--fontsize-base);
+    visibility: hidden;
+    transition:
+      background-color var(--duration) var(--ease),
+      color var(--duration) var(--ease),
+      opacity var(--duration) var(--ease);
+
+    &:hover:not(:disabled) {
+      background-color: var(--color-primary40);
+      color: var(--color-white);
+    }
+
+    &:disabled {
+      opacity: 0.25;
+      cursor: default;
+    }
+
+    &:is(.overflowing > *) { visibility: visible; }
+  }
 }
 
 .picture-item {
@@ -61,8 +116,9 @@
       margin-right: 0.35rem;
       padding: 0.15rem 0.35rem;
       border-radius: 0.25rem;
-      background-color: var(--color-primary);
+      background-color: var(--clan-color, var(--color-primary));
       color: var(--color-white);
+      text-shadow: 0 1px 2px var(--color-black50);
       font-size: var(--fontsize-mini);
       line-height: var(--leading-1);
       letter-spacing: 1px;

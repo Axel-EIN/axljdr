@@ -22,7 +22,7 @@
             <div class="card character-card text-white shadow-more {{zoom}} {{translucide}} {{hover_opaque}} relative {{ element_unseen(perso) ? 'access-hidden' }} {{ state == 'locked' ? 'locked' }}">
 
                 {% if state == 'locked' %}
-                    <img class="icon-lock in-character-card fa-beat-fade" src="{{ asset(LOCKED_ICO) }}" alt="Cadenas" />
+                    <img class="icon-lock in-character-card" src="{{ asset(LOCKED_ICO) }}" alt="Cadenas" />
                 {% endif %}
 
                 {% if element_fresh(perso) %}

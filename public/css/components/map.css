@@ -24,16 +24,19 @@
 
   &.current-city { --current-size: 115px; }
 
+  &.draggable {
+    cursor: grab;
+
+    &.dragging { cursor: grabbing; }
+  }
+
   &.world {
     --map-top: calc(var(--nav-height) + var(--map-gap));
 
     position: fixed;
     inset: 0;
     aspect-ratio: auto;
-    cursor: grab;
     touch-action: none;
-
-    &.dragging { cursor: grabbing; }
 
     &:fullscreen {
       --map-top: var(--map-gap);
@@ -595,21 +598,6 @@
     font-size: var(--fontsize-base);
     line-height: var(--leading-1);
     text-shadow: 0 1px 2px var(--color-black);
-  }
-
-  .map-label-badge {
-    display: inline-block;
-    margin-right: 0.35rem;
-    padding: 0.15rem 0.35rem;
-    border: 1px solid var(--color-white50);
-    border-radius: 0.25rem;
-    background-color: var(--map-label-color);
-    font-size: var(--fontsize-mini);
-    font-weight: bold;
-    line-height: var(--leading-1);
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    vertical-align: middle;
   }
 
   .map-label-details {

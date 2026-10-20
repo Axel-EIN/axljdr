@@ -4,7 +4,11 @@
   border: unset;
   transition: var(--duration) var(--ease);
 
-  &.locked:hover .grayscale { filter: none; }
+  &.locked {
+    .icon-lock { transition: filter var(--duration) var(--ease); }
+
+    &:hover .icon-lock { filter: grayscale(1) opacity(1); }
+  }
 }
 
 @media (max-width: 575.98px) {

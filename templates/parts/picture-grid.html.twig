@@ -15,6 +15,7 @@
   {% set badge_hover = badge_hover|default(false) %}
   {% set catalog = catalog|default(false) %}
   {% set type_badges = type_badges|default([]) %}
+  {% set type_icon = type_icon|default(false) %}
 
   {% if scroll and per_row is not defined %}{% set per_row = {desktop: 6, mobile: 2} %}{% endif %}
   {% if per_row is defined %}
@@ -113,9 +114,13 @@
 
         {% if show_label %}
           <div class="label">
+            {%- set clan = item.clan|default(null) -%}
+            {%- set clan_color = clan and element_listed(clan) ? clan.couleur : null -%}
+            {%- if type_icon and item.typeIcon|default(null) -%}
+              <span class="label-icon" title="{{ item.type }}"{% if clan_color %} style="--clan-color: {{ clan_color }}"{% endif %}><i class="{{ item.typeIcon }}" aria-hidden="true"></i></span>
+            {%- endif -%}
             {%- if item.type|default(null) in type_badges -%}
-              {%- set badge_color = item.clan.couleur ?? null -%}
-              <span class="label-badge"{% if badge_color %} style="--clan-color: {{ badge_color }}"{% endif %}>{{ item.type }}</span>
+              <span class="label-badge"{% if clan_color %} style="--clan-color: {{ clan_color }}"{% endif %}>{{ item.type }}</span>
             {%- endif -%}
             {{ name }}
             {%- if access_label -%}

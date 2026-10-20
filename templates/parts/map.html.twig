@@ -120,11 +120,11 @@
 
   <div class="map-drag"{% if center %} style="transform: scale({{ zoom ?? 1 }}) translate(-{{ center.locX }}%, -{{ center.locY }}%);"{% endif %}>
 
-    <img class="map-image" src="{{ asset('assets/maps/map-rokugan-50-' ~ (territories ? 'frontier' : 'clean') ~ '.jpg') }}" alt="Carte de Rokugan" draggable="false"
-         data-clean="{{ asset('assets/maps/map-rokugan-50-clean.jpg') }}"
-         data-frontier="{{ asset('assets/maps/map-rokugan-50-frontier.jpg') }}"
-         data-clean-hd="{{ asset('assets/maps/map-rokugan-100-clean.jpg') }}"
-         data-frontier-hd="{{ asset('assets/maps/map-rokugan-100-frontier.jpg') }}" />
+    <img class="map-image" src="{{ asset('assets/maps/map-rokugan-' ~ (territories ? 'frontiers' : 'clean') ~ '.jpg') }}" alt="Carte de Rokugan" draggable="false"
+         data-clean="{{ asset('assets/maps/map-rokugan-clean.jpg') }}"
+         data-frontier="{{ asset('assets/maps/map-rokugan-frontiers.jpg') }}"
+         data-clean-hd="{{ asset('assets/maps/map-rokugan-clean-zoomed.jpg') }}"
+         data-frontier-hd="{{ asset('assets/maps/map-rokugan-frontiers-zoomed.jpg') }}" />
 
     {% if trail|length > 1 %}
       <svg class="map-trail" aria-hidden="true">
@@ -201,7 +201,7 @@
       {% else %}
         <span class="absolute minimap-view"></span>
       {% endif %}
-      <img class="img-fluid" src="{{asset('assets/img/lieux/minimap.jpg')}}" alt="Carte de Rokugan">
+      <img class="img-fluid" src="{{asset('assets/maps/map-rokugan-frontiers-mini.jpg')}}" alt="Carte de Rokugan">
     </div>
   </div>
 

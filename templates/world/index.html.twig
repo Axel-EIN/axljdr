@@ -68,8 +68,9 @@
 
 {% block section_content3 %}
     {% for groupe in groupesLieux %}
+        {% set scroller_id = 'lieux-' ~ loop.index %}
         <div class="col-12">
-            <h3 class="heading-amerigo category-section-sub-heading flex-wrap">
+            <h3 class="heading-amerigo category-section-sub-heading flex-wrap relative">
                 {% for clan in groupe.clans|default([]) %}
                     <img class="img-40 mr-2" src="{{ asset(clan.mon|default(NA_MON)) }}" alt="Mon de la faction" title="{{ clan.nom }}" />
                 {% endfor %}
@@ -77,11 +78,13 @@
                     <img class="img-40 mr-2" src="{{ asset(NA_MON) }}" alt="Mon de la faction" />
                 {% endif %}
                 {{ groupe.titre }}
+                <span class="scroller-dots" data-scroller="{{ scroller_id }}"></span>
             </h3>
             {{ include('/parts/picture-grid.html.twig', {
                 catalog: true,
                 variant: 'icon',
-                scroll: true,
+                scroll: true, scroll_id: scroller_id,
+                access_label: true,
                 items: groupe.lieux, route: 'world_lieu', na_image: NA_LIEU_ICO,
                 per_row: {desktop: 6, mobile: 2},
             }) }}

@@ -181,10 +181,11 @@
     &.catalog:hover,
     &[href]:hover {
       .frame,
-      .picture,
-      .label { filter: none; opacity: 1; }
+      .picture { filter: grayscale(100%); }
 
-      .icon-lock { filter: grayscale(1) opacity(0); }
+      .label { opacity: 1; }
+
+      .icon-lock { filter: grayscale(1) opacity(1); }
     }
 
     &[href] { cursor: pointer; }

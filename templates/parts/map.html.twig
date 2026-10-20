@@ -14,8 +14,10 @@
 {% set main_character = main_character() %}
 {% set current_color = current.clan.couleur ?? null %}
 {% set placed = lieux|filter(l => l.locX is not empty and l.locY is not empty) %}
+{% set badge_types = ['Cité', 'Ville', 'Région'] %}
+{% set current_city = current and current.type in ['Cité', 'Ville'] %}
 
-<div class="map-frame {{ variant }}{% if labels %} labels-shown{% elseif not worldmap %} labels-hidden{% endif %}{% if not worldmap %} d-none d-lg-block{% endif %}{% if large_markers %} large-markers{% endif %}"
+<div class="map-frame {{ variant }}{% if labels %} labels-shown{% elseif not worldmap %} labels-hidden{% endif %}{% if not worldmap %} d-none d-lg-block{% endif %}{% if large_markers %} large-markers{% endif %}{% if current_city %} current-city{% endif %}"
   {% if center %}data-locx="{{ center.locX }}" data-locy="{{ center.locY }}"{% endif %}
   {% if highlight %}data-highlight="{{ highlight.id }}"{% endif %}
   {% if zoom %}data-zoom="{{ zoom }}"{% endif %}
@@ -151,6 +153,7 @@
             <img class="lieu-icon" src="{{ asset(autre.icone|default(NA_LIEU_ICO)) }}" alt="Icone de {{ autre.nom }}" />
             {{ include('parts/map-label.html.twig', {
               name: autre.nom,
+              badge: autre.type in badge_types ? autre.type : null,
               mon: autre.clan.mon ?? null,
               details: [autre.type, autre.clan.nom ?? null, autre_etat == 'secret' ? 'Secret' : null],
               state: autre_etat,
@@ -185,6 +188,7 @@
 
       {{ include('parts/map-label.html.twig', {
         name: current.nom,
+        badge: current.type in badge_types ? current.type : null,
         mon: current.clan.mon ?? null,
         details: [current.type, current.clan.nom ?? null],
         variant: 'absolute current',

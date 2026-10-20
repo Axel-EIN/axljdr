@@ -55,6 +55,20 @@
     font-weight: bold;
     text-align: center;
     line-height: var(--leading-base);
+
+    .label-badge {
+      display: inline-block;
+      margin-right: 0.35rem;
+      padding: 0.15rem 0.35rem;
+      border-radius: 0.25rem;
+      background-color: var(--color-primary);
+      color: var(--color-white);
+      font-size: var(--fontsize-mini);
+      line-height: var(--leading-1);
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      vertical-align: middle;
+    }
   }
 
   .hover-tooltip {

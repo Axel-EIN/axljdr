@@ -12,6 +12,7 @@
   {% set plain = reveal_session %}
   {% set badge_hover = badge_hover|default(false) %}
   {% set catalog = catalog|default(false) %}
+  {% set type_badges = type_badges|default([]) %}
 
   {% if per_row is defined %}
     {% set cols = per_row is iterable ? per_row : {desktop: per_row} %}
@@ -63,7 +64,7 @@
           {% endif %}
 
           {% if locked %}
-            <img class="icon-lock" src="{{ asset(LOCKED_ICO) }}" alt="Cadenas" />
+            <img class="icon-lock{% if variant == 'icon' %} in-icon{% endif %}" src="{{ asset(LOCKED_ICO) }}" alt="Cadenas" />
           {% endif %}
 
           {% if element_fresh(item) %}{{ include('parts/badge-new.html.twig', {variant: pin}) }}{% endif %}
@@ -98,7 +99,12 @@
           {% endif %}
         </div>
 
-        {% if show_label %}<div class="label">{{ name }}</div>{% endif %}
+        {% if show_label %}
+          <div class="label">
+            {%- if item.type|default(null) in type_badges %}<span class="label-badge">{{ item.type }}</span>{% endif -%}
+            {{ name }}
+          </div>
+        {% endif %}
 
         {% if restricted %}
           <span class="access-tooltip">Connectez votre personnage pour vérifier l'accès à cet élément</span>

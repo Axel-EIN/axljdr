@@ -93,8 +93,7 @@ class WorldController extends AbstractController
     $titres = array_column($this->getParameter('factions'), 'titre', 'nom');
     $ordre = array_merge(
       array_map(fn (string $nom) => 'clan-' . $nom, array_keys($titres)),
-      array_map(fn (int $type) => 'type-' . $type, array_keys(FactionType::GROUPS)),
-      ['autres']
+      ['type-' . FactionType::MINEUR, 'type-' . FactionType::NON_ALIGNE, 'autres']
     );
 
     $groupes = [];
@@ -105,19 +104,32 @@ class WorldController extends AbstractController
 
       $clan = $lieu->getClan();
       $majeur = $clan !== null && $clan->getType() === FactionType::MAJEUR;
+      $sansGroupe = $clan === null || ($majeur && !isset($titres[$clan->getNom()]));
 
-      if ($clan === null || ($majeur && !isset($titres[$clan->getNom()]))) {
+      if ($sansGroupe) {
         $cle = 'autres';
-        $groupes[$cle]['titre'] = 'Autres';
+        $groupes[$cle]['sansGroupe'] = true;
+      } elseif ($clan->getType() === FactionType::ENNEMI) {
+        $cle = 'autres';
       } else {
         $cle = $majeur ? 'clan-' . $clan->getNom() : 'type-' . $clan->getType();
         $groupes[$cle]['titre'] = $majeur ? $titres[$clan->getNom()] : FactionType::GROUPS[$clan->getType()];
-        if ($visibility->isListed($clan)) {
-          $groupes[$cle]['clans'][$clan->getId()] = $clan;
-        }
+      }
+
+      if (!$sansGroupe && $visibility->isListed($clan)) {
+        $groupes[$cle]['clans'][$clan->getId()] = $clan;
       }
 
       $groupes[$cle]['lieux'][] = $lieu;
+    }
+
+    if (isset($groupes['autres'])) {
+      $ennemis = !empty($groupes['autres']['clans']);
+      $groupes['autres']['titre'] = match (true) {
+        $ennemis && isset($groupes['autres']['sansGroupe']) => 'Ennemis et autres',
+        $ennemis => FactionType::GROUPS[FactionType::ENNEMI],
+        default => 'Autres',
+      };
     }
 
     return array_values(array_filter(array_map(fn (string $cle) => $groupes[$cle] ?? null, $ordre)));

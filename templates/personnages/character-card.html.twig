@@ -2,6 +2,7 @@
 
 {% set state = element_state(perso) %}
 {% set readable = element_readable(perso) %}
+{% set locked = state == 'locked' and not (app.user and is_granted('ROLE_MJ')) %}
 
 <article class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2 py-3 {{ perso.dead or perso.missing ? 'perso-inactif' }}">
 
@@ -19,9 +20,9 @@
         {% set zoom, translucide, hover_opaque, text, tint, grayscale = 'hover-zoom', 'translucide', 'hover-opaque', 'text-AIR', 'missing', '' %}
     {% endif %}
 
-            <div class="card character-card text-white shadow-more {{zoom}} {{translucide}} {{hover_opaque}} relative {{ element_unseen(perso) ? 'access-hidden' }} {{ state == 'locked' ? 'locked' }}">
+            <div class="card character-card text-white shadow-more {{zoom}} {{translucide}} {{hover_opaque}} relative {{ locked ? 'locked' }}">
 
-                {% if state == 'locked' %}
+                {% if locked %}
                     <img class="icon-lock in-character-card" src="{{ asset(LOCKED_ICO) }}" alt="Cadenas" />
                 {% endif %}
 

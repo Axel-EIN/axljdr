@@ -39,3 +39,27 @@ $('#caption').click(function (e) {
 $('.modal').on('shown.bs.modal', function () {
     $(this).find('[autofocus]').trigger('focus');
 });
+
+document.querySelectorAll('.picture-scroller').forEach(function (scroller) {
+
+    const grid = scroller.querySelector('.picture-grid');
+    const buttons = scroller.querySelectorAll('.scroller-btn');
+
+    function update() {
+        const max = grid.scrollWidth - grid.clientWidth;
+        scroller.classList.toggle('overflowing', max > 1);
+        buttons.forEach(function (button) {
+            button.disabled = button.dataset.direction < 0 ? grid.scrollLeft <= 1 : grid.scrollLeft >= max - 1;
+        });
+    }
+
+    buttons.forEach(function (button) {
+        button.addEventListener('click', function () {
+            grid.scrollBy({ left: button.dataset.direction * grid.clientWidth });
+        });
+    });
+
+    grid.addEventListener('scroll', update, { passive: true });
+    new ResizeObserver(update).observe(grid);
+
+});

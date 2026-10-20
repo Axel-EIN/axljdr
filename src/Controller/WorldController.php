@@ -183,7 +183,10 @@ class WorldController extends AbstractController
       $lieuRepository->findAllExceptOne($lieu->getId()),
       fn (Lieu $autre) => $visibility->isReadable($autre)
     ));
+    $clan = $lieu->getClan();
+    $memeFaction = fn (Lieu $autre) => $clan !== null && $autre->getClan() === $clan;
     shuffle($autresLieux);
+    usort($autresLieux, fn (Lieu $a, Lieu $b) => $memeFaction($b) <=> $memeFaction($a));
     $autresLieux = array_slice($autresLieux, 0, 12);
 
     $historique = $classeur->pourLieu($lieu);

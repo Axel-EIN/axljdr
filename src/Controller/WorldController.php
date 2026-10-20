@@ -181,12 +181,9 @@ class WorldController extends AbstractController
     $lieux = $lieuRepository->findAllSorted();
     $autresLieux = array_values(array_filter(
       $lieuRepository->findAllExceptOne($lieu->getId()),
-      fn (Lieu $autre) => $visibility->isReadable($autre)
+      fn (Lieu $autre) => $autre->getClan() === $lieu->getClan() && $visibility->isReadable($autre)
     ));
-    $clan = $lieu->getClan();
-    $memeFaction = fn (Lieu $autre) => $clan !== null && $autre->getClan() === $clan;
     shuffle($autresLieux);
-    usort($autresLieux, fn (Lieu $a, Lieu $b) => $memeFaction($b) <=> $memeFaction($a));
     $autresLieux = array_slice($autresLieux, 0, 12);
 
     $historique = $classeur->pourLieu($lieu);

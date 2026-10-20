@@ -46,10 +46,12 @@ class AdminLieuController extends AbstractController
         'type:Type',
         'population:Population:number',
         'description:Description:bool',
-        'carte:Plan:bool',
         'locX:LocX:number',
         'locY:LocY:number',
-        'quartiers:QuartiersText:bool',
+        'regionMap:Région:bool',
+        'regionDesc:RégionText:bool',
+        'planMap:Plan:bool',
+        'planDesc:PlanText:bool',
         'access:Accès:access',
         'publishedAt:Publié le:date',
       ],
@@ -75,10 +77,16 @@ class AdminLieuController extends AbstractController
         $lieu->setImage($fileHandler->handle($nouvelleImage, null, $prefix, 'lieux', 'landscape720'));
       }
 
-      $nouvelleCarte = $form->get('carte')->getData();
-      if (!empty($nouvelleCarte)) {
+      $nouvelleRegion = $form->get('regionMap')->getData();
+      if (!empty($nouvelleRegion)) {
+        $prefix = 'lieu-' . $lieu->getNom() . '-region';
+        $lieu->setRegionMap($fileHandler->handle($nouvelleRegion, null, $prefix, 'lieux'));
+      }
+
+      $nouveauPlan = $form->get('planMap')->getData();
+      if (!empty($nouveauPlan)) {
         $prefix = 'lieu-' . $lieu->getNom() . '-plan';
-        $lieu->setCarte($fileHandler->handle($nouvelleCarte, null, $prefix, 'lieux'));
+        $lieu->setPlanMap($fileHandler->handle($nouveauPlan, null, $prefix, 'lieux'));
       }
 
       $nouvelleIcone = $form->get('icone')->getData();
@@ -88,6 +96,7 @@ class AdminLieuController extends AbstractController
       }
 
       $lieu->setDescription($baliseur->baliser($lieu->getDescription()));
+      $lieu->setRegionDesc($baliseur->baliser($lieu->getRegionDesc()));
 
       $em->persist($lieu);
       $em->flush();
@@ -121,6 +130,7 @@ class AdminLieuController extends AbstractController
   public function editLieu(Request $request, Lieu $lieu, FileHandler $fileHandler, Baliseur $baliseur, Unlocker $unlocker): Response {
 
     $lieu->setDescription($baliseur->debaliser($lieu->getDescription()));
+    $lieu->setRegionDesc($baliseur->debaliser($lieu->getRegionDesc()));
 
     $form = $this->createForm(AdminLieuType::class, $lieu);
     $form->get('unlockedBy')->setData($unlocker->charactersOf($lieu));
@@ -137,10 +147,19 @@ class AdminLieuController extends AbstractController
         $lieu->setImage(null);
       }
 
-      $nouvelleCarte = $form->get('carte')->getData();
-      if (!empty($nouvelleCarte)) {
-        $prefix = 'lieu-' . $lieu->getNom() . '-carte';
-        $lieu->setCarte($fileHandler->handle($nouvelleCarte, $lieu->getCarte(), $prefix, 'lieux'));
+      $nouvelleRegion = $form->get('regionMap')->getData();
+      if (!empty($nouvelleRegion)) {
+        $prefix = 'lieu-' . $lieu->getNom() . '-region';
+        $lieu->setRegionMap($fileHandler->handle($nouvelleRegion, $lieu->getRegionMap(), $prefix, 'lieux'));
+      } elseif ($request->request->get('remove_regionMap') === '1' && $lieu->getRegionMap()) {
+        $fileHandler->handle(null, $lieu->getRegionMap(), null, 'lieux');
+        $lieu->setRegionMap(null);
+      }
+
+      $nouveauPlan = $form->get('planMap')->getData();
+      if (!empty($nouveauPlan)) {
+        $prefix = 'lieu-' . $lieu->getNom() . '-plan';
+        $lieu->setPlanMap($fileHandler->handle($nouveauPlan, $lieu->getPlanMap(), $prefix, 'lieux'));
       }
 
       $nouvelleIcone = $form->get('icone')->getData();
@@ -153,6 +172,7 @@ class AdminLieuController extends AbstractController
       }
 
       $lieu->setDescription($baliseur->baliser($lieu->getDescription()));
+      $lieu->setRegionDesc($baliseur->baliser($lieu->getRegionDesc()));
 
       $unlocker->sync($lieu, $form->get('unlockedBy')->getData());
       $unlocker->syncAccess($lieu);
@@ -188,7 +208,8 @@ class AdminLieuController extends AbstractController
       $entityManager = $this->getDoctrine()->getManager();
 
       $fileHandler->handle(null, $lieu->getImage(), null, 'lieux');
-      $fileHandler->handle(null, $lieu->getCarte(), null, 'lieux');
+      $fileHandler->handle(null, $lieu->getRegionMap(), null, 'lieux');
+      $fileHandler->handle(null, $lieu->getPlanMap(), null, 'lieux');
       $fileHandler->handle(null, $lieu->getIcone(), null, 'lieux');
 
       $unlocker->forget($lieu);

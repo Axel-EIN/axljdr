@@ -167,8 +167,6 @@
       letter-spacing: 1px;
       text-transform: uppercase;
     }
-
-    .label-icon { color: var(--clan-color, var(--color-primary)); }
   }
 
   .hover-tooltip {

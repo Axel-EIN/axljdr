@@ -5,7 +5,10 @@
     <img class="map-label-mon" src="{{ asset(mon) }}" alt="" />
   {% endif %}
   <span>
-    <span class="map-label-name">{{ name }}</span>
+    <span class="map-label-name">
+      {%- if badge is defined and badge is not empty %}<span class="map-label-badge">{{ badge }}</span>{% endif -%}
+      {{ name }}
+    </span>
     {% if details is not empty %}
       <span class="map-label-details">{{ details|join(' · ') }}</span>
     {% endif %}

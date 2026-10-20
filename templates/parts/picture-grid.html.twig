@@ -3,7 +3,8 @@
   {% set reveal_session = reveal_session|default(false) %}
   {% set hide_dead = hide_dead|default(false) %}
   {% set items = items|filter(item => element_listed(item, reveal_session) and not (hide_dead and item.dead)) %}
-  {% set items = keep_order|default(false) ? items : element_sort(items) %}
+  {% set scroll = scroll|default(false) %}
+  {% set items = keep_order|default(false) ? items : element_sort(items, scroll) %}
   {% set variant = variant|default('landscape') %}
   {% set shape = {landscape: '1610', rule: '43', icon: '11'}[variant]|default('1610') %}
   {% set pin = {portrait: 'pin-topleft', icon: 'pin-downcenter'}[variant]|default('') %}
@@ -14,6 +15,7 @@
   {% set catalog = catalog|default(false) %}
   {% set type_badges = type_badges|default([]) %}
 
+  {% if scroll and per_row is not defined %}{% set per_row = {desktop: 6, mobile: 2} %}{% endif %}
   {% if per_row is defined %}
     {% set cols = per_row is iterable ? per_row : {desktop: per_row} %}
     {% set style = '--grid-min: 0' %}
@@ -34,7 +36,14 @@
         <hr>
   {% endif %}
 
-  <div class="picture-grid {{ title is not defined ? wrapper|default('') }}" style="{{ style }}">
+  {% set wrapper_class = title is not defined ? wrapper|default('') : '' %}
+
+  {% if scroll %}
+    <div class="picture-scroller {{ wrapper_class }}">
+      <button type="button" class="scroller-btn" data-direction="-1" aria-label="Défiler vers la gauche"><i class="fa-solid fa-chevron-left" aria-hidden="true"></i></button>
+  {% endif %}
+
+  <div class="picture-grid {{ scroll ? 'scroll' : wrapper_class }}" style="{{ style }}">
     {% for item in limit is defined ? items|slice(0, limit) : items %}
 
       {% set state = element_state(item, reveal_session) %}
@@ -101,7 +110,10 @@
 
         {% if show_label %}
           <div class="label">
-            {%- if item.type|default(null) in type_badges %}<span class="label-badge">{{ item.type }}</span>{% endif -%}
+            {%- if item.type|default(null) in type_badges -%}
+              {%- set badge_color = item.clan.couleur ?? null -%}
+              <span class="label-badge"{% if badge_color %} style="--clan-color: {{ badge_color }}"{% endif %}>{{ item.type }}</span>
+            {%- endif -%}
             {{ name }}
           </div>
         {% endif %}
@@ -115,6 +127,11 @@
       <span class="grid-empty text-muted font-italic">{{ empty_message|default('') }}</span>
     {% endfor %}
   </div>
+
+  {% if scroll %}
+      <button type="button" class="scroller-btn" data-direction="1" aria-label="Défiler vers la droite"><i class="fa-solid fa-chevron-right" aria-hidden="true"></i></button>
+    </div>
+  {% endif %}
 
   {% if title is defined %}
       </div>

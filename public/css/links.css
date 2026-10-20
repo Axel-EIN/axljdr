@@ -17,6 +17,8 @@ a {
 
     &.location-icon {
         display: inline-block;
+        border-radius: 0.375rem;
+        background-color: var(--color-whitefog);
         text-decoration: none;
         color: var(--color-linklocation);
     }

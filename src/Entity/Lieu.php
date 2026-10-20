@@ -18,7 +18,7 @@ class Lieu
 
   public const TYPE_ICONS = [
     'Cité' => 'fa-solid fa-archway',
-    'Ville' => 'fa-solid fa-archway',
+    'Ville' => 'fa-solid fa-landmark',
     'Village' => 'fa-solid fa-house-chimney',
     'Palais Fortifié' => 'fa-solid fa-gopuram',
     'Forteresse' => 'fa-brands fa-fort-awesome',
@@ -26,7 +26,7 @@ class Lieu
     'Temple' => 'fa-solid fa-torii-gate',
     'Région' => 'fa-solid fa-mountain-sun',
     'Royaume Spirituel' => 'fa-solid fa-yin-yang',
-    'Structure' => 'fa-solid fa-landmark',
+    'Structure' => 'fa-solid fa-monument',
   ];
 
   /**

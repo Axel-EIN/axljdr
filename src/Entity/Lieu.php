@@ -16,6 +16,19 @@ class Lieu
 {
   use PublishableTrait;
 
+  public const TYPE_ICONS = [
+    'Cité' => 'fa-solid fa-archway',
+    'Ville' => 'fa-solid fa-archway',
+    'Village' => 'fa-solid fa-house-chimney',
+    'Palais Fortifié' => 'fa-solid fa-gopuram',
+    'Forteresse' => 'fa-brands fa-fort-awesome',
+    'Palais' => 'fa-solid fa-vihara',
+    'Temple' => 'fa-solid fa-torii-gate',
+    'Région' => 'fa-solid fa-mountain-sun',
+    'Royaume Spirituel' => 'fa-solid fa-yin-yang',
+    'Structure' => 'fa-solid fa-landmark',
+  ];
+
   /**
    * @ORM\Id
    * @ORM\GeneratedValue
@@ -286,6 +299,11 @@ class Lieu
     $this->type = $type;
 
     return $this;
+  }
+
+  public function getTypeIcon(): ?string
+  {
+    return self::TYPE_ICONS[$this->type] ?? null;
   }
 
   public function getPopulation(): ?int

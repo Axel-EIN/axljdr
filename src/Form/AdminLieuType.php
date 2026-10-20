@@ -45,15 +45,18 @@ class AdminLieuType extends AbstractType
           'Structure' => 'Structure',
         ],
       ])
-      ->add('carte', FileType::class, [
+      ->add('planMap', FileType::class, [
         'mapped' => false,
         'data_class' => null,
         'required' => false,
-        'label' => 'Plan Intérieur',
+        'label' => 'Plan',
         'constraints' => [new File(['maxSize' => '5M'])],
       ])
       ->add('description', TextareaType::class, array('required' => false))
-      ->add('quartiers', TextareaType::class, array('required' => false))
+      ->add('planDesc', TextareaType::class, [
+        'label' => 'Description du plan',
+        'required' => false,
+      ])
       ->add('locX', NumberType::class, array(
         'scale' => 2,
         'attr' => array(
@@ -74,6 +77,21 @@ class AdminLieuType extends AbstractType
         'label' => 'Coord. % vert. carte',
         'required' => false,
       ))
+      ->add('zoom', NumberType::class, [
+        'scale' => 2,
+        'attr' => ['min' => 0.25, 'max' => 2, 'step' => '.05'],
+        'label' => 'Zoom carte (0,25 à 2)',
+        'required' => false,
+      ])
+      ->add('regionMap', FileType::class, [
+        'mapped' => false, 'data_class' => null, 'required' => false,
+        'label' => 'Image de la région',
+        'constraints' => [new File(['maxSize' => '5M'])],
+      ])
+      ->add('regionDesc', TextareaType::class, [
+        'label' => 'Description de la région',
+        'required' => false,
+      ])
       ->add('population', NumberType::class, array(
         'label' => 'Population',
         'required' => false,

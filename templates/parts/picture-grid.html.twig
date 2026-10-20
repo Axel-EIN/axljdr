@@ -10,10 +10,10 @@
   {% set pin = {portrait: 'pin-topleft', icon: 'pin-downcenter'}[variant]|default('') %}
   {% set show_label = variant != 'portrait' %}
   {% set is_mj = app.user and is_granted('ROLE_MJ') %}
-  {% set access_label = access_label|default(false) and is_mj %}
   {% set plain = reveal_session %}
   {% set badge_hover = badge_hover|default(false) %}
   {% set catalog = catalog|default(false) %}
+  {% set mj_plain = catalog and is_mj %}
   {% set type_badges = type_badges|default([]) %}
   {% set type_icon = type_icon|default(false) %}
 
@@ -50,9 +50,9 @@
 
       {% set state = element_state(item, reveal_session) %}
       {% set hidden = not element_readable(item) %}
-      {% set locked = not plain and not access_label and state == 'locked' %}
+      {% set locked = not plain and not mj_plain and state == 'locked' %}
       {% set restricted = plain and hidden %}
-      {% set item_class = plain ? (restricted ? 'restricted' : 'hover-zoom') : (element_unseen(item) and not access_label ? 'access-hidden ' : '') ~ (locked ? 'locked ' : '') ~ (catalog ? 'catalog ' : '') ~ (hidden or locked ? '' : 'hover-zoom') %}
+      {% set item_class = plain ? (restricted ? 'restricted' : 'hover-zoom') : (element_unseen(item) and not mj_plain ? 'access-hidden ' : '') ~ (locked ? 'locked ' : '') ~ (catalog ? 'catalog ' : '') ~ (hidden or locked ? '' : 'hover-zoom') %}
       {% set name = item.nomComplet is defined ? item.nomComplet : (item.nom is defined ? item.nom : item.titre) %}
       {% set alt = hidden ? 'À découvrir' : name %}
       {% set pdf_only = item.pdf|default(null) and not item.hasParts|default(false) %}
@@ -64,16 +64,14 @@
          {% if hidden or not href %}aria-disabled="true"{% else %}{% if show_label %}title="{{ name }}" {% endif %}{% if pdf_link %}target="_blank" rel="noopener" {% endif %}href="{{ href }}"{% endif %}>
         <div class="image-container {% if locked %}slight-fade{% endif %}">
 
-          {% if not access_label %}
-            {% if catalog %}
-              {{ include('parts/badge-catalog.html.twig', {item: item}) }}
-            {% else %}
-              {% set pinned = badge_hover and not is_mj and element_individual(item) %}
-              {{ include('parts/badge-access.html.twig', {
-                state: pinned and state == 'common-discovered' ? 'unlocked' : state,
-                variant: badge_hover and not pinned ? 'hover-only' : '',
-              }) }}
-            {% endif %}
+          {% if catalog %}
+            {{ include('parts/badge-catalog.html.twig', {item: item}) }}
+          {% else %}
+            {% set pinned = badge_hover and not is_mj and element_individual(item) %}
+            {{ include('parts/badge-access.html.twig', {
+              state: pinned and state == 'common-discovered' ? 'unlocked' : state,
+              variant: badge_hover and not pinned ? 'hover-only' : '',
+            }) }}
           {% endif %}
 
           {% if locked %}
@@ -123,9 +121,6 @@
               <span class="label-badge"{% if clan_color %} style="--clan-color: {{ clan_color }}"{% endif %}>{{ item.type }}</span>
             {%- endif -%}
             {{ name }}
-            {%- if access_label -%}
-              <div class="label-access">{{ include('parts/badge-access.html.twig', {state: state, variant: 'inline mini'}) }}</div>
-            {%- endif %}
           </div>
         {% endif %}
 

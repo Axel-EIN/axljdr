@@ -4,8 +4,8 @@
         <img id="{{ input_id }}-cropper-image" style="display:block; max-width: 100%;" />
     </div>
     <p class="text-muted small mt-2 mb-0">
-        Cadrez votre image au format <strong>{{ width }}×{{ height }}</strong>. Glissez pour déplacer, molette pour zoomer.
-        Tout ce qui dépasse du cadre sera coupé.
+        Cadrez votre image au format <strong>{{ width }}×{{ height }}</strong>. Glissez pour déplacer, molette pour zoomer ou dézoomer.
+        Tout ce qui dépasse du cadre sera coupé. Les zones vides du cadre restent transparentes, ou noires pour un JPEG.
     </p>
 </div>
 
@@ -35,7 +35,7 @@
             if (cropper) cropper.destroy();
             cropper = new Cropper(cropperImg, {
                 aspectRatio: targetW / targetH,
-                viewMode: 1,
+                viewMode: 0,
                 autoCropArea: 1,
                 background: false,
                 movable: true,

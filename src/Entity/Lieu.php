@@ -17,8 +17,8 @@ class Lieu
   use PublishableTrait;
 
   public const TYPE_ICONS = [
-    'Cité' => 'fa-solid fa-archway',
-    'Ville' => 'fa-solid fa-landmark',
+    'Cité' => 'fa-solid fa-landmark',
+    'Ville' => 'fa-solid fa-archway',
     'Village' => 'fa-solid fa-house-chimney',
     'Palais Fortifié' => 'fa-solid fa-gopuram',
     'Forteresse' => 'fa-brands fa-fort-awesome',

@@ -43,19 +43,58 @@ $('.modal').on('shown.bs.modal', function () {
 document.querySelectorAll('.picture-scroller').forEach(function (scroller) {
 
     const grid = scroller.querySelector('.picture-grid');
+    const items = grid.querySelectorAll('.picture-item');
     const buttons = scroller.querySelectorAll('.scroller-btn');
+    const dots = scroller.id ? document.querySelector('.scroller-dots[data-scroller="' + scroller.id + '"]') : null;
+    let page = 0;
+
+    function perPage() {
+        return parseInt(getComputedStyle(grid).getPropertyValue('--cols'), 10) || 1;
+    }
+
+    function pageWidth() {
+        const cols = perPage();
+        return items.length > cols ? items[cols].offsetLeft - items[0].offsetLeft : grid.clientWidth;
+    }
+
+    function goTo(target) {
+        grid.scrollTo({ left: target * pageWidth() });
+    }
+
+    function renderDots(pages) {
+        if (dots.children.length === pages) return;
+        dots.replaceChildren();
+        for (let i = 0; i < pages; i++) {
+            const dot = document.createElement('button');
+            dot.type = 'button';
+            dot.className = 'scroller-dot';
+            dot.setAttribute('aria-label', 'Page ' + (i + 1));
+            dot.addEventListener('click', function () { goTo(i); });
+            dots.append(dot);
+        }
+    }
 
     function update() {
         const max = grid.scrollWidth - grid.clientWidth;
+        const pages = max > 1 ? Math.ceil(items.length / perPage()) : 0;
+        page = grid.scrollLeft >= max - 1 ? pages - 1 : Math.round(grid.scrollLeft / pageWidth());
+
         scroller.classList.toggle('overflowing', max > 1);
         buttons.forEach(function (button) {
             button.disabled = button.dataset.direction < 0 ? grid.scrollLeft <= 1 : grid.scrollLeft >= max - 1;
         });
+
+        if (dots) {
+            renderDots(pages);
+            Array.from(dots.children).forEach(function (dot, i) {
+                dot.classList.toggle('active', i === page);
+            });
+        }
     }
 
     buttons.forEach(function (button) {
         button.addEventListener('click', function () {
-            grid.scrollBy({ left: button.dataset.direction * grid.clientWidth });
+            goTo(page + Number(button.dataset.direction));
         });
     });
 

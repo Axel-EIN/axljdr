@@ -2,6 +2,7 @@
   --map-gap: 0.75rem;
   --map-top: var(--map-gap);
   --marker-size: 1;
+  --current-size: 96px;
 
   position: relative;
   width: 100%;
@@ -20,6 +21,8 @@
   }
 
   &.large-markers { --marker-size: 1.5; }
+
+  &.current-city { --current-size: 115px; }
 
   &.world {
     --map-top: calc(var(--nav-height) + var(--map-gap));
@@ -360,8 +363,8 @@
 
   .lieu-pulse-icon {
     z-index: 6;
-    width: 96px;
-    height: 96px;
+    width: var(--current-size);
+    height: var(--current-size);
     object-fit: contain;
     filter: drop-shadow(0 0 6px rgba(0, 0, 0, 0.8));
     pointer-events: none;
@@ -373,7 +376,7 @@
     --tag-bottom: #d8b56a;
 
     z-index: 7;
-    transform: translate(-50%, calc(-50% - 76px));
+    transform: translate(-50%, calc(-50% - var(--current-size) / 2 - 28px));
     padding: 0.4rem 1.1rem;
     border: 1px solid var(--tag-border);
     border-radius: 0.375rem;
@@ -594,6 +597,21 @@
     text-shadow: 0 1px 2px var(--color-black);
   }
 
+  .map-label-badge {
+    display: inline-block;
+    margin-right: 0.35rem;
+    padding: 0.15rem 0.35rem;
+    border: 1px solid var(--color-white50);
+    border-radius: 0.25rem;
+    background-color: var(--map-label-color);
+    font-size: var(--fontsize-mini);
+    font-weight: bold;
+    line-height: var(--leading-1);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    vertical-align: middle;
+  }
+
   .map-label-details {
     display: block;
     max-height: 1rem;
@@ -630,7 +648,7 @@
 
   &.current {
     z-index: 7;
-    transform: translate(-50%, 50px);
+    transform: translate(-50%, calc(var(--current-size) / 2 + 2px));
 
     .map-label-name { font-size: var(--fontsize-regular); }
   }

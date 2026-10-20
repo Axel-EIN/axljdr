@@ -88,7 +88,8 @@
         opacity: 0;
         transition: opacity var(--duration) var(--ease);
 
-        :hover > & { opacity: 1; }
+        :hover > &,
+        a:hover & { opacity: 1; }
     }
 
     &.glass {

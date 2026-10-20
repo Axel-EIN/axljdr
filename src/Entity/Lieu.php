@@ -36,7 +36,7 @@ class Lieu
   /**
    * @ORM\Column(type="string", length=255, nullable=true)
    */
-  private $carte;
+  private $planMap;
 
   /**
    * @ORM\Column(type="text", nullable=true)
@@ -60,6 +60,12 @@ class Lieu
   private $locY;
 
   /**
+   * @ORM\Column(type="decimal", precision=3, scale=2, nullable=true)
+   * @Assert\Range(min=0.25, max=2)
+   */
+  private $zoom;
+
+  /**
    * @ORM\Column(type="string", length=255, nullable=true)
    */
   private $surnom;
@@ -72,7 +78,7 @@ class Lieu
   /**
    * @ORM\Column(type="text", nullable=true)
    */
-  private $quartiers;
+  private $planDesc;
 
   /**
    * @ORM\OneToMany(targetEntity=Scene::class, mappedBy="lieu")
@@ -88,6 +94,16 @@ class Lieu
    * @ORM\Column(type="integer", nullable=true)
    */
   private $population;
+
+  /**
+   * @ORM\Column(type="string", length=255, nullable=true)
+   */
+  private $regionMap;
+
+  /**
+   * @ORM\Column(type="text", nullable=true)
+   */
+  private $regionDesc;
 
   public function __construct()
   {
@@ -123,14 +139,14 @@ class Lieu
     return $this;
   }
 
-  public function getCarte(): ?string
+  public function getPlanMap(): ?string
   {
-    return $this->carte;
+    return $this->planMap;
   }
 
-  public function setCarte(?string $carte): self
+  public function setPlanMap(?string $planMap): self
   {
-    $this->carte = $carte;
+    $this->planMap = $planMap;
 
     return $this;
   }
@@ -183,6 +199,18 @@ class Lieu
     return $this;
   }
 
+  public function getZoom(): ?string
+  {
+    return $this->zoom;
+  }
+
+  public function setZoom(?string $zoom): self
+  {
+    $this->zoom = $zoom;
+
+    return $this;
+  }
+
   public function getSurnom(): ?string
   {
     return $this->surnom;
@@ -207,14 +235,14 @@ class Lieu
     return $this;
   }
 
-  public function getQuartiers(): ?string
+  public function getPlanDesc(): ?string
   {
-    return $this->quartiers;
+    return $this->planDesc;
   }
 
-  public function setQuartiers(?string $quartiers): self
+  public function setPlanDesc(?string $planDesc): self
   {
-    $this->quartiers = $quartiers;
+    $this->planDesc = $planDesc;
 
     return $this;
   }
@@ -268,6 +296,30 @@ class Lieu
   public function setPopulation(?int $population): self
   {
     $this->population = $population;
+
+    return $this;
+  }
+
+  public function getRegionMap(): ?string
+  {
+    return $this->regionMap;
+  }
+
+  public function setRegionMap(?string $regionMap): self
+  {
+    $this->regionMap = $regionMap;
+
+    return $this;
+  }
+
+  public function getRegionDesc(): ?string
+  {
+    return $this->regionDesc;
+  }
+
+  public function setRegionDesc(?string $regionDesc): self
+  {
+    $this->regionDesc = $regionDesc;
 
     return $this;
   }

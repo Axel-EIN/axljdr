@@ -72,14 +72,16 @@
             <h3 class="heading-amerigo category-section-sub-heading flex-wrap">
                 {% for clan in groupe.clans|default([]) %}
                     <img class="img-40 mr-2" src="{{ asset(clan.mon|default(NA_MON)) }}" alt="Mon de la faction" title="{{ clan.nom }}" />
-                {% else %}
-                    <img class="img-40 mr-2" src="{{ asset(NA_MON) }}" alt="Mon de la faction" />
                 {% endfor %}
+                {% if groupe.clans|default([]) is empty or groupe.sansGroupe|default(false) %}
+                    <img class="img-40 mr-2" src="{{ asset(NA_MON) }}" alt="Mon de la faction" />
+                {% endif %}
                 {{ groupe.titre }}
             </h3>
             {{ include('/parts/picture-grid.html.twig', {
                 catalog: true,
                 variant: 'icon',
+                scroll: true,
                 items: groupe.lieux, route: 'world_lieu', na_image: NA_LIEU_ICO,
                 per_row: {desktop: 6, mobile: 2},
             }) }}

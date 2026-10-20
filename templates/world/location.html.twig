@@ -79,7 +79,7 @@
         {% if un_element.regionMap is not empty %}
           <img class="img-fluid" src="{{ asset(un_element.regionMap) }}" alt="Carte de la région de {{ un_element.nom }}">
         {% elseif placed %}
-          {{ include('parts/map.html.twig', {lieux, current: un_element, zoom: un_element.zoom}, with_context = false) }}
+          {{ include('parts/map.html.twig', {lieux, current: un_element, zoom: un_element.zoom, draggable: true}, with_context = false) }}
         {% endif %}
 
         {% if un_element.regionDesc is not empty %}
@@ -131,6 +131,7 @@
       catalog: true,
       variant: 'icon',
       items: autresLieux, route: 'world_lieu',
+      type_badges: ['Cité', 'Ville', 'Région'],
       na_image: NA_LIEU_ICO,
       per_row: {desktop: 6, mobile: 2},
   }) }}

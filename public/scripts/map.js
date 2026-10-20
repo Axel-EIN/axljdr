@@ -8,6 +8,7 @@
   const view = frame.querySelector('.minimap .minimap-view');
   const zoomLevel = frame.querySelector('.map-zoom-level');
   const world = frame.classList.contains('world');
+  const draggable = frame.classList.contains('draggable');
   const markerSize = parseFloat(getComputedStyle(frame).getPropertyValue('--marker-size')) || 1;
 
   const DRAG_THRESHOLD = 5;
@@ -49,7 +50,7 @@
   }
 
   function clamp() {
-    if (!world) return;
+    if (!draggable) return;
     x = Math.min(0, Math.max(-mapW * scale, x));
     y = Math.min(0, Math.max(-mapH * scale, y));
   }
@@ -175,7 +176,7 @@
   }
 
   function start(clientX, clientY) {
-    if (!ready || !world) return;
+    if (!ready || !draggable) return;
     drag = { x: clientX, y: clientY, offsetX: x, offsetY: y };
     dragMoved = false;
     frame.classList.add('dragging');

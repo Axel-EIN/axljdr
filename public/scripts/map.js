@@ -15,7 +15,8 @@
   const ZOOM_LEVELS = [0.25, 0.5, 1, 1.5, 2];
   const MIN_SCALE = ZOOM_LEVELS[0];
   const MAX_SCALE = ZOOM_LEVELS[ZOOM_LEVELS.length - 1];
-  const HD_SCALE = 1;
+  const NORMAL_IMAGE_SCALE = 0.5;
+  const HD_SCALE = NORMAL_IMAGE_SCALE;
   const FOCUS_SCALE = 1;
   const ZOOMED_OUT_SCALE = 0.45;
   const MARKER_MIN_SCALE = 0.5;
@@ -140,8 +141,8 @@
   }
 
   function init() {
-    mapW = mapImage.naturalWidth;
-    mapH = mapImage.naturalHeight;
+    mapW = mapImage.naturalWidth / NORMAL_IMAGE_SCALE;
+    mapH = mapImage.naturalHeight / NORMAL_IMAGE_SCALE;
     if (!mapW || !mapH) return;
     mapImage.style.width = mapW + 'px';
     mapImage.style.height = mapH + 'px';

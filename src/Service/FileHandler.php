@@ -41,7 +41,11 @@ class FileHandler extends AbstractController
 
         if ($preset !== null && $this->imageNormalizer->hasPreset($preset)) {
             $cheminAbsolu = $this->getParameter('image_directory') . '/' . $dossier . '/' . $nouveauNomFichier;
-            $this->imageNormalizer->normalize($cheminAbsolu, $preset);
+            $cheminNormalise = $this->imageNormalizer->normalize($cheminAbsolu, $preset);
+
+            if ($cheminNormalise !== null) {
+                $nouveauNomFichier = basename($cheminNormalise);
+            }
         }
 
         return 'assets/img/' . $dossier . '/' . $nouveauNomFichier;
@@ -56,7 +60,7 @@ class FileHandler extends AbstractController
         $chemin = $this->getParameter('image_directory') . '/' . $dossier . '/' . basename($ancienFichier);
 
         if (!is_dir($chemin)) {
-            (new Filesystem())->remove($chemin);
+            (new Filesystem())->remove([$chemin, $this->imageNormalizer->reducedPath($chemin)]);
         }
     }
 }

@@ -6,7 +6,7 @@ class ImageNormalizer
 {
     public const PRESETS = [
         'landscape1080' => ['width' => 1920, 'height' => 1080],
-        'landscape720'  => ['width' => 1280, 'height' => 720],
+        'landscape720'  => ['width' => 1280, 'height' => 720, 'format' => IMAGETYPE_JPEG, 'reduced' => ['width' => 640, 'height' => 360]],
         'fourthird900'  => ['width' => 1200, 'height' => 900],
         'square320'     => ['width' => 320,  'height' => 320],
         'square240'     => ['width' => 240,  'height' => 240],
@@ -60,9 +60,18 @@ class ImageNormalizer
         return $target;
     }
 
-    public function convert(string $absolutePath, int $format): ?string
+    public function matchesPreset(string $absolutePath, string $presetName): bool
     {
-        return $this->transform($absolutePath, null, null, $format);
+        $preset = $this->getPreset($presetName);
+
+        $info = @getimagesize($absolutePath);
+        if ($info === false) {
+            return false;
+        }
+
+        return $info[0] === $preset['width']
+            && $info[1] === $preset['height']
+            && (!isset($preset['format']) || $info[2] === $preset['format']);
     }
 
     public function reduce(string $absolutePath, string $presetName): bool
@@ -91,7 +100,12 @@ class ImageNormalizer
         return is_file($this->publicDirectory . '/' . ltrim($reduced, '/')) ? $reduced : null;
     }
 
-    private function transform(string $absolutePath, ?int $dstW, ?int $dstH, ?int $format): ?string
+    public function reducedOrOriginal(?string $path): ?string
+    {
+        return $this->existingReduced($path) ?? $path;
+    }
+
+    private function transform(string $absolutePath, int $dstW, int $dstH, ?int $format): ?string
     {
         $info = @getimagesize($absolutePath);
         if ($info === false) {
@@ -101,7 +115,7 @@ class ImageNormalizer
         $format = $format ?? $info[2];
         $target = $format === $info[2] ? $absolutePath : $this->withExtension($absolutePath, $format);
 
-        if (!$this->render($absolutePath, $target, $dstW ?? $info[0], $dstH ?? $info[1], $format)) {
+        if (!$this->render($absolutePath, $target, $dstW, $dstH, $format)) {
             return null;
         }
 

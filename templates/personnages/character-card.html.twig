@@ -48,8 +48,17 @@
                     {% set NA_PERSO_ILLU = NA_PERSO_ILLU_M %}
                 {% endif %}
 
+                {% set illustration = perso.illustration|default(NA_PERSO_ILLU) %}
+                {% set illustration_reduced = image_reduced(illustration) %}
+                {% set illustration_preset = image_preset('vertical450') %}
+
                 <div class="ratio-916 gradient-after-down">
-                    <img class="ratio-cropped card-img {{grayscale}} {{tint}}" src="{{ asset(perso.illustration|default(NA_PERSO_ILLU)) }}"  alt="Illustration d'un personnage" >
+                    <img class="ratio-cropped card-img {{grayscale}} {{tint}}" src="{{ asset(illustration) }}"
+                        {% if illustration_reduced %}
+                            srcset="{{ asset(illustration_reduced) }} {{ illustration_preset.reduced.width }}w, {{ asset(illustration) }} {{ illustration_preset.width }}w"
+                            sizes="(max-width: 575.98px) 100vw, (max-width: 767.98px) 240px, (max-width: 1199.98px) 210px, 160px"
+                        {% endif %}
+                        loading="lazy" alt="Illustration d'un personnage" >
                 </div>
 
                 <div class="card-img-overlay">

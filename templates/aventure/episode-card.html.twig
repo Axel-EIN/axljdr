@@ -27,8 +27,19 @@
   <a class="card-inner" href="{{ path('aventure_episode', {id:un_episode.id} ) }}">
     {% if element_fresh(un_episode) %}{{ include('parts/badge-new.html.twig') }}{% endif %}
     <span class="card-number"><span class="text-big">#</span>{{ un_episode.numeroSaison }}</span>
+    {% set episode_image = un_episode.image|default(NA_SESSION) %}
+    {% set episode_image_reduced = image_reduced(episode_image) %}
+    {% set episode_preset = image_preset('landscape720') %}
+
     <div class="image-container gradient-after-down">
-      <img class="card-image" src="{{ asset(un_episode.image|default(NA_SESSION)) }}" alt="Image de la session {{un_episode.titre}}" title="{{un_episode.titre}}"  />
+      <img class="card-image" src="{{ asset(episode_image) }}"
+        {% if episode_image_reduced %}
+          srcset="{{ asset(episode_image_reduced) }} {{ episode_preset.reduced.width }}w, {{ asset(episode_image) }} {{ episode_preset.width }}w"
+          sizes="(max-width: 575.98px) 100vw, (max-width: 991.98px) 404px, 270px"
+        {% endif %}
+        width="{{ episode_preset.width }}" height="{{ episode_preset.height }}"
+        {% if lazy ?? true %}loading="lazy"{% endif %}
+        alt="Image de la session {{un_episode.titre}}" title="{{un_episode.titre}}"  />
     </div>
     <div class="text-container">
       <span class="card-title-cartouche leading-0">{{ un_episode.titre }}</span>

@@ -65,6 +65,7 @@ class AppExtension extends AbstractExtension
             new TwigFunction('faction_label', [$this, 'factionLabel']),
             new TwigFunction('image_bright', [$this->imageBrightness, 'isBright']),
             new TwigFunction('image_reduced', [$this->imageNormalizer, 'existingReduced']),
+            new TwigFunction('image_small', [$this->imageNormalizer, 'reducedOrOriginal']),
             new TwigFunction('image_preset', [$this->imageNormalizer, 'getPreset']),
             new TwigFunction('table_filters', [$this->tableFilter, 'build']),
             new TwigFunction('table_value', [$this->tableFilter, 'valueOf']),

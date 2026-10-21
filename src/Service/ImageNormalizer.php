@@ -5,18 +5,34 @@ namespace App\Service;
 class ImageNormalizer
 {
     public const PRESETS = [
-        'landscape1080' => ['width' => 1920, 'height' => 1080, 'mode' => 'cover'],
-        'landscape720'  => ['width' => 1280, 'height' => 720,  'mode' => 'cover'],
-        'fourthird900'  => ['width' => 1200, 'height' => 900,  'mode' => 'cover'],
-        'square320'     => ['width' => 320,  'height' => 320,  'mode' => 'cover'],
-        'square240'     => ['width' => 240,  'height' => 240,  'mode' => 'cover'],
-        'square192'     => ['width' => 192,  'height' => 192,  'mode' => 'cover'],
-        'vertical450'   => ['width' => 450,  'height' => 800,  'mode' => 'cover'],
+        'landscape1080' => ['width' => 1920, 'height' => 1080],
+        'landscape720'  => ['width' => 1280, 'height' => 720],
+        'fourthird900'  => ['width' => 1200, 'height' => 900],
+        'square320'     => ['width' => 320,  'height' => 320],
+        'square240'     => ['width' => 240,  'height' => 240],
+        'square192'     => ['width' => 192,  'height' => 192],
+        'vertical450'   => ['width' => 450,  'height' => 800, 'format' => IMAGETYPE_JPEG, 'reduced' => ['width' => 360, 'height' => 640]],
     ];
+
+    private const EXTENSIONS = [
+        IMAGETYPE_JPEG => 'jpg',
+        IMAGETYPE_PNG  => 'png',
+        IMAGETYPE_GIF  => 'gif',
+        IMAGETYPE_WEBP => 'webp',
+    ];
+
+    private const REDUCED_SUFFIX = '-reduced';
 
     private const JPEG_QUALITY = 85;
     private const WEBP_QUALITY = 85;
     private const PNG_COMPRESSION = 6;
+
+    private $publicDirectory;
+
+    public function __construct(string $publicDirectory)
+    {
+        $this->publicDirectory = $publicDirectory;
+    }
 
     public function hasPreset(string $name): bool
     {
@@ -31,29 +47,93 @@ class ImageNormalizer
         return self::PRESETS[$name];
     }
 
-    public function normalize(string $absolutePath, string $presetName): bool
+    public function normalize(string $absolutePath, string $presetName): ?string
     {
         $preset = $this->getPreset($presetName);
 
+        $target = $this->transform($absolutePath, $preset['width'], $preset['height'], $preset['format'] ?? null);
+
+        if ($target !== null) {
+            $this->reduce($target, $presetName);
+        }
+
+        return $target;
+    }
+
+    public function convert(string $absolutePath, int $format): ?string
+    {
+        return $this->transform($absolutePath, null, null, $format);
+    }
+
+    public function reduce(string $absolutePath, string $presetName): bool
+    {
+        $reduced = $this->getPreset($presetName)['reduced'] ?? null;
+        if ($reduced === null) {
+            return false;
+        }
+
+        return $this->render($absolutePath, $this->reducedPath($absolutePath), $reduced['width'], $reduced['height'], IMAGETYPE_JPEG);
+    }
+
+    public function reducedPath(string $path): string
+    {
+        return $this->withExtension($path, IMAGETYPE_JPEG, self::REDUCED_SUFFIX);
+    }
+
+    public function existingReduced(?string $path): ?string
+    {
+        if (!$path) {
+            return null;
+        }
+
+        $reduced = $this->reducedPath($path);
+
+        return is_file($this->publicDirectory . '/' . ltrim($reduced, '/')) ? $reduced : null;
+    }
+
+    private function transform(string $absolutePath, ?int $dstW, ?int $dstH, ?int $format): ?string
+    {
         $info = @getimagesize($absolutePath);
+        if ($info === false) {
+            return null;
+        }
+
+        $format = $format ?? $info[2];
+        $target = $format === $info[2] ? $absolutePath : $this->withExtension($absolutePath, $format);
+
+        if (!$this->render($absolutePath, $target, $dstW ?? $info[0], $dstH ?? $info[1], $format)) {
+            return null;
+        }
+
+        if ($target !== $absolutePath) {
+            unlink($absolutePath);
+        }
+
+        return $target;
+    }
+
+    private function withExtension(string $path, int $format, string $suffix = ''): string
+    {
+        return preg_replace('/\.[^.\/]+$/', '', $path) . $suffix . '.' . self::EXTENSIONS[$format];
+    }
+
+    private function render(string $source, string $target, int $dstW, int $dstH, int $format): bool
+    {
+        $info = @getimagesize($source);
         if ($info === false) {
             return false;
         }
 
         [$srcW, $srcH] = $info;
-        $type = $info[2];
 
-        $src = $this->loadImage($absolutePath, $type);
+        $src = $this->loadImage($source, $info[2]);
         if ($src === null) {
             return false;
         }
 
-        $dstW = $preset['width'];
-        $dstH = $preset['height'];
-
         $dst = imagecreatetruecolor($dstW, $dstH);
 
-        if ($type === IMAGETYPE_PNG || $type === IMAGETYPE_WEBP || $type === IMAGETYPE_GIF) {
+        if ($format === IMAGETYPE_PNG || $format === IMAGETYPE_WEBP || $format === IMAGETYPE_GIF) {
             imagealphablending($dst, false);
             imagesavealpha($dst, true);
             $transparent = imagecolorallocatealpha($dst, 0, 0, 0, 127);
@@ -65,7 +145,7 @@ class ImageNormalizer
 
         imagecopyresampled($dst, $src, 0, 0, $srcX, $srcY, $dstW, $dstH, $copyW, $copyH);
 
-        $ok = $this->saveImage($dst, $absolutePath, $type);
+        $ok = $this->saveImage($dst, $target, $format);
 
         imagedestroy($src);
         imagedestroy($dst);

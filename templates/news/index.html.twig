@@ -12,6 +12,7 @@
 
     {% set chapitre = dernier_episode ? dernier_episode.chapitreParent : null %}
     {% set chapter_image = chapitre ? chapitre.image|default(NA_CHAPITRE) : null %}
+    {% set episode_preset = image_preset('landscape720') %}
 
     <div class="col-12 col-lg-7">
         <div class="card card-body session-card on-image{{ image_bright(chapter_image) ? ' bright' }}"
@@ -23,6 +24,7 @@
                         {{ include('/aventure/episode-card.html.twig', {
                             un_episode: dernier_episode,
                             wrapper: 'w-100',
+                            lazy: false,
                             user_personnages_cumul_episodes: [],
                         }) }}
                     </div>
@@ -83,7 +85,7 @@
                                         <strong>{{ un_episode.titre }}</strong>
                                         <span class="episode-sub">{{ un_episode.chapitreParent.titre }}</span>
                                     </span>
-                                    <img class="episode-picture" src="{{ asset(un_episode.image|default(NA_SESSION)) }}" alt="" />
+                                    <img class="episode-picture" src="{{ asset(image_small(un_episode.image|default(NA_SESSION))) }}" width="{{ episode_preset.width }}" height="{{ episode_preset.height }}" loading="lazy" alt="" />
                                 </a>
                             {% endfor %}
                         </div>
@@ -133,7 +135,7 @@
                             <strong>{{ episode.titre }}</strong>
                             {% if scene.lieu %}<span class="episode-sub">{{ scene.lieu.nom }}</span>{% endif %}
                         </span>
-                        <img class="episode-picture" src="{{ asset(episode.image|default(NA_SESSION)) }}" alt="" />
+                        <img class="episode-picture" src="{{ asset(image_small(episode.image|default(NA_SESSION))) }}" width="{{ episode_preset.width }}" height="{{ episode_preset.height }}" loading="lazy" alt="" />
                     </a>
                 {% endfor %}
             </div>

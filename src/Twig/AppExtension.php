@@ -10,6 +10,7 @@ use App\Service\CurrentPlayer;
 use App\Service\ElementUrl;
 use App\Service\EntityRegistry;
 use App\Service\ImageBrightness;
+use App\Service\ImageNormalizer;
 use App\Service\TableFilter;
 use App\Service\Visibility;
 use Twig\Extension\AbstractExtension;
@@ -23,14 +24,16 @@ class AppExtension extends AbstractExtension
     private $imageBrightness;
     private $tableFilter;
     private $currentPlayer;
+    private $imageNormalizer;
 
-    public function __construct(Visibility $visibility, ElementUrl $elementUrl, ImageBrightness $imageBrightness, TableFilter $tableFilter, CurrentPlayer $currentPlayer)
+    public function __construct(Visibility $visibility, ElementUrl $elementUrl, ImageBrightness $imageBrightness, TableFilter $tableFilter, CurrentPlayer $currentPlayer, ImageNormalizer $imageNormalizer)
     {
         $this->visibility = $visibility;
         $this->elementUrl = $elementUrl;
         $this->imageBrightness = $imageBrightness;
         $this->tableFilter = $tableFilter;
         $this->currentPlayer = $currentPlayer;
+        $this->imageNormalizer = $imageNormalizer;
     }
 
     public function getFilters()
@@ -61,6 +64,8 @@ class AppExtension extends AbstractExtension
             new TwigFunction('status_label', [$this, 'statusLabel']),
             new TwigFunction('faction_label', [$this, 'factionLabel']),
             new TwigFunction('image_bright', [$this->imageBrightness, 'isBright']),
+            new TwigFunction('image_reduced', [$this->imageNormalizer, 'existingReduced']),
+            new TwigFunction('image_preset', [$this->imageNormalizer, 'getPreset']),
             new TwigFunction('table_filters', [$this->tableFilter, 'build']),
             new TwigFunction('table_value', [$this->tableFilter, 'valueOf']),
             new TwigFunction('main_character', [$this->currentPlayer, 'main']),

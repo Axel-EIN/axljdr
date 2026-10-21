@@ -504,7 +504,8 @@
     ] %}
     <div class="illu-col col-12 col-lg-4 order-first order-lg-last">
       <div class="fiche-illu-wrap">
-        <img class="fiche-illu img-fluid rounded-8 d-block mx-auto" src="{{ asset(fiche.personnage.illustration|default(NA_PERSO_ILLU)) }}" />
+        {% set illustration_preset = image_preset('vertical450') %}
+        <img class="fiche-illu img-fluid rounded-8 d-block mx-auto" src="{{ asset(fiche.personnage.illustration|default(NA_PERSO_ILLU)) }}" width="{{ illustration_preset.width }}" height="{{ illustration_preset.height }}" />
 
         <div class="fiche-traits d-lg-none">
           {% for anneau in anneaux_mobile %}

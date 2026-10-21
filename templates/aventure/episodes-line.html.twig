@@ -7,7 +7,7 @@
           <span class="titre">{{un_episode.titre}}</span>
           <div class="ratio-169">
             <a class="{% if un_episode.id == episode.id %}link-disabled{% endif %}" href="{{ path('aventure_episode', { id : un_episode.id, '_fragment': 'read-head' } ) }}" >
-              <img class="ratio-cropped" src="{{ asset(un_episode.image|default(NA_SESSION)) }}" alt="image d'une session" />
+              <img class="ratio-cropped" src="{{ asset(image_small(un_episode.image|default(NA_SESSION))) }}" loading="lazy" alt="image d'une session" />
             </a>
           </div>
           {% if un_episode.id == episode.id %}<i class="absolute arrow-down fa-sharp fa-solid fa-sort-down fa-2xl text-primary"></i>{% endif %}

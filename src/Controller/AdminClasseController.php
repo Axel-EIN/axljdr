@@ -62,7 +62,7 @@ class AdminClasseController extends AbstractController
             $nouvelleImage = $form->get('image')->getData();
             if (!empty($nouvelleImage)) {
                 $prefix = 'classe-' . $classe->getNom() . '-image';
-                $classe->setImage($fileHandler->handle($nouvelleImage, null, $prefix, 'classes'));
+                $classe->setImage($fileHandler->handle($nouvelleImage, null, $prefix, 'classes', 'landscape720'));
             }
 
             $em->persist($classe);
@@ -106,7 +106,7 @@ class AdminClasseController extends AbstractController
             $nouvelleImage = $form->get('image')->getData();
             if (!empty($nouvelleImage)) {
                 $prefix = 'classe-' . $classe->getNom() . '-image';
-                $classe->setImage($fileHandler->handle($nouvelleImage, $classe->getImage(), $prefix, 'classes'));
+                $classe->setImage($fileHandler->handle($nouvelleImage, $classe->getImage(), $prefix, 'classes', 'landscape720'));
             } elseif ($request->request->get('remove_image') === '1' && $classe->getImage()) {
                 $fileHandler->handle(null, $classe->getImage(), null, 'classes');
                 $classe->setImage(null);

@@ -17,6 +17,7 @@ use App\Entity\Personnage;
 use App\Entity\Rule;
 use App\Entity\Saison;
 use App\Entity\Scene;
+use App\Entity\Utilisateur;
 use App\Service\Baliseur;
 use App\Service\ImageNormalizer;
 use Doctrine\ORM\EntityManagerInterface;
@@ -48,10 +49,12 @@ final class OptimizeImagesCommand extends Command
         'famille-mon'  => ['entity' => Famille::class,    'field' => 'mon',          'preset' => 'square320'],
         'classe-icone' => ['entity' => Classe::class,     'field' => 'icone',        'preset' => 'square320'],
         'lieu-icone'   => ['entity' => Lieu::class,       'field' => 'icone',        'preset' => 'square192'],
+        'plan'         => ['entity' => Lieu::class,       'field' => 'planMap',      'preset' => 'map1920'],
         'objet'        => ['entity' => Objet::class,      'field' => 'image',        'preset' => 'landscape720'],
         'objet-icon'   => ['entity' => Objet::class,      'field' => 'icon',         'preset' => 'square320'],
         'portrait'     => ['entity' => Personnage::class, 'field' => 'icone',        'preset' => 'square240'],
         'classe'       => ['entity' => Classe::class,     'field' => 'image',        'preset' => 'landscape720'],
+        'avatar'       => ['entity' => Utilisateur::class, 'field' => 'avatar',      'preset' => 'square320'],
     ];
 
     private $entityManager;

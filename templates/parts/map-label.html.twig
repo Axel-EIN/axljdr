@@ -2,7 +2,7 @@
 
 <span class="map-label {{ variant|default('') }}"{% if style is defined %} style="{{ style }}"{% endif %}>
   {% if mon is defined and mon is not empty %}
-    <img class="map-label-mon" src="{{ asset(mon) }}" alt="" />
+    <img class="map-label-mon" src="{{ asset(image_small(mon)) }}" alt="" />
   {% endif %}
   <span>
     <span class="map-label-name">{{ name }}</span>

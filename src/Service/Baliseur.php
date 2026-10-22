@@ -1,11 +1,22 @@
 <?php
 namespace App\Service;
 
+use App\Entity\Development;
+use App\Entity\Lieu;
+use App\Entity\Personnage;
+use App\Entity\Scene;
 use App\Repository\PersonnageRepository;
 use App\Repository\LieuRepository;
 
 class Baliseur
 {
+    public const CHAMPS = [
+        Personnage::class  => ['description'],
+        Scene::class       => ['texte'],
+        Lieu::class        => ['description', 'regionDesc'],
+        Development::class => ['content'],
+    ];
+
     private const LIEN_PERSONNAGE = '#<a class="tag-character .*><img class="character-portrait small" .* \/> (.*)<\/a>#Ui';
     private const LIEN_LIEU = '#<a class="tag-location .*><img class="location-icon-small" .* \/> (.*)<\/a>#Ui';
 

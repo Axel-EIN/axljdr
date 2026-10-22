@@ -6,6 +6,7 @@ use App\Repository\FichePersonnageRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 use App\Entity\Avantage;
 use App\Entity\Competence;
 use App\Entity\Objet;
@@ -187,6 +188,18 @@ class FichePersonnage
      * @ORM\Column(type="text", nullable=true)
      */
     private $notes;
+
+    /**
+     * @ORM\Column(type="decimal", precision=5, scale=2, nullable=true)
+     * @Assert\Range(min=1, max=99)
+     */
+    private $locX;
+
+    /**
+     * @ORM\Column(type="decimal", precision=5, scale=2, nullable=true)
+     * @Assert\Range(min=1, max=99)
+     */
+    private $locY;
 
     /**
      * @ORM\Column(type="smallint")
@@ -472,6 +485,17 @@ class FichePersonnage
 
     public function getNotes(): ?string { return $this->notes; }
     public function setNotes(?string $v): self { $this->notes = $v; return $this; }
+
+    public function getLocX(): ?string { return $this->locX; }
+    public function setLocX(?string $v): self { $this->locX = $v; return $this; }
+
+    public function getLocY(): ?string { return $this->locY; }
+    public function setLocY(?string $v): self { $this->locY = $v; return $this; }
+
+    public function hasPositionLibre(): bool
+    {
+        return $this->locX !== null && $this->locY !== null;
+    }
 
     public function getConstitution(): ?int
     {

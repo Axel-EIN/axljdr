@@ -28,9 +28,16 @@
             </div>
 
             <div class="col-4">
+                <div class="d-flex flex-column mb-4">
+                    {{ include('parts/image-field.html.twig', {
+                        field: form.icon, input_id: 'admin_objet_icon', prefix: 'icon',
+                        current: objet.icon|default(null), fallback: NA_ICON,
+                        label: 'Icône (320×320 1:1 recommandé)', width: 320, height: 320 }) }}
+                </div>
                 {{ include('parts/image-field.html.twig', {
                     field: form.image, input_id: 'admin_objet_image', prefix: 'image',
-                    current: objet.image|default(null), fallback: NA_169 }) }}
+                    current: objet.image|default(null), fallback: NA_169,
+                    label: 'Image (1280×720 16:9 recommandé)', width: 1280, height: 720 }) }}
             </div>
 
             <div class="col-12 mt-4">{{ form_row(form.description,{ 'attr': {'rows': '5'} }) }}</div>

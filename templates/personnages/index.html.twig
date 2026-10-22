@@ -71,7 +71,7 @@
             {% if persos_du_clan|length > 0 %}
                 <div class="pnj-clan-group">
                     <h3 class="heading-amerigo category-section-sub-heading">
-                        <img class="img-40 mr-2" src="{{ asset((persos_du_clan|first).clan.mon|default(NA_MON)) }}" alt="Mon de la faction" />
+                        <img class="img-40 mr-2" src="{{ asset(image_small((persos_du_clan|first).clan.mon|default(NA_MON))) }}" alt="Mon de la faction" />
                         {{ clan_def.titre }}
                     </h3>
                     <div class="row">

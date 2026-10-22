@@ -94,8 +94,18 @@
             {% endfor %}
         </div>
 
+        {% set scene_image = une_scene.image|default(NA_SCENE) %}
+        {% set scene_image_reduced = image_reduced(scene_image) %}
+        {% set scene_preset = image_preset('landscape720') %}
+
         <div class="ratio-169 gradient-after-top-down">
-            <img class="ratio-cropped" src="{{ asset(une_scene.image|default(NA_SCENE)) }}"  alt="Image d'une scène">
+            <img class="ratio-cropped" src="{{ asset(scene_image) }}"
+                {% if scene_image_reduced %}
+                    srcset="{{ asset(scene_image_reduced) }} {{ scene_preset.reduced.width }}w, {{ asset(scene_image) }} {{ scene_preset.width }}w"
+                    sizes="(max-width: 991.98px) 100vw, 920px"
+                {% endif %}
+                {% if lazy ?? true %}loading="lazy"{% endif %}
+                alt="Image d'une scène">
         </div>
         
 

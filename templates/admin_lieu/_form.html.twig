@@ -25,7 +25,6 @@
             fallback: NA_LIEU, label: 'Image (1280×720 16:9 recommandé)', width: 1280, height: 720 }) }}
       </div>
 
-      {% set region_map = lieu.regionMap|default(null) %}
       {% set plan_rempli = lieu.planMap|default(null) or lieu.planDesc|default(null) %}
 
       <div class="col-12 mt-5">
@@ -36,19 +35,6 @@
       <div class="col-4">{{ form_row(form.locX) }}</div>
       <div class="col-4">{{ form_row(form.locY) }}</div>
       <div class="col-4">{{ form_row(form.zoom) }}</div>
-
-      <div class="col-12 mb-3">
-        <button type="button" class="btn btn-medium btn-secondary-style" data-toggle="collapse" data-target="#region-map-collapse"
-          aria-expanded="{{ region_map ? 'true' : 'false' }}" aria-controls="region-map-collapse">
-          <i class="fas fa-upload"></i>&nbsp;&nbsp;Uploader une image
-        </button>
-      </div>
-
-      <div id="region-map-collapse" class="col-12 mb-5 collapse{% if region_map %} show{% endif %}">
-        {{ include('parts/image-field.html.twig', {
-            field: form.regionMap, input_id: 'admin_lieu_regionMap', prefix: 'map', current: region_map,
-            fallback: NA_MAP }) }}
-      </div>
 
       <div class="col-12">{{ form_row(form.regionDesc, {'attr': {'rows': '7'}}) }}</div>
 

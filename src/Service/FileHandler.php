@@ -60,7 +60,7 @@ class FileHandler extends AbstractController
         $chemin = $this->getParameter('image_directory') . '/' . $dossier . '/' . basename($ancienFichier);
 
         if (!is_dir($chemin)) {
-            (new Filesystem())->remove([$chemin, $this->imageNormalizer->reducedPath($chemin)]);
+            (new Filesystem())->remove(array_merge([$chemin], $this->imageNormalizer->reducedPaths($chemin)));
         }
     }
 }

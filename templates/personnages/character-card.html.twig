@@ -39,7 +39,7 @@
                 {% endif %}
 
                 {% if perso.clan %}
-                    <img class="absolute corner-badge {{grayscale}} {{tint}}" src="{{ asset(perso.clan.mon|default(NA_MON)) }}" alt="Mon d'un clan"/>
+                    <img class="absolute corner-badge {{grayscale}} {{tint}}" src="{{ asset(image_small(perso.clan.mon|default(NA_MON))) }}" alt="Mon d'un clan"/>
                 {% endif %}
 
                 {% if perso.illustration is null and perso.genre == 'F' %}

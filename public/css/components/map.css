@@ -30,6 +30,15 @@
     &.dragging { cursor: grabbing; }
   }
 
+  &.mini {
+    --current-size: 64px;
+
+    aspect-ratio: 16 / 9;
+    border-radius: 0.5rem;
+
+    .minimap { width: 96px; }
+  }
+
   &.world {
     --map-top: calc(var(--nav-height) + var(--map-gap));
 
@@ -497,6 +506,11 @@
     &.city { --icon-base: 100px; }
     &.region { --icon-base: 110px; }
     &.temple { --icon-base: 68px; }
+
+    &.wanderer {
+      --party-offset-x: -50%;
+      --party-offset-y: -50%;
+    }
   }
 
   .map-portrait {
@@ -508,6 +522,8 @@
       background: none;
       box-shadow: 0 0 4px var(--color-black);
       cursor: pointer;
+
+      &.static { cursor: default; }
 
       img {
         display: block;

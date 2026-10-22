@@ -53,6 +53,12 @@ class AdminObjetType extends AbstractType
             ])
             ->add('numero', IntegerType::class, [
                 'required' => false ] )
+            ->add('icon', FileType::class, [
+                'mapped' => false,
+                'data_class' => null,
+                'required' => false,
+                'constraints' => [new File(['maxSize' => '5M'])],
+            ])
             ->add('image', FileType::class, [
                 'mapped' => false,
                 'data_class' => null,

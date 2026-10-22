@@ -43,6 +43,11 @@ class Objet
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
+    private $icon;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
     private $image;
 
     /**
@@ -211,6 +216,18 @@ class Objet
     public function setRegles(?string $regles): self
     {
         $this->regles = $regles;
+
+        return $this;
+    }
+
+    public function getIcon(): ?string
+    {
+        return $this->icon;
+    }
+
+    public function setIcon(?string $icon): self
+    {
+        $this->icon = $icon;
 
         return $this;
     }

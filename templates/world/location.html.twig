@@ -22,7 +22,7 @@
         <div class="stats d-none d-lg-flex">
           {% if un_element.clan is defined and un_element.clan is not empty %}
             <a class="d-flex justify-content-end" href="{{ path('world_clan', {id:un_element.clan.id} ) }}" >
-              <img class="mb-2 img-64 circle-crop" src="{{ asset(un_element.clan.mon|default(NA_MON)) }}" alt="Mon d'une faction" title="{{un_element.clan.nom|default('')}}" />
+              <img class="mb-2 img-64 circle-crop" src="{{ asset(image_small(un_element.clan.mon|default(NA_MON))) }}" alt="Mon d'une faction" title="{{un_element.clan.nom|default('')}}" />
             </a>
           {% endif %}
           {% if un_element.type is defined and un_element.type is not empty %}<span>Type : <strong>{{ un_element.type }}</strong></span>{% endif %}
@@ -47,7 +47,7 @@
               <li>
                 <span class="label">Clan :</span>
                 <a class="extrabold" href="{{ path('world_clan', {id:un_element.clan.id} ) }}">
-                  <img class="img-24" src="{{ asset(un_element.clan.mon|default(NA_MON)) }}" alt="" title="Mon du clan {{un_element.clan.nom}}" />
+                  <img class="img-24" src="{{ asset(image_small(un_element.clan.mon|default(NA_MON))) }}" alt="" title="Mon du clan {{un_element.clan.nom}}" />
                   {{ un_element.clan.nom }}
                 </a>
               </li>

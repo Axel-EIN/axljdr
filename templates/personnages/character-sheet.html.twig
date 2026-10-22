@@ -68,7 +68,7 @@
               <span class="label">Clan :</span>
               {% if fiche.personnage.clan %}
                 <a class="extrabold" href="{{ path('world_clan', {id: fiche.personnage.clan.id}) }}">
-                  <img  class="img-24" src="{{ asset(fiche.personnage.clan.mon|default(NA_MON)) }}"
+                  <img  class="img-24" src="{{ asset(image_small(fiche.personnage.clan.mon|default(NA_MON))) }}"
                         title="Mon du clan {{ fiche.personnage.clan.nom }}" />
                   {{ fiche.personnage.clan.nom }}
                 </a>
@@ -80,7 +80,7 @@
               <span class="label">Famille :</span>
               {% if fiche.personnage.famille %}
                 <a class="extrabold" href="{{ path('world_clan', {id: fiche.personnage.clan.id, '_fragment': fiche.personnage.famille.nom}) }}">
-                  <img  class="img-24 rounded-circle" src="{{ asset(fiche.personnage.famille.mon|default(NA_MON)) }}"
+                  <img  class="img-24 rounded-circle" src="{{ asset(image_small(fiche.personnage.famille.mon|default(NA_MON))) }}"
                         title="Mon de la famille {{ fiche.personnage.famille.nom }}" />
                   {{ fiche.personnage.famille.nom }}
                 </a>
@@ -94,7 +94,7 @@
               <span class="label">Classe :</span>
               {% if fiche.personnage.classe %}
                 <a class="extrabold" href="{{ path('regles_classe', {id: fiche.personnage.classe.id}) }}">
-                  <img  class="img-24" src="{{ asset(fiche.personnage.classe.icone|default(NA_MON)) }}"
+                  <img  class="img-24" src="{{ asset(image_small(fiche.personnage.classe.icone|default(NA_MON))) }}"
                         title="Mon de la classe {{ fiche.personnage.classe.nom }}" />
                   {{ fiche.personnage.classe.nom }}
                 </a>
@@ -107,7 +107,7 @@
               {% if fiche.personnage.classe %}
                 <a class="d-lg-none" href="{{ path('regles_classe', {id: fiche.personnage.classe.id}) }}"
                    title="Classe {{ fiche.personnage.classe.nom }}">
-                  <img class="img-24" src="{{ asset(fiche.personnage.classe.icone|default(NA_MON)) }}" alt="" />
+                  <img class="img-24" src="{{ asset(image_small(fiche.personnage.classe.icone|default(NA_MON))) }}" alt="" />
                 </a>
               {% endif %}
               {% if fiche.personnage.ecole %}
@@ -654,7 +654,7 @@
                 >
                   <td class="text-center" data-comp-ecole-cell>
                     {% if slot.compEcole > 0 %}
-                      <img src="{{ asset(fiche.personnage.ecole.clan.mon) }}" class="img-24" title="Compétence de l'École {{ fiche.personnage.ecole.nom }}" />
+                      <img src="{{ asset(image_small(fiche.personnage.ecole.clan.mon)) }}" class="img-24" title="Compétence de l'École {{ fiche.personnage.ecole.nom }}" />
                     {% else %}
                       <span class="d-inline-flex icon-20 rounded-circle border-base">&nbsp;</span>
                     {% endif %}
@@ -1108,7 +1108,7 @@
                           <br/>VD de l'Arme + Force
                           <br/>/garder VD de l'Arme
                           <br/>
-                          <br/><img class='img-56' src={{ asset(fiche.armeActuelle ? fiche.armeActuelle.image|default(NA_OBJET) : NA_OBJET) }} />
+                          <br/><img class='img-56' src={{ asset(image_small(fiche.armeActuelle ? fiche.armeActuelle.icon|default(NA_OBJET) : NA_OBJET)) }} />
                           <br/>- VD {{ fiche.armeActuelle ? fiche.armeActuelle.nom : '' }} : {{ fiche.armeActuelle ? fiche.armeActuelle.vd|default('0g1') : '0g1' }}
                           <br/>- Force : +{{ eff_forceStat }}g0
                           {% if fiche.dmgModifier %}

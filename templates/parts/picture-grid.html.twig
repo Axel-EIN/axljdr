@@ -82,23 +82,23 @@
 
           {% if variant == 'portrait' %}
             {% set na_genre = item.genre == 'F' ? NA_PERSO_PORTRAIT_F : (item.genre == 'M' ? NA_PERSO_PORTRAIT_M : NA_PERSO_PORTRAIT) %}
-            <img class="picture {{ item.dead|default(false) ? 'effect-dead' }}" src="{{ asset(item.icone|default(na_genre)) }}" alt="{{ alt }}" />
+            <img class="picture {{ item.dead|default(false) ? 'effect-dead' }}" src="{{ asset(image_small(item.icone|default(na_genre))) }}" loading="lazy" alt="{{ alt }}" />
             {% if not hidden and item.dead|default(false) %}
               <img class="character-icon-dead" src="{{ asset(MORT_ICO) }}" alt="est mort" />
             {% endif %}
 
           {% elseif variant == 'emblem' %}
             <span class="hover-ray">
-              <img class="picture" src="{{ asset(attribute(item, field|default('mon'))|default(image_na)) }}" alt="{{ alt }}" />
+              <img class="picture" src="{{ asset(image_small(attribute(item, field|default('mon'))|default(image_na))) }}" loading="lazy" alt="{{ alt }}" />
             </span>
 
           {% elseif variant == 'icon' %}
-            <img class="picture" src="{{ asset(item.icone|default(image_na)) }}" alt="{{ alt }}" />
+            <img class="picture" src="{{ asset(image_small(item.icone|default(image_na))) }}" loading="lazy" alt="{{ alt }}" />
 
           {% else %}
             {% if pdf_only %}<img class="badge-corner" src="{{ asset(PDF) }}" alt="Icône PDF" />{% endif %}
             <div class="frame ratio-{{ shape }}">
-              <img class="ratio-cropped" src="{{ asset(item.imageAffichee|default(item.image|default(image_na))) }}" alt="{{ alt }}" />
+              <img class="ratio-cropped" src="{{ asset(image_small(item.imageAffichee|default(item.image|default(image_na)))) }}" loading="lazy" alt="{{ alt }}" />
               {% if not hidden and item.icone|default(null) %}
                 <img class="hover-icon" src="{{ asset(item.icone) }}" alt="" />
               {% endif %}

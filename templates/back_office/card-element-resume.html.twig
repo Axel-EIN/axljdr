@@ -14,7 +14,7 @@
                 <a class="relative d-block text-white hover-slight-fade" href="{{ path('admin_' ~ element ~ '_edit', {id: last.id} ) }}" >
                     <i class="topright-corner-inside absolute fa-solid fa-edit"></i>
                     <div class="ratio-{{ratio|default('43')}}">
-                        <img class="bg-background ratio-cropped" src="{{ asset(image|default(NA_43)) }}" alt="Image {{element}}" />
+                        <img class="bg-background ratio-cropped" src="{{ asset(image_small(image|default(NA_43))) }}" alt="Image {{element}}" />
                     </div>
                 </a>
                 <strong class="d-block text-center mt-1">{{nom}}</strong>

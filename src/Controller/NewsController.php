@@ -2,8 +2,10 @@
 
 namespace App\Controller;
 
+use App\Repository\LieuRepository;
 use App\Service\ClasseurXP;
 use App\Service\CurrentPlayer;
+use App\Service\Localisateur;
 use App\Service\NewsFeed;
 use App\Service\Visibility;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -44,11 +46,15 @@ class NewsController extends AbstractController
     /**
      * @Route("/", name="news")
      */
-    public function viewNews(NewsFeed $newsFeed, ClasseurXP $classeurXP, CurrentPlayer $currentPlayer, Visibility $visibility): Response
+    public function viewNews(NewsFeed $newsFeed, ClasseurXP $classeurXP, CurrentPlayer $currentPlayer, Visibility $visibility, Localisateur $localisateur, LieuRepository $lieuRepository): Response
     {
         $mesPersonnages = $currentPlayer->characterIds();
+        $monPersonnage = $currentPlayer->main();
+        $maPositionLibre = $localisateur->positionLibre($monPersonnage);
+        $maPosition = $maPositionLibre === null ? $localisateur->position($monPersonnage) : null;
 
         $participations = $newsFeed->lastParticipations(self::PARTICIPATIONS);
+        $carteVisible = $participations !== [] && ($maPosition !== null || $maPositionLibre !== null);
         $episodes = $newsFeed->lastEpisodes(1 + self::SEANCES_PRECEDENTES);
         $dernierEpisode = $episodes[0] ?? null;
 
@@ -124,10 +130,14 @@ class NewsController extends AbstractController
             'session_objects' => $dernierEpisode === null ? [] : $newsFeed->episodeObjects($dernierEpisode),
             'session_previous' => array_slice($episodes, 1),
             'mes_personnages' => $mesPersonnages,
-            'mon_personnage' => $currentPlayer->main(),
+            'mon_personnage' => $monPersonnage,
             'mes_participations' => $participations,
             'classement_general' => $newsFeed->generalRanking(),
             'participations_xp' => $participationsXp,
+            'ma_position' => $maPosition,
+            'ma_position_libre' => $maPositionLibre,
+            'carte_visible' => $carteVisible,
+            'lieux' => $carteVisible ? $lieuRepository->findAllSorted() : [],
             'groupes' => $groupes,
             'secrets_large' => $colonne === 0,
             'sections' => $sections,

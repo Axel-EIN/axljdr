@@ -5,6 +5,7 @@
     {{ parent() }}
     <link rel="stylesheet" href="{{asset('css/components/picture-grid.css')}}" />
     <link rel="stylesheet" href="{{asset('css/components/episode-card.css')}}" />
+    <link rel="stylesheet" href="{{asset('css/components/map.css')}}" />
     <link rel="stylesheet" href="{{asset('css/pages/news.css')}}" />
 {% endblock %}
 
@@ -139,6 +140,19 @@
                         <img class="episode-picture" src="{{ asset(image_small(episode.image|default(NA_SESSION))) }}" width="{{ episode_preset.width }}" height="{{ episode_preset.height }}" loading="lazy" alt="" />
                     </a>
                 {% endfor %}
+
+                {% if carte_visible %}
+                    <div class="participations-map d-none d-lg-block">
+                        {{ include('parts/map.html.twig', {
+                            lieux,
+                            current: ma_position,
+                            center: ma_position_libre,
+                            wanderers: ma_position_libre ? [ma_position_libre] : [],
+                            zoom: ma_position ? ma_position.zoom : null,
+                            variant: 'mini',
+                        }, with_context = false) }}
+                    </div>
+                {% endif %}
             </div>
         {% endif %}
 
@@ -198,4 +212,9 @@
             {% endif %}
         </div>
     </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {% if carte_visible %}<script src="{{ asset('scripts/map.js') }}"></script>{% endif %}
 {% endblock %}

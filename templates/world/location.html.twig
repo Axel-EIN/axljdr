@@ -68,7 +68,7 @@
       {% endif %}
 
       {% set placed = un_element.locX is not empty and un_element.locY is not empty %}
-      {% set region_visible_mobile = un_element.regionMap is not empty or un_element.regionDesc is not empty %}
+      {% set region_visible_mobile = un_element.regionDesc is not empty %}
       {% set plan_visible = un_element.planMap is not empty or un_element.planDesc is not empty %}
 
       {% if placed or region_visible_mobile %}
@@ -76,9 +76,7 @@
 
         <h2 class="heading-elementpart decorated{% if not region_visible_mobile %} d-none d-lg-block{% endif %}">Carte</h2>
 
-        {% if un_element.regionMap is not empty %}
-          <img class="img-fluid" src="{{ asset(un_element.regionMap) }}" alt="Carte de la région de {{ un_element.nom }}">
-        {% elseif placed %}
+        {% if placed %}
           {{ include('parts/map.html.twig', {lieux, current: un_element, zoom: un_element.zoom, draggable: true}, with_context = false) }}
         {% endif %}
 
@@ -93,7 +91,19 @@
         <h2 class="heading-elementpart decorated">Plan</h2>
 
         {% if un_element.planMap is not empty %}
-          <img class="img-fluid" src="{{ asset(un_element.planMap) }}" alt="Plan de {{ un_element.nom }}">
+          {% set plan_srcset = image_srcset(un_element.planMap) %}
+          <img class="img-fluid" src="{{ asset(un_element.planMap) }}"
+            {% if plan_srcset %}
+              srcset="{{ plan_srcset }}"
+              sizes="(max-width: 991.98px) 100vw, 1080px"
+            {% endif %}
+            loading="lazy" alt="Plan de {{ un_element.nom }}">
+          <div class="text-center mt-3">
+            <button type="button" class="btn-primary-style btn-medium" data-toggle="modal" data-target="#plan-modal">
+              <i class="fas fa-expand" aria-hidden="true"></i>&nbsp;&nbsp;Agrandir le plan
+            </button>
+          </div>
+          {{ include('parts/modal-image.html.twig', {id: 'plan-modal', titre: 'Plan de ' ~ un_element.nom, image: un_element.planMap}, with_context = false) }}
         {% endif %}
 
         {% if un_element.planDesc is not empty %}

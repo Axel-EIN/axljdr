@@ -17,6 +17,7 @@ use App\Entity\Personnage;
 use App\Entity\Rule;
 use App\Entity\Saison;
 use App\Entity\Scene;
+use App\Service\Baliseur;
 use App\Service\ImageNormalizer;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Command\Command;
@@ -49,12 +50,15 @@ final class OptimizeImagesCommand extends Command
         'lieu-icone'   => ['entity' => Lieu::class,       'field' => 'icone',        'preset' => 'square192'],
         'objet'        => ['entity' => Objet::class,      'field' => 'image',        'preset' => 'landscape720'],
         'objet-icon'   => ['entity' => Objet::class,      'field' => 'icon',         'preset' => 'square320'],
+        'portrait'     => ['entity' => Personnage::class, 'field' => 'icone',        'preset' => 'square240'],
+        'classe'       => ['entity' => Classe::class,     'field' => 'image',        'preset' => 'landscape720'],
     ];
 
     private $entityManager;
     private $imageNormalizer;
     private $propertyAccessor;
     private $publicDirectory;
+    private $renommages = [];
 
     public function __construct(EntityManagerInterface $entityManager, ImageNormalizer $imageNormalizer, PropertyAccessorInterface $propertyAccessor, string $publicDirectory)
     {
@@ -93,6 +97,10 @@ final class OptimizeImagesCommand extends Command
 
         $this->entityManager->flush();
 
+        if ($this->renommages !== []) {
+            $io->writeln(sprintf('%d texte(s) balisé(s) mis à jour pour %d image(s) renommée(s)', $this->remplacerDansLesTextes(), count($this->renommages)));
+        }
+
         foreach ($echecs as $echec) {
             $io->warning($echec);
         }
@@ -130,8 +138,13 @@ final class OptimizeImagesCommand extends Command
                     continue;
                 }
 
-                $this->propertyAccessor->setValue($element, $field, dirname($image) . '/' . basename($normalise));
+                $nouvelleImage = dirname($image) . '/' . basename($normalise);
+                $this->propertyAccessor->setValue($element, $field, $nouvelleImage);
                 $normalises++;
+
+                if ($nouvelleImage !== $image) {
+                    $this->renommages[$image] = $nouvelleImage;
+                }
             } elseif ($avecReduite && !$this->imageNormalizer->reduce($chemin, $preset)) {
                 $echecs[] = $image . ' : version réduite impossible';
                 continue;
@@ -145,5 +158,26 @@ final class OptimizeImagesCommand extends Command
         $io->writeln(sprintf('%-12s %3d image(s) normalisée(s), %3d version(s) réduite(s) créée(s)', $type, $normalises, $reduits));
 
         return $echecs;
+    }
+
+    private function remplacerDansLesTextes(): int
+    {
+        $connexion = $this->entityManager->getConnection();
+        $lignes = 0;
+
+        foreach (Baliseur::CHAMPS as $entite => $champs) {
+            $metadata = $this->entityManager->getClassMetadata($entite);
+
+            foreach ($champs as $champ) {
+                $colonne = $metadata->getColumnName($champ);
+                $requete = sprintf('UPDATE %1$s SET %2$s = REPLACE(%2$s, ?, ?) WHERE %2$s LIKE ?', $metadata->getTableName(), $colonne);
+
+                foreach ($this->renommages as $ancien => $nouveau) {
+                    $lignes += $connexion->executeStatement($requete, [$ancien, $nouveau, '%' . $ancien . '%']);
+                }
+            }
+        }
+
+        return $lignes;
     }
 }

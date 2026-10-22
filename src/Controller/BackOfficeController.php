@@ -379,7 +379,7 @@ class BackOfficeController extends AbstractController
         if (!empty($lastObjet)) {
             $admin_elements[$i]['last'] = $lastObjet;
             $admin_elements[$i]['nom'] = $lastObjet->getNom();
-            $admin_elements[$i]['image'] = $lastObjet->getImage();
+            $admin_elements[$i]['image'] = $lastObjet->getIcon();
         } else {
             $admin_elements[$i]['last'] = '';
             $admin_elements[$i]['nom'] = '';

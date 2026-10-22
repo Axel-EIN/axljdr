@@ -21,7 +21,7 @@
   {% if lisible %}
     <div class="map-panel-details">
       {% if element.clan %}
-        <img class="img-24" src="{{ asset(element.clan.mon|default(NA_MON)) }}" alt="" />
+        <img class="img-24" src="{{ asset(image_small(element.clan.mon|default(NA_MON))) }}" alt="" />
         <span>{{ element.clan.nom }}</span>
       {% endif %}
       {% if type %}<span>{{ type }}</span>{% endif %}

@@ -149,13 +149,29 @@
     text-align: center;
     line-height: var(--leading-base);
 
-    .label-badge,
     .label-icon {
       margin-right: 0.35rem;
       vertical-align: middle;
+
+      &.city {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 1.6em;
+        height: 1.6em;
+        border-radius: 50%;
+        background-color: currentColor;
+
+        i {
+          color: var(--color-white);
+          font-size: 0.8em;
+        }
+      }
     }
 
     .label-badge {
+      margin-right: 0.35rem;
+      vertical-align: middle;
       display: inline-block;
       padding: 0.15rem 0.35rem;
       border-radius: 0.25rem;

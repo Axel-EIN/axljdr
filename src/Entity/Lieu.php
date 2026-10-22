@@ -30,6 +30,8 @@ class Lieu
     'Structure' => 'fa-solid fa-monument',
   ];
 
+  public const CITY_TYPES = ['Cité', 'Ville'];
+
   /**
    * @ORM\Id
    * @ORM\GeneratedValue
@@ -305,6 +307,11 @@ class Lieu
   public function getTypeIcon(): ?string
   {
     return self::TYPE_ICONS[$this->type] ?? null;
+  }
+
+  public function isCity(): bool
+  {
+    return in_array($this->type, self::CITY_TYPES, true);
   }
 
   public function getPopulation(): ?int

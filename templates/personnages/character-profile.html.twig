@@ -186,7 +186,7 @@
                         <div class="development-content">
                             <p class="text-description text-compact">{{ development.content|raw|nl2br }}</p>
                             <a class="development-image" href="{{ scene_url }}" title="Voir la scène {{ scene.numero }}">
-                                <img src="{{ asset(scene.image|default(NA_SCENE)) }}" alt="Scène {{ scene.numero }} — {{ scene.titre }}" />
+                                <img src="{{ asset(image_small(scene.image|default(NA_SCENE))) }}" loading="lazy" alt="Scène {{ scene.numero }} — {{ scene.titre }}" />
                             </a>
                         </div>
                     </article>

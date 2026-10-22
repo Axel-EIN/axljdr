@@ -36,7 +36,7 @@
 
     {% set color, entity, parent, parentID, redirect = 'text-white50', 'chapitre', 'saison', saison.id, 'aventure' %}
     {% for un_chapitre in saison.chapitres|reverse %}
-        {{ include('/aventure/chapter-detail.html.twig') }}
+        {{ include('/aventure/chapter-detail.html.twig', {lazy: not loop.first}) }}
     {% else %}
 
         <section class="chapter-backdrop chapter-banner" style="--chapter-color: #400000">

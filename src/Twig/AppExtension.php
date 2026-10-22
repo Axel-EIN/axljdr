@@ -13,6 +13,7 @@ use App\Service\ImageBrightness;
 use App\Service\ImageNormalizer;
 use App\Service\TableFilter;
 use App\Service\Visibility;
+use Symfony\Component\Asset\Packages;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
 use Twig\TwigFunction;
@@ -25,8 +26,9 @@ class AppExtension extends AbstractExtension
     private $tableFilter;
     private $currentPlayer;
     private $imageNormalizer;
+    private $packages;
 
-    public function __construct(Visibility $visibility, ElementUrl $elementUrl, ImageBrightness $imageBrightness, TableFilter $tableFilter, CurrentPlayer $currentPlayer, ImageNormalizer $imageNormalizer)
+    public function __construct(Visibility $visibility, ElementUrl $elementUrl, ImageBrightness $imageBrightness, TableFilter $tableFilter, CurrentPlayer $currentPlayer, ImageNormalizer $imageNormalizer, Packages $packages)
     {
         $this->visibility = $visibility;
         $this->elementUrl = $elementUrl;
@@ -34,6 +36,7 @@ class AppExtension extends AbstractExtension
         $this->tableFilter = $tableFilter;
         $this->currentPlayer = $currentPlayer;
         $this->imageNormalizer = $imageNormalizer;
+        $this->packages = $packages;
     }
 
     public function getFilters()
@@ -64,13 +67,33 @@ class AppExtension extends AbstractExtension
             new TwigFunction('status_label', [$this, 'statusLabel']),
             new TwigFunction('faction_label', [$this, 'factionLabel']),
             new TwigFunction('image_bright', [$this->imageBrightness, 'isBright']),
-            new TwigFunction('image_reduced', [$this->imageNormalizer, 'existingReduced']),
             new TwigFunction('image_small', [$this->imageNormalizer, 'reducedOrOriginal']),
             new TwigFunction('image_preset', [$this->imageNormalizer, 'getPreset']),
+            new TwigFunction('image_srcset', [$this, 'imageSrcset']),
             new TwigFunction('table_filters', [$this->tableFilter, 'build']),
             new TwigFunction('table_value', [$this->tableFilter, 'valueOf']),
             new TwigFunction('main_character', [$this->currentPlayer, 'main']),
         ];
+    }
+
+    public function imageSrcset(?string $path): ?string
+    {
+        $reduced = $this->imageNormalizer->existingReduced($path);
+        if ($reduced === null) {
+            return null;
+        }
+
+        $candidats = [];
+        foreach ([$reduced, $path] as $image) {
+            $largeur = $this->imageNormalizer->width($image);
+            if ($largeur === null) {
+                return null;
+            }
+
+            $candidats[] = $this->packages->getUrl($image) . ' ' . $largeur . 'w';
+        }
+
+        return implode(', ', $candidats);
     }
 
     public function accessLabel($access, bool $manualUnlock = false): string

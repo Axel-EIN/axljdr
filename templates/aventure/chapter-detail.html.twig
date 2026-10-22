@@ -1,7 +1,7 @@
 {% set chapter_image = un_chapitre.image|default(NA_CHAPITRE) %}
 <section class="chapter-backdrop chapter-banner" style="--chapter-color: {{ un_chapitre.couleur }}">
 
-  <img class="chapter-backdrop-image zoomed{{ image_bright(chapter_image) ? ' bright' }}" src="{{ asset(chapter_image) }}" alt="" />
+  <img class="chapter-backdrop-image zoomed{{ image_bright(chapter_image) ? ' bright' }}" src="{{ asset(chapter_image) }}" {% if lazy ?? true %}loading="lazy"{% endif %} alt="" />
 
   <div class="container">
 

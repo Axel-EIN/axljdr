@@ -134,6 +134,14 @@ class AdminFichePersonnageType extends AbstractType
             ->add('eyes', TextType::class, ['label' => 'Yeux', 'required' => false, 'constraints' => [ new Length(['max' => 40]) ]])
             ->add('appearance', TextareaType::class, ['label' => 'Apparence', 'required' => false, 'constraints' => [ new Length(['max' => 3000]) ]])
             ->add('notes', TextareaType::class, ['label' => 'Notes', 'required' => false, 'constraints' => [ new Length(['max' => 3000]) ]])
+            ->add('locX', MapCoordinateType::class, [
+                'label' => 'Coord. % hori. position libre',
+                'help' => 'PJ vivants seulement. Prioritaire sur le lieu de la dernière scène.',
+            ])
+            ->add('locY', MapCoordinateType::class, [
+                'label' => 'Coord. % vert. position libre',
+                'help' => 'Effacée quand le personnage participe à une scène plus récente, dont le lieu est placé sur la carte.',
+            ])
             ->add('constitution', IntegerType::class)
             ->add('volonte', IntegerType::class)
             ->add('reflexes', IntegerType::class)

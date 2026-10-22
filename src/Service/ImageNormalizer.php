@@ -5,9 +5,9 @@ namespace App\Service;
 class ImageNormalizer
 {
     public const PRESETS = [
-        'landscape1080' => ['width' => 1920, 'height' => 1080],
+        'landscape1080' => ['width' => 1920, 'height' => 1080, 'format' => IMAGETYPE_JPEG, 'reduced' => ['width' => 960, 'height' => 540]],
         'landscape720'  => ['width' => 1280, 'height' => 720, 'format' => IMAGETYPE_JPEG, 'reduced' => ['width' => 640, 'height' => 360]],
-        'fourthird900'  => ['width' => 1200, 'height' => 900],
+        'fourthird900'  => ['width' => 1200, 'height' => 900, 'format' => IMAGETYPE_JPEG, 'reduced' => ['width' => 640, 'height' => 480]],
         'square320'     => ['width' => 320,  'height' => 320],
         'square240'     => ['width' => 240,  'height' => 240],
         'square192'     => ['width' => 192,  'height' => 192],

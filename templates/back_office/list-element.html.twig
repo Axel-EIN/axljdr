@@ -84,7 +84,7 @@
                             {% set placeholder = (extra_resolved is not empty and _context[extra_resolved] is defined) ? _context[extra_resolved] : NA_ICON %}
                             <td class="text-center align-middle">
                                 <a href="{{ path('admin_' ~ element ~ '_edit', {id: un_element.id}) }}">
-                                    <img class="border-soft" src="{{ asset(val|default(placeholder)) }}" alt="{{ parts[1]|default(parts[0]) }}" style="width: 48px; height: 48px; object-fit: cover;" />
+                                    <img class="border-soft" src="{{ asset(image_small(val|default(placeholder))) }}" loading="lazy" alt="{{ parts[1]|default(parts[0]) }}" style="width: 48px; height: 48px; object-fit: cover;" />
                                 </a>
                             </td>
                         {% elseif format == 'image' %}
@@ -97,7 +97,7 @@
                             {% set placeholder = (extra_resolved is not empty and _context[extra_resolved] is defined) ? _context[extra_resolved] : NA_169 %}
                             <td class="text-center align-middle">
                                 <a href="{{ path('admin_' ~ element ~ '_edit', {id: un_element.id}) }}">
-                                    <img class="border-soft" src="{{ asset(val|default(placeholder)) }}" alt="{{ parts[1]|default(parts[0]) }}" style="height: 64px; width: auto; max-width: 160px; object-fit: cover;" />
+                                    <img class="border-soft" src="{{ asset(image_small(val|default(placeholder))) }}" loading="lazy" alt="{{ parts[1]|default(parts[0]) }}" style="height: 64px; width: auto; max-width: 160px; object-fit: cover;" />
                                 </a>
                             </td>
                         {% elseif format == 'color' %}

@@ -84,11 +84,6 @@ class Clan
     private $citation;
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    private $territoireCarte;
-
-    /**
      * @ORM\Column(type="text", nullable=true)
      */
     private $territoireDesc;
@@ -110,6 +105,18 @@ class Clan
      * @Assert\Range(min=0.25, max=2)
      */
     private $zoom;
+
+    /**
+     * @ORM\Column(type="decimal", precision=5, scale=2, nullable=true)
+     * @Assert\Range(min=1, max=99)
+     */
+    private $emblemX;
+
+    /**
+     * @ORM\Column(type="decimal", precision=5, scale=2, nullable=true)
+     * @Assert\Range(min=1, max=99)
+     */
+    private $emblemY;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
@@ -351,18 +358,6 @@ class Clan
         return $this;
     }
 
-    public function getTerritoireCarte(): ?string
-    {
-        return $this->territoireCarte;
-    }
-
-    public function setTerritoireCarte(?string $territoireCarte): self
-    {
-        $this->territoireCarte = $territoireCarte;
-
-        return $this;
-    }
-
     public function getTerritoireDesc(): ?string
     {
         return $this->territoireDesc;
@@ -407,6 +402,30 @@ class Clan
     public function setZoom(?string $zoom): self
     {
         $this->zoom = $zoom;
+
+        return $this;
+    }
+
+    public function getEmblemX(): ?string
+    {
+        return $this->emblemX;
+    }
+
+    public function setEmblemX(?string $emblemX): self
+    {
+        $this->emblemX = $emblemX;
+
+        return $this;
+    }
+
+    public function getEmblemY(): ?string
+    {
+        return $this->emblemY;
+    }
+
+    public function setEmblemY(?string $emblemY): self
+    {
+        $this->emblemY = $emblemY;
 
         return $this;
     }

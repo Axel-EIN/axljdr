@@ -4,6 +4,8 @@ namespace App\Repository;
 
 use App\Entity\Avantage;
 use App\Entity\FichePersonnage;
+use App\Entity\Personnage;
+use App\Entity\Status;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -36,5 +38,23 @@ class FichePersonnageRepository extends ServiceEntityRepository
             ->orderBy('p.nom', 'ASC')
             ->getQuery()
             ->getResult();
+    }
+
+    public function findPlacedForLivingPlayers(?Personnage $personnage = null): array
+    {
+        $qb = $this->createQueryBuilder('f')
+            ->join('f.personnage', 'p')
+            ->addSelect('p')
+            ->andWhere('f.locX IS NOT NULL')
+            ->andWhere('f.locY IS NOT NULL')
+            ->andWhere('p.estPj = true')
+            ->andWhere('p.status = :vivant')
+            ->setParameter('vivant', Status::ALIVE);
+
+        if ($personnage !== null) {
+            $qb->andWhere('p = :personnage')->setParameter('personnage', $personnage);
+        }
+
+        return $qb->getQuery()->getResult();
     }
 }

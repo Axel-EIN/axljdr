@@ -11,7 +11,8 @@
             <div class="col-8 mt-3 mb-4">
                 {{ include('parts/image-field.html.twig', {
                     field: form.image, input_id: 'admin_classe_image', prefix: 'image',
-                    current: classe.image|default(null), fallback: NA_169 }) }}
+                    current: classe.image|default(null), fallback: NA_169,
+                    label: 'Image (1280×720 16:9 recommandé)', width: 1280, height: 720 }) }}
             </div>
 
             <div class="col-4 mt-3 mb-4">

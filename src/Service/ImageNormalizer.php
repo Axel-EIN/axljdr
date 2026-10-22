@@ -9,7 +9,7 @@ class ImageNormalizer
         'landscape720'  => ['width' => 1280, 'height' => 720, 'format' => IMAGETYPE_JPEG, 'reduced' => ['width' => 640, 'height' => 360]],
         'fourthird900'  => ['width' => 1200, 'height' => 900, 'format' => IMAGETYPE_JPEG, 'reduced' => ['width' => 640, 'height' => 480]],
         'square320'     => ['width' => 320,  'height' => 320, 'reduced' => ['width' => 128, 'height' => 128]],
-        'square240'     => ['width' => 240,  'height' => 240],
+        'square240'     => ['width' => 240,  'height' => 240, 'format' => IMAGETYPE_JPEG],
         'square192'     => ['width' => 192,  'height' => 192],
         'vertical450'   => ['width' => 450,  'height' => 800, 'format' => IMAGETYPE_JPEG, 'reduced' => ['width' => 360, 'height' => 640]],
     ];

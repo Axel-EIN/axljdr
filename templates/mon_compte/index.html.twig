@@ -62,7 +62,7 @@
           </a>
           <div>
             {% if principal.clan %}
-              <img class="img-24" src="{{ asset(principal.clan.mon|default(NA_MON)) }}" alt="Mon du Clan {{ principal.clan.nom }}" />
+              <img class="img-24" src="{{ asset(image_small(principal.clan.mon|default(NA_MON))) }}" alt="Mon du Clan {{ principal.clan.nom }}" />
             {% endif %}
             <strong>{{ principal.nomComplet }}</strong>
             {% if principal.fichePersonnage is not empty %}

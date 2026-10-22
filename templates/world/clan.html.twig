@@ -74,8 +74,9 @@
 
     {% set territoire_place = clan.locX is not empty and clan.locY is not empty %}
 
-    {% if territoire_place or clan.territoireDesc is not empty %}
-    <div class="col-12">
+    {% set territoire_visible_mobile = clan.territoireDesc is not empty %}
+    {% if territoire_place or territoire_visible_mobile %}
+    <div class="col-12{% if not territoire_visible_mobile %} d-none d-lg-block{% endif %}">
         <div class="card card-body">
             <h2 class="heading-cardtitle">Territoires</h2>
             <hr>
@@ -83,15 +84,12 @@
             {% if territoire_place %}
                 {{ include('parts/map.html.twig', {
                     lieux: clan.lieux.toArray, center: clan, zoom: clan.zoom, territories: true, labels: true, large_markers: true, emblem: clan.mon|default(NA_MON),
+                    emblem_at: clan.emblemX is not null and clan.emblemY is not null ? {locX: clan.emblemX, locY: clan.emblemY} : null,
                 }, with_context = false) }}
-            {% elseif clan.territoireCarte %}
-                <img id="carte" class="img-fluid img-bleed" src="{{asset(clan.territoireCarte)}}" alt="Carte du Territoire du clan" />
             {% endif %}
 
-            {% if clan.territoireDesc %}
+            {% if territoire_visible_mobile %}
                 {{ include('parts/description.html.twig', {text: clan.territoireDesc, variant: 'aerated'}, with_context = false) }}
-            {% else %}
-                <p class="text-muted"><i>Description des Territoires à venir.</i></p>
             {% endif %}
 
         </div>

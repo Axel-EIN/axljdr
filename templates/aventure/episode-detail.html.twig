@@ -12,13 +12,12 @@
 {% block body %}
 
 {% set chapter_image = episode.chapitreParent.image|default(NA_CHAPITRE) %}
-{% set chapter_image_reduced = image_reduced(chapter_image) %}
-{% set chapter_preset = image_preset('landscape1080') %}
+{% set chapter_srcset = image_srcset(chapter_image) %}
 <div class="chapter-backdrop padded" style="--chapter-color: {{ episode.chapitreParent.couleur }}">
 
   <img class="chapter-backdrop-image{{ image_bright(chapter_image) ? ' bright' }}" src="{{ asset(chapter_image) }}"
-    {% if chapter_image_reduced %}
-      srcset="{{ asset(chapter_image_reduced) }} {{ chapter_preset.reduced.width }}w, {{ asset(chapter_image) }} {{ chapter_preset.width }}w"
+    {% if chapter_srcset %}
+      srcset="{{ chapter_srcset }}"
       sizes="100vw"
     {% endif %}
     alt="" />

@@ -9,7 +9,7 @@
 {% if personnage and lisible %}
   <img class="map-panel-banner portrait" src="{{ asset(personnage.illustration|default(NA_PERSO_ILLU)) }}" alt="Illustration de {{ personnage.nomComplet }}" />
 {% elseif lieu and lieu.image %}
-  <img class="map-panel-banner" src="{{ asset(lieu.image) }}" alt="Image de {{ lieu.nom }}" />
+  <img class="map-panel-banner" src="{{ asset(image_small(lieu.image)) }}" alt="Image de {{ lieu.nom }}" />
 {% endif %}
 
 <div class="map-panel-body">

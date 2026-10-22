@@ -13,7 +13,7 @@ class ParticipationHandler
     private $sessionFlash;
     private $unlocker;
 
-    public function __construct(PersonnageRepository $personnageRepository, EntityManagerInterface $entityManagerInterface, RequestStack $requestStack, Unlocker $unlocker )
+    public function __construct(PersonnageRepository $personnageRepository, EntityManagerInterface $entityManagerInterface, RequestStack $requestStack, Unlocker $unlocker)
     {
         $this->repo = $personnageRepository;
         $this->entity = $entityManagerInterface;
@@ -25,8 +25,8 @@ class ParticipationHandler
     {
         if (!empty($participants_a_ajoutes)) {
             foreach ($participants_a_ajoutes as $cle => $un_participant_a_ajoute) {
-                if ( !empty($this->repo->find($participants_a_ajoutes[$cle]['id'])) ) {
-                    $personnage = $this->repo->find($participants_a_ajoutes[$cle]['id']);
+                $personnage = $this->repo->find($participants_a_ajoutes[$cle]['id']);
+                if ($personnage !== null) {
                     $nouvelle_participation = new Participation;
                     $nouvelle_participation->setScene($scene);
                     $nouvelle_participation->setPersonnage($personnage);

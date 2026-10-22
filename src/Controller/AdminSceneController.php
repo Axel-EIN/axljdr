@@ -7,6 +7,7 @@ use App\Entity\Scene;
 use App\Service\FileHandler;
 use App\Service\Numeroteur;
 use App\Service\Baliseur;
+use App\Service\Localisateur;
 use App\Service\ParticipationHandler;
 use App\Service\Unlocker;
 use App\Form\AdminSceneType;
@@ -62,7 +63,7 @@ class AdminSceneController extends AbstractController
      */
     public function addScene(Request $request, EntityManagerInterface $em, FileHandler $fileHandler, Baliseur $baliseur,
                             ParticipationHandler $participationHandler, PersonnageRepository $personnageRepository,
-                            EpisodeRepository $episodeRepository, Numeroteur $numeroteur, SceneRepository $sceneRepository, Unlocker $unlocker, TableFilter $tableFilter) {
+                            EpisodeRepository $episodeRepository, Numeroteur $numeroteur, SceneRepository $sceneRepository, Unlocker $unlocker, TableFilter $tableFilter, Localisateur $localisateur) {
 
         $scene = new Scene;
         $tableFilter->prefill($scene, self::TABLE_FILTERS, $request->query->all('filter'));
@@ -106,10 +107,12 @@ class AdminSceneController extends AbstractController
             $unlocker->syncScene($scene);
             $em->flush();
 
-            $this->addFlash('success', 'La scène a bien été crée.');
+            $this->addFlash('success', 'La scène a bien été créée.');
 
             $fratrieArrivee = $sceneRepository->findBy(['episodeParent' => $scene->getEpisodeParent()->getId()]);
             $numeroteur->reordonnerNumero($scene->getId(), -1, $scene->getNumero(), [], $fratrieArrivee);
+
+            $this->signalerPositionsEffacees($localisateur->effacerPositionsLibres($scene));
 
             if (!empty($request->query->get('redirect')) && $request->query->get('redirect') == 'episode')
                 return $this->redirectToRoute('aventure_episode', ['id' => $scene->getEpisodeParent()->getId(),'_fragment' => 'scn' . $scene->getNumero()]);
@@ -135,10 +138,11 @@ class AdminSceneController extends AbstractController
      */
     public function editScene(Request $request, Scene $scene, FileHandler $fileHandler, Numeroteur $numeroteur, Baliseur $baliseur,
                                 ParticipationHandler $participationHandler, PersonnageRepository $personnageRepository,
-                                ParticipationRepository $participationRepository, SceneRepository $sceneRepository, Unlocker $unlocker): Response {
+                                ParticipationRepository $participationRepository, SceneRepository $sceneRepository, Unlocker $unlocker, Localisateur $localisateur): Response {
 
         $numeroDepart = $scene->getNumero();
         $fratrieDepartId = $scene->getEpisodeParent()->getId();
+        $lieuDepart = $scene->getLieu();
         
         $tout_pjs  = $personnageRepository->findAllPJsSorted();
         $tout_pnjs = $personnageRepository->findAllPNJsSorted();
@@ -187,7 +191,7 @@ class AdminSceneController extends AbstractController
                         $une_participation->setXpGagne($un_participant_modifie['xp']);
                         $une_participation->setEstMort($un_participant_modifie['mort']);
                         $une_participation->setXpBonus($xpBonusModifie);
-                        $this->addFlash('warning', 'Le personnage ' . $une_participation->getPersonnage()->getPrenom() . ' a bien été modifié des participant !');
+                        $this->addFlash('warning', 'Le personnage ' . $une_participation->getPersonnage()->getPrenom() . ' a bien été modifié dans les participants !');
                     }
                 }
 
@@ -197,6 +201,7 @@ class AdminSceneController extends AbstractController
                 }
             }
 
+            $ajoutes = [];
             foreach ($participants_modifies as $un_participant_modifie) {
                 $trouvee = false;
 
@@ -217,6 +222,7 @@ class AdminSceneController extends AbstractController
                     $nouvelle_participation->setEstPj($un_participant_modifie['estPj']);
                     $nouvelle_participation->setXpBonus(!empty($un_participant_modifie['xpBonus']));
                     $this->getDoctrine()->getManager()->persist($nouvelle_participation);
+                    $ajoutes[] = $personnage;
                     $this->addFlash('success', 'Le personnage ' . $nouvelle_participation->getPersonnage()->getPrenom() . ' a bien été ajouté en participant !');
                 }
             }
@@ -234,6 +240,8 @@ class AdminSceneController extends AbstractController
 
             $unlocker->syncScene($scene);
             $this->getDoctrine()->getManager()->flush();
+
+            $this->signalerPositionsEffacees($localisateur->effacerPositionsLibres($scene, $lieuDepart === $scene->getLieu() ? $ajoutes : null));
 
             $this->addFlash('success', 'La scène a bien été modifiée.');
 
@@ -286,5 +294,12 @@ class AdminSceneController extends AbstractController
             return $this->redirectToRoute('aventure_episode', ['id' => $episodeParent->getId()]);
 
         return $this->redirectToRoute('admin_scene');
+    }
+
+    private function signalerPositionsEffacees(array $personnages): void
+    {
+        foreach ($personnages as $personnage) {
+            $this->addFlash('warning', 'La position libre de ' . $personnage->getPrenom() . ' a été effacée : cette scène est sa dernière.');
+        }
     }
 }

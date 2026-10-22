@@ -49,36 +49,13 @@ class AdminLieuType extends AbstractType
         'label' => 'Description du plan',
         'required' => false,
       ])
-      ->add('locX', NumberType::class, array(
-        'scale' => 2,
-        'attr' => array(
-          'min' => 1,
-          'max' => 99,
-          'step' => '.05',
-        ),
-        'label' => 'Coord. % hori. carte',
-        'required' => false,
-      ))
-      ->add('locY', NumberType::class, array(
-        'scale' => 2,
-        'attr' => array(
-          'min' => 1,
-          'max' => 99,
-          'step' => '.05',
-        ),
-        'label' => 'Coord. % vert. carte',
-        'required' => false,
-      ))
+      ->add('locX', MapCoordinateType::class, ['label' => 'Coord. % hori. carte'])
+      ->add('locY', MapCoordinateType::class, ['label' => 'Coord. % vert. carte'])
       ->add('zoom', NumberType::class, [
         'scale' => 2,
         'attr' => ['min' => 0.25, 'max' => 2, 'step' => '.05'],
         'label' => 'Zoom carte (0,25 à 2)',
         'required' => false,
-      ])
-      ->add('regionMap', FileType::class, [
-        'mapped' => false, 'data_class' => null, 'required' => false,
-        'label' => 'Image de la région',
-        'constraints' => [new File(['maxSize' => '5M'])],
       ])
       ->add('regionDesc', TextareaType::class, [
         'label' => 'Description de la région',

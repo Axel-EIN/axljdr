@@ -5,11 +5,14 @@ namespace App\Command;
 use App\Entity\Archive;
 use App\Entity\Chapitre;
 use App\Entity\Clan;
+use App\Entity\Classe;
 use App\Entity\Ecole;
 use App\Entity\Episode;
+use App\Entity\Famille;
 use App\Entity\Library;
 use App\Entity\Lieu;
 use App\Entity\Lore;
+use App\Entity\Objet;
 use App\Entity\Personnage;
 use App\Entity\Rule;
 use App\Entity\Saison;
@@ -40,6 +43,12 @@ final class OptimizeImagesCommand extends Command
         'rule'         => ['entity' => Rule::class,       'field' => 'image',        'preset' => 'fourthird900'],
         'lore'         => ['entity' => Lore::class,       'field' => 'image',        'preset' => 'fourthird900'],
         'library'      => ['entity' => Library::class,    'field' => 'image',        'preset' => 'fourthird900'],
+        'clan-mon'     => ['entity' => Clan::class,       'field' => 'mon',          'preset' => 'square320'],
+        'famille-mon'  => ['entity' => Famille::class,    'field' => 'mon',          'preset' => 'square320'],
+        'classe-icone' => ['entity' => Classe::class,     'field' => 'icone',        'preset' => 'square320'],
+        'lieu-icone'   => ['entity' => Lieu::class,       'field' => 'icone',        'preset' => 'square192'],
+        'objet'        => ['entity' => Objet::class,      'field' => 'image',        'preset' => 'landscape720'],
+        'objet-icon'   => ['entity' => Objet::class,      'field' => 'icon',         'preset' => 'square320'],
     ];
 
     private $entityManager;
@@ -94,11 +103,13 @@ final class OptimizeImagesCommand extends Command
     private function optimiser(string $type, SymfonyStyle $io): array
     {
         ['entity' => $entity, 'field' => $field, 'preset' => $preset] = self::TYPES[$type];
+        $avecReduite = isset($this->imageNormalizer->getPreset($preset)['reduced']);
         $normalises = $reduits = 0;
         $echecs = [];
 
         $elements = $this->entityManager->getRepository($entity)->createQueryBuilder('e')
             ->andWhere('e.' . $field . ' IS NOT NULL')
+            ->andWhere('e.' . $field . " <> ''")
             ->getQuery()
             ->getResult();
 
@@ -111,12 +122,7 @@ final class OptimizeImagesCommand extends Command
                 continue;
             }
 
-            if ($this->imageNormalizer->matchesPreset($chemin, $preset)) {
-                if (!$this->imageNormalizer->reduce($chemin, $preset)) {
-                    $echecs[] = $image . ' : version réduite impossible';
-                    continue;
-                }
-            } else {
+            if (!$this->imageNormalizer->matchesPreset($chemin, $preset)) {
                 $normalise = $this->imageNormalizer->normalize($chemin, $preset);
 
                 if ($normalise === null) {
@@ -126,9 +132,14 @@ final class OptimizeImagesCommand extends Command
 
                 $this->propertyAccessor->setValue($element, $field, dirname($image) . '/' . basename($normalise));
                 $normalises++;
+            } elseif ($avecReduite && !$this->imageNormalizer->reduce($chemin, $preset)) {
+                $echecs[] = $image . ' : version réduite impossible';
+                continue;
             }
 
-            $reduits++;
+            if ($avecReduite) {
+                $reduits++;
+            }
         }
 
         $io->writeln(sprintf('%-12s %3d image(s) normalisée(s), %3d version(s) réduite(s) créée(s)', $type, $normalises, $reduits));

@@ -2,29 +2,63 @@
 namespace App\Service;
 
 use App\Entity\Lieu;
+use App\Entity\Participation;
 use App\Entity\Personnage;
+use App\Entity\Scene;
+use App\Repository\FichePersonnageRepository;
 use App\Repository\ParticipationRepository;
+use Doctrine\ORM\EntityManagerInterface;
 
 class Localisateur
 {
     private $participationRepository;
+    private $fichePersonnageRepository;
     private $visibility;
+    private $entityManager;
     private $parcours;
+    private $libres;
 
-    public function __construct(ParticipationRepository $participationRepository, Visibility $visibility)
+    public function __construct(ParticipationRepository $participationRepository, FichePersonnageRepository $fichePersonnageRepository, Visibility $visibility, EntityManagerInterface $entityManager)
     {
         $this->participationRepository = $participationRepository;
+        $this->fichePersonnageRepository = $fichePersonnageRepository;
         $this->visibility = $visibility;
+        $this->entityManager = $entityManager;
     }
 
     public function positions(): array
     {
         $positions = [];
-        foreach ($this->parcours() as $parcours) {
-            $positions[$parcours['lieux'][0]->getId()][] = $parcours['personnage'];
+        $libres = $this->libres();
+        foreach ($this->parcours() as $id => $parcours) {
+            if (!isset($libres[$id])) {
+                $positions[$parcours['lieux'][0]->getId()][] = $parcours['personnage'];
+            }
         }
 
         return $positions;
+    }
+
+    public function libres(): array
+    {
+        if ($this->libres !== null) {
+            return $this->libres;
+        }
+
+        $this->libres = $this->listerLibres($this->fichePersonnageRepository->findPlacedForLivingPlayers());
+
+        return $this->libres;
+    }
+
+    public function positionLibre(?Personnage $personnage): ?array
+    {
+        if ($personnage === null) {
+            return null;
+        }
+
+        $libres = $this->libres ?? $this->listerLibres($this->fichePersonnageRepository->findPlacedForLivingPlayers($personnage));
+
+        return $libres[$personnage->getId()] ?? null;
     }
 
     public function chemin(?Personnage $personnage, int $longueur = 5): array
@@ -33,14 +67,74 @@ class Localisateur
             return [];
         }
 
-        $lieux = $this->parcours()[$personnage->getId()]['lieux'] ?? [];
+        $etapes = array_map(function (Lieu $lieu) {
+            return ['locX' => $lieu->getLocX(), 'locY' => $lieu->getLocY()];
+        }, $this->parcours()[$personnage->getId()]['lieux'] ?? []);
+        $libre = $this->positionLibre($personnage);
 
-        return array_slice($lieux, 0, $longueur);
+        if ($libre !== null) {
+            array_unshift($etapes, ['locX' => $libre['locX'], 'locY' => $libre['locY']]);
+        }
+
+        return array_slice($etapes, 0, $longueur);
+    }
+
+    public function effacerPositionsLibres(Scene $scene, ?array $personnages = null): array
+    {
+        $lieu = $scene->getLieu();
+        if ($lieu === null || $lieu->getLocX() === null || $lieu->getLocY() === null) {
+            return [];
+        }
+
+        if ($personnages === null) {
+            $personnages = array_map(function (Participation $participation) {
+                return $participation->getPersonnage();
+            }, $this->participationRepository->findBy(['scene' => $scene]));
+        }
+
+        $effaces = [];
+        foreach ($personnages as $personnage) {
+            $fiche = $personnage->getFichePersonnage();
+            if ($fiche === null || !$fiche->hasPositionLibre()) {
+                continue;
+            }
+
+            $derniere = $this->participationRepository->findLastForCharacter($personnage);
+            if ($derniere !== null && $derniere->getScene()->getId() === $scene->getId()) {
+                $fiche->setLocX(null)->setLocY(null);
+                $effaces[] = $personnage;
+            }
+        }
+
+        if ($effaces !== []) {
+            $this->entityManager->flush();
+            $this->libres = null;
+        }
+
+        return $effaces;
     }
 
     public function position(?Personnage $personnage): ?Lieu
     {
-        return $this->chemin($personnage, 1)[0] ?? null;
+        return $personnage === null ? null : $this->parcours()[$personnage->getId()]['lieux'][0] ?? null;
+    }
+
+    private function listerLibres(array $fiches): array
+    {
+        $libres = [];
+        foreach ($fiches as $fiche) {
+            $personnage = $fiche->getPersonnage();
+
+            if ($this->visibility->isListed($personnage)) {
+                $libres[$personnage->getId()] = [
+                    'personnage' => $personnage,
+                    'locX' => $fiche->getLocX(),
+                    'locY' => $fiche->getLocY(),
+                ];
+            }
+        }
+
+        return $libres;
     }
 
     private function parcours(): array

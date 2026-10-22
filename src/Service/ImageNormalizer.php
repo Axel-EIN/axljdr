@@ -12,6 +12,7 @@ class ImageNormalizer
         'square240'     => ['width' => 240,  'height' => 240, 'format' => IMAGETYPE_JPEG],
         'square192'     => ['width' => 192,  'height' => 192],
         'vertical450'   => ['width' => 450,  'height' => 800, 'format' => IMAGETYPE_JPEG, 'reduced' => ['width' => 360, 'height' => 640]],
+        'map1920'       => ['width' => 1920, 'height' => 1920, 'mode' => 'contain', 'format' => IMAGETYPE_JPEG, 'reduced' => ['width' => 960, 'height' => 960]],
     ];
 
     private const EXTENSIONS = [
@@ -51,7 +52,7 @@ class ImageNormalizer
     {
         $preset = $this->getPreset($presetName);
 
-        $target = $this->transform($absolutePath, $preset['width'], $preset['height'], $preset['format'] ?? null);
+        $target = $this->transform($absolutePath, $preset, $this->isContain($preset), $preset['format'] ?? null);
 
         if ($target !== null) {
             $this->reduce($target, $presetName);
@@ -69,9 +70,11 @@ class ImageNormalizer
             return false;
         }
 
-        return $info[0] === $preset['width']
-            && $info[1] === $preset['height']
-            && (!isset($preset['format']) || $info[2] === $preset['format']);
+        $sizeMatches = $this->isContain($preset)
+            ? $info[0] <= $preset['width'] && $info[1] <= $preset['height']
+            : $info[0] === $preset['width'] && $info[1] === $preset['height'];
+
+        return $sizeMatches && (!isset($preset['format']) || $info[2] === $preset['format']);
     }
 
     public function reduce(string $absolutePath, string $presetName): bool
@@ -88,8 +91,9 @@ class ImageNormalizer
         }
 
         $format = $preset['format'] ?? $info[2];
+        [$dstW, $dstH] = $this->size($reduced, $this->isContain($preset), $info);
 
-        return $this->render($absolutePath, $this->withExtension($absolutePath, $format, self::REDUCED_SUFFIX), $reduced['width'], $reduced['height'], $format);
+        return $this->render($absolutePath, $this->withExtension($absolutePath, $format, self::REDUCED_SUFFIX), $dstW, $dstH, $format);
     }
 
     public function reducedPaths(string $path): array
@@ -119,13 +123,21 @@ class ImageNormalizer
         return $this->existingReduced($path) ?? $path;
     }
 
-    private function transform(string $absolutePath, int $dstW, int $dstH, ?int $format): ?string
+    public function width(string $path): ?int
+    {
+        $info = @getimagesize($this->publicDirectory . '/' . ltrim($path, '/'));
+
+        return $info === false ? null : $info[0];
+    }
+
+    private function transform(string $absolutePath, array $box, bool $contain, ?int $format): ?string
     {
         $info = @getimagesize($absolutePath);
         if ($info === false) {
             return null;
         }
 
+        [$dstW, $dstH] = $this->size($box, $contain, $info);
         $format = $format ?? $info[2];
         $target = $format === $info[2] ? $absolutePath : $this->withExtension($absolutePath, $format);
 
@@ -138,6 +150,22 @@ class ImageNormalizer
         }
 
         return $target;
+    }
+
+    private function isContain(array $preset): bool
+    {
+        return ($preset['mode'] ?? null) === 'contain';
+    }
+
+    private function size(array $box, bool $contain, array $info): array
+    {
+        if (!$contain) {
+            return [$box['width'], $box['height']];
+        }
+
+        $scale = min(1, $box['width'] / $info[0], $box['height'] / $info[1]);
+
+        return [max(1, (int) round($info[0] * $scale)), max(1, (int) round($info[1] * $scale))];
     }
 
     private function withExtension(string $path, int $format, string $suffix = ''): string

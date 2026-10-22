@@ -112,11 +112,6 @@ class Lieu
   private $population;
 
   /**
-   * @ORM\Column(type="string", length=255, nullable=true)
-   */
-  private $regionMap;
-
-  /**
    * @ORM\Column(type="text", nullable=true)
    */
   private $regionDesc;
@@ -322,18 +317,6 @@ class Lieu
   public function setPopulation(?int $population): self
   {
     $this->population = $population;
-
-    return $this;
-  }
-
-  public function getRegionMap(): ?string
-  {
-    return $this->regionMap;
-  }
-
-  public function setRegionMap(?string $regionMap): self
-  {
-    $this->regionMap = $regionMap;
 
     return $this;
   }

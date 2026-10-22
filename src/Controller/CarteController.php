@@ -33,6 +33,7 @@ class CarteController extends AbstractController
         return $this->render('carte/index.html.twig', [
             'lieux' => $lieuRepository->findAllSorted(),
             'positions' => $localisateur->positions(),
+            'libres' => $localisateur->libres(),
             'chemin' => $chemin,
             'cible' => $cible,
             'position_principal' => $chemin[0] ?? null,

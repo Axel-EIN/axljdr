@@ -54,23 +54,15 @@ class AdminClanType extends AbstractType
                 'mapped' => false, 'data_class' => null, 'required' => false,
                 'constraints' => [new File(['maxSize' => '50M'])],
             ])
-            ->add('territoireCarte', FileType::class, [
-                'mapped' => false, 'data_class' => null, 'required' => false,
-                'constraints' => [new File(['maxSize' => '5M'])],
-            ])
             ->add('territoireDesc', TextareaType::class, ['required' => false])
-            ->add('locX', NumberType::class, [
-                'scale' => 2, 'required' => false, 'label' => 'Coord. % hori. carte',
-                'attr' => ['min' => 1, 'max' => 99, 'step' => '.05'],
-            ])
-            ->add('locY', NumberType::class, [
-                'scale' => 2, 'required' => false, 'label' => 'Coord. % vert. carte',
-                'attr' => ['min' => 1, 'max' => 99, 'step' => '.05'],
-            ])
+            ->add('locX', MapCoordinateType::class, ['label' => 'Coord. % hori. carte'])
+            ->add('locY', MapCoordinateType::class, ['label' => 'Coord. % vert. carte'])
             ->add('zoom', NumberType::class, [
                 'scale' => 2, 'required' => false, 'label' => 'Zoom carte (0,25 à 2)',
                 'attr' => ['min' => 0.25, 'max' => 2, 'step' => '.05'],
             ])
+            ->add('emblemX', MapCoordinateType::class, ['label' => 'Coord. % hori. mon'])
+            ->add('emblemY', MapCoordinateType::class, ['label' => 'Coord. % vert. mon'])
             ->add('chef', EntityType::class, [
                 'class' => Personnage::class,
                 'choice_label' => 'prenom',

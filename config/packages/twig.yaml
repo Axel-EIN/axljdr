@@ -4,6 +4,7 @@ twig:
 
     globals:
         nom_du_site: "Aventure d'Axel dans le Livre des Cinq Anneaux"
+        EN_DEPLACEMENT: 'En déplacement'
 
         NA_ICON: &NA_ICON '/assets/placeholders/na_icon.png'
         NA_MON: '/assets/placeholders/na_mon.png'

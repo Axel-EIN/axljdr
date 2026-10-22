@@ -48,7 +48,6 @@ class AdminLieuController extends AbstractController
         'description:Description:bool',
         'locX:LocX:number',
         'locY:LocY:number',
-        'regionMap:Région:bool',
         'regionDesc:RégionText:bool',
         'planMap:Plan:bool',
         'planDesc:PlanText:bool',
@@ -77,16 +76,10 @@ class AdminLieuController extends AbstractController
         $lieu->setImage($fileHandler->handle($nouvelleImage, null, $prefix, 'lieux', 'landscape720'));
       }
 
-      $nouvelleRegion = $form->get('regionMap')->getData();
-      if (!empty($nouvelleRegion)) {
-        $prefix = 'lieu-' . $lieu->getNom() . '-region';
-        $lieu->setRegionMap($fileHandler->handle($nouvelleRegion, null, $prefix, 'lieux'));
-      }
-
       $nouveauPlan = $form->get('planMap')->getData();
       if (!empty($nouveauPlan)) {
         $prefix = 'lieu-' . $lieu->getNom() . '-plan';
-        $lieu->setPlanMap($fileHandler->handle($nouveauPlan, null, $prefix, 'lieux'));
+        $lieu->setPlanMap($fileHandler->handle($nouveauPlan, null, $prefix, 'lieux', 'map1920'));
       }
 
       $nouvelleIcone = $form->get('icone')->getData();
@@ -147,19 +140,10 @@ class AdminLieuController extends AbstractController
         $lieu->setImage(null);
       }
 
-      $nouvelleRegion = $form->get('regionMap')->getData();
-      if (!empty($nouvelleRegion)) {
-        $prefix = 'lieu-' . $lieu->getNom() . '-region';
-        $lieu->setRegionMap($fileHandler->handle($nouvelleRegion, $lieu->getRegionMap(), $prefix, 'lieux'));
-      } elseif ($request->request->get('remove_regionMap') === '1' && $lieu->getRegionMap()) {
-        $fileHandler->handle(null, $lieu->getRegionMap(), null, 'lieux');
-        $lieu->setRegionMap(null);
-      }
-
       $nouveauPlan = $form->get('planMap')->getData();
       if (!empty($nouveauPlan)) {
         $prefix = 'lieu-' . $lieu->getNom() . '-plan';
-        $lieu->setPlanMap($fileHandler->handle($nouveauPlan, $lieu->getPlanMap(), $prefix, 'lieux'));
+        $lieu->setPlanMap($fileHandler->handle($nouveauPlan, $lieu->getPlanMap(), $prefix, 'lieux', 'map1920'));
       }
 
       $nouvelleIcone = $form->get('icone')->getData();
@@ -208,7 +192,6 @@ class AdminLieuController extends AbstractController
       $entityManager = $this->getDoctrine()->getManager();
 
       $fileHandler->handle(null, $lieu->getImage(), null, 'lieux');
-      $fileHandler->handle(null, $lieu->getRegionMap(), null, 'lieux');
       $fileHandler->handle(null, $lieu->getPlanMap(), null, 'lieux');
       $fileHandler->handle(null, $lieu->getIcone(), null, 'lieux');
 

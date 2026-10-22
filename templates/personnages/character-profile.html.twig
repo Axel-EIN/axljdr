@@ -60,7 +60,7 @@
                 Clan :
                 <a href="{{ path('world_clan', {id: personnage.clan.id} ) }}">
                     {{ personnage.clan.nom }}
-                    <img class="img-48" src="{{ asset(personnage.clan.mon|default(NA_MON)) }}" alt="Mon du Clan {{personnage.clan.nom}}" title="Mon du Clan {{personnage.clan.nom}}" />
+                    <img class="img-48" src="{{ asset(image_small(personnage.clan.mon|default(NA_MON))) }}" alt="Mon du Clan {{personnage.clan.nom}}" title="Mon du Clan {{personnage.clan.nom}}" />
                 </a>
             </li>
         {% endif %}
@@ -71,7 +71,7 @@
                 <a href="{{ path('world_clan', {id: personnage.clan.id, '_fragment': personnage.famille.nom } ) }}">
                     {{ personnage.famille.nom }}
                     <img
-                    class="img-48 rounded-circle" src="{{ asset(personnage.famille.mon|default(NA_MON)) }}"
+                    class="img-48 rounded-circle" src="{{ asset(image_small(personnage.famille.mon|default(NA_MON))) }}"
                     alt="Mon de la Famille {{personnage.famille.nom}}" title="Mon de la Famille {{personnage.famille.nom}}"
                     />
                 </a>
@@ -83,7 +83,7 @@
                 Ecole :
                 <a href="{{ path('regles_ecole', {id: personnage.ecole.id} ) }}">
                     {{ personnage.ecole.nom }}
-                    <img class="img-48" src="{{ asset(personnage.classe.icone|default(NA_CLASS_ICO)) }}" alt="Classe {{personnage.classe.nom}}" title="Classe {{personnage.classe.nom}}" />
+                    <img class="img-48" src="{{ asset(image_small(personnage.classe.icone|default(NA_CLASS_ICO))) }}" alt="Classe {{personnage.classe.nom}}" title="Classe {{personnage.classe.nom}}" />
                 </a>           
             </li>
         {% endif %} 

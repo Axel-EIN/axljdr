@@ -12,9 +12,16 @@
 {% block body %}
 
 {% set chapter_image = episode.chapitreParent.image|default(NA_CHAPITRE) %}
+{% set chapter_image_reduced = image_reduced(chapter_image) %}
+{% set chapter_preset = image_preset('landscape1080') %}
 <div class="chapter-backdrop padded" style="--chapter-color: {{ episode.chapitreParent.couleur }}">
 
-  <img class="chapter-backdrop-image{{ image_bright(chapter_image) ? ' bright' }}" src="{{ asset(chapter_image) }}" alt="" />
+  <img class="chapter-backdrop-image{{ image_bright(chapter_image) ? ' bright' }}" src="{{ asset(chapter_image) }}"
+    {% if chapter_image_reduced %}
+      srcset="{{ asset(chapter_image_reduced) }} {{ chapter_preset.reduced.width }}w, {{ asset(chapter_image) }} {{ chapter_preset.width }}w"
+      sizes="100vw"
+    {% endif %}
+    alt="" />
 
   <header class="container header header-episode veiled">
 
@@ -78,7 +85,7 @@
               </div>
             {% endif %}
 
-            {{ include('/aventure/scene-detail.html.twig', {une_scene}) }}
+            {{ include('/aventure/scene-detail.html.twig', {une_scene, lazy: not loop.first}) }}
 
           {% else %}
             <p class="text-center text-light py-5">Il n'y a pas encore de scènes pour cette épisode.</p>

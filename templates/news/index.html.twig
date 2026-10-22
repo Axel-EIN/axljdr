@@ -67,6 +67,7 @@
                         <h3 class="label-amerigo news-subtitle text-white mt-4">Objets découverts</h3>
                         {{ include('/parts/picture-grid.html.twig', {
                             items: session_objects,
+                            field: 'icon',
                             reveal_session: true,
                             badge_hover: true,
                             variant: 'rule',
@@ -165,6 +166,7 @@
                                         items: section.elements,
                                         badge_hover: true,
                                         variant: groupe.variant|default('landscape'),
+                                        field: groupe.field|default(null),
                                         per_row: section.max,
                                     }) }}
                                 </div>
@@ -175,6 +177,7 @@
                             items: groupe.elements,
                             badge_hover: true,
                             variant: groupe.variant|default('landscape'),
+                            field: groupe.field|default(null),
                             per_row: groupe.perRow,
                         }) }}
                     {% endif %}

@@ -1,0 +1,13 @@
+{% set title = title|default(perso.nomComplet) %}
+{% set interactive = interactive ?? true %}
+{% set portrait %}<img src="{{ asset(perso.icone|default(NA_PERSO_PORTRAIT)) }}" alt="Portrait de {{ perso.prenom }}" draggable="false" />{% endset %}
+
+<div class="map-portrait{{ mine|default(false) ? ' mine' }}" data-personnage="{{ perso.id }}">
+  {% if interactive %}
+    <button type="button" class="map-portrait-toggle" data-panel="{{ path('carte_personnage', {id: perso.id}) }}" aria-expanded="false" aria-label="{{ title }}" title="{{ title }}">
+      {{ portrait }}
+    </button>
+  {% else %}
+    <span class="map-portrait-toggle static" title="{{ title }}">{{ portrait }}</span>
+  {% endif %}
+</div>

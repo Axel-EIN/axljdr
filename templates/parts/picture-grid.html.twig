@@ -116,7 +116,7 @@
             {%- set clan = item.clan|default(null) -%}
             {%- set clan_color = clan and element_listed(clan) ? clan.couleur : null -%}
             {%- if type_icon and item.typeIcon|default(null) -%}
-              <span class="label-icon" title="{{ item.type }}"{% if clan_color %} style="--clan-color: {{ clan_color }}"{% endif %}><i class="{{ item.typeIcon }}" aria-hidden="true"></i></span>
+              <span class="label-icon{{ item.city|default(false) ? ' city' }}" title="{{ item.type }}"{% if clan_color %} style="--clan-color: {{ clan_color }}"{% endif %}><i class="{{ item.typeIcon }}" aria-hidden="true"></i></span>
             {%- endif -%}
             {%- if item.type|default(null) in type_badges -%}
               <span class="label-badge"{% if clan_color %} style="--clan-color: {{ clan_color }}"{% endif %}>{{ item.type }}</span>

@@ -8,7 +8,7 @@ class ImageNormalizer
         'landscape1080' => ['width' => 1920, 'height' => 1080, 'format' => IMAGETYPE_JPEG, 'reduced' => ['width' => 960, 'height' => 540]],
         'landscape720'  => ['width' => 1280, 'height' => 720, 'format' => IMAGETYPE_JPEG, 'reduced' => ['width' => 640, 'height' => 360]],
         'fourthird900'  => ['width' => 1200, 'height' => 900, 'format' => IMAGETYPE_JPEG, 'reduced' => ['width' => 640, 'height' => 480]],
-        'square320'     => ['width' => 320,  'height' => 320],
+        'square320'     => ['width' => 320,  'height' => 320, 'reduced' => ['width' => 128, 'height' => 128]],
         'square240'     => ['width' => 240,  'height' => 240],
         'square192'     => ['width' => 192,  'height' => 192],
         'vertical450'   => ['width' => 450,  'height' => 800, 'format' => IMAGETYPE_JPEG, 'reduced' => ['width' => 360, 'height' => 640]],
@@ -76,17 +76,27 @@ class ImageNormalizer
 
     public function reduce(string $absolutePath, string $presetName): bool
     {
-        $reduced = $this->getPreset($presetName)['reduced'] ?? null;
+        $preset = $this->getPreset($presetName);
+        $reduced = $preset['reduced'] ?? null;
         if ($reduced === null) {
             return false;
         }
 
-        return $this->render($absolutePath, $this->reducedPath($absolutePath), $reduced['width'], $reduced['height'], IMAGETYPE_JPEG);
+        $info = @getimagesize($absolutePath);
+        if ($info === false || !isset(self::EXTENSIONS[$info[2]])) {
+            return false;
+        }
+
+        $format = $preset['format'] ?? $info[2];
+
+        return $this->render($absolutePath, $this->withExtension($absolutePath, $format, self::REDUCED_SUFFIX), $reduced['width'], $reduced['height'], $format);
     }
 
-    public function reducedPath(string $path): string
+    public function reducedPaths(string $path): array
     {
-        return $this->withExtension($path, IMAGETYPE_JPEG, self::REDUCED_SUFFIX);
+        return array_map(function (int $format) use ($path) {
+            return $this->withExtension($path, $format, self::REDUCED_SUFFIX);
+        }, array_keys(self::EXTENSIONS));
     }
 
     public function existingReduced(?string $path): ?string
@@ -95,9 +105,13 @@ class ImageNormalizer
             return null;
         }
 
-        $reduced = $this->reducedPath($path);
+        foreach ($this->reducedPaths($path) as $reduced) {
+            if (is_file($this->publicDirectory . '/' . ltrim($reduced, '/'))) {
+                return $reduced;
+            }
+        }
 
-        return is_file($this->publicDirectory . '/' . ltrim($reduced, '/')) ? $reduced : null;
+        return null;
     }
 
     public function reducedOrOriginal(?string $path): ?string

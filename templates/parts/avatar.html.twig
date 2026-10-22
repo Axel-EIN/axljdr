@@ -8,7 +8,7 @@
   </span>
 {% elseif user.avatar %}
   <span class="avatar" style="--avatar-size: {{ size }}px">
-    <img src="{{ asset(user.avatar) }}" alt="Avatar de {{ user.pseudo }}" title="{{ user.pseudo }}" />
+    <img src="{{ asset(size <= 64 ? image_small(user.avatar) : user.avatar) }}" alt="Avatar de {{ user.pseudo }}" title="{{ user.pseudo }}" />
   </span>
 {% else %}
   <span class="avatar initial" style="--avatar-size: {{ size }}px" title="{{ user.pseudo }}">{{ user.pseudo|first|upper }}</span>

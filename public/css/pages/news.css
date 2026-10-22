@@ -188,7 +188,7 @@
   align-items: center;
   gap: 0.5rem;
 
-  & > img { width: 32px; }
+  > img { width: 32px; }
 }
 
 .participations-card {
@@ -213,13 +213,15 @@
     margin-top: 0.25rem;
     margin-bottom: 0.5rem;
   }
+
+  > .participations-map { margin-top: 0.5rem; }
 }
 
 .ranking-card {
   height: 100%;
 
   .ranking-list {
-    --rows: 10;
+    --rows: 7;
 
     max-height: calc(var(--rows) * 3.75rem);
     overflow-y: auto;

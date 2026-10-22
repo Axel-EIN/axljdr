@@ -1,10 +1,12 @@
 {% set variant = variant|default('embedded') %}
 {% set worldmap = variant == 'world' %}
+{% set minimap = variant == 'mini' %}
 {% set draggable = worldmap or draggable|default(false) %}
 {% set current = current|default(null) %}
 {% set center = current ?? center|default(null) %}
 {% set highlight = highlight|default(null) %}
 {% set party = party|default({}) %}
+{% set wanderers = wanderers|default([]) %}
 {% set trail = trail|default([]) %}
 {% set recenter = recenter|default(null) %}
 {% set zoom = zoom|default(null) %}
@@ -12,7 +14,9 @@
 {% set labels = labels|default(false) %}
 {% set large_markers = large_markers|default(false) %}
 {% set emblem = emblem|default(null) %}
+{% set emblem_at = emblem_at|default(center) %}
 {% set main_character = main_character() %}
+{% set main_id = main_character.id ?? null %}
 {% set current_color = current.clan.couleur ?? null %}
 {% set placed = lieux|filter(l => l.locX is not empty and l.locY is not empty) %}
 {% set current_city = current and current.type in ['Cité', 'Ville'] %}
@@ -43,14 +47,24 @@
           {% set joueurs = [] %}
           {% for un_lieu in placed %}
             {% for perso in party[un_lieu.id] ?? [] %}
-              {% set joueurs = joueurs|merge([{perso, lieu: un_lieu}]) %}
+              {% set joueurs = joueurs|merge([{perso, lieu: un_lieu, locX: un_lieu.locX, locY: un_lieu.locY}]) %}
             {% endfor %}
           {% endfor %}
+          {% for libre in wanderers %}
+            {% set joueurs = joueurs|merge([{perso: libre.personnage, lieu: null, locX: libre.locX, locY: libre.locY}]) %}
+          {% endfor %}
           {% for joueur in joueurs|sort((a, b) => a.perso.nomComplet <=> b.perso.nomComplet) %}
-            <button type="button" class="dropdown-item search-suggestion" data-lieu="{{ joueur.lieu.id }}" data-personnage="{{ joueur.perso.id }}" data-locx="{{ joueur.lieu.locX }}" data-locy="{{ joueur.lieu.locY }}">
+            <button type="button" class="dropdown-item search-suggestion"{% if joueur.lieu %} data-lieu="{{ joueur.lieu.id }}"{% endif %} data-personnage="{{ joueur.perso.id }}" data-locx="{{ joueur.locX }}" data-locy="{{ joueur.locY }}">
               <img class="img-24" src="{{ asset(joueur.perso.icone|default(NA_PERSO_PORTRAIT)) }}" alt="" />
               <span class="search-suggestion-label">{{ joueur.perso.nomComplet }}</span>
-              <small class="search-suggestion-group">{{ element_state(joueur.lieu) == 'hidden' ? 'Lieu inconnu' : joueur.lieu.nom }}</small>
+              {% if joueur.lieu is null %}
+                {% set groupe = EN_DEPLACEMENT %}
+              {% elseif element_state(joueur.lieu) == 'hidden' %}
+                {% set groupe = 'Lieu inconnu' %}
+              {% else %}
+                {% set groupe = joueur.lieu.nom %}
+              {% endif %}
+              <small class="search-suggestion-group">{{ groupe }}</small>
             </button>
           {% endfor %}
           <span class="dropdown-item-text search-suggestion-empty" hidden>Aucun résultat</span>
@@ -66,7 +80,7 @@
     </aside>
   {% endif %}
 
-  {% if worldmap or not labels or not territories %}
+  {% if not minimap and (worldmap or not labels or not territories) %}
     <div class="map-controls absolute">
       {% if worldmap %}
         <button type="button" class="map-toggle-btn map-controls-toggle" aria-expanded="false" aria-label="Options de la carte">
@@ -165,19 +179,26 @@
         {% if party[autre.id] is defined %}
           <div class="map-party absolute{{ autre_taille }}" style="left:{{autre.locX}}%; top:{{autre.locY}}%;">
             {% for perso in party[autre.id] %}
-              <div class="map-portrait{% if main_character and perso.id == main_character.id %} mine{% endif %}" data-personnage="{{ perso.id }}">
-                <button type="button" class="map-portrait-toggle" data-panel="{{ path('carte_personnage', {id: perso.id}) }}" aria-expanded="false" aria-label="{{ perso.nomComplet }}" title="{{ perso.nomComplet }}">
-                  <img src="{{ asset(perso.icone|default(NA_PERSO_PORTRAIT)) }}" alt="Portrait de {{ perso.prenom }}" draggable="false" />
-                </button>
-              </div>
+              {{ include('parts/map-portrait.html.twig', {perso, mine: perso.id == main_id, interactive: worldmap}, with_context = false) }}
             {% endfor %}
           </div>
         {% endif %}
       {% endif %}
     {% endfor %}
 
-    {% if emblem and center %}
-      <img class="absolute map-emblem" style="left:{{center.locX}}%; top:{{center.locY}}%" src="{{ asset(emblem) }}" alt="" />
+    {% for libre in wanderers %}
+      <div class="map-party wanderer absolute" style="left:{{libre.locX}}%; top:{{libre.locY}}%;">
+        {{ include('parts/map-portrait.html.twig', {
+          perso: libre.personnage,
+          mine: libre.personnage.id == main_id,
+          title: libre.personnage.nomComplet ~ ' — ' ~ EN_DEPLACEMENT,
+          interactive: worldmap,
+        }, with_context = false) }}
+      </div>
+    {% endfor %}
+
+    {% if emblem and emblem_at %}
+      <img class="absolute map-emblem" style="left:{{emblem_at.locX}}%; top:{{emblem_at.locY}}%" src="{{ asset(emblem) }}" alt="" />
     {% endif %}
 
     {% if current %}
@@ -199,7 +220,7 @@
   <div class="minimap absolute">
     <div class="relative overflow-hidden">
       {% if current %}
-        <img class="absolute localisator-ui" style="left:{{current.locX}}%; top:{{current.locY}}%" src="{{asset('assets/maps/mini-localisator.png')}}" />
+        <img class="absolute localisator-ui" style="left:{{current.locX}}%; top:{{current.locY}}%" src="{{asset('assets/maps/mini-localisator.png')}}" alt="" />
       {% else %}
         <span class="absolute minimap-view"></span>
       {% endif %}

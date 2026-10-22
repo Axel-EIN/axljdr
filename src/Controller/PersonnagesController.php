@@ -172,6 +172,7 @@ class PersonnagesController extends AbstractController
             'historique' => $classeur->pourPersonnage($personnage),
             'saison_courante' => $saisonRepository->findCourante()?->getNumero(),
             'position_actuelle' => $localisateur->position($personnage),
+            'position_libre' => $localisateur->positionLibre($personnage),
         ]);
     }
 

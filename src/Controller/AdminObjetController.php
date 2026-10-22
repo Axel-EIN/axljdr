@@ -39,7 +39,7 @@ class AdminObjetController extends AbstractController
             'determinant' => 'un',
             'table_filters' => self::TABLE_FILTERS,
             'table_cols' => [
-                'image:Image:image:NA_ICON',
+                'icon:Icône:symbol:NA_ICON',
                 'nom:Nom::bold',
                 'categorie:Catégorie',
                 'type:Type',
@@ -76,10 +76,16 @@ class AdminObjetController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
 
+            $nouvelleIcone = $form->get('icon')->getData();
+            if (!empty($nouvelleIcone)) {
+                $prefix = 'objet-' . $objet->getNom() . '-icon';
+                $objet->setIcon($fileHandler->handle($nouvelleIcone, null, $prefix, 'objets', 'square320'));
+            }
+
             $nouvelleImage = $form->get('image')->getData();
             if (!empty($nouvelleImage)) {
-                $prefix = 'objet-' . $objet->getNom() . '-image';
-                $objet->setImage($fileHandler->handle($nouvelleImage, null, $prefix, 'objets'));
+                $prefix = 'objet-' . $objet->getNom() . '-illustration';
+                $objet->setImage($fileHandler->handle($nouvelleImage, null, $prefix, 'objets', 'landscape720'));
             }
 
             $formNumero = $form->get('numero')->getData();
@@ -137,10 +143,19 @@ class AdminObjetController extends AbstractController
 
         if($form->isSubmitted() && $form->isValid()) {
 
+            $nouvelleIcone = $form->get('icon')->getData();
+            if (!empty($nouvelleIcone)) {
+                $prefix = 'objet-' . $objet->getNom() . '-icon';
+                $objet->setIcon($fileHandler->handle($nouvelleIcone, $objet->getIcon(), $prefix, 'objets', 'square320'));
+            } elseif ($request->request->get('remove_icon') === '1' && $objet->getIcon()) {
+                $fileHandler->handle(null, $objet->getIcon(), null, 'objets');
+                $objet->setIcon(null);
+            }
+
             $nouvelleImage = $form->get('image')->getData();
             if (!empty($nouvelleImage)) {
-                $prefix = 'objet-' . $objet->getNom() . '-image';
-                $objet->setImage($fileHandler->handle($nouvelleImage, $objet->getImage(), $prefix, 'objets'));
+                $prefix = 'objet-' . $objet->getNom() . '-illustration';
+                $objet->setImage($fileHandler->handle($nouvelleImage, $objet->getImage(), $prefix, 'objets', 'landscape720'));
             } elseif ($request->request->get('remove_image') === '1' && $objet->getImage()) {
                 $fileHandler->handle(null, $objet->getImage(), null, 'objets');
                 $objet->setImage(null);
@@ -189,6 +204,7 @@ class AdminObjetController extends AbstractController
         if ($this->isCsrfTokenValid('delete' . $objet->getId(), $request->request->get('_csrf_token'))) {
 
             $entityManager = $this->getDoctrine()->getManager();
+            $fileHandler->handle(null, $objet->getIcon(), null, 'objets');
             $fileHandler->handle(null, $objet->getImage(), null, 'objets');
 
             $unlocker->forget($objet);

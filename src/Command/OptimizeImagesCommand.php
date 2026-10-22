@@ -2,8 +2,18 @@
 
 namespace App\Command;
 
+use App\Entity\Archive;
+use App\Entity\Chapitre;
+use App\Entity\Clan;
+use App\Entity\Ecole;
 use App\Entity\Episode;
+use App\Entity\Library;
+use App\Entity\Lieu;
+use App\Entity\Lore;
 use App\Entity\Personnage;
+use App\Entity\Rule;
+use App\Entity\Saison;
+use App\Entity\Scene;
 use App\Service\ImageNormalizer;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Command\Command;
@@ -19,7 +29,17 @@ final class OptimizeImagesCommand extends Command
 
     private const TYPES = [
         'illustration' => ['entity' => Personnage::class, 'field' => 'illustration', 'preset' => 'vertical450'],
+        'saison'       => ['entity' => Saison::class,     'field' => 'image',        'preset' => 'landscape1080'],
+        'chapitre'     => ['entity' => Chapitre::class,   'field' => 'image',        'preset' => 'landscape1080'],
         'episode'      => ['entity' => Episode::class,    'field' => 'image',        'preset' => 'landscape720'],
+        'scene'        => ['entity' => Scene::class,      'field' => 'image',        'preset' => 'landscape720'],
+        'archive'      => ['entity' => Archive::class,    'field' => 'image',        'preset' => 'landscape720'],
+        'clan'         => ['entity' => Clan::class,       'field' => 'image',        'preset' => 'landscape720'],
+        'lieu'         => ['entity' => Lieu::class,       'field' => 'image',        'preset' => 'landscape720'],
+        'ecole'        => ['entity' => Ecole::class,      'field' => 'image',        'preset' => 'fourthird900'],
+        'rule'         => ['entity' => Rule::class,       'field' => 'image',        'preset' => 'fourthird900'],
+        'lore'         => ['entity' => Lore::class,       'field' => 'image',        'preset' => 'fourthird900'],
+        'library'      => ['entity' => Library::class,    'field' => 'image',        'preset' => 'fourthird900'],
     ];
 
     private $entityManager;

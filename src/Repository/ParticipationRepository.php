@@ -109,6 +109,24 @@ class ParticipationRepository extends ServiceEntityRepository
         return $this->dedoublonner($participations);
     }
 
+    public function findLastForCharacter(Personnage $personnage): ?Participation
+    {
+        return $this->createQueryBuilder('p')
+            ->join('p.scene', 's')
+            ->join('s.episodeParent', 'e')
+            ->join('e.chapitreParent', 'c')
+            ->join('c.saisonParent', 'sa')
+            ->andWhere('p.personnage = :personnage')
+            ->setParameter('personnage', $personnage)
+            ->orderBy('sa.numero', 'DESC')
+            ->addOrderBy('c.numero', 'DESC')
+            ->addOrderBy('e.numero', 'DESC')
+            ->addOrderBy('s.numero', 'DESC')
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
+
     public function findPlacedForLivingPlayers(): array
     {
         return $this->createQueryBuilder('p')

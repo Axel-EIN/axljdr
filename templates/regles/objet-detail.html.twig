@@ -34,7 +34,7 @@
         </div>
 
         {{ include('/parts/card-top-image.html.twig', {
-          image: un_element.image, na_image: NA_169, alt: 'Image de ' ~ un_element.nom,
+          image: un_element.image|default(un_element.icon), na_image: NA_169, alt: 'Image de ' ~ un_element.nom,
           img_class: 'crop-169', titre: nom, classes: 'gradient-desktop', state: element_state(un_element)
         }) }}
       </div>
@@ -90,6 +90,7 @@
         title: 'Autres ' ~ (categories[un_element.categorie]|default(un_element.categorie))|lower ~ 's',
         route: 'regles_objet',
         variant: 'rule',
+        field: 'icon',
         na_image: NA_43,
         per_row: 6
       }) }}

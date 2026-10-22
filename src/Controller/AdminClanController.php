@@ -41,7 +41,6 @@ class AdminClanController extends AbstractController
                 'citation:Citation:bool',
                 'longDescription:LongText:bool',
                 'type:Type:faction',
-                'territoireCarte:Carte:bool',
                 'territoireDesc:CarteText:bool',
                 'video:Video:bool',
                 'access:Accès:access',
@@ -72,12 +71,6 @@ class AdminClanController extends AbstractController
             if (!empty($nouvelleImage)) {
                 $prefix = 'clan-' . $clan->getNom() . '-image';
                 $clan->setImage($fileHandler->handle($nouvelleImage, null, $prefix, 'clans', 'landscape720'));
-            }
-
-            $nouvelleCarte = $form->get('territoireCarte')->getData();
-            if (!empty($nouvelleCarte)) {
-                $prefix = 'clan-' . $clan->getNom() . '-territoire';
-                $clan->setTerritoireCarte($fileHandler->handle($nouvelleCarte, null, $prefix, 'clans'));
             }
 
             $nouvelleVideo = $form->get('video')->getData();
@@ -138,15 +131,6 @@ class AdminClanController extends AbstractController
                 $clan->setImage(null);
             }
 
-            $nouvelleCarte = $form->get('territoireCarte')->getData();
-            if (!empty($nouvelleCarte)) {
-                $prefix = 'clan-' . $clan->getNom() . '-territoire';
-                $clan->setTerritoireCarte($fileHandler->handle($nouvelleCarte, $clan->getTerritoireCarte(), $prefix, 'clans'));
-            } elseif ($request->request->get('remove_territoireCarte') === '1' && $clan->getTerritoireCarte()) {
-                $fileHandler->handle(null, $clan->getTerritoireCarte(), null, 'clans');
-                $clan->setTerritoireCarte(null);
-            }
-
             $nouvelleVideo = $form->get('video')->getData();
             if (!empty($nouvelleVideo)) {
                 $prefix = 'clan-' . $clan->getNom() . '-video';
@@ -192,7 +176,6 @@ class AdminClanController extends AbstractController
 
             $fileHandler->handle(null, $clan->getMon(), null, 'clans');
             $fileHandler->handle(null, $clan->getImage(), null, 'clans');
-            $fileHandler->handle(null, $clan->getTerritoireCarte(), null, 'clans');
             $fileHandler->handle(null, $clan->getVideo(), null, 'video');
 
             $unlocker->forget($clan);

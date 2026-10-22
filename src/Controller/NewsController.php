@@ -23,7 +23,7 @@ class NewsController extends AbstractController
         ['titre' => 'Personnages Joueurs', 'variant' => 'portrait', 'cles' => ['personnage'], 'criteres' => ['estPj' => true]],
         ['titre' => 'Personnages Non Joueurs', 'variant' => 'portrait', 'cles' => ['personnage'], 'criteres' => ['estPj' => false]],
         ['titre' => 'Lieux', 'variant' => 'icon', 'cles' => ['lieu']],
-        ['titre' => 'Objets & Equipements', 'variant' => 'rule', 'sections' => [
+        ['titre' => 'Objets & Equipements', 'variant' => 'rule', 'field' => 'icon', 'sections' => [
             ['titre' => 'Divers', 'cles' => ['objet'], 'criteres' => ['categorie' => 'OBJET'], 'max' => 2],
             ['titre' => 'Armes & Armures', 'cles' => ['objet'], 'criteres' => ['categorie' => ['ARME', 'ARMURE', 'PROJECTILE']], 'max' => 2],
         ]],

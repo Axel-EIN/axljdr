@@ -73,7 +73,7 @@
             <h3 class="heading-amerigo category-section-sub-heading flex-wrap relative">
                 <span class="heading-mons">
                     {% for clan in groupe.clans|default([]) %}
-                        <img class="img-40" src="{{ asset(clan.mon|default(NA_MON)) }}" alt="Mon de la faction" title="{{ clan.nom }}" />
+                        <img class="img-40" src="{{ asset(image_small(clan.mon|default(NA_MON))) }}" alt="Mon de la faction" title="{{ clan.nom }}" />
                     {% endfor %}
                     {% if groupe.clans|default([]) is empty or groupe.sansGroupe|default(false) %}
                         <img class="img-40" src="{{ asset(NA_MON) }}" alt="Mon de la faction" />

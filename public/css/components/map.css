@@ -368,7 +368,7 @@
     height: 160px;
     object-fit: contain;
     transform: translate(-50%, -50%) scale(calc(var(--marker-scale, 1) / var(--marker-size, 1)));
-    opacity: 0.4;
+    opacity: 0.6;
     filter: drop-shadow(0 0 6px var(--color-black50));
     pointer-events: none;
   }

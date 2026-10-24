@@ -80,8 +80,7 @@ class AdminEpisodeController extends AbstractController
 
             $nouvelleImage = $form->get('image')->getData();
             if (!empty($nouvelleImage)) {
-                $prefix = 'episode-s' . $episode->getChapitreParent()->getSaisonParent()->getNumero()
-                . '-ch' . $episode->getChapitreParent()->getNumero() . '-ep' . $episode->getNumero();
+                $prefix = $this->prefixeImage($episode);
                 $episode->setImage($fileHandler->handle($nouvelleImage, null, $prefix, 'episodes', 'landscape720'));
             }
 
@@ -128,9 +127,7 @@ class AdminEpisodeController extends AbstractController
 
             $nouvelleImage = $form->get('image')->getData();
             if (!empty($nouvelleImage)) {
-                $prefix = 'episode-s'
-                . $episode->getChapitreParent()->getSaisonParent()->getNumero()
-                . '-ch' . $episode->getChapitreParent()->getNumero() . '-ep' . $episode->getNumero();
+                $prefix = $this->prefixeImage($episode);
                 $episode->setImage($fileHandler->handle($nouvelleImage, $episode->getImage(), $prefix, 'episodes', 'landscape720'));
             } elseif ($request->request->get('remove_image') === '1' && $episode->getImage()) {
                 $fileHandler->handle(null, $episode->getImage(), null, 'episodes');
@@ -197,5 +194,12 @@ class AdminEpisodeController extends AbstractController
             return $this->redirectToRoute('aventure_saison', ['id' => $chapitreParent->getSaisonParent()->getId(), '_fragment' => 'read-head-ch-id' . $chapitreParent->getId()]);
 
         return $this->redirectToRoute('admin_episode');
+    }
+
+    private function prefixeImage(Episode $episode): string
+    {
+        return 'episode-s' . $episode->getChapitreParent()->getSaisonParent()->getNumero()
+            . '-ch' . $episode->getChapitreParent()->getNumero() . '-ep' . $episode->getNumero()
+            . (empty($episode->getTitre()) ? '' : '-' . $episode->getTitre());
     }
 }

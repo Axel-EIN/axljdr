@@ -18,12 +18,15 @@
   {% set type_icon = type_icon|default(false) %}
 
   {% if scroll and per_row is not defined %}{% set per_row = {desktop: 6, mobile: 2} %}{% endif %}
+  {% set paliers = {} %}
   {% if per_row is defined %}
     {% set cols = per_row is iterable ? per_row : {desktop: per_row} %}
     {% set style = '--grid-min: 0' %}
     {% for palier, nombre in cols %}
       {% set style = style ~ '; --cols-' ~ palier ~ ': ' ~ nombre %}
     {% endfor %}
+    {% set cols_tablet = cols.tablet|default(cols.desktop|default(null)) %}
+    {% set paliers = {desktop: cols.desktop|default(null), tablet: cols_tablet, mobile: cols.mobile|default(cols_tablet)} %}
   {% else %}
     {% set style = min_size is defined ? '--grid-min: ' ~ min_size : '' %}
   {% endif %}
@@ -52,7 +55,14 @@
       {% set hidden = not element_readable(item) %}
       {% set locked = not plain and not mj_plain and state == 'locked' %}
       {% set restricted = plain and hidden %}
-      {% set item_class = plain ? (restricted ? 'restricted' : 'hover-zoom') : (element_unseen(item) and not mj_plain ? 'access-hidden ' : '') ~ (locked ? 'locked ' : '') ~ (catalog ? 'catalog ' : '') ~ (hidden or locked ? '' : 'hover-zoom') %}
+      {% set edges = '' %}
+      {% if restricted %}
+        {% for palier, nombre in paliers %}
+          {% if nombre and loop.parent.loop.index0 is divisible by(nombre) %}{% set edges = edges ~ ' start-' ~ palier %}{% endif %}
+          {% if nombre and loop.parent.loop.index is divisible by(nombre) %}{% set edges = edges ~ ' edge-' ~ palier %}{% endif %}
+        {% endfor %}
+      {% endif %}
+      {% set item_class = plain ? (restricted ? 'restricted' ~ edges : 'hover-zoom') : (element_unseen(item) and not mj_plain ? 'access-hidden ' : '') ~ (locked ? 'locked ' : '') ~ (catalog ? 'catalog ' : '') ~ (hidden or locked ? '' : 'hover-zoom') %}
       {% set name = item.nomComplet is defined ? item.nomComplet : (item.nom is defined ? item.nom : item.titre) %}
       {% set alt = hidden ? 'À découvrir' : name %}
       {% set pdf_only = item.pdf|default(null) and not item.hasParts|default(false) %}

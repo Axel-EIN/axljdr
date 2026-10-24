@@ -1,0 +1,72 @@
+.image-viewer {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  overflow: hidden;
+  background-color: var(--color-whitefog);
+  user-select: none;
+
+  .image-viewer-picture {
+    flex-shrink: 0;
+    max-width: 100%;
+    transform-origin: 0 0;
+  }
+
+  &.zoomed {
+    cursor: grab;
+    touch-action: none;
+
+    &.dragging { cursor: grabbing; }
+  }
+
+  &.animated .image-viewer-picture { transition: transform var(--duration) var(--ease); }
+
+  &:fullscreen {
+    align-items: center;
+    background-color: var(--color-blackonyx);
+  }
+
+  .image-viewer-controls {
+    position: absolute;
+    z-index: 2;
+    top: 0.75rem;
+    right: 0.75rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    cursor: default;
+  }
+
+  .image-viewer-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    padding: 0;
+    border: 1px solid rgb(from var(--color-earthlight) r g b / 70%);
+    border-radius: 0.5rem;
+    background-color: rgb(from var(--color-blackonyx) r g b / 85%);
+    box-shadow: 0 4px 12px var(--color-black50);
+    backdrop-filter: blur(4px);
+    color: var(--color-white);
+    font-size: var(--fontsize-regular);
+    cursor: pointer;
+    transition: background-color var(--duration) var(--ease), opacity var(--duration) var(--ease);
+
+    .icon-on { display: none; }
+
+    &:hover { background-color: rgb(from var(--color-blacktar) r g b / 90%); }
+
+    &:disabled {
+      opacity: 0.4;
+      cursor: default;
+    }
+
+    &[aria-pressed="true"] {
+      .icon-off { display: none; }
+
+      .icon-on { display: inline; }
+    }
+  }
+}

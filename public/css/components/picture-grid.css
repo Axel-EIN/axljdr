@@ -266,7 +266,8 @@
       position: absolute;
       z-index: 100;
       top: 100%;
-      left: 50%;
+      left: var(--tip-left, 50%);
+      right: var(--tip-right, auto);
       width: max-content;
       max-width: 12rem;
       margin-top: 0.25rem;
@@ -280,16 +281,70 @@
       white-space: normal;
       visibility: hidden;
       opacity: 0;
-      transform: translateX(-50%);
+      transform: translateX(var(--tip-shift, -50%)) scale(0);
+      transform-origin: top var(--tip-origin, center);
       pointer-events: none;
       transition:
         opacity var(--duration) var(--ease),
+        transform var(--duration) var(--ease),
         visibility var(--duration);
     }
 
     &:hover .access-tooltip {
       visibility: visible;
       opacity: 1;
+      transform: translateX(var(--tip-shift, -50%)) scale(1);
+    }
+
+    &.start-desktop {
+      @media (min-width: 992px) {
+        --tip-left: 0;
+        --tip-shift: 0;
+        --tip-origin: left;
+      }
+    }
+
+    &.start-tablet {
+      @media (min-width: 576px) and (max-width: 991.98px) {
+        --tip-left: 0;
+        --tip-shift: 0;
+        --tip-origin: left;
+      }
+    }
+
+    &.start-mobile {
+      @media (max-width: 575.98px) {
+        --tip-left: 0;
+        --tip-shift: 0;
+        --tip-origin: left;
+      }
+    }
+
+    &.edge-desktop {
+      @media (min-width: 992px) {
+        --tip-left: auto;
+        --tip-right: 0;
+        --tip-shift: 0;
+        --tip-origin: right;
+      }
+    }
+
+    &.edge-tablet {
+      @media (min-width: 576px) and (max-width: 991.98px) {
+        --tip-left: auto;
+        --tip-right: 0;
+        --tip-shift: 0;
+        --tip-origin: right;
+      }
+    }
+
+    &.edge-mobile {
+      @media (max-width: 575.98px) {
+        --tip-left: auto;
+        --tip-right: 0;
+        --tip-shift: 0;
+        --tip-origin: right;
+      }
     }
   }
 

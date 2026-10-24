@@ -1,0 +1,23 @@
+{% set srcset = image_srcset(image) %}
+
+<div class="image-viewer">
+  <img class="image-viewer-picture" src="{{ asset(image) }}"
+    {% if srcset %}
+      srcset="{{ srcset }}"
+      sizes="(max-width: 991.98px) 100vw, 1080px"
+    {% endif %}
+    alt="{{ alt }}" draggable="false" />
+
+  <div class="image-viewer-controls">
+    <button type="button" class="image-viewer-btn" data-viewer-zoom="in" aria-label="Zoomer" title="Zoomer">
+      <i class="fa-solid fa-plus" aria-hidden="true"></i>
+    </button>
+    <button type="button" class="image-viewer-btn" data-viewer-zoom="out" aria-label="Dézoomer" title="Dézoomer" disabled>
+      <i class="fa-solid fa-minus" aria-hidden="true"></i>
+    </button>
+    <button type="button" class="image-viewer-btn" data-viewer-fullscreen aria-label="Plein écran" title="Plein écran" aria-pressed="false">
+      <i class="fa-solid fa-expand icon-off" aria-hidden="true"></i>
+      <i class="fa-solid fa-compress icon-on" aria-hidden="true"></i>
+    </button>
+  </div>
+</div>

@@ -4,6 +4,7 @@
   {{parent()}}
   <link rel="stylesheet" href="{{asset('css/components/history.css')}}" />
   <link rel="stylesheet" href="{{asset('css/components/map.css')}}" />
+  <link rel="stylesheet" href="{{asset('css/components/image-viewer.css')}}" />
   <link rel="stylesheet" href="{{asset('css/pages/location.css')}}" />
 {% endblock %}
 
@@ -77,7 +78,7 @@
         <h2 class="heading-elementpart decorated{% if not region_visible_mobile %} d-none d-lg-block{% endif %}">Carte</h2>
 
         {% if placed %}
-          {{ include('parts/map.html.twig', {lieux, current: un_element, zoom: un_element.zoom, draggable: true}, with_context = false) }}
+          {{ include('parts/map.html.twig', {lieux, current: un_element, zoom: un_element.zoom, draggable: true, labels_on: true, territories_on: true}, with_context = false) }}
         {% endif %}
 
         {% if un_element.regionDesc is not empty %}
@@ -91,19 +92,7 @@
         <h2 class="heading-elementpart decorated">Plan</h2>
 
         {% if un_element.planMap is not empty %}
-          {% set plan_srcset = image_srcset(un_element.planMap) %}
-          <img class="img-fluid" src="{{ asset(un_element.planMap) }}"
-            {% if plan_srcset %}
-              srcset="{{ plan_srcset }}"
-              sizes="(max-width: 991.98px) 100vw, 1080px"
-            {% endif %}
-            loading="lazy" alt="Plan de {{ un_element.nom }}">
-          <div class="text-center mt-3">
-            <button type="button" class="btn-primary-style btn-medium" data-toggle="modal" data-target="#plan-modal">
-              <i class="fas fa-expand" aria-hidden="true"></i>&nbsp;&nbsp;Agrandir le plan
-            </button>
-          </div>
-          {{ include('parts/modal-image.html.twig', {id: 'plan-modal', titre: 'Plan de ' ~ un_element.nom, image: un_element.planMap}, with_context = false) }}
+          {{ include('parts/image-viewer.html.twig', {image: un_element.planMap, alt: 'Plan de ' ~ un_element.nom}, with_context = false) }}
         {% endif %}
 
         {% if un_element.planDesc is not empty %}
@@ -151,4 +140,5 @@
 {% block javascripts %}
   {{ parent() }}
   <script src="{{ asset('scripts/map.js') }}"></script>
+  <script src="{{ asset('scripts/image-viewer.js') }}"></script>
 {% endblock %}

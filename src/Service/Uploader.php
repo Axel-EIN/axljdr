@@ -31,7 +31,7 @@ class Uploader extends AbstractController
         $this->targetDirectory = $targetDirectory;
     }
 
-    public function upload(UploadedFile $fichierForm, $prefix, $categorie): ?string
+    public function upload(UploadedFile $fichierForm, $prefix, $categorie, ?string $ancienFichier = null): ?string
     {
         $mimeType = $this->detectRealMimeType($fichierForm);
         if (!in_array($mimeType, self::ALLOWED_MIME_TYPES, true)) {
@@ -61,6 +61,12 @@ class Uploader extends AbstractController
             $prefix = 'fichier-' . bin2hex(random_bytes(8));
         }
 
+        $base = $prefix;
+        $rang = 2;
+        while ($this->nomPris($categorie, $prefix, $ancienFichier)) {
+            $prefix = $base . '-' . $rang++;
+        }
+
         $nouveau_nomFichier = $prefix . '.' . $extension;
 
         try
@@ -74,6 +80,15 @@ class Uploader extends AbstractController
         }
 
         return $nouveau_nomFichier;
+    }
+
+    private function nomPris(string $categorie, string $nom, ?string $ancienFichier): bool
+    {
+        if ($ancienFichier !== null && pathinfo($ancienFichier, PATHINFO_FILENAME) === $nom) {
+            return false;
+        }
+
+        return !empty(glob($this->getTargetDirectory($categorie) . '/' . $nom . '.*'));
     }
 
     private function detectRealMimeType(UploadedFile $fichier): string

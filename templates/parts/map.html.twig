@@ -12,6 +12,8 @@
 {% set zoom = zoom|default(null) %}
 {% set territories = territories|default(false) %}
 {% set labels = labels|default(false) %}
+{% set territories_on = territories or territories_on|default(false) %}
+{% set labels_on = worldmap or labels_on|default(false) %}
 {% set large_markers = large_markers|default(false) %}
 {% set emblem = emblem|default(null) %}
 {% set emblem_at = emblem_at|default(center) %}
@@ -21,11 +23,11 @@
 {% set placed = lieux|filter(l => l.locX is not empty and l.locY is not empty) %}
 {% set current_city = current and current.type in ['Cité', 'Ville'] %}
 
-<div class="map-frame {{ variant }}{% if labels %} labels-shown{% elseif not worldmap %} labels-hidden{% endif %}{% if not worldmap %} d-none d-lg-block{% endif %}{% if large_markers %} large-markers{% endif %}{% if current_city %} current-city{% endif %}{% if draggable %} draggable{% endif %}"
+<div class="map-frame {{ variant }}{% if labels %} labels-shown{% elseif not labels_on %} labels-hidden{% endif %}{% if not worldmap %} d-none d-lg-block{% endif %}{% if large_markers %} large-markers{% endif %}{% if current_city %} current-city{% endif %}{% if draggable %} draggable{% endif %}"
   {% if center %}data-locx="{{ center.locX }}" data-locy="{{ center.locY }}"{% endif %}
   {% if highlight %}data-highlight="{{ highlight.id }}"{% endif %}
   {% if zoom %}data-zoom="{{ zoom }}"{% endif %}
-  {% if territories %}data-territories{% endif %}
+  {% if territories_on %}data-territories{% endif %}
 >
 
   {% if worldmap %}
@@ -95,14 +97,14 @@
       {% endif %}
 
       {% if not labels %}
-        <button type="button" class="map-toggle-btn{% if worldmap %} active{% endif %}" data-map-toggle="labels" aria-pressed="{{ worldmap ? 'true' : 'false' }}">
+        <button type="button" class="map-toggle-btn{% if labels_on %} active{% endif %}" data-map-toggle="labels" aria-pressed="{{ labels_on ? 'true' : 'false' }}">
           <i class="fa-solid fa-torii-gate"></i>
           <span class="label">Lieux</span>
         </button>
       {% endif %}
 
       {% if not territories %}
-        <button type="button" class="map-toggle-btn" data-map-toggle="territories" aria-pressed="false">
+        <button type="button" class="map-toggle-btn{% if territories_on %} active{% endif %}" data-map-toggle="territories" aria-pressed="{{ territories_on ? 'true' : 'false' }}">
           <i class="fa-solid fa-map"></i>
           <span class="label">Territoires</span>
         </button>
@@ -136,7 +138,7 @@
 
   <div class="map-drag"{% if center %} style="transform: scale({{ zoom ?? 1 }}) translate(-{{ center.locX }}%, -{{ center.locY }}%);"{% endif %}>
 
-    <img class="map-image" src="{{ asset('assets/maps/map-rokugan-' ~ (territories ? 'frontiers' : 'clean') ~ '.jpg') }}" alt="Carte de Rokugan" draggable="false"
+    <img class="map-image" src="{{ asset('assets/maps/map-rokugan-' ~ (territories_on ? 'frontiers' : 'clean') ~ '.jpg') }}" alt="Carte de Rokugan" draggable="false"
          data-clean="{{ asset('assets/maps/map-rokugan-clean.jpg') }}"
          data-frontier="{{ asset('assets/maps/map-rokugan-frontiers.jpg') }}"
          data-clean-hd="{{ asset('assets/maps/map-rokugan-clean-zoomed.jpg') }}"

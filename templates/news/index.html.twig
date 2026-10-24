@@ -146,6 +146,7 @@
                         {{ include('parts/map.html.twig', {
                             lieux,
                             current: ma_position,
+                            party: ma_position ? {(ma_position.id): [mon_personnage]} : {},
                             center: ma_position_libre,
                             wanderers: ma_position_libre ? [ma_position_libre] : [],
                             zoom: ma_position ? ma_position.zoom : null,

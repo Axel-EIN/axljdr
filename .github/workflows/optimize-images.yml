@@ -38,14 +38,15 @@ jobs:
           mkdir -p backup/img
           lftp -u "$FTP_USERNAME","$FTP_PASSWORD" "$FTP_SERVER" \
                -e "set ssl:verify-certificate no; mirror --parallel=4 $PUBLIC_DIR/assets/img backup/img; bye"
-          du -sh backup/img
+          tar -cf backup/images.tar -C backup img
+          du -sh backup/images.tar
 
       - name: Envoi de la sauvegarde
         if: ${{ inputs.backup }}
         uses: actions/upload-artifact@v4
         with:
           name: images-${{ github.run_id }}
-          path: backup/img
+          path: backup/images.tar
           retention-days: 7
 
       - name: Optimisation des images

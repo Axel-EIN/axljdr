@@ -59,8 +59,8 @@
             </ul>
         </div>
 
-        {% if app.request.get('tab') is defined and app.request.get('tab') is not empty and subtabs is defined and subtabs is not empty %}
-            <div class="col-12 p-0 m-0 ml-4 mt-3 pl-2">
+        {% if app.request.get('tab') is not empty and subtabs is defined and subtabs is not empty %}
+            <div class="col-12 p-0 mt-3 pl-4">
                 <ul id="sub-tabs">
                     {% for subtab in subtabs %}
                         <li class="mt-auto mb-auto">

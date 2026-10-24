@@ -506,6 +506,7 @@
     &.city { --icon-base: 100px; }
     &.region { --icon-base: 110px; }
     &.temple { --icon-base: 68px; }
+    &.current { --icon-base: var(--current-size); }
 
     &.wanderer {
       --party-offset-x: -50%;

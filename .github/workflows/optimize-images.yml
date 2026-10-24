@@ -7,10 +7,6 @@ on:
         description: "Types à traiter, séparés par des espaces. Vide : tous les types."
         required: false
         default: ""
-      backup:
-        description: "Sauvegarder public/assets/img avant le traitement"
-        type: boolean
-        default: true
 
 jobs:
   optimize:
@@ -30,24 +26,6 @@ jobs:
 
       - name: Installation de lftp
         run: sudo apt-get update -qq && sudo apt-get install -y -qq lftp
-
-      - name: Sauvegarde des images
-        if: ${{ inputs.backup }}
-        run: |
-          set -euo pipefail
-          mkdir -p backup/img
-          lftp -u "$FTP_USERNAME","$FTP_PASSWORD" "$FTP_SERVER" \
-               -e "set ssl:verify-certificate no; mirror --parallel=4 $PUBLIC_DIR/assets/img backup/img; bye"
-          tar -cf backup/images.tar -C backup img
-          du -sh backup/images.tar
-
-      - name: Envoi de la sauvegarde
-        if: ${{ inputs.backup }}
-        uses: actions/upload-artifact@v4
-        with:
-          name: images-${{ github.run_id }}
-          path: backup/images.tar
-          retention-days: 7
 
       - name: Optimisation des images
         run: |

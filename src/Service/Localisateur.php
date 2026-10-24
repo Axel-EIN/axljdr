@@ -82,7 +82,7 @@ class Localisateur
     public function effacerPositionsLibres(Scene $scene, ?array $personnages = null): array
     {
         $lieu = $scene->getLieu();
-        if ($lieu === null || $lieu->getLocX() === null || $lieu->getLocY() === null) {
+        if ($lieu === null || !$lieu->isPlaced()) {
             return [];
         }
 

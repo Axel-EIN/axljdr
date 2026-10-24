@@ -78,6 +78,17 @@
             overflow-y: auto;
 
             .search-suggestion[hidden] { display: none; }
+
+            .search-suggestions-heading {
+                display: flex;
+                align-items: center;
+                gap: 0.35rem;
+                margin-top: 0.25rem;
+                color: var(--color-white50);
+                font-size: var(--fontsize-mini);
+                letter-spacing: 0.05em;
+                text-transform: uppercase;
+            }
         }
     }
 

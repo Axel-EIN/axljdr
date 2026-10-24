@@ -425,6 +425,7 @@
   const list = search.querySelector('.search-bar-suggestions');
   const empty = list.querySelector('.search-suggestion-empty');
   const items = Array.from(list.querySelectorAll('.search-suggestion'));
+  const sections = Array.from(list.querySelectorAll('.search-suggestions-section'));
 
   function normalize(text) {
     return text.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().trim();
@@ -443,6 +444,9 @@
     items.forEach(function (item) {
       item.hidden = !item.dataset.search.includes(term);
       item.classList.remove('active');
+    });
+    sections.forEach(function (section) {
+      section.hidden = !section.querySelector('.search-suggestion:not([hidden])');
     });
     empty.hidden = visibleItems().length > 0;
     list.classList.add('show');

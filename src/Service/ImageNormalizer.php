@@ -91,9 +91,14 @@ class ImageNormalizer
         }
 
         $format = $preset['format'] ?? $info[2];
+        $target = $this->withExtension($absolutePath, $format, self::REDUCED_SUFFIX);
+        if (is_file($target) && filemtime($target) >= filemtime($absolutePath)) {
+            return true;
+        }
+
         [$dstW, $dstH] = $this->size($reduced, $this->isContain($preset), $info);
 
-        return $this->render($absolutePath, $this->withExtension($absolutePath, $format, self::REDUCED_SUFFIX), $dstW, $dstH, $format);
+        return $this->render($absolutePath, $target, $dstW, $dstH, $format);
     }
 
     public function reducedPaths(string $path): array

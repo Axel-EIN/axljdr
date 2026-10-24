@@ -3,6 +3,7 @@ namespace App\Service;
 
 use App\Service\Uploader;
 use App\Service\ImageNormalizer;
+use App\Service\Baliseur;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
@@ -10,11 +11,13 @@ class FileHandler extends AbstractController
 {
     private $uploader;
     private $imageNormalizer;
+    private $baliseur;
 
-    public function __construct(Uploader $uploader, ImageNormalizer $imageNormalizer)
+    public function __construct(Uploader $uploader, ImageNormalizer $imageNormalizer, Baliseur $baliseur)
     {
         $this->uploader = $uploader;
         $this->imageNormalizer = $imageNormalizer;
+        $this->baliseur = $baliseur;
     }
 
     public function handle($fichier, $ancienFichier, $prefix, $dossier, ?string $preset = null)
@@ -29,7 +32,7 @@ class FileHandler extends AbstractController
             return null;
         }
 
-        $nouveauNomFichier = $this->uploader->upload($fichier, $prefix, $dossier);
+        $nouveauNomFichier = $this->uploader->upload($fichier, $prefix, $dossier, $ancienFichier);
 
         if ($nouveauNomFichier === null) {
             return $ancienFichier;
@@ -48,7 +51,13 @@ class FileHandler extends AbstractController
             }
         }
 
-        return 'assets/img/' . $dossier . '/' . $nouveauNomFichier;
+        $nouveauChemin = 'assets/img/' . $dossier . '/' . $nouveauNomFichier;
+
+        if (!empty($ancienFichier) && $ancienFichier !== $nouveauChemin) {
+            $this->baliseur->remplacerChemin($ancienFichier, $nouveauChemin);
+        }
+
+        return $nouveauChemin;
     }
 
     private function supprimer(?string $ancienFichier, string $dossier): void

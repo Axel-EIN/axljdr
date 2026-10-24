@@ -6,6 +6,7 @@ use App\Entity\Lieu;
 use App\Entity\Personnage;
 use App\Repository\LieuRepository;
 use App\Service\ClasseurHistorique;
+use App\Service\ClasseurLieux;
 use App\Service\Localisateur;
 use App\Service\Visibility;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -20,18 +21,21 @@ class CarteController extends AbstractController
     /**
      * @Route("/carte", name="carte")
      */
-    public function afficherCarte(Request $request, LieuRepository $lieuRepository, Localisateur $localisateur, Visibility $visibility): Response
+    public function afficherCarte(Request $request, LieuRepository $lieuRepository, Localisateur $localisateur, Visibility $visibility, ClasseurLieux $classeurLieux): Response
     {
         $principal = $this->getUser() ? $this->getUser()->getMainCharacter() : null;
         $chemin = $localisateur->chemin($principal);
 
         $cible = $lieuRepository->find($request->query->getInt('lieu'));
-        if ($cible !== null && ($cible->getLocX() === null || $cible->getLocY() === null || !$visibility->isListed($cible))) {
+        if ($cible !== null && (!$cible->isPlaced() || !$visibility->isListed($cible))) {
             $cible = null;
         }
 
+        $lieux = $lieuRepository->findAllSorted();
+
         return $this->render('carte/index.html.twig', [
-            'lieux' => $lieuRepository->findAllSorted(),
+            'lieux' => $lieux,
+            'groupes_lieux' => $classeurLieux->parFaction($lieux),
             'positions' => $localisateur->positions(),
             'libres' => $localisateur->libres(),
             'chemin' => $chemin,

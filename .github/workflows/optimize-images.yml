@@ -1,0 +1,85 @@
+name: Optimize images
+
+on:
+  workflow_dispatch:
+    inputs:
+      types:
+        description: "Types à traiter, séparés par des espaces. Vide : tous les types."
+        required: false
+        default: ""
+      backup:
+        description: "Sauvegarder public/assets/img avant le traitement"
+        type: boolean
+        default: true
+
+jobs:
+  optimize:
+    runs-on: ubuntu-latest
+
+    env:
+      FTP_SERVER: ${{ secrets.FTP_SERVER }}
+      FTP_USERNAME: ${{ secrets.FTP_USERNAME }}
+      FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+      SITE_URL: https://jdr.axl-design.me
+      PUBLIC_DIR: www/jdr/public
+      TYPES: ${{ inputs.types }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Installation de lftp
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq lftp
+
+      - name: Sauvegarde des images
+        if: ${{ inputs.backup }}
+        run: |
+          set -euo pipefail
+          mkdir -p backup/img
+          lftp -u "$FTP_USERNAME","$FTP_PASSWORD" "$FTP_SERVER" \
+               -e "set ssl:verify-certificate no; mirror --parallel=4 $PUBLIC_DIR/assets/img backup/img; bye"
+          du -sh backup/img
+
+      - name: Envoi de la sauvegarde
+        if: ${{ inputs.backup }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: images-${{ github.run_id }}
+          path: backup/img
+          retention-days: 7
+
+      - name: Optimisation des images
+        run: |
+          set -euo pipefail
+
+          if ! printf '%s' "$TYPES" | grep -Eq '^[a-z -]*$'; then
+            echo "::error::Types invalides : lettres minuscules, tirets et espaces uniquement."
+            exit 1
+          fi
+
+          NAME="optimize-$(openssl rand -hex 16).php"
+          TOKEN="$(openssl rand -hex 32)"
+          echo "::add-mask::$TOKEN"
+          sed "s/__TOKEN__/$TOKEN/" .ci/optimize-images.php > "/tmp/$NAME"
+
+          ftp_do() {
+            lftp -u "$FTP_USERNAME","$FTP_PASSWORD" "$FTP_SERVER" \
+                 -e "set ssl:verify-certificate no; $1; bye"
+          }
+
+          trap 'ftp_do "rm -f $PUBLIC_DIR/$NAME" || true' EXIT
+
+          ftp_do "put /tmp/$NAME -o $PUBLIC_DIR/$NAME"
+
+          if [ -z "$TYPES" ]; then
+            TYPES="$(curl -sS --fail -H "X-Deploy-Token: $TOKEN" -H "X-Image-Action: list" "$SITE_URL/$NAME")"
+          fi
+
+          for TYPE in $TYPES; do
+            echo "::group::$TYPE"
+            HTTP=$(curl -sS --max-time 900 -o /tmp/optimize-out.txt -w '%{http_code}' \
+                        -H "X-Deploy-Token: $TOKEN" -H "X-Image-Types: $TYPE" "$SITE_URL/$NAME" || echo "000")
+            cat /tmp/optimize-out.txt || true
+            echo "::endgroup::"
+            [ "$HTTP" = "200" ] || { echo "::error::Échec sur le type $TYPE (HTTP $HTTP). Relancer le workflow avec les types restants."; exit 1; }
+          done

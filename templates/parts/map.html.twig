@@ -213,6 +213,14 @@
         variant: 'absolute current',
         style: 'left:' ~ current.locX ~ '%; top:' ~ current.locY ~ '%;' ~ (current_color ? ' --clan-color: ' ~ current_color ~ ';' : ''),
       }) }}
+
+      {% if party[current.id] is defined %}
+        <div class="map-party current absolute" style="left:{{current.locX}}%; top:{{current.locY}}%;">
+          {% for perso in party[current.id] %}
+            {{ include('parts/map-portrait.html.twig', {perso, mine: perso.id == main_id, interactive: worldmap}, with_context = false) }}
+          {% endfor %}
+        </div>
+      {% endif %}
     {% endif %}
 
   </div>

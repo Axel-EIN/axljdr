@@ -32,7 +32,7 @@ final class OptimizeImagesCommand extends Command
 {
     protected static $defaultName = 'app:images:optimize';
 
-    private const TYPES = [
+    public const TYPES = [
         'illustration' => ['entity' => Personnage::class, 'field' => 'illustration', 'preset' => 'vertical450'],
         'saison'       => ['entity' => Saison::class,     'field' => 'image',        'preset' => 'landscape1080'],
         'chapitre'     => ['entity' => Chapitre::class,   'field' => 'image',        'preset' => 'landscape1080'],
@@ -158,7 +158,7 @@ final class OptimizeImagesCommand extends Command
             }
         }
 
-        $io->writeln(sprintf('%-12s %3d image(s) normalisée(s), %3d version(s) réduite(s) créée(s)', $type, $normalises, $reduits));
+        $io->writeln(sprintf('%-12s %3d image(s) normalisée(s), %3d version(s) réduite(s) à jour', $type, $normalises, $reduits));
 
         return $echecs;
     }

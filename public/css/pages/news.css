@@ -210,16 +210,26 @@
   gap: 0.25rem;
 
   > .news-subtitle {
+    --outline: rgb(from var(--color-white) r g b / 20%);
+
     margin-top: 0.25rem;
     margin-bottom: 0.5rem;
+    text-shadow:
+      1px 0 0 var(--outline),
+      -1px 0 0 var(--outline),
+      0 1px 0 var(--outline),
+      0 -1px 0 var(--outline),
+      1px 1px 0 var(--outline),
+      -1px -1px 0 var(--outline),
+      1px -1px 0 var(--outline),
+      -1px 1px 0 var(--outline),
+      0 0 8px var(--color-white);
   }
 
   > .participations-map { margin-top: 0.5rem; }
 }
 
 .ranking-card {
-  height: 100%;
-
   .ranking-list {
     --rows: 7;
 
@@ -228,6 +238,20 @@
   }
 
   &:only-child .ranking-list { --rows: 22; }
+
+  @media (min-width: 992px) {
+    .news-aside > & {
+      flex: 1 1 0;
+      height: 0;
+      min-height: 24rem;
+    }
+
+    .ranking-list {
+      flex: 1 1 0;
+      min-height: 0;
+      max-height: none;
+    }
+  }
 }
 
 .episode-row {

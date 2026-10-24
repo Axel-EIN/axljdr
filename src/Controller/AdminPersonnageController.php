@@ -151,6 +151,7 @@ class AdminPersonnageController extends AbstractController
                 $prefix = $prefix . '-portrait';
                 $personnage->setIcone($fileHandler->handle($nouvelleIcone, $personnage->getIcone(), $prefix, 'personnages', 'square240'));
             } elseif ($request->request->get('remove_icone') === '1' && $personnage->getIcone()) {
+                $baliseur->remplacerIconeParDefaut($personnage);
                 $fileHandler->handle(null, $personnage->getIcone(), null, 'personnages');
                 $personnage->setIcone(null);
             }
@@ -201,12 +202,13 @@ class AdminPersonnageController extends AbstractController
      * @Route("/admin/personnage/{id}/delete", name="admin_personnage_delete", methods={"POST"})
      * @IsGranted("ROLE_MJ")
      */
-    public function deletePersonnage(Request $request, Personnage $personnage, FileHandler $fileHandler, Unlocker $unlocker): Response {
+    public function deletePersonnage(Request $request, Personnage $personnage, FileHandler $fileHandler, Baliseur $baliseur, Unlocker $unlocker): Response {
 
         if ($this->isCsrfTokenValid('delete' . $personnage->getId(), $request->request->get('_csrf_token'))) {
 
             $entityManager = $this->getDoctrine()->getManager();
 
+            $baliseur->remplacerIconeParDefaut($personnage);
             $fileHandler->handle(null, $personnage->getIcone(), null, 'personnages');
             $fileHandler->handle(null, $personnage->getIllustration(), null, 'personnages');
 

@@ -27,7 +27,7 @@
 
     > .container > section {
       margin-bottom: 0;
-      &:last-of-type { padding-bottom: 0; }
+      &:last-of-type { padding-bottom: 0.5rem; }
     }
   }
 }

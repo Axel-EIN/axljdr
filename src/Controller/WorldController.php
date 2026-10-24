@@ -13,6 +13,7 @@ use App\Repository\LoreRepository;
 use App\Repository\ArchiveRepository;
 use App\Repository\SaisonRepository;
 use App\Service\ClasseurHistorique;
+use App\Service\ClasseurLieux;
 use App\Service\Visibility;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -29,7 +30,8 @@ class WorldController extends AbstractController
                                  ArchiveRepository $archiveRepository,
                                  LieuRepository $lieuRepository,
                                  LoreRepository $loreRepository,
-                                 Visibility $visibility): Response
+                                 Visibility $visibility,
+                                 ClasseurLieux $classeurLieux): Response
   {
     $factions = array_fill_keys(array_keys(FactionType::GROUPS), []);
     foreach ($clanRepository->findAllSorted() as $clan) {
@@ -38,7 +40,7 @@ class WorldController extends AbstractController
       }
     }
     $archives = $archiveRepository->findall();
-    $groupesLieux = $this->grouperLieux($lieuRepository->findAllSorted(), $visibility);
+    $groupesLieux = $classeurLieux->parFaction($lieuRepository->findAllSorted());
     $lores = $loreRepository->findall();
 
     $sections = [];
@@ -86,53 +88,6 @@ class WorldController extends AbstractController
       'header_down' => $header_down,
       'category' => $category
     ]);
-  }
-
-  private function grouperLieux(array $lieux, Visibility $visibility): array
-  {
-    $titres = array_column($this->getParameter('factions'), 'titre', 'nom');
-    $ordre = array_merge(
-      array_map(fn (string $nom) => 'clan-' . $nom, array_keys($titres)),
-      ['type-' . FactionType::MINEUR, 'type-' . FactionType::NON_ALIGNE, 'autres']
-    );
-
-    $groupes = [];
-    foreach ($lieux as $lieu) {
-      if (!$visibility->isListed($lieu)) {
-        continue;
-      }
-
-      $clan = $lieu->getClan();
-      $majeur = $clan !== null && $clan->getType() === FactionType::MAJEUR;
-      $sansGroupe = $clan === null || ($majeur && !isset($titres[$clan->getNom()]));
-
-      if ($sansGroupe) {
-        $cle = 'autres';
-        $groupes[$cle]['sansGroupe'] = true;
-      } elseif ($clan->getType() === FactionType::ENNEMI) {
-        $cle = 'autres';
-      } else {
-        $cle = $majeur ? 'clan-' . $clan->getNom() : 'type-' . $clan->getType();
-        $groupes[$cle]['titre'] = $majeur ? $titres[$clan->getNom()] : FactionType::GROUPS[$clan->getType()];
-      }
-
-      if (!$sansGroupe && $visibility->isListed($clan)) {
-        $groupes[$cle]['clans'][$clan->getId()] = $clan;
-      }
-
-      $groupes[$cle]['lieux'][] = $lieu;
-    }
-
-    if (isset($groupes['autres'])) {
-      $ennemis = !empty($groupes['autres']['clans']);
-      $groupes['autres']['titre'] = match (true) {
-        $ennemis && isset($groupes['autres']['sansGroupe']) => 'Ennemis et autres',
-        $ennemis => FactionType::GROUPS[FactionType::ENNEMI],
-        default => 'Autres',
-      };
-    }
-
-    return array_values(array_filter(array_map(fn (string $cle) => $groupes[$cle] ?? null, $ordre)));
   }
 
   /**

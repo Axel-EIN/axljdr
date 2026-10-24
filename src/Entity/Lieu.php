@@ -203,6 +203,11 @@ class Lieu
     return $this->locY;
   }
 
+  public function isPlaced(): bool
+  {
+    return $this->locX !== null && $this->locY !== null;
+  }
+
   public function setLocY(?string $locY): self
   {
     $this->locY = $locY;

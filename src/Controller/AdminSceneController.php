@@ -87,9 +87,7 @@ class AdminSceneController extends AbstractController
 
             $nouvelleImage = $form->get('image')->getData();
             if (!empty($nouvelleImage)) {
-                $prefix = 'scene-s' . $scene->getEpisodeParent()->getChapitreParent()->getSaisonParent()->getNumero()
-                . '-ch' . $scene->getEpisodeParent()->getChapitreParent()->getNumero()
-                . '-ep' . $scene->getEpisodeParent()->getNumero() . '-scn' . $scene->getNumero();
+                $prefix = $this->prefixeImage($scene);
                 $scene->setImage($fileHandler->handle($nouvelleImage, null, $prefix, 'scenes', 'landscape720'));
             }
 
@@ -158,9 +156,7 @@ class AdminSceneController extends AbstractController
 
             $nouvelleImage = $form->get('image')->getData();
             if (!empty($nouvelleImage)) {
-                $prefix = 'scene-s' . $scene->getEpisodeParent()->getChapitreParent()->getSaisonParent()->getNumero()
-                . '-ch' . $scene->getEpisodeParent()->getChapitreParent()->getNumero()
-                . '-ep' . $scene->getEpisodeParent()->getNumero() . '-scn' . $scene->getNumero();
+                $prefix = $this->prefixeImage($scene);
                 $scene->setImage($fileHandler->handle($nouvelleImage, $scene->getImage(), $prefix, 'scenes', 'landscape720'));
             } elseif ($request->request->get('remove_image') === '1' && $scene->getImage()) {
                 $fileHandler->handle(null, $scene->getImage(), null, 'scenes');
@@ -301,5 +297,13 @@ class AdminSceneController extends AbstractController
         foreach ($personnages as $personnage) {
             $this->addFlash('warning', 'La position libre de ' . $personnage->getPrenom() . ' a été effacée : cette scène est sa dernière.');
         }
+    }
+
+    private function prefixeImage(Scene $scene): string
+    {
+        return 'scene-s' . $scene->getEpisodeParent()->getChapitreParent()->getSaisonParent()->getNumero()
+            . '-ch' . $scene->getEpisodeParent()->getChapitreParent()->getNumero()
+            . '-ep' . $scene->getEpisodeParent()->getNumero() . '-scn' . $scene->getNumero()
+            . (empty($scene->getTitre()) ? '' : '-' . $scene->getTitre());
     }
 }

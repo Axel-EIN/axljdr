@@ -58,7 +58,7 @@ class AdminSaisonController extends AbstractController
 
             $nouvelleImage = $form->get('image')->getData();
             if (!empty($nouvelleImage)) {
-                $prefix = 'saison-' . $saison->getNumero();
+                $prefix = $this->prefixeImage($saison);
                 $saison->setImage($fileHandler->handle($nouvelleImage, null, $prefix, 'saisons', 'landscape1080'));
             }
 
@@ -102,7 +102,7 @@ class AdminSaisonController extends AbstractController
 
             $nouvelleImage = $form->get('image')->getData();
             if (!empty($nouvelleImage)) {
-                $prefix = 'saison-' . $saison->getNumero();
+                $prefix = $this->prefixeImage($saison);
                 $saison->setImage($fileHandler->handle($nouvelleImage, $saison->getImage(), $prefix, 'saisons', 'landscape1080'));
             } elseif ($request->request->get('remove_image') === '1' && $saison->getImage()) {
                 $fileHandler->handle(null, $saison->getImage(), null, 'saisons');
@@ -165,5 +165,11 @@ class AdminSaisonController extends AbstractController
             return $this->redirectToRoute('aventure');
 
         return $this->redirectToRoute('admin_saison');
+    }
+
+    private function prefixeImage(Saison $saison): string
+    {
+        return 'saison-' . $saison->getNumero()
+            . (empty($saison->getTitre()) ? '' : '-' . $saison->getTitre());
     }
 }

@@ -7,6 +7,7 @@ use App\Entity\Personnage;
 use App\Entity\Scene;
 use App\Repository\PersonnageRepository;
 use App\Repository\LieuRepository;
+use Doctrine\ORM\EntityManagerInterface;
 
 class Baliseur
 {
@@ -22,11 +23,47 @@ class Baliseur
 
     private $persoRepo;
     private $lieuRepo;
+    private $entityManager;
 
-    public function __construct(PersonnageRepository $personnageRepository, LieuRepository $lieuRepository)
+    public function __construct(PersonnageRepository $personnageRepository, LieuRepository $lieuRepository, EntityManagerInterface $entityManager)
     {
         $this->persoRepo = $personnageRepository;
         $this->lieuRepo = $lieuRepository;
+        $this->entityManager = $entityManager;
+    }
+
+    public function iconeParDefaut($element): string
+    {
+        if ($element instanceof Lieu) {
+            return 'assets/placeholders/na_lieu_ico.png';
+        }
+
+        $genre = $element->getGenre();
+
+        return 'assets/placeholders/na_perso_icon' . (in_array($genre, ['M', 'F'], true) ? '_' . $genre : '') . '.jpg';
+    }
+
+    public function remplacerIconeParDefaut($element): int
+    {
+        return empty($element->getIcone()) ? 0 : $this->remplacerChemin($element->getIcone(), $this->iconeParDefaut($element));
+    }
+
+    public function remplacerChemin(string $ancien, string $nouveau): int
+    {
+        $connexion = $this->entityManager->getConnection();
+        $lignes = 0;
+
+        foreach (self::CHAMPS as $entite => $champs) {
+            $metadata = $this->entityManager->getClassMetadata($entite);
+
+            foreach ($champs as $champ) {
+                $colonne = $metadata->getColumnName($champ);
+                $requete = sprintf('UPDATE %1$s SET %2$s = REPLACE(%2$s, ?, ?) WHERE %2$s LIKE ?', $metadata->getTableName(), $colonne);
+                $lignes += $connexion->executeStatement($requete, [$ancien, $nouveau, '%' . $ancien . '%']);
+            }
+        }
+
+        return $lignes;
     }
 
     public function baliser(?string $texte): ?string
@@ -67,16 +104,7 @@ class Baliseur
             $personnage_trouve = $this->persoRepo->findOneBy(array('prenom' => $un_match));
 
             if ($personnage_trouve != null) {
-                if($personnage_trouve->getIcone())
-                    $icone_personnage = '../../' . $personnage_trouve->getIcone();
-                else {
-                    if ($personnage_trouve->getGenre() == 'M')
-                        $icone_personnage = '../../assets/placeholders/na_perso_icon_M.jpg';
-                    else if ($personnage_trouve->getGenre() == 'F')
-                        $icone_personnage = '../../assets/placeholders/na_perso_icon_F.jpg';
-                    else
-                        $icone_personnage = '../../assets/placeholders/na_perso_icon.jpg';
-                }
+                $icone_personnage = '../../' . ($personnage_trouve->getIcone() ?: $this->iconeParDefaut($personnage_trouve));
                 $tableau_remplacement[] =
                     '<a class="tag-character hover-zoom-quick character-icon bg-background pr-1 pt-0 pb-0 pl-0" href="../../personnages/profil/' . $personnage_trouve->getId() . '">'
                                 . '<img class="character-portrait small" src="../../' . $icone_personnage
@@ -122,10 +150,7 @@ class Baliseur
 
             if ($lieu_trouve != null) {
 
-                if ($lieu_trouve->getIcone())
-                    $icone_lieu = '../../' . $lieu_trouve->getIcone();
-                else
-                    $icone_lieu = '../../assets/placeholders/na_lieu_ico.png';
+                $icone_lieu = '../../' . ($lieu_trouve->getIcone() ?: $this->iconeParDefaut($lieu_trouve));
 
                 $tableau_remplacement[] =
                     '<a class="tag-location hover-zoom-quick location-icon bg-background pr-1 pt-0 pb-0 pl-0" href="../../world/lieu/' . $lieu_trouve->getId() . '">'

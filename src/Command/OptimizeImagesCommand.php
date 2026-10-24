@@ -60,17 +60,19 @@ final class OptimizeImagesCommand extends Command
     private $entityManager;
     private $imageNormalizer;
     private $propertyAccessor;
+    private $baliseur;
     private $publicDirectory;
     private $renommages = [];
     private $absents = [];
 
-    public function __construct(EntityManagerInterface $entityManager, ImageNormalizer $imageNormalizer, PropertyAccessorInterface $propertyAccessor, string $publicDirectory)
+    public function __construct(EntityManagerInterface $entityManager, ImageNormalizer $imageNormalizer, PropertyAccessorInterface $propertyAccessor, Baliseur $baliseur, string $publicDirectory)
     {
         parent::__construct();
 
         $this->entityManager = $entityManager;
         $this->imageNormalizer = $imageNormalizer;
         $this->propertyAccessor = $propertyAccessor;
+        $this->baliseur = $baliseur;
         $this->publicDirectory = $publicDirectory;
     }
 
@@ -170,20 +172,9 @@ final class OptimizeImagesCommand extends Command
 
     private function remplacerDansLesTextes(): int
     {
-        $connexion = $this->entityManager->getConnection();
         $lignes = 0;
-
-        foreach (Baliseur::CHAMPS as $entite => $champs) {
-            $metadata = $this->entityManager->getClassMetadata($entite);
-
-            foreach ($champs as $champ) {
-                $colonne = $metadata->getColumnName($champ);
-                $requete = sprintf('UPDATE %1$s SET %2$s = REPLACE(%2$s, ?, ?) WHERE %2$s LIKE ?', $metadata->getTableName(), $colonne);
-
-                foreach ($this->renommages as $ancien => $nouveau) {
-                    $lignes += $connexion->executeStatement($requete, [$ancien, $nouveau, '%' . $ancien . '%']);
-                }
-            }
+        foreach ($this->renommages as $ancien => $nouveau) {
+            $lignes += $this->baliseur->remplacerChemin($ancien, $nouveau);
         }
 
         return $lignes;

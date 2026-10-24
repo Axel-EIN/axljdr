@@ -20,7 +20,8 @@
 {% set main_character = main_character() %}
 {% set main_id = main_character.id ?? null %}
 {% set current_color = current.clan.couleur ?? null %}
-{% set placed = lieux|filter(l => l.locX is not empty and l.locY is not empty) %}
+{% set place_groups = place_groups|default([]) %}
+{% set placed = lieux|filter(l => l.placed) %}
 {% set current_city = current and current.type in ['Cité', 'Ville'] %}
 
 <div class="map-frame {{ variant }}{% if labels %} labels-shown{% elseif not labels_on %} labels-hidden{% endif %}{% if not worldmap %} d-none d-lg-block{% endif %}{% if large_markers %} large-markers{% endif %}{% if current_city %} current-city{% endif %}{% if draggable %} draggable{% endif %}"
@@ -36,14 +37,24 @@
         <i class="search-bar-icon fas fa-magnifying-glass" aria-hidden="true"></i>
         <input class="search-bar-input" type="search" placeholder="Chercher un lieu ou un personnage…" aria-label="Chercher un lieu ou un personnage" autocomplete="off" />
         <div class="search-bar-suggestions dropdown-menu dropdown-dark">
-          {% for un_lieu in placed|sort((a, b) => a.nom <=> b.nom) %}
-            {% set etat = element_state(un_lieu) %}
-            {% if etat != 'hidden' %}
-              <button type="button" class="dropdown-item search-suggestion" data-lieu="{{ un_lieu.id }}" data-locx="{{ un_lieu.locX }}" data-locy="{{ un_lieu.locY }}">
-                <span class="search-suggestion-label">{{ un_lieu.nom }}</span>
-                <small class="search-suggestion-group">{{ un_lieu.type }}</small>
-                {{ include('parts/badge-access.html.twig', {state: etat, variant: 'inline'}) }}
-              </button>
+          {% for groupe in place_groups %}
+            {% set lieux_places = groupe.lieux|filter(l => l.placed)|sort((a, b) => a.nom <=> b.nom) %}
+            {% if lieux_places is not empty %}
+              <div class="search-suggestions-section">
+                <h6 class="dropdown-header search-suggestions-heading">
+                  {% for clan in groupe.clans|default([]) %}
+                    <img class="img-18" src="{{ asset(image_small(clan.mon|default(NA_MON))) }}" alt="" />
+                  {% endfor %}
+                  {{ groupe.titre }}
+                </h6>
+                {% for un_lieu in lieux_places %}
+                  <button type="button" class="dropdown-item search-suggestion" data-lieu="{{ un_lieu.id }}" data-locx="{{ un_lieu.locX }}" data-locy="{{ un_lieu.locY }}">
+                    <span class="search-suggestion-label">{{ un_lieu.nom }}</span>
+                    <small class="search-suggestion-group">{{ un_lieu.type }}</small>
+                    {{ include('parts/badge-access.html.twig', {state: element_state(un_lieu), variant: 'inline'}) }}
+                  </button>
+                {% endfor %}
+              </div>
             {% endif %}
           {% endfor %}
           {% set joueurs = [] %}
@@ -55,20 +66,25 @@
           {% for libre in wanderers %}
             {% set joueurs = joueurs|merge([{perso: libre.personnage, lieu: null, locX: libre.locX, locY: libre.locY}]) %}
           {% endfor %}
-          {% for joueur in joueurs|sort((a, b) => a.perso.nomComplet <=> b.perso.nomComplet) %}
-            <button type="button" class="dropdown-item search-suggestion"{% if joueur.lieu %} data-lieu="{{ joueur.lieu.id }}"{% endif %} data-personnage="{{ joueur.perso.id }}" data-locx="{{ joueur.locX }}" data-locy="{{ joueur.locY }}">
-              <img class="img-24" src="{{ asset(joueur.perso.icone|default(NA_PERSO_PORTRAIT)) }}" alt="" />
-              <span class="search-suggestion-label">{{ joueur.perso.nomComplet }}</span>
-              {% if joueur.lieu is null %}
-                {% set groupe = EN_DEPLACEMENT %}
-              {% elseif element_state(joueur.lieu) == 'hidden' %}
-                {% set groupe = 'Lieu inconnu' %}
-              {% else %}
-                {% set groupe = joueur.lieu.nom %}
-              {% endif %}
-              <small class="search-suggestion-group">{{ groupe }}</small>
-            </button>
-          {% endfor %}
+          {% if joueurs is not empty %}
+            <div class="search-suggestions-section">
+              <h6 class="dropdown-header search-suggestions-heading">Personnages</h6>
+              {% for joueur in joueurs|sort((a, b) => a.perso.nomComplet <=> b.perso.nomComplet) %}
+                <button type="button" class="dropdown-item search-suggestion"{% if joueur.lieu %} data-lieu="{{ joueur.lieu.id }}"{% endif %} data-personnage="{{ joueur.perso.id }}" data-locx="{{ joueur.locX }}" data-locy="{{ joueur.locY }}">
+                  <img class="img-24" src="{{ asset(joueur.perso.icone|default(NA_PERSO_PORTRAIT)) }}" alt="" />
+                  <span class="search-suggestion-label">{{ joueur.perso.nomComplet }}</span>
+                  {% if joueur.lieu is null %}
+                    {% set groupe = EN_DEPLACEMENT %}
+                  {% elseif element_state(joueur.lieu) == 'hidden' %}
+                    {% set groupe = 'Lieu inconnu' %}
+                  {% else %}
+                    {% set groupe = joueur.lieu.nom %}
+                  {% endif %}
+                  <small class="search-suggestion-group">{{ groupe }}</small>
+                </button>
+              {% endfor %}
+            </div>
+          {% endif %}
           <span class="dropdown-item-text search-suggestion-empty" hidden>Aucun résultat</span>
         </div>
       </div>

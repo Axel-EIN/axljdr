@@ -74,7 +74,7 @@ class AdminChapitreController extends AbstractController
 
             $nouvelleImage = $form->get('image')->getData();
             if (!empty($nouvelleImage)) {
-                $prefix = 'chapitre-s' . $chapitre->getSaisonParent()->getNumero() . '-ch' . $chapitre->getNumero();
+                $prefix = $this->prefixeImage($chapitre);
                 $chapitre->setImage($fileHandler->handle($nouvelleImage, null, $prefix, 'chapitres', 'landscape1080'));
             }
 
@@ -118,7 +118,7 @@ class AdminChapitreController extends AbstractController
 
             $nouvelleImage = $form->get('image')->getData();
             if (!empty($nouvelleImage)) {
-                $prefix = 'chapitre-s' . $chapitre->getSaisonParent()->getNumero() . '-ch' . $chapitre->getNumero();
+                $prefix = $this->prefixeImage($chapitre);
                 $chapitre->setImage($fileHandler->handle($nouvelleImage, $chapitre->getImage(), $prefix, 'chapitres', 'landscape1080'));
             } elseif ($request->request->get('remove_image') === '1' && $chapitre->getImage()) {
                 $fileHandler->handle(null, $chapitre->getImage(), null, 'chapitres');
@@ -185,5 +185,11 @@ class AdminChapitreController extends AbstractController
             return $this->redirectToRoute('aventure_saison', ['id' => $saisonParent->getId()], Response::HTTP_SEE_OTHER);
         
         return $this->redirectToRoute('admin_chapitre');
+    }
+
+    private function prefixeImage(Chapitre $chapitre): string
+    {
+        return 'chapitre-s' . $chapitre->getSaisonParent()->getNumero() . '-ch' . $chapitre->getNumero()
+            . (empty($chapitre->getTitre()) ? '' : '-' . $chapitre->getTitre());
     }
 }

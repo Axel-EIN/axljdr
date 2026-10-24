@@ -3,13 +3,11 @@
 /* ----- SOMMAIRE ----- */
 
 #sommaire {
-    display: flex;
     flex-direction: column;
     position: absolute;
     z-index: 10;
     bottom: 1rem;
     left: 1rem;
-    margin: 0;
     padding: 0.5rem 0;
     color: var(--color-white);
 
@@ -24,7 +22,6 @@
         border: unset;
         border-bottom: 1px solid rgba(255, 255, 255, 0.2);
         background-color: unset;
-        margin: 0;
         padding: 0.5rem 1.5rem;
         border-radius: 0;
         &:hover {
@@ -80,7 +77,6 @@
         margin: 1rem 1rem 1rem 1.5rem;
         float: right;
         width: 30%;
-        float: right;
         border-color: transparent;
         border-style: double;
         border-width: 24px 24px 140px 24px;
@@ -90,19 +86,16 @@
             font-size: var(--fontsize-base);
             line-height: var(--leading-16);
         }
-    }
 
+        @media (max-width: 991.98px) {
+            order: 2;
+            width: auto;
+            margin: 1rem;
+        }
+    }
 
     @media (max-width: 991.98px) {
         display: flex;
         flex-direction: column;
-
-        aside {
-            order: 2;
-            float: none;
-            width: auto;
-            margin: 1rem;
-        }
-        .articlepart { order: 1; }
     }
 }

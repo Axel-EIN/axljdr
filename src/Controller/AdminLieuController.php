@@ -151,6 +151,7 @@ class AdminLieuController extends AbstractController
         $prefix = 'lieu-' . $lieu->getNom() . '-icone';
         $lieu->setIcone($fileHandler->handle($nouvelleIcone, $lieu->getIcone(), $prefix, 'lieux', 'square192'));
       } elseif ($request->request->get('remove_icone') === '1' && $lieu->getIcone()) {
+        $baliseur->remplacerIconeParDefaut($lieu);
         $fileHandler->handle(null, $lieu->getIcone(), null, 'lieux');
         $lieu->setIcone(null);
       }
@@ -185,7 +186,7 @@ class AdminLieuController extends AbstractController
    * @Route("/admin/lieu/{id}/delete", name="admin_lieu_delete", methods={"POST"})
    * @IsGranted("ROLE_MJ")
    */
-  public function deleteLieu(Request $request, Lieu $lieu, FileHandler $fileHandler, Unlocker $unlocker): Response {
+  public function deleteLieu(Request $request, Lieu $lieu, FileHandler $fileHandler, Baliseur $baliseur, Unlocker $unlocker): Response {
 
     if ($this->isCsrfTokenValid('delete' . $lieu->getId(), $request->request->get('_csrf_token'))) {
 
@@ -193,6 +194,7 @@ class AdminLieuController extends AbstractController
 
       $fileHandler->handle(null, $lieu->getImage(), null, 'lieux');
       $fileHandler->handle(null, $lieu->getPlanMap(), null, 'lieux');
+      $baliseur->remplacerIconeParDefaut($lieu);
       $fileHandler->handle(null, $lieu->getIcone(), null, 'lieux');
 
       $unlocker->forget($lieu);

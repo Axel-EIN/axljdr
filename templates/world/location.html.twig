@@ -68,7 +68,7 @@
         {{ include('parts/description.html.twig', {text: un_element.description, variant: 'aerated'}, with_context = false) }}
       {% endif %}
 
-      {% set placed = un_element.locX is not empty and un_element.locY is not empty %}
+      {% set placed = un_element.placed %}
       {% set region_visible_mobile = un_element.regionDesc is not empty %}
       {% set plan_visible = un_element.planMap is not empty or un_element.planDesc is not empty %}
 

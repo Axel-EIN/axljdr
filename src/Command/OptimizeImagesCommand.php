@@ -62,6 +62,7 @@ final class OptimizeImagesCommand extends Command
     private $propertyAccessor;
     private $publicDirectory;
     private $renommages = [];
+    private $absents = [];
 
     public function __construct(EntityManagerInterface $entityManager, ImageNormalizer $imageNormalizer, PropertyAccessorInterface $propertyAccessor, string $publicDirectory)
     {
@@ -104,6 +105,10 @@ final class OptimizeImagesCommand extends Command
             $io->writeln(sprintf('%d texte(s) balisé(s) mis à jour pour %d image(s) renommée(s)', $this->remplacerDansLesTextes(), count($this->renommages)));
         }
 
+        foreach ($this->absents as $absent) {
+            $io->note($absent . ' : fichier introuvable, ignoré');
+        }
+
         foreach ($echecs as $echec) {
             $io->warning($echec);
         }
@@ -129,7 +134,7 @@ final class OptimizeImagesCommand extends Command
             $chemin = $this->publicDirectory . '/' . ltrim($image, '/');
 
             if (!is_file($chemin)) {
-                $echecs[] = $image . ' : fichier introuvable';
+                $this->absents[] = $image;
                 continue;
             }
 

@@ -76,18 +76,6 @@ class FichePersonnage
      * @ORM\ManyToOne(targetEntity=Objet::class)
      * @ORM\JoinColumn(nullable=true)
      */
-    private $arme;
-
-    /**
-     * @ORM\ManyToOne(targetEntity=Objet::class)
-     * @ORM\JoinColumn(nullable=true)
-     */
-    private $arme2;
-
-    /**
-     * @ORM\ManyToOne(targetEntity=Objet::class)
-     * @ORM\JoinColumn(nullable=true)
-     */
     private $armeActuelle;
 
     /**
@@ -423,12 +411,6 @@ class FichePersonnage
 
     public function getDesavantage2(): ?Avantage { return $this->desavantage2; }
     public function setDesavantage2(?Avantage $a): self { $this->desavantage2 = $a; return $this; }
-
-    public function getArme(): ?Objet { return $this->arme; }
-    public function setArme(?Objet $a): self { $this->arme = $a; return $this; }
-
-    public function getArme2(): ?Objet { return $this->arme2; }
-    public function setArme2(?Objet $a): self { $this->arme2 = $a; return $this; }
 
     public function getArmeActuelle(): ?Objet { return $this->armeActuelle; }
     public function setArmeActuelle(?Objet $a): self { $this->armeActuelle = $a; return $this; }

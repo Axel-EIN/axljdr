@@ -113,7 +113,7 @@ class AdminSceneController extends AbstractController
             $this->signalerPositionsEffacees($localisateur->effacerPositionsLibres($scene));
 
             if (!empty($request->query->get('redirect')) && $request->query->get('redirect') == 'episode')
-                return $this->redirectToRoute('aventure_episode', ['id' => $scene->getEpisodeParent()->getId(),'_fragment' => 'scn' . $scene->getNumero()]);
+                return $this->redirectToRoute('story_episode', ['id' => $scene->getEpisodeParent()->getId(),'_fragment' => 'scn' . $scene->getNumero()]);
 
             return $this->redirectToRoute('admin_scene');
         }
@@ -242,7 +242,7 @@ class AdminSceneController extends AbstractController
             $this->addFlash('success', 'La scène a bien été modifiée.');
 
             if (!empty($request->query->get('redirect')) && $request->query->get('redirect') == 'episode')
-                return $this->redirectToRoute('aventure_episode', ['id' => $scene->getEpisodeParent()->getId(),'_fragment' => 'scn' . $scene->getNumero()]);
+                return $this->redirectToRoute('story_episode', ['id' => $scene->getEpisodeParent()->getId(),'_fragment' => 'scn' . $scene->getNumero()]);
     
             return $this->redirectToRoute('admin_scene');
         }
@@ -287,7 +287,7 @@ class AdminSceneController extends AbstractController
         }
 
         if (!empty($request->query->get('redirect')) && $request->query->get('redirect') == 'episode')
-            return $this->redirectToRoute('aventure_episode', ['id' => $episodeParent->getId()]);
+            return $this->redirectToRoute('story_episode', ['id' => $episodeParent->getId()]);
 
         return $this->redirectToRoute('admin_scene');
     }

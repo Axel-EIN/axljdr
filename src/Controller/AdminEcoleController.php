@@ -98,7 +98,7 @@ class AdminEcoleController extends AbstractController
             $this->addFlash('success', 'L\'école a bien été ajoutée.');
 
             if (!empty($request->query->get('redirect')) && $request->query->get('redirect') == 'ecole')
-                return $this->redirectToRoute('regles_ecole', ['id' => $ecole->getId()]);
+                return $this->redirectToRoute('rules_dojo', ['id' => $ecole->getId()]);
                 
             return $this->redirectToRoute('admin_ecole');    
         }
@@ -141,7 +141,7 @@ class AdminEcoleController extends AbstractController
             $this->addFlash('success', 'L\'école a bien été modifiée.');
 
             if (!empty($request->query->get('redirect')) && $request->query->get('redirect') == 'ecole')
-                return $this->redirectToRoute('regles_ecole', ['id' => $ecole->getId()]);
+                return $this->redirectToRoute('rules_dojo', ['id' => $ecole->getId()]);
 
             return $this->redirectToRoute('admin_ecole');
         }

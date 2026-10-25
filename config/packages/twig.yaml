@@ -24,7 +24,7 @@ twig:
             location: 'Lieu'
             lore: 'Lore'
             object: 'Objet'
-            personnage: 'Personnage'
+            character: 'Personnage'
             rule: 'Règle'
 
         NA_ICON: &NA_ICON '/assets/placeholders/na_icon.png'

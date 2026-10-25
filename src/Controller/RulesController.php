@@ -339,7 +339,7 @@ class RulesController extends AbstractController
      */
     public function showDojo(Ecole $dojo, EcoleRepository $dojoRepository, Visibility $visibility): Response
     {
-        if ($response = $this->accessGuard($visibility, $dojo, 'ecole', 'rules')) {
+        if ($response = $this->accessGuard($visibility, $dojo, 'dojo', 'rules')) {
             return $response;
         }
 
@@ -348,7 +348,7 @@ class RulesController extends AbstractController
         return $this->render('rules/dojo-detail.html.twig', [
             'ecole' => $dojo,
             'nom' => $dojo->getNom(),
-            'entity' => 'ecole',
+            'entity' => 'dojo',
             'category' => 'rules',
             'un_element' => $dojo,
             'other_dojos' => $otherDojos,

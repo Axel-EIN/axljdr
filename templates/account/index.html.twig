@@ -1,13 +1,13 @@
 {% extends 'other.html.twig' %}
 
-{% set titre = 'Votre espace de compte' %}
+{% set page_title = 'Votre espace de compte' %}
 
 {% block stylesheets %}
   {{ parent() }}
   <link rel="stylesheet" href="{{asset('css/pages/account.css')}}" />
 {% endblock %}
 
-{% block cartes %}
+{% block cards %}
 
   <div class="col-12 col-lg-6">
     <div class="card card-page compact">
@@ -32,8 +32,8 @@
 
         <dt>Vos rôles</dt>
         <dd>
-          {% for un_role in app.user.roles %}
-            <strong>{{ un_role }}</strong>{{ not loop.last ? ',' : '' }}
+          {% for role in app.user.roles %}
+            <strong>{{ role }}</strong>{{ not loop.last ? ',' : '' }}
           {% else %}
             Il n'y a pas de rôle
           {% endfor %}
@@ -53,7 +53,7 @@
       <h2 class="heading-cardtitle">Mon Personnage Principal</h2>
       <hr>
 
-      {% if is_mj() %}
+      {% if is_gm() %}
         <p class="text-muted font-italic">En mode MJ, vous naviguez sans personnage principal.{% if main_character %} Passez en mode Joueur pour naviguer avec lui.{% endif %}</p>
       {% endif %}
 
@@ -62,10 +62,10 @@
           <input type="hidden" name="_csrf_token" value="{{ csrf_token('navigation-mode') }}" />
           <span>Mode de navigation</span>
           <div class="account-mode-switch">
-            <button type="submit" name="mode" value="{{ constant('App\\Entity\\Utilisateur::MODE_GAME_MASTER') }}" class="mj{{ is_mj() ? ' active' }}" aria-pressed="{{ is_mj() ? 'true' : 'false' }}"{% if is_mj() %} disabled{% endif %} title="Tous les droits du MJ, sans personnage principal">
+            <button type="submit" name="mode" value="{{ constant('App\\Entity\\Utilisateur::MODE_GAME_MASTER') }}" class="mj{{ is_gm() ? ' active' }}" aria-pressed="{{ is_gm() ? 'true' : 'false' }}"{% if is_gm() %} disabled{% endif %} title="Tous les droits du MJ, sans personnage principal">
               <i class="fas fa-scroll" aria-hidden="true"></i> MJ
             </button>
-            <button type="submit" name="mode" value="{{ constant('App\\Entity\\Utilisateur::MODE_PLAYER') }}" class="joueur{{ not is_mj() ? ' active' }}" aria-pressed="{{ is_mj() ? 'false' : 'true' }}"{% if not is_mj() %} disabled{% endif %} title="Votre personnage principal, sans les droits du MJ">
+            <button type="submit" name="mode" value="{{ constant('App\\Entity\\Utilisateur::MODE_PLAYER') }}" class="joueur{{ not is_gm() ? ' active' }}" aria-pressed="{{ is_gm() ? 'false' : 'true' }}"{% if not is_gm() %} disabled{% endif %} title="Votre personnage principal, sans les droits du MJ">
               <i class="fas fa-user" aria-hidden="true"></i> Joueur
             </button>
           </div>
@@ -99,9 +99,9 @@
           <label for="main-character">Choisir mon personnage principal</label>
           <select id="main-character" name="character">
             <option value="">Automatique — le plus récent</option>
-            {% for un_personnage in app.user.personnages %}
-              <option value="{{ un_personnage.id }}"{% if app.user.mainCharacter and un_personnage.id == app.user.mainCharacter.id %} selected{% endif %}>
-                {{ un_personnage.nomComplet }}
+            {% for character in app.user.personnages %}
+              <option value="{{ character.id }}"{% if app.user.mainCharacter and character.id == app.user.mainCharacter.id %} selected{% endif %}>
+                {{ character.nomComplet }}
               </option>
             {% endfor %}
           </select>
@@ -114,14 +114,14 @@
       <hr>
 
       <div class="account-characters">
-        {% for un_personnage in app.user.personnages|filter(p => main_character is empty or p.id != main_character.id) %}
+        {% for character in app.user.personnages|filter(p => main_character is empty or p.id != main_character.id) %}
           <article>
-            <a href="{{ path('characters_profile', {id: un_personnage.id}) }}" class="hover-zoom">
-              <img src="{{ asset(un_personnage.icone|default(NA_PERSO_PORTRAIT)) }}" alt="Portrait de {{ un_personnage.prenom }}" />
+            <a href="{{ path('characters_profile', {id: character.id}) }}" class="hover-zoom">
+              <img src="{{ asset(character.icone|default(NA_PERSO_PORTRAIT)) }}" alt="Portrait de {{ character.prenom }}" />
             </a>
-            <strong>{{ un_personnage.nomComplet }}</strong>
-            {% if un_personnage.fichePersonnage is not empty %}
-              <a href="{{ path('characters_sheet', {id: un_personnage.fichePersonnage.id}) }}">
+            <strong>{{ character.nomComplet }}</strong>
+            {% if character.fichePersonnage is not empty %}
+              <a href="{{ path('characters_sheet', {id: character.fichePersonnage.id}) }}">
                 <i class="fas fa-user-secret" aria-hidden="true"></i> Fiche privée
               </a>
             {% else %}

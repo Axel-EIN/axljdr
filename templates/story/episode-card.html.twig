@@ -1,33 +1,33 @@
 <div class="{{ wrapper|default('col-12 col-sm-6 col-md-4 col-lg-3') }} hover-zoom episode-card-space">
 
-  {% if is_mj() %}
-    {% set position, redirect, entity, un_element, size = 'topright-corner-inside-more', 'story', 'episode', un_episode, 'small' %}
+  {% if is_gm() %}
+    {% set position, redirect, entity, record, size = 'topright-corner-inside-more', 'story', 'episode', episode, 'small' %}
     {{ include('/btns/btn-icon-edit.html.twig') }}
   {% endif %}
 
   {% if app.user %}
-    {% for cumul in user_characters_episode_totals %}
-      {% if cumul[un_episode.id] is defined %}
-        {% set joue = cumul[un_episode.id] %}
+    {% for episode_totals in user_characters_episode_totals %}
+      {% if episode_totals[episode.id] is defined %}
+        {% set played = episode_totals[episode.id] %}
         <div class="character-box">
-          {% if joue.dead == 1 %}
+          {% if played.dead == 1 %}
             <strong class="text-dead">MORT</strong>
-          {% elseif joue.xp != 0 %}
-            <strong class="text-your-xp">{{ include('parts/xp-gain.html.twig', {xp: joue.xp, total: joue.xpWithBonus, signe: '+'}) }}</strong>
+          {% elseif played.xp != 0 %}
+            <strong class="text-your-xp">{{ include('parts/xp-gain.html.twig', {xp: played.xp, total: played.xpWithBonus, sign: '+'}) }}</strong>
           {% endif %}
-          <a href="{{ path('characters_profile', {id: joue.id}) }}">
-            <img class="character-portrait medium outlined {% if joue.dead == 1 %}effect-dead{% elseif joue.xp == 0 %}grayscale{% else %}hover-shine{% endif %}"
-              src="{{ asset(joue.icon) }}" alt="Icone de {{ joue.firstName }}" title="{{ joue.firstName }}" />
+          <a href="{{ path('characters_profile', {id: played.id}) }}">
+            <img class="character-portrait medium outlined {% if played.dead == 1 %}effect-dead{% elseif played.xp == 0 %}grayscale{% else %}hover-shine{% endif %}"
+              src="{{ asset(played.icon) }}" alt="Icone de {{ played.firstName }}" title="{{ played.firstName }}" />
           </a>
         </div>
       {% endif %}
     {% endfor %}
   {% endif %}
 
-  <a class="card-inner" href="{{ path('story_episode', {id:un_episode.id} ) }}">
-    {% if element_fresh(un_episode) %}{{ include('parts/badge-new.html.twig') }}{% endif %}
-    <span class="card-number"><span class="text-big">#</span>{{ un_episode.numeroSaison }}</span>
-    {% set episode_image = un_episode.image|default(NA_SESSION) %}
+  <a class="card-inner" href="{{ path('story_episode', {id:episode.id} ) }}">
+    {% if element_fresh(episode) %}{{ include('parts/badge-new.html.twig') }}{% endif %}
+    <span class="card-number"><span class="text-big">#</span>{{ episode.numeroSaison }}</span>
+    {% set episode_image = episode.image|default(NA_SESSION) %}
     {% set episode_srcset = image_srcset(episode_image) %}
     {% set episode_preset = image_preset('landscape720') %}
 
@@ -39,11 +39,11 @@
         {% endif %}
         width="{{ episode_preset.width }}" height="{{ episode_preset.height }}"
         {% if lazy ?? true %}loading="lazy"{% endif %}
-        alt="Image de la session {{un_episode.titre}}" title="{{un_episode.titre}}"  />
+        alt="Image de la session {{episode.titre}}" title="{{episode.titre}}"  />
     </div>
     <div class="text-container">
-      <span class="card-title-cartouche leading-0">{{ un_episode.titre }}</span>
-      <p class="card-text">{{ un_episode.resume|default('Résumé à venir...') }}</p>
+      <span class="card-title-cartouche leading-0">{{ episode.titre }}</span>
+      <p class="card-text">{{ episode.resume|default('Résumé à venir...') }}</p>
     </div>
     <button class="btn-primary-style btn-medium">
       <i class="fab fa-readme" aria-hidden="true"></i>&nbsp;&nbsp;Lire le résumé

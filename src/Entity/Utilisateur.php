@@ -17,6 +17,9 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
 {
+    public const MODE_GAME_MASTER = 'mj';
+    public const MODE_PLAYER = 'joueur';
+
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
@@ -76,6 +79,11 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
     private $mainCharacter;
 
     /**
+     * @ORM\Column(type="boolean", options={"default": false})
+     */
+    private $playerMode = false;
+
+    /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $reset_token;
@@ -133,6 +141,10 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function setRoles(array $roles): self
     {
+        if (!$this->isGameMaster() && in_array('ROLE_MJ', $roles, true)) {
+            $this->playerMode = false;
+        }
+
         $this->roles = $roles;
 
         return $this;
@@ -245,6 +257,23 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
     public function setMainCharacter(?Personnage $mainCharacter): self
     {
         $this->mainCharacter = $mainCharacter;
+
+        return $this;
+    }
+
+    public function isGameMaster(): bool
+    {
+        return in_array('ROLE_MJ', $this->roles, true);
+    }
+
+    public function isPlayerMode(): bool
+    {
+        return $this->playerMode;
+    }
+
+    public function setPlayerMode(bool $playerMode): self
+    {
+        $this->playerMode = $playerMode;
 
         return $this;
     }

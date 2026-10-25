@@ -36,8 +36,8 @@
     box-shadow: 0px -4px 16px var(--color-black25);
     backdrop-filter: blur(4px);
     min-width: 265px;
-    min-height: 360px;
-    max-height: 360px;
+    min-height: 336px;
+    max-height: 336px;
     border: 0;
 
     .card-number {

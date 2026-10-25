@@ -9,12 +9,12 @@ use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-final class PrixType extends AbstractType
+final class PriceType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        foreach (['koku' => 'Koku', 'bu' => 'Bu', 'zeni' => 'Zeni'] as $piece => $label) {
-            $builder->add($piece, IntegerType::class, [
+        foreach (['koku' => 'Koku', 'bu' => 'Bu', 'zeni' => 'Zeni'] as $coin => $label) {
+            $builder->add($coin, IntegerType::class, [
                 'label' => $label,
                 'required' => false,
                 'attr' => ['min' => 0],
@@ -22,25 +22,25 @@ final class PrixType extends AbstractType
         }
 
         $builder->addModelTransformer(new CallbackTransformer(
-            function (?int $prix): array {
-                if ($prix === null) {
+            function (?int $price): array {
+                if ($price === null) {
                     return ['koku' => null, 'bu' => null, 'zeni' => null];
                 }
 
                 return [
-                    'koku' => intdiv($prix, Monnaie::ZENI_PAR_KOKU),
-                    'bu' => intdiv($prix % Monnaie::ZENI_PAR_KOKU, Monnaie::ZENI_PAR_BU),
-                    'zeni' => $prix % Monnaie::ZENI_PAR_BU,
+                    'koku' => intdiv($price, Monnaie::ZENI_PAR_KOKU),
+                    'bu' => intdiv($price % Monnaie::ZENI_PAR_KOKU, Monnaie::ZENI_PAR_BU),
+                    'zeni' => $price % Monnaie::ZENI_PAR_BU,
                 ];
             },
-            function (?array $pieces): ?int {
-                if ($pieces === null || array_filter($pieces, fn ($valeur) => $valeur !== null) === []) {
+            function (?array $coins): ?int {
+                if ($coins === null || array_filter($coins, fn ($value) => $value !== null) === []) {
                     return null;
                 }
 
-                return (int) $pieces['koku'] * Monnaie::ZENI_PAR_KOKU
-                    + (int) $pieces['bu'] * Monnaie::ZENI_PAR_BU
-                    + (int) $pieces['zeni'];
+                return (int) $coins['koku'] * Monnaie::ZENI_PAR_KOKU
+                    + (int) $coins['bu'] * Monnaie::ZENI_PAR_BU
+                    + (int) $coins['zeni'];
             }
         ));
     }

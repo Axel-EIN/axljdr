@@ -5,7 +5,7 @@ namespace App\Controller;
 use App\Entity\Rule;
 use App\Form\AdminRuleType;
 use App\Service\FileHandler;
-use App\Service\Numeroteur;
+use App\Service\Orderer;
 use App\Repository\RuleRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -53,7 +53,7 @@ class AdminRuleController extends AbstractController
      * @Route("/admin/rule/create", name="admin_rule_create")
      * @IsGranted("ROLE_MJ")
      */
-    public function addRule(Request $request, EntityManagerInterface $em, FileHandler $fileHandler, RuleRepository $ruleRepository, Numeroteur $numeroteur, Unlocker $unlocker): Response
+    public function addRule(Request $request, EntityManagerInterface $em, FileHandler $fileHandler, RuleRepository $ruleRepository, Orderer $orderer, Unlocker $unlocker): Response
     {
         $rule = new Rule;
         $form = $this->createForm(AdminRuleType::class, $rule);
@@ -81,7 +81,7 @@ class AdminRuleController extends AbstractController
             $this->addFlash('success', 'La Règle a bien été ajoutée');
 
             $fratrieArrivee = $ruleRepository->findBy(['base' => $rule->getBase()]);
-            $numeroteur->reordonnerNumero($rule->getId(), -1, $rule->getNumero(), [], $fratrieArrivee);
+            $orderer->reorderNumber($rule->getId(), -1, $rule->getNumero(), [], $fratrieArrivee);
 
             if (!empty($request->query->get('redirect')) && $request->query->get('redirect') == 'rule')
                 return $this->redirectToRoute('rules_rule', ['id' => $rule->getId()]);
@@ -103,7 +103,7 @@ class AdminRuleController extends AbstractController
      * @Route("/admin/rule/{id}/edit", name="admin_rule_edit")
      * @IsGranted("ROLE_MJ")
      */
-    public function editRule(Request $request, Rule $rule, FileHandler $fileHandler, RuleRepository $ruleRepository, Numeroteur $numeroteur, Unlocker $unlocker): Response
+    public function editRule(Request $request, Rule $rule, FileHandler $fileHandler, RuleRepository $ruleRepository, Orderer $orderer, Unlocker $unlocker): Response
     {
         $numeroDepart = $rule->getNumero();
         $fratrieDepartId = $rule->getBase();
@@ -133,7 +133,7 @@ class AdminRuleController extends AbstractController
             {
                 $fratrieDepart = $ruleRepository->findBy(['base' => $fratrieDepartId]);
                 $fratrieArrivee = $ruleRepository->findBy(['base' => $rule->getBase()]);
-                $numeroteur->reordonnerNumero($rule->getId(), $numeroDepart, $rule->getNumero(), $fratrieDepart, $fratrieArrivee);
+                $orderer->reorderNumber($rule->getId(), $numeroDepart, $rule->getNumero(), $fratrieDepart, $fratrieArrivee);
             }
 
             $unlocker->sync($rule, $form->get('unlockedBy')->getData());
@@ -162,7 +162,7 @@ class AdminRuleController extends AbstractController
      * @Route("/admin/rule/{id}/delete", name="admin_rule_delete", methods={"POST"})
      * @IsGranted("ROLE_MJ")
      */
-    public function deleteRule(Request $request, Rule $rule, FileHandler $fileHandler, EntityManagerInterface $em, RuleRepository $ruleRepository, Numeroteur $numeroteur, Unlocker $unlocker): Response
+    public function deleteRule(Request $request, Rule $rule, FileHandler $fileHandler, EntityManagerInterface $em, RuleRepository $ruleRepository, Orderer $orderer, Unlocker $unlocker): Response
     {
         if ( $this->isCsrfTokenValid('delete' . $rule->getId(), $request->request->get('_csrf_token')))
         {
@@ -172,7 +172,7 @@ class AdminRuleController extends AbstractController
 
             $fratrieDepartId = $rule->getBase();
             $fratrieDepart = $ruleRepository->findBy(['base' => $fratrieDepartId]);
-            $numeroteur->reordonnerNumero($rule->getId(), $rule->getNumero(), -1, $fratrieDepart, []);
+            $orderer->reorderNumber($rule->getId(), $rule->getNumero(), -1, $fratrieDepart, []);
 
             $unlocker->forget($rule);
             $em->remove($rule);

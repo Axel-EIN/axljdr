@@ -134,12 +134,12 @@
                     {% endif %}
                     <div class="status-body">
                         <nav class="status-actions" aria-label="Raccourcis du personnage">
-                            <a class="status-link" href="{{ path('personnage_profil', {id: mon_personnage.id}) }}" aria-label="Voir le profil">
+                            <a class="status-link" href="{{ path('characters_profile', {id: mon_personnage.id}) }}" aria-label="Voir le profil">
                                 <i class="fa-solid fa-user" aria-hidden="true"></i>
                                 <span class="hover-tooltip below">Voir le profil</span>
                             </a>
                             {% if mon_personnage.fichePersonnage %}
-                                <a class="status-link" href="{{ path('personnage_fiche', {id: mon_personnage.fichePersonnage.id}) }}" aria-label="Voir la Fiche de Jeu">
+                                <a class="status-link" href="{{ path('characters_sheet', {id: mon_personnage.fichePersonnage.id}) }}" aria-label="Voir la Fiche de Jeu">
                                     <i class="fa-solid fa-scroll" aria-hidden="true"></i>
                                     <span class="hover-tooltip below">Voir la Fiche de Jeu</span>
                                 </a>

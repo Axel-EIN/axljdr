@@ -10,14 +10,14 @@
       {% if cumul[un_episode.id] is defined %}
         {% set joue = cumul[un_episode.id] %}
         <div class="character-box">
-          {% if joue.estMort == 1 %}
+          {% if joue.dead == 1 %}
             <strong class="text-dead">MORT</strong>
           {% elseif joue.xp != 0 %}
             <strong class="text-your-xp">{{ include('parts/xp-gain.html.twig', {xp: joue.xp, total: joue.xpWithBonus, signe: '+'}) }}</strong>
           {% endif %}
           <a href="{{ path('characters_profile', {id: joue.id}) }}">
-            <img class="character-portrait medium outlined {% if joue.estMort == 1 %}effect-dead{% elseif joue.xp == 0 %}grayscale{% else %}hover-shine{% endif %}"
-              src="{{ asset(joue.icone) }}" alt="Icone de {{ joue.prenom }}" title="{{ joue.prenom }}" />
+            <img class="character-portrait medium outlined {% if joue.dead == 1 %}effect-dead{% elseif joue.xp == 0 %}grayscale{% else %}hover-shine{% endif %}"
+              src="{{ asset(joue.icon) }}" alt="Icone de {{ joue.firstName }}" title="{{ joue.firstName }}" />
           </a>
         </div>
       {% endif %}

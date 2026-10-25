@@ -23,14 +23,14 @@ class NewsController extends AbstractController
     private const MARGE_DECOUVERTES = 2;
 
     private const DECOUVERTES = [
-        ['titre' => 'Personnages', 'vide' => 'Aucun personnage découvert', 'variant' => 'portrait', 'cle' => 'personnage', 'max' => 4],
+        ['titre' => 'Personnages', 'vide' => 'Aucun personnage découvert', 'variant' => 'portrait', 'cle' => 'character', 'max' => 4],
         ['titre' => 'Lieux', 'vide' => 'Aucun lieu découvert', 'variant' => 'icon', 'cle' => 'location', 'max' => 3],
         ['titre' => 'Objets', 'vide' => 'Aucun objet découvert', 'variant' => 'rule', 'field' => 'icon', 'cle' => 'object', 'max' => 3],
     ];
 
     private const GROUPES = [
-        ['titre' => 'Personnages Joueurs', 'variant' => 'portrait', 'cles' => ['personnage'], 'criteres' => ['estPj' => true]],
-        ['titre' => 'Personnages Non Joueurs', 'variant' => 'portrait', 'cles' => ['personnage'], 'criteres' => ['estPj' => false]],
+        ['titre' => 'Personnages Joueurs', 'variant' => 'portrait', 'cles' => ['character'], 'criteres' => ['estPj' => true]],
+        ['titre' => 'Personnages Non Joueurs', 'variant' => 'portrait', 'cles' => ['character'], 'criteres' => ['estPj' => false]],
         ['titre' => 'Lieux', 'variant' => 'icon', 'cles' => ['location']],
         ['titre' => 'Objets & Equipements', 'variant' => 'rule', 'field' => 'icon', 'sections' => [
             ['titre' => 'Divers', 'cles' => ['object'], 'criteres' => ['categorie' => 'OBJET'], 'max' => 2],

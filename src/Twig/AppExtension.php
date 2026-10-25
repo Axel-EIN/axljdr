@@ -72,7 +72,8 @@ class AppExtension extends AbstractExtension
             new TwigFunction('image_srcset', [$this, 'imageSrcset']),
             new TwigFunction('table_filters', [$this->tableFilter, 'build']),
             new TwigFunction('table_value', [$this->tableFilter, 'valueOf']),
-            new TwigFunction('main_character', [$this->currentPlayer, 'main']),
+            new TwigFunction('navigating_character', [$this->currentPlayer, 'navigatingCharacter']),
+            new TwigFunction('is_mj', [$this->currentPlayer, 'seesAll']),
         ];
     }
 

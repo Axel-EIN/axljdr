@@ -131,7 +131,7 @@ class RulesController extends AbstractController
             'advantage' => $advantageRepository,
             'skill' => $skillRepository,
             'spell' => $spellRepository,
-            'objet' => $objectRepository,
+            'object' => $objectRepository,
         ];
         $repository = $repositories[$entity_name] ?? throw $this->createNotFoundException();
         $items = $visibility->listedOnly($repository->findAll());
@@ -294,7 +294,7 @@ class RulesController extends AbstractController
      */
     public function showObject(Objet $object, ObjetRepository $objectRepository, Visibility $visibility): Response
     {
-        if ($response = $this->accessGuard($visibility, $object, 'objet', 'rules')) {
+        if ($response = $this->accessGuard($visibility, $object, 'object', 'rules')) {
             return $response;
         }
 
@@ -306,7 +306,7 @@ class RulesController extends AbstractController
         return $this->render('rules/object-detail.html.twig', [
             'un_element' => $object,
             'nom' => $object->getNom(),
-            'entity' => 'objet',
+            'entity' => 'object',
             'category' => 'rules',
             'other_objects' => array_slice(array_values($otherObjects), 0, 12),
         ]);

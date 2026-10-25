@@ -22,8 +22,6 @@
     --color-linkgm-hover: var(--accent-light);
     --color-linkonimage: var(--color-white50);
     --color-linkonimage-hover: var(--color-white);
-    --color-linkcharacter: var(--color-secondary);
-    --color-linklocation: var(--purple);
 
     .text-surface { color: var(--color-surface); }
     .text-background { color: var(--color-background); }
@@ -34,7 +32,7 @@
     .text-strong { color: var(--color-strong) }
     .text-stamp { color: var(--color-stamp) }
 
-    .bg-surface { background-color: var(var(--color-surface)); }
+    .bg-surface { background-color: var(--color-surface); }
     .bg-background { background-color: var(--color-background); }
     .bg-fade { background-color: var(--color-fade); }
     .bg-disabled { background-color: var(--color-disabled); }

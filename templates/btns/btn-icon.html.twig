@@ -12,16 +12,16 @@
     {% set href = path(path) %}
     {% set fa_icon, label = 'fa-plus-square', 'Ajouter' %}
 {% elseif action == 'edit' %}
-    {% set href = path(path, {id:un_element.id}) %}
+    {% set href = path(path, {id:record.id}) %}
     {% set fa_icon, label = 'fa-edit', 'Modifier' %}
 {% elseif action == 'delete' %}
     {% set fa_icon, label = 'fa-trash-alt', 'Supprimer' %}
 {% endif %}
 
 {% if action == 'delete' %}
-    {% set form_action = path(path, {id:un_element.id}) ~ '?' ~ frag_redir|default('') ~ fragment|default('') %}
+    {% set form_action = path(path, {id:record.id}) ~ '?' ~ frag_redir|default('') ~ fragment|default('') %}
     <form method="POST" action="{{ form_action }}" style="display:inline" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cet élément ?')">
-        <input type="hidden" name="_csrf_token" value="{{ csrf_token('delete' ~ un_element.id) }}">
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token('delete' ~ record.id) }}">
         <button type="submit" class="{{position|default('')}} {{color}} {{size}}" style="border:none;background:none;cursor:pointer;padding:0;">
             <i class="fas {{fa_icon}}" title="{{label}}"></i>
         </button>

@@ -63,10 +63,10 @@ class AdminEpisodeController extends AbstractController
         $tableFilter->prefill($episode, self::TABLE_FILTERS, $request->query->all('filter'));
 
         if ( !empty($request->query->get('numero')) && $request->query->get('numero') > 0
-          && !empty($request->query->get('chapitreID')) && $request->query->get('chapitreID') > 0 )
+          && !empty($request->query->get('chapterID')) && $request->query->get('chapterID') > 0 )
         {
                 $episode->setNumero($request->query->get('numero'));
-                $chapitreParent = $chapitreRepository->find($request->query->get('chapitreID'));
+                $chapitreParent = $chapitreRepository->find($request->query->get('chapterID'));
                 if ($chapitreParent !== null)
                     $episode->setChapitreParent($chapitreParent);
         }

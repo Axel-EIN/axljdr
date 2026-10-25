@@ -27,7 +27,7 @@
     {{ include('/parts/messages-flashes.html.twig') }}
 
     <div class="relative d-flex w-100 flex-column">
-      {% set chapitres_voisins = {precedent: chapitre_precedent, suivant: chapitre_suivant}|map(c => c ? c.episodes|filter(e => e.scenes|length > 0 or is_granted('ROLE_MJ'))|first : null) %}
+      {% set chapitres_voisins = {precedent: chapitre_precedent, suivant: chapitre_suivant}|map(c => c ? c.episodes|filter(e => e.scenes|length > 0 or is_mj())|first : null) %}
       <span class="chapter-number navigable display-5">
         <a class="prev btn-quaternary-style text-white50{{ chapitres_voisins.precedent is empty ? ' invisible' }}"
            {% if chapitres_voisins.precedent is not empty %}href="{{ path('aventure_episode', {id: chapitres_voisins.precedent.id}) }}" title="Chapitre précédent"{% endif %}>
@@ -65,7 +65,7 @@
         {{ include('parts/badge-access.html.twig', {state: element_state(episode)}) }}
         <h1 class="heading-episodedetail mb-0 mt-3 py-3">
           {{episode.titre}}
-          {% if app.user and is_granted("ROLE_MJ") %}            {% set color, position, redirect, entity, un_element, size = 'text-white50', '', 'aventure', 'episode', episode, 'btn-icon-medium' %}
+          {% if is_mj() %}            {% set color, position, redirect, entity, un_element, size = 'text-white50', '', 'aventure', 'episode', episode, 'btn-icon-medium' %}
             {{ include('/btns/btn-icon-edit.html.twig') }}
           {% endif %}
         </h1>
@@ -77,7 +77,7 @@
           {% set numero = 0 %}
           {% for une_scene in episode.scenes %}
 
-            {% if app.user and is_granted("ROLE_MJ") %}
+            {% if is_mj() %}
               <div class="text-center mb-4">&nbsp;
                   {% set color, entity, numero, parent, parentID, redirect, label = 'link-gm', 'scene', une_scene.numero, 'episode', episode.id, 'episode', 'Insérer' %}
                   {{ include('/btns/btn-line-insert.html.twig') }}
@@ -90,7 +90,7 @@
             <p class="text-center text-light py-5">Il n'y a pas encore de scènes pour cette épisode.</p>
           {% endfor %}
 
-          {% if app.user and is_granted("ROLE_MJ") %}
+          {% if is_mj() %}
             <div class="text-center mt-1 mb-3">
               {% set btnStyle, btnSize, color, entity, numero, parent, parentID, redirect, label = 'btn-primary-style gm', 'btn-medium', 'text-white', 'scene', (numero + 1), 'episode', episode.id, 'episode', 'Ajouter' %}
               {{ include('/btns/btn-line-insert.html.twig') }}
@@ -172,7 +172,7 @@
             </div>
             <div class="col text-right pr-0">
               {% if episode_suivant is not empty %}
-                {% if episode_suivant.scenes|length > 0 or is_granted("ROLE_MJ") %}
+                {% if episode_suivant.scenes|length > 0 or is_mj() %}
                   <a class="btn-primary-style btn-medium" href="{{ path('aventure_episode', {id: episode_suivant.id}) }}">
                     Suivant
                   </a>

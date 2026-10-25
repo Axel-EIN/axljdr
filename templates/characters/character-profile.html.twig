@@ -43,7 +43,7 @@
             </div>
 
             {% if sheet_visible or sheet_addable %}
-                <div class="profile-btn-fiche">
+                <div class="profile-btn-sheet">
                     {% if sheet_visible %}
                         <a class="btn-primary-style btn-medium{% if not is_own_character %} gm{% endif %}" href="{{ path('characters_sheet', {id: character.fichePersonnage.id}) }}">
                             <i class="fas fa-scroll"></i> Voir la Fiche de Jeu
@@ -67,7 +67,7 @@
 
         {% if xp > 0 %}
             <li class="list-group-item infos-item profile-xp-and-rank">
-                <span class="badge-rang-{{rank}} large">RANG {{rank}}</span>
+                <span class="badge-rank-{{rank}} large">RANG {{rank}}</span>
                 <span class="xp-number">{{xp}} XP</span>
             </li>
         {% endif %}
@@ -206,7 +206,7 @@
                     </article>
                 {% endfor %}
 
-                <div class="zone-actions">
+                <div class="action-zone">
                     {{ include('/btns/btn-add-element.html.twig', {
                         entity: 'development', label_one: 'développement',
                         position: '', options: 'character=' ~ character.id,
@@ -271,7 +271,7 @@
     <div class="card card-body">
         <h2 class="heading-cardtitle">Historique</h2>
         <hr>
-        <div class="card-text profile-historique">
+        <div class="card-text profile-history">
             {{ include('parts/history.html.twig', {history, current_season}) }}
             {% if creation_xp > 0 %}
             <p class="profile-creation">Création du personnage {{ character.prenom }} avec <strong>{{ creation_xp }}xp</strong>.</p>

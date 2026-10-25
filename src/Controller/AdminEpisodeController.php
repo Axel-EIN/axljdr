@@ -57,7 +57,7 @@ class AdminEpisodeController extends AbstractController
      * @Route("/admin/episode/create", name="admin_episode_create")
      * @IsGranted("ROLE_MJ")
      */
-    public function addEpisode(Request $request, EntityManagerInterface $em, FileHandler $fileHandler, ChapitreRepository $chapitreRepository, Orderer $orderer, EpisodeRepository $episodeRepository, Unlocker $unlocker, TableFilter $tableFilter) {
+    public function addEpisode(Request $request, EntityManagerInterface $em, FileHandler $fileHandler, ChapitreRepository $chapterRepository, Orderer $orderer, EpisodeRepository $episodeRepository, Unlocker $unlocker, TableFilter $tableFilter) {
 
         $episode = new Episode;
         $tableFilter->prefill($episode, self::TABLE_FILTERS, $request->query->all('filter'));
@@ -66,9 +66,9 @@ class AdminEpisodeController extends AbstractController
           && !empty($request->query->get('chapterID')) && $request->query->get('chapterID') > 0 )
         {
                 $episode->setNumero($request->query->get('numero'));
-                $chapitreParent = $chapitreRepository->find($request->query->get('chapterID'));
-                if ($chapitreParent !== null)
-                    $episode->setChapitreParent($chapitreParent);
+                $parentChapter = $chapterRepository->find($request->query->get('chapterID'));
+                if ($parentChapter !== null)
+                    $episode->setChapitreParent($parentChapter);
         }
 
         $episode->setNumeroSaison($episodeRepository->nextCampaignNumber());
@@ -78,10 +78,10 @@ class AdminEpisodeController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
 
-            $nouvelleImage = $form->get('image')->getData();
-            if (!empty($nouvelleImage)) {
-                $prefix = $this->prefixeImage($episode);
-                $episode->setImage($fileHandler->handle($nouvelleImage, null, $prefix, 'episodes', 'landscape720'));
+            $newImage = $form->get('image')->getData();
+            if (!empty($newImage)) {
+                $prefix = $this->imagePrefix($episode);
+                $episode->setImage($fileHandler->handle($newImage, null, $prefix, 'episodes', 'landscape720'));
             }
 
             $em->persist($episode);
@@ -91,8 +91,8 @@ class AdminEpisodeController extends AbstractController
             $em->flush();
             $this->addFlash('success', 'L\'épisode a bien été crée.');
 
-            $fratrieArrivee = $episodeRepository->findBy(['chapitreParent' => $episode->getChapitreParent()->getId()]);
-            $orderer->reorderNumber($episode->getId(), -1, $episode->getNumero(), [], $fratrieArrivee);
+            $newSiblings = $episodeRepository->findBy(['chapitreParent' => $episode->getChapitreParent()->getId()]);
+            $orderer->reorderNumber($episode->getId(), -1, $episode->getNumero(), [], $newSiblings);
 
             if (!empty($request->query->get('redirect')) && $request->query->get('redirect') == 'story')
                 return $this->redirectToRoute('story_season', ['id' => $episode->getChapitreParent()->getSaisonParent()->getId(),'_fragment' => 'read-head-ch-id' . $episode->getChapitreParent()->getId()]);
@@ -116,8 +116,8 @@ class AdminEpisodeController extends AbstractController
      */
     public function editEpisode(Request $request, Episode $episode, FileHandler $fileHandler, Orderer $orderer, EpisodeRepository $episodeRepository, Unlocker $unlocker): Response {
 
-        $numeroDepart = $episode->getNumero();
-        $fratrieDepartId = $episode->getChapitreParent()->getId();
+        $previousNumber = $episode->getNumero();
+        $previousSiblingsId = $episode->getChapitreParent()->getId();
 
         $form = $this->createForm(AdminEpisodeType::class, $episode);
         $form->get('unlockedBy')->setData($unlocker->charactersOf($episode));
@@ -125,20 +125,20 @@ class AdminEpisodeController extends AbstractController
 
         if($form->isSubmitted() && $form->isValid()) {
 
-            $nouvelleImage = $form->get('image')->getData();
-            if (!empty($nouvelleImage)) {
-                $prefix = $this->prefixeImage($episode);
-                $episode->setImage($fileHandler->handle($nouvelleImage, $episode->getImage(), $prefix, 'episodes', 'landscape720'));
+            $newImage = $form->get('image')->getData();
+            if (!empty($newImage)) {
+                $prefix = $this->imagePrefix($episode);
+                $episode->setImage($fileHandler->handle($newImage, $episode->getImage(), $prefix, 'episodes', 'landscape720'));
             } elseif ($request->request->get('remove_image') === '1' && $episode->getImage()) {
                 $fileHandler->handle(null, $episode->getImage(), null, 'episodes');
                 $episode->setImage(null);
             }
 
-            if ($numeroDepart != $episode->getNumero() || $fratrieDepartId != $episode->getChapitreParent()->getId())
+            if ($previousNumber != $episode->getNumero() || $previousSiblingsId != $episode->getChapitreParent()->getId())
             {
-                $fratrieDepart = $episodeRepository->findBy(['chapitreParent' => $fratrieDepartId]);
-                $fratrieArrivee = $episodeRepository->findBy(['chapitreParent' => $episode->getChapitreParent()->getId()]);
-                $orderer->reorderNumber($episode->getId(), $numeroDepart, $episode->getNumero(), $fratrieDepart, $fratrieArrivee);
+                $previousSiblings = $episodeRepository->findBy(['chapitreParent' => $previousSiblingsId]);
+                $newSiblings = $episodeRepository->findBy(['chapitreParent' => $episode->getChapitreParent()->getId()]);
+                $orderer->reorderNumber($episode->getId(), $previousNumber, $episode->getNumero(), $previousSiblings, $newSiblings);
             }
 
             $unlocker->sync($episode, $form->get('unlockedBy')->getData());
@@ -168,7 +168,7 @@ class AdminEpisodeController extends AbstractController
      * @IsGranted("ROLE_MJ")
      */
     public function deleteEpisode(Request $request, Episode $episode, Orderer $orderer, EpisodeRepository $episodeRepository, FileHandler $fileHandler, Unlocker $unlocker): Response {
-        $chapitreParent = $episode->getChapitreParent();
+        $parentChapter = $episode->getChapitreParent();
 
         if ($this->isCsrfTokenValid('delete' . $episode->getId(), $request->request->get('_csrf_token'))) {
 
@@ -179,9 +179,9 @@ class AdminEpisodeController extends AbstractController
 
             $fileHandler->handle(null, $episode->getImage(), null, 'episodes');
 
-            $fratrieDepartId = $episode->getChapitreParent()->getId();
-            $fratrieDepart = $episodeRepository->findBy(['chapitreParent' => $fratrieDepartId]);
-            $orderer->reorderNumber($episode->getId(), $episode->getNumero(), -1, $fratrieDepart, []);
+            $previousSiblingsId = $episode->getChapitreParent()->getId();
+            $previousSiblings = $episodeRepository->findBy(['chapitreParent' => $previousSiblingsId]);
+            $orderer->reorderNumber($episode->getId(), $episode->getNumero(), -1, $previousSiblings, []);
 
             $entityManager = $this->getDoctrine()->getManager();
             $unlocker->forget($episode);
@@ -191,12 +191,12 @@ class AdminEpisodeController extends AbstractController
         }
 
         if (!empty($request->query->get('redirect')) && $request->query->get('redirect') == 'story')
-            return $this->redirectToRoute('story_season', ['id' => $chapitreParent->getSaisonParent()->getId(), '_fragment' => 'read-head-ch-id' . $chapitreParent->getId()]);
+            return $this->redirectToRoute('story_season', ['id' => $parentChapter->getSaisonParent()->getId(), '_fragment' => 'read-head-ch-id' . $parentChapter->getId()]);
 
         return $this->redirectToRoute('admin_episode');
     }
 
-    private function prefixeImage(Episode $episode): string
+    private function imagePrefix(Episode $episode): string
     {
         return 'episode-s' . $episode->getChapitreParent()->getSaisonParent()->getNumero()
             . '-ch' . $episode->getChapitreParent()->getNumero() . '-ep' . $episode->getNumero()

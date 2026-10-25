@@ -141,7 +141,7 @@
                     {% set scale = 'scale-sm-80' %}
                   {% endif %}
 
-                  <a class="list-group-item d-flex align-items-center hover-zoom bg-transparent ranking {{scale|default('')}}" href="{{path('personnage_profil',{id:un_personnage.id})}}">
+                  <a class="list-group-item d-flex align-items-center hover-zoom bg-transparent ranking {{scale|default('')}}" href="{{path('characters_profile',{id:un_personnage.id})}}">
                     <img class="img-96 mr-4 rounded-circle" src="{{ asset(un_personnage.icone|default(NA_PERSO_PORTRAIT)) }}" alt="Portrait du Personnage" title="Voir le profil de {{un_personnage.prenom}}"/>
                     <div class="relative inlineblock mr-4">
                       {% if mvp == true and rank == 1 %}<i class="crown fa-solid fa-crown fa-2xl text-primary mr-4"></i>{% endif %}

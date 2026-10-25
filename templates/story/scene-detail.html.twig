@@ -35,7 +35,7 @@
             </div>
         </div>
 
-        <div class="characters-line pnjs">
+        <div class="characters-line npcs">
             {% for participation in scene.participations|filter( (participation) => participation.estPj == 0) %}
 
                 {% if participation.personnage.icone is null and participation.personnage.genre == 'F' %}
@@ -49,10 +49,10 @@
                         {% if participation.estMort == 1 %}
                             <img class="character-icon-dead" src="{{ asset(MORT_ICO) }}" alt="est mort" />
                         {% endif %}
-                        <span class="hover-tooltip character-name pnj">
+                        <span class="hover-tooltip character-name npc">
                             {{participation.personnage.prenom}}
                         </span>
-                        <img class="character-portrait large pnj
+                        <img class="character-portrait large npc
                             {% if participation.estMort == 1 %}effect-dead{% endif %}"
                             src="{{ asset(participation.personnage.icone|default( attribute(_context, 'NA_PERSO_PORTRAIT' ~ gender_variable_sufix|default ) ) ) }}"
                             alt="Icone personnage" />
@@ -61,7 +61,7 @@
             {% endfor %}
         </div>
 
-        <div class="characters-line pjs">
+        <div class="characters-line pcs">
             {% for participation in scene.participations|filter( (participation) => participation.estPj == 1)|sort( (a, b) => a.xpGagne <=> b.xpGagne)|reverse %}
                 
                 {% if participation.personnage.icone is null and participation.personnage.genre == 'F' %}
@@ -80,11 +80,11 @@
 
                     <a class="character-portrait-link" href="{{path('characters_profile',{id:participation.personnage.id})}}" >
                         {% if participation.estMort == 1 %}<img class="character-icon-dead" src="{{ asset(MORT_ICO) }}" alt="est mort" />{% endif %}
-                        <span class="hover-tooltip character-name pj {% if participation.personnage.joueur == app.user %}me{% endif %} {% if participation.xpGagne == 0 or participation.estMort == 1 %}gray{% endif %}">
+                        <span class="hover-tooltip character-name pc {% if participation.personnage.joueur == app.user %}me{% endif %} {% if participation.xpGagne == 0 or participation.estMort == 1 %}gray{% endif %}">
                             {{participation.personnage.prenom}}
                         </span>
                         <img
-                            class="character-portrait large pj 
+                            class="character-portrait large pc 
                             {% if participation.personnage.joueur == app.user %} me outlined{% endif %}
                             {% if participation.estMort == 1 %}effect-dead{% elseif participation.xpGagne == 0 %}grayscale{% endif %}"
                             src="{{asset(participation.personnage.icone|default( attribute(_context, 'NA_PERSO_PORTRAIT' ~ gender_variable_sufix|default ) ) ) }}"

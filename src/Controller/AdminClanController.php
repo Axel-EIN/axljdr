@@ -29,8 +29,8 @@ class AdminClanController extends AbstractController
             'element' => 'clan',
             'label' => 'Clan',
             'labels' => 'Clans',
-            'genre' => 'M',
-            'determinant' => 'un',
+            'gender' => 'M',
+            'article' => 'un',
             'table_cols' => [
                 'mon:Mon:symbol:NA_MON',
                 'nom:Nom::bold',
@@ -91,11 +91,11 @@ class AdminClanController extends AbstractController
         
 
         return $this->render('back_office/create.html.twig', [
-            'type' => 'Créer',
+            'type' => 'create',
             'entity' => 'clan',
             'label' => 'Clan',
-            'genre' => 'M',
-            'determinant' => 'un',
+            'gender' => 'M',
+            'article' => 'un',
             'form' => $form->createView()
         ]);
     }
@@ -149,12 +149,12 @@ class AdminClanController extends AbstractController
         }
 
         return $this->renderForm('back_office/edit.html.twig', [
-            'type' => 'Modifier',
+            'type' => 'edit',
             'clan' => $clan,
             'entity' => 'clan',
             'label' => 'Clan',
-            'genre' => 'M',
-            'determinant' => 'un',
+            'gender' => 'M',
+            'article' => 'un',
             'form' => $form,
         ]);
     }

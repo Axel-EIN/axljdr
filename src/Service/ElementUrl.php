@@ -61,7 +61,7 @@ class ElementUrl
         }
         $params['_fragment'] = $key . $element->getId();
 
-        return $this->router->generate('regles_library', $params);
+        return $this->router->generate('rules_library', $params);
     }
 
     private function libraries(): array

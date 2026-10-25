@@ -61,7 +61,7 @@
   position: relative;
   border-top-left-radius: 0;
   border-top-right-radius: 0;
-  padding-top: var(--spacer-double);
+  padding-top: var(--spacer-triple-semi);
   margin-top: -1.2rem;
 
   @media (max-width: 991.98px) {

@@ -47,7 +47,7 @@ class RulesController extends AbstractController
 
         
         $sections[1]['name'] = "Classes";
-        $sections[1]['entity'] = 'classe';
+        $sections[1]['entity'] = 'class';
         $sections[1]['label_one'] = 'une Classe';
         $sections[1]['titleLight'] = 'Les ';
         $sections[1]['titleStrong'] = 'Classes';
@@ -128,9 +128,9 @@ class RulesController extends AbstractController
 
         $entity_name = $library->getEntity();
         $repositories = [
-            'avantage' => $advantageRepository,
-            'competence' => $skillRepository,
-            'sort' => $spellRepository,
+            'advantage' => $advantageRepository,
+            'skill' => $skillRepository,
+            'spell' => $spellRepository,
             'objet' => $objectRepository,
         ];
         $repository = $repositories[$entity_name] ?? throw $this->createNotFoundException();
@@ -227,7 +227,7 @@ class RulesController extends AbstractController
 
         $discounts = [];
 
-        if ( $entity_name == 'avantage' ) {
+        if ( $entity_name == 'advantage' ) {
             $discount_getters = [
                 'clan' => ['label' => 'Discount Clan/Faction', 'getter' => 'getDiscountClans'],
                 'class' => ['label' => 'Discount Classe', 'getter' => 'getDiscountClasses'],
@@ -325,7 +325,7 @@ class RulesController extends AbstractController
         return $this->render('rules/class-detail.html.twig', [
             'classe' => $class,
             'nom' => $class->getNom(),
-            'entity' => 'classe',
+            'entity' => 'class',
             'category' => 'rules',
             'un_element' => $class,
             'player_characters' => $playerCharacters,

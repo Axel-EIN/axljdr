@@ -9,7 +9,7 @@
 {% block title %}L'Aventure Saison {{ season.numero }} {{ parent() }}{% endblock %}
 {% block body %}
 
-<section class="saison-bar container-fluid" style="background-color: {{ season.couleur }}">
+<section class="season-bar container-fluid" style="background-color: {{ season.couleur }}">
     <div class="container">
         {{ include('/parts/flash-messages.html.twig') }}
         <a class="btn-quaternary-style text-white50{{ previous_season is empty ? ' invisible' : '' }}"
@@ -17,7 +17,7 @@
             <span class="text-small"><i class="fa-solid fa-caret-left"></i><span class="d-none d-lg-inline"> Saison Précédente</span></span>
         </a>
 
-        <h1 class="h1-saison">
+        <h1 class="h1-season">
             {% if next_season is empty %}
                 SAISON {{ season.numero }} en cours
             {% else %}

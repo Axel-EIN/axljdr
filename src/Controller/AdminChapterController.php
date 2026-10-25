@@ -35,8 +35,8 @@ class AdminChapterController extends AbstractController
             'element' => 'chapter',
             'label' => 'Chapitre',
             'labels' => "Chapitres",
-            'genre' => 'M',
-            'determinant' => 'un',
+            'gender' => 'M',
+            'article' => 'un',
             'table_filters' => self::TABLE_FILTERS,
             'table_cols' => [
                 'image:Image:image:NA_CHAPITRE',
@@ -58,10 +58,10 @@ class AdminChapterController extends AbstractController
         $chapter = new Chapitre;
         $tableFilter->prefill($chapter, self::TABLE_FILTERS, $request->query->all('filter'));
 
-        if ( !empty($request->query->get('numero')) && $request->query->get('numero') > 0
+        if ( !empty($request->query->get('number')) && $request->query->get('number') > 0
           && !empty($request->query->get('seasonID')) && $request->query->get('seasonID') > 0 )
         {
-                $chapter->setNumero($request->query->get('numero'));
+                $chapter->setNumero($request->query->get('number'));
                 $parentSeason = $seasonRepository->find($request->query->get('seasonID'));
                 if ($parentSeason !== null)
                     $chapter->setSaisonParent($parentSeason);
@@ -93,11 +93,11 @@ class AdminChapterController extends AbstractController
         
 
         return $this->render('back_office/create.html.twig', [
-            'type' => 'Créer',
+            'type' => 'create',
             'entity' => 'chapter',
             'label' => 'Chapitre',
-            'genre' => 'M',
-            'determinant' => 'un',
+            'gender' => 'M',
+            'article' => 'un',
             'form' => $form->createView()
         ]);
     }
@@ -142,12 +142,12 @@ class AdminChapterController extends AbstractController
         }
 
         return $this->renderForm('back_office/edit.html.twig', [
-            'type' => 'Modifier',
+            'type' => 'edit',
             'chapter' => $chapter,
             'entity' => 'chapter',
             'label' => 'Chapitre',
-            'genre' => 'M',
-            'determinant' => 'un',
+            'gender' => 'M',
+            'article' => 'un',
             'form' => $form,
         ]);
     }

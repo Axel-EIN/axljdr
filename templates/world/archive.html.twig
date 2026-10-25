@@ -19,7 +19,7 @@
 
             {{ include('/parts/divider-ornament.html.twig') }}
 
-            {% if app.user and is_granted("ROLE_MJ") %}
+            {% if is_mj() %}
                 {% set redirect, element, un_element, color, action = 'world', 'archive', un_element, 'link-gm', 'delete' %}
                 {{ include('/btns/btn-line.html.twig') }}
             {% endif %}

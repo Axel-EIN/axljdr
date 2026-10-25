@@ -16,61 +16,61 @@
       <div class="relative">
 
         <h2 class="nickname-container d-none d-lg-flex">
-          <img class="img-96 mr-2 filter-shadow" src="{{ asset(un_element.icone|default(NA_LIEU_ICO)) }}" alt="Icone de {{un_element.nom}}">
-          <i class="align-middle">{{ un_element.surnom|default('') }}</i>
+          <img class="img-96 mr-2 filter-shadow" src="{{ asset(record.icone|default(NA_LIEU_ICO)) }}" alt="Icone de {{record.nom}}">
+          <i class="align-middle">{{ record.surnom|default('') }}</i>
         </h2>
 
         <div class="stats d-none d-lg-flex">
-          {% if un_element.clan is defined and un_element.clan is not empty %}
-            <a class="d-flex justify-content-end" href="{{ path('world_clan', {id:un_element.clan.id} ) }}" >
-              <img class="mb-2 img-64 circle-crop" src="{{ asset(image_small(un_element.clan.mon|default(NA_MON))) }}" alt="Mon d'une faction" title="{{un_element.clan.nom|default('')}}" />
+          {% if record.clan is defined and record.clan is not empty %}
+            <a class="d-flex justify-content-end" href="{{ path('world_clan', {id:record.clan.id} ) }}" >
+              <img class="mb-2 img-64 circle-crop" src="{{ asset(image_small(record.clan.mon|default(NA_MON))) }}" alt="Mon d'une faction" title="{{record.clan.nom|default('')}}" />
             </a>
           {% endif %}
-          {% if un_element.type is defined and un_element.type is not empty %}<span>Type : <strong>{{ un_element.type }}</strong></span>{% endif %}
-          {% if un_element.population is defined and un_element.population is not empty %}
-            <span>Population : <strong>{{ un_element.population|number_format(0, ',', '.') }} habitants</strong></span>
+          {% if record.type is defined and record.type is not empty %}<span>Type : <strong>{{ record.type }}</strong></span>{% endif %}
+          {% if record.population is defined and record.population is not empty %}
+            <span>Population : <strong>{{ record.population|number_format(0, ',', '.') }} habitants</strong></span>
           {% endif %}
         </div>
 
-        {{ include('/parts/card-top-image.html.twig', {image: un_element.image, na_image: NA_LIEU, alt: 'Image de ' ~ un_element.nom, img_class: 'crop-169', titre: nom, classes: 'gradient-desktop', state: element_state(un_element)}) }}
+        {{ include('/parts/card-top-image.html.twig', {image: record.image, na_image: NA_LIEU, alt: 'Image de ' ~ record.nom, img_class: 'crop-169', title: name, classes: 'gradient-desktop', state: element_state(record)}) }}
       </div>
 
       <div class="lieu-mobile-info d-lg-none text-center">
-        {% if un_element.surnom is defined and un_element.surnom is not empty %}
-          <p class="lieu-surnom">{{ un_element.surnom }}</p>
+        {% if record.surnom is defined and record.surnom is not empty %}
+          <p class="lieu-surnom">{{ record.surnom }}</p>
         {% endif %}
 
         <div class="d-inline-flex justify-content-center align-items-center text-center">
-          <img class="img-96 mr-5" src="{{ asset(un_element.icone|default(NA_LIEU_ICO)) }}" alt="Icone de {{un_element.nom}}" />
+          <img class="img-96 mr-5" src="{{ asset(record.icone|default(NA_LIEU_ICO)) }}" alt="Icone de {{record.nom}}" />
 
           <ul class="list-decored text-left">
-            {% if un_element.clan is defined and un_element.clan is not empty %}
+            {% if record.clan is defined and record.clan is not empty %}
               <li>
                 <span class="label">Clan :</span>
-                <a class="extrabold" href="{{ path('world_clan', {id:un_element.clan.id} ) }}">
-                  <img class="img-24" src="{{ asset(image_small(un_element.clan.mon|default(NA_MON))) }}" alt="" title="Mon du clan {{un_element.clan.nom}}" />
-                  {{ un_element.clan.nom }}
+                <a class="extrabold" href="{{ path('world_clan', {id:record.clan.id} ) }}">
+                  <img class="img-24" src="{{ asset(image_small(record.clan.mon|default(NA_MON))) }}" alt="" title="Mon du clan {{record.clan.nom}}" />
+                  {{ record.clan.nom }}
                 </a>
               </li>
             {% endif %}
-            {% if un_element.type is defined and un_element.type is not empty %}
-              <li><span class="label">Type :</span> {{ un_element.type }}</li>
+            {% if record.type is defined and record.type is not empty %}
+              <li><span class="label">Type :</span> {{ record.type }}</li>
             {% endif %}
-            {% if un_element.population is defined and un_element.population is not empty %}
-              <li><span class="label">Habitants :</span> {{ un_element.population|number_format(0, ',', '.') }}</li>
+            {% if record.population is defined and record.population is not empty %}
+              <li><span class="label">Habitants :</span> {{ record.population|number_format(0, ',', '.') }}</li>
             {% endif %}
           </ul>
 
         </div>
       </div>
 
-      {% if un_element.description is defined and un_element.description is not empty %}
-        {{ include('parts/description.html.twig', {text: un_element.description, variant: 'aerated'}, with_context = false) }}
+      {% if record.description is defined and record.description is not empty %}
+        {{ include('parts/description.html.twig', {text: record.description, variant: 'aerated'}, with_context = false) }}
       {% endif %}
 
-      {% set placed = un_element.placed %}
-      {% set region_visible_mobile = un_element.regionDesc is not empty %}
-      {% set plan_visible = un_element.planMap is not empty or un_element.planDesc is not empty %}
+      {% set placed = record.placed %}
+      {% set region_visible_mobile = record.regionDesc is not empty %}
+      {% set plan_visible = record.planMap is not empty or record.planDesc is not empty %}
 
       {% if placed or region_visible_mobile %}
         {{ include('/parts/divider-ornament.html.twig', {classes: region_visible_mobile ? 'my-3' : 'my-3 d-none d-lg-flex'}) }}
@@ -78,11 +78,11 @@
         <h2 class="heading-elementpart decorated{% if not region_visible_mobile %} d-none d-lg-block{% endif %}">Carte</h2>
 
         {% if placed %}
-          {{ include('parts/map.html.twig', {lieux, current: un_element, zoom: un_element.zoom, draggable: true, labels_on: true, territories_on: true}, with_context = false) }}
+          {{ include('parts/map.html.twig', {locations, current: record, zoom: record.zoom, draggable: true, labels_on: true, territories_on: true}, with_context = false) }}
         {% endif %}
 
-        {% if un_element.regionDesc is not empty %}
-          {{ include('parts/description.html.twig', {text: un_element.regionDesc, variant: 'aerated'}, with_context = false) }}
+        {% if record.regionDesc is not empty %}
+          {{ include('parts/description.html.twig', {text: record.regionDesc, variant: 'aerated'}, with_context = false) }}
         {% endif %}
       {% endif %}
 
@@ -91,35 +91,35 @@
 
         <h2 class="heading-elementpart decorated">Plan</h2>
 
-        {% if un_element.planMap is not empty %}
-          {{ include('parts/image-viewer.html.twig', {image: un_element.planMap, alt: 'Plan de ' ~ un_element.nom}, with_context = false) }}
+        {% if record.planMap is not empty %}
+          {{ include('parts/image-viewer.html.twig', {image: record.planMap, alt: 'Plan de ' ~ record.nom}, with_context = false) }}
         {% endif %}
 
-        {% if un_element.planDesc is not empty %}
-          {{ include('parts/description.html.twig', {text: un_element.planDesc, variant: 'aerated'}, with_context = false) }}
+        {% if record.planDesc is not empty %}
+          {{ include('parts/description.html.twig', {text: record.planDesc, variant: 'aerated'}, with_context = false) }}
         {% endif %}
       {% endif %}
 
-      {% if un_element.description is not empty or placed or region_visible_mobile or plan_visible %}
+      {% if record.description is not empty or placed or region_visible_mobile or plan_visible %}
         {{ include('/parts/divider-ornament.html.twig') }}
         {% set ornament = true %}
       {% endif %}
 
-      {% if is_mj() %}
-        {% set redirect, element, un_element, color, action = 'world', 'location', un_element, 'link-gm', 'delete' %}
+      {% if is_gm() %}
+        {% set redirect, element, record, color, action = 'world', 'location', record, 'link-gm', 'delete' %}
         {{ include('/btns/btn-line.html.twig', {classes: ornament is defined ? '' : 'mt-5'}) }}
       {% endif %}
 
     </div>
   </div>
 
-  {% if historique is defined and historique|length > 0 %}
+  {% if history is defined and history|length > 0 %}
     <div class="col-12">
       <div class="card card-body">
         <h2 class="heading-cardtitle">Historique des visites</h2>
         <hr>
         <div class="card-text">
-          {{ include('parts/history.html.twig', {historique, saison_courante}) }}
+          {{ include('parts/history.html.twig', {history, current_season}) }}
         </div>
       </div>
     </div>

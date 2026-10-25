@@ -17,7 +17,7 @@ class Unlocker
     private $entityManager;
     private $unlockRepository;
     private $participationRepository;
-    private $enAttente = [];
+    private $pending = [];
 
     public function __construct(
         EntityManagerInterface $entityManager,
@@ -29,7 +29,7 @@ class Unlocker
         $this->participationRepository = $participationRepository;
     }
 
-    public function unlock(Personnage $personnage, $element, bool $parRencontre = false, ?\DateTimeInterface $quand = null): void
+    public function unlock(Personnage $character, $element, bool $byMeeting = false, ?\DateTimeInterface $at = null): void
     {
         $key = EntityRegistry::keyOf($element);
 
@@ -37,45 +37,45 @@ class Unlocker
             return;
         }
 
-        $ligne = $personnage->getId() . '|' . $key . '|' . $element->getId();
+        $entry = $character->getId() . '|' . $key . '|' . $element->getId();
 
-        if (isset($this->enAttente[$ligne])) {
+        if (isset($this->pending[$entry])) {
             return;
         }
 
-        $existante = $this->unlockRepository->findOneBy([
-            'character' => $personnage,
+        $existing = $this->unlockRepository->findOneBy([
+            'character' => $character,
             'entity' => $key,
             'elementId' => $element->getId(),
         ]);
 
-        if ($existante !== null) {
+        if ($existing !== null) {
             return;
         }
 
-        $this->enAttente[$ligne] = true;
+        $this->pending[$entry] = true;
 
         $unlock = new Unlock();
-        $unlock->setCharacter($personnage);
+        $unlock->setCharacter($character);
         $unlock->setEntity($key);
         $unlock->setElementId($element->getId());
-        $unlock->setUnlockedAt($quand ?? new \DateTime());
-        $unlock->setByMeeting($parRencontre);
+        $unlock->setUnlockedAt($at ?? new \DateTime());
+        $unlock->setByMeeting($byMeeting);
 
         $this->entityManager->persist($unlock);
     }
 
-    public function syncAccess($element, ?\DateTimeInterface $quand = null): void
+    public function syncAccess($element, ?\DateTimeInterface $at = null): void
     {
-        $rencontres = $this->playersWhoMet($element);
+        $met = $this->playersWhoMet($element);
 
-        if (empty($rencontres)) {
+        if (empty($met)) {
             return;
         }
 
         if (Access::unlocksByMeeting($element)) {
-            foreach ($rencontres as $joueur) {
-                $this->unlock($joueur, $element, true, $quand);
+            foreach ($met as $player) {
+                $this->unlock($player, $element, true, $at);
             }
 
             return;
@@ -103,31 +103,31 @@ class Unlocker
 
     public function syncScene(Scene $scene): void
     {
-        $joueurs = [];
-        $croises = [];
+        $players = [];
+        $encountered = [];
 
         foreach ($scene->getParticipations() as $participation) {
-            $personnage = $participation->getPersonnage();
+            $character = $participation->getPersonnage();
 
             if ($participation->getEstPj()) {
-                $joueurs[] = $personnage;
+                $players[] = $character;
             }
 
-            $croises[] = $personnage;
+            $encountered[] = $character;
         }
 
         if ($scene->getLieu() !== null) {
-            $croises[] = $scene->getLieu();
+            $encountered[] = $scene->getLieu();
         }
 
-        foreach ($scene->getFoundObjects() as $objet) {
-            $croises[] = $objet;
+        foreach ($scene->getFoundObjects() as $object) {
+            $encountered[] = $object;
         }
 
-        foreach ($joueurs as $joueur) {
-            foreach ($croises as $element) {
-                if ($element !== $joueur && Access::unlocksByMeeting($element)) {
-                    $this->unlock($joueur, $element, true);
+        foreach ($players as $player) {
+            foreach ($encountered as $element) {
+                if ($element !== $player && Access::unlocksByMeeting($element)) {
+                    $this->unlock($player, $element, true);
                 }
             }
         }
@@ -141,17 +141,17 @@ class Unlocker
             return [];
         }
 
-        $personnages = [];
+        $characters = [];
         foreach ($this->unlockRepository->findForElement($key, $element->getId()) as $unlock) {
             if (!$unlock->isByMeeting()) {
-                $personnages[] = $unlock->getCharacter();
+                $characters[] = $unlock->getCharacter();
             }
         }
 
-        return $personnages;
+        return $characters;
     }
 
-    public function sync($element, $personnages): void
+    public function sync($element, $characters): void
     {
         $key = EntityRegistry::keyOf($element);
 
@@ -159,24 +159,24 @@ class Unlocker
             return;
         }
 
-        $voulus = [];
-        foreach ($personnages as $personnage) {
-            $voulus[$personnage->getId()] = $personnage;
+        $wanted = [];
+        foreach ($characters as $character) {
+            $wanted[$character->getId()] = $character;
         }
 
         foreach ($this->unlockRepository->findForElement($key, $element->getId()) as $unlock) {
             $id = $unlock->getCharacter()->getId();
 
-            if (isset($voulus[$id])) {
+            if (isset($wanted[$id])) {
                 $unlock->setByMeeting(false);
-                unset($voulus[$id]);
+                unset($wanted[$id]);
             } elseif (!$unlock->isByMeeting()) {
                 $this->entityManager->remove($unlock);
             }
         }
 
-        foreach ($voulus as $personnage) {
-            $this->unlock($personnage, $element);
+        foreach ($wanted as $character) {
+            $this->unlock($character, $element);
         }
     }
 

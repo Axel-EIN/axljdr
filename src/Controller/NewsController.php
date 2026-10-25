@@ -53,7 +53,7 @@ class NewsController extends AbstractController
     /**
      * @Route("/", name="news")
      */
-    public function viewNews(NewsFeed $newsFeed, ClasseurXP $classeurXP, CurrentPlayer $currentPlayer, Visibility $visibility, Localisateur $localisateur): Response
+    public function index(NewsFeed $newsFeed, ClasseurXP $classeurXP, CurrentPlayer $currentPlayer, Visibility $visibility, Localisateur $localisateur): Response
     {
         $mesPersonnages = $currentPlayer->characterIds();
         $monPersonnage = $currentPlayer->navigatingCharacter();
@@ -72,8 +72,8 @@ class NewsController extends AbstractController
         }
 
         $sections = [
-            ['entity' => 'aventure', 'titleLight' => '', 'titleStrong' => 'Dernière Séance'],
-            ['entity' => 'nouveautes', 'titleLight' => '', 'titleStrong' => 'Nouveautés'],
+            ['entity' => 'story', 'titleLight' => '', 'titleStrong' => 'Dernière Séance'],
+            ['entity' => 'news', 'titleLight' => '', 'titleStrong' => 'Nouveautés'],
         ];
 
         $groupes = [];

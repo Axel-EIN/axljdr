@@ -42,10 +42,7 @@ final class PublishableFields
                 'label' => 'Débloqué par',
                 'class' => Personnage::class,
                 'query_builder' => function (PersonnageRepository $personnageRepository) {
-                    return $personnageRepository->createQueryBuilder('p')
-                        ->andWhere('p.estPj = true')
-                        ->orderBy('p.nom', 'ASC')
-                        ->addOrderBy('p.prenom', 'ASC');
+                    return $personnageRepository->createPJsByNameQueryBuilder();
                 },
                 'choice_label' => 'nomComplet',
                 'multiple' => true,

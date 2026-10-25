@@ -19,19 +19,19 @@ use App\Entity\Sort;
 final class EntityRegistry
 {
     private const ENTITIES = [
-        'episode'    => ['class' => Episode::class,    'route' => 'story_episode',  'label' => 'Épisode'],
-        'personnage' => ['class' => Personnage::class, 'route' => 'personnage_profil', 'label' => 'Personnage'],
-        'archive'    => ['class' => Archive::class,    'route' => 'world_archive',    'label' => 'Archive'],
-        'clan'       => ['class' => Clan::class,       'route' => 'world_clan',       'label' => 'Faction'],
-        'lieu'       => ['class' => Lieu::class,       'route' => 'world_location',       'label' => 'Lieu'],
-        'lore'       => ['class' => Lore::class,       'route' => 'world_lore',       'label' => 'Lore'],
-        'rule'       => ['class' => Rule::class,       'route' => 'rules_rule',       'label' => 'Règle'],
-        'library'    => ['class' => Library::class,    'route' => 'rules_library',    'label' => 'Bibliothèque'],
-        'ecole'      => ['class' => Ecole::class,      'route' => 'rules_dojo',      'label' => 'École'],
-        'objet'      => ['class' => Objet::class,      'route' => 'rules_object',      'label' => 'Objet'],
-        'sort'       => ['class' => Sort::class,       'route' => null,                'label' => 'Sort'],
-        'competence' => ['class' => Competence::class, 'route' => null,                'label' => 'Compétence'],
-        'avantage'   => ['class' => Avantage::class,   'route' => null,                'label' => 'Avantage'],
+        'episode'    => ['class' => Episode::class,    'route' => 'story_episode',      'label' => 'Épisode'],
+        'personnage' => ['class' => Personnage::class, 'route' => 'characters_profile', 'label' => 'Personnage'],
+        'archive'    => ['class' => Archive::class,    'route' => 'world_archive',      'label' => 'Archive'],
+        'clan'       => ['class' => Clan::class,       'route' => 'world_clan',         'label' => 'Faction'],
+        'lieu'       => ['class' => Lieu::class,       'route' => 'world_location',     'label' => 'Lieu'],
+        'lore'       => ['class' => Lore::class,       'route' => 'world_lore',         'label' => 'Lore'],
+        'rule'       => ['class' => Rule::class,       'route' => 'rules_rule',         'label' => 'Règle'],
+        'library'    => ['class' => Library::class,    'route' => 'rules_library',      'label' => 'Bibliothèque'],
+        'ecole'      => ['class' => Ecole::class,      'route' => 'rules_dojo',         'label' => 'École'],
+        'objet'      => ['class' => Objet::class,      'route' => 'rules_object',       'label' => 'Objet'],
+        'sort'       => ['class' => Sort::class,       'route' => null,                 'label' => 'Sort'],
+        'competence' => ['class' => Competence::class, 'route' => null,                 'label' => 'Compétence'],
+        'avantage'   => ['class' => Avantage::class,   'route' => null,                 'label' => 'Avantage'],
     ];
 
     public static function keyOf($element): ?string

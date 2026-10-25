@@ -55,7 +55,7 @@ class BackOfficeController extends AbstractController
         ObjetRepository $objectRepository,
         SortRepository $sortRepository,
 
-        PersonnageRepository $personnageRepository,
+        PersonnageRepository $characterRepository,
         FichePersonnageRepository $sheetRepository,
         DevelopmentRepository $developmentRepository,
 
@@ -217,16 +217,16 @@ class BackOfficeController extends AbstractController
         }
 
         $i++;
-        $admin_elements[$i]['element'] = 'personnage' ;
+        $admin_elements[$i]['element'] = 'character' ;
         $admin_elements[$i]['label'] = 'Personnages';
         $admin_elements[$i]['genre'] = 'M';
         $admin_elements[$i]['categorie'] = 'Personnages';
-        $admin_elements[$i]['nbr'] = $personnageRepository->countPersonnages();
-        $lastPersonnage = $personnageRepository->findOneBy(array(),array('id' => 'DESC'));
-        if (!empty($lastPersonnage)) {
-            $admin_elements[$i]['last'] = $lastPersonnage;
-            $admin_elements[$i]['nom'] = $lastPersonnage->getNomComplet();
-            $admin_elements[$i]['image'] = $lastPersonnage->getIcone();
+        $admin_elements[$i]['nbr'] = $characterRepository->countPersonnages();
+        $lastCharacter = $characterRepository->findOneBy(array(),array('id' => 'DESC'));
+        if (!empty($lastCharacter)) {
+            $admin_elements[$i]['last'] = $lastCharacter;
+            $admin_elements[$i]['nom'] = $lastCharacter->getNomComplet();
+            $admin_elements[$i]['image'] = $lastCharacter->getIcone();
         } else {
             $admin_elements[$i]['last'] = '';
             $admin_elements[$i]['nom'] = '';

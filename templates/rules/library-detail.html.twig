@@ -9,48 +9,48 @@
 
 {% block element_content %}
 
-    {% set accueil = app.request.get('tab') is not defined or app.request.get('tab') is empty %}
-    {% set pluriel_onglet = un_element.entity in ['advantage', 'skill', 'object'] ? 's' : '' %}
-    {% set pluriel_sous_onglet = un_element.entity == 'object' ? 's' : '' %}
-    {% set pluriels = {
+    {% set is_home = app.request.get('tab') is not defined or app.request.get('tab') is empty %}
+    {% set tab_plural = record.entity in ['advantage', 'skill', 'object'] ? 's' : '' %}
+    {% set subtab_plural = record.entity == 'object' ? 's' : '' %}
+    {% set plurals = {
         'BUGEI': 'Bugei', 'COUTEAU': 'Couteaux', 'DIVERS': 'Divers',
         'HAST': 'Hast', 'MARCHAND': 'Marchand', 'NINJUTSU': 'Ninjutsu',
     } %}
 
-    {% set a_sous_onglets = un_element.subTabField is defined and un_element.subTabField is not empty %}
-    {% set subtab = a_sous_onglets
-        ? (un_element.mixable == true ? app.request.get('subtab')|default('all') : 'first')
+    {% set has_subtabs = record.subTabField is defined and record.subTabField is not empty %}
+    {% set subtab = has_subtabs
+        ? (record.mixable == true ? app.request.get('subtab')|default('all') : 'first')
         : app.request.get('subtab') %}
 
-    {% set onglets = [] %}
+    {% set tab_links = [] %}
     {% for tab in tabs %}
-        {% set onglets = onglets|merge([{
-            label: pluriels[tab|upper]|default(tab|capitalize ~ pluriel_onglet),
-            path: path('rules_library', {id: un_element.id, tab: tab, subtab: subtab}),
-            actif: app.request.get('tab') == tab,
+        {% set tab_links = tab_links|merge([{
+            label: plurals[tab|upper]|default(tab|capitalize ~ tab_plural),
+            path: path('rules_library', {id: record.id, tab: tab, subtab: subtab}),
+            active: app.request.get('tab') == tab,
         }]) %}
     {% endfor %}
 
-    <nav class="mt-2 mt-lg-0 mb-lg-3{% if accueil %} d-lg-none{% endif %}">
+    <nav class="mt-2 mt-lg-0 mb-lg-3{% if is_home %} d-lg-none{% endif %}">
         <div class="col-12 p-0 m-0">
             <ul id="tabs">
                 <li>
-                    <a href="{{ path( 'rules_library', {id: un_element.id} ) }}"
-                    class="tab {% if accueil %}active{% endif %}">
+                    <a href="{{ path( 'rules_library', {id: record.id} ) }}"
+                    class="tab {% if is_home %}active{% endif %}">
                             <i class="fa-solid fa-house" title="Lire l'introduction"></i>
                     </a>
                 </li>
-                {% for onglet in onglets %}
+                {% for tab_link in tab_links %}
                     <li>
-                        <a href="{{ onglet.path }}" class="tab {% if onglet.actif %}active{% endif %}">
-                            {{ onglet.label|upper }}
+                        <a href="{{ tab_link.path }}" class="tab {% if tab_link.active %}active{% endif %}">
+                            {{ tab_link.label|upper }}
                         </a>
                     </li>
                 {% endfor %}
 
-                {% if un_element.mixable is defined and un_element.mixable == true %}
+                {% if record.mixable is defined and record.mixable == true %}
                     <li>
-                        <a href="{{ path('rules_library', {id: un_element.id, tab: 'all', subtab: subtab}) }}"
+                        <a href="{{ path('rules_library', {id: record.id, tab: 'all', subtab: subtab}) }}"
                             class="tab {% if app.request.get('tab') == 'all' %}active{% endif %}">
                             <i class="fa-solid fa-list" title="Voir tout"></i>
                         </a>
@@ -64,7 +64,7 @@
                 <ul id="sub-tabs">
                     {% for subtab in subtabs %}
                         <li class="mt-auto mb-auto">
-                            <a href="{{ path('rules_library', {id: un_element.id, 'tab' : app.request.get('tab'), 'subtab' : subtab } ) }}"
+                            <a href="{{ path('rules_library', {id: record.id, 'tab' : app.request.get('tab'), 'subtab' : subtab } ) }}"
                                 class="{% if app.request.get('subtab') is defined and app.request.get('subtab') == subtab %}active{% endif %}">
                                 {% if app.request.get('tab') == 'MAGIE' %}
                                     {% if subtab == 'UNIVERSEL' %}
@@ -77,14 +77,14 @@
                                 {% elseif app.request.get('tab') == 'KIHO' %}
                                     <img class="img-48" src="/assets/icons/elements/{{subtab|lower}}-kiho.png" title='{{subtab}} Kiho' alt='Icône {{subtab}} Kiho' />
                                 {% else %}
-                                    {{ pluriels[subtab|upper]|default(subtab|capitalize ~ pluriel_sous_onglet) }}
+                                    {{ plurals[subtab|upper]|default(subtab|capitalize ~ subtab_plural) }}
                                 {% endif %}
                             </a>
                         </li>
                     {% endfor %}
-                    {% if un_element.mixable is defined and un_element.mixable == true %}
+                    {% if record.mixable is defined and record.mixable == true %}
                         <li>
-                            <a href="{{ path('rules_library', {id: un_element.id, 'tab' : app.request.get('tab'), 'subtab' : 'all' } ) }}"
+                            <a href="{{ path('rules_library', {id: record.id, 'tab' : app.request.get('tab'), 'subtab' : 'all' } ) }}"
                             class="{% if app.request.get('subtab') is defined and app.request.get('subtab') == 'all' %}active{% endif %}">
                                     <i class="fa-solid fa-list" title="Voir tout"></i>
                             </a>
@@ -95,33 +95,33 @@
         {% endif %}
     </nav>
 
-    {% if accueil %}
+    {% if is_home %}
 
         <div class="col-12">
             <div class="card card-page">
 
                 <div class="relative">
 
-                    {{ include('rule-lore-library/summary.html.twig', {items: onglets}) }}
+                    {{ include('rule-lore-library/summary.html.twig', {items: tab_links}) }}
 
                     {{ include('/parts/card-top-image.html.twig', {
-                        image: un_element.image,
+                        image: record.image,
                         na_image: NA_LIBRARY,
-                        alt: 'Image de ' ~ nom,
-                        pdf: un_element.pdf,
+                        alt: 'Image de ' ~ name,
+                        pdf: record.pdf,
                         img_class: 'crop-169',
-                        titre: nom,
+                        title: name,
                     }) }}
                 </div>
 
                 <div class="part-body">
-                    {% if un_element.aside is defined and un_element.aside is not empty %}
+                    {% if record.aside is defined and record.aside is not empty %}
                         <aside class="aside">
-                            <p>{{ un_element.aside|raw|nl2br }}</p>
+                            <p>{{ record.aside|raw|nl2br }}</p>
                         </aside>
                     {% endif %}
 
-                    <div class="card-description text-description">{{ un_element.description|raw|nl2br }}</div>
+                    <div class="card-description text-description">{{ record.description|raw|nl2br }}</div>
                 </div>
 
                 {{ include('/parts/divider-ornament.html.twig') }}
@@ -145,7 +145,7 @@
                 </div>
 
                 <div class="col-12 col-md-4">
-                    <label for="filter-select">Filtrer par {{un_element.filterField|capitalize}} :</label>
+                    <label for="filter-select">Filtrer par {{record.filterField|capitalize}} :</label>
                     <select name="filter" id="filter-select" >
                         <option value="">TOUS</option>
                         {% for one_filter in filters %}
@@ -164,8 +164,8 @@
                         <label for="discount-{{param}}-select">Filtrer par {{discount.label}} :</label>
                         <select id="discount-{{param}}-select" class="discount-select" data-param="{{param}}">
                             <option value="">TOUS</option>
-                            {% for id, nom in discount.options %}
-                                <option value="{{id}}" {% if app.request.get(param) == id %}selected{% endif %}>{{nom}}</option>
+                            {% for id, option_label in discount.options %}
+                                <option value="{{id}}" {% if app.request.get(param) == id %}selected{% endif %}>{{option_label}}</option>
                             {% endfor %}
                         </select>
                     </div>
@@ -175,7 +175,7 @@
 
         {% if subtabs is empty or subtabs is not empty and app.request.get('subtab') is defined and app.request.get('subtab') is not empty %}
             <div class="col-12 library-row">
-                {{ include('rules/list-' ~ un_element.entity ~ '.html.twig') }}
+                {{ include('rules/list-' ~ record.entity ~ '.html.twig') }}
             </div>
         {% endif %}
 

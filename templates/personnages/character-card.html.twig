@@ -2,7 +2,7 @@
 
 {% set state = element_state(perso) %}
 {% set readable = element_readable(perso) %}
-{% set locked = state == 'locked' and not (app.user and is_granted('ROLE_MJ')) %}
+{% set locked = state == 'locked' and not is_mj() %}
 {% set hide_clan = hide_clan|default(false) %}
 {% set compact = compact|default(false) %}
 

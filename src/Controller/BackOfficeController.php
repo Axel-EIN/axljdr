@@ -43,7 +43,7 @@ class BackOfficeController extends AbstractController
         ClanRepository $clanRepository,
         FamilleRepository $familyRepository,
         ArchiveRepository $archiveRepository,
-        LieuRepository $lieuRepository,
+        LieuRepository $locationRepository,
         LoreRepository $loreRepository,
 
         RuleRepository $ruleRepository,
@@ -52,7 +52,7 @@ class BackOfficeController extends AbstractController
         EcoleRepository $dojoRepository,
         AvantageRepository $advantageRepository,
         CompetenceRepository $skillRepository,
-        ObjetRepository $objetRepository,
+        ObjetRepository $objectRepository,
         SortRepository $sortRepository,
 
         PersonnageRepository $personnageRepository,
@@ -183,16 +183,16 @@ class BackOfficeController extends AbstractController
         }
 
         $i++;
-        $admin_elements[$i]['element'] = 'lieu' ;
+        $admin_elements[$i]['element'] = 'location' ;
         $admin_elements[$i]['label'] = 'Lieux';
         $admin_elements[$i]['genre'] = 'M';
         $admin_elements[$i]['categorie'] = 'Univers';
-        $admin_elements[$i]['nbr'] = $lieuRepository->countLieux();
-        $lastLieu = $lieuRepository->findOneBy(array(),array('id' => 'DESC'));
-        if (!empty($lastLieu)) {
-            $admin_elements[$i]['last'] = $lastLieu;
-            $admin_elements[$i]['nom'] = $lastLieu->getNom();
-            $admin_elements[$i]['image'] = $lastLieu->getImage();
+        $admin_elements[$i]['nbr'] = $locationRepository->countLieux();
+        $lastLocation = $locationRepository->findOneBy(array(),array('id' => 'DESC'));
+        if (!empty($lastLocation)) {
+            $admin_elements[$i]['last'] = $lastLocation;
+            $admin_elements[$i]['nom'] = $lastLocation->getNom();
+            $admin_elements[$i]['image'] = $lastLocation->getImage();
         } else {
             $admin_elements[$i]['last'] = '';
             $admin_elements[$i]['nom'] = '';
@@ -370,16 +370,16 @@ class BackOfficeController extends AbstractController
         }
 
         $i++;
-        $admin_elements[$i]['element'] = 'objet' ;
+        $admin_elements[$i]['element'] = 'object' ;
         $admin_elements[$i]['label'] = 'Objets';
         $admin_elements[$i]['genre'] = 'M';
         $admin_elements[$i]['categorie'] = 'Règles';
-        $admin_elements[$i]['nbr'] = $objetRepository->countObjets();
-        $lastObjet = $objetRepository->findOneBy(array(),array('id' => 'DESC'));
-        if (!empty($lastObjet)) {
-            $admin_elements[$i]['last'] = $lastObjet;
-            $admin_elements[$i]['nom'] = $lastObjet->getNom();
-            $admin_elements[$i]['image'] = $lastObjet->getIcon();
+        $admin_elements[$i]['nbr'] = $objectRepository->countObjets();
+        $lastObject = $objectRepository->findOneBy(array(),array('id' => 'DESC'));
+        if (!empty($lastObject)) {
+            $admin_elements[$i]['last'] = $lastObject;
+            $admin_elements[$i]['nom'] = $lastObject->getNom();
+            $admin_elements[$i]['image'] = $lastObject->getIcon();
         } else {
             $admin_elements[$i]['last'] = '';
             $admin_elements[$i]['nom'] = '';

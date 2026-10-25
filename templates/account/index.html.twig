@@ -24,7 +24,7 @@
         <dt>Votre Mot de passe</dt>
         <dd>
           <strong>******</strong>
-          <a href="{{ path('mon_compte_mdp') }}"><i class="fas fa-edit" aria-hidden="true"></i> Modifier</a>
+          <a href="{{ path('account_password') }}"><i class="fas fa-edit" aria-hidden="true"></i> Modifier</a>
         </dd>
 
         <dt>Votre statut de compte</dt>
@@ -42,7 +42,7 @@
         <dt>Votre avatar</dt>
         <dd>
           {{ include('parts/avatar.html.twig', {user: app.user, size: 128}) }}
-          <a href="{{ path('mon_compte_avatar') }}"><i class="fas fa-edit" aria-hidden="true"></i> Modifier</a>
+          <a href="{{ path('account_avatar') }}"><i class="fas fa-edit" aria-hidden="true"></i> Modifier</a>
         </dd>
       </dl>
     </div>
@@ -54,11 +54,11 @@
       <hr>
 
       {% if is_mj() %}
-        <p class="text-muted font-italic">En mode MJ, vous naviguez sans personnage principal.{% if principal %} Passez en mode Joueur pour naviguer avec lui.{% endif %}</p>
+        <p class="text-muted font-italic">En mode MJ, vous naviguez sans personnage principal.{% if main_character %} Passez en mode Joueur pour naviguer avec lui.{% endif %}</p>
       {% endif %}
 
       {% if app.user.gameMaster %}
-        <form class="account-row account-mode" method="post" action="{{ path('mon_compte_navigation_mode') }}">
+        <form class="account-row account-mode" method="post" action="{{ path('account_navigation_mode') }}">
           <input type="hidden" name="_csrf_token" value="{{ csrf_token('navigation-mode') }}" />
           <span>Mode de navigation</span>
           <div class="account-mode-switch">
@@ -72,18 +72,18 @@
         </form>
       {% endif %}
 
-      {% if principal %}
+      {% if main_character %}
         <div class="account-main">
-          <a href="{{ path('personnage_profil', {id: principal.id}) }}" class="hover-zoom">
-            <img src="{{ asset(principal.icone|default(NA_PERSO_PORTRAIT)) }}" alt="Portrait de {{ principal.prenom }}" />
+          <a href="{{ path('personnage_profil', {id: main_character.id}) }}" class="hover-zoom">
+            <img src="{{ asset(main_character.icone|default(NA_PERSO_PORTRAIT)) }}" alt="Portrait de {{ main_character.prenom }}" />
           </a>
           <div>
-            {% if principal.clan %}
-              <img class="img-24" src="{{ asset(image_small(principal.clan.mon|default(NA_MON))) }}" alt="Mon du Clan {{ principal.clan.nom }}" />
+            {% if main_character.clan %}
+              <img class="img-24" src="{{ asset(image_small(main_character.clan.mon|default(NA_MON))) }}" alt="Mon du Clan {{ main_character.clan.nom }}" />
             {% endif %}
-            <strong>{{ principal.nomComplet }}</strong>
-            {% if principal.fichePersonnage is not empty %}
-              <a href="{{ path('personnage_fiche', {id: principal.fichePersonnage.id}) }}">
+            <strong>{{ main_character.nomComplet }}</strong>
+            {% if main_character.fichePersonnage is not empty %}
+              <a href="{{ path('personnage_fiche', {id: main_character.fichePersonnage.id}) }}">
                 <i class="fas fa-user-secret" aria-hidden="true"></i> Fiche privée
               </a>
             {% endif %}
@@ -94,10 +94,10 @@
       {% endif %}
 
       {% if app.user.personnages|length %}
-        <form class="account-row account-choice" method="post" action="{{ path('mon_compte_main_character') }}">
+        <form class="account-row account-choice" method="post" action="{{ path('account_main_character') }}">
           <input type="hidden" name="_csrf_token" value="{{ csrf_token('main-character') }}" />
           <label for="main-character">Choisir mon personnage principal</label>
-          <select id="main-character" name="personnage">
+          <select id="main-character" name="character">
             <option value="">Automatique — le plus récent</option>
             {% for un_personnage in app.user.personnages %}
               <option value="{{ un_personnage.id }}"{% if app.user.mainCharacter and un_personnage.id == app.user.mainCharacter.id %} selected{% endif %}>
@@ -114,7 +114,7 @@
       <hr>
 
       <div class="account-characters">
-        {% for un_personnage in app.user.personnages|filter(p => principal is empty or p.id != principal.id) %}
+        {% for un_personnage in app.user.personnages|filter(p => main_character is empty or p.id != main_character.id) %}
           <article>
             <a href="{{ path('personnage_profil', {id: un_personnage.id}) }}" class="hover-zoom">
               <img src="{{ asset(un_personnage.icone|default(NA_PERSO_PORTRAIT)) }}" alt="Portrait de {{ un_personnage.prenom }}" />

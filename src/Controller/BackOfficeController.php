@@ -53,7 +53,7 @@ class BackOfficeController extends AbstractController
         AvantageRepository $advantageRepository,
         CompetenceRepository $skillRepository,
         ObjetRepository $objectRepository,
-        SortRepository $sortRepository,
+        SortRepository $spellRepository,
 
         PersonnageRepository $characterRepository,
         FichePersonnageRepository $sheetRepository,
@@ -391,11 +391,11 @@ class BackOfficeController extends AbstractController
         $admin_elements[$i]['label'] = 'Sorts';
         $admin_elements[$i]['genre'] = 'M';
         $admin_elements[$i]['categorie'] = 'Règles';
-        $admin_elements[$i]['nbr'] = $sortRepository->countSorts();
-        $lastSort = $sortRepository->findOneBy(array(),array('id' => 'DESC'));
-        if (!empty($lastSort)) {
-            $admin_elements[$i]['last'] = $lastSort;
-            $admin_elements[$i]['nom'] = $lastSort->getNom();
+        $admin_elements[$i]['nbr'] = $spellRepository->countSorts();
+        $lastSpell = $spellRepository->findOneBy(array(),array('id' => 'DESC'));
+        if (!empty($lastSpell)) {
+            $admin_elements[$i]['last'] = $lastSpell;
+            $admin_elements[$i]['nom'] = $lastSpell->getNom();
             $admin_elements[$i]['image'] = '';
         } else {
             $admin_elements[$i]['last'] = '';
@@ -403,11 +403,11 @@ class BackOfficeController extends AbstractController
             $admin_elements[$i]['image'] = '';
         }
 
-        $nbrUsers = $userRepository->countUtilisateurs();
+        $userCount = $userRepository->countUtilisateurs();
         $lastUser = $userRepository->findOneBy(array(),array('id' => 'DESC'));
 
         return $this->render('back_office/index.html.twig', [
-            'nbrUsers' => $nbrUsers,
+            'nbrUsers' => $userCount,
             'lastUser' => $lastUser,
             'admin_elements' => $admin_elements,
         ]);

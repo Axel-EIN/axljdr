@@ -44,9 +44,9 @@ class NewsController extends AbstractController
         ]],
         ['titre' => 'Règles', 'variant' => 'rule', 'cles' => ['rule']],
         ['titre' => 'Bibliothèques', 'variant' => 'rule', 'large' => true, 'sections' => [
-            ['titre' => 'Avantages & Désavantages', 'cles' => ['avantage'], 'max' => 2],
-            ['titre' => 'Compétences', 'cles' => ['competence'], 'max' => 2],
-            ['titre' => 'Sorts', 'cles' => ['sort'], 'max' => 4],
+            ['titre' => 'Avantages & Désavantages', 'cles' => ['advantage'], 'max' => 2],
+            ['titre' => 'Compétences', 'cles' => ['skill'], 'max' => 2],
+            ['titre' => 'Sorts', 'cles' => ['spell'], 'max' => 4],
         ]],
     ];
 

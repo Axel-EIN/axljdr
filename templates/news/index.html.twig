@@ -109,7 +109,7 @@
                     </div>
                 {% endif %}
             {% else %}
-                <p class="texte-attente">Le premier résumé de séance n'a pas encore été publié.</p>
+                <p class="waiting-text">Le premier résumé de séance n'a pas encore été publié.</p>
             {% endif %}
         </div>
     </div>
@@ -122,7 +122,7 @@
                 <div class="character-status">
                     <div class="status-head">
                         <h3 class="status-name font-present text-white">{{ my_character.nomComplet }}</h3>
-                        <span class="badge-rang-{{ my_summary.rank }} large">RANG {{ my_summary.rank }}</span>
+                        <span class="badge-rank-{{ my_summary.rank }} large">RANG {{ my_summary.rank }}</span>
                     </div>
                     {% set wound_levels = constant('App\\Entity\\FichePersonnage::NIVEAUX_BLESSURE')|keys %}
                     {% if my_summary.maxHp %}

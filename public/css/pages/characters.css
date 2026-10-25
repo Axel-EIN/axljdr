@@ -42,7 +42,7 @@
       p { margin-bottom: 0; }
     }
 
-    .card-titres { flex-basis: 100%; }
+    .card-titles { flex-basis: 100%; }
   }
 }
 
@@ -177,16 +177,16 @@ main.container-fluid {
 
 /* ----- MORTS ET DISPARUS ----- */
 
-.perso-inactif {
+.character-inactive {
     display: none;
 
-    .category-page:has(#voir-inactifs:checked) & { display: block; }
+    .category-page:has(#show-inactive:checked) & { display: block; }
 }
 
-.pnj-clan-group {
-    &:not(:has(article:not(.perso-inactif))) { display: none; }
+.npc-clan-group {
+    &:not(:has(article:not(.character-inactive))) { display: none; }
 
-    .category-page:has(#voir-inactifs:checked) & { display: block; }
+    .category-page:has(#show-inactive:checked) & { display: block; }
 
     .characters-track {
         --col-lg-3-per-row: 4;
@@ -205,7 +205,7 @@ main.container-fluid {
     }
 }
 
-.voir-inactifs {
+.show-inactive {
     display: flex;
     align-items: center;
     gap: 0.5rem;

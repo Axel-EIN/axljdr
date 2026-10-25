@@ -26,7 +26,7 @@
     {% for tab in tabs %}
         {% set onglets = onglets|merge([{
             label: pluriels[tab|upper]|default(tab|capitalize ~ pluriel_onglet),
-            path: path('regles_library', {id: un_element.id, tab: tab, subtab: subtab}),
+            path: path('rules_library', {id: un_element.id, tab: tab, subtab: subtab}),
             actif: app.request.get('tab') == tab,
         }]) %}
     {% endfor %}
@@ -35,7 +35,7 @@
         <div class="col-12 p-0 m-0">
             <ul id="tabs">
                 <li>
-                    <a href="{{ path( 'regles_library', {id: un_element.id} ) }}"
+                    <a href="{{ path( 'rules_library', {id: un_element.id} ) }}"
                     class="tab {% if accueil %}active{% endif %}">
                             <i class="fa-solid fa-house" title="Lire l'introduction"></i>
                     </a>
@@ -50,7 +50,7 @@
 
                 {% if un_element.mixable is defined and un_element.mixable == true %}
                     <li>
-                        <a href="{{ path('regles_library', {id: un_element.id, tab: 'all', subtab: subtab}) }}"
+                        <a href="{{ path('rules_library', {id: un_element.id, tab: 'all', subtab: subtab}) }}"
                             class="tab {% if app.request.get('tab') == 'all' %}active{% endif %}">
                             <i class="fa-solid fa-list" title="Voir tout"></i>
                         </a>
@@ -64,7 +64,7 @@
                 <ul id="sub-tabs">
                     {% for subtab in subtabs %}
                         <li class="mt-auto mb-auto">
-                            <a href="{{ path('regles_library', {id: un_element.id, 'tab' : app.request.get('tab'), 'subtab' : subtab } ) }}"
+                            <a href="{{ path('rules_library', {id: un_element.id, 'tab' : app.request.get('tab'), 'subtab' : subtab } ) }}"
                                 class="{% if app.request.get('subtab') is defined and app.request.get('subtab') == subtab %}active{% endif %}">
                                 {% if app.request.get('tab') == 'MAGIE' %}
                                     {% if subtab == 'UNIVERSEL' %}
@@ -84,7 +84,7 @@
                     {% endfor %}
                     {% if un_element.mixable is defined and un_element.mixable == true %}
                         <li>
-                            <a href="{{ path('regles_library', {id: un_element.id, 'tab' : app.request.get('tab'), 'subtab' : 'all' } ) }}"
+                            <a href="{{ path('rules_library', {id: un_element.id, 'tab' : app.request.get('tab'), 'subtab' : 'all' } ) }}"
                             class="{% if app.request.get('subtab') is defined and app.request.get('subtab') == 'all' %}active{% endif %}">
                                     <i class="fa-solid fa-list" title="Voir tout"></i>
                             </a>
@@ -175,7 +175,7 @@
 
         {% if subtabs is empty or subtabs is not empty and app.request.get('subtab') is defined and app.request.get('subtab') is not empty %}
             <div class="col-12 library-row">
-                {{ include('regles/list-' ~ un_element.entity ~ '.html.twig') }}
+                {{ include('rules/list-' ~ un_element.entity ~ '.html.twig') }}
             </div>
         {% endif %}
 
@@ -184,7 +184,7 @@
     {{ include('/parts/picture-grid.html.twig', {
         variant: 'rule',
         title: 'Autres Bibliothèques',
-        items: otherLibraries, route: 'regles_library',
+        items: other_libraries, route: 'rules_library',
         na_image: NA_LIBRARY,
     }) }}
 

@@ -2,11 +2,11 @@
 {% set character = character|default(null) %}
 {% set present_characters = present_characters|default([]) %}
 {% set element = location ?? character %}
-{% set etat = element_state(element) %}
-{% set lisible = element_readable(element) %}
+{% set state = element_state(element) %}
+{% set readable = element_readable(element) %}
 {% set type = character ? character.classe.nom ?? null : location.type %}
 
-{% if character and lisible %}
+{% if character and readable %}
   <img class="map-panel-banner portrait" src="{{ asset(character.illustration|default(NA_PERSO_ILLU)) }}" alt="Illustration de {{ character.nomComplet }}" />
 {% elseif location and location.image %}
   <img class="map-panel-banner" src="{{ asset(image_small(location.image)) }}" alt="Image de {{ location.nom }}" />
@@ -15,10 +15,10 @@
 <div class="map-panel-body">
   <h2 class="map-panel-title">
     {{ character ? character.nomComplet : location.nom }}
-    {{ include('parts/badge-access.html.twig', {state: etat, variant: 'inline'}) }}
+    {{ include('parts/badge-access.html.twig', {state: state, variant: 'inline'}) }}
   </h2>
 
-  {% if lisible %}
+  {% if readable %}
     <div class="map-panel-details">
       {% if element.clan %}
         <img class="img-24" src="{{ asset(image_small(element.clan.mon|default(NA_MON))) }}" alt="" />
@@ -36,9 +36,9 @@
     <div>
       <h3 class="map-panel-heading">Personnages présents</h3>
       <div class="map-panel-party">
-        {% for perso in present_characters %}
-          <a href="{{ path('characters_profile', {id: perso.id}) }}" title="{{ perso.nomComplet }}">
-            <img src="{{ asset(perso.icone|default(NA_PERSO_PORTRAIT)) }}" alt="Portrait de {{ perso.prenom }}" />
+        {% for present_character in present_characters %}
+          <a href="{{ path('characters_profile', {id: present_character.id}) }}" title="{{ present_character.nomComplet }}">
+            <img src="{{ asset(present_character.icone|default(NA_PERSO_PORTRAIT)) }}" alt="Portrait de {{ present_character.prenom }}" />
           </a>
         {% endfor %}
       </div>
@@ -49,12 +49,12 @@
     <div>
       <h3 class="map-panel-heading">Dernières scènes</h3>
       <ul class="map-panel-history">
-        {% for un_bloc in history %}
-          {% set derniere = un_bloc.lines|first.scene %}
+        {% for entry in history %}
+          {% set last_scene = entry.lines|first.scene %}
           <li>
-            <a href="{{ path('story_episode', {id: un_bloc.episode.id, '_fragment': 'scn' ~ derniere.numero}) }}">
-              <span class="text-muted">#{{ un_bloc.episode.numeroSaison }}</span>
-              {{ derniere.titre }}
+            <a href="{{ path('story_episode', {id: entry.episode.id, '_fragment': 'scn' ~ last_scene.numero}) }}">
+              <span class="text-muted">#{{ entry.episode.numeroSaison }}</span>
+              {{ last_scene.titre }}
             </a>
           </li>
         {% endfor %}
@@ -62,7 +62,7 @@
     </div>
   {% endif %}
 
-  {% if lisible %}
+  {% if readable %}
     {% if character %}
       <a class="btn-primary-style btn-medium text-center" href="{{ path('characters_profile', {id: character.id}) }}">Voir le profil</a>
     {% else %}

@@ -1,11 +1,27 @@
-.element-page { --profil-banner-h: 125px; }
+.element-page {
+    --profile-banner-h: 125px;
+
+    @media (max-width: 991.98px) {
+        > .container > section {
+            position: relative;
+
+            > h1 {
+                position: absolute;
+                z-index: 2;
+                top: 0;
+                left: 1rem;
+                right: 1rem;
+                height: var(--profile-banner-h);
+                display: flex;
+                align-items: flex-end;
+                justify-content: center;
+                color: var(--color-white);
+            }
+        }
+    }
+}
 
 .profile-xp-and-rank {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-
     .xp-number {
         font-size: var(--fontsize-larger);
         color: var(--color-strong);
@@ -33,6 +49,8 @@
     text-align: center;
     margin: 2rem 0 1rem 0;
     line-height: 1;
+
+    &.gm { color: var(--color-linkgm); }
 }
 
 .profile-description-na {
@@ -43,7 +61,7 @@
 
 /* ----- DEVELOPPEMENT ---------- */
 
-.profil-developments {
+.profile-developments {
     display: block;
 
     .development-line + .development-line { margin-top: 1.5rem; }
@@ -53,6 +71,14 @@
         flex-wrap: wrap;
         align-items: baseline;
         gap: 0.5rem;
+    }
+
+    .development-title {
+        a {
+            color: var(--color-strong);
+
+            &:hover { color: var(--color-link-hover); }
+        }
     }
 
     .development-meta {
@@ -67,6 +93,11 @@
         align-items: flex-start;
         gap: 1rem;
         margin-top: 0.25rem;
+
+        @media (max-width: 575.98px) {
+            flex-direction: column;
+            align-items: stretch;
+        }
     }
 
     .development-image {
@@ -79,7 +110,7 @@
             border-radius: 0.5rem;
         }
 
-        @media (max-width: 575.98px) { flex-basis: 6rem; }
+        @media (max-width: 575.98px) { flex-basis: auto; }
     }
 }
 
@@ -98,15 +129,47 @@
             align-items: center;
 
             a > img { margin-left: 0.5rem; }
+
+            &.with-map {
+                flex-wrap: wrap;
+                row-gap: 0.75rem;
+            }
+        }
+    }
+
+    .profile-illustration {
+        position: relative;
+
+        &.with-btn::after {
+            content: '';
+            position: absolute;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            height: 8rem;
+            background: linear-gradient(to top, var(--color-black50), transparent);
+            pointer-events: none;
+        }
+    }
+
+    .profile-btn-fiche {
+        position: absolute;
+        right: 0;
+        bottom: 1rem;
+        left: 0;
+        display: flex;
+        justify-content: center;
+
+        @media (max-width: 991.98px) {
+            position: static;
+            padding: 1rem;
         }
     }
 }
 
-.profil-btn-fiche { margin-top: 1rem; }
+.profile-creation {margin: 1rem; text-align: center; }
 
-.profil-creation {margin: 1rem; text-align: center; }
-
-.profil-historique {
+.profile-historique {
     @media (max-width: 991.98px) { padding-bottom: 1rem; }
 }
 
@@ -116,7 +179,7 @@
 
 .profile-banner-mobile {
     position: relative;
-    height: var(--profil-banner-h);
+    height: var(--profile-banner-h);
     overflow: hidden;
     @media (min-width: 576px) {
         border-top-left-radius: 1rem;
@@ -129,29 +192,12 @@
         object-fit: cover;
         object-position: center 17%;
     }
-}
 
-.profile-banner-mobile::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.8));
-}
-
-@media (max-width: 991.98px) {
-        .element-page > .container > section { position: relative; }
-
-        .element-page > .container > section > h1 {
+    &::after {
+        content: '';
         position: absolute;
-        z-index: 2;
-        top: 0;
-        left: 1rem;
-        right: 1rem;
-        height: var(--profil-banner-h);
-        display: flex;
-        align-items: flex-end;
-        justify-content: center;
-        color: var(--color-white);
+        inset: 0;
+        background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.8));
     }
 }
 

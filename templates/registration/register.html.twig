@@ -1,8 +1,8 @@
 {% extends 'other.html.twig' %}
 
-{% set titre = 'Créer un compte' %}
+{% set page_title = 'Créer un compte' %}
 
-{% block contenu %}
+{% block content %}
   {% for flashError in app.flashes('verify_email_error') %}
     <div class="alert alert-danger" role="alert">{{ flashError }}</div>
   {% endfor %}

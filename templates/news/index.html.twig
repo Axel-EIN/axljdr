@@ -38,7 +38,7 @@
                 <div class="session-groups">
                     <div class="session-pair">
                         <div class="session-group">
-                            <h3 class="label-amerigo news-subtitle text-white mt-4">Lieux visités</h3>
+                            <h3 class="label-amerigo news-subtitle text-white mt-4">Lieux</h3>
                             {{ include('/parts/picture-grid.html.twig', {
                                 items: session_locations,
                                 reveal_session: true,
@@ -52,7 +52,7 @@
                         </div>
 
                         <div class="session-group">
-                            <h3 class="label-amerigo news-subtitle text-white mt-4">Personnages rencontrés</h3>
+                            <h3 class="label-amerigo news-subtitle text-white mt-4">Rencontres</h3>
                             {{ include('/parts/picture-grid.html.twig', {
                                 items: session_characters,
                                 reveal_session: true,
@@ -65,7 +65,7 @@
                     </div>
 
                     <div class="session-group">
-                        <h3 class="label-amerigo news-subtitle text-white mt-4">Objets découverts</h3>
+                        <h3 class="label-amerigo news-subtitle text-white mt-4">Objets</h3>
                         {{ include('/parts/picture-grid.html.twig', {
                             items: session_objects,
                             field: 'icon',
@@ -121,10 +121,8 @@
                 style="--character-image: url('{{ asset(mon_personnage.illustration|default(NA_PERSO_ILLU)) }}');{% if mon_personnage.clan %} --faction-color: {{ mon_personnage.clan.couleur }};{% endif %}">
                 <div class="character-status">
                     <div class="status-head">
-                        <h3 class="label-amerigo news-subtitle">
-                            <a href="{{ path('personnage_profil', {id: mon_personnage.id}) }}">{{ mon_personnage.nomComplet }}</a>
-                        </h3>
-                        <span class="badge-rang-{{ mon_recap.rang }}">RANG {{ mon_recap.rang }}</span>
+                        <h3 class="status-name font-present text-white">{{ mon_personnage.nomComplet }}</h3>
+                        <span class="badge-rang-{{ mon_recap.rang }} large">RANG {{ mon_recap.rang }}</span>
                     </div>
                     {% set niveaux_blessure = constant('App\\Entity\\FichePersonnage::NIVEAUX_BLESSURE')|keys %}
                     {% if mon_recap.pvMax %}
@@ -136,6 +134,10 @@
                     {% endif %}
                     <div class="status-body">
                         <nav class="status-actions" aria-label="Raccourcis du personnage">
+                            <a class="status-link" href="{{ path('personnage_profil', {id: mon_personnage.id}) }}" aria-label="Voir le profil">
+                                <i class="fa-solid fa-user" aria-hidden="true"></i>
+                                <span class="hover-tooltip below">Voir le profil</span>
+                            </a>
                             {% if mon_personnage.fichePersonnage %}
                                 <a class="status-link" href="{{ path('personnage_fiche', {id: mon_personnage.fichePersonnage.id}) }}" aria-label="Voir la Fiche de Jeu">
                                     <i class="fa-solid fa-scroll" aria-hidden="true"></i>
@@ -148,7 +150,7 @@
                             </a>
                         </nav>
                         {% if mon_recap.pvMax %}
-                            <div class="status-hp-values text-your-xp"><strong>{{ mon_recap.pvMax }} / {{ mon_recap.pvMax }}</strong><span>{{ niveaux_blessure|first }}</span></div>
+                            <div class="status-hp-values text-your-xp">{{ mon_recap.pvMax }} / {{ mon_recap.pvMax }}<span class="status-label">{{ niveaux_blessure|first }}</span></div>
                         {% endif %}
                     </div>
                 </div>
@@ -169,7 +171,7 @@
                 {% endif %}
 
                 {% if mes_participations is not empty %}
-                    <h3 class="label-amerigo news-subtitle">Mes Dernières Participations</h3>
+                    <h3 class="label-amerigo news-subtitle">Participations</h3>
                     {% for participation in mes_participations %}
                         {% set scene = participation.scene %}
                         {% set episode = scene.episodeParent %}
@@ -194,7 +196,7 @@
             </div>
 
             <div class="card card-body discoveries-card">
-                <h3 class="label-amerigo news-subtitle"><i class="fa-solid fa-lock-open" aria-hidden="true"></i> Déblocages</h3>
+                <h3 class="label-amerigo news-subtitle"><i class="fa-solid fa-eye" aria-hidden="true"></i> Découvertes</h3>
 
                 {% for decouverte in decouvertes %}
                     <h4 class="news-qualifier">{{ decouverte.titre }}</h4>
@@ -238,6 +240,7 @@
                                         variant: groupe.variant|default('landscape'),
                                         field: groupe.field|default(null),
                                         per_row: section.max,
+                                        wrapper: 'compact',
                                     }) }}
                                 </div>
                             {% endfor %}
@@ -249,6 +252,7 @@
                             variant: groupe.variant|default('landscape'),
                             field: groupe.field|default(null),
                             per_row: groupe.perRow,
+                            wrapper: 'compact',
                         }) }}
                     {% endif %}
                 </div>

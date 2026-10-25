@@ -17,28 +17,28 @@
 {% endblock %}
 
 {% block section_content2 %}
-    {% set majeur = constant('App\\Entity\\FactionType::MAJEUR') %}
-    {% set mineur = constant('App\\Entity\\FactionType::MINEUR') %}
-    {% set titres = constant('App\\Entity\\FactionType::GROUPS') %}
+    {% set major = constant('App\\Entity\\FactionType::MAJEUR') %}
+    {% set minor = constant('App\\Entity\\FactionType::MINEUR') %}
+    {% set group_titles = constant('App\\Entity\\FactionType::GROUPS') %}
     {% set intros = constant('App\\Entity\\FactionType::INTROS') %}
     {% if factions|filter(clans => clans is not empty) is empty %}
         <p class="col-12 text-muted font-italic">Pas de factions disponibles.</p>
     {% else %}
 
         <div class="col-12 col-lg-9">
-            <h4 class="text-primarydark">{{ titres[majeur] }}</h4>
-            <p class="faction-intro">{{ intros[majeur] }}</p>
+            <h4 class="text-primarydark">{{ group_titles[major] }}</h4>
+            <p class="faction-intro">{{ intros[major] }}</p>
             {{ include('/parts/picture-grid.html.twig', {
                 catalog: true,
                 variant: 'emblem',
-                items: factions[majeur], route: 'world_clan', na_image: NA_MON,
+                items: factions[major], route: 'world_clan', na_image: NA_MON,
                 per_row: {desktop: 4, mobile: 2},
             }) }}
         </div>
 
         <div class="col-12 col-lg-3 border-left mt-4 mt-lg-0">
-            {% for type, clans in factions|filter((clans, type) => type not in [majeur, mineur] and clans is not empty) %}
-                <h4 class="text-primarydark text-center">{{ titres[type] }}</h4>
+            {% for type, clans in factions|filter((clans, type) => type not in [major, minor] and clans is not empty) %}
+                <h4 class="text-primarydark text-center">{{ group_titles[type] }}</h4>
                 <p class="faction-intro">{{ intros[type] }}</p>
                 {{ include('/parts/picture-grid.html.twig', {
                     catalog: true,
@@ -50,14 +50,14 @@
             {% endfor %}
         </div>
 
-        {% if factions[mineur] is not empty %}
+        {% if factions[minor] is not empty %}
             <div class="col-12">
-                <h4 class="text-primarydark mt-4">{{ titres[mineur] }}</h4>
-                <p class="faction-intro">{{ intros[mineur] }}</p>
+                <h4 class="text-primarydark mt-4">{{ group_titles[minor] }}</h4>
+                <p class="faction-intro">{{ intros[minor] }}</p>
                 {{ include('/parts/picture-grid.html.twig', {
                     catalog: true,
                     variant: 'emblem',
-                    items: factions[mineur], route: 'world_clan', na_image: NA_MON,
+                    items: factions[minor], route: 'world_clan', na_image: NA_MON,
                     per_row: {desktop: 8, mobile: 3},
                     gap: '1.5rem',
                 }) }}
@@ -68,20 +68,20 @@
 {% endblock %}
 
 {% block section_content3 %}
-    {% for groupe in location_groups %}
+    {% for group in location_groups %}
         {% set scroller_id = 'lieux-' ~ loop.index %}
         <div class="col-12">
             <h3 class="heading-amerigo category-section-sub-heading flex-wrap relative">
                 <span class="heading-mons">
-                    {% for clan in groupe.clans|default([]) %}
+                    {% for clan in group.clans|default([]) %}
                         <img class="img-40" src="{{ asset(image_small(clan.mon|default(NA_MON))) }}" alt="Mon de la faction" title="{{ clan.nom }}" />
                     {% endfor %}
-                    {% if groupe.clans|default([]) is empty or groupe.ungrouped|default(false) %}
+                    {% if group.clans|default([]) is empty or group.ungrouped|default(false) %}
                         <img class="img-40" src="{{ asset(NA_MON) }}" alt="Mon de la faction" />
                     {% endif %}
                 </span>
-                {{ groupe.title }}
-                {% set dots_color = groupe.clans|default([])|length == 1 ? (groupe.clans|first).couleur : null %}
+                {{ group.title }}
+                {% set dots_color = group.clans|default([])|length == 1 ? (group.clans|first).couleur : null %}
                 <span class="scroller-dots" data-scroller="{{ scroller_id }}"{% if dots_color %} style="--clan-color: {{ dots_color }}"{% endif %}></span>
             </h3>
             {{ include('/parts/picture-grid.html.twig', {
@@ -89,7 +89,7 @@
                 variant: 'icon',
                 scroll: true, scroll_id: scroller_id,
                 type_icon: true,
-                items: groupe.locations, route: 'world_location', na_image: NA_LIEU_ICO,
+                items: group.locations, route: 'world_location', na_image: NA_LIEU_ICO,
                 per_row: {desktop: 6, mobile: 2},
             }) }}
         </div>

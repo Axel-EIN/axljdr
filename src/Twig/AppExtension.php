@@ -42,10 +42,10 @@ class AppExtension extends AbstractExtension
     public function getFilters()
     {
         return [
-            new TwigFilter('relief', [$this, 'titreRelief']),
-            new TwigFilter('lister', [$this, 'listerRetourChariot']),
-            new TwigFilter('pricer', [$this, 'distribuerPrix']),
-            new TwigFilter('jeter', [$this, 'calculerJet']),
+            new TwigFilter('relief', [$this, 'titleRelief']),
+            new TwigFilter('lister', [$this, 'linesToList']),
+            new TwigFilter('pricer', [$this, 'formatPrice']),
+            new TwigFilter('jeter', [$this, 'expectedRoll']),
             new TwigFilter('sortByField', [$this, 'sortByField']),
         ];
     }
@@ -53,7 +53,7 @@ class AppExtension extends AbstractExtension
     public function getFunctions()
     {
         return [
-            new TwigFunction('jet_map', [$this, 'getJetMap']),
+            new TwigFunction('jet_map', [$this, 'getRollMap']),
             new TwigFunction('element_state', [$this->visibility, 'state']),
             new TwigFunction('element_readable', [$this->visibility, 'isReadable']),
             new TwigFunction('element_unseen', [$this->visibility, 'isUnseen']),
@@ -84,17 +84,17 @@ class AppExtension extends AbstractExtension
             return null;
         }
 
-        $candidats = [];
+        $candidates = [];
         foreach ([$reduced, $path] as $image) {
-            $largeur = $this->imageNormalizer->width($image);
-            if ($largeur === null) {
+            $width = $this->imageNormalizer->width($image);
+            if ($width === null) {
                 return null;
             }
 
-            $candidats[] = $this->packages->getUrl($image) . ' ' . $largeur . 'w';
+            $candidates[] = $this->packages->getUrl($image) . ' ' . $width . 'w';
         }
 
-        return implode(', ', $candidats);
+        return implode(', ', $candidates);
     }
 
     public function accessLabel($access, bool $manualUnlock = false): string
@@ -114,7 +114,7 @@ class AppExtension extends AbstractExtension
         return FactionType::LABELS[$type] ?? '';
     }
 
-    public function getJetMap()
+    public function getRollMap()
     {
         return [
             1  => [1 => 6.10],
@@ -130,100 +130,96 @@ class AppExtension extends AbstractExtension
         ];
     }
 
-    private const MOTS_OUTILS = ['à', 'a', 'le', 'la', 'les', 'du', 'de', 'des', 'dans', 'et', 'son'];
+    private const SMALL_WORDS = ['à', 'a', 'le', 'la', 'les', 'du', 'de', 'des', 'dans', 'et', 'son'];
 
     private const ELISIONS = ["l'" => "l'&nbsp;", "L'" => "L'", "d'" => "d'&nbsp;", "D'" => "D'"];
 
-    public function titreRelief($titre)
+    public function titleRelief($title)
     {
-        $titre = preg_replace(
-            '/(?<!\p{L})(' . implode('|', self::MOTS_OUTILS) . ')\s+/ui',
+        $title = preg_replace(
+            '/(?<!\p{L})(' . implode('|', self::SMALL_WORDS) . ')\s+/ui',
             '<span class="small-word">$1&nbsp;</span>',
-            $titre
+            $title
         );
 
-        foreach (self::ELISIONS as $elision => $rendu) {
-            $titre = str_replace($elision, '<span class="small-word">' . $rendu . '</span>', $titre);
+        foreach (self::ELISIONS as $elision => $rendered) {
+            $title = str_replace($elision, '<span class="small-word">' . $rendered . '</span>', $title);
         }
 
-        return $titre;
+        return $title;
     }
 
-    public function listerRetourChariot($text)
+    public function linesToList($text)
     {
-    
-        $string = "line 1\nline 2\nline3";
-        
-        $lignes = explode("\n", $text);
-        
+        $lines = explode("\n", $text);
+
         $listedText = "";
-        foreach($lignes as $ligne)
+        foreach($lines as $line)
         {
-          $listedText .= "<li>" . $ligne . "</li>";
+          $listedText .= "<li>" . $line . "</li>";
         }
-        $listedText .= "";
-    
+
         return $listedText;
     }
 
-    public function distribuerPrix($prix)
+    public function formatPrice($price)
     {
 
-        $reste = $prix;
+        $remainder = $price;
         $html = '';
 
-        if ( $reste >= Monnaie::ZENI_PAR_KOKU  ) {
-            $html = '<strong class="text-medium">' . floor($reste / Monnaie::ZENI_PAR_KOKU) . '</strong>'
+        if ( $remainder >= Monnaie::ZENI_PAR_KOKU  ) {
+            $html = '<strong class="text-medium">' . floor($remainder / Monnaie::ZENI_PAR_KOKU) . '</strong>'
                   . '<img class="ml-1 img-24 align-text-bottom" src="/assets/icons/money/koku.png" alt="image pièce koku" title="Koku" /><br>';
-            $reste = $reste % Monnaie::ZENI_PAR_KOKU;
+            $remainder = $remainder % Monnaie::ZENI_PAR_KOKU;
         }
 
-        if ( $reste >= Monnaie::ZENI_PAR_BU ) {
-            $html = $html . '<strong class="align-middle">' . floor($reste / Monnaie::ZENI_PAR_BU) . '</strong>'
+        if ( $remainder >= Monnaie::ZENI_PAR_BU ) {
+            $html = $html . '<strong class="align-middle">' . floor($remainder / Monnaie::ZENI_PAR_BU) . '</strong>'
                           . '<img class="ml-1 img-18 align-middle" src="/assets/icons/money/bu.png" alt="image pièce bu" title="Bu" /><br>';
-            $reste = $reste % Monnaie::ZENI_PAR_BU;
+            $remainder = $remainder % Monnaie::ZENI_PAR_BU;
         }
 
-        if ( $reste > 0 ) {
-            $html = $html . '<strong class="text-small align-middle">' . $reste . '</strong>'
+        if ( $remainder > 0 ) {
+            $html = $html . '<strong class="text-small align-middle">' . $remainder . '</strong>'
                           . '<img class="ml-1 img-14 align-middle" src="/assets/icons/money/zeni.png" alt="image pièce zeni" title="Zeni" />';
         }
     
         return $html;
     }
 
-    public function calculerJet($jetOuVD, $traitOuBonusD = 0)
+    public function expectedRoll($rollOrDamage, $traitOrBonusDice = 0)
     {
-      $jetDecompose = explode('g', (string) $jetOuVD);
+      $rollParts = explode('g', (string) $rollOrDamage);
 
-      if (count($jetDecompose) < 2)
+      if (count($rollParts) < 2)
         return 0;
 
-      $lancesDFinal = (int) $jetDecompose[0];
-      $gardesDFinal = (int) $jetDecompose[1];
+      $rolledDice = (int) $rollParts[0];
+      $keptDice = (int) $rollParts[1];
 
-      if ($gardesDFinal < 1 )
+      if ($keptDice < 1 )
         return 0;
 
-      if ($traitOuBonusD >= 1)
-        $lancesDFinal += $traitOuBonusD;
+      if ($traitOrBonusDice >= 1)
+        $rolledDice += $traitOrBonusDice;
 
-      if ($lancesDFinal < $gardesDFinal)
-        $gardesDFinal = $lancesDFinal;
+      if ($rolledDice < $keptDice)
+        $keptDice = $rolledDice;
 
       $bonus = 0;
-      if ($lancesDFinal > 10) {
-        $bonus += ($lancesDFinal - 10) * 2;
-        $lancesDFinal = 10;
+      if ($rolledDice > 10) {
+        $bonus += ($rolledDice - 10) * 2;
+        $rolledDice = 10;
       }
 
-      if ($gardesDFinal > 10) {
-        $bonus += ($gardesDFinal - 10) * 3;
-        $gardesDFinal = 10;
+      if ($keptDice > 10) {
+        $bonus += ($keptDice - 10) * 3;
+        $keptDice = 10;
       }
 
-      $map = $this->getJetMap();
-      return ($map[$lancesDFinal][$gardesDFinal] ?? 0) + $bonus;
+      $map = $this->getRollMap();
+      return ($map[$rolledDice][$keptDice] ?? 0) + $bonus;
     }
 
     public function sortByField($content, $sort_by, $direction = 'asc'){

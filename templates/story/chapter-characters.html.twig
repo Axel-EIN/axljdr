@@ -25,22 +25,22 @@
 {% set view_class = episode is defined ? ' episode-view' : ' chapter-view' %}
 
 {% if chapter_locations|length > 0 %}
-  <div class="chapter-lieux">
-    <div class="label-du-groupe">Lieux</div>
-    <div class="chapter-lieux-row">
+  <div class="chapter-locations">
+    <div class="group-label">Lieux</div>
+    <div class="chapter-locations-row">
       {% for location in chapter_locations %}
-        <a class="chapter-lieu-link" href="{{ path('world_location', {id: location.id}) }}" title="{{ location.nom }}">
-          <img class="chapter-lieu-icon" src="{{ asset(location.icone|default(NA_LIEU_ICO)) }}" alt="Icone de {{ location.nom }}" />
+        <a class="chapter-location-link" href="{{ path('world_location', {id: location.id}) }}" title="{{ location.nom }}">
+          <img class="chapter-location-icon" src="{{ asset(location.icone|default(NA_LIEU_ICO)) }}" alt="Icone de {{ location.nom }}" />
         </a>
       {% endfor %}
     </div>
   </div>
 {% endif %}
 
-{% for group in [{key: 'pjs', label: 'Joueurs', characters: pcs}, {key: 'pnjs', label: 'Non-joueurs', characters: npcs}] %}
+{% for group in [{key: 'pcs', label: 'Joueurs', characters: pcs}, {key: 'npcs', label: 'Non-joueurs', characters: npcs}] %}
   {% if group.characters|length > 0 %}
     <div class="chapter-characters {{ group.key }}{{ view_class }}">
-      <div class="label-du-groupe {{ group.key == 'pnjs' ? 'pnjs' : '' }}">{{ group.label }}</div>
+      <div class="group-label {{ group.key == 'npcs' ? 'npcs' : '' }}">{{ group.label }}</div>
       <div class="chapter-portraits-grid">
         {% for character in group.characters %}
           {% set fallback = NA_PERSO_PORTRAIT %}

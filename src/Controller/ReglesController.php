@@ -7,6 +7,7 @@ use App\Entity\Rule;
 use App\Entity\Ecole;
 use App\Entity\Classe;
 use App\Entity\Library;
+use App\Entity\Personnage;
 use App\Repository\RuleRepository;
 use App\Repository\SortRepository;
 use App\Repository\EcoleRepository;
@@ -15,6 +16,7 @@ use App\Repository\ClasseRepository;
 use App\Repository\LibraryRepository;
 use App\Repository\AvantageRepository;
 use App\Repository\CompetenceRepository;
+use Doctrine\Common\Collections\Collection;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -309,7 +311,7 @@ class ReglesController extends AbstractController
     public function viewClasse(Classe $classe, EcoleRepository $ecoleRepository, ClasseRepository $classeRepository): Response
     {
         $classes = $classeRepository->FindAll();
-        $personnagesClasse = $classe->getPersonnages()->toArray();
+        $personnagesClasse = $this->personnagesJoueurs($classe->getPersonnages());
         $ecolesClasse = $ecoleRepository->findByClasseSorted($classe->getId());
         shuffle($personnagesClasse);
 
@@ -343,6 +345,12 @@ class ReglesController extends AbstractController
             'category' => 'regles',
             'un_element' => $ecole,
             'autresEcoles' => $autresEcoles,
+            'personnagesEcole' => $this->personnagesJoueurs($ecole->getPersonnages()),
         ]);
+    }
+
+    private function personnagesJoueurs(Collection $personnages): array
+    {
+        return $personnages->filter(fn (Personnage $personnage) => $personnage->getEstPj())->getValues();
     }
 }

@@ -34,7 +34,7 @@ class BackOfficeController extends AbstractController
      * @Route("/back-office", name="back_office")
      * @Security("is_granted('ROLE_MJ') or is_granted('ROLE_ADMIN')")
      */
-    public function viewBackOffice(
+    public function index(
         SaisonRepository $saisonRepository,
         ChapitreRepository $chapitreRepository,
         EpisodeRepository $episodeRepository,

@@ -226,7 +226,7 @@ class Visibility
         }
 
         $this->owned = [];
-        $personnage = $this->currentPlayer->main();
+        $personnage = $this->currentPlayer->navigatingCharacter();
 
         if ($personnage === null) {
             return $this->owned;

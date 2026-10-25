@@ -35,7 +35,7 @@
                             <img class="img-fluid circle-crop" src="{{ asset(une_famille.mon|default(NA_MON)) }}" alt="Mon Famille" />
 
                             {% if une_famille.chef is not empty %}
-                                <a class="famille-daimyo hover-zoom" href="{{ path('personnage_profil', {id: une_famille.chef.id} ) }}" title="{{ une_famille.chef.nomComplet }}">
+                                <a class="famille-daimyo hover-zoom" href="{{ path('characters_profile', {id: une_famille.chef.id} ) }}" title="{{ une_famille.chef.nomComplet }}">
                                     <span class="text-muted">Daimyo</span>
                                     <img class="character-portrait medium" src="{{ asset(une_famille.chef.icone|default(NA_PERSO_PORTRAIT)) }}" alt="Icône du personnage" />
                                 </a>
@@ -152,7 +152,7 @@
     {{ include('/parts/picture-grid.html.twig', {
         variant: 'portrait',
         title: 'Personnages',
-        items: clan.personnages, route: 'personnage_profil', hide_dead: true,
+        items: clan.personnages, route: 'characters_profile', hide_dead: true,
         wrapper: col_side,
         per_row: {desktop: portraits_par_ligne, tablet: 4, mobile: 2},
         empty_message: "Il n'y a pas encore de personnage rattaché à ce clan.",

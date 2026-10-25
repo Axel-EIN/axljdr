@@ -23,7 +23,7 @@ final class EntityRegistry
         'personnage' => ['class' => Personnage::class, 'route' => 'personnage_profil', 'label' => 'Personnage'],
         'archive'    => ['class' => Archive::class,    'route' => 'world_archive',    'label' => 'Archive'],
         'clan'       => ['class' => Clan::class,       'route' => 'world_clan',       'label' => 'Faction'],
-        'lieu'       => ['class' => Lieu::class,       'route' => 'world_lieu',       'label' => 'Lieu'],
+        'lieu'       => ['class' => Lieu::class,       'route' => 'world_location',       'label' => 'Lieu'],
         'lore'       => ['class' => Lore::class,       'route' => 'world_lore',       'label' => 'Lore'],
         'rule'       => ['class' => Rule::class,       'route' => 'regles_rule',       'label' => 'Règle'],
         'library'    => ['class' => Library::class,    'route' => 'regles_library',    'label' => 'Bibliothèque'],

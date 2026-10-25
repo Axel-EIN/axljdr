@@ -15,10 +15,10 @@ use App\Repository\ObjetRepository;
 use App\Repository\PersonnageRepository;
 use App\Repository\SaisonRepository;
 use App\Repository\SortRepository;
-use App\Service\Baliseur;
-use App\Service\ClasseurHistorique;
-use App\Service\Localisateur;
-use App\Service\ClasseurXP;
+use App\Service\NameTagger;
+use App\Service\HistoryRanker;
+use App\Service\Locator;
+use App\Service\XpRanker;
 use App\Service\SheetExport;
 use App\Service\Visibility;
 use Doctrine\ORM\EntityManagerInterface;
@@ -125,7 +125,7 @@ class CharactersController extends AbstractController
     /**
      * @Route("/characters/profile/{id}", name="characters_profile")
      */
-    public function showProfile(Personnage $character, PersonnageRepository $characterRepository, ClasseurHistorique $classeur, SaisonRepository $seasonRepository, Visibility $visibility, DevelopmentRepository $developmentRepository, Baliseur $baliseur, ClasseurXP $classeurXP, Localisateur $localisateur): Response {
+    public function showProfile(Personnage $character, PersonnageRepository $characterRepository, HistoryRanker $historyRanker, SaisonRepository $seasonRepository, Visibility $visibility, DevelopmentRepository $developmentRepository, NameTagger $nameTagger, XpRanker $xpRanker, Locator $locator): Response {
 
         if ($response = $this->accessGuard($visibility, $character, 'character', 'characters')) {
             return $response;
@@ -137,9 +137,9 @@ class CharactersController extends AbstractController
         shuffle($otherCharacters);
 
         $sheet = $character->getFichePersonnage();
-        $creationXp = ($sheet !== null) ? $classeurXP->creation($sheet) : 0;
-        $totalXp = $classeurXP->total($character);
-        $rank = $classeurXP->rank($totalXp);
+        $creationXp = ($sheet !== null) ? $xpRanker->creation($sheet) : 0;
+        $totalXp = $xpRanker->total($character);
+        $rank = $xpRanker->rank($totalXp);
 
         $isOwnCharacter = $this->isOwnCharacter($character);
         $isGm = $this->isGranted('ROLE_MJ');
@@ -148,7 +148,7 @@ class CharactersController extends AbstractController
         $form = null;
         if ($canEdit) {
             $form = $this->createForm(PlayerCharacterType::class, $character, ['is_gm' => $isGm]);
-            $form->get('description')->setData($baliseur->debaliser($character->getDescription()));
+            $form->get('description')->setData($nameTagger->untag($character->getDescription()));
         }
 
         return $this->render('characters/character-profile.html.twig', [
@@ -165,15 +165,15 @@ class CharactersController extends AbstractController
             'creation_xp' => $creationXp,
             'rank' => $rank,
             'other_characters' => $otherCharacters,
-            'historique' => $classeur->pourPersonnage($character),
+            'historique' => $historyRanker->forCharacter($character),
             'saison_courante' => $seasonRepository->findCourante()?->getNumero(),
-        ] + $localisateur->carte($character));
+        ] + $locator->map($character));
     }
 
     /**
      * @Route("/characters/sheet/{id}", name="characters_sheet")
      */
-    public function showSheet(FichePersonnage $sheet, CompetenceRepository $skillRepository, AvantageRepository $advantageRepository, ObjetRepository $objectRepository, SortRepository $spellRepository, Visibility $visibility, ClasseurXP $classeurXP): Response
+    public function showSheet(FichePersonnage $sheet, CompetenceRepository $skillRepository, AvantageRepository $advantageRepository, ObjetRepository $objectRepository, SortRepository $spellRepository, Visibility $visibility, XpRanker $xpRanker): Response
     {
         $isOwnCharacter = $this->isOwnCharacter($sheet->getPersonnage());
 
@@ -181,7 +181,7 @@ class CharactersController extends AbstractController
             return $this->render('element-hidden.html.twig', [], new Response('', Response::HTTP_NOT_FOUND));
         }
 
-        $xp = $classeurXP->sheet($sheet);
+        $xp = $xpRanker->sheet($sheet);
 
         $skillsJson = [];
         $advantagesJson = [];
@@ -206,14 +206,14 @@ class CharactersController extends AbstractController
             ];
         }
 
-        $serialize = function ($advantage) use ($classeurXP, $sheet) {
+        $serialize = function ($advantage) use ($xpRanker, $sheet) {
             return [
                 'id'                => $advantage->getId(),
                 'nom'               => $advantage->getNom(),
                 'description'       => $advantage->getDescription(),
                 'summary'           => $advantage->getSummary(),
                 'cout'              => $advantage->getCout(),
-                'coutEffectif'      => $classeurXP->advantageCost($sheet, $advantage),
+                'coutEffectif'      => $xpRanker->advantageCost($sheet, $advantage),
                 'exclusiveId'       => $advantage->getExclusive()      ? $advantage->getExclusive()->getId()      : null,
             ];
         };
@@ -292,7 +292,7 @@ class CharactersController extends AbstractController
         return $this->render('characters/character-sheet.html.twig', [
             'fiche'              => $sheet,
             'xp'                 => $xp,
-            'rank'               => $classeurXP->rank($xp['total']),
+            'rank'               => $xpRanker->rank($xp['total']),
             'is_own_character'   => $isOwnCharacter,
             'skills_json'        => $skillsJson,
             'advantages_json'    => $advantagesJson,
@@ -357,7 +357,7 @@ class CharactersController extends AbstractController
     /**
      * @Route("/characters/profile/{id}/edit", name="characters_profile_edit", methods={"POST"})
      */
-    public function editProfile(Request $request, Personnage $character, EntityManagerInterface $em, Baliseur $baliseur): Response
+    public function editProfile(Request $request, Personnage $character, EntityManagerInterface $em, NameTagger $nameTagger): Response
     {
         $isGm = $this->isGranted('ROLE_MJ');
 
@@ -371,9 +371,9 @@ class CharactersController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             if ($isGm) {
-                $character->setDescription($baliseur->baliser($character->getDescription()));
+                $character->setDescription($nameTagger->tag($character->getDescription()));
             } else {
-                $character->setDescription($baliseur->rebaliser($this->withoutHtml($character->getDescription()), $previousDescription));
+                $character->setDescription($nameTagger->retag($this->withoutHtml($character->getDescription()), $previousDescription));
                 $character->setPlayerNotes($this->withoutHtml($character->getPlayerNotes()));
             }
 

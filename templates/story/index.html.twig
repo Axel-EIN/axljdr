@@ -35,7 +35,7 @@
 <main class="relative">
 
     {% set color, entity, parent, parentID, redirect = 'text-white50', 'chapter', 'season', season.id, 'story' %}
-    {% for un_chapitre in season.chapitres|reverse %}
+    {% for chapter in season.chapitres|reverse %}
         {{ include('/story/chapter-detail.html.twig', {lazy: not loop.first}) }}
     {% else %}
 

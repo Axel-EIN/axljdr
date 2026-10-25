@@ -3,7 +3,7 @@
 <div class="col-12 list-heading">
 
     {% if is_mj() %}
-        {% set action, entity, redirect, position, color, size = 'create', 'avantage', 'library&libraryID=' ~ library.id ~ '&tab=' ~ app.request.get('tab'), 'topleft-overflow', 'link-gm', 'btn-icon-mini' %}
+        {% set action, entity, redirect, position, color, size = 'create', 'advantage', 'library&libraryID=' ~ library.id ~ '&tab=' ~ app.request.get('tab'), 'topleft-overflow', 'link-gm', 'btn-icon-mini' %}
         {{ include('/btns/btn-icon.html.twig') }}
     {% endif %}
 
@@ -17,16 +17,16 @@
 {% for item in items %}
 
     {% if not element_readable(item) %}
-        {{ include('rules/list-item-locked.html.twig', {entity: 'avantage'}) }}
+        {{ include('rules/list-item-locked.html.twig', {entity: 'advantage'}) }}
     {% else %}
         <div class="col-12 p-0 m-0 relative">
 
             {% if is_mj() %}
-                {% set position, size, color, entity, un_element, redirect = 'topleft-overflow', 'btn-icon-mini', 'link-gm', 'avantage', item, 'library&libraryID=' ~ library.id %}
+                {% set position, size, color, entity, un_element, redirect = 'topleft-overflow', 'btn-icon-mini', 'link-gm', 'advantage', item, 'library&libraryID=' ~ library.id %}
                 {{ include('/btns/btn-icon-edit.html.twig') }}
             {% endif %}
 
-            <a href="#avantage{{ item.id }}" class="card item" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="avantage{{ item.id }}">
+            <a href="#advantage{{ item.id }}" class="card item" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="advantage{{ item.id }}">
 
                 <div class="item-line">
                     {{ include('parts/badge-access.html.twig', {state: element_state(item), variant: 'inline'}) }}
@@ -47,7 +47,7 @@
                     </span>
                 </div>
 
-                <div id="avantage{{ item.id }}" class="collapse">
+                <div id="advantage{{ item.id }}" class="collapse">
                     <span class="badge badge-pill badge-dark mt-2">{{item.type}}</span>
                     <p class="p-2 m-0 item-description">
                         {{ item.description|raw|nl2br }}

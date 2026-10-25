@@ -74,7 +74,7 @@ class AdminAvantageController extends AbstractController
 
             if (!empty($request->query->get('redirect')) && $request->query->get('redirect') == 'library'
                 && !empty($request->query->get('libraryID')) && $request->query->get('libraryID') > 0)
-                return $this->redirectToRoute( 'regles_library', [ 'id' => $request->query->get('libraryID') , 'tab' => $avantage->getGenre(), 'subtab' => $avantage->getType() ] );
+                return $this->redirectToRoute( 'rules_library', [ 'id' => $request->query->get('libraryID') , 'tab' => $avantage->getGenre(), 'subtab' => $avantage->getType() ] );
 
             return $this->redirectToRoute('admin_avantage');
         }
@@ -109,7 +109,7 @@ class AdminAvantageController extends AbstractController
 
             if (!empty($request->query->get('redirect')) && $request->query->get('redirect') == 'library'
                 && !empty($request->query->get('libraryID')) && $request->query->get('libraryID') > 0)
-                return $this->redirectToRoute( 'regles_library', [ 'id' => $request->query->get('libraryID') , 'tab' => $avantage->getGenre(), 'subtab' => $avantage->getType() ] );
+                return $this->redirectToRoute( 'rules_library', [ 'id' => $request->query->get('libraryID') , 'tab' => $avantage->getGenre(), 'subtab' => $avantage->getType() ] );
 
             return $this->redirectToRoute('admin_avantage');
         }

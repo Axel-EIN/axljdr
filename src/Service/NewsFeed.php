@@ -4,6 +4,7 @@ namespace App\Service;
 
 use App\Entity\Access;
 use App\Entity\Episode;
+use App\Entity\Personnage;
 use App\Repository\ParticipationRepository;
 use App\Repository\PersonnageRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -182,9 +183,14 @@ class NewsFeed
         }, $ids);
         usort($references, $parDate);
 
-        $elements = $this->entityManager->getRepository($class)->findBy(['id' => array_map(function ($reference) {
-            return $reference->getId();
-        }, array_slice($references, 0, $limit))]);
+        $qb = $this->entityManager->createQueryBuilder()
+            ->select('e')
+            ->from($class, 'e')
+            ->andWhere('e.id IN (:ids)')
+            ->setParameter('ids', array_map(function ($reference) {
+                return $reference->getId();
+            }, array_slice($references, 0, $limit)));
+        $elements = $this->joindreFiche($qb, $class)->getQuery()->getResult();
         usort($elements, $parDate);
 
         return $elements;
@@ -197,10 +203,17 @@ class NewsFeed
 
     private function parus(string $class, bool $memeSansDate): QueryBuilder
     {
-        return $this->entityManager->createQueryBuilder()
+        $qb = $this->entityManager->createQueryBuilder()
             ->select('e')
             ->from($class, 'e')
             ->andWhere($memeSansDate ? 'e.publishedAt IS NULL OR e.publishedAt <= :maintenant' : 'e.publishedAt <= :maintenant')
             ->setParameter('maintenant', new \DateTime());
+
+        return $this->joindreFiche($qb, $class);
+    }
+
+    private function joindreFiche(QueryBuilder $qb, string $class): QueryBuilder
+    {
+        return $class === Personnage::class ? $qb->leftJoin('e.fichePersonnage', 'fiche')->addSelect('fiche') : $qb;
     }
 }

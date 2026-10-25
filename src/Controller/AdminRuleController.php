@@ -80,8 +80,8 @@ class AdminRuleController extends AbstractController
             $em->flush();
             $this->addFlash('success', 'La Règle a bien été ajoutée');
 
-            $fratrieArrivee = $ruleRepository->findBy(['base' => $rule->getBase()]);
-            $orderer->reorderNumber($rule->getId(), -1, $rule->getNumero(), [], $fratrieArrivee);
+            $newSiblings = $ruleRepository->findBy(['base' => $rule->getBase()]);
+            $orderer->reorderNumber($rule->getId(), -1, $rule->getNumero(), [], $newSiblings);
 
             if (!empty($request->query->get('redirect')) && $request->query->get('redirect') == 'rule')
                 return $this->redirectToRoute('rules_rule', ['id' => $rule->getId()]);
@@ -105,8 +105,8 @@ class AdminRuleController extends AbstractController
      */
     public function editRule(Request $request, Rule $rule, FileHandler $fileHandler, RuleRepository $ruleRepository, Orderer $orderer, Unlocker $unlocker): Response
     {
-        $numeroDepart = $rule->getNumero();
-        $fratrieDepartId = $rule->getBase();
+        $previousNumber = $rule->getNumero();
+        $previousSiblingsId = $rule->getBase();
 
         $form = $this->createForm(AdminRuleType::class, $rule);
         $form->get('unlockedBy')->setData($unlocker->charactersOf($rule));
@@ -114,26 +114,26 @@ class AdminRuleController extends AbstractController
 
         if ( $form->isSubmitted() && $form->isValid() ) {
 
-            $nouvelleImage = $form->get('image')->getData();
-            if (!empty($nouvelleImage)) {
+            $newImage = $form->get('image')->getData();
+            if (!empty($newImage)) {
                 $prefix = 'rule-' . $rule->getNom() . '-image';
-                $rule->setImage($fileHandler->handle($nouvelleImage, $rule->getImage(), $prefix, 'rules', 'fourthird900'));
+                $rule->setImage($fileHandler->handle($newImage, $rule->getImage(), $prefix, 'rules', 'fourthird900'));
             } elseif ($request->request->get('remove_image') === '1' && $rule->getImage()) {
                 $fileHandler->handle(null, $rule->getImage(), null, 'rules');
                 $rule->setImage(null);
             }
 
-            $nouveauPDF = $form->get('pdf')->getData();
-            if (!empty($nouveauPDF)) {
+            $newPdf = $form->get('pdf')->getData();
+            if (!empty($newPdf)) {
                 $prefix = 'rule-' . $rule->getNom() . '-pdf';
-                $rule->setPdf($fileHandler->handle($nouveauPDF, $rule->getPdf(), $prefix, 'pdf-rules'));
+                $rule->setPdf($fileHandler->handle($newPdf, $rule->getPdf(), $prefix, 'pdf-rules'));
             }
 
-            if ($numeroDepart != $rule->getNumero() || $fratrieDepartId != $rule->getBase())
+            if ($previousNumber != $rule->getNumero() || $previousSiblingsId != $rule->getBase())
             {
-                $fratrieDepart = $ruleRepository->findBy(['base' => $fratrieDepartId]);
-                $fratrieArrivee = $ruleRepository->findBy(['base' => $rule->getBase()]);
-                $orderer->reorderNumber($rule->getId(), $numeroDepart, $rule->getNumero(), $fratrieDepart, $fratrieArrivee);
+                $previousSiblings = $ruleRepository->findBy(['base' => $previousSiblingsId]);
+                $newSiblings = $ruleRepository->findBy(['base' => $rule->getBase()]);
+                $orderer->reorderNumber($rule->getId(), $previousNumber, $rule->getNumero(), $previousSiblings, $newSiblings);
             }
 
             $unlocker->sync($rule, $form->get('unlockedBy')->getData());
@@ -170,9 +170,9 @@ class AdminRuleController extends AbstractController
             $fileHandler->handle(null, $rule->getImage(), null, 'rules');
             $fileHandler->handle(null, $rule->getPdf(), null, 'pdf-rules');
 
-            $fratrieDepartId = $rule->getBase();
-            $fratrieDepart = $ruleRepository->findBy(['base' => $fratrieDepartId]);
-            $orderer->reorderNumber($rule->getId(), $rule->getNumero(), -1, $fratrieDepart, []);
+            $previousSiblingsId = $rule->getBase();
+            $previousSiblings = $ruleRepository->findBy(['base' => $previousSiblingsId]);
+            $orderer->reorderNumber($rule->getId(), $rule->getNumero(), -1, $previousSiblings, []);
 
             $unlocker->forget($rule);
             $em->remove($rule);

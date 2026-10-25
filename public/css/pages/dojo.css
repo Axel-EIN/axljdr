@@ -47,7 +47,7 @@
     #banner-icon-clan { display: none; }
 }
 
-.technique-speciale {
+.technique-special {
     padding: 0 1rem;
     scroll-margin-top: 1rem;
 
@@ -74,7 +74,7 @@
     }
 }
 
-.tech-rang {
+.tech-rank {
     text-align: center;
 
     @media (max-width: 991.98px) {

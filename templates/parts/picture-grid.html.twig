@@ -12,6 +12,7 @@
   {% set is_mj = app.user and is_granted('ROLE_MJ') %}
   {% set plain = reveal_session %}
   {% set badge_hover = badge_hover|default(false) %}
+  {% set badge_pinned = badge_pinned|default(false) %}
   {% set catalog = catalog|default(false) %}
   {% set mj_plain = catalog and is_mj %}
   {% set type_badges = type_badges|default([]) %}
@@ -43,12 +44,8 @@
 
   {% set wrapper_class = title is not defined ? wrapper|default('') : '' %}
 
-  {% if scroll %}
-    <div class="picture-scroller {{ wrapper_class }}"{% if scroll_id is defined %} id="{{ scroll_id }}"{% endif %}>
-      <button type="button" class="scroller-btn" data-direction="-1" aria-label="Défiler vers la gauche"><i class="fa-solid fa-chevron-left" aria-hidden="true"></i></button>
-  {% endif %}
-
-  <div class="picture-grid {{ scroll ? 'scroll' : wrapper_class }}" style="{{ style }}">
+  {% set track %}
+  <div class="picture-grid {{ scroll ? 'scroll scroller-track' : wrapper_class }}" style="{{ style }}">
     {% for item in limit is defined ? items|slice(0, limit) : items %}
 
       {% set state = element_state(item, reveal_session) %}
@@ -77,7 +74,7 @@
           {% if catalog %}
             {{ include('parts/badge-catalog.html.twig', {item: item}) }}
           {% else %}
-            {% set pinned = badge_hover and not is_mj and element_individual(item) %}
+            {% set pinned = badge_pinned or (badge_hover and not is_mj and element_individual(item)) %}
             {{ include('parts/badge-access.html.twig', {
               state: pinned and state == 'common-discovered' ? 'unlocked' : state,
               variant: badge_hover and not pinned ? 'hover-only' : '',
@@ -144,10 +141,14 @@
       <span class="grid-empty text-muted font-italic">{{ empty_message|default('') }}</span>
     {% endfor %}
   </div>
+  {% endset %}
 
   {% if scroll %}
-      <button type="button" class="scroller-btn" data-direction="1" aria-label="Défiler vers la droite"><i class="fa-solid fa-chevron-right" aria-hidden="true"></i></button>
-    </div>
+    {% embed 'parts/picture-scroller.html.twig' with {scroller_id: scroll_id|default(null), scroller_class: wrapper_class} %}
+      {% block track %}{{ track }}{% endblock %}
+    {% endembed %}
+  {% else %}
+    {{ track }}
   {% endif %}
 
   {% if title is defined %}

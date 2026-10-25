@@ -29,17 +29,17 @@
 
             <div class="col-12 mt-5">
 
-                {% set options_remplies = type == 'Modifier'
+                {% set filled_options = type == 'edit'
                     and (clan.longDescription is not empty or clan.territoireDesc is not empty or clan.locX is not empty) %}
 
                 <a class="w-100" data-toggle="collapse" href="#clan-options-collapse" role="button"
-                    aria-expanded="{{ options_remplies ? 'true' : 'false' }}"
+                    aria-expanded="{{ filled_options ? 'true' : 'false' }}"
                     aria-controls="clan-options-collapse">
                     <h2 class="heading-cardtitle">Plus d'options ...</h2>
                 </a>
                 <hr>
 
-                <div id="clan-options-collapse" class="collapse{{ options_remplies ? ' show' }}">
+                <div id="clan-options-collapse" class="collapse{{ filled_options ? ' show' }}">
 
 
                     <div class="col-12">{{ form_row(form.territoireDesc,{ 'attr': {'rows': '7'} }) }}</div>

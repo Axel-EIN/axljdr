@@ -10,7 +10,7 @@
   > :last-child { margin-bottom: 0; }
 }
 
-.formulaire-etroit {
+.form-narrow {
   max-width: 34rem;
   margin: 0 auto;
 }

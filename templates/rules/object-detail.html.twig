@@ -22,15 +22,15 @@
 
       <div class="relative">
 
-        <div class="objet-stats d-none d-lg-flex">
-          <span class="objet-categorie">{{ categories[record.categorie]|default(record.categorie) }}</span>
+        <div class="object-stats d-none d-lg-flex">
+          <span class="object-category">{{ categories[record.categorie]|default(record.categorie) }}</span>
           {% if record.quality %}
-            <span class="objet-quality quality-{{ record.quality|lower }}">{{ record.quality }}</span>
+            <span class="object-quality quality-{{ record.quality|lower }}">{{ record.quality }}</span>
           {% endif %}
           {% for stat in stats %}
             <span>{{ stat.label }} : <strong>{{ stat.value }}</strong></span>
           {% endfor %}
-          {% if record.prix %}<span class="objet-prix">{{ record.prix|pricer|raw }}</span>{% endif %}
+          {% if record.prix %}<span class="object-price">{{ record.prix|pricer|raw }}</span>{% endif %}
         </div>
 
         {{ include('/parts/card-top-image.html.twig', {
@@ -39,10 +39,10 @@
         }) }}
       </div>
 
-      <div class="objet-mobile-info d-lg-none text-center">
-        <span class="objet-categorie">{{ categories[record.categorie]|default(record.categorie) }}</span>
+      <div class="object-mobile-info d-lg-none text-center">
+        <span class="object-category">{{ categories[record.categorie]|default(record.categorie) }}</span>
         {% if record.quality %}
-          <span class="objet-quality quality-{{ record.quality|lower }}">{{ record.quality }}</span>
+          <span class="object-quality quality-{{ record.quality|lower }}">{{ record.quality }}</span>
         {% endif %}
 
         <ul class="list-decored text-left">
@@ -62,7 +62,7 @@
       </div>
 
       {% if record.motCle1 or record.motCle2 %}
-        <p class="objet-motscles d-none d-lg-block">
+        <p class="object-keywords d-none d-lg-block">
           {% for word in [record.motCle1, record.motCle2]|filter(m => m is not empty) %}
             <span class="badge badge-secondary">{{ word }}</span>
           {% endfor %}

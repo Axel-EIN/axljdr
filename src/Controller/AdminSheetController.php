@@ -3,7 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\FichePersonnage;
-use App\Form\AdminFichePersonnageType;
+use App\Form\AdminSheetType;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\CompetenceRepository;
 use App\Repository\FichePersonnageRepository;
@@ -14,19 +14,19 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
-class AdminFicheController extends AbstractController
+class AdminSheetController extends AbstractController
 {
     /**
-     * @Route("/admin/fiche", name="admin_fiche")
+     * @Route("/admin/sheet", name="admin_sheet")
      * @IsGranted("ROLE_MJ")
      */
-    public function viewAdminFiches(FichePersonnageRepository $fichePersonnageRepository): Response
+    public function viewAdminSheets(FichePersonnageRepository $sheetRepository): Response
     {
-        $fiches = $fichePersonnageRepository->findBy( [] , ['id' => 'DESC'] );
+        $sheets = $sheetRepository->findBy( [] , ['id' => 'DESC'] );
 
         return $this->render('back_office/list-element.html.twig', [
-            'elements' => $fiches,
-            'element' => 'fiche',
+            'elements' => $sheets,
+            'element' => 'sheet',
             'label' => 'Fiche',
             'labels' => 'Fiches',
             'genre' => 'F',
@@ -55,51 +55,51 @@ class AdminFicheController extends AbstractController
     }
 
     /**
-     * @Route("/admin/fiche/create", name="admin_fiche_create")
+     * @Route("/admin/sheet/create", name="admin_sheet_create")
      * @IsGranted("ROLE_MJ")
      */
-    public function addFiche(Request $request, EntityManagerInterface $em, CompetenceRepository $competenceRepository, PersonnageRepository $personnageRepository) {
+    public function addSheet(Request $request, EntityManagerInterface $em, CompetenceRepository $skillRepository, PersonnageRepository $characterRepository) {
 
-        $fiche = new FichePersonnage;
-        $personnage = $personnageRepository->find($request->query->getInt('personnage'));
-        if ($personnage !== null) {
-            $fiche->setPersonnage($personnage);
+        $sheet = new FichePersonnage;
+        $character = $characterRepository->find($request->query->getInt('character'));
+        if ($character !== null) {
+            $sheet->setPersonnage($character);
         }
 
-        $form = $this->createForm(AdminFichePersonnageType::class, $fiche);
+        $form = $this->createForm(AdminSheetType::class, $sheet);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
 
-            $em->persist($fiche);
+            $em->persist($sheet);
             $em->flush();
             $this->addFlash('success', 'La Fiche a bien été ajoutée.');
 
-            if ($request->query->get('redirect') === 'fiche') {
-                return $this->redirectToRoute('characters_sheet', ['id' => $fiche->getId()]);
+            if ($request->query->get('redirect') === 'sheet') {
+                return $this->redirectToRoute('characters_sheet', ['id' => $sheet->getId()]);
             }
 
-            return $this->redirectToRoute('admin_fiche');
+            return $this->redirectToRoute('admin_sheet');
         }
 
         return $this->render('back_office/create.html.twig', [
             'type' => 'Créer',
-            'entity' => 'fiche',
+            'entity' => 'sheet',
             'label' => 'Fiche',
             'genre' => 'F',
             'determinant' => 'une',
             'form' => $form->createView(),
-            'competences_json' => $this->buildCompetencesJson($competenceRepository),
+            'skills_json' => $this->buildSkillsJson($skillRepository),
         ]);
     }
 
     /**
-     * @Route("/admin/fiche/{id}/edit", name="admin_fiche_edit")
+     * @Route("/admin/sheet/{id}/edit", name="admin_sheet_edit")
      * @IsGranted("ROLE_MJ")
      */
-    public function editFiche(Request $request, FichePersonnage $fiche, CompetenceRepository $competenceRepository): Response {
+    public function editSheet(Request $request, FichePersonnage $sheet, CompetenceRepository $skillRepository): Response {
 
-        $form = $this->createForm(AdminFichePersonnageType::class, $fiche);
+        $form = $this->createForm(AdminSheetType::class, $sheet);
         $form->handleRequest($request);
 
         if($form->isSubmitted() && $form->isValid()) {
@@ -107,33 +107,33 @@ class AdminFicheController extends AbstractController
             $this->getDoctrine()->getManager()->flush();
             $this->addFlash('success', 'La fiche a bien été modifiée.');
 
-            return $this->redirectToRoute('admin_fiche');
+            return $this->redirectToRoute('admin_sheet');
         }
 
         return $this->renderForm('back_office/edit.html.twig', [
             'type' => 'Modifier',
-            'fiche' => $fiche,
-            'entity' => 'fiche',
+            'sheet' => $sheet,
+            'entity' => 'sheet',
             'label' => 'Fiche',
             'genre' => 'F',
             'determinant' => 'une',
             'form' => $form,
-            'competences_json' => $this->buildCompetencesJson($competenceRepository),
+            'skills_json' => $this->buildSkillsJson($skillRepository),
         ]);
     }
 
-    private function buildCompetencesJson(CompetenceRepository $repo): array
+    private function buildSkillsJson(CompetenceRepository $repo): array
     {
         $out = [];
-        foreach ($repo->findBy([], ['nom' => 'ASC']) as $c) {
-            $out[$c->getId()] = [
+        foreach ($repo->findBy([], ['nom' => 'ASC']) as $skill) {
+            $out[$skill->getId()] = [
                 'specialisations' => [
-                    $c->getSpecialisation1(),
-                    $c->getSpecialisation2(),
-                    $c->getSpecialisation3(),
-                    $c->getSpecialisation4(),
-                    $c->getSpecialisation5(),
-                    $c->getSpecialisation6(),
+                    $skill->getSpecialisation1(),
+                    $skill->getSpecialisation2(),
+                    $skill->getSpecialisation3(),
+                    $skill->getSpecialisation4(),
+                    $skill->getSpecialisation5(),
+                    $skill->getSpecialisation6(),
                 ],
             ];
         }
@@ -141,20 +141,20 @@ class AdminFicheController extends AbstractController
     }
 
     /**
-     * @Route("/admin/fiche/{id}/delete", name="admin_fiche_delete", methods={"POST"})
+     * @Route("/admin/sheet/{id}/delete", name="admin_sheet_delete", methods={"POST"})
      * @IsGranted("ROLE_MJ")
      */
-    public function deleteFiche(Request $request, FichePersonnage $fiche): Response {
+    public function deleteSheet(Request $request, FichePersonnage $sheet): Response {
 
-        if ($this->isCsrfTokenValid('delete' . $fiche->getId(), $request->request->get('_csrf_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $sheet->getId(), $request->request->get('_csrf_token'))) {
 
             $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->remove($fiche);
+            $entityManager->remove($sheet);
             $entityManager->flush();
 
             $this->addFlash('success', 'La fiche a bien été supprimée.');
         }
 
-        return $this->redirectToRoute('admin_fiche');
+        return $this->redirectToRoute('admin_sheet');
     }
 }

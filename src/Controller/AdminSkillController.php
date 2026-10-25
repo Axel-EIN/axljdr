@@ -11,26 +11,26 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Request;
 use App\Entity\Competence;
 use Doctrine\ORM\EntityManagerInterface;
-use App\Form\AdminCompetenceType;
+use App\Form\AdminSkillType;
 use App\Service\Unlocker;
 
-class AdminCompetenceController extends AbstractController
+class AdminSkillController extends AbstractController
 {
     private const TABLE_FILTERS = [
         'categorie:Catégorie',
     ];
 
     /**
-     * @Route("/admin/competence", name="admin_competence")
+     * @Route("/admin/skill", name="admin_skill")
      * @IsGranted("ROLE_MJ")
      */
-    public function viewAdminCompetences( CompetenceRepository $competenceRepository ): Response
+    public function viewAdminSkills( CompetenceRepository $skillRepository ): Response
     {
-        $competences = $competenceRepository->findBy( [] , ['id' => 'DESC'] );
+        $skills = $skillRepository->findBy( [] , ['id' => 'DESC'] );
 
         return $this->render('back_office/list-element.html.twig', [
-            'elements' => $competences,
-            'element' => 'competence',
+            'elements' => $skills,
+            'element' => 'skill',
             'label' => 'Compétence',
             'labels' => 'Compétences',
             'genre' => 'F',
@@ -55,36 +55,36 @@ class AdminCompetenceController extends AbstractController
     }
 
     /**
-     * @Route("/admin/competence/create", name="admin_competence_create")
+     * @Route("/admin/skill/create", name="admin_skill_create")
      * @IsGranted("ROLE_MJ")
      */
-    public function addCompetence(Request $request, EntityManagerInterface $em, Unlocker $unlocker, TableFilter $tableFilter) {
+    public function addSkill(Request $request, EntityManagerInterface $em, Unlocker $unlocker, TableFilter $tableFilter) {
 
-        $competence = new Competence;
-        $tableFilter->prefill($competence, self::TABLE_FILTERS, $request->query->all('filter'));
-        $form = $this->createForm(AdminCompetenceType::class, $competence);
+        $skill = new Competence;
+        $tableFilter->prefill($skill, self::TABLE_FILTERS, $request->query->all('filter'));
+        $form = $this->createForm(AdminSkillType::class, $skill);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
 
-            $em->persist($competence);
+            $em->persist($skill);
             $em->flush();
 
-            $unlocker->sync($competence, $form->get('unlockedBy')->getData());
+            $unlocker->sync($skill, $form->get('unlockedBy')->getData());
             $em->flush();
             $this->addFlash('success', "La compétence a bien été ajoutée.");
 
             if (!empty($request->query->get('redirect')) && $request->query->get('redirect') == 'library'
             && !empty($request->query->get('libraryID')) && $request->query->get('libraryID') > 0)
-                return $this->redirectToRoute( 'rules_library', [ 'id' => $request->query->get('libraryID') , 'tab' => $competence->getCategorie() ] );
+                return $this->redirectToRoute( 'rules_library', [ 'id' => $request->query->get('libraryID') , 'tab' => $skill->getCategorie() ] );
 
-            return $this->redirectToRoute('admin_competence');
+            return $this->redirectToRoute('admin_skill');
         }
         
 
         return $this->render('back_office/create.html.twig', [
             'type' => 'Créer',
-            'entity' => 'competence',
+            'entity' => 'skill',
             'label' => 'Compétence',
             'genre' => 'F',
             'determinant' => 'une',
@@ -93,33 +93,33 @@ class AdminCompetenceController extends AbstractController
     }
 
     /**
-     * @Route("/admin/competence/{id}/edit", name="admin_competence_edit")
+     * @Route("/admin/skill/{id}/edit", name="admin_skill_edit")
      * @IsGranted("ROLE_MJ")
      */
-    public function editCompetence(Request $request, Competence $competence, Unlocker $unlocker): Response {
+    public function editSkill(Request $request, Competence $skill, Unlocker $unlocker): Response {
 
-        $form = $this->createForm(AdminCompetenceType::class, $competence);
-        $form->get('unlockedBy')->setData($unlocker->charactersOf($competence));
+        $form = $this->createForm(AdminSkillType::class, $skill);
+        $form->get('unlockedBy')->setData($unlocker->charactersOf($skill));
         $form->handleRequest($request);
 
         if($form->isSubmitted() && $form->isValid()) {
 
-            $unlocker->sync($competence, $form->get('unlockedBy')->getData());
+            $unlocker->sync($skill, $form->get('unlockedBy')->getData());
 
             $this->getDoctrine()->getManager()->flush();
             $this->addFlash('success', 'La compétence a bien été modifiée.');
 
             if (!empty($request->query->get('redirect')) && $request->query->get('redirect') == 'library'
             && !empty($request->query->get('libraryID')) && $request->query->get('libraryID') > 0)
-                return $this->redirectToRoute( 'rules_library', [ 'id' => $request->query->get('libraryID') , 'tab' => $competence->getCategorie() ] );
+                return $this->redirectToRoute( 'rules_library', [ 'id' => $request->query->get('libraryID') , 'tab' => $skill->getCategorie() ] );
 
-            return $this->redirectToRoute('admin_competence');
+            return $this->redirectToRoute('admin_skill');
         }
 
         return $this->renderForm('back_office/edit.html.twig', [
             'type' => 'Modifier',
-            'competence' => $competence,
-            'entity' => 'competence',
+            'skill' => $skill,
+            'entity' => 'skill',
             'label' => 'Compétence',
             'genre' => 'F',
             'determinant' => 'une',
@@ -128,20 +128,20 @@ class AdminCompetenceController extends AbstractController
     }
 
     /**
-     * @Route("/admin/competence/{id}/delete", name="admin_competence_delete", methods={"POST"})
+     * @Route("/admin/skill/{id}/delete", name="admin_skill_delete", methods={"POST"})
      * @IsGranted("ROLE_MJ")
      */
-    public function deleteCompetence(Request $request, Competence $competence, Unlocker $unlocker): Response {
+    public function deleteSkill(Request $request, Competence $skill, Unlocker $unlocker): Response {
 
-        if ($this->isCsrfTokenValid('delete' . $competence->getId(), $request->request->get('_csrf_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $skill->getId(), $request->request->get('_csrf_token'))) {
 
             $entityManager = $this->getDoctrine()->getManager();
-            $unlocker->forget($competence);
-            $entityManager->remove($competence);
+            $unlocker->forget($skill);
+            $entityManager->remove($skill);
             $entityManager->flush();
             $this->addFlash('success', 'La compétence a bien été supprimée.');
         }
 
-        return $this->redirectToRoute('admin_competence');
+        return $this->redirectToRoute('admin_skill');
     }
 }

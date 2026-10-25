@@ -1,24 +1,24 @@
 {% for i in 1..5 %}
-  {% if attribute(un_element, 'part' ~ i ~ 'titre') is not empty %}
+  {% if attribute(record, 'part' ~ i ~ 'titre') is not empty %}
     <div id="part{{ i }}" class="part-header">
-      {% if is_mj() %}
+      {% if is_gm() %}
         {% set position, size, color, redirect, fragment = 'topright-corner-snap', 'btn-icon-medium', 'link-gm', entity, 'part' ~ i %}
         {{ include('/btns/btn-icon-edit.html.twig') }}
       {% endif %}
 
-      <h2 class="heading-cardtitle">{{ i }}. {{ attribute(un_element, 'part' ~ i ~ 'titre') }}</h2>
+      <h2 class="heading-cardtitle">{{ i }}. {{ attribute(record, 'part' ~ i ~ 'titre') }}</h2>
       <hr>
     </div>
   {% endif %}
 
-  {% if attribute(un_element, 'part' ~ i) is not empty %}
+  {% if attribute(record, 'part' ~ i) is not empty %}
     <div class="part-body">
-      {% if attribute(un_element, 'part' ~ i ~ 'aside') is not empty %}
+      {% if attribute(record, 'part' ~ i ~ 'aside') is not empty %}
         <aside class="aside">
-          <p>{{ attribute(un_element, 'part' ~ i ~ 'aside')|raw|nl2br }}</p>
+          <p>{{ attribute(record, 'part' ~ i ~ 'aside')|raw|nl2br }}</p>
         </aside>
       {% endif %}
-      <div class="card-description articlepart text-description">{{ attribute(un_element, 'part' ~ i)|raw|nl2br }}</div>
+      <div class="card-description articlepart text-description">{{ attribute(record, 'part' ~ i)|raw|nl2br }}</div>
     </div>
 
     {{ include('/parts/divider-ornament.html.twig') }}

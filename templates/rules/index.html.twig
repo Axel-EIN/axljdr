@@ -10,7 +10,7 @@
     {{ include('/parts/picture-grid.html.twig', {
         catalog: true,
         variant: 'rule',
-        items: rulesBases, route: 'regles_rule', na_image: NA_RULE,
+        items: base_rules, route: 'rules_rule', na_image: NA_RULE,
         wrapper: 'col-12', per_row: {desktop: 4, mobile: 2},
         empty_message: 'Pas de règles de base disponibles.',
     }) }}
@@ -20,7 +20,7 @@
     {{ include('/parts/picture-grid.html.twig', {
         catalog: true,
         variant: 'emblem',
-        items: classes, route: 'regles_classe', na_image: NA_CLASS_ICO,
+        items: classes, route: 'rules_class', na_image: NA_CLASS_ICO,
         field: 'icone', wrapper: 'col-12',
         per_row: {desktop: 6, mobile: 2},
     }) }}
@@ -30,7 +30,7 @@
     {{ include('/parts/picture-grid.html.twig', {
         catalog: true,
         variant: 'rule',
-        items: librariesBases, route: 'regles_library', na_image: NA_LIBRARY,
+        items: base_libraries, route: 'rules_library', na_image: NA_LIBRARY,
         wrapper: 'col-12', per_row: {desktop: 4, mobile: 2},
         empty_message: 'Pas de bibliothèques disponibles.',
     }) }}
@@ -40,7 +40,7 @@
     {{ include('/parts/picture-grid.html.twig', {
         catalog: true,
         variant: 'rule',
-        items: annexes, route: 'regles_rule', na_image: NA_RULE,
+        items: annexes, route: 'rules_rule', na_image: NA_RULE,
         wrapper: 'col-12', per_row: {desktop: 6, mobile: 2},
         empty_message: 'Pas de règles annexes disponibles.',
     }) }}

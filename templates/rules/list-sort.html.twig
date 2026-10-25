@@ -96,7 +96,7 @@
     {% endif %}
 
     {% if not element_readable(item) %}
-        {{ include('regles/list-item-locked.html.twig', {entity: 'sort', classes: past_rank != item.niveau ? 'mt-3'}) }}
+        {{ include('rules/list-item-locked.html.twig', {entity: 'sort', classes: past_rank != item.niveau ? 'mt-3'}) }}
     {% else %}
         <div class="col-12 p-0 m-0 {% if past_rank != item.niveau %}mt-3{% endif %} relative">
 

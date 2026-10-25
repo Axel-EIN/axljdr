@@ -10,16 +10,16 @@
 
             <div class="col-8 mt-3 mb-4">
                 {{ include('parts/image-field.html.twig', {
-                    field: form.image, input_id: 'admin_classe_image', prefix: 'image',
-                    current: classe.image|default(null), fallback: NA_169,
+                    field: form.image, input_id: 'admin_class_image', prefix: 'image',
+                    current: class.image|default(null), fallback: NA_169,
                     label: 'Image (1280×720 16:9 recommandé)', width: 1280, height: 720 }) }}
             </div>
 
             <div class="col-4 mt-3 mb-4">
                 <div class="d-flex flex-column mb-4"> 
                     {{ include('parts/image-field.html.twig', {
-                        field: form.icone, input_id: 'admin_classe_icone', prefix: 'icon',
-                        current: classe.icone|default(null), fallback: NA_CLASS_ICO,
+                        field: form.icone, input_id: 'admin_class_icone', prefix: 'icon',
+                        current: class.icone|default(null), fallback: NA_CLASS_ICO,
                         label: 'Icone (320×320 1:1 recommandé)', width: 320, height: 320 }) }}
                 </div>
             </div>

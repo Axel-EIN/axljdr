@@ -32,14 +32,14 @@ class CurrentPlayer
             return $user->getMainCharacter();
         }
 
-        $dernier = null;
-        foreach ($user->getPersonnages() as $personnage) {
-            if ($dernier === null || $personnage->getId() > $dernier->getId()) {
-                $dernier = $personnage;
+        $latest = null;
+        foreach ($user->getPersonnages() as $character) {
+            if ($latest === null || $character->getId() > $latest->getId()) {
+                $latest = $character;
             }
         }
 
-        return $dernier;
+        return $latest;
     }
 
     public function seesAll(): bool
@@ -49,8 +49,8 @@ class CurrentPlayer
 
     public function characterIds(): array
     {
-        $personnage = $this->navigatingCharacter();
+        $character = $this->navigatingCharacter();
 
-        return $personnage === null ? [] : [$personnage->getId()];
+        return $character === null ? [] : [$character->getId()];
     }
 }

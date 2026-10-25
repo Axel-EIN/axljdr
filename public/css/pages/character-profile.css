@@ -27,10 +27,6 @@
         color: var(--color-strong);
         font-weight: bold;
     }
-
-    .xp-rank {
-        font-size: var(--fontsize-medium);
-    }
 }
 
 .profile-maincontent {

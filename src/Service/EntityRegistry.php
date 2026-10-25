@@ -19,7 +19,7 @@ use App\Entity\Sort;
 final class EntityRegistry
 {
     private const ENTITIES = [
-        'episode'    => ['class' => Episode::class,    'route' => 'aventure_episode',  'label' => 'Épisode'],
+        'episode'    => ['class' => Episode::class,    'route' => 'story_episode',  'label' => 'Épisode'],
         'personnage' => ['class' => Personnage::class, 'route' => 'personnage_profil', 'label' => 'Personnage'],
         'archive'    => ['class' => Archive::class,    'route' => 'world_archive',    'label' => 'Archive'],
         'clan'       => ['class' => Clan::class,       'route' => 'world_clan',       'label' => 'Faction'],

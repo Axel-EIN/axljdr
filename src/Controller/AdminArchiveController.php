@@ -30,8 +30,8 @@ class AdminArchiveController extends AbstractController
             'element' => 'archive',
             'label' => 'Archive',
             'labels' => "Archives",
-            'genre' => 'F',
-            'determinant' => 'une',
+            'gender' => 'F',
+            'article' => 'une',
             'table_cols' => [
                 'image:Image:image:NA_ARCHIVE',
                 'titre:Titre::bold',
@@ -75,11 +75,11 @@ class AdminArchiveController extends AbstractController
         }
 
         return $this->render('back_office/create.html.twig', [
-            'type' => 'Créer',
+            'type' => 'create',
             'entity' => 'archive',
             'label' => 'Archive',
-            'genre' => 'F',
-            'determinant' => 'une',
+            'gender' => 'F',
+            'article' => 'une',
             'form' => $form->createView()
         ]);
     }
@@ -117,12 +117,12 @@ class AdminArchiveController extends AbstractController
         }
 
         return $this->renderForm('back_office/edit.html.twig', [
-            'type' => 'Modifier',
+            'type' => 'edit',
             'archive' => $archive,
             'entity' => 'archive',
             'label' => 'Archive',
-            'genre' => 'F',
-            'determinant' => 'une',
+            'gender' => 'F',
+            'article' => 'une',
             'form' => $form,
         ]);
     }

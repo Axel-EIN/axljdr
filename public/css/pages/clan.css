@@ -1,13 +1,13 @@
 /* ----- PAGE CLAN -------- */
 
-.famille {
+.family {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 3fr);
   grid-template-rows: auto 1fr;
   gap: 1rem;
   margin: 1.5rem 0;
 
-  .famille-mon {
+  .family-mon {
     grid-row: 1 / span 2;
     display: flex;
     flex-direction: column;
@@ -16,21 +16,21 @@
     text-align: center;
   }
 
-  .famille-daimyo {
+  .family-daimyo {
     display: flex;
     flex-direction: column;
     align-items: center;
     margin-top: 1rem;
   }
 
-  .famille-description { margin: 0; }
+  .family-description { margin: 0; }
 
   @media (max-width: 991.98px) {
-    .famille-mon { grid-row: 1; }
-    .famille-daimyo { display: none; }
+    .family-mon { grid-row: 1; }
+    .family-daimyo { display: none; }
 
-    .famille-entete { align-self: center; }
+    .family-header { align-self: center; }
 
-    .famille-description { grid-column: 1 / -1; }
+    .family-description { grid-column: 1 / -1; }
   }
 }

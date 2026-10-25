@@ -37,7 +37,7 @@
             <strong>{{ nom }}</strong>
           {% endif %}
 
-          {% if app.user and is_granted("ROLE_MJ") %}
+          {% if is_mj() %}
             {% set redirect, size, color, position = entity, 'btn-icon-medium', 'link-gm', 'topright-corner-snap' %}
             {{ include('/btns/btn-icon-edit.html.twig') }}
           {% endif %}

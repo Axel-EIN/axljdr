@@ -3,6 +3,7 @@
 namespace App\Service;
 
 use App\Entity\Personnage;
+use App\Entity\Utilisateur;
 use Symfony\Component\Security\Core\Security;
 
 class CurrentPlayer
@@ -14,11 +15,16 @@ class CurrentPlayer
         $this->security = $security;
     }
 
-    public function main(): ?Personnage
+    public function navigatingCharacter(): ?Personnage
+    {
+        return $this->seesAll() ? null : $this->mainCharacter();
+    }
+
+    public function mainCharacter(): ?Personnage
     {
         $user = $this->security->getUser();
 
-        if ($user === null || !method_exists($user, 'getPersonnages')) {
+        if (!$user instanceof Utilisateur) {
             return null;
         }
 
@@ -43,7 +49,7 @@ class CurrentPlayer
 
     public function characterIds(): array
     {
-        $personnage = $this->main();
+        $personnage = $this->navigatingCharacter();
 
         return $personnage === null ? [] : [$personnage->getId()];
     }

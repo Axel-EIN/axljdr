@@ -25,30 +25,30 @@ class PlayerSheetType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        $fiche = $builder->getData();
-        $spellCategories = $fiche?->getPersonnage()?->getEcole()?->hasTattoos()
+        $sheet = $builder->getData();
+        $spellCategories = $sheet?->getPersonnage()?->getEcole()?->hasTattoos()
             ? ['MAGIE', 'KIHO', 'TATOUAGE']
             : ['MAGIE', 'KIHO'];
-        $equipped = array_filter([$fiche?->getArmeActuelle()?->getId()]) ?: [0];
+        $equipped = array_filter([$sheet?->getArmeActuelle()?->getId()]) ?: [0];
 
-        $armes = function (EntityRepository $er, ?string $categorie) use ($options, $equipped) {
+        $objectQuery = function (EntityRepository $er, ?string $category) use ($options, $equipped) {
             $qb = $er->createQueryBuilder('o')->orderBy('o.nom', 'ASC');
 
-            if ($categorie !== null) {
-                $qb->andWhere('o.categorie = :cat')->setParameter('cat', $categorie);
+            if ($category !== null) {
+                $qb->andWhere('o.categorie = :cat')->setParameter('cat', $category);
             }
 
             if (!$options['sees_locked']) {
-                $qb->andWhere('(o.access = :palier AND (o.publishedAt IS NULL OR o.publishedAt <= :maintenant)) OR o.id IN (:autorises)')
-                    ->setParameter('palier', Access::PUBLIC)
-                    ->setParameter('maintenant', new \DateTime())
-                    ->setParameter('autorises', array_merge($equipped, $options['unlocked']));
+                $qb->andWhere('(o.access = :access AND (o.publishedAt IS NULL OR o.publishedAt <= :now)) OR o.id IN (:allowed)')
+                    ->setParameter('access', Access::PUBLIC)
+                    ->setParameter('now', new \DateTime())
+                    ->setParameter('allowed', array_merge($equipped, $options['unlocked']));
             }
 
             return $qb;
         };
 
-        $avantageOptions = [
+        $advantageOptions = [
             'class' => Avantage::class,
             'choice_label' => 'nom',
             'placeholder' => '— Aucun —',
@@ -56,7 +56,7 @@ class PlayerSheetType extends AbstractType
             'query_builder' => fn(EntityRepository $er) => $er->createQueryBuilder('a')
                 ->where('a.genre = :genre')->setParameter('genre', 'Avantage')->orderBy('a.nom', 'ASC'),
         ];
-        $desavantageOptions = [
+        $disadvantageOptions = [
             'class' => Avantage::class,
             'choice_label' => 'nom',
             'placeholder' => '— Aucun —',
@@ -75,10 +75,10 @@ class PlayerSheetType extends AbstractType
             ->add('forceStat', IntegerType::class)
             ->add('perception', IntegerType::class)
             ->add('vide', IntegerType::class)
-            ->add('avantage1', EntityType::class, $avantageOptions)
-            ->add('avantage2', EntityType::class, $avantageOptions)
-            ->add('desavantage1', EntityType::class, $desavantageOptions)
-            ->add('desavantage2', EntityType::class, $desavantageOptions)
+            ->add('avantage1', EntityType::class, $advantageOptions)
+            ->add('avantage2', EntityType::class, $advantageOptions)
+            ->add('desavantage1', EntityType::class, $disadvantageOptions)
+            ->add('desavantage2', EntityType::class, $disadvantageOptions)
             ->add('compCombatActuelle', EntityType::class, [
                 'class' => Competence::class,
                 'choice_label' => 'nom',
@@ -92,14 +92,14 @@ class PlayerSheetType extends AbstractType
                 'choice_label' => 'nom',
                 'placeholder' => '— Aucune —',
                 'required' => false,
-                'query_builder' => fn(EntityRepository $er) => $armes($er, 'ARMURE'),
+                'query_builder' => fn(EntityRepository $er) => $objectQuery($er, 'ARMURE'),
             ])
             ->add('armeActuelle', EntityType::class, [
                 'class' => Objet::class,
                 'choice_label' => 'nom',
                 'placeholder' => '— Aucune —',
                 'required' => false,
-                'query_builder' => fn(EntityRepository $er) => $armes($er, null),
+                'query_builder' => fn(EntityRepository $er) => $objectQuery($er, null),
             ])
             ->add('honneur', NumberType::class, ['required' => false, 'scale' => 1])
             ->add('gloire', NumberType::class, ['required' => false, 'scale' => 1])
@@ -154,14 +154,14 @@ class PlayerSheetType extends AbstractType
             ])
         ;
 
-        $competenceOptions = [
+        $skillOptions = [
             'class' => Competence::class,
             'choice_label' => 'nom',
             'group_by' => 'categorie',
             'placeholder' => '— Aucune —',
             'required' => false,
         ];
-        $valeurOptions = [
+        $valueOptions = [
             'placeholder' => '—',
             'required' => false,
             'choices' => array_combine(range(1, 10), range(1, 10)),
@@ -169,8 +169,8 @@ class PlayerSheetType extends AbstractType
 
         for ($i = 1; $i <= 20; $i++) {
             $builder
-                ->add('competence' . $i, EntityType::class, $competenceOptions)
-                ->add('valeur' . $i, ChoiceType::class, $valeurOptions)
+                ->add('competence' . $i, EntityType::class, $skillOptions)
+                ->add('valeur' . $i, ChoiceType::class, $valueOptions)
                 ->add('specialisations' . $i, HiddenType::class, ['required' => false])
                 ->add('compEcole' . $i, HiddenType::class, ['required' => false])
                 ->add('speEcole' . $i, HiddenType::class, ['required' => false]);

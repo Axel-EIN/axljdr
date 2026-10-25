@@ -15,16 +15,16 @@ class ContactController extends AbstractController
     /**
      * @Route("/contact", name="contact")
      */
-    public function contactezNous(Request $request, MailerInterface $mailer): Response
+    public function contact(Request $request, MailerInterface $mailer): Response
     {
-        $formulaire = $this->createForm(ContactType::class);
-        $formulaire->handleRequest($request);
+        $form = $this->createForm(ContactType::class);
+        $form->handleRequest($request);
 
         $notif = '';
 
-        if ($formulaire->isSubmitted() && $formulaire->isValid()) {
+        if ($form->isSubmitted() && $form->isValid()) {
 
-            $data = $formulaire->getData();
+            $data = $form->getData();
 
             $email = new Email;
             $email
@@ -47,7 +47,7 @@ class ContactController extends AbstractController
 
         return $this->render('contact/index.html.twig', [
             'notif' => $notif,
-            'formulaire' => $formulaire->createView(),
+            'formulaire' => $form->createView(),
         ]);
     }
 }

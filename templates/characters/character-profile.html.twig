@@ -33,7 +33,7 @@
 <div class="col-12 col-lg-4 order-2 order-lg-1">
     <div class="card card-body profile-infos">
 
-        {% set fiche_visible = personnage.fichePersonnage is not null and (est_le_joueur or is_mj()) %}
+        {% set fiche_visible = personnage.fichePersonnage is not null and (is_own_character or is_mj()) %}
         {% set fiche_addable = personnage.fichePersonnage is null and is_mj() %}
 
         <div class="relative">
@@ -44,7 +44,7 @@
 
             {% if fiche_visible %}
                 <div class="profile-btn-fiche">
-                    <a class="btn-primary-style btn-medium{% if not est_le_joueur %} gm{% endif %}" href="{{ path('personnage_fiche', {id: personnage.fichePersonnage.id}) }}">
+                    <a class="btn-primary-style btn-medium{% if not is_own_character %} gm{% endif %}" href="{{ path('characters_sheet', {id: personnage.fichePersonnage.id}) }}">
                         <i class="fas fa-scroll"></i> Voir la Fiche de Jeu
                     </a>
                 </div>
@@ -61,7 +61,7 @@
 
         {% if xp > 0 %}
             <li class="list-group-item infos-item profile-xp-and-rank">
-                <span class="badge-rang-{{rang}} large">RANG {{rang}}</span>
+                <span class="badge-rang-{{rank}} large">RANG {{rank}}</span>
                 <span class="xp-number">{{xp}} XP</span>
             </li>
         {% endif %}
@@ -136,8 +136,8 @@
 <div class="col-12 col-lg-8 order-1 order-lg-2">
     <div class="card card-body">
 
-        {% if peut_editer %}
-        {{ form_start(form, {action: path('personnage_profil_edit', {id: personnage.id})}) }}
+        {% if can_edit %}
+        {{ form_start(form, {action: path('characters_profile_edit', {id: personnage.id})}) }}
         {% endif %}
 
         <div class="profile-maincontent profile-zone">
@@ -154,7 +154,7 @@
 
             <p class="text-description text-compact read-only">{{ personnage.description|default('')|raw|nl2br }}</p>
 
-            {% if peut_editer %}
+            {% if can_edit %}
                 {{ form_widget(form.description, {attr: {class: 'edit-only'}}) }}
                 {{ include('/btns/btn-interactive-edit-actions.html.twig', {label: 'Éditer'}) }}
             {% endif %}
@@ -209,7 +209,7 @@
                 </div>
             </div>
 
-            {% if peut_editer %}
+            {% if can_edit %}
 
                 {# ================================================ #}
                 {# ===== [CARD-SECTION] SECRET PLAYER'S NOTES ===== #}
@@ -267,8 +267,8 @@
         <hr>
         <div class="card-text profile-historique">
             {{ include('parts/history.html.twig', {historique, saison_courante}) }}
-            {% if xp_creation > 0 %}
-            <p class="profile-creation">Création du personnage {{ personnage.prenom }} avec <strong>{{ xp_creation }}xp</strong>.</p>
+            {% if creation_xp > 0 %}
+            <p class="profile-creation">Création du personnage {{ personnage.prenom }} avec <strong>{{ creation_xp }}xp</strong>.</p>
             {% endif %}
         </div>
     </div>
@@ -281,7 +281,7 @@
 {{ include('/parts/picture-grid.html.twig', {
     variant: 'portrait',
     title: personnage.estPj ? 'Autres PJs' : 'Autres PNJs',
-    items: autresPersonnages, route: 'personnage_profil', hide_dead: true,
+    items: other_characters, route: 'characters_profile', hide_dead: true,
     limit: 12,
     wrapper: 'col-12 col-lg-4 order-4',
     per_row: {desktop: 2, tablet: 4, mobile: 2},
@@ -293,7 +293,7 @@
 {% block javascripts %}
     {{ parent() }}
     {% if carte_visible %}<script src="{{ asset('scripts/map.js') }}"></script>{% endif %}
-    {% if peut_editer %}
+    {% if can_edit %}
         <script>
             (function () {
             const bascule = (selecteur, action) => document.querySelectorAll(selecteur).forEach(

@@ -12,8 +12,8 @@ use App\Repository\LieuRepository;
 use App\Repository\LoreRepository;
 use App\Repository\ArchiveRepository;
 use App\Repository\SaisonRepository;
-use App\Service\ClasseurHistorique;
-use App\Service\ClasseurLieux;
+use App\Service\HistoryRanker;
+use App\Service\LocationGrouper;
 use App\Service\Visibility;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -31,7 +31,7 @@ class WorldController extends AbstractController
                         LieuRepository $locationRepository,
                         LoreRepository $loreRepository,
                         Visibility $visibility,
-                        ClasseurLieux $locationGrouper): Response
+                        LocationGrouper $locationGrouper): Response
   {
     $factions = array_fill_keys(array_keys(FactionType::GROUPS), []);
     foreach ($clanRepository->findAllSorted() as $clan) {
@@ -40,7 +40,7 @@ class WorldController extends AbstractController
       }
     }
     $archives = $archiveRepository->findall();
-    $locationGroups = $locationGrouper->parFaction($locationRepository->findAllSorted());
+    $locationGroups = $locationGrouper->byFaction($locationRepository->findAllSorted());
     $lores = $loreRepository->findall();
 
     $sections = [];
@@ -139,7 +139,7 @@ class WorldController extends AbstractController
   /**
    * @Route("/world/location/{id}", name="world_location")
    */
-  public function showLocation(Lieu $location, LieuRepository $locationRepository, ClasseurHistorique $classeur, SaisonRepository $seasonRepository, Visibility $visibility): Response
+  public function showLocation(Lieu $location, LieuRepository $locationRepository, HistoryRanker $historyRanker, SaisonRepository $seasonRepository, Visibility $visibility): Response
   {
     if ($response = $this->accessGuard($visibility, $location, 'location', 'world')) {
       return $response;
@@ -153,7 +153,7 @@ class WorldController extends AbstractController
     shuffle($otherLocations);
     $otherLocations = array_slice($otherLocations, 0, 12);
 
-    $history = $classeur->pourLieu($location);
+    $history = $historyRanker->forLocation($location);
 
     return $this->render('world/location.html.twig', [
       'un_element' => $location,

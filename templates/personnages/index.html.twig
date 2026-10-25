@@ -2,6 +2,7 @@
 
 {% block stylesheets %}
     {{parent()}}
+    <link rel="stylesheet" href="{{asset('css/components/picture-grid.css')}}" />
     <link rel="stylesheet" href="{{asset('css/pages/characters.css')}}" />
 {% endblock %}
 {% block title %}Personnages de l'Aventure {{ parent() }}{% endblock %}
@@ -66,38 +67,30 @@
 {% block section_content2 %}
     {% set pnjs = pnjs|filter(p => element_listed(p)) %}
     <div class="col-12">
-        {% for clan_def in FACTIONS %}
-            {% set persos_du_clan = pnjs|filter(p => p.clan is not empty and p.clan.nom == clan_def.nom) %}
-            {% if persos_du_clan|length > 0 %}
-                <div class="pnj-clan-group">
-                    <h3 class="heading-amerigo category-section-sub-heading">
-                        <img class="img-40 mr-2" src="{{ asset(image_small((persos_du_clan|first).clan.mon|default(NA_MON))) }}" alt="Mon de la faction" />
-                        {{ clan_def.titre }}
-                    </h3>
-                    <div class="row">
-                        {% for perso in element_sort(persos_du_clan) %}
-                            {{ include('/personnages/character-card.html.twig', {perso}) }}
-                        {% endfor %}
-                    </div>
-                </div>
-            {% endif %}
-        {% endfor %}
-
         {% set clans_listes = FACTIONS|map(c => c.nom) %}
-        {% set autres = pnjs|filter(p => p.clan is empty or p.clan.nom not in clans_listes) %}
-        {% if autres|length > 0 %}
+        {% set groupes = FACTIONS|map(c => {titre: c.titre, faction: true, persos: pnjs|filter(p => p.clan is not empty and p.clan.nom == c.nom)})
+            |merge([{titre: 'Autres', faction: false, persos: pnjs|filter(p => p.clan is empty or p.clan.nom not in clans_listes)}]) %}
+
+        {% for groupe in groupes|filter(g => g.persos|length > 0) %}
+            {% set clan_groupe = groupe.faction ? (groupe.persos|first).clan : null %}
+            {% set scroller_id = 'pnj-' ~ loop.index %}
             <div class="pnj-clan-group">
-                <h3 class="heading-amerigo category-section-sub-heading">
-                    <img class="img-40 mr-2" src="{{ asset(NA_MON) }}" alt="Mon de la faction" />
-                    Autres
+                <h3 class="heading-amerigo category-section-sub-heading relative">
+                    <img class="img-40 mr-2" src="{{ asset(clan_groupe ? image_small(clan_groupe.mon|default(NA_MON)) : NA_MON) }}" alt="Mon de la faction" />
+                    {{ groupe.titre }}
+                    <span class="scroller-dots" data-scroller="{{ scroller_id }}"{% if clan_groupe and clan_groupe.couleur %} style="--clan-color: {{ clan_groupe.couleur }}"{% endif %}></span>
                 </h3>
-                <div class="row">
-                    {% for perso in element_sort(autres) %}
-                        {{ include('/personnages/character-card.html.twig', {perso}) }}
-                    {% endfor %}
-                </div>
+                {% embed 'parts/picture-scroller.html.twig' with {scroller_id, scroller_class: 'desktop-only'} %}
+                    {% block track %}
+                        <div class="row scroller-track characters-track {{ groupe.faction ? 'compact' }}">
+                            {% for perso in element_sort(groupe.persos, true) %}
+                                {{ include('/personnages/character-card.html.twig', {perso, hide_clan: groupe.faction, compact: groupe.faction}) }}
+                            {% endfor %}
+                        </div>
+                    {% endblock %}
+                {% endembed %}
             </div>
-        {% endif %}
+        {% endfor %}
 
         {% if pnjs is empty %}
             <p class="text-muted font-italic">Aucun autre personnage ne correspond à ce filtre.</p>

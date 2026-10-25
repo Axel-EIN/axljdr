@@ -7,6 +7,7 @@ use App\Entity\Personnage;
 use App\Repository\LieuRepository;
 use App\Service\ClasseurHistorique;
 use App\Service\ClasseurLieux;
+use App\Service\CurrentPlayer;
 use App\Service\Localisateur;
 use App\Service\Visibility;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -21,10 +22,9 @@ class CarteController extends AbstractController
     /**
      * @Route("/carte", name="carte")
      */
-    public function afficherCarte(Request $request, LieuRepository $lieuRepository, Localisateur $localisateur, Visibility $visibility, ClasseurLieux $classeurLieux): Response
+    public function afficherCarte(Request $request, LieuRepository $lieuRepository, Localisateur $localisateur, Visibility $visibility, ClasseurLieux $classeurLieux, CurrentPlayer $currentPlayer): Response
     {
-        $principal = $this->getUser() ? $this->getUser()->getMainCharacter() : null;
-        $chemin = $localisateur->chemin($principal);
+        $chemin = $localisateur->chemin($currentPlayer->navigatingCharacter());
 
         $cible = $lieuRepository->find($request->query->getInt('lieu'));
         if ($cible !== null && (!$cible->isPlaced() || !$visibility->isListed($cible))) {
@@ -36,6 +36,7 @@ class CarteController extends AbstractController
         return $this->render('carte/index.html.twig', [
             'lieux' => $lieux,
             'groupes_lieux' => $classeurLieux->parFaction($lieux),
+            'joueurs' => $localisateur->joueurs(),
             'positions' => $localisateur->positions(),
             'libres' => $localisateur->libres(),
             'chemin' => $chemin,

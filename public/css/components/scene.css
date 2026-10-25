@@ -53,8 +53,8 @@
   position: absolute;
   z-index: 10;
   right: 24px;
-  &.pnjs { top: -24px; }
-  &.pjs { bottom: -24px; }
+  &.npcs { top: -24px; }
+  &.pcs { bottom: -24px; }
 
   .character-portrait-box {
     position: relative;
@@ -75,8 +75,8 @@
         border-top-left-radius: 0;
         border-top-right-radius: 0;
         bottom: -2.75rem;
-        &.pj { background-color: var(--color-flashblue); }
-        &.pnj { background-color: var(--color-primarydarken); }
+        &.pc { background-color: var(--color-flashblue); }
+        &.npc { background-color: var(--color-primarydarken); }
         &.gray { background-color: var(--color-grayash); }
         &.me {
           visibility: visible;

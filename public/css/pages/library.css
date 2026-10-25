@@ -82,7 +82,7 @@
     color: var(--color-gray);
 }
 
-#effet-rappel {
+#effects-reminder {
     color: var(--color-strong);
     border-radius: 1rem;
     background-color: var(--accent-lightest);

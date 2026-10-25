@@ -9,18 +9,13 @@ a {
         text-decoration: none;
     }
 
-    &.character-icon {
+    &:is(.character-icon, .location-icon) {
         display: inline-block;
+        background-color: transparent !important;
         text-decoration: none;
-        color: var(--color-linkcharacter);
-    }
+        color: var(--color-strong);
 
-    &.location-icon {
-        display: inline-block;
-        border-radius: 0.375rem;
-        background-color: var(--color-whitefog);
-        text-decoration: none;
-        color: var(--color-linklocation);
+        &:hover { color: var(--color-link); }
     }
 }
 

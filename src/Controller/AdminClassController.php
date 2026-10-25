@@ -28,8 +28,8 @@ class AdminClassController extends AbstractController
             'element' => 'class',
             'label' => 'Classe',
             'labels' => 'Classes',
-            'genre' => 'F',
-            'determinant' => 'une',
+            'gender' => 'F',
+            'article' => 'une',
             'table_cols' => [
                 'icone:Icone:symbol:NA_CLASS_ICO',
                 'nom:Nom::bold',
@@ -74,11 +74,11 @@ class AdminClassController extends AbstractController
         
 
         return $this->render('back_office/create.html.twig', [
-            'type' => 'Créer',
+            'type' => 'create',
             'entity' => 'class',
             'label' => 'Classe',
-            'genre' => 'F',
-            'determinant' => 'une',
+            'gender' => 'F',
+            'article' => 'une',
             'form' => $form->createView()
         ]);
     }
@@ -122,12 +122,12 @@ class AdminClassController extends AbstractController
         }
 
         return $this->renderForm('back_office/edit.html.twig', [
-            'type' => 'Modifier',
+            'type' => 'edit',
             'class' => $class,
             'entity' => 'class',
             'label' => 'Classe',
-            'genre' => 'F',
-            'determinant' => 'une',
+            'gender' => 'F',
+            'article' => 'une',
             'form' => $form,
         ]);
     }

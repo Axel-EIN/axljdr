@@ -23,7 +23,7 @@
 {% set current_color = current.clan.couleur ?? null %}
 {% set place_groups = place_groups|default([])|map(g => g|merge({locations: g.locations|filter(l => l.placed)|sort((a, b) => a.nom <=> b.nom)}))|filter(g => g.locations is not empty) %}
 {% set players = players|default([]) %}
-{% set placed = lieux|filter(l => l.placed) %}
+{% set placed = locations|filter(l => l.placed) %}
 {% set current_city = current and current.type in ['Cité', 'Ville'] %}
 
 <div class="map-frame {{ variant }}{% if labels %} labels-shown{% elseif not labels_on %} labels-hidden{% endif %}{% if not worldmap %} d-none d-lg-block{% endif %}{% if large_markers %} large-markers{% endif %}{% if current_city %} current-city{% endif %}{% if draggable %} draggable{% endif %}"
@@ -39,19 +39,19 @@
         <i class="search-bar-icon fas fa-magnifying-glass" aria-hidden="true"></i>
         <input class="search-bar-input" type="search" placeholder="Chercher un lieu ou un personnage…" aria-label="Chercher un lieu ou un personnage" autocomplete="off" />
         <div class="search-bar-suggestions dropdown-menu dropdown-dark">
-          {% for groupe in place_groups %}
+          {% for group in place_groups %}
             <div class="search-suggestions-section">
               <h6 class="dropdown-header search-suggestions-heading">
-                {% for clan in groupe.clans|default([]) %}
+                {% for clan in group.clans|default([]) %}
                   <img class="img-18" src="{{ asset(image_small(clan.mon|default(NA_MON))) }}" alt="" />
                 {% endfor %}
-                {{ groupe.title }}
+                {{ group.title }}
               </h6>
-              {% for un_lieu in groupe.locations %}
-                <button type="button" class="dropdown-item search-suggestion" data-lieu="{{ un_lieu.id }}" data-locx="{{ un_lieu.locX }}" data-locy="{{ un_lieu.locY }}">
-                  <span class="search-suggestion-label">{{ un_lieu.nom }}</span>
-                  <small class="search-suggestion-group">{{ un_lieu.type }}</small>
-                  {{ include('parts/badge-access.html.twig', {state: element_state(un_lieu), variant: 'inline'}) }}
+              {% for location in group.locations %}
+                <button type="button" class="dropdown-item search-suggestion" data-lieu="{{ location.id }}" data-locx="{{ location.locX }}" data-locy="{{ location.locY }}">
+                  <span class="search-suggestion-label">{{ location.nom }}</span>
+                  <small class="search-suggestion-group">{{ location.type }}</small>
+                  {{ include('parts/badge-access.html.twig', {state: element_state(location), variant: 'inline'}) }}
                 </button>
               {% endfor %}
             </div>
@@ -59,17 +59,17 @@
           {% if players is not empty %}
             <div class="search-suggestions-section">
               <h6 class="dropdown-header search-suggestions-heading">Personnages Joueurs</h6>
-              {% for joueur in players|sort((a, b) => a.character.nomComplet <=> b.character.nomComplet) %}
-                {% if joueur.location is null %}
+              {% for player in players|sort((a, b) => a.character.nomComplet <=> b.character.nomComplet) %}
+                {% if player.location is null %}
                   {% set position = EN_DEPLACEMENT %}
-                {% elseif element_state(joueur.location) == 'hidden' %}
+                {% elseif element_state(player.location) == 'hidden' %}
                   {% set position = 'Lieu inconnu' %}
                 {% else %}
-                  {% set position = joueur.location.nom %}
+                  {% set position = player.location.nom %}
                 {% endif %}
-                <button type="button" class="dropdown-item search-suggestion"{% if joueur.location %} data-lieu="{{ joueur.location.id }}"{% endif %} data-personnage="{{ joueur.character.id }}" data-locx="{{ joueur.locX }}" data-locy="{{ joueur.locY }}">
-                  <img class="img-24" src="{{ asset(joueur.character.icone|default(NA_PERSO_PORTRAIT)) }}" alt="" />
-                  <span class="search-suggestion-label">{{ joueur.character.nomComplet }}</span>
+                <button type="button" class="dropdown-item search-suggestion"{% if player.location %} data-lieu="{{ player.location.id }}"{% endif %} data-personnage="{{ player.character.id }}" data-locx="{{ player.locX }}" data-locy="{{ player.locY }}">
+                  <img class="img-24" src="{{ asset(player.character.icone|default(NA_PERSO_PORTRAIT)) }}" alt="" />
+                  <span class="search-suggestion-label">{{ player.character.nomComplet }}</span>
                   <small class="search-suggestion-group">{{ position }}</small>
                 </button>
               {% endfor %}
@@ -128,18 +128,18 @@
         </button>
 
         <form id="map-route" class="map-route" hidden>
-          {% for champ in [{name: 'from', label: 'Départ'}, {name: 'to', label: 'Arrivée'}] %}
+          {% for field in [{name: 'from', label: 'Départ'}, {name: 'to', label: 'Arrivée'}] %}
             <label class="map-route-field">
-              <span>{{ champ.label }}</span>
-              <select name="{{ champ.name }}">
+              <span>{{ field.label }}</span>
+              <select name="{{ field.name }}">
                 <option value="">Choisir un lieu</option>
-                {% if champ.name == 'from' and recenter %}
+                {% if field.name == 'from' and recenter %}
                   <option value="personnage" data-locx="{{ recenter.locX }}" data-locy="{{ recenter.locY }}" selected>Position de mon personnage</option>
                 {% endif %}
-                {% for groupe in place_groups %}
-                  <optgroup label="{{ groupe.title }}">
-                    {% for un_lieu in groupe.locations %}
-                      <option value="{{ un_lieu.id }}" data-locx="{{ un_lieu.locX }}" data-locy="{{ un_lieu.locY }}">{{ un_lieu.nom }}</option>
+                {% for group in place_groups %}
+                  <optgroup label="{{ group.title }}">
+                    {% for location in group.locations %}
+                      <option value="{{ location.id }}" data-locx="{{ location.locX }}" data-locy="{{ location.locY }}">{{ location.nom }}</option>
                     {% endfor %}
                   </optgroup>
                 {% endfor %}
@@ -184,54 +184,54 @@
 
     {% if trail|length > 1 %}
       <svg class="map-trail" aria-hidden="true">
-        {% for un_lieu in trail|slice(1) %}
-          {% set suivant = trail[loop.index0] %}
-          <line x1="{{ un_lieu.locX }}%" y1="{{ un_lieu.locY }}%" x2="{{ suivant.locX }}%" y2="{{ suivant.locY }}%" />
+        {% for location in trail|slice(1) %}
+          {% set next = trail[loop.index0] %}
+          <line x1="{{ location.locX }}%" y1="{{ location.locY }}%" x2="{{ next.locX }}%" y2="{{ next.locY }}%" />
         {% endfor %}
       </svg>
     {% endif %}
 
-    {% for autre in placed %}
-      {% if current is null or autre.id != current.id %}
-        {% set autre_etat = element_state(autre) %}
-        {% set autre_secret = autre_etat == 'hidden' %}
-        {% set autre_taille = autre_secret ? '' : {'Cité': ' city', 'Ville': ' city', 'Région': ' region', 'Temple': ' temple'}[autre.type] ?? '' %}
-        {% set autre_color = autre_secret ? null : autre.clan.couleur ?? null %}
-        <a {% if autre_secret %}aria-disabled="true"{% else %}href="{{ path('world_location', {id: autre.id}) }}"{% if worldmap %} data-panel="{{ path('map_location', {id: autre.id}) }}"{% endif %}{% endif %}
-           class="absolute lieu-other-icon{{ autre_taille }}" data-lieu="{{ autre.id }}"
-           style="left:{{autre.locX}}%; top:{{autre.locY}}%;{% if autre_color %} --clan-color: {{autre_color}};{% endif %}">
-          {% if autre_secret %}
+    {% for other in placed %}
+      {% if current is null or other.id != current.id %}
+        {% set other_state = element_state(other) %}
+        {% set other_secret = other_state == 'hidden' %}
+        {% set other_size = other_secret ? '' : {'Cité': ' city', 'Ville': ' city', 'Région': ' region', 'Temple': ' temple'}[other.type] ?? '' %}
+        {% set other_color = other_secret ? null : other.clan.couleur ?? null %}
+        <a {% if other_secret %}aria-disabled="true"{% else %}href="{{ path('world_location', {id: other.id}) }}"{% if worldmap %} data-panel="{{ path('map_location', {id: other.id}) }}"{% endif %}{% endif %}
+           class="absolute lieu-other-icon{{ other_size }}" data-lieu="{{ other.id }}"
+           style="left:{{other.locX}}%; top:{{other.locY}}%;{% if other_color %} --clan-color: {{other_color}};{% endif %}">
+          {% if other_secret %}
             <span class="lieu-other-unknown">?</span>
             {{ include('parts/map-label.html.twig', {name: 'Inconnu', variant: 'compact'}) }}
           {% else %}
-            <img class="lieu-icon" src="{{ asset(autre.icone|default(NA_LIEU_ICO)) }}" alt="Icone de {{ autre.nom }}" />
+            <img class="lieu-icon" src="{{ asset(other.icone|default(NA_LIEU_ICO)) }}" alt="Icone de {{ other.nom }}" />
             {{ include('parts/map-label.html.twig', {
-              name: autre.nom,
-              mon: autre.clan.mon ?? null,
-              details: [autre.type, autre.clan.nom ?? null, autre_etat == 'secret' ? 'Secret' : null],
-              state: autre_etat,
+              name: other.nom,
+              mon: other.clan.mon ?? null,
+              details: [other.type, other.clan.nom ?? null, other_state == 'secret' ? 'Secret' : null],
+              state: other_state,
               variant: 'compact',
             }) }}
           {% endif %}
-          {% if element_fresh(autre) %}{{ include('parts/badge-new.html.twig', {variant: 'pin-downcenter'}) }}{% endif %}
+          {% if element_fresh(other) %}{{ include('parts/badge-new.html.twig', {variant: 'pin-downcenter'}) }}{% endif %}
         </a>
 
-        {% if party[autre.id] is defined %}
-          <div class="map-party absolute{{ autre_taille }}" style="left:{{autre.locX}}%; top:{{autre.locY}}%;">
-            {% for perso in party[autre.id] %}
-              {{ include('parts/map-portrait.html.twig', {perso, mine: perso.id == main_id, interactive: worldmap}, with_context = false) }}
+        {% if party[other.id] is defined %}
+          <div class="map-party absolute{{ other_size }}" style="left:{{other.locX}}%; top:{{other.locY}}%;">
+            {% for character in party[other.id] %}
+              {{ include('parts/map-portrait.html.twig', {character, mine: character.id == main_id, interactive: worldmap}, with_context = false) }}
             {% endfor %}
           </div>
         {% endif %}
       {% endif %}
     {% endfor %}
 
-    {% for libre in wanderers %}
-      <div class="map-party wanderer absolute" style="left:{{libre.locX}}%; top:{{libre.locY}}%;">
+    {% for wanderer in wanderers %}
+      <div class="map-party wanderer absolute" style="left:{{wanderer.locX}}%; top:{{wanderer.locY}}%;">
         {{ include('parts/map-portrait.html.twig', {
-          perso: libre.character,
-          mine: libre.character.id == main_id,
-          title: libre.character.nomComplet ~ ' — ' ~ EN_DEPLACEMENT,
+          character: wanderer.character,
+          mine: wanderer.character.id == main_id,
+          title: wanderer.character.nomComplet ~ ' — ' ~ EN_DEPLACEMENT,
           interactive: worldmap,
         }, with_context = false) }}
       </div>
@@ -256,8 +256,8 @@
 
       {% if party[current.id] is defined %}
         <div class="map-party current absolute" style="left:{{current.locX}}%; top:{{current.locY}}%;">
-          {% for perso in party[current.id] %}
-            {{ include('parts/map-portrait.html.twig', {perso, mine: perso.id == main_id, interactive: worldmap}, with_context = false) }}
+          {% for character in party[current.id] %}
+            {{ include('parts/map-portrait.html.twig', {character, mine: character.id == main_id, interactive: worldmap}, with_context = false) }}
           {% endfor %}
         </div>
       {% endif %}

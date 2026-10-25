@@ -9,8 +9,8 @@
 
             <div class="col-12 mt-3 mb-5">
                 {{ include('parts/image-field.html.twig', {
-                    field: form.image, input_id: 'admin_chapitre_image', prefix: 'image',
-                    current: chapitre.image|default(null), fallback: NA_CHAPITRE,
+                    field: form.image, input_id: 'admin_chapter_image', prefix: 'image',
+                    current: chapter.image|default(null), fallback: NA_CHAPITRE,
                     label: 'Image (1920×1080 16:9 recommandé)', width: 1920, height: 1080 }) }}
             </div>
 

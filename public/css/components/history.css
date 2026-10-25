@@ -1,6 +1,6 @@
 /* -------- HISTORIQUE -------- */
 
-.historique-saison {
+.history-season {
   display: flex;
   align-items: center;
   margin: 3rem -1rem 1.5rem;
@@ -13,7 +13,7 @@
   @media (max-width: 991.98px) { font-size: var(--fontsize-plus); }
 }
 
-.historique-episode {
+.history-episode {
   display: flex;
   align-items: center;
   margin: 1rem 0 0 1.5rem;
@@ -25,15 +25,15 @@
     &:hover, &:focus { color: var(--color-link); }
   }
 
-  .historique-numero { font-weight: normal; }
+  .history-number { font-weight: normal; }
 }
 
-.historique-xp {
+.history-xp {
   color: var(--color-alternate);
   font-weight: normal;
 }
 
-.historique-scene {
+.history-scene {
   display: flex;
   justify-content: space-between;
   align-items: baseline;

@@ -60,6 +60,19 @@
     }
   }
 
+  &.compact {
+    align-content: start;
+
+    &:has(.icon) { --image-max: 8rem; }
+
+    .label {
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 2;
+      overflow: hidden;
+    }
+  }
+
   &.desktop-only {
     @media (max-width: 991.98px) {
       .scroller-btn { display: none; }
@@ -297,7 +310,7 @@
   }
 
   &.restricted {
-    cursor: default;
+    &:hover .icon-lock { filter: grayscale(1) opacity(0); }
 
     .access-tooltip {
       position: absolute;

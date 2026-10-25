@@ -139,7 +139,7 @@ class WorldController extends AbstractController
   /**
    * @Route("/world/location/{id}", name="world_location")
    */
-  public function showLocation(Lieu $location, LieuRepository $locationRepository, ClasseurHistorique $classeur, SaisonRepository $saisonRepository, Visibility $visibility): Response
+  public function showLocation(Lieu $location, LieuRepository $locationRepository, ClasseurHistorique $classeur, SaisonRepository $seasonRepository, Visibility $visibility): Response
   {
     if ($response = $this->accessGuard($visibility, $location, 'lieu', 'world')) {
       return $response;
@@ -163,7 +163,7 @@ class WorldController extends AbstractController
       'lieux' => $locations,
       'other_locations' => $otherLocations,
       'historique' => $history,
-      'saison_courante' => $saisonRepository->findCourante()?->getNumero(),
+      'saison_courante' => $seasonRepository->findCourante()?->getNumero(),
     ]);
   }
 

@@ -1,23 +1,18 @@
 {% extends 'element.html.twig' %}
 
-{% set labels = {
-  archive: 'Archive', clan: 'Faction', ecole: 'École', episode: 'Épisode', library: 'Bibliothèque',
-  lieu: 'Lieu', lore: 'Lore', objet: 'Objet', personnage: 'Personnage',
-  rule: 'Règle',
-} %}
-{% set nom = labels[entity]|default('Élément') ~ ' à découvrir' %}
+{% set nom = ENTITY_LABELS[entity]|default('Élément') ~ ' à découvrir' %}
 
 {% block element_content %}
 
   {% set placeholders = {
-    archive: NA_ARCHIVE, clan: NA_CLAN, ecole: NA_ECOLE, library: NA_LIBRARY,
+    archive: NA_ARCHIVE, clan: NA_CLAN, dojo: NA_ECOLE, library: NA_LIBRARY,
     lieu: NA_LIEU, lore: NA_LORE, objet: NA_OBJET, rule: NA_RULE,
   } %}
 
   {% set attentes = {
     archive:    "Cette archive n'a pas encore été déverrouillée dans l'aventure. Seules vos actions, jeunes samuraïs, vous permettront d'en percer les secrets.",
     clan:       "Cette faction n'a pas encore été déverrouillée dans l'aventure. Seules vos actions, jeunes samuraïs, vous permettront un jour de la côtoyer.",
-    ecole:      "Cette école n'a pas encore été déverrouillée dans l'aventure. Seules vos actions, jeunes samuraïs, vous permettront un jour d'en apprendre les techniques.",
+    dojo:       "Cette école n'a pas encore été déverrouillée dans l'aventure. Seules vos actions, jeunes samuraïs, vous permettront un jour d'en apprendre les techniques.",
     episode:    "Cet épisode n'a pas encore été déverrouillé dans l'aventure. Seules vos actions, jeunes samuraïs, vous permettront un jour d'en connaître le récit.",
     lieu:       "Ce lieu n'a pas encore été déverrouillé dans l'aventure. Seules vos actions, jeunes samuraïs, vous mèneront un jour jusqu'à lui.",
     lore:       "Ce savoir n'a pas encore été déverrouillé dans l'aventure. Seules vos actions, jeunes samuraïs, vous permettront un jour de le lire.",

@@ -20,15 +20,14 @@
     {% set majeur = constant('App\\Entity\\FactionType::MAJEUR') %}
     {% set mineur = constant('App\\Entity\\FactionType::MINEUR') %}
     {% set titres = constant('App\\Entity\\FactionType::GROUPS') %}
+    {% set intros = constant('App\\Entity\\FactionType::INTROS') %}
     {% if factions|filter(clans => clans is not empty) is empty %}
         <p class="col-12 text-muted font-italic">Pas de factions disponibles.</p>
     {% else %}
 
         <div class="col-12 col-lg-9">
             <h4 class="text-primarydark">{{ titres[majeur] }}</h4>
-            <p class="faction-intro">Les Clans Majeurs sont les plus grandes factions de Rokugan.
-            Chacune d'elles est héritière d'un Kami originel qui jura fidélité à l'Empereur et se répartit la majeure partie de l'Empire.
-            Elles se composent de plusieurs familles et forment des milliers de Samuraïs dans leurs dojos.</p>
+            <p class="faction-intro">{{ intros[majeur] }}</p>
             {{ include('/parts/picture-grid.html.twig', {
                 catalog: true,
                 variant: 'emblem',
@@ -37,9 +36,10 @@
             }) }}
         </div>
 
-        <div class="col-12 col-lg-3 border-left">
+        <div class="col-12 col-lg-3 border-left mt-4 mt-lg-0">
             {% for type, clans in factions|filter((clans, type) => type not in [majeur, mineur] and clans is not empty) %}
                 <h4 class="text-primarydark text-center">{{ titres[type] }}</h4>
+                <p class="faction-intro">{{ intros[type] }}</p>
                 {{ include('/parts/picture-grid.html.twig', {
                     catalog: true,
                     variant: 'emblem',
@@ -53,6 +53,7 @@
         {% if factions[mineur] is not empty %}
             <div class="col-12">
                 <h4 class="text-primarydark mt-4">{{ titres[mineur] }}</h4>
+                <p class="faction-intro">{{ intros[mineur] }}</p>
                 {{ include('/parts/picture-grid.html.twig', {
                     catalog: true,
                     variant: 'emblem',

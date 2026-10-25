@@ -4,7 +4,7 @@
 
 <div class="map-portrait{{ mine|default(false) ? ' mine' }}" data-personnage="{{ perso.id }}">
   {% if interactive %}
-    <button type="button" class="map-portrait-toggle" data-panel="{{ path('carte_personnage', {id: perso.id}) }}" aria-expanded="false" aria-label="{{ title }}" title="{{ title }}">
+    <button type="button" class="map-portrait-toggle" data-panel="{{ path('map_character', {id: perso.id}) }}" aria-expanded="false" aria-label="{{ title }}" title="{{ title }}">
       {{ portrait }}
     </button>
   {% else %}

@@ -2,9 +2,9 @@
 
 namespace App\Controller;
 
-use App\Service\ClasseurXP;
+use App\Service\XpRanker;
 use App\Service\CurrentPlayer;
-use App\Service\Localisateur;
+use App\Service\Locator;
 use App\Service\NewsFeed;
 use App\Service\Visibility;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -53,19 +53,19 @@ class NewsController extends AbstractController
     /**
      * @Route("/", name="news")
      */
-    public function index(NewsFeed $newsFeed, ClasseurXP $classeurXP, CurrentPlayer $currentPlayer, Visibility $visibility, Localisateur $localisateur): Response
+    public function index(NewsFeed $newsFeed, XpRanker $xpRanker, CurrentPlayer $currentPlayer, Visibility $visibility, Locator $locator): Response
     {
         $mesPersonnages = $currentPlayer->characterIds();
         $monPersonnage = $currentPlayer->navigatingCharacter();
 
         $participations = $newsFeed->lastParticipations(self::PARTICIPATIONS);
-        $carte = $localisateur->carte($participations === [] ? null : $monPersonnage, true);
+        $map = $locator->map($participations === [] ? null : $monPersonnage, true);
         $episodes = $newsFeed->lastEpisodes(1 + self::SEANCES_PRECEDENTES);
         $dernierEpisode = $episodes[0] ?? null;
 
         $participationsXp = [];
         foreach ($participations as $participation) {
-            $participationsXp[$participation->getId()] = $classeurXP->cumulUnPersoEpisode(
+            $participationsXp[$participation->getId()] = $xpRanker->characterEpisodeTotal(
                 $participation->getScene()->getEpisodeParent(),
                 $participation->getPersonnage()->getId()
             );
@@ -121,7 +121,7 @@ class NewsController extends AbstractController
         if ($monPersonnage !== null) {
             $monRecap = [
                 'pvMax' => $monPersonnage->getFichePersonnage()?->getPvMax(),
-                'rang' => $classeurXP->rank($classeurXP->total($monPersonnage)),
+                'rang' => $xpRanker->rank($xpRanker->total($monPersonnage)),
             ];
 
             foreach (self::DECOUVERTES as $decouverte) {
@@ -132,7 +132,7 @@ class NewsController extends AbstractController
 
         return $this->render('news/index.html.twig', [
             'dernier_episode' => $dernierEpisode,
-            'classement' => $dernierEpisode === null ? false : $classeurXP->classerPersosEpisode($dernierEpisode),
+            'classement' => $dernierEpisode === null ? false : $xpRanker->rankEpisodeCharacters($dernierEpisode),
             'session_locations' => $dernierEpisode === null ? [] : $newsFeed->episodeLocations($dernierEpisode),
             'session_characters' => $dernierEpisode === null ? [] : $newsFeed->episodeCharacters($dernierEpisode),
             'session_objects' => $dernierEpisode === null ? [] : $newsFeed->episodeObjects($dernierEpisode),
@@ -151,6 +151,6 @@ class NewsController extends AbstractController
             'header_up' => 'Accueil',
             'header_down' => 'Bienvenue à Rokugan',
             'category' => 'news',
-        ] + $carte);
+        ] + $map);
     }
 }

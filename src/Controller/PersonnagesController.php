@@ -138,8 +138,6 @@ class PersonnagesController extends AbstractController
 
         $fiche = $personnage->getFichePersonnage();
         $xp_creation = ($fiche !== null) ? $classeurXP->creation($fiche) : 0;
-        $xp_desavantages = ($fiche !== null) ? $classeurXP->disadvantagesGain($fiche) : 0;
-        $xp_progression = $classeurXP->progression($personnage);
         $xp_total = $classeurXP->total($personnage);
         $rang = $classeurXP->rank($xp_total);
 
@@ -165,15 +163,11 @@ class PersonnagesController extends AbstractController
             'un_element' => $personnage,
             'xp' => $xp_total,
             'xp_creation' => $xp_creation,
-            'xp_desavantages' => $xp_desavantages,
-            'xp_progression' => $xp_progression,
             'rang' => $rang,
             'autresPersonnages' => $autresPersonnages,
             'historique' => $classeur->pourPersonnage($personnage),
             'saison_courante' => $saisonRepository->findCourante()?->getNumero(),
-            'position_actuelle' => $localisateur->position($personnage),
-            'position_libre' => $localisateur->positionLibre($personnage),
-        ]);
+        ] + $localisateur->carte($personnage));
     }
 
     /**

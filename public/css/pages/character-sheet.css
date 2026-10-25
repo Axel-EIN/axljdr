@@ -1,36 +1,36 @@
 #character-sheet {
-  --gap-bloc: 0.75rem;
+  --gap-block: 0.75rem;
 
   padding: 1rem;
 
   @media (max-width: 991.98px) { padding: 0 0.5rem 0.5rem; }
 }
 
-.card-bloc {
+.card-block {
   padding: 0;
   border-radius: 0.5rem;
   overflow: hidden;
 }
 
-.bloc-row {
-  margin-top: var(--gap-bloc);
-  margin-left: calc(var(--gap-bloc) / -2);
-  margin-right: calc(var(--gap-bloc) / -2);
-  row-gap: var(--gap-bloc);
+.block-row {
+  margin-top: var(--gap-block);
+  margin-left: calc(var(--gap-block) / -2);
+  margin-right: calc(var(--gap-block) / -2);
+  row-gap: var(--gap-block);
 
   > * {
-    padding-left: calc(var(--gap-bloc) / 2);
-    padding-right: calc(var(--gap-bloc) / 2);
+    padding-left: calc(var(--gap-block) / 2);
+    padding-right: calc(var(--gap-block) / 2);
 
     display: flex;
     flex-direction: column;
-    gap: var(--gap-bloc);
+    gap: var(--gap-block);
   }
 }
 
 /* ----- MANDALA DES ANNEAUX ----- */
 
-.anneaux-board {
+.rings-board {
   position: relative;
   background-image: var(--mon-clan);
   background-size: 192px;
@@ -38,7 +38,7 @@
   background-position: center 40%;
 }
 
-.anneaux-glow {
+.rings-glow {
   position: absolute;
   top: 45%;
   left: 50%;
@@ -67,7 +67,7 @@
 
 /* ----- TRAITS SUR L'ILLUSTRATION ----- */
 
-.fiche-ligne-classe {
+.sheet-class-line {
   @media (max-width: 991.98px) { display: none; }
 }
 
@@ -95,7 +95,7 @@
   }
 }
 
-.fiche-illu-wrap {
+.sheet-illu-wrap {
   @media (max-width: 991.98px) {
     position: relative;
     height: 25.75rem;
@@ -118,7 +118,7 @@
   }
 }
 
-.fiche-illu {
+.sheet-illu {
   @media (max-width: 991.98px) {
     position: absolute;
     top: 0;
@@ -131,10 +131,10 @@
   }
 }
 
-.fiche-traits {
+.sheet-traits {
   @media (max-width: 991.98px) {
     --ico: 24px;
-    --gouttiere: 0.5rem;
+    --gutter: 0.5rem;
     position: absolute;
     inset: 30% 0 0;
     z-index: 2;
@@ -147,42 +147,42 @@
     align-content: end;
     text-shadow: 0 1px 3px rgba(0, 0, 0, 0.9);
 
-    .fiche-anneau-line,
-    .fiche-trait-line {
+    .sheet-ring-line,
+    .sheet-trait-line {
       display: flex;
       align-items: center;
-      gap: var(--gouttiere);
+      gap: var(--gutter);
 
-      &.fiche-trait-line { padding-left: calc(var(--ico) + var(--gouttiere)); }
+      &.sheet-trait-line { padding-left: calc(var(--ico) + var(--gutter)); }
     }
 
-    .fiche-anneau-ico {
+    .sheet-ring-icon {
       flex: none;
       width: var(--ico);
       height: var(--ico);
       filter: invert(1);
     }
 
-    .fiche-trait-value,
-    .fiche-anneau-rang { margin-left: auto; }
+    .sheet-trait-value,
+    .sheet-ring-rank { margin-left: auto; }
 
-    .fiche-anneau-solo {
+    .sheet-ring-solo {
       grid-column: 1 / -1;
 
-      .fiche-anneau-line { justify-content: center; }
-      .fiche-anneau-rang { margin-left: var(--gouttiere); }
+      .sheet-ring-line { justify-content: center; }
+      .sheet-ring-rank { margin-left: var(--gutter); }
     }
   }
 }
 
-.anneau-rang {
+.ring-rank {
   font-family: 'Present';
   font-size: var(--fontsize-hero);
   line-height: var(--leading-1);
   color: var(--color-alternate);
 }
 
-.trait-rang {
+.trait-rank {
   font-size: var(--fontsize-large);
   font-family: 'Avenir';
   color: var(--color-alternate);
@@ -195,17 +195,17 @@
   .edit-mode & select { width: 3em; display: inline-block; vertical-align: middle; }
 }
 
-.comp-select {
+.skill-select {
   .edit-mode & { min-width: 14em; }
 }
 
-.av-row-empty {
+.advantage-row-empty {
   display: none;
 
   .edit-mode & { display: list-item; }
 }
 
-.av-select {
+.advantage-select {
   .edit-mode & { min-width: 14em; }
 }
 
@@ -229,8 +229,8 @@
   }
 }
 
-.comp-ecole-tri,
-.comp-spec-tri {
+.skill-dojo-sort,
+.skill-spec-sort {
     position: relative;
     display: inline-flex;
     justify-content: center;
@@ -239,36 +239,36 @@
     user-select: none;
     vertical-align: middle;
 
-    &[data-state="2"] .comp-ecole-tag,
-    &[data-state="2"] .spec-ecole-tag {
+    &[data-state="2"] .skill-dojo-tag,
+    &[data-state="2"] .spec-dojo-tag {
         display: inline-flex;
         justify-content: center;
         align-items: center;
     }
 }
 
-.comp-ecole-tri {
-    .comp-ecole-tag { color: var(--color-yellow-gold); }
+.skill-dojo-sort {
+    .skill-dojo-tag { color: var(--color-yellow-gold); }
 
-    &[data-state="1"] .tri-icon { color: var(--color-green-success); }
-    &[data-state="2"] .tri-icon,
+    &[data-state="1"] .sort-icon { color: var(--color-green-success); }
+    &[data-state="2"] .sort-icon,
     &[data-state="2"]           { color: var(--color-yellow-gold); }
 }
 
-.comp-spec-tri {
+.skill-spec-sort {
     margin-right: 1em;
     font-size: 0.9em;
     gap: 0.3em;
 
-    .spec-ecole-tag { color: var(--color-green-success); }
+    .spec-dojo-tag { color: var(--color-green-success); }
 
-    &[data-state="1"] .tri-icon { color: var(--color-reddanger); }
-    &[data-state="2"] .tri-icon,
+    &[data-state="1"] .sort-icon { color: var(--color-reddanger); }
+    &[data-state="2"] .sort-icon,
     &[data-state="2"]           { color: var(--color-green-success); }
 }
 
-.comp-ecole-tag,
-.spec-ecole-tag {
+.skill-dojo-tag,
+.spec-dojo-tag {
     display: none;
     position: absolute;
     left: 0;
@@ -287,9 +287,9 @@
   overflow: hidden;
 }
 
-.fiche-standings {
+.sheet-standings {
   display: flex;
-  margin: var(--gap-bloc) 0 0;
+  margin: var(--gap-block) 0 0;
   padding: 0;
   gap: 0.35rem;
   list-style: none;
@@ -318,7 +318,7 @@
   }
 }
 
-.signalement-board {
+.appearance-board {
   display: flex;
   flex-wrap: wrap;
   margin: 0;
@@ -342,7 +342,7 @@
   }
 }
 
-.signalement-texte {
+.appearance-text {
   padding: 0.75rem;
 
   p { margin: 0; }
@@ -459,14 +459,14 @@
 }
 
 #comp-table {
-  .comp-legende {
+  .skill-legend {
     margin-left: 0.75rem;
     font-size: var(--fontsize-small);
     text-transform: none;
     white-space: nowrap;
   }
 
-  .comp-degradante {
+  .skill-degrading {
     margin-right: 0.35rem;
     color: var(--color-reddanger);
 
@@ -478,13 +478,13 @@
     vertical-align: middle;
   }
 
-  .comp-row-empty {
+  .skill-row-empty {
     display: none;
 
     .edit-mode & { display: table-row; }
   }
 
-  .comp-specs-row {
+  .skill-specs-row {
     td {
       height: 1.25rem;
       padding-top: 0;
@@ -496,7 +496,7 @@
     }
   }
 
-  .comp-cap {
+  .skill-cap {
     display: none;
     width: 30%;
     line-height: var(--leading-1);
@@ -508,7 +508,7 @@
 
 /* ----- BLOC MAGIE ----- */
 
-.magie-entete {
+.magic-header {
   padding: 0.75rem 1rem;
   border-bottom: 1px solid var(--color-border-base);
 
@@ -519,7 +519,7 @@
   }
 }
 
-.magie-anneaux { display: flex; }
+.magic-rings { display: flex; }
 
 .knownspells-column {
   padding-left: 0.125rem !important;

@@ -14,7 +14,7 @@ use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 
-class AdminObjetType extends AbstractType
+class AdminObjectType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {

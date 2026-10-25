@@ -2,7 +2,7 @@
   <span class="text-light">Il y a <strong class="text-accent-light">{{ episode.chapitreParent.episodes|length }} ÉPISODES</strong> dans ce chapitre.</span>
   <div class="carrousel mt-2 d-none d-lg-flex">
     {% for un_episode in episode.chapitreParent.episodes %}
-      {% if un_episode.scenes|length > 0 or is_granted("ROLE_MJ") %}
+      {% if un_episode.scenes|length > 0 or is_mj() %}
         <div class="vignette-episode {% if un_episode.id == episode.id %}active{% endif %}">
           <span class="titre">{{un_episode.titre}}</span>
           <div class="ratio-169">
@@ -26,7 +26,7 @@
     </a>
     <div class="dropdown-menu dropdown-dark">
       {% for un_episode in episode.chapitreParent.episodes %}
-        {% if un_episode.id != episode.id and (un_episode.scenes|length > 0 or is_granted("ROLE_MJ")) %}
+        {% if un_episode.id != episode.id and (un_episode.scenes|length > 0 or is_mj()) %}
           <a class="dropdown-item" href="{{ path('aventure_episode', { id: un_episode.id, '_fragment': 'read-head' } ) }}">
             #{{ un_episode.numeroSaison }} {{ un_episode.titre }}
           </a>

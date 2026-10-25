@@ -1,5 +1,5 @@
 {% extends 'base.html.twig' %}
-{% block title %}{{ entity == 'sheet' ? 'Fiche de Jeu : ' ~ nom : ENTITY_LABELS[entity]|default(entity|capitalize) ~ ' ' ~ nom }} {{parent()}} {% endblock %}
+{% block title %}{{ entity == 'sheet' ? 'Fiche de Jeu : ' ~ name : ENTITY_LABELS[entity]|default(entity|capitalize) ~ ' ' ~ name }} {{parent()}} {% endblock %}
 
 {% block stylesheets %}
   {{ parent() }}
@@ -13,18 +13,18 @@
 
       {% set category_label = {world: 'Univers', story: 'Aventure', rules: 'Règles', characters: 'Personnages'}[category] ?? category|capitalize %}
       {% if category == 'characters' and entity == 'sheet' %}
-        {% set fil = [
+        {% set breadcrumb_items = [
           { label: category_label, path: path(category) },
-          { label: nom, path: path('characters_profile', {id: fiche.personnage.id}) },
+          { label: name, path: path('characters_profile', {id: sheet.personnage.id}) },
           { label: 'Fiche de Jeu' },
         ] %}
       {% else %}
-        {% set fil = [
+        {% set breadcrumb_items = [
           { label: category_label, path: path(category, {'_fragment': entity}) },
-          { label: nom },
+          { label: name },
         ] %}
       {% endif %}
-      {{ include('parts/breadcrumbs.html.twig', {items: fil}) }}
+      {{ include('parts/breadcrumbs.html.twig', {items: breadcrumb_items}) }}
 
       {{ include('parts/flash-messages.html.twig') }}
 
@@ -32,12 +32,12 @@
 
         <h1 class="heading-elementdetail relative">
           {% if category == 'characters' and entity == 'sheet' %}
-            <strong>Fiche de Jeu : {{ nom }}</strong>
+            <strong>Fiche de Jeu : {{ name }}</strong>
           {% else %}
-            <strong>{{ nom }}</strong>
+            <strong>{{ name }}</strong>
           {% endif %}
 
-          {% if is_mj() %}
+          {% if is_gm() %}
             {% set redirect, size, color, position = entity, 'btn-icon-medium', 'link-gm', 'topright-corner-snap' %}
             {{ include('/btns/btn-icon-edit.html.twig') }}
           {% endif %}

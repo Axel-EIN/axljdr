@@ -14,6 +14,19 @@ twig:
             common: ['fa-gear', 'Commun']
             common-discovered: ['fa-gear', "Commun\nDécouvert"]
 
+        ENTITY_LABELS:
+            archive: 'Archive'
+            clan: 'Faction'
+            class: 'Classe'
+            dojo: 'École'
+            episode: 'Épisode'
+            library: 'Bibliothèque'
+            lieu: 'Lieu'
+            lore: 'Lore'
+            objet: 'Objet'
+            personnage: 'Personnage'
+            rule: 'Règle'
+
         NA_ICON: &NA_ICON '/assets/placeholders/na_icon.png'
         NA_MON: '/assets/placeholders/na_mon.png'
         NA_LIEU_ICO: '/assets/placeholders/na_lieu_ico.png'

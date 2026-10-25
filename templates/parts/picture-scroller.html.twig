@@ -1,0 +1,5 @@
+<div class="picture-scroller {{ scroller_class|default('') }}"{% if scroller_id|default(null) %} id="{{ scroller_id }}"{% endif %}>
+  <button type="button" class="scroller-btn" data-direction="-1" aria-label="Défiler vers la gauche"><i class="fa-solid fa-chevron-left" aria-hidden="true"></i></button>
+  {% block track %}{% endblock %}
+  <button type="button" class="scroller-btn" data-direction="1" aria-label="Défiler vers la droite"><i class="fa-solid fa-chevron-right" aria-hidden="true"></i></button>
+</div>

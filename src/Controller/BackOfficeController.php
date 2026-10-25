@@ -49,14 +49,14 @@ class BackOfficeController extends AbstractController
         RuleRepository $ruleRepository,
         LibraryRepository $libraryRepository,
         ClasseRepository $classRepository,
-        EcoleRepository $ecoleRepository,
+        EcoleRepository $dojoRepository,
         AvantageRepository $advantageRepository,
         CompetenceRepository $skillRepository,
         ObjetRepository $objetRepository,
         SortRepository $sortRepository,
 
         PersonnageRepository $personnageRepository,
-        FichePersonnageRepository $fichePersonnageRepository,
+        FichePersonnageRepository $sheetRepository,
         DevelopmentRepository $developmentRepository,
 
         UtilisateurRepository $userRepository ): Response
@@ -234,16 +234,16 @@ class BackOfficeController extends AbstractController
         }
 
         $i++;
-        $admin_elements[$i]['element'] = 'fiche' ;
+        $admin_elements[$i]['element'] = 'sheet' ;
         $admin_elements[$i]['label'] = 'Fiches';
         $admin_elements[$i]['genre'] = 'F';
         $admin_elements[$i]['categorie'] = 'Personnages';
-        $admin_elements[$i]['nbr'] = $fichePersonnageRepository->countFiches();
-        $lastFiche = $fichePersonnageRepository->findOneBy(array(),array('id' => 'DESC'));
-        if (!empty($lastFiche)) {
-            $admin_elements[$i]['last'] = $lastFiche;
-            $admin_elements[$i]['nom'] = $lastFiche->getPersonnage()->getNomComplet();
-            $admin_elements[$i]['image'] = $lastFiche->getPersonnage()->getIcone();
+        $admin_elements[$i]['nbr'] = $sheetRepository->countFiches();
+        $lastSheet = $sheetRepository->findOneBy(array(),array('id' => 'DESC'));
+        if (!empty($lastSheet)) {
+            $admin_elements[$i]['last'] = $lastSheet;
+            $admin_elements[$i]['nom'] = $lastSheet->getPersonnage()->getNomComplet();
+            $admin_elements[$i]['image'] = $lastSheet->getPersonnage()->getIcone();
         } else {
             $admin_elements[$i]['last'] = '';
             $admin_elements[$i]['nom'] = '';
@@ -319,16 +319,16 @@ class BackOfficeController extends AbstractController
         }
 
         $i++;
-        $admin_elements[$i]['element'] = 'ecole' ;
+        $admin_elements[$i]['element'] = 'dojo' ;
         $admin_elements[$i]['label'] = 'Écoles';
         $admin_elements[$i]['genre'] = 'F';
         $admin_elements[$i]['categorie'] = 'Règles';
-        $admin_elements[$i]['nbr'] = $ecoleRepository->countEcoles();
-        $lastEcole = $ecoleRepository->findOneBy(array(),array('id' => 'DESC'));
-        if (!empty($lastEcole)) {
-            $admin_elements[$i]['last'] = $lastEcole;
-            $admin_elements[$i]['nom'] = $lastEcole->getNom();
-            $admin_elements[$i]['image'] = $lastEcole->getImage();
+        $admin_elements[$i]['nbr'] = $dojoRepository->countEcoles();
+        $lastDojo = $dojoRepository->findOneBy(array(),array('id' => 'DESC'));
+        if (!empty($lastDojo)) {
+            $admin_elements[$i]['last'] = $lastDojo;
+            $admin_elements[$i]['nom'] = $lastDojo->getNom();
+            $admin_elements[$i]['image'] = $lastDojo->getImage();
         } else {
             $admin_elements[$i]['last'] = '';
             $admin_elements[$i]['nom'] = '';

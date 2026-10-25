@@ -6,7 +6,7 @@ use App\Entity\Development;
 use App\Form\AdminDevelopmentType;
 use App\Repository\DevelopmentRepository;
 use App\Repository\PersonnageRepository;
-use App\Service\Baliseur;
+use App\Service\NameTagger;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -47,7 +47,7 @@ class AdminDevelopmentController extends AbstractController
      * @Route("/admin/development/create", name="admin_development_create")
      * @IsGranted("ROLE_MJ")
      */
-    public function addDevelopment(Request $request, EntityManagerInterface $em, PersonnageRepository $characterRepository, Baliseur $baliseur): Response
+    public function addDevelopment(Request $request, EntityManagerInterface $em, PersonnageRepository $characterRepository, NameTagger $nameTagger): Response
     {
         $development = new Development;
         $form = $this->createForm(AdminDevelopmentType::class, $development);
@@ -59,7 +59,7 @@ class AdminDevelopmentController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $development->setContent($baliseur->baliser($development->getContent()));
+            $development->setContent($nameTagger->tag($development->getContent()));
             $em->persist($development);
             $em->flush();
             $this->addFlash('success', 'Le Développement a bien été ajouté');
@@ -81,15 +81,15 @@ class AdminDevelopmentController extends AbstractController
      * @Route("/admin/development/{id}/edit", name="admin_development_edit")
      * @IsGranted("ROLE_MJ")
      */
-    public function editDevelopment(Request $request, Development $development, EntityManagerInterface $em, Baliseur $baliseur): Response
+    public function editDevelopment(Request $request, Development $development, EntityManagerInterface $em, NameTagger $nameTagger): Response
     {
         $form = $this->createForm(AdminDevelopmentType::class, $development);
         $form->get('personnage')->setData($development->getPersonnage());
-        $form->get('content')->setData($baliseur->debaliser($development->getContent()));
+        $form->get('content')->setData($nameTagger->untag($development->getContent()));
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $development->setContent($baliseur->baliser($development->getContent()));
+            $development->setContent($nameTagger->tag($development->getContent()));
             $em->flush();
             $this->addFlash('success', 'Le Développement a bien été modifié');
 

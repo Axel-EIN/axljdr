@@ -29,9 +29,9 @@ final class EntityRegistry
         'library'    => ['class' => Library::class,    'route' => 'rules_library',      'label' => 'Bibliothèque'],
         'ecole'      => ['class' => Ecole::class,      'route' => 'rules_dojo',         'label' => 'École'],
         'objet'      => ['class' => Objet::class,      'route' => 'rules_object',       'label' => 'Objet'],
-        'sort'       => ['class' => Sort::class,       'route' => null,                 'label' => 'Sort'],
-        'competence' => ['class' => Competence::class, 'route' => null,                 'label' => 'Compétence'],
-        'avantage'   => ['class' => Avantage::class,   'route' => null,                 'label' => 'Avantage'],
+        'spell'      => ['class' => Sort::class,       'route' => null,                 'label' => 'Sort'],
+        'skill'      => ['class' => Competence::class, 'route' => null,                 'label' => 'Compétence'],
+        'advantage'  => ['class' => Avantage::class,   'route' => null,                 'label' => 'Avantage'],
     ];
 
     public static function keyOf($element): ?string

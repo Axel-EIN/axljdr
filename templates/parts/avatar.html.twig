@@ -1,10 +1,10 @@
 {% set size = size|default(96) %}
-{% set principal = (character is defined ? character : false) ? navigating_character() : null %}
+{% set main_character = (character is defined ? character : false) ? navigating_character() : null %}
 
-{% if principal %}
+{% if main_character %}
   <span class="avatar" style="--avatar-size: {{ size }}px">
-    <img src="{{ asset(principal.icone|default(NA_PERSO_PORTRAIT)) }}"
-         alt="Portrait de {{ principal.prenom }}" title="{{ principal.nomComplet }}" />
+    <img src="{{ asset(main_character.icone|default(NA_PERSO_PORTRAIT)) }}"
+         alt="Portrait de {{ main_character.prenom }}" title="{{ main_character.nomComplet }}" />
   </span>
 {% elseif user.avatar %}
   <span class="avatar" style="--avatar-size: {{ size }}px">

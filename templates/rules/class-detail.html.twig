@@ -7,10 +7,10 @@
 
 {% block element_content %}
 
-    {{ include('rules/class-banner.html.twig', {classe, classes}) }}
+    {{ include('rules/class-banner.html.twig', {character_class, classes}) }}
 
     {{ include('/parts/picture-grid.html.twig', {
-        title: 'Écoles de ' ~ classe.nom,
+        title: 'Écoles de ' ~ character_class.nom,
         variant: 'rule',
         items: class_dojos, route: 'rules_dojo',
         na_image: NA_ECOLE,

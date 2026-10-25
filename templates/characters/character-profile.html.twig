@@ -10,20 +10,20 @@
 
 {% block element_content %}
 
-{% if personnage.illustration is null and personnage.genre == 'F' %}
+{% if character.illustration is null and character.genre == 'F' %}
     {% set NA_PERSO_ILLU = NA_PERSO_ILLU_F %}
-{% elseif personnage.illustration is null and personnage.genre == 'M' %}
+{% elseif character.illustration is null and character.genre == 'M' %}
     {% set NA_PERSO_ILLU = NA_PERSO_ILLU_M %}
 {% endif %}
 
-{% set illustration_src = asset(personnage.illustration|default(NA_PERSO_ILLU)) %}
+{% set illustration_src = asset(character.illustration|default(NA_PERSO_ILLU)) %}
 {% set illustration_preset = image_preset('vertical450') %}
 
 <div class="col-12 d-lg-none order-0 relative">
     <div class="profile-banner-mobile">
-        <img src="{{ illustration_src }}" alt="{{ personnage.nomComplet }}" title="{{ personnage.nomComplet }}" />
+        <img src="{{ illustration_src }}" alt="{{ character.nomComplet }}" title="{{ character.nomComplet }}" />
     </div>
-    {{ include('parts/badge-access.html.twig', {state: element_state(personnage)}) }}
+    {{ include('parts/badge-access.html.twig', {state: element_state(character)}) }}
 </div>
 
 {# ============================= #}
@@ -33,26 +33,32 @@
 <div class="col-12 col-lg-4 order-2 order-lg-1">
     <div class="card card-body profile-infos">
 
-        {% set fiche_visible = personnage.fichePersonnage is not null and (is_own_character or is_mj()) %}
-        {% set fiche_addable = personnage.fichePersonnage is null and is_mj() %}
+        {% set sheet_visible = character.fichePersonnage is not null and (is_own_character or is_gm()) %}
+        {% set sheet_addable = character.fichePersonnage is null and is_gm() %}
 
         <div class="relative">
-            <div class="profile-illustration d-none d-lg-block {{ fiche_visible or fiche_addable ? 'with-btn' }}">
-                <img class="img-fluid w-100" src="{{ illustration_src }}" width="{{ illustration_preset.width }}" height="{{ illustration_preset.height }}" alt="{{ personnage.nomComplet }}" title="{{ personnage.nomComplet }}" />
-                {{ include('parts/badge-access.html.twig', {state: element_state(personnage)}) }}
+            <div class="profile-illustration d-none d-lg-block {{ sheet_visible or sheet_addable ? 'with-btn' }}">
+                <img class="img-fluid w-100" src="{{ illustration_src }}" width="{{ illustration_preset.width }}" height="{{ illustration_preset.height }}" alt="{{ character.nomComplet }}" title="{{ character.nomComplet }}" />
+                {{ include('parts/badge-access.html.twig', {state: element_state(character)}) }}
             </div>
 
-            {% if fiche_visible %}
+            {% if sheet_visible or sheet_addable %}
                 <div class="profile-btn-fiche">
-                    <a class="btn-primary-style btn-medium{% if not is_own_character %} gm{% endif %}" href="{{ path('characters_sheet', {id: personnage.fichePersonnage.id}) }}">
-                        <i class="fas fa-scroll"></i> Voir la Fiche de Jeu
-                    </a>
-                </div>
-            {% elseif fiche_addable %}
-                <div class="profile-btn-fiche">
-                    {{ include('btns/btn-add-element.html.twig', {
-                        entity: 'sheet', label_one: 'Fiche Personnage', options: 'character=' ~ personnage.id, position: ''
-                    }) }}
+                    {% if sheet_visible %}
+                        <a class="btn-primary-style btn-medium{% if not is_own_character %} gm{% endif %}" href="{{ path('characters_sheet', {id: character.fichePersonnage.id}) }}">
+                            <i class="fas fa-scroll"></i> Voir la Fiche de Jeu
+                        </a>
+                    {% else %}
+                        {{ include('btns/btn-add-element.html.twig', {
+                            entity: 'sheet', label_one: 'Fiche Personnage', options: 'character=' ~ character.id, position: ''
+                        }) }}
+                    {% endif %}
+
+                    {% if is_gm() %}
+                        <a class="btn-primary-style btn-medium gm" href="{{ path('characters_profile_markdown', {id: character.id}) }}">
+                            <i class="fa-solid fa-square-binary"></i> Export Infos .md
+                        </a>
+                    {% endif %}
                 </div>
             {% endif %}
         </div>
@@ -66,41 +72,41 @@
             </li>
         {% endif %}
 
-        {% if personnage.clan is defined and personnage.clan is not empty %}
+        {% if character.clan is defined and character.clan is not empty %}
             <li class="list-group-item infos-item">
                 Clan :
-                <a href="{{ path('world_clan', {id: personnage.clan.id} ) }}">
-                    {{ personnage.clan.nom }}
-                    <img class="img-48" src="{{ asset(image_small(personnage.clan.mon|default(NA_MON))) }}" alt="Mon du Clan {{personnage.clan.nom}}" title="Mon du Clan {{personnage.clan.nom}}" />
+                <a href="{{ path('world_clan', {id: character.clan.id} ) }}">
+                    {{ character.clan.nom }}
+                    <img class="img-48" src="{{ asset(image_small(character.clan.mon|default(NA_MON))) }}" alt="Mon du Clan {{character.clan.nom}}" title="Mon du Clan {{character.clan.nom}}" />
                 </a>
             </li>
         {% endif %}
 
-        {% if personnage.famille is defined and personnage.famille is not empty %}
+        {% if character.famille is defined and character.famille is not empty %}
             <li class="list-group-item infos-item">
                 Famille :
-                <a href="{{ path('world_clan', {id: personnage.clan.id, '_fragment': personnage.famille.nom } ) }}">
-                    {{ personnage.famille.nom }}
+                <a href="{{ path('world_clan', {id: character.clan.id, '_fragment': character.famille.nom } ) }}">
+                    {{ character.famille.nom }}
                     <img
-                    class="img-48 rounded-circle" src="{{ asset(image_small(personnage.famille.mon|default(NA_MON))) }}"
-                    alt="Mon de la Famille {{personnage.famille.nom}}" title="Mon de la Famille {{personnage.famille.nom}}"
+                    class="img-48 rounded-circle" src="{{ asset(image_small(character.famille.mon|default(NA_MON))) }}"
+                    alt="Mon de la Famille {{character.famille.nom}}" title="Mon de la Famille {{character.famille.nom}}"
                     />
                 </a>
             </li>
         {% endif %}
 
-        {% if personnage.ecole is defined and personnage.ecole is not empty %}
+        {% if character.ecole is defined and character.ecole is not empty %}
             <li class="list-group-item infos-item">
                 École :
-                <a href="{{ path('rules_dojo', {id: personnage.ecole.id} ) }}">
-                    {{ personnage.ecole.nom }}
-                    <img class="img-48" src="{{ asset(image_small(personnage.classe.icone|default(NA_CLASS_ICO))) }}" alt="Classe {{personnage.classe.nom}}" title="Classe {{personnage.classe.nom}}" />
+                <a href="{{ path('rules_dojo', {id: character.ecole.id} ) }}">
+                    {{ character.ecole.nom }}
+                    <img class="img-48" src="{{ asset(image_small(character.classe.icone|default(NA_CLASS_ICO))) }}" alt="Classe {{character.classe.nom}}" title="Classe {{character.classe.nom}}" />
                 </a>
             </li>
         {% endif %}
 
-      {% if personnage.joueur is not empty %}
-        <li class="list-group-item infos-item">Joueur : <span class="bold">{{ personnage.joueur.pseudo }}</span></li>
+      {% if character.joueur is not empty %}
+        <li class="list-group-item infos-item">Joueur : <span class="bold">{{ character.joueur.pseudo }}</span></li>
       {% endif %}
 
       {% if free_position or current_position %}
@@ -112,9 +118,9 @@
           </a>
           {% if map_visible %}
             {{ include('parts/map.html.twig', {
-              lieux,
+              locations,
               current: known_position ? current_position : null,
-              party: known_position ? {(current_position.id): [personnage]} : {},
+              party: known_position ? {(current_position.id): [character]} : {},
               center: free_position,
               wanderers: free_position ? [free_position] : [],
               zoom: known_position ? current_position.zoom : null,
@@ -137,7 +143,7 @@
     <div class="card card-body">
 
         {% if can_edit %}
-        {{ form_start(form, {action: path('characters_profile_edit', {id: personnage.id})}) }}
+        {{ form_start(form, {action: path('characters_profile_edit', {id: character.id})}) }}
         {% endif %}
 
         <div class="profile-maincontent profile-zone">
@@ -148,11 +154,11 @@
 
             <h2 class="profile-description-title">Histoire</h2>
 
-            {% if personnage.titres is defined and personnage.titres is not empty %}
-                <h4 class="card-title-cartouche">{{ personnage.titres }}</h4>
+            {% if character.titres is defined and character.titres is not empty %}
+                <h4 class="card-title-cartouche">{{ character.titres }}</h4>
             {% endif %}
 
-            <p class="text-description text-compact read-only">{{ personnage.description|default('')|raw|nl2br }}</p>
+            <p class="text-description text-compact read-only">{{ character.description|default('')|raw|nl2br }}</p>
 
             {% if can_edit %}
                 {{ form_widget(form.description, {attr: {class: 'edit-only'}}) }}
@@ -167,7 +173,7 @@
                 {% for development in developments %}
                     {% set scene = development.scene %}
                     {% set episode = scene.episodeParent %}
-                    {% set chapitre = episode.chapitreParent %}
+                    {% set chapter = episode.chapitreParent %}
                     {% set scene_url = path('story_episode', {id: episode.id, '_fragment': 'scn' ~ scene.numero}) %}
 
                     <article class="development-line">
@@ -177,15 +183,15 @@
                                     <img class="img-18 invert mr-1 align-middle" src="{{ asset(STORY_EPISODE_ICO) }}" alt="" />
                                     <strong>{{ scene.titre }}</strong>
                                 </a>
-                                {% if is_mj() %}
+                                {% if is_gm() %}
                                     {{ include('/btns/btn-icon-edit.html.twig', {
-                                    entity: 'development', un_element: development, position: 'align-middle',
+                                    entity: 'development', record: development, position: 'align-middle',
                                     redirect: 'development', size: 'btn-icon-mini', color: 'link-gm',
                                     }) }}
                                 {% endif %}
                             </span>
 
-                            <span class="development-meta">{{ chapitre.titre }} — EP #{{ episode.numeroSaison }} - Scène {{ scene.numero }}</span>
+                            <span class="development-meta">{{ chapter.titre }} — EP #{{ episode.numeroSaison }} - Scène {{ scene.numero }}</span>
                             {% if development.estMort %}
                                 <strong class="text-dead">MORT</strong>
                             {% endif %}
@@ -203,7 +209,7 @@
                 <div class="zone-actions">
                     {{ include('/btns/btn-add-element.html.twig', {
                         entity: 'development', label_one: 'développement',
-                        position: '', options: 'character=' ~ personnage.id,
+                        position: '', options: 'character=' ~ character.id,
                         variant: 'btn-quaternary-style link-gm',
                     }) }}
                 </div>
@@ -219,8 +225,8 @@
                     {{ include('/parts/divider-ornament.html.twig') }}
                     <h2 class="profile-description-title">Secrets</h2>
 
-                    {% if personnage.playerNotes is not empty %}
-                        <p class="text-description text-compact read-only">{{ personnage.playerNotes|nl2br }}</p>
+                    {% if character.playerNotes is not empty %}
+                        <p class="text-description text-compact read-only">{{ character.playerNotes|nl2br }}</p>
                     {% else %}
                         <p class="profile-description-na">Rien pour le moment.</p>
                     {% endif %}
@@ -230,7 +236,7 @@
                 </div>
 
 
-                {% if is_mj() %}
+                {% if is_gm() %}
                     {# ===================================== #}
                     {# ===== [CARD-SECTION] GM's NOTES ===== #}
                     {# ===================================== #}
@@ -239,8 +245,8 @@
                         {{ include('/parts/divider-ornament.html.twig') }}
                         <h2 class="profile-description-title gm">Notes du Maître de Jeu</h2>
 
-                        {% if personnage.gmNotes is not empty %}
-                            <p class="text-description text-compact read-only">{{ personnage.gmNotes|nl2br }}</p>
+                        {% if character.gmNotes is not empty %}
+                            <p class="text-description text-compact read-only">{{ character.gmNotes|nl2br }}</p>
                         {% else %}
                             <p class="profile-description-na">Rien pour le moment.</p>
                         {% endif %}
@@ -266,9 +272,9 @@
         <h2 class="heading-cardtitle">Historique</h2>
         <hr>
         <div class="card-text profile-historique">
-            {{ include('parts/history.html.twig', {historique, saison_courante}) }}
+            {{ include('parts/history.html.twig', {history, current_season}) }}
             {% if creation_xp > 0 %}
-            <p class="profile-creation">Création du personnage {{ personnage.prenom }} avec <strong>{{ creation_xp }}xp</strong>.</p>
+            <p class="profile-creation">Création du personnage {{ character.prenom }} avec <strong>{{ creation_xp }}xp</strong>.</p>
             {% endif %}
         </div>
     </div>
@@ -280,7 +286,7 @@
 
 {{ include('/parts/picture-grid.html.twig', {
     variant: 'portrait',
-    title: personnage.estPj ? 'Autres PJs' : 'Autres PNJs',
+    title: character.estPj ? 'Autres PJs' : 'Autres PNJs',
     items: other_characters, route: 'characters_profile', hide_dead: true,
     limit: 12,
     wrapper: 'col-12 col-lg-4 order-4',

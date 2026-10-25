@@ -302,7 +302,7 @@ class CharactersController extends AbstractController
             'objects_json'       => $objectsJson,
             'bare_hands_id'      => $bareHandsId,
             'category' => 'characters',
-            'entity' => 'fiche',
+            'entity' => 'sheet',
             'un_element' => $sheet,
             'nom' => $sheet->getPersonnage()->getNomComplet(),
         ]);

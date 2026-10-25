@@ -55,10 +55,10 @@ class AdminArchiveController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
 
-            $nouvelleImage = $form->get('image')->getData();
-            if (!empty($nouvelleImage)) {
+            $newImage = $form->get('image')->getData();
+            if (!empty($newImage)) {
                 $prefix = 'archive-' . $archive->getTitre() . '-image';
-                $archive->setImage($fileHandler->handle($nouvelleImage, null, $prefix, 'archives', 'landscape720'));
+                $archive->setImage($fileHandler->handle($newImage, null, $prefix, 'archives', 'landscape720'));
             }
 
             $em->persist($archive);
@@ -96,10 +96,10 @@ class AdminArchiveController extends AbstractController
 
         if($form->isSubmitted() && $form->isValid()) {
 
-            $nouvelleImage = $form->get('image')->getData();
-            if (!empty($nouvelleImage)) {
+            $newImage = $form->get('image')->getData();
+            if (!empty($newImage)) {
                 $prefix = 'archive-' . $archive->getTitre() . '-image';
-                $archive->setImage($fileHandler->handle($nouvelleImage, $archive->getImage(), $prefix, 'archives', 'landscape720'));
+                $archive->setImage($fileHandler->handle($newImage, $archive->getImage(), $prefix, 'archives', 'landscape720'));
             } elseif ($request->request->get('remove_image') === '1' && $archive->getImage()) {
                 $fileHandler->handle(null, $archive->getImage(), null, 'archives');
                 $archive->setImage(null);

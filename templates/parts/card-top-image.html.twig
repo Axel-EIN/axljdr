@@ -1,5 +1,5 @@
 {% set has_pdf = pdf is defined and pdf is not empty %}
-{% set show_button = pdf_button|default(false) or (app.user and is_granted('ROLE_MJ')) %}
+{% set show_button = pdf_button|default(false) or is_mj() %}
 
 <div class="gradient-after-down {{ classes|default('') }}">
   {% if has_pdf and not show_button and app.user %}

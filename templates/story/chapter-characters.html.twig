@@ -1,58 +1,58 @@
 
-{% set pj_ids, pjs, pnj_ids, pnjs = [], [], [], [] %}
-{% set lieu_ids, lieux_chapitre = [], [] %}
-{% set bloc = bloc|default('personnages') %}
+{% set pc_ids, pcs, npc_ids, npcs = [], [], [], [] %}
+{% set location_ids, chapter_locations = [], [] %}
+{% set mode = mode|default('characters') %}
 
-{% for un_episode in episode is defined ? [episode] : un_chapitre.episodes %}
-  {% for une_scene in un_episode.scenes %}
-    {% for une_participation in bloc == 'personnages' ? une_scene.participations : [] %}
-      {% set perso = une_participation.personnage %}
-      {% if element_listed(perso, true) and une_participation.estPj and perso.id not in pj_ids %}
-        {% set pj_ids = pj_ids|merge([perso.id]) %}
-        {% set pjs = pjs|merge([perso]) %}
-      {% elseif element_listed(perso, true) and not une_participation.estPj and perso.id not in pnj_ids %}
-        {% set pnj_ids = pnj_ids|merge([perso.id]) %}
-        {% set pnjs = pnjs|merge([perso]) %}
+{% for listed_episode in episode is defined ? [episode] : chapter.episodes %}
+  {% for scene in listed_episode.scenes %}
+    {% for participation in mode == 'characters' ? scene.participations : [] %}
+      {% set character = participation.personnage %}
+      {% if element_listed(character, true) and participation.estPj and character.id not in pc_ids %}
+        {% set pc_ids = pc_ids|merge([character.id]) %}
+        {% set pcs = pcs|merge([character]) %}
+      {% elseif element_listed(character, true) and not participation.estPj and character.id not in npc_ids %}
+        {% set npc_ids = npc_ids|merge([character.id]) %}
+        {% set npcs = npcs|merge([character]) %}
       {% endif %}
     {% endfor %}
-    {% if bloc == 'lieux' and une_scene.lieu is not null and une_scene.lieu.id not in lieu_ids and element_listed(une_scene.lieu) %}
-      {% set lieu_ids = lieu_ids|merge([une_scene.lieu.id]) %}
-      {% set lieux_chapitre = lieux_chapitre|merge([une_scene.lieu]) %}
+    {% if mode == 'locations' and scene.lieu is not null and scene.lieu.id not in location_ids and element_listed(scene.lieu) %}
+      {% set location_ids = location_ids|merge([scene.lieu.id]) %}
+      {% set chapter_locations = chapter_locations|merge([scene.lieu]) %}
     {% endif %}
   {% endfor %}
 {% endfor %}
 
-{% set vue = episode is defined ? ' episode-view' : ' chapter-view' %}
+{% set view_class = episode is defined ? ' episode-view' : ' chapter-view' %}
 
-{% if lieux_chapitre|length > 0 %}
+{% if chapter_locations|length > 0 %}
   <div class="chapter-lieux">
     <div class="label-du-groupe">Lieux</div>
     <div class="chapter-lieux-row">
-      {% for lieu in lieux_chapitre %}
-        <a class="chapter-lieu-link" href="{{ path('world_location', {id: lieu.id}) }}" title="{{ lieu.nom }}">
-          <img class="chapter-lieu-icon" src="{{ asset(lieu.icone|default(NA_LIEU_ICO)) }}" alt="Icone de {{ lieu.nom }}" />
+      {% for location in chapter_locations %}
+        <a class="chapter-lieu-link" href="{{ path('world_location', {id: location.id}) }}" title="{{ location.nom }}">
+          <img class="chapter-lieu-icon" src="{{ asset(location.icone|default(NA_LIEU_ICO)) }}" alt="Icone de {{ location.nom }}" />
         </a>
       {% endfor %}
     </div>
   </div>
 {% endif %}
 
-{% for groupe in [{cle: 'pjs', label: 'Joueurs', persos: pjs}, {cle: 'pnjs', label: 'Non-joueurs', persos: pnjs}] %}
-  {% if groupe.persos|length > 0 %}
-    <div class="chapter-characters {{ groupe.cle }}{{ vue }}">
-      <div class="label-du-groupe {{ groupe.cle == 'pnjs' ? 'pnjs' : '' }}">{{ groupe.label }}</div>
+{% for group in [{key: 'pjs', label: 'Joueurs', characters: pcs}, {key: 'pnjs', label: 'Non-joueurs', characters: npcs}] %}
+  {% if group.characters|length > 0 %}
+    <div class="chapter-characters {{ group.key }}{{ view_class }}">
+      <div class="label-du-groupe {{ group.key == 'pnjs' ? 'pnjs' : '' }}">{{ group.label }}</div>
       <div class="chapter-portraits-grid">
-        {% for perso in groupe.persos %}
+        {% for character in group.characters %}
           {% set fallback = NA_PERSO_PORTRAIT %}
-          {% if perso.icone is null and perso.genre == 'F' %}{% set fallback = attribute(_context, 'NA_PERSO_PORTRAIT_F')|default(NA_PERSO_PORTRAIT) %}
-          {% elseif perso.icone is null and perso.genre == 'M' %}{% set fallback = attribute(_context, 'NA_PERSO_PORTRAIT_M')|default(NA_PERSO_PORTRAIT) %}
+          {% if character.icone is null and character.genre == 'F' %}{% set fallback = attribute(_context, 'NA_PERSO_PORTRAIT_F')|default(NA_PERSO_PORTRAIT) %}
+          {% elseif character.icone is null and character.genre == 'M' %}{% set fallback = attribute(_context, 'NA_PERSO_PORTRAIT_M')|default(NA_PERSO_PORTRAIT) %}
           {% endif %}
-          <a class="chapter-portrait-link" href="{{ path('characters_profile', {id: perso.id}) }}" title="{{ perso.prenom }}">
-            <img class="chapter-portrait{{ vue }}{% if episode is defined %} in-episode{% endif %}"
-                 src="{{ asset(perso.icone|default(fallback)) }}" alt="Portrait de {{ perso.prenom }}" />
-            {% set state = element_state(perso) %}
-            {% if is_mj() or (state == 'discovered' and perso.manualUnlock) %}
-              {{ include('parts/badge-access.html.twig', {state: state, variant: is_mj() ? 'mini hover-only' : 'mini'}) }}
+          <a class="chapter-portrait-link" href="{{ path('characters_profile', {id: character.id}) }}" title="{{ character.prenom }}">
+            <img class="chapter-portrait{{ view_class }}{% if episode is defined %} in-episode{% endif %}"
+                 src="{{ asset(character.icone|default(fallback)) }}" alt="Portrait de {{ character.prenom }}" />
+            {% set state = element_state(character) %}
+            {% if is_gm() or (state == 'discovered' and character.manualUnlock) %}
+              {{ include('parts/badge-access.html.twig', {state: state, variant: is_gm() ? 'mini hover-only' : 'mini'}) }}
             {% endif %}
           </a>
         {% endfor %}

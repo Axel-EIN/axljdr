@@ -1,16 +1,16 @@
-{% set chapter_image = un_chapitre.image|default(NA_CHAPITRE) %}
-<section id="read-head-ch-id{{ un_chapitre.id }}" class="chapter-backdrop banner" style="--chapter-color: {{ un_chapitre.couleur }}">
+{% set chapter_image = chapter.image|default(NA_CHAPITRE) %}
+<section id="read-head-ch-id{{ chapter.id }}" class="chapter-backdrop banner" style="--chapter-color: {{ chapter.couleur }}">
 
   <img class="chapter-backdrop-image zoomed{{ image_bright(chapter_image) ? ' bright' }}" src="{{ asset(chapter_image) }}" {% if lazy ?? true %}loading="lazy"{% endif %} alt="" />
 
   <div class="container">
 
-    {% if is_mj() %}
+    {% if is_gm() %}
 
-      {% if un_chapitre.numero == season.chapitres|length %}
-        {% set label, numero, position = 'Ajouter', (un_chapitre.numero + 1), 'top-center' %}
+      {% if chapter.numero == season.chapitres|length %}
+        {% set label, number, position = 'Ajouter', (chapter.numero + 1), 'top-center' %}
       {% else %}
-        {% set label, numero, position = 'Insérer', (un_chapitre.numero + 1), 'top-center' %}
+        {% set label, number, position = 'Insérer', (chapter.numero + 1), 'top-center' %}
       {% endif %}
 
       <div class="{{position}} mt-1">
@@ -19,43 +19,43 @@
 
     {% endif %}
 
-    {% set episodes_visibles = [] %}
-    {% for un_episode in un_chapitre.episodes %}
-      {% if un_episode.scenes|length > 0 or is_mj() %}
-        {% set episodes_visibles = episodes_visibles|merge([un_episode]) %}
+    {% set visible_episodes = [] %}
+    {% for episode in chapter.episodes %}
+      {% if episode.scenes|length > 0 or is_gm() %}
+        {% set visible_episodes = visible_episodes|merge([episode]) %}
       {% endif %}
     {% endfor %}
 
     <div class="header header-chapter d-flex flex-column" >
       <span class="chapter-number text-left">
-        {% if is_mj() %}
-          {% set color, position, redirect, entity, un_element, size = 'text-white50', 'mr-2 align-middle', 'story', 'chapter', un_chapitre, 'btn-icon-medium' %}
+        {% if is_gm() %}
+          {% set color, position, redirect, entity, record, size = 'text-white50', 'mr-2 align-middle', 'story', 'chapter', chapter, 'btn-icon-medium' %}
           {{ include('/btns/btn-icon-edit.html.twig') }}
         {% endif %}
-        CHAPITRE {{ un_chapitre.numero }}
+        CHAPITRE {{ chapter.numero }}
       </span>
       <div><hr></div>
 
-      {{ include('story/chapter-characters.html.twig', {un_chapitre, bloc: 'lieux'}) }}
+      {{ include('story/chapter-characters.html.twig', {chapter, mode: 'locations'}) }}
 
       <div>
-        <h2 class="heading-chapter{% if un_chapitre.titre|length > 20 %} reduced{% endif %}">{{ un_chapitre.titre|relief|raw }}</h2>
+        <h2 class="heading-chapter{% if chapter.titre|length > 20 %} reduced{% endif %}">{{ chapter.titre|relief|raw }}</h2>
         <div class="chapter-intro relative">
-          {{ include('story/chapter-characters.html.twig', {un_chapitre}) }}
-          {% if un_chapitre.citation is not empty %}
-            <p class="quote quote-chapter">{{ un_chapitre.citation|nl2br }}</p>
+          {{ include('story/chapter-characters.html.twig', {chapter}) }}
+          {% if chapter.citation is not empty %}
+            <p class="quote quote-chapter">{{ chapter.citation|nl2br }}</p>
           {% endif %}
-          {% if episodes_visibles is not empty %}
+          {% if visible_episodes is not empty %}
             <button type="button" class="btn-primary-style btn-large voir" data-toggle="collapse"
-               data-target="#ch{{ un_chapitre.numero }}-episodes" aria-controls="ch{{ un_chapitre.numero }}-episodes"
-               aria-expanded="false" aria-label="Voir les épisodes du chapitre {{ un_chapitre.numero }}">
+               data-target="#ch{{ chapter.numero }}-episodes" aria-controls="ch{{ chapter.numero }}-episodes"
+               aria-expanded="false" aria-label="Voir les épisodes du chapitre {{ chapter.numero }}">
               <i class="fa-solid fa-scroll fa-bounce" aria-hidden="true"></i>&nbsp;&nbsp;Voir les Épisodes
             </button>
           {% else %}
             <div class="alert alert-light mx-auto alert-persist">
               <strong>Il n'y a pas encore de session disponible !</strong>&nbsp;&nbsp;
-              {% if is_mj() %}
-                <a class="btn-quaternary-style text-white50" href="{{path('admin_episode_create')}}?numero=1&chapterID={{un_chapitre.id}}&redirect=story">
+              {% if is_gm() %}
+                <a class="btn-quaternary-style text-white50" href="{{path('admin_episode_create')}}?number=1&chapterID={{chapter.id}}&redirect=story">
                   <i class="fas fa-plus-square" aria-hidden="true"></i>&nbsp;&nbsp;<strong>Ajouter une Session</strong>
                 </a>
               {% endif %}
@@ -66,16 +66,16 @@
 
     </div>
 
-    <div id="ch{{ un_chapitre.numero }}-episodes" class="collapse mb-4 mt-2">
+    <div id="ch{{ chapter.numero }}-episodes" class="collapse mb-4 mt-2">
       <div class="container">
         <div class="row justify-content-center relative">
 
-          {% for un_episode in episodes_visibles %}
+          {% for episode in visible_episodes %}
             {{ include('/story/episode-card.html.twig') }}
           {% endfor %}
 
-          {% if is_mj() %}
-            <a class="absolute btn-display-icon" href="{{path('admin_episode_create')}}?numero={{(un_chapitre.episodes|length)+1}}&chapterID={{un_chapitre.id}}&redirect=story">
+          {% if is_gm() %}
+            <a class="absolute btn-display-icon" href="{{path('admin_episode_create')}}?number={{(chapter.episodes|length)+1}}&chapterID={{chapter.id}}&redirect=story">
               <i class="fas fa-plus-square" title="Ajouter une Session"></i>
             </a>
           {% endif %}

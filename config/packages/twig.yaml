@@ -21,9 +21,9 @@ twig:
             dojo: 'École'
             episode: 'Épisode'
             library: 'Bibliothèque'
-            lieu: 'Lieu'
+            location: 'Lieu'
             lore: 'Lore'
-            objet: 'Objet'
+            object: 'Objet'
             personnage: 'Personnage'
             rule: 'Règle'
 

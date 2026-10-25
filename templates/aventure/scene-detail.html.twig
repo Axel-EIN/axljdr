@@ -121,9 +121,8 @@
 
     </div>
 
-    {% set is_mj = app.user and is_granted("ROLE_MJ") %}
 
-    {% if is_mj %}
+    {% if is_mj() %}
         {% set color, entity, un_element, redirect = 'link-gm', 'scene', une_scene, 'episode' %}
         <div class="d-flex justify-content-center">
 
@@ -136,6 +135,6 @@
         </div>
     {% endif %}
 
-    {{ include('/parts/divider-ornament.html.twig', is_mj ? {} : {classes: 'my-3 mt-lg-n4 mb-lg-5'}) }}
+    {{ include('/parts/divider-ornament.html.twig', is_mj() ? {} : {classes: 'my-3 mt-lg-n4 mb-lg-5'}) }}
 
 </article>

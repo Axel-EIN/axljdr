@@ -6,7 +6,7 @@
     {% if xp_precedent != un_personnage.xp %}{% set rang = loop.index %}{% endif %}
     {% set xp_precedent = un_personnage.xp %}
 
-    <a class="ranking-line" href="{{ path('personnage_profil', {id: un_personnage.id}) }}" title="{{ un_personnage.prenom }}">
+    <a class="ranking-line" href="{{ path('characters_profile', {id: un_personnage.id}) }}" title="{{ un_personnage.prenom }}">
       <span class="ranking-rank">{{ rang }}</span>
       <span class="portrait-slot">
         <img class="character-portrait medium outlined {{ un_personnage.id in mine ? '' : 'player' }} {{ un_personnage.estMort ? 'effect-dead' }}"

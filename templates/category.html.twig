@@ -17,8 +17,8 @@
                 </div>
                 <hr class="w-50">
                 {% set has_long_word = false %}
-                {% for mot in header_down|split(' ') %}
-                    {% if mot|length > 9 %}{% set has_long_word = true %}{% endif %}
+                {% for word in header_down|split(' ') %}
+                    {% if word|length > 9 %}{% set has_long_word = true %}{% endif %}
                 {% endfor %}
                 <h1 class="heading-category{% if has_long_word %} reduced{% endif %}">
                     {{header_down|relief|raw}}
@@ -32,19 +32,19 @@
 
             {% block content_top %}{% endblock %}
 
-            {% set compteur = 1 %}
-            {% for une_section in sections %}
-                {% set entity, label_one = une_section['entity'], une_section['label_one']|default(null) %}
+            {% set counter = 1 %}
+            {% for section in sections %}
+                {% set entity, label_one = section['entity'], section['label_one']|default(null) %}
 
-                <section id="{{une_section['entity']}}">
+                <section id="{{section['entity']}}">
 
                     <div class="relative">
                         <h2 class="heading-categorysubsection">
-                            <span class="small-word">{{une_section['titleLight']}}</span><strong>{{une_section['titleStrong']}}</strong>
+                            <span class="small-word">{{section['titleLight']}}</span><strong>{{section['titleStrong']}}</strong>
                         </h2>
                         <hr class="d-none d-lg-block">
                         <div class="section-aside">
-                            {% if block('section_aside' ~ compteur) is defined %}{{ block('section_aside' ~ compteur) }}{% endif %}
+                            {% if block('section_aside' ~ counter) is defined %}{{ block('section_aside' ~ counter) }}{% endif %}
                             {% if label_one is not empty %}
                                 {{ include('/btns/btn-add-element.html.twig', {entity, label_one, position: ''}) }}
                             {% endif %}
@@ -52,12 +52,12 @@
                     </div>
                     <div class="row">
 
-                        {{ block('section_content' ~ compteur) }}
+                        {{ block('section_content' ~ counter) }}
                         
                     </div>
                 </section>
 
-                {% set compteur = compteur + 1 %}
+                {% set counter = counter + 1 %}
             {% endfor %}
             
         </div>

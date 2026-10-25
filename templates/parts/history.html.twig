@@ -6,7 +6,7 @@
   {% set new_season = previous is null or previous.chapitreParent.saisonParent.id != season.id %}
 
   {% if new_season %}
-    <h3 class="historique-saison{{ previous is null ? ' first' : '' }}">
+    <h3 class="history-season{{ previous is null ? ' first' : '' }}">
       <img class="img-48 mr-2" src="{{ asset(STORY_SEASON_ICO) }}" alt="" />
       <span class="text-white">{{ season.numero == current_season|default(null) ? 'Saison en cours' : season.titre }}</span>
     </h3>
@@ -20,16 +20,16 @@
     </h4>
   {% endif %}
 
-  <h5 class="historique-episode">
+  <h5 class="history-episode">
     <a  class="chevron-toggle d-flex align-items-center flex-grow-1"
         data-toggle="collapse" href="#episode{{ episode.id }}" role="button"
         aria-expanded="false" aria-controls="episode{{ episode.id }}">
       <img class="img-24 invert mr-2" src="{{ asset(STORY_EPISODE_ICO) }}" alt="" />
-      <span class="historique-numero text-muted mr-2">#{{ episode.numeroSaison }}</span>
+      <span class="history-number text-muted mr-2">#{{ episode.numeroSaison }}</span>
       {{ episode.titre }}
       <i class="fas fa-chevron-down ml-2 text-small"></i>
       {% if entry.xp > 0 %}
-        <span class="ml-auto text-nowrap historique-xp">{{ include('parts/xp-gain.html.twig', {xp: entry.xp, total: entry.xpWithBonus, format: 'medium', sign: '+'}) }}</span>
+        <span class="ml-auto text-nowrap history-xp">{{ include('parts/xp-gain.html.twig', {xp: entry.xp, total: entry.xpWithBonus, format: 'medium', sign: '+'}) }}</span>
       {% endif %}
     </a>
     <a class="ml-2 mr-2 mr-lg-0 text-small" href="{{ path('story_episode', {id: episode.id}) }}" title="Voir l'épisode">
@@ -39,7 +39,7 @@
 
   <div id="episode{{ episode.id }}" class="collapse">
     {% for line in entry.lines %}
-      <div class="historique-scene">
+      <div class="history-scene">
         <a href="{{ path('story_episode', {id: episode.id, '_fragment': 'scn' ~ line.scene.numero}) }}">
           Scène {{ line.scene.numero }} — <strong>{{ line.scene.titre }}</strong>
         </a>
@@ -47,7 +47,7 @@
         {% if line.dead %}
           <strong class="text-dead">MORT</strong>
         {% elseif line.xp > 0 %}
-          <span class="text-nowrap historique-xp">
+          <span class="text-nowrap history-xp">
             {{ include('parts/xp-gain.html.twig', {xp: line.xp, sign: '+'}) }}
           </span>
         {% endif %}

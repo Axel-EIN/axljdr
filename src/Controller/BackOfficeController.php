@@ -48,10 +48,10 @@ class BackOfficeController extends AbstractController
 
         RuleRepository $ruleRepository,
         LibraryRepository $libraryRepository,
-        ClasseRepository $classeRepository,
+        ClasseRepository $classRepository,
         EcoleRepository $ecoleRepository,
-        AvantageRepository $avantageRepository,
-        CompetenceRepository $competenceRepository,
+        AvantageRepository $advantageRepository,
+        CompetenceRepository $skillRepository,
         ObjetRepository $objetRepository,
         SortRepository $sortRepository,
 
@@ -302,16 +302,16 @@ class BackOfficeController extends AbstractController
         }
 
         $i++;
-        $admin_elements[$i]['element'] = 'classe' ;
+        $admin_elements[$i]['element'] = 'class' ;
         $admin_elements[$i]['label'] = 'Classes';
         $admin_elements[$i]['genre'] = 'F';
         $admin_elements[$i]['categorie'] = 'Règles';
-        $admin_elements[$i]['nbr'] = $classeRepository->countClasses();
-        $lastClasse = $classeRepository->findOneBy(array(),array('id' => 'DESC'));
-        if (!empty($lastClasse)) {
-            $admin_elements[$i]['last'] = $lastClasse;
-            $admin_elements[$i]['nom'] = $lastClasse->getNom();
-            $admin_elements[$i]['image'] = $lastClasse->getImage();
+        $admin_elements[$i]['nbr'] = $classRepository->countClasses();
+        $lastClass = $classRepository->findOneBy(array(),array('id' => 'DESC'));
+        if (!empty($lastClass)) {
+            $admin_elements[$i]['last'] = $lastClass;
+            $admin_elements[$i]['nom'] = $lastClass->getNom();
+            $admin_elements[$i]['image'] = $lastClass->getImage();
         } else {
             $admin_elements[$i]['last'] = '';
             $admin_elements[$i]['nom'] = '';
@@ -336,15 +336,15 @@ class BackOfficeController extends AbstractController
         }
 
         $i++;
-        $admin_elements[$i]['element'] = 'avantage' ;
+        $admin_elements[$i]['element'] = 'advantage' ;
         $admin_elements[$i]['label'] = 'Avantages / Dés.';
         $admin_elements[$i]['genre'] = 'M';
         $admin_elements[$i]['categorie'] = 'Règles';
-        $admin_elements[$i]['nbr'] = $avantageRepository->countAvantages();
-        $lastAvantage = $avantageRepository->findOneBy(array(),array('id' => 'DESC'));
-        if (!empty($lastAvantage)) {
-            $admin_elements[$i]['last'] = $lastAvantage;
-            $admin_elements[$i]['nom'] = $lastAvantage->getNom();
+        $admin_elements[$i]['nbr'] = $advantageRepository->countAvantages();
+        $lastAdvantage = $advantageRepository->findOneBy(array(),array('id' => 'DESC'));
+        if (!empty($lastAdvantage)) {
+            $admin_elements[$i]['last'] = $lastAdvantage;
+            $admin_elements[$i]['nom'] = $lastAdvantage->getNom();
             $admin_elements[$i]['image'] = '';
         } else {
             $admin_elements[$i]['last'] = '';
@@ -353,15 +353,15 @@ class BackOfficeController extends AbstractController
         }
 
         $i++;
-        $admin_elements[$i]['element'] = 'competence' ;
+        $admin_elements[$i]['element'] = 'skill' ;
         $admin_elements[$i]['label'] = 'Compétences';
         $admin_elements[$i]['genre'] = 'F';
         $admin_elements[$i]['categorie'] = 'Règles';
-        $admin_elements[$i]['nbr'] = $competenceRepository->countCompetences();
-        $lastCompetence = $competenceRepository->findOneBy(array(),array('id' => 'DESC'));
-        if (!empty($lastCompetence)) {
-            $admin_elements[$i]['last'] = $lastCompetence;
-            $admin_elements[$i]['nom'] = $lastCompetence->getNom();
+        $admin_elements[$i]['nbr'] = $skillRepository->countCompetences();
+        $lastSkill = $skillRepository->findOneBy(array(),array('id' => 'DESC'));
+        if (!empty($lastSkill)) {
+            $admin_elements[$i]['last'] = $lastSkill;
+            $admin_elements[$i]['nom'] = $lastSkill->getNom();
             $admin_elements[$i]['image'] = '';
         } else {
             $admin_elements[$i]['last'] = '';
@@ -387,7 +387,7 @@ class BackOfficeController extends AbstractController
         }
 
         $i++;
-        $admin_elements[$i]['element'] = 'sort' ;
+        $admin_elements[$i]['element'] = 'spell' ;
         $admin_elements[$i]['label'] = 'Sorts';
         $admin_elements[$i]['genre'] = 'M';
         $admin_elements[$i]['categorie'] = 'Règles';

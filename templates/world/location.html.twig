@@ -35,9 +35,9 @@
         {{ include('/parts/card-top-image.html.twig', {image: record.image, na_image: NA_LIEU, alt: 'Image de ' ~ record.nom, img_class: 'crop-169', title: name, classes: 'gradient-desktop', state: element_state(record)}) }}
       </div>
 
-      <div class="lieu-mobile-info d-lg-none text-center">
+      <div class="location-mobile-info d-lg-none text-center">
         {% if record.surnom is defined and record.surnom is not empty %}
-          <p class="lieu-surnom">{{ record.surnom }}</p>
+          <p class="location-nickname">{{ record.surnom }}</p>
         {% endif %}
 
         <div class="d-inline-flex justify-content-center align-items-center text-center">

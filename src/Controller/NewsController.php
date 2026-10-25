@@ -23,9 +23,9 @@ class NewsController extends AbstractController
     private const MARGE_DECOUVERTES = 2;
 
     private const DECOUVERTES = [
-        ['titre' => 'Personnages', 'vide' => 'Aucun personnage débloqué', 'variant' => 'portrait', 'cle' => 'personnage', 'max' => 4],
-        ['titre' => 'Lieux', 'vide' => 'Aucun lieu débloqué', 'variant' => 'icon', 'cle' => 'lieu', 'max' => 3],
-        ['titre' => 'Objets', 'vide' => 'Aucun objet débloqué', 'variant' => 'rule', 'field' => 'icon', 'cle' => 'objet', 'max' => 3],
+        ['titre' => 'Personnages', 'vide' => 'Aucun personnage découvert', 'variant' => 'portrait', 'cle' => 'personnage', 'max' => 4],
+        ['titre' => 'Lieux', 'vide' => 'Aucun lieu découvert', 'variant' => 'icon', 'cle' => 'lieu', 'max' => 3],
+        ['titre' => 'Objets', 'vide' => 'Aucun objet découvert', 'variant' => 'rule', 'field' => 'icon', 'cle' => 'objet', 'max' => 3],
     ];
 
     private const GROUPES = [
@@ -56,7 +56,7 @@ class NewsController extends AbstractController
     public function viewNews(NewsFeed $newsFeed, ClasseurXP $classeurXP, CurrentPlayer $currentPlayer, Visibility $visibility, Localisateur $localisateur): Response
     {
         $mesPersonnages = $currentPlayer->characterIds();
-        $monPersonnage = $currentPlayer->main();
+        $monPersonnage = $currentPlayer->navigatingCharacter();
 
         $participations = $newsFeed->lastParticipations(self::PARTICIPATIONS);
         $carte = $localisateur->carte($participations === [] ? null : $monPersonnage, true);
@@ -72,7 +72,7 @@ class NewsController extends AbstractController
         }
 
         $sections = [
-            ['entity' => 'aventure', 'titleLight' => 'Dernière ', 'titleStrong' => 'Séance'],
+            ['entity' => 'aventure', 'titleLight' => '', 'titleStrong' => 'Dernière Séance'],
             ['entity' => 'nouveautes', 'titleLight' => '', 'titleStrong' => 'Nouveautés'],
         ];
 

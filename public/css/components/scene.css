@@ -70,7 +70,8 @@
         text-overflow: ellipsis;
         padding-left: 0;
         padding-right: 0;
-        width: 95%;
+        left: 0;
+        width: 100%;
         border-top-left-radius: 0;
         border-top-right-radius: 0;
         bottom: -2.75rem;
@@ -108,10 +109,11 @@
     }
 
   @media (max-width: 991.98px) {
-    left: 0;
-    width: 110%;
-    top: -50px;
+    position: static;
+    width: 100%;
+    padding: 0.5rem;
     border-radius: 0;
     border: unset;
+    background-color: color-mix(in srgb, var(--color-earth), black 80%);
   }
 }

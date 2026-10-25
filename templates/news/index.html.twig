@@ -59,7 +59,7 @@
                                 badge_hover: true,
                                 variant: 'portrait',
                                 per_row: 4,
-                                empty_message: 'Aucune rencontre',
+                                empty_message: 'Aucun personnage rencontré',
                             }) }}
                         </div>
                     </div>
@@ -116,51 +116,106 @@
 
     <div class="col-12 col-lg-5 news-aside">
 
-        {% if mes_participations is not empty %}
+        {% if mon_personnage %}
             <div class="card card-body participations-card"
                 style="--character-image: url('{{ asset(mon_personnage.illustration|default(NA_PERSO_ILLU)) }}');{% if mon_personnage.clan %} --faction-color: {{ mon_personnage.clan.couleur }};{% endif %}">
-                <h3 class="label-amerigo news-subtitle">Mes Dernières Participations</h3>
-                {% for participation in mes_participations %}
-                    {% set scene = participation.scene %}
-                    {% set episode = scene.episodeParent %}
-                    {% set perso = participation.personnage %}
-                    {% set cumul = participations_xp[participation.id]|default(null) %}
-                    <a class="episode-row" href="{{ path('aventure_episode', {id: episode.id}) }}">
-                        <span class="portrait-slot">
-                            <img class="character-portrait medium outlined {{ participation.estMort ? 'effect-dead' }}"
-                                 src="{{ asset(perso.icone|default(NA_PERSO_PORTRAIT)) }}"
-                                 alt="Portrait de {{ perso.prenom }}" title="{{ perso.prenom }}" />
-                            {% if participation.estMort %}<img class="character-icon-dead" src="{{ asset(MORT_ICO) }}" alt="est mort" />{% endif %}
-                            {% if cumul %}<span class="episode-xp">{{ include('parts/xp-gain.html.twig', {xp: cumul.xp, total: cumul.xpWithBonus, signe: '+'}) }}</span>{% endif %}
-                        </span>
-                        <span class="episode-text">
-                            <strong>{{ episode.titre }}</strong>
-                            {% if scene.lieu %}<span class="episode-sub">{{ scene.lieu.nom }}</span>{% endif %}
-                        </span>
-                        <img class="episode-picture" src="{{ asset(image_small(episode.image|default(NA_SESSION))) }}" width="{{ episode_preset.width }}" height="{{ episode_preset.height }}" loading="lazy" alt="" />
-                    </a>
-                {% endfor %}
+                <div class="character-status">
+                    <div class="status-head">
+                        <h3 class="label-amerigo news-subtitle">
+                            <a href="{{ path('personnage_profil', {id: mon_personnage.id}) }}">{{ mon_personnage.nomComplet }}</a>
+                        </h3>
+                        <span class="badge-rang-{{ mon_recap.rang }}">RANG {{ mon_recap.rang }}</span>
+                    </div>
+                    {% set niveaux_blessure = constant('App\\Entity\\FichePersonnage::NIVEAUX_BLESSURE')|keys %}
+                    {% if mon_recap.pvMax %}
+                        <div class="status-hp-bar">
+                            {% for niveau in niveaux_blessure %}
+                                <span class="filled" title="{{ niveau }}"></span>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                    <div class="status-body">
+                        <nav class="status-actions" aria-label="Raccourcis du personnage">
+                            {% if mon_personnage.fichePersonnage %}
+                                <a class="status-link" href="{{ path('personnage_fiche', {id: mon_personnage.fichePersonnage.id}) }}" aria-label="Voir la Fiche de Jeu">
+                                    <i class="fa-solid fa-scroll" aria-hidden="true"></i>
+                                    <span class="hover-tooltip below">Voir la Fiche de Jeu</span>
+                                </a>
+                            {% endif %}
+                            <a class="status-link" href="{{ path('carte') }}" aria-label="Voir sur la carte">
+                                <i class="fa-solid fa-map-location-dot" aria-hidden="true"></i>
+                                <span class="hover-tooltip below">Voir sur la carte</span>
+                            </a>
+                        </nav>
+                        {% if mon_recap.pvMax %}
+                            <div class="status-hp-values text-your-xp"><strong>{{ mon_recap.pvMax }} / {{ mon_recap.pvMax }}</strong><span>{{ niveaux_blessure|first }}</span></div>
+                        {% endif %}
+                    </div>
+                </div>
 
                 {% if carte_visible %}
                     <div class="participations-map d-none d-lg-block">
+                        <h3 class="label-amerigo news-subtitle">Position</h3>
                         {{ include('parts/map.html.twig', {
                             lieux,
-                            current: ma_position,
-                            party: ma_position ? {(ma_position.id): [mon_personnage]} : {},
-                            center: ma_position_libre,
-                            wanderers: ma_position_libre ? [ma_position_libre] : [],
-                            zoom: ma_position ? ma_position.zoom : null,
+                            current: position_actuelle,
+                            party: position_actuelle ? {(position_actuelle.id): [mon_personnage]} : {},
+                            center: position_libre,
+                            wanderers: position_libre ? [position_libre] : [],
+                            zoom: position_actuelle ? position_actuelle.zoom : null,
                             variant: 'mini',
                         }, with_context = false) }}
                     </div>
                 {% endif %}
+
+                {% if mes_participations is not empty %}
+                    <h3 class="label-amerigo news-subtitle">Mes Dernières Participations</h3>
+                    {% for participation in mes_participations %}
+                        {% set scene = participation.scene %}
+                        {% set episode = scene.episodeParent %}
+                        {% set perso = participation.personnage %}
+                        {% set cumul = participations_xp[participation.id]|default(null) %}
+                        <a class="episode-row" href="{{ path('aventure_episode', {id: episode.id}) }}">
+                            <span class="portrait-slot">
+                                <img class="character-portrait medium outlined {{ participation.estMort ? 'effect-dead' }}"
+                                     src="{{ asset(perso.icone|default(NA_PERSO_PORTRAIT)) }}"
+                                     alt="Portrait de {{ perso.prenom }}" title="{{ perso.prenom }}" />
+                                {% if participation.estMort %}<img class="character-icon-dead" src="{{ asset(MORT_ICO) }}" alt="est mort" />{% endif %}
+                                {% if cumul %}<span class="episode-xp">{{ include('parts/xp-gain.html.twig', {xp: cumul.xp, total: cumul.xpWithBonus, signe: '+'}) }}</span>{% endif %}
+                            </span>
+                            <span class="episode-text">
+                                <strong>{{ episode.titre }}</strong>
+                                {% if scene.lieu %}<span class="episode-sub">{{ scene.lieu.nom }}</span>{% endif %}
+                            </span>
+                            <img class="episode-picture" src="{{ asset(image_small(episode.image|default(NA_SESSION))) }}" width="{{ episode_preset.width }}" height="{{ episode_preset.height }}" loading="lazy" alt="" />
+                        </a>
+                    {% endfor %}
+                {% endif %}
+            </div>
+
+            <div class="card card-body discoveries-card">
+                <h3 class="label-amerigo news-subtitle"><i class="fa-solid fa-lock-open" aria-hidden="true"></i> Déblocages</h3>
+
+                {% for decouverte in decouvertes %}
+                    <h4 class="news-qualifier">{{ decouverte.titre }}</h4>
+                    {{ include('/parts/picture-grid.html.twig', {
+                        items: decouverte.elements,
+                        keep_order: true,
+                        badge_pinned: true,
+                        variant: decouverte.variant,
+                        field: decouverte.field|default(null),
+                        na_image: {lieu: NA_LIEU_ICO}[decouverte.cle]|default(null),
+                        per_row: decouverte.max,
+                        empty_message: decouverte.vide,
+                    }) }}
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="card card-body ranking-card">
+                <h3 class="label-amerigo news-subtitle">Classement Général</h3>
+                {{ include('/news/ranking.html.twig', {items: classement_general}) }}
             </div>
         {% endif %}
-
-        <div class="card card-body ranking-card">
-            <h3 class="label-amerigo news-subtitle">Classement Général</h3>
-            {{ include('/news/ranking.html.twig', {items: classement_general, mine: mes_personnages}) }}
-        </div>
 
     </div>
 
@@ -199,7 +254,7 @@
                 </div>
             {% endfor %}
 
-            {% if mes_personnages is empty %}
+            {% if not mon_personnage %}
                 <div class="card card-body news-group{{ secrets_large ? ' large' }} locked">
                     <h3 class="label-amerigo news-subtitle">Secrets</h3>
                     <img class="news-lock fa-beat-fade" src="{{ asset(LOCKED_ICO) }}" alt="Cadenas" />

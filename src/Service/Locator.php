@@ -151,7 +151,7 @@ class Locator
             'current_position' => $currentPosition,
             'known_position' => $knownPosition,
             'map_visible' => $mapVisible,
-            'lieux' => $mapVisible ? $this->locationRepository->findAllSorted() : [],
+            'locations' => $mapVisible ? $this->locationRepository->findAllSorted() : [],
         ];
     }
 

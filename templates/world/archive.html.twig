@@ -5,22 +5,22 @@
     <div class="col-12">
         <div class="card card-page">
         
-            {{ include('/parts/card-top-image.html.twig', {image: un_element.image, na_image: NA_ARCHIVE, alt: 'Image de ' ~ nom, img_class: 'crop-169', titre: nom, state: element_state(un_element)}) }}
+            {{ include('/parts/card-top-image.html.twig', {image: record.image, na_image: NA_ARCHIVE, alt: 'Image de ' ~ name, img_class: 'crop-169', title: name, state: element_state(record)}) }}
 
-            {{ include('parts/description.html.twig', {text: un_element.contenu, variant: 'aerated'}, with_context = false) }}
+            {{ include('parts/description.html.twig', {text: record.contenu, variant: 'aerated'}, with_context = false) }}
         
-            {% if un_element.auteur is not empty %}
+            {% if record.auteur is not empty %}
                 <ul class="list-group list-group-flush">
                     <li class="list-group-item">
-                        <strong>Auteur&nbsp;:</strong> {{ un_element.auteur.nom }} <strong>{{ un_element.auteur.prenom }}</strong> 
+                        <strong>Auteur&nbsp;:</strong> {{ record.auteur.nom }} <strong>{{ record.auteur.prenom }}</strong> 
                     </li>
                 </ul>
             {% endif %}
 
             {{ include('/parts/divider-ornament.html.twig') }}
 
-            {% if is_mj() %}
-                {% set redirect, element, un_element, color, action = 'world', 'archive', un_element, 'link-gm', 'delete' %}
+            {% if is_gm() %}
+                {% set redirect, element, record, color, action = 'world', 'archive', record, 'link-gm', 'delete' %}
                 {{ include('/btns/btn-line.html.twig') }}
             {% endif %}
 

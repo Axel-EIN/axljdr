@@ -106,10 +106,10 @@ class WorldController extends AbstractController
 
     return $this->render('world/clan.html.twig', [
       'clan' => $clan,
-      'nom' => $clan->getNom(),
+      'name' => $clan->getNom(),
       'entity' => 'clan',
       'category' => 'world',
-      'un_element' => $clan,
+      'record' => $clan,
       'all_clans' => $allClans,
     ]);
   }
@@ -127,8 +127,8 @@ class WorldController extends AbstractController
     $otherArchives = $archiveRepository->findAllExceptOne($archive->getId());
 
     return $this->render('world/archive.html.twig', [
-      'un_element' => $archive,
-      'nom' => $archive->getTitre(),
+      'record' => $archive,
+      'name' => $archive->getTitre(),
       'entity' => 'archive',
       'category' => 'world',
       'archives' => $archives,
@@ -156,14 +156,14 @@ class WorldController extends AbstractController
     $history = $historyRanker->forLocation($location);
 
     return $this->render('world/location.html.twig', [
-      'un_element' => $location,
-      'nom' => $location->getNom(),
+      'record' => $location,
+      'name' => $location->getNom(),
       'entity' => 'location',
       'category' => 'world',
-      'lieux' => $locations,
+      'locations' => $locations,
       'other_locations' => $otherLocations,
-      'historique' => $history,
-      'saison_courante' => $seasonRepository->findCourante()?->getNumero(),
+      'history' => $history,
+      'current_season' => $seasonRepository->findCourante()?->getNumero(),
     ]);
   }
 
@@ -177,8 +177,8 @@ class WorldController extends AbstractController
     }
 
     return $this->render('world/lore.html.twig', [
-      'un_element' => $lore,
-      'nom' => $lore->getNom(),
+      'record' => $lore,
+      'name' => $lore->getNom(),
       'entity' => 'lore',
       'category' => 'world',
       'other_lores' => $loreRepository->findAllExceptOne($lore->getId()),

@@ -15,7 +15,7 @@
           {% elseif joue.xp != 0 %}
             <strong class="text-your-xp">{{ include('parts/xp-gain.html.twig', {xp: joue.xp, total: joue.xpWithBonus, signe: '+'}) }}</strong>
           {% endif %}
-          <a href="{{ path('personnage_profil', {id: joue.id}) }}">
+          <a href="{{ path('characters_profile', {id: joue.id}) }}">
             <img class="character-portrait medium outlined {% if joue.estMort == 1 %}effect-dead{% elseif joue.xp == 0 %}grayscale{% else %}hover-shine{% endif %}"
               src="{{ asset(joue.icone) }}" alt="Icone de {{ joue.prenom }}" title="{{ joue.prenom }}" />
           </a>

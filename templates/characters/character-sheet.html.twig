@@ -1,16 +1,16 @@
 {% extends 'element.html.twig' %}
 
-{% macro stat_mod(id, valeur, unite) %}
+{% macro stat_mod(id, value, unit) %}
   <div class="stat-mod edit-only">
-    <label for="mod-input-{{ id }}">Modificateur ({{ unite }})</label>
-    {% if unite == 'XgY' %}
-      <input type="text" id="mod-input-{{ id }}" class="form-control form-control-sm" value="{{ valeur }}" placeholder="ex: 1g0" pattern="\d+g\d+" />
+    <label for="mod-input-{{ id }}">Modificateur ({{ unit }})</label>
+    {% if unit == 'XgY' %}
+      <input type="text" id="mod-input-{{ id }}" class="form-control form-control-sm" value="{{ value }}" placeholder="ex: 1g0" pattern="\d+g\d+" />
     {% else %}
-      <input type="number" id="mod-input-{{ id }}" class="form-control form-control-sm" value="{{ valeur }}" />
+      <input type="number" id="mod-input-{{ id }}" class="form-control form-control-sm" value="{{ value }}" />
     {% endif %}
   </div>
 {% endmacro %}
-{% import _self as fiche_macros %}
+{% import _self as sheet_macros %}
 
 {% block stylesheets %}
   {{parent()}}
@@ -19,50 +19,50 @@
   <link rel="stylesheet" href="{{asset('css/pages/character-sheet.css')}}" />
 {% endblock %}
 
-{% set perso_classe_id = fiche.personnage.classe ? fiche.personnage.classe.id : 0 %}
-{% set av_items = {av1: fiche.avantage1, av2: fiche.avantage2, dv1: fiche.desavantage1, dv2: fiche.desavantage2} %}
+{% set character_class_id = sheet.personnage.classe ? sheet.personnage.classe.id : 0 %}
+{% set advantage_items = {av1: sheet.avantage1, av2: sheet.avantage2, dv1: sheet.desavantage1, dv2: sheet.desavantage2} %}
 
-{% set initMod = fiche.initiativeModifier ?? 0 %}
-{% set niveaux_blessure = constant('App\\Entity\\FichePersonnage::NIVEAUX_BLESSURE') %}
-{% set pv_indemne_par_terre = constant('App\\Entity\\FichePersonnage::PV_INDEMNE_PAR_TERRE') %}
-{% set pv_blessure_par_terre = constant('App\\Entity\\FichePersonnage::PV_BLESSURE_PAR_TERRE') %}
-{% set atkModL, atkModG = 0, 0 %}
-{% if fiche.attaqueModifier %}
-  {% set atkModSplit = fiche.attaqueModifier|split('g') %}
-  {% set atkModL = atkModSplit[0]|default(0) %}
-  {% set atkModG = atkModSplit[1]|default(0) %}
+{% set initiative_mod = sheet.initiativeModifier ?? 0 %}
+{% set wound_levels = constant('App\\Entity\\FichePersonnage::NIVEAUX_BLESSURE') %}
+{% set healthy_hp_per_earth = constant('App\\Entity\\FichePersonnage::PV_INDEMNE_PAR_TERRE') %}
+{% set wounded_hp_per_earth = constant('App\\Entity\\FichePersonnage::PV_BLESSURE_PAR_TERRE') %}
+{% set attack_rolled_mod, attack_kept_mod = 0, 0 %}
+{% if sheet.attaqueModifier %}
+  {% set attack_mod_split = sheet.attaqueModifier|split('g') %}
+  {% set attack_rolled_mod = attack_mod_split[0]|default(0) %}
+  {% set attack_kept_mod = attack_mod_split[1]|default(0) %}
 {% endif %}
-{% set dmgModL, dmgModG = 0, 0 %}
-{% if fiche.dmgModifier %}
-  {% set dmgModSplit = fiche.dmgModifier|split('g') %}
-  {% set dmgModL = dmgModSplit[0]|default(0) %}
-  {% set dmgModG = dmgModSplit[1]|default(0) %}
+{% set damage_rolled_mod, damage_kept_mod = 0, 0 %}
+{% if sheet.dmgModifier %}
+  {% set damage_mod_split = sheet.dmgModifier|split('g') %}
+  {% set damage_rolled_mod = damage_mod_split[0]|default(0) %}
+  {% set damage_kept_mod = damage_mod_split[1]|default(0) %}
 {% endif %}
 
 {% block element_content %}
 
-{% set bonusNomFamille = (fiche.personnage.famille is not empty) ? fiche.personnage.famille.bonusStatNom : null %}
-{% set bonusNomEcole   = (fiche.personnage.ecole is not empty) ? fiche.personnage.ecole.bonusStatNom : null %}
+{% set family_bonus_name = (sheet.personnage.famille is not empty) ? sheet.personnage.famille.bonusStatNom : null %}
+{% set dojo_bonus_name   = (sheet.personnage.ecole is not empty) ? sheet.personnage.ecole.bonusStatNom : null %}
 
-{% set nb_bonus_constitution = fiche.bonusAttribut('constitution') %}
-{% set nb_bonus_volonte = fiche.bonusAttribut('volonte') %}
-{% set nb_bonus_reflexes = fiche.bonusAttribut('reflexes') %}
-{% set nb_bonus_intuition = fiche.bonusAttribut('intuition') %}
-{% set nb_bonus_agilite = fiche.bonusAttribut('agilite') %}
-{% set nb_bonus_intelligence = fiche.bonusAttribut('intelligence') %}
-{% set nb_bonus_forceStat = fiche.bonusAttribut('forceStat') %}
-{% set nb_bonus_perception = fiche.bonusAttribut('perception') %}
-{% set nb_bonus_vide = fiche.bonusAttribut('vide') %}
+{% set constitution_bonus_count = sheet.bonusAttribut('constitution') %}
+{% set willpower_bonus_count = sheet.bonusAttribut('volonte') %}
+{% set reflexes_bonus_count = sheet.bonusAttribut('reflexes') %}
+{% set intuition_bonus_count = sheet.bonusAttribut('intuition') %}
+{% set agility_bonus_count = sheet.bonusAttribut('agilite') %}
+{% set intelligence_bonus_count = sheet.bonusAttribut('intelligence') %}
+{% set strength_bonus_count = sheet.bonusAttribut('forceStat') %}
+{% set perception_bonus_count = sheet.bonusAttribut('perception') %}
+{% set void_bonus_count = sheet.bonusAttribut('vide') %}
 
-{% set eff_constitution = fiche.attributEffectif('constitution') %}
-{% set eff_volonte = fiche.attributEffectif('volonte') %}
-{% set eff_reflexes = fiche.attributEffectif('reflexes') %}
-{% set eff_intuition = fiche.attributEffectif('intuition') %}
-{% set eff_agilite = fiche.attributEffectif('agilite') %}
-{% set eff_intelligence = fiche.attributEffectif('intelligence') %}
-{% set eff_forceStat = fiche.attributEffectif('forceStat') %}
-{% set eff_perception = fiche.attributEffectif('perception') %}
-{% set eff_vide = fiche.attributEffectif('vide') %}
+{% set eff_constitution = sheet.attributEffectif('constitution') %}
+{% set eff_willpower = sheet.attributEffectif('volonte') %}
+{% set eff_reflexes = sheet.attributEffectif('reflexes') %}
+{% set eff_intuition = sheet.attributEffectif('intuition') %}
+{% set eff_agility = sheet.attributEffectif('agilite') %}
+{% set eff_intelligence = sheet.attributEffectif('intelligence') %}
+{% set eff_strength = sheet.attributEffectif('forceStat') %}
+{% set eff_perception = sheet.attributEffectif('perception') %}
+{% set eff_void = sheet.attributEffectif('vide') %}
 
 <div class="col-12">
   <div id="character-sheet" class="card card-page text-grayslate">
@@ -81,11 +81,11 @@
             } %}
             <li>
               <span class="label">Clan :</span>
-              {% if fiche.personnage.clan %}
-                <a class="extrabold" href="{{ path('world_clan', {id: fiche.personnage.clan.id}) }}">
-                  <img  class="img-24" src="{{ asset(image_small(fiche.personnage.clan.mon|default(NA_MON))) }}"
-                        title="Mon du clan {{ fiche.personnage.clan.nom }}" />
-                  {{ fiche.personnage.clan.nom }}
+              {% if sheet.personnage.clan %}
+                <a class="extrabold" href="{{ path('world_clan', {id: sheet.personnage.clan.id}) }}">
+                  <img  class="img-24" src="{{ asset(image_small(sheet.personnage.clan.mon|default(NA_MON))) }}"
+                        title="Mon du clan {{ sheet.personnage.clan.nom }}" />
+                  {{ sheet.personnage.clan.nom }}
                 </a>
               {% else %}
                 Aucun
@@ -93,25 +93,25 @@
             </li>
             <li>
               <span class="label">Famille :</span>
-              {% if fiche.personnage.famille %}
-                <a class="extrabold" href="{{ path('world_clan', {id: fiche.personnage.clan.id, '_fragment': fiche.personnage.famille.nom}) }}">
-                  <img  class="img-24 rounded-circle" src="{{ asset(image_small(fiche.personnage.famille.mon|default(NA_MON))) }}"
-                        title="Mon de la famille {{ fiche.personnage.famille.nom }}" />
-                  {{ fiche.personnage.famille.nom }}
+              {% if sheet.personnage.famille %}
+                <a class="extrabold" href="{{ path('world_clan', {id: sheet.personnage.clan.id, '_fragment': sheet.personnage.famille.nom}) }}">
+                  <img  class="img-24 rounded-circle" src="{{ asset(image_small(sheet.personnage.famille.mon|default(NA_MON))) }}"
+                        title="Mon de la famille {{ sheet.personnage.famille.nom }}" />
+                  {{ sheet.personnage.famille.nom }}
                 </a>
-                {% if bonusNomFamille %}
-                  <small class="text-success ml-1">+1 {{ trait_labels[bonusNomFamille] ?? bonusNomFamille }}</small>{% endif %}
+                {% if family_bonus_name %}
+                  <small class="text-success ml-1">+1 {{ trait_labels[family_bonus_name] ?? family_bonus_name }}</small>{% endif %}
               {% else %}
                 Aucun
               {% endif %}
             </li>
             <li class="fiche-ligne-classe">
               <span class="label">Classe :</span>
-              {% if fiche.personnage.classe %}
-                <a class="extrabold" href="{{ path('rules_class', {id: fiche.personnage.classe.id}) }}">
-                  <img  class="img-24" src="{{ asset(image_small(fiche.personnage.classe.icone|default(NA_MON))) }}"
-                        title="Mon de la classe {{ fiche.personnage.classe.nom }}" />
-                  {{ fiche.personnage.classe.nom }}
+              {% if sheet.personnage.classe %}
+                <a class="extrabold" href="{{ path('rules_class', {id: sheet.personnage.classe.id}) }}">
+                  <img  class="img-24" src="{{ asset(image_small(sheet.personnage.classe.icone|default(NA_MON))) }}"
+                        title="Mon de la classe {{ sheet.personnage.classe.nom }}" />
+                  {{ sheet.personnage.classe.nom }}
                 </a>
               {% else %}
                 Aucun
@@ -119,18 +119,18 @@
             </li>
             <li>
               <span class="label">Ecole :</span>
-              {% if fiche.personnage.classe %}
-                <a class="d-lg-none" href="{{ path('rules_class', {id: fiche.personnage.classe.id}) }}"
-                   title="Classe {{ fiche.personnage.classe.nom }}">
-                  <img class="img-24" src="{{ asset(image_small(fiche.personnage.classe.icone|default(NA_MON))) }}" alt="" />
+              {% if sheet.personnage.classe %}
+                <a class="d-lg-none" href="{{ path('rules_class', {id: sheet.personnage.classe.id}) }}"
+                   title="Classe {{ sheet.personnage.classe.nom }}">
+                  <img class="img-24" src="{{ asset(image_small(sheet.personnage.classe.icone|default(NA_MON))) }}" alt="" />
                 </a>
               {% endif %}
-              {% if fiche.personnage.ecole %}
-                <a class="extrabold" href="{{ path('rules_dojo', {id: fiche.personnage.ecole.id}) }}">
-                  {{ fiche.personnage.ecole.nom }}
+              {% if sheet.personnage.ecole %}
+                <a class="extrabold" href="{{ path('rules_dojo', {id: sheet.personnage.ecole.id}) }}">
+                  {{ sheet.personnage.ecole.nom }}
                 </a>
-                {% if bonusNomEcole %}
-                  <small class="text-success ml-1">+1 {{ (trait_labels[bonusNomEcole] ?? bonusNomEcole)|u.truncate(8, '…') }}</small>
+                {% if dojo_bonus_name %}
+                  <small class="text-success ml-1">+1 {{ (trait_labels[dojo_bonus_name] ?? dojo_bonus_name)|u.truncate(8, '…') }}</small>
                 {% endif %}
               {% else %}
                 Aucun
@@ -145,7 +145,7 @@
               <span class="ml-auto badge-rang-{{rank}}">RANG {{rank}}</span>
             </li>
 
-            {% if is_own_character or is_mj() %}
+            {% if is_own_character or is_gm() %}
 
               <li>
                 <span class="label">Expérience :</span>
@@ -192,10 +192,10 @@
 
       <div class="row mt-4 d-none d-lg-flex">
         <div class="col-12 anneaux-board"
-             style="--mon-clan: url('{{ asset(fiche.personnage.clan.mon|default(NA_MON)) }}');">
+             style="--mon-clan: url('{{ asset(sheet.personnage.clan.mon|default(NA_MON)) }}');">
 
           {% for i in 1..3 %}
-            <img class="anneaux-glow" src="{{ asset(fiche.personnage.classe.icone|default(NA_MON)) }}" />
+            <img class="anneaux-glow" src="{{ asset(sheet.personnage.classe.icone|default(NA_MON)) }}" />
           {% endfor %}
 
           <div class="row text-center">
@@ -204,7 +204,7 @@
             <div class="col-4 flex-col align-items-center">
               <div class="flex align-items-start">
                 <span class="anneau-rang" data-ring="terre">
-                  {{ min(eff_constitution, eff_volonte) }}
+                  {{ min(eff_constitution, eff_willpower) }}
                 </span>
                 <img src="{{FLAT_TERRE}}" class="ml-3 img-72" />
               </div>
@@ -212,18 +212,18 @@
               <div class="align-self-start">
                 <span
                   class="trait-rang
-                    {% if eff_constitution > eff_volonte %} text-strong {% endif %}"
-                  data-trait-eff="constitution" data-base="{{ fiche.constitution }}"
-                  data-bonus="{{ nb_bonus_constitution }}" data-multiplier="4"
+                    {% if eff_constitution > eff_willpower %} text-strong {% endif %}"
+                  data-trait-eff="constitution" data-base="{{ sheet.constitution }}"
+                  data-bonus="{{ constitution_bonus_count }}" data-multiplier="4"
                 >
                   <span class="eff-display">{{ eff_constitution }}</span>
                 </span>
                 &nbsp;
                 Constitution
-                {% if nb_bonus_constitution > 0 %}
-                  <small class="text-success extrabold">+{{ nb_bonus_constitution }}</small>
+                {% if constitution_bonus_count > 0 %}
+                  <small class="text-success extrabold">+{{ constitution_bonus_count }}</small>
                 {% endif %}
-                {% if is_own_character or is_mj() %}
+                {% if is_own_character or is_gm() %}
                   <span class="text-alternate edit-only" data-cost-for="constitution">
                     {% if xp.trait.constitution > 0 %}-{{ xp.trait.constitution }}xp{% endif %}
                   </span>
@@ -233,18 +233,18 @@
               <div class="align-self-start">
                 <span
                   class="trait-rang
-                    {% if eff_volonte > eff_constitution %} text-strong {% endif %}"
-                  data-trait-eff="volonte" data-base="{{ fiche.volonte }}"
-                  data-bonus="{{ nb_bonus_volonte }}" data-multiplier="4"
+                    {% if eff_willpower > eff_constitution %} text-strong {% endif %}"
+                  data-trait-eff="volonte" data-base="{{ sheet.volonte }}"
+                  data-bonus="{{ willpower_bonus_count }}" data-multiplier="4"
                 >
-                  <span class="eff-display">{{ eff_volonte }}</span>
+                  <span class="eff-display">{{ eff_willpower }}</span>
                 </span>
                 &nbsp;
                 Volonté
-                {% if nb_bonus_volonte > 0 %}
-                  <small class="text-success extrabold">+{{ nb_bonus_volonte }}</small>
+                {% if willpower_bonus_count > 0 %}
+                  <small class="text-success extrabold">+{{ willpower_bonus_count }}</small>
                 {% endif %}
-                {% if is_own_character or is_mj() %}
+                {% if is_own_character or is_gm() %}
                   <span class="text-alternate edit-only" data-cost-for="volonte">
                     {% if xp.trait.volonte > 0 %}-{{ xp.trait.volonte }}xp{% endif %}
                   </span>
@@ -261,42 +261,42 @@
               </div>
 
               <div class="align-self-end">
-                {% if is_own_character or is_mj() %}
+                {% if is_own_character or is_gm() %}
                   <span class="text-alternate edit-only" data-cost-for="reflexes">
                     {% if xp.trait.reflexes > 0 %}-{{ xp.trait.reflexes }}xp{% endif %}
                   </span>
                 {% endif %}
                 Réflèxes
-                {% if nb_bonus_reflexes > 0 %}
-                  <small class="text-success extrabold">+{{ nb_bonus_reflexes }}</small>
+                {% if reflexes_bonus_count > 0 %}
+                  <small class="text-success extrabold">+{{ reflexes_bonus_count }}</small>
                 {% endif %}
                 &nbsp;
                 <span
                   class="trait-rang
                     {% if eff_reflexes > eff_intuition %} text-strong {% endif %}"
-                  data-trait-eff="reflexes" data-base="{{ fiche.reflexes }}"
-                  data-bonus="{{ nb_bonus_reflexes }}" data-multiplier="4"
+                  data-trait-eff="reflexes" data-base="{{ sheet.reflexes }}"
+                  data-bonus="{{ reflexes_bonus_count }}" data-multiplier="4"
                 >
                   <span class="eff-display">{{ eff_reflexes }}</span>
                 </span>
               </div>
 
               <div class="align-self-end">
-                {% if is_own_character or is_mj() %}
+                {% if is_own_character or is_gm() %}
                   <span class="text-alternate edit-only" data-cost-for="intuition">
                     {% if xp.trait.intuition > 0 %}-{{ xp.trait.intuition }}xp{% endif %}
                   </span>
                 {% endif %}
                 Intuition
-                {% if nb_bonus_intuition > 0 %}
-                  <small class="text-success extrabold">+{{ nb_bonus_intuition }}</small>
+                {% if intuition_bonus_count > 0 %}
+                  <small class="text-success extrabold">+{{ intuition_bonus_count }}</small>
                 {% endif %}
                 &nbsp;
                 <span
                   class="trait-rang
                     {% if eff_intuition > eff_reflexes %} text-strong {% endif %}"
-                  data-trait-eff="intuition" data-base="{{ fiche.intuition }}"
-                  data-bonus="{{ nb_bonus_intuition }}" data-multiplier="4"
+                  data-trait-eff="intuition" data-base="{{ sheet.intuition }}"
+                  data-bonus="{{ intuition_bonus_count }}" data-multiplier="4"
                 >
                   <span class="eff-display">{{ eff_intuition }}</span>
                 </span>
@@ -313,7 +313,7 @@
             <div class="col-4 flex-col align-items-center">
               <div class="flex align-items-center">
                 <span class="anneau-rang" data-ring="eau">
-                  {{ min(eff_forceStat, eff_perception) }}
+                  {{ min(eff_strength, eff_perception) }}
                 </span>
                 <img src="{{FLAT_EAU}}" class="img-72 ml-3" />
               </div>
@@ -321,18 +321,18 @@
               <div class="align-self-start">
                 <span
                   class="trait-rang
-                    {% if eff_forceStat > eff_perception %} text-strong {% endif %}"
-                  data-trait-eff="forceStat" data-base="{{ fiche.forceStat }}"
-                  data-bonus="{{ nb_bonus_forceStat }}" data-multiplier="4"
+                    {% if eff_strength > eff_perception %} text-strong {% endif %}"
+                  data-trait-eff="forceStat" data-base="{{ sheet.forceStat }}"
+                  data-bonus="{{ strength_bonus_count }}" data-multiplier="4"
                 >
-                  <span class="eff-display">{{ eff_forceStat }}</span>
+                  <span class="eff-display">{{ eff_strength }}</span>
                 </span>
                 &nbsp;
                 Force
-                {% if nb_bonus_forceStat > 0 %}
-                  <small class="text-success extrabold">+{{ nb_bonus_forceStat }}</small>
+                {% if strength_bonus_count > 0 %}
+                  <small class="text-success extrabold">+{{ strength_bonus_count }}</small>
                 {% endif %}
-                {% if is_own_character or is_mj() %}
+                {% if is_own_character or is_gm() %}
                   <span class="text-alternate edit-only" data-cost-for="forceStat">
                     {% if xp.trait.forceStat > 0 %}-{{ xp.trait.forceStat }}xp{% endif %}
                   </span>
@@ -342,18 +342,18 @@
               <div class="align-self-start">
                 <span
                   class="trait-rang
-                    {% if eff_perception > eff_forceStat %} text-strong {% endif %}"
-                  data-trait-eff="perception" data-base="{{ fiche.perception }}"
-                  data-bonus="{{ nb_bonus_perception }}" data-multiplier="4"
+                    {% if eff_perception > eff_strength %} text-strong {% endif %}"
+                  data-trait-eff="perception" data-base="{{ sheet.perception }}"
+                  data-bonus="{{ perception_bonus_count }}" data-multiplier="4"
                 >
                   <span class="eff-display">{{ eff_perception }}</span>
                 </span>
                 &nbsp;
                 Perception
-                {% if nb_bonus_perception > 0 %}
-                  <small class="text-success extrabold">+{{ nb_bonus_perception }}</small>
+                {% if perception_bonus_count > 0 %}
+                  <small class="text-success extrabold">+{{ perception_bonus_count }}</small>
                 {% endif %}
-                {% if is_own_character or is_mj() %}
+                {% if is_own_character or is_gm() %}
                   <span class="text-alternate edit-only" data-cost-for="perception">
                     {% if xp.trait.perception > 0 %}-{{ xp.trait.perception }}xp{% endif %}
                   </span>
@@ -362,7 +362,7 @@
             </div>
 
             <div class="col-2 m-0 p-0">
-              {% if is_own_character or is_mj() %}
+              {% if is_own_character or is_gm() %}
                 <div class="flex-col p-1 bg-strong text-fade text-small rounded-8 edit-only">
                   <div class="label-amerigo">Exp.</div>
                   <div class="flex w-100 justify-content-between {% if xp.disadvantages == 0 %}d-none{% endif %}" id="xp-desav-row">
@@ -393,47 +393,47 @@
               <div class="flex align-items-center">
                 <img src="{{FLAT_FEU}}" class="img-72 mr-2" />
                 <span class="anneau-rang" data-ring="feu">
-                  {{ min(eff_agilite, eff_intelligence) }}
+                  {{ min(eff_agility, eff_intelligence) }}
                 </span>
               </div>
 
               <div class="align-self-end">
-                {% if is_own_character or is_mj() %}
+                {% if is_own_character or is_gm() %}
                   <span class="text-alternate edit-only" data-cost-for="agilite">
                     {% if xp.trait.agilite > 0 %}-{{ xp.trait.agilite }}xp{% endif %}
                   </span>
                 {% endif %}
                 Agilité
-                {% if nb_bonus_agilite > 0 %}
-                  <small class="text-success extrabold">+{{ nb_bonus_agilite }}</small>
+                {% if agility_bonus_count > 0 %}
+                  <small class="text-success extrabold">+{{ agility_bonus_count }}</small>
                 {% endif %}
                 &nbsp;
                 <span
                   class="trait-rang
-                    {% if eff_agilite > eff_intelligence %} text-strong {% endif %}"
-                  data-trait-eff="agilite" data-base="{{ fiche.agilite }}"
-                  data-bonus="{{ nb_bonus_agilite }}" data-multiplier="4"
+                    {% if eff_agility > eff_intelligence %} text-strong {% endif %}"
+                  data-trait-eff="agilite" data-base="{{ sheet.agilite }}"
+                  data-bonus="{{ agility_bonus_count }}" data-multiplier="4"
                 >
-                  <span class="eff-display">{{ eff_agilite }}</span>
+                  <span class="eff-display">{{ eff_agility }}</span>
                 </span>
               </div>
 
               <div class="align-self-end">
-                {% if is_own_character or is_mj() %}
+                {% if is_own_character or is_gm() %}
                   <span class="text-alternate edit-only" data-cost-for="intelligence">
                     {% if xp.trait.intelligence > 0 %}-{{ xp.trait.intelligence }}xp{% endif %}
                   </span>
                 {% endif %}
                 Intelligence
-                {% if nb_bonus_intelligence > 0 %}
-                  <small class="text-success extrabold">+{{ nb_bonus_intelligence }}</small>
+                {% if intelligence_bonus_count > 0 %}
+                  <small class="text-success extrabold">+{{ intelligence_bonus_count }}</small>
                 {% endif %}
                 &nbsp;
                 <span
                   class="trait-rang
-                    {% if eff_intelligence > eff_agilite %} text-strong {% endif %}"
-                  data-trait-eff="intelligence" data-base="{{ fiche.intelligence }}"
-                  data-bonus="{{ nb_bonus_intelligence }}" data-multiplier="4"
+                    {% if eff_intelligence > eff_agility %} text-strong {% endif %}"
+                  data-trait-eff="intelligence" data-base="{{ sheet.intelligence }}"
+                  data-bonus="{{ intelligence_bonus_count }}" data-multiplier="4"
                 >
                   <span class="eff-display">{{ eff_intelligence }}</span>
                 </span>
@@ -451,14 +451,14 @@
               <div class="flex align-items-center">
                 <img class="img-72 ml-5 mr-3" src="{{FLAT_VIDE}}"/>
                 <span class="anneau-rang"
-                  data-trait-eff="vide" data-base="{{ fiche.vide }}"
-                  data-bonus="{{ nb_bonus_vide }}" data-multiplier="6"
+                  data-trait-eff="vide" data-base="{{ sheet.vide }}"
+                  data-bonus="{{ void_bonus_count }}" data-multiplier="6"
                 >
-                  <span class="eff-display">{{ eff_vide }}</span>
+                  <span class="eff-display">{{ eff_void }}</span>
                 </span>
               </div>
               <div class="flex align-items-center">
-                {% if is_own_character or is_mj() %}
+                {% if is_own_character or is_gm() %}
                   <span class="text-alternate edit-only" data-cost-for="vide">
                     {% if xp.trait.vide > 0 %}-{{ xp.trait.vide }}xp{% endif %}
                   </span>
@@ -466,8 +466,8 @@
                 {% endif %}
                 <span class="h6 m-0 mb-0 mt-2 ml-2 mr-2">Vide</span>
                 &nbsp;
-                {% if nb_bonus_vide > 0 %}
-                  <small class="text-success extrabold">+{{ nb_bonus_vide }}</small>
+                {% if void_bonus_count > 0 %}
+                  <small class="text-success extrabold">+{{ void_bonus_count }}</small>
                 {% endif %}
               </div>
             </div>
@@ -477,7 +477,7 @@
 
         </div>
 
-        {% if is_own_character or is_mj() %}
+        {% if is_own_character or is_gm() %}
           <div class="my-4 d-flex w-100 justify-content-center align-items-center">
             <button type="button" id="btn-fiche-edit" class="btn-primary-style btn-large{% if not is_own_character %} gm{% endif %}">
               <i class="fas fa-edit"></i> {{ is_own_character ? 'Éditer ma fiche' : 'Éditer la fiche' }}
@@ -488,7 +488,7 @@
             <button type="button" id="btn-fiche-valider" class="btn btn-success btn-sm ml-3" style="display:none;">
               <i class="fas fa-check"></i> Valider
             </button>
-            <a class="btn-icon-medium primary{% if not is_own_character %} gm{% endif %} ml-3" href="{{ path('characters_sheet_pdf', {id: fiche.id}) }}">
+            <a class="btn-icon-medium primary{% if not is_own_character %} gm{% endif %} ml-3" href="{{ path('characters_sheet_pdf', {id: sheet.id}) }}">
               <i class="fas fa-print" title="Imprimer la fiche en PDF"></i>
             </a>
           </div>
@@ -498,41 +498,41 @@
 
     </div>
 
-    {% set anneaux_mobile = [
-      { nom: 'Terre', icone: FLAT_TERRE, rang: min(eff_constitution, eff_volonte), traits: [
-        { nom: 'Constitution', val: eff_constitution, bonus: nb_bonus_constitution },
-        { nom: 'Volonté',      val: eff_volonte,      bonus: nb_bonus_volonte }
+    {% set mobile_rings = [
+      { name: 'Terre', icon: FLAT_TERRE, rank: min(eff_constitution, eff_willpower), traits: [
+        { name: 'Constitution', val: eff_constitution, bonus: constitution_bonus_count },
+        { name: 'Volonté',      val: eff_willpower,      bonus: willpower_bonus_count }
       ] },
-      { nom: 'Air', icone: FLAT_AIR, rang: min(eff_reflexes, eff_intuition), traits: [
-        { nom: 'Réflèxes',  val: eff_reflexes,  bonus: nb_bonus_reflexes },
-        { nom: 'Intuition', val: eff_intuition, bonus: nb_bonus_intuition }
+      { name: 'Air', icon: FLAT_AIR, rank: min(eff_reflexes, eff_intuition), traits: [
+        { name: 'Réflèxes',  val: eff_reflexes,  bonus: reflexes_bonus_count },
+        { name: 'Intuition', val: eff_intuition, bonus: intuition_bonus_count }
       ] },
-      { nom: 'Eau', icone: FLAT_EAU, rang: min(eff_forceStat, eff_perception), traits: [
-        { nom: 'Force',      val: eff_forceStat,  bonus: nb_bonus_forceStat },
-        { nom: 'Perception', val: eff_perception, bonus: nb_bonus_perception }
+      { name: 'Eau', icon: FLAT_EAU, rank: min(eff_strength, eff_perception), traits: [
+        { name: 'Force',      val: eff_strength,  bonus: strength_bonus_count },
+        { name: 'Perception', val: eff_perception, bonus: perception_bonus_count }
       ] },
-      { nom: 'Feu', icone: FLAT_FEU, rang: min(eff_agilite, eff_intelligence), traits: [
-        { nom: 'Agilité',      val: eff_agilite,      bonus: nb_bonus_agilite },
-        { nom: 'Intelligence', val: eff_intelligence, bonus: nb_bonus_intelligence }
+      { name: 'Feu', icon: FLAT_FEU, rank: min(eff_agility, eff_intelligence), traits: [
+        { name: 'Agilité',      val: eff_agility,      bonus: agility_bonus_count },
+        { name: 'Intelligence', val: eff_intelligence, bonus: intelligence_bonus_count }
       ] },
-      { nom: 'Vide', icone: FLAT_VIDE, rang: eff_vide, traits: [] }
+      { name: 'Vide', icon: FLAT_VIDE, rank: eff_void, traits: [] }
     ] %}
     <div class="illu-col col-12 col-lg-4 order-first order-lg-last">
       <div class="fiche-illu-wrap">
         {% set illustration_preset = image_preset('vertical450') %}
-        <img class="fiche-illu img-fluid rounded-8 d-block mx-auto" src="{{ asset(fiche.personnage.illustration|default(NA_PERSO_ILLU)) }}" width="{{ illustration_preset.width }}" height="{{ illustration_preset.height }}" />
+        <img class="fiche-illu img-fluid rounded-8 d-block mx-auto" src="{{ asset(sheet.personnage.illustration|default(NA_PERSO_ILLU)) }}" width="{{ illustration_preset.width }}" height="{{ illustration_preset.height }}" />
 
         <div class="fiche-traits d-lg-none">
-          {% for anneau in anneaux_mobile %}
-            <div class="fiche-anneau-groupe{% if anneau.traits is empty %} fiche-anneau-solo{% endif %}">
+          {% for mobile_ring in mobile_rings %}
+            <div class="fiche-anneau-groupe{% if mobile_ring.traits is empty %} fiche-anneau-solo{% endif %}">
               <div class="fiche-anneau-line">
-                <img class="fiche-anneau-ico" src="{{ anneau.icone }}" alt="" />
-                <span class="text-plus extrabold">{{ anneau.nom }}</span>
-                <strong class="fiche-anneau-rang text-plus">{{ anneau.rang }}</strong>
+                <img class="fiche-anneau-ico" src="{{ mobile_ring.icon }}" alt="" />
+                <span class="text-plus extrabold">{{ mobile_ring.name }}</span>
+                <strong class="fiche-anneau-rang text-plus">{{ mobile_ring.rank }}</strong>
               </div>
-              {% for trait in anneau.traits %}
+              {% for trait in mobile_ring.traits %}
                 <div class="fiche-trait-line">
-                  <span>{{ trait.nom }}</span>
+                  <span>{{ trait.name }}</span>
                   {% if trait.bonus > 0 %}<small class="text-success">+{{ trait.bonus }}</small>{% endif %}
                   <strong class="fiche-trait-value">{{ trait.val }}</strong>
                 </div>
@@ -543,13 +543,13 @@
       </div>
 
       <ul class="fiche-standings">
-        {% for champ in ['honneur', 'gloire', 'infamie', 'statut'] %}
-          {% set valeur = attribute(fiche, champ) %}
+        {% for field in ['honneur', 'gloire', 'infamie', 'statut'] %}
+          {% set value = attribute(sheet, field) %}
           <li>
-            <span class="label">{{ champ|capitalize }}</span>
-            <strong class="read-only">{{ valeur is null ? '—' : valeur|number_format(1, '.', '') }}</strong>
-            <input type="number" min="0" max="10" step="0.1" id="standing-input-{{ champ }}"
-                   class="form-control form-control-sm edit-only" value="{{ valeur }}" />
+            <span class="label">{{ field|capitalize }}</span>
+            <strong class="read-only">{{ value is null ? '—' : value|number_format(1, '.', '') }}</strong>
+            <input type="number" min="0" max="10" step="0.1" id="standing-input-{{ field }}"
+                   class="form-control form-control-sm edit-only" value="{{ value }}" />
           </li>
         {% endfor %}
       </ul>
@@ -560,7 +560,7 @@
 
     <section class="col-12 col-lg-8">
 
-      {% if is_own_character or is_mj() %}
+      {% if is_own_character or is_gm() %}
         <div class="card card-bloc">
 
           <div class="card-title-cartouche d-flex align-items-center">
@@ -573,31 +573,31 @@
 
           <div class="row p-3">
 
-            {% for kind, bloc in {
+            {% for kind, advantage_group in {
               avantage: {title: 'Avantages', slots: ['av1', 'av2'], sign: '-', color: 'text-danger'},
               desavantage: {title: 'Désavantages', slots: ['dv1', 'dv2'], sign: '+', color: 'text-success'},
             } %}
               <div class="col-12 col-lg-6">
-                <h6>{{ bloc.title }}</h6>
+                <h6>{{ advantage_group.title }}</h6>
                 <ul class="list-decored flex-col gap-4 ml-2">
-                  {% for slot in bloc.slots %}
-                    {% set item = av_items[slot] %}
+                  {% for slot in advantage_group.slots %}
+                    {% set item = advantage_items[slot] %}
                     <li data-av-slot="{{ slot }}" data-av-kind="{{ kind }}"
                         data-av-id="{{ item ? item.id : 0 }}"
                         {% if not item %}class="av-row-empty"{% endif %}
                     >
-                      {% set av_texte = item ? (item.summary ?: item.description|striptags) : '' %}
+                      {% set advantage_text = item ? (item.summary ?: item.description|striptags) : '' %}
                       <div>
                         <span data-av-name class="text-strong extrabold">
                           {% if item %}<a href="{{ element_url(item) }}">{{ item.nom }}</a>{% endif %}
                         </span>
                       </div>
                       <div class="text-clamp-2 text-small text-body-c" data-av-summary
-                           {% if item and not item.summary %}data-toggle="tooltip" title="{{ av_texte }}"{% endif %}>
-                        {{ av_texte }}
+                           {% if item and not item.summary %}data-toggle="tooltip" title="{{ advantage_text }}"{% endif %}>
+                        {{ advantage_text }}
                       </div>
-                      <span class="edit-only {{ bloc.color }} text-small ml-2" data-av-cost>
-                        {% if item %}{{ bloc.sign }}{{ xp.slots[slot] }}xp
+                      <span class="edit-only {{ advantage_group.color }} text-small ml-2" data-av-cost>
+                        {% if item %}{{ advantage_group.sign }}{{ xp.slots[slot] }}xp
                           {% if xp.slots[slot] != item.cout %}
                             (promo)
                           {% endif %}
@@ -635,13 +635,13 @@
             {% set filled_slots = [] %}
             {% set empty_slots = [] %}
             {% for i in 1..20 %}
-              {% set comp = attribute(fiche, 'competence' ~ i) %}
-              {% set val  = attribute(fiche, 'valeur' ~ i) %}
-              {% set specs = attribute(fiche, 'specialisations' ~ i) %}
-              {% set compEcole = attribute(fiche, 'compEcole' ~ i)|default(0) %}
-              {% set speEcole  = attribute(fiche, 'speEcole'  ~ i)|default('') %}
-              {% set slot = {i: i, comp: comp, val: val, specs: specs, compEcole: compEcole, speEcole: speEcole} %}
-              {% if comp is empty %}
+              {% set skill = attribute(sheet, 'competence' ~ i) %}
+              {% set val  = attribute(sheet, 'valeur' ~ i) %}
+              {% set specs = attribute(sheet, 'specialisations' ~ i) %}
+              {% set dojo_skill = attribute(sheet, 'compEcole' ~ i)|default(0) %}
+              {% set dojo_spec  = attribute(sheet, 'speEcole'  ~ i)|default('') %}
+              {% set slot = {i: i, skill: skill, val: val, specs: specs, dojo_skill: dojo_skill, dojo_spec: dojo_spec} %}
+              {% if skill is empty %}
                 {% set empty_slots = empty_slots|merge([slot]) %}
               {% else %}
                 {% set filled_slots = filled_slots|merge([slot]) %}
@@ -649,48 +649,47 @@
             {% endfor %}
 
             {% for slot in filled_slots|sort((a, b) =>
-                [a.compEcole > 0 ? 0 : 1, a.comp.nom|u.ascii|lower]
-                <=> [b.compEcole > 0 ? 0 : 1, b.comp.nom|u.ascii|lower]
+                [a.dojo_skill > 0 ? 0 : 1, a.skill.nom|u.ascii|lower]
+                <=> [b.dojo_skill > 0 ? 0 : 1, b.skill.nom|u.ascii|lower]
             ) %}
-                {% set bitmask = slot.specs|default('') %}
-                {% set bm_ec   = slot.speEcole|default('') %}
+                {% set spec_bitmask = slot.specs|default('') %}
+                {% set dojo_spec_bitmask   = slot.dojo_spec|default('') %}
                 {% set bought_specs = [] %}
                 {% for k in 1..6 %}
-                  {% set lab = attribute(slot.comp, 'specialisation' ~ k) %}
-                  {% set bit = (bitmask|length >= k) ? bitmask|slice(k - 1, 1) : '0' %}
-                  {% set bit_ec = (bm_ec|length >= k) ? bm_ec|slice(k - 1, 1) : '0' %}
-                  {% if lab and bit == '1' %}
-                    {% set bought_specs = bought_specs|merge([{label: lab, ecole: bit_ec == '1'}]) %}
+                  {% set spec_label = attribute(slot.skill, 'specialisation' ~ k) %}
+                  {% set spec_bit = (spec_bitmask|length >= k) ? spec_bitmask|slice(k - 1, 1) : '0' %}
+                  {% if spec_label and spec_bit == '1' %}
+                    {% set bought_specs = bought_specs|merge([spec_label]) %}
                   {% endif %}
                 {% endfor %}
-                {% set cout_slot = xp.skill[slot.i] %}
+                {% set cost_slot = xp.skill[slot.i] %}
                 <tr
-                  class="p-0" data-comp-row="{{ slot.i }}" data-comp-id="{{ slot.comp.id }}"
-                  data-comp-val="{{ slot.val ?? 0 }}" data-comp-specs="{{ bitmask }}"
-                  data-comp-ecole="{{ slot.compEcole ?? 0 }}" data-comp-spe-ecole="{{ bm_ec }}"
+                  class="p-0" data-comp-row="{{ slot.i }}" data-comp-id="{{ slot.skill.id }}"
+                  data-comp-val="{{ slot.val ?? 0 }}" data-comp-specs="{{ spec_bitmask }}"
+                  data-comp-ecole="{{ slot.dojo_skill ?? 0 }}" data-comp-spe-ecole="{{ dojo_spec_bitmask }}"
                 >
                   <td class="text-center" data-comp-ecole-cell>
-                    {% if slot.compEcole > 0 %}
-                      <img src="{{ asset(image_small(fiche.personnage.ecole.clan.mon)) }}" class="img-24" title="Compétence de l'École {{ fiche.personnage.ecole.nom }}" />
+                    {% if slot.dojo_skill > 0 %}
+                      <img src="{{ asset(image_small(sheet.personnage.ecole.clan.mon)) }}" class="img-24" title="Compétence de l'École {{ sheet.personnage.ecole.nom }}" />
                     {% else %}
                       <span class="d-inline-flex icon-20 rounded-circle border-base">&nbsp;</span>
                     {% endif %}
                   </td>
                   <th class="text-strong extrabold" scope="row" data-comp-name>
-                    <a href="{{ element_url(slot.comp) }}"><strong>{{ slot.comp.nom }}</strong></a>
-                    {% if slot.comp.degradante %}<i class="comp-degradante after fa-solid fa-arrow-down-wide-short" title="Compétence dégradante"></i>{% endif %}
+                    <a href="{{ element_url(slot.skill) }}"><strong>{{ slot.skill.nom }}</strong></a>
+                    {% if slot.skill.degradante %}<i class="comp-degradante after fa-solid fa-arrow-down-wide-short" title="Compétence dégradante"></i>{% endif %}
                   </th>
                   <td class="text-strong extrabold text-center" data-comp-val-cell>{{ slot.val ?? '' }}</td>
-                  <td class="text-body-c text-mini text-center d-none d-lg-table-cell" title="{{ slot.comp.trait }}" data-comp-trait-cell>{{ slot.comp.traitCourt }}</td>
-                  {% for rang_cap, texte_cap in {3: slot.comp.mastery3Text, 6: slot.comp.mastery6Text} %}
-                    {% set cap_long = not attribute(slot.comp, 'mastery' ~ rang_cap ~ 'Summary') %}
+                  <td class="text-body-c text-mini text-center d-none d-lg-table-cell" title="{{ slot.skill.trait }}" data-comp-trait-cell>{{ slot.skill.traitCourt }}</td>
+                  {% for rank_cap, cap_text in {3: slot.skill.mastery3Text, 6: slot.skill.mastery6Text} %}
+                    {% set cap_long = not attribute(slot.skill, 'mastery' ~ rank_cap ~ 'Summary') %}
                     <td class="comp-cap text-mini text-body-c text-center" rowspan="2">
-                      {% if slot.val >= rang_cap %}
-                        <span class="text-clamp-2"{% if cap_long %} data-toggle="tooltip" title="{{ texte_cap|striptags }}"{% endif %}>{{ texte_cap|striptags }}</span>
+                      {% if slot.val >= rank_cap %}
+                        <span class="text-clamp-2"{% if cap_long %} data-toggle="tooltip" title="{{ cap_text|striptags }}"{% endif %}>{{ cap_text|striptags }}</span>
                       {% endif %}
                     </td>
                   {% endfor %}
-                  <td class="edit-only text-alternate" data-comp-cost-cell>{% if cout_slot.rank > 0 %}-{{ cout_slot.rank }}xp{% endif %}</td>
+                  <td class="edit-only text-alternate" data-comp-cost-cell>{% if cost_slot.rank > 0 %}-{{ cost_slot.rank }}xp{% endif %}</td>
                 </tr>
                 <tr data-comp-specs-row="{{ slot.i }}" class="comp-specs-row">
                   <td></td>
@@ -698,15 +697,15 @@
                     {% if bought_specs|length > 0 %}
                       <small class="text-body-c">
                         <span class="text-alternate">Spé. :</span>
-                        {% for s in bought_specs %}
-                          <span{% if 'dégradante' in s.label|lower %} class="text-reddanger extrabold"{% endif %}>{{ s.label }}</span>{% if not loop.last %}, {% endif %}
+                        {% for bought_spec in bought_specs %}
+                          <span{% if 'dégradante' in bought_spec|lower %} class="text-reddanger extrabold"{% endif %}>{{ bought_spec }}</span>{% if not loop.last %}, {% endif %}
                         {% endfor %}
                       </small>
                     {% endif %}
                   </td>
                   <td class="edit-only text-alternate" data-comp-specs-cost-cell>
-                    {% if cout_slot.specialisations > 0 %}
-                      <small>-{{ cout_slot.specialisations }}xp (spé)</small>
+                    {% if cost_slot.specialisations > 0 %}
+                      <small>-{{ cost_slot.specialisations }}xp (spé)</small>
                     {% endif %}
                   </td>
                 </tr>
@@ -732,22 +731,22 @@
         </table>
       </div>
 
-      {% set ecole = fiche.personnage.ecole %}
-      {% set classe_nom = fiche.personnage.classe ? fiche.personnage.classe.nom : '' %}
+      {% set dojo = sheet.personnage.ecole %}
+      {% set class_name = sheet.personnage.classe ? sheet.personnage.classe.nom : '' %}
 
-      {% if ecole %}
+      {% if dojo %}
         {% set techniques = [] %}
-        {% if classe_nom in ['Shugenja', 'Moine'] and ecole.techSpecialNom is not empty %}
+        {% if class_name in ['Shugenja', 'Moine'] and dojo.techSpecialNom is not empty %}
           {% set techniques = [{
-            rank: null, anchor: 'technique-speciale', nom: ecole.techSpecialNom,
-            summary: ecole.techSpecialSummary, desc: ecole.techSpecialDesc|striptags
+            rank: null, anchor: 'technique-speciale', name: dojo.techSpecialNom,
+            summary: dojo.techSpecialSummary, description: dojo.techSpecialDesc|striptags
           }] %}
         {% endif %}
         {% for i in 1..rank %}
-          {% if attribute(ecole, 'tech' ~ i ~ 'Nom') is not empty %}
+          {% if attribute(dojo, 'tech' ~ i ~ 'Nom') is not empty %}
             {% set techniques = techniques|merge([{
-              rank: i, anchor: 'technique-' ~ i, nom: attribute(ecole, 'tech' ~ i ~ 'Nom'),
-              summary: attribute(ecole, 'tech' ~ i ~ 'Summary'), desc: attribute(ecole, 'tech' ~ i ~ 'Desc')|striptags
+              rank: i, anchor: 'technique-' ~ i, name: attribute(dojo, 'tech' ~ i ~ 'Nom'),
+              summary: attribute(dojo, 'tech' ~ i ~ 'Summary'), description: attribute(dojo, 'tech' ~ i ~ 'Desc')|striptags
             }]) %}
           {% endif %}
         {% endfor %}
@@ -762,10 +761,10 @@
                   {% if technique.rank %}{{ technique.rank }}{% else %}<i class="fa-solid fa-star text-small" title="Technique spéciale"></i>{% endif %}
                 </span>
                 <div>
-                  <strong class="text-strong extrabold"><a href="{{ element_url(ecole) }}#{{ technique.anchor }}">{{ technique.nom }}</a></strong>
+                  <strong class="text-strong extrabold"><a href="{{ element_url(dojo) }}#{{ technique.anchor }}">{{ technique.name }}</a></strong>
                   <p class="text-small text-body-c{% if not technique.summary %} text-clamp-2{% endif %}"
-                     {% if not technique.summary %}data-toggle="tooltip" title="{{ technique.desc }}"{% endif %}>
-                    {{ technique.summary ?: technique.desc }}
+                     {% if not technique.summary %}data-toggle="tooltip" title="{{ technique.description }}"{% endif %}>
+                    {{ technique.summary ?: technique.description }}
                   </p>
                 </div>
               </li>
@@ -776,8 +775,8 @@
 
       {% set spells_by_ring = {} %}
       {% set kihos_by_ring = {} %}
-      {% set tattoos = fiche.knownSpells|filter(s => s.categorie == 'TATOUAGE')|sort((a, b) => a.nom|u.ascii|lower <=> b.nom|u.ascii|lower) %}
-      {% for spell in fiche.knownSpells|filter(s => s.categorie != 'TATOUAGE') %}
+      {% set tattoos = sheet.knownSpells|filter(s => s.categorie == 'TATOUAGE')|sort((a, b) => a.nom|u.ascii|lower <=> b.nom|u.ascii|lower) %}
+      {% for spell in sheet.knownSpells|filter(s => s.categorie != 'TATOUAGE') %}
         {% if spell.categorie == 'KIHO' %}
           {% set kihos_by_ring = kihos_by_ring|merge({ (spell.anneau): (kihos_by_ring[spell.anneau] ?? [])|merge([spell]) }) %}
         {% else %}
@@ -789,12 +788,12 @@
     {# ===== [CARD-BLOC-SECTION] SPELLS ===== #}
     {# ====================================== #}
 
-      {% if classe_nom == 'Shugenja' or spells_by_ring is not empty %}
+      {% if class_name == 'Shugenja' or spells_by_ring is not empty %}
 
         {% set rings = {TERRE: FLAT_TERRE, AIR: FLAT_AIR, FEU: FLAT_FEU, EAU: FLAT_EAU} %}
-        {% set est_ishiken = (fiche.avantage1 and fiche.avantage1.nom == 'Ishiken-Do')
-                          or (fiche.avantage2 and fiche.avantage2.nom == 'Ishiken-Do') %}
-        {% if est_ishiken %}
+        {% set is_ishiken = (sheet.avantage1 and sheet.avantage1.nom == 'Ishiken-Do')
+                          or (sheet.avantage2 and sheet.avantage2.nom == 'Ishiken-Do') %}
+        {% if is_ishiken %}
           {% set rings = rings|merge({VIDE: FLAT_VIDE}) %}
         {% endif %}
 
@@ -806,23 +805,23 @@
 
             <div class="col-6 col-lg-3">
               <h6>Affinité</h6>
-              <strong class="text-{{ ecole.affinite|upper }} text-uppercase">{{ ecole.affinite|default('—') }}</strong>
+              <strong class="text-{{ dojo.affinite|upper }} text-uppercase">{{ dojo.affinite|default('—') }}</strong>
             </div>
 
             <div class="col-6 col-lg-3">
               <h6>Déficience</h6>
-              <strong class="text-{{ ecole.deficience|upper }} text-uppercase">{{ ecole.deficience|default('—') }}</strong>
+              <strong class="text-{{ dojo.deficience|upper }} text-uppercase">{{ dojo.deficience|default('—') }}</strong>
             </div>
 
             <div class="col-6 col-lg-3">
               <h6>Technique de l'École</h6>
-              {% if ecole and ecole.techSpecialNom is not empty %}
+              {% if dojo and dojo.techSpecialNom is not empty %}
                 <a  class="spell-link extrabold" role="button" tabindex="0"
                     data-toggle="popover" data-html="true" data-trigger="focus"
                     data-container="body" data-placement="top"
-                    title="{{ ecole.techSpecialNom }}"
-                    data-content="{{ ecole.techSpecialDesc|raw|nl2br|e('html_attr') }}">
-                  {{ ecole.techSpecialNom }}
+                    title="{{ dojo.techSpecialNom }}"
+                    data-content="{{ dojo.techSpecialDesc|raw|nl2br|e('html_attr') }}">
+                  {{ dojo.techSpecialNom }}
                 </a>
               {% else %}
                 —
@@ -842,10 +841,10 @@
           </div>
 
           <div class="row no-gutters magie-anneaux">
-            {% for ring, icone in rings %}
+            {% for ring, icon in rings %}
               <div class="col-6 col-lg knownspells-column">
                 <h6 class="element-header text-{{ ring }}-lighten bg-{{ ring }}-darken extrabold">
-                  <img class="img-24" src="{{ asset(icone) }}" />{{ ring|lower|capitalize }}
+                  <img class="img-24" src="{{ asset(icon) }}" />{{ ring|lower|capitalize }}
                 </h6>
                 <ul class="spell-list" data-spell-list="{{ ring }}">
                   {% for spell in spells_by_ring[ring]|default([]) %}
@@ -865,17 +864,17 @@
         {# ===== [CARD-BLOC-SECTION] KIHOS ===== #}
         {# ===================================== #}
 
-      {% if classe_nom == 'Moine' or kihos_by_ring is not empty %}
+      {% if class_name == 'Moine' or kihos_by_ring is not empty %}
 
         <div class="card card-bloc">
 
           <div class="card-title-cartouche">Kihos</div>
 
           <div class="row no-gutters magie-anneaux">
-            {% for ring, icone in {TERRE: FLAT_TERRE, AIR: FLAT_AIR, FEU: FLAT_FEU, EAU: FLAT_EAU, VIDE: FLAT_VIDE} %}
+            {% for ring, icon in {TERRE: FLAT_TERRE, AIR: FLAT_AIR, FEU: FLAT_FEU, EAU: FLAT_EAU, VIDE: FLAT_VIDE} %}
               <div class="col-6 col-lg knownspells-column">
                 <h6 class="element-header text-{{ ring }}-lighten bg-{{ ring }}-darken extrabold">
-                  <img class="img-24" src="{{ asset(icone) }}" />{{ ring|lower|capitalize }}
+                  <img class="img-24" src="{{ asset(icon) }}" />{{ ring|lower|capitalize }}
                 </h6>
                 <ul class="spell-list" data-spell-list="KIHO_{{ ring }}">
                   {% for kiho in kihos_by_ring[ring]|default([]) %}
@@ -891,11 +890,11 @@
 
       {% endif %}
 
-      {% if ecole and ecole.hasTattoos %}
+      {% if dojo and dojo.hasTattoos %}
         <div class="card card-bloc">
           <div class="card-title-cartouche">Tatouages</div>
 
-          {% set tattoo_emblem = ecole.clan.mon|default(NA_MON) %}
+          {% set tattoo_emblem = dojo.clan.mon|default(NA_MON) %}
           <div class="tattoo-board">
             <ul class="spell-list" data-spell-list="TATOUAGE" data-spell-emblem="{{ asset(tattoo_emblem) }}">
               {% for tattoo in tattoos %}
@@ -909,33 +908,33 @@
         </div>
       {% endif %}
 
-      {% if is_own_character or is_mj() %}
-        {% set signalement = {
-          Sexe: fiche.personnage.genre == 'F' ? 'Femme' : (fiche.personnage.genre == 'M' ? 'Homme' : ''),
-          Age: fiche.age, Taille: fiche.height, Poids: fiche.weight,
-          Cheveux: fiche.hair, Yeux: fiche.eyes
+      {% if is_own_character or is_gm() %}
+        {% set report = {
+          Sexe: sheet.personnage.genre == 'F' ? 'Femme' : (sheet.personnage.genre == 'M' ? 'Homme' : ''),
+          Age: sheet.age, Taille: sheet.height, Poids: sheet.weight,
+          Cheveux: sheet.hair, Yeux: sheet.eyes
         } %}
         <div class="card card-bloc">
           <div class="card-title-cartouche">Apparence</div>
 
           <ul class="signalement-board">
-            {% for label, valeur in signalement %}
+            {% for label, value in report %}
               <li>
                 <span class="label">{{ label }}</span>
-                <strong class="read-only">{{ valeur ?: '—' }}</strong>
+                <strong class="read-only">{{ value ?: '—' }}</strong>
                 {% if label != 'Sexe' %}
                   <input type="{{ label == 'Age' ? 'number' : 'text' }}" {% if label == 'Age' %}min="0"{% endif %}
                          id="look-input-{{ label|lower }}" class="form-control form-control-sm edit-only"
-                         value="{{ valeur }}" />
+                         value="{{ value }}" />
                 {% endif %}
               </li>
             {% endfor %}
           </ul>
 
           <div class="signalement-texte">
-            <p class="read-only">{{ fiche.appearance ?: 'Aucune description.' }}</p>
+            <p class="read-only">{{ sheet.appearance ?: 'Aucune description.' }}</p>
             <textarea id="look-input-appearance" rows="2"
-                      class="form-control form-control-sm edit-only">{{ fiche.appearance }}</textarea>
+                      class="form-control form-control-sm edit-only">{{ sheet.appearance }}</textarea>
           </div>
         </div>
 
@@ -943,9 +942,9 @@
           <div class="card-title-cartouche">Notes de Jeu</div>
 
           <div class="signalement-texte">
-            <p class="read-only">{{ fiche.notes ? fiche.notes|nl2br : 'Aucune note.' }}</p>
+            <p class="read-only">{{ sheet.notes ? sheet.notes|nl2br : 'Aucune note.' }}</p>
             <textarea id="look-input-notes" rows="5"
-                      class="form-control form-control-sm edit-only">{{ fiche.notes }}</textarea>
+                      class="form-control form-control-sm edit-only">{{ sheet.notes }}</textarea>
           </div>
         </div>
       {% endif %}
@@ -963,13 +962,13 @@
         <div>
           <ul class="list-group list-group-flush">
 
-            {% set JetInitL = eff_reflexes + rank %}
-            {% set JetInitG = eff_reflexes %}
+            {% set initiative_rolled = eff_reflexes + rank %}
+            {% set initiative_kept = eff_reflexes %}
             <li class="list-group-item p-0 px-3 py-1 flex flex-wrap gap-2">
               <div class="flex-grow-1 flex-col">
                 Initiative
                 <span class="ml-2">
-                  <strong class="text-strong" data-stat="initiative">{{JetInitL}}g{{JetInitG}}{% if initMod != 0 %} {{ initMod > 0 ? '+' : '' }}{{ initMod }}{% endif %}</strong>
+                  <strong class="text-strong" data-stat="initiative">{{initiative_rolled}}g{{initiative_kept}}{% if initiative_mod != 0 %} {{ initiative_mod > 0 ? '+' : '' }}{{ initiative_mod }}{% endif %}</strong>
                   &nbsp;
                   <i
                     class="fa-solid fa-dice text-accent"
@@ -984,8 +983,8 @@
                         <br/>
                         <br/>/lancer {{eff_reflexes}} + {{rank}}
                         <br/>/garder {{eff_reflexes}}
-                        {% if initMod != 0 %}
-                          <br/>Modificateur : {{ initMod > 0 ? '+' : '' }}{{ initMod }}
+                        {% if initiative_mod != 0 %}
+                          <br/>Modificateur : {{ initiative_mod > 0 ? '+' : '' }}{{ initiative_mod }}
                         {% endif %}
                       </div>"
                   >
@@ -993,25 +992,25 @@
                 </span>
               </div>
               <div class="text-right text-small">
-                <strong data-stat="initiative-avg">{{ (((rank + eff_reflexes) ~ 'g' ~ eff_reflexes)|jeter) + initMod }}</strong>
-                <div data-stat="arme-lourde"{% if not (fiche.armeActuelle and fiche.armeActuelle.type == 'LOURDE') %} class="d-none"{% endif %}>-5 (arme lourde)</div>
+                <strong data-stat="initiative-avg">{{ (((rank + eff_reflexes) ~ 'g' ~ eff_reflexes)|expected_roll) + initiative_mod }}</strong>
+                <div data-stat="arme-lourde"{% if not (sheet.armeActuelle and sheet.armeActuelle.type == 'LOURDE') %} class="d-none"{% endif %}>-5 (arme lourde)</div>
               </div>
-              {{ fiche_macros.stat_mod('initiative', fiche.initiativeModifier ?? '', 'nombre') }}
+              {{ sheet_macros.stat_mod('initiative', sheet.initiativeModifier ?? '', 'nombre') }}
             </li>
 
-            {% set comp_combat_val = 0 %}
-            {% if fiche.compCombatActuelle %}
+            {% set combat_skill_value = 0 %}
+            {% if sheet.compCombatActuelle %}
               {% for i in 1..20 %}
-                {% set ci = attribute(fiche, 'competence' ~ i) %}
-                {% if ci and ci.id == fiche.compCombatActuelle.id %}
-                  {% set comp_combat_val = attribute(fiche, 'valeur' ~ i) ?? 0 %}
+                {% set slot_skill = attribute(sheet, 'competence' ~ i) %}
+                {% if slot_skill and slot_skill.id == sheet.compCombatActuelle.id %}
+                  {% set combat_skill_value = attribute(sheet, 'valeur' ~ i) ?? 0 %}
                 {% endif %}
               {% endfor %}
             {% endif %}
 
             <li class="list-group-item p-0 px-3 py-1 flex gap-2 edit-only"
                 data-comp-combat-row
-                data-comp-combat-id="{{ fiche.compCombatActuelle ? fiche.compCombatActuelle.id : 0 }}">
+                data-comp-combat-id="{{ sheet.compCombatActuelle ? sheet.compCombatActuelle.id : 0 }}">
               <div class="flex-grow-1">
                 Compétence de combat
                 <i  class="fas fa-info-circle text-disabled ml-1"
@@ -1021,14 +1020,14 @@
               </div>
             </li>
 
-            {% set JetAtkL = eff_agilite + atkModL + (comp_combat_val / 2)|round(0, 'ceil') %}
-            {% set JetAtkG = eff_agilite + atkModG %}
+            {% set attack_rolled = eff_agility + attack_rolled_mod + (combat_skill_value / 2)|round(0, 'ceil') %}
+            {% set attack_kept = eff_agility + attack_kept_mod %}
             <li class="list-group-item p-0 px-3 py-1 flex flex-wrap gap-2">
-              <div class="flex-grow-1 stat-attaque-with-comp{% if not fiche.compCombatActuelle %} d-none{% endif %}">
-                Attaque <span class="text-small text-grayash">(<span data-stat="comp-combat-nom">{{ fiche.compCombatActuelle ? fiche.compCombatActuelle.nom : '' }}</span>)</span>
+              <div class="flex-grow-1 stat-attaque-with-comp{% if not sheet.compCombatActuelle %} d-none{% endif %}">
+                Attaque <span class="text-small text-grayash">(<span data-stat="comp-combat-nom">{{ sheet.compCombatActuelle ? sheet.compCombatActuelle.nom : '' }}</span>)</span>
                 <br/>
                 <span>
-                  <strong class="text-strong ml-2" data-stat="attaque">{{JetAtkL}}g{{JetAtkG}}</strong>
+                  <strong class="text-strong ml-2" data-stat="attaque">{{attack_rolled}}g{{attack_kept}}</strong>
                   &nbsp;
                   <i
                     class="fa-solid fa-dice text-accent"
@@ -1041,30 +1040,30 @@
                         <br/>/garder
                         Agilité
                         <br/>
-                        <br/>/lancer {{eff_agilite}} + {{comp_combat_val / 2}}
-                        <br/>/garder {{eff_agilite}}
-                        {% if fiche.attaqueModifier %}
-                          Modificateur : {{ fiche.attaqueModifier }}
+                        <br/>/lancer {{eff_agility}} + {{combat_skill_value / 2}}
+                        <br/>/garder {{eff_agility}}
+                        {% if sheet.attaqueModifier %}
+                          Modificateur : {{ sheet.attaqueModifier }}
                         {% endif %}
                       </div>
                     "></i>
                 </span>
               </div>
-              <div class="text-right text-small stat-attaque-with-comp{% if not fiche.compCombatActuelle %} d-none{% endif %}">
-                <strong data-stat="attaque-avg">{{(JetAtkL ~ 'g' ~ JetAtkG)|jeter}}</strong>
-                <br/><span class="edit-only">en Assaut : <span data-stat="attaque-assaut-avg">{{((JetAtkL + 2) ~ 'g' ~ (JetAtkG + 1))|jeter}}</span></span>
+              <div class="text-right text-small stat-attaque-with-comp{% if not sheet.compCombatActuelle %} d-none{% endif %}">
+                <strong data-stat="attaque-avg">{{(attack_rolled ~ 'g' ~ attack_kept)|expected_roll}}</strong>
+                <br/><span class="edit-only">en Assaut : <span data-stat="attaque-assaut-avg">{{((attack_rolled + 2) ~ 'g' ~ (attack_kept + 1))|expected_roll}}</span></span>
               </div>
-              <div class="stat-attaque-no-comp{% if fiche.compCombatActuelle %} d-none{% endif %}">
+              <div class="stat-attaque-no-comp{% if sheet.compCombatActuelle %} d-none{% endif %}">
                 Jet Attaque
                 <br/>
                 <small class="text-alternate">Choisissez une compétence de combat principal</small>
               </div>
-              {{ fiche_macros.stat_mod('attaque', fiche.attaqueModifier ?? '', 'XgY') }}
+              {{ sheet_macros.stat_mod('attaque', sheet.attaqueModifier ?? '', 'XgY') }}
             </li>
 
             <li class="list-group-item p-0 px-3 py-1 flex gap-2 edit-only"
                 data-arme-actuelle-row
-                data-arme-actuelle-id="{{ fiche.armeActuelle ? fiche.armeActuelle.id : 0 }}">
+                data-arme-actuelle-id="{{ sheet.armeActuelle ? sheet.armeActuelle.id : 0 }}">
               <div class="flex-grow-1">
                 Arme actuelle
                 <i  class="fas fa-info-circle text-disabled ml-1"
@@ -1076,7 +1075,7 @@
 
             <li class="list-group-item p-0 px-3 py-1 flex gap-2 edit-only"
                 data-armure-row
-                data-armure-id="{{ fiche.armure ? fiche.armure.id : 0 }}">
+                data-armure-id="{{ sheet.armure ? sheet.armure.id : 0 }}">
               <div class="flex-grow-1">
                 Armure actuelle
                 <i  class="fas fa-info-circle text-disabled ml-1"
@@ -1086,16 +1085,16 @@
               </div>
             </li>
 
-            {% set vdparts = fiche.armeActuelle ? fiche.armeActuelle.vd|default('0g1')|split('g') : ['0', '1'] %}
-            {% set JetDmglances = vdparts[0] + dmgModL + eff_forceStat %}
-            {% set JetDmgGardes = vdparts[1] + dmgModG %}
+            {% set damage_parts = sheet.armeActuelle ? sheet.armeActuelle.vd|default('0g1')|split('g') : ['0', '1'] %}
+            {% set damage_rolled = damage_parts[0] + damage_rolled_mod + eff_strength %}
+            {% set damage_kept = damage_parts[1] + damage_kept_mod %}
             <li class="list-group-item px-3 py-2 flex flex-wrap gap-2">
-              <div class="flex-grow-1 flex-col stat-dommages-with-arme{% if not fiche.armeActuelle %} d-none{% endif %}">
+              <div class="flex-grow-1 flex-col stat-dommages-with-arme{% if not sheet.armeActuelle %} d-none{% endif %}">
                 <span>
-                  Dommages <span class="text-small text-grayash">(<span data-stat="arme-actuelle-nom">{{ fiche.armeActuelle ? fiche.armeActuelle.nom : '' }}</span>)</span>
+                  Dommages <span class="text-small text-grayash">(<span data-stat="arme-actuelle-nom">{{ sheet.armeActuelle ? sheet.armeActuelle.nom : '' }}</span>)</span>
                 </span>
                 <span class="ml-2 text-grayash">
-                  <strong class="text-strong" data-stat="dommages">{{ JetDmglances ~ 'g' ~ JetDmgGardes }}</strong>
+                  <strong class="text-strong" data-stat="dommages">{{ damage_rolled ~ 'g' ~ damage_kept }}</strong>
                   &nbsp;
                   <i class="fa-solid fa-dice text-accent"
                       data-tooltip-stat="dommages"
@@ -1106,81 +1105,81 @@
                           <br/>VD de l'Arme + Force
                           <br/>/garder VD de l'Arme
                           <br/>
-                          <br/><img class='img-56' src={{ asset(image_small(fiche.armeActuelle ? fiche.armeActuelle.icon|default(NA_OBJET) : NA_OBJET)) }} />
-                          <br/>- VD {{ fiche.armeActuelle ? fiche.armeActuelle.nom : '' }} : {{ fiche.armeActuelle ? fiche.armeActuelle.vd|default('0g1') : '0g1' }}
-                          <br/>- Force : +{{ eff_forceStat }}g0
-                          {% if fiche.dmgModifier %}
+                          <br/><img class='img-56' src={{ asset(image_small(sheet.armeActuelle ? sheet.armeActuelle.icon|default(NA_OBJET) : NA_OBJET)) }} />
+                          <br/>- VD {{ sheet.armeActuelle ? sheet.armeActuelle.nom : '' }} : {{ sheet.armeActuelle ? sheet.armeActuelle.vd|default('0g1') : '0g1' }}
+                          <br/>- Force : +{{ eff_strength }}g0
+                          {% if sheet.dmgModifier %}
                             <br/>
                             <br/>Modificateurs :
-                            <br/> - Av./Techniques : +{{ fiche.dmgModifier }}
+                            <br/> - Av./Techniques : +{{ sheet.dmgModifier }}
                           {% endif %}
                         </div>"
                   >
                   </i>
                 </span>
               </div>
-              <div class="text-right text-small stat-dommages-with-arme{% if not fiche.armeActuelle %} d-none{% endif %}">
-                <strong data-stat="dommages-avg">{{ ( JetDmglances ~  'g' ~ JetDmgGardes  )|jeter }}</strong>
-                <br/><span class="edit-only">3 Aug. : <span data-stat="dommages-aug3-avg">{{ ( (JetDmglances + 3) ~  'g' ~ JetDmgGardes  )|jeter }}</span></span>
+              <div class="text-right text-small stat-dommages-with-arme{% if not sheet.armeActuelle %} d-none{% endif %}">
+                <strong data-stat="dommages-avg">{{ ( damage_rolled ~  'g' ~ damage_kept  )|expected_roll }}</strong>
+                <br/><span class="edit-only">3 Aug. : <span data-stat="dommages-aug3-avg">{{ ( (damage_rolled + 3) ~  'g' ~ damage_kept  )|expected_roll }}</span></span>
               </div>
-              <div class="stat-dommages-no-arme{% if fiche.armeActuelle %} d-none{% endif %}">
+              <div class="stat-dommages-no-arme{% if sheet.armeActuelle %} d-none{% endif %}">
                 Jet Dommages
                 <br/>
                 <small class="text-alternate">Choisissez une arme principale</small>
               </div>
-              {{ fiche_macros.stat_mod('dmg', fiche.dmgModifier ?? '', 'XgY') }}
+              {{ sheet_macros.stat_mod('dmg', sheet.dmgModifier ?? '', 'XgY') }}
             </li>
 
-            {% set nd_mod = fiche.ndModifier ?? 0 %}
+            {% set tn_mod = sheet.ndModifier ?? 0 %}
             <li class="list-group-item px-3 py-2 flex flex-wrap gap-2">
               <div class="flex-grow-1">
                 ND pour être touché
-                <br/><strong class="text-strong ml-2" data-stat="nd-touche">{{ eff_reflexes * 5 + rank + nd_mod }}</strong>
+                <br/><strong class="text-strong ml-2" data-stat="nd-touche">{{ eff_reflexes * 5 + rank + tn_mod }}</strong>
                 &nbsp;
                 <i
                   class="fa-solid fa-arrow-trend-up"
                   data-toggle="tooltip" data-placement="right" data-html="true"
                   title="
                     <div class='text-mini'>
-                      5 x Réflexes + Rang Général{% if nd_mod != 0 %}<br/>Modificateur : {{ nd_mod > 0 ? '+' : '' }}{{ nd_mod }}{% endif %}
+                      5 x Réflexes + Rang Général{% if tn_mod != 0 %}<br/>Modificateur : {{ tn_mod > 0 ? '+' : '' }}{{ tn_mod }}{% endif %}
                     </div>"
                 >
                 </i>
               </div>
-              {% if fiche.armure %}
+              {% if sheet.armure %}
                 <small class="text-right">
-                  <strong data-stat="nd-touche-armure">{{ eff_reflexes * 5 + rank + fiche.armure.ndArmure + nd_mod }}</strong>
+                  <strong data-stat="nd-touche-armure">{{ eff_reflexes * 5 + rank + sheet.armure.ndArmure + tn_mod }}</strong>
                   <br/>
                   Avec Armure
                 </small>
               {% endif %}
-              {{ fiche_macros.stat_mod('nd', fiche.ndModifier ?? '', 'nombre') }}
+              {{ sheet_macros.stat_mod('nd', sheet.ndModifier ?? '', 'nombre') }}
             </li>
 
-            {% if fiche.armure %}
+            {% if sheet.armure %}
               <li class="list-group-item px-3 py-2 flex">
                 <div class="flex-grow-1" >
-                  Armure <span class="text-small text-grayash">({{ fiche.armure.nom }})</span>
-                  <br/><strong class="text-strong ml-2">+{{ fiche.armure.ndArmure }} au ND pour être touché</strong>
-                  <br/><strong class="text-strong ml-2">-{{ fiche.armure.reduction }} Réduction de dommages</strong>
+                  Armure <span class="text-small text-grayash">({{ sheet.armure.nom }})</span>
+                  <br/><strong class="text-strong ml-2">+{{ sheet.armure.ndArmure }} au ND pour être touché</strong>
+                  <br/><strong class="text-strong ml-2">-{{ sheet.armure.reduction }} Réduction de dommages</strong>
                 </div>
               </li>
             {% endif %}
 
-            {% set reduction_armure = fiche.armure ? fiche.armure.reduction : 0 %}
-            {% set reduction_mod = fiche.reductionModifier ?? 0 %}
+            {% set armor_reduction = sheet.armure ? sheet.armure.reduction : 0 %}
+            {% set reduction_mod = sheet.reductionModifier ?? 0 %}
             <li class="list-group-item px-3 py-2 d-flex flex-wrap">
               <div class="flex-grow-1">
                 Réduction
-                <br><strong class="ml-2 text-strong">{{ reduction_armure + reduction_mod }}</strong>
+                <br><strong class="ml-2 text-strong">{{ armor_reduction + reduction_mod }}</strong>
                 &nbsp;
                 <i
                   class="fa-solid fa-shield-halved"
                   data-toggle="tooltip" data-placement="right" data-html="true"
                   title="
                     <div class='text-mini text-left'>
-                      {% if fiche.armure %}
-                        {{ fiche.armure.nom }} : {{ fiche.armure.reduction }}
+                      {% if sheet.armure %}
+                        {{ sheet.armure.nom }} : {{ sheet.armure.reduction }}
                       {% endif %}
                       {% if reduction_mod != 0 %}
                         <br/>Modificateur : {{ reduction_mod > 0 ? '+' : '' }}{{ reduction_mod }}
@@ -1190,26 +1189,26 @@
               </div>
               <div class="text-right">
                 {% if reduction_mod != 0 %}
-                  <br/><small class="text-muted">({{ reduction_armure }} armure {{ reduction_mod > 0 ? '+' : '' }}{{ reduction_mod }} modif.)</small>
+                  <br/><small class="text-muted">({{ armor_reduction }} armure {{ reduction_mod > 0 ? '+' : '' }}{{ reduction_mod }} modif.)</small>
                 {% endif %}
               </div>
-              {{ fiche_macros.stat_mod('reduction', fiche.reductionModifier ?? '', 'nombre') }}
+              {{ sheet_macros.stat_mod('reduction', sheet.reductionModifier ?? '', 'nombre') }}
             </li>
 
             <li class="list-group-item px-3 py-2 d-flex">
               <div class="flex-grow-1">
                 Points de Vie
-                <br><strong class="ml-2 text-strong" data-stat="hp-total">{{ fiche.pvMax }}</strong>
+                <br><strong class="ml-2 text-strong" data-stat="hp-total">{{ sheet.pvMax }}</strong>
                 &nbsp;
                 <i
                   class="fa-solid fa-heart-pulse text-primary"
                   data-toggle="tooltip" data-placement="right" data-html="true"
                   title="
                     <div class='text-mini'>
-                      1 * (TERRE * {{ pv_indemne_par_terre }})
+                      1 * (TERRE * {{ healthy_hp_per_earth }})
                       <br/>
                       +
-                      <br/> {{ niveaux_blessure|length - 1 }} * (TERRE * {{ pv_blessure_par_terre }})
+                      <br/> {{ wound_levels|length - 1 }} * (TERRE * {{ wounded_hp_per_earth }})
                     </div>
                 "></i>
               </div>
@@ -1238,14 +1237,14 @@
               </tr>
             </thead>
             <tbody>
-              {% for etat, malus in niveaux_blessure %}
+              {% for state, malus in wound_levels %}
                 <tr>
-                  <td>{{ etat }}</td>
+                  <td>{{ state }}</td>
                   <td>{{ malus is null ? 'ne peut agir' : (malus > 0 ? '+' ~ malus : malus) }}</td>
                   {% if loop.first %}
-                    <td data-stat="hp-indemne">{{ pv_indemne_par_terre * fiche.terre }}</td>
+                    <td data-stat="hp-indemne">{{ healthy_hp_per_earth * sheet.terre }}</td>
                   {% else %}
-                    <td data-stat="hp-blesse">{{ pv_blessure_par_terre * fiche.terre }}</td>
+                    <td data-stat="hp-blesse">{{ wounded_hp_per_earth * sheet.terre }}</td>
                   {% endif %}
                 </tr>
               {% endfor %}
@@ -1254,7 +1253,7 @@
         </div>
       </div>
 
-      {% if is_own_character or is_mj() %}
+      {% if is_own_character or is_gm() %}
         <div class="card card-bloc mb-2">
           <div class="card-title-cartouche">Armes</div>
 
@@ -1263,12 +1262,12 @@
               <tr><th>Arme</th><th>Taille</th><th>Poids</th><th>VD / Force</th><th class="edit-only"></th></tr>
             </thead>
             <tbody data-inventory-list="weapons">
-              {% for arme in fiche.inventoryItems|filter(o => o.categorie == 'ARME')|sort((a, b) => a.nom|u.ascii|lower <=> b.nom|u.ascii|lower) %}
-                <tr class="inventory-line" data-inventory-id="{{ arme.id }}" data-inventory-categorie="ARME">
-                  <th scope="row" class="inventory-name">{{ arme.nom }}</th>
-                  <td>{{ arme.taille|lower|capitalize|default('—') }}</td>
-                  <td>{{ arme.poids|lower|capitalize|default('—') }}</td>
-                  <td class="extrabold">{{ arme.vdOuForce|default('—') }}</td>
+              {% for weapon in sheet.inventoryItems|filter(o => o.categorie == 'ARME')|sort((a, b) => a.nom|u.ascii|lower <=> b.nom|u.ascii|lower) %}
+                <tr class="inventory-line" data-inventory-id="{{ weapon.id }}" data-inventory-categorie="ARME">
+                  <th scope="row" class="inventory-name">{{ weapon.nom }}</th>
+                  <td>{{ weapon.taille|lower|capitalize|default('—') }}</td>
+                  <td>{{ weapon.poids|lower|capitalize|default('—') }}</td>
+                  <td class="extrabold">{{ weapon.vdOuForce|default('—') }}</td>
                   <td class="edit-only" data-inventory-remove></td>
                 </tr>
               {% else %}
@@ -1284,12 +1283,12 @@
 
           {% set inventory_order = {'OBJET': 0, 'PROJECTILE': 1, 'ARMURE': 2} %}
           <ul class="inventory-list" data-inventory-list="items">
-            {% for objet in fiche.inventoryItems|filter(o => o.categorie != 'ARME')|sort((a, b) =>
+            {% for object in sheet.inventoryItems|filter(o => o.categorie != 'ARME')|sort((a, b) =>
                 [inventory_order[a.categorie]|default(9), a.nom|u.ascii|lower]
                 <=> [inventory_order[b.categorie]|default(9), b.nom|u.ascii|lower]) %}
-              <li class="inventory-line" data-inventory-id="{{ objet.id }}" data-inventory-categorie="{{ objet.categorie }}">
-                <span class="inventory-name">{{ objet.nom }}</span>
-                {% if objet.categorie == 'ARMURE' %}
+              <li class="inventory-line" data-inventory-id="{{ object.id }}" data-inventory-categorie="{{ object.categorie }}">
+                <span class="inventory-name">{{ object.nom }}</span>
+                {% if object.categorie == 'ARMURE' %}
                   <i class="fa-solid fa-shield-halved text-graydust" title="Armure"></i>
                 {% endif %}
               </li>
@@ -1304,10 +1303,10 @@
               <li>
                 <img src="{{ asset('/assets/icons/money/' ~ coin ~ '.png') }}" alt="" />
                 <span class="purse-label">{{ coin|capitalize }}</span>
-                <strong class="read-only">{{ attribute(fiche, coin) ?? 0 }}</strong>
+                <strong class="read-only">{{ attribute(sheet, coin) ?? 0 }}</strong>
                 <input type="number" min="0" id="purse-input-{{ coin }}"
                        class="form-control form-control-sm edit-only"
-                       value="{{ attribute(fiche, coin) ?? 0 }}" />
+                       value="{{ attribute(sheet, coin) ?? 0 }}" />
               </li>
             {% endfor %}
           </ul>
@@ -1332,18 +1331,18 @@
         });
     </script>
 
-    {% if is_own_character or is_mj() %}
+    {% if is_own_character or is_gm() %}
     <script>
         window.FICHE_CONFIG = {
             xpBase: {{ xp.creation + xp.progression }},
-            persoClasseId: {{ perso_classe_id }},
+            persoClasseId: {{ character_class_id }},
             rank: {{ rank }},
-            armureNd: {{ fiche.armure and fiche.armure.ndArmure ? fiche.armure.ndArmure : 0 }},
-            ndModifier: {{ fiche.ndModifier ?? 0 }},
-            pvIndemneParTerre: {{ pv_indemne_par_terre }},
-            pvBlessureParTerre: {{ pv_blessure_par_terre }},
-            niveauxBlesses: {{ niveaux_blessure|length - 1 }},
-            editUrl: {{ path('characters_sheet_edit', {id: fiche.id})|json_encode|raw }},
+            armureNd: {{ sheet.armure and sheet.armure.ndArmure ? sheet.armure.ndArmure : 0 }},
+            ndModifier: {{ sheet.ndModifier ?? 0 }},
+            pvIndemneParTerre: {{ healthy_hp_per_earth }},
+            pvBlessureParTerre: {{ wounded_hp_per_earth }},
+            niveauxBlesses: {{ wound_levels|length - 1 }},
+            editUrl: {{ path('characters_sheet_edit', {id: sheet.id})|json_encode|raw }},
             csrfToken: {{ csrf_token('player_sheet')|json_encode|raw }},
             skills: {{ skills_json|json_encode|raw }},
             advantages: {{ advantages_json|json_encode|raw }},
@@ -1352,16 +1351,16 @@
             spells: {{ spells_json|default([])|json_encode|raw }},
             objects: {{ objects_json|default([])|json_encode|raw }},
             bareHandsId: {{ bare_hands_id ?? 'null' }},
-            jetMap: {{ jet_map()|json_encode|raw }},
-            armeActuelleId: {{ fiche.armeActuelle ? fiche.armeActuelle.id : 0 }},
-            compCombatActuelleId: {{ fiche.compCombatActuelle ? fiche.compCombatActuelle.id : 0 }},
-            initiativeModifier: {{ fiche.initiativeModifier ?? 0 }},
-            atkModL:  {{ atkModL }},
-            atkModG:  {{ atkModG }},
-            dmgModL:  {{ dmgModL }},
-            dmgModG:  {{ dmgModG }},
-            attaqueModifierStr:    {% if fiche.attaqueModifier %}{{ fiche.attaqueModifier|json_encode|raw }}{% else %}null{% endif %},
-            dmgModifierStr:        {% if fiche.dmgModifier %}{{ fiche.dmgModifier|json_encode|raw }}{% else %}null{% endif %}
+            jetMap: {{ roll_map()|json_encode|raw }},
+            armeActuelleId: {{ sheet.armeActuelle ? sheet.armeActuelle.id : 0 }},
+            compCombatActuelleId: {{ sheet.compCombatActuelle ? sheet.compCombatActuelle.id : 0 }},
+            initiativeModifier: {{ sheet.initiativeModifier ?? 0 }},
+            atkModL:  {{ attack_rolled_mod }},
+            atkModG:  {{ attack_kept_mod }},
+            dmgModL:  {{ damage_rolled_mod }},
+            dmgModG:  {{ damage_kept_mod }},
+            attaqueModifierStr:    {% if sheet.attaqueModifier %}{{ sheet.attaqueModifier|json_encode|raw }}{% else %}null{% endif %},
+            dmgModifierStr:        {% if sheet.dmgModifier %}{{ sheet.dmgModifier|json_encode|raw }}{% else %}null{% endif %}
         };
     </script>
     <script>

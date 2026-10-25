@@ -29,8 +29,8 @@ class AdminDevelopmentController extends AbstractController
             'element' => 'development',
             'label' => 'Développement',
             'labels' => 'Développements',
-            'genre' => 'M',
-            'determinant' => 'un',
+            'gender' => 'M',
+            'article' => 'un',
             'table_cols' => [
                 'participation.personnage.icone:Portrait:symbol',
                 'participation.personnage.prenom:Personnage::bold',
@@ -68,11 +68,11 @@ class AdminDevelopmentController extends AbstractController
         }
 
         return $this->render('back_office/create.html.twig', [
-            'type' => 'Créer',
+            'type' => 'create',
             'entity' => 'development',
             'label' => 'Développement',
-            'genre' => 'M',
-            'determinant' => 'un',
+            'gender' => 'M',
+            'article' => 'un',
             'form' => $form->createView(),
         ]);
     }
@@ -97,12 +97,12 @@ class AdminDevelopmentController extends AbstractController
         }
 
         return $this->renderForm('back_office/edit.html.twig', [
-            'type' => 'Modifier',
+            'type' => 'edit',
             'development' => $development,
             'entity' => 'development',
             'label' => 'Développement',
-            'genre' => 'M',
-            'determinant' => 'un',
+            'gender' => 'M',
+            'article' => 'un',
             'form' => $form,
         ]);
     }

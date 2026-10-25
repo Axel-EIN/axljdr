@@ -11,11 +11,11 @@
   <main class="container-fluid element-page">
     <div class="container relative">
 
-      {% set category_label = {world: 'Univers', story: 'Aventure', rules: 'Règles'}[category] ?? category|capitalize %}
-      {% if category == 'personnages' and entity == 'fiche' %}
+      {% set category_label = {world: 'Univers', story: 'Aventure', rules: 'Règles', characters: 'Personnages'}[category] ?? category|capitalize %}
+      {% if category == 'characters' and entity == 'fiche' %}
         {% set fil = [
           { label: category_label, path: path(category) },
-          { label: nom, path: path('personnage_profil', {id: fiche.personnage.id}) },
+          { label: nom, path: path('characters_profile', {id: fiche.personnage.id}) },
           { label: 'Fiche de Jeu' },
         ] %}
       {% else %}
@@ -31,7 +31,7 @@
       <section>
 
         <h1 class="heading-elementdetail relative">
-          {% if category == 'personnages' and entity == 'fiche' %}
+          {% if category == 'characters' and entity == 'fiche' %}
             <strong>Fiche de Jeu : {{ nom }}</strong>
           {% else %}
             <strong>{{ nom }}</strong>

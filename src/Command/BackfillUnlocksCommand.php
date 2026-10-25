@@ -19,8 +19,8 @@ final class BackfillUnlocksCommand extends Command
 
     private const CIBLES = [
         'personnage' => 'e.estPj = false',
-        'lieu' => null,
-        'objet' => null,
+        'location' => null,
+        'object' => null,
     ];
 
     private $entityManager;

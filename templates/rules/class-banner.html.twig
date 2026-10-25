@@ -27,7 +27,7 @@
             <div class="d-none d-lg-flex justify-content-center">
                 {% for une_autre_classe in classes %}
                     <a class="text-white py-2 px-3" {% if une_autre_classe.id == classe.id %}style="background-color: {{classe.couleur}}"{% endif %}
-                    href="{{ path('regles_classe', { id: une_autre_classe.id, '_fragment' : 'element-banner' } ) }}">
+                    href="{{ path('rules_class', { id: une_autre_classe.id, '_fragment' : 'element-banner' } ) }}">
                         <strong>{{une_autre_classe.nom|upper}}</strong>
                     </a>
                 {% endfor %}
@@ -43,7 +43,7 @@
                 </a>
                 <div class="dropdown-menu dropdown-dark">
                     {% for une_autre_classe in classes|filter(c => c.id != classe.id) %}
-                        <a class="dropdown-item" href="{{ path('regles_classe', { id: une_autre_classe.id, '_fragment' : 'element-banner' } ) }}">
+                        <a class="dropdown-item" href="{{ path('rules_class', { id: une_autre_classe.id, '_fragment' : 'element-banner' } ) }}">
                             {{une_autre_classe.nom|upper}}
                         </a>
                     {% endfor %}

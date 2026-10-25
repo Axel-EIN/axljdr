@@ -1353,9 +1353,6 @@
             objets: {{ objets_json|default([])|json_encode|raw }},
             mainsNuesId: {{ mains_nues_id ?? 'null' }},
             jetMap: {{ jet_map()|json_encode|raw }},
-            armeVd: {% if fiche.armeActuelle and fiche.armeActuelle.vd %}{{ fiche.armeActuelle.vd|json_encode|raw }}{% else %}null{% endif %},
-            armeId: {{ fiche.arme ? fiche.arme.id : 0 }},
-            arme2Id: {{ fiche.arme2 ? fiche.arme2.id : 0 }},
             armeActuelleId: {{ fiche.armeActuelle ? fiche.armeActuelle.id : 0 }},
             compCombatActuelleId: {{ fiche.compCombatActuelle ? fiche.compCombatActuelle.id : 0 }},
             initiativeModifier: {{ fiche.initiativeModifier ?? 0 }},
@@ -1438,13 +1435,6 @@
             const select = row ? row.querySelector('select.arme-actuelle-select') : null;
             if (select) return parseInt(select.value, 10) || 0;
             return parseInt(cfg.armeActuelleId, 10) || 0;
-        }
-
-        function getArmeActuelleVd() {
-            const id = getArmeActuelleId();
-            if (!id) return null;
-            const arme = (cfg.armes || []).find(a => a.id === id);
-            return arme ? arme.vd : null;
         }
 
         function setTooltipHtml(el, html) {
@@ -2405,8 +2395,6 @@
             const armureSelect = document.querySelector('select.armure-select');
             const armureId = armureSelect && parseInt(armureSelect.value, 10) > 0 ? armureSelect.value : '';
             addInput('joueur_fiche_personnage[armure]', armureId);
-
-            addInput('joueur_fiche_personnage[arme2]', cfg.arme2Id || '');
 
             ['koku', 'bu', 'zeni'].forEach(coin => {
                 const el = document.getElementById(`purse-input-${coin}`);

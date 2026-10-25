@@ -12,17 +12,17 @@
 
             <div class="relative">
 
-                <a id="banner-icon-clan" class="hover-zoom" href="{{ path('world_clan', {id:ecole.clan.id} ) }}" >
-                    <img class="img-96 filter-shadow" src="{{ asset(ecole.clan.mon|default(NA_MON)) }}" alt="Mon d'une faction" title="Voir la faction {{ecole.clan.nom}}" />
+                <a id="banner-icon-clan" class="hover-zoom" href="{{ path('world_clan', {id:dojo.clan.id} ) }}" >
+                    <img class="img-96 filter-shadow" src="{{ asset(dojo.clan.mon|default(NA_MON)) }}" alt="Mon d'une faction" title="Voir la faction {{dojo.clan.nom}}" />
                 </a>
 
                 {{ include('/parts/card-top-image.html.twig', {
-                    image: ecole.imageAffichee,
+                    image: dojo.imageAffichee,
                     alt: "Image de l'École",
                     img_class: 'crop-169 top',
-                    titre: nom,
+                    title: name,
                     classes: 'gradient-desktop',
-                    state: element_state(ecole),
+                    state: element_state(dojo),
                 }) }}
 
                 <div id="text-zone">
@@ -30,24 +30,24 @@
                     <div>
                         <h2 class="heading-cardtitle">Trait bonus</h2>
                         {% set labels = {'constitution':'Constitution','volonte':'Volonté','reflexes':'Réflexes','intuition':'Intuition','agilite':'Agilité','intelligence':'Intelligence','forceStat':'Force','perception':'Perception','vide':'Vide'} %}
-                        <span class="text-zone-blur text-xp text-big">{{ ecole.bonusStatNom ? (labels[ecole.bonusStatNom] ?? ecole.bonusStatNom) ~ ' +1' : '—' }}</span>
+                        <span class="text-zone-blur text-xp text-big">{{ dojo.bonusStatNom ? (labels[dojo.bonusStatNom] ?? dojo.bonusStatNom) ~ ' +1' : '—' }}</span>
                     </div>
 
                     <div>
                         <h2 class="heading-cardtitle">Compétences</h2>
-                        <ul class="text-zone-blur">{{ ecole.competences|lister|raw }}</ul>
+                        <ul class="text-zone-blur">{{ dojo.competences|list_items|raw }}</ul>
                     </div>
 
                     <div>
                         <h2 class="heading-cardtitle">Équipement</h2>
-                        <ul class="text-zone-blur">{{ ecole.equipements|lister|raw }}</ul>
+                        <ul class="text-zone-blur">{{ dojo.equipements|list_items|raw }}</ul>
                     </div>
 
                 </div>
 
             </div>
 
-            {{ include('parts/description.html.twig', {text: ecole.description, variant: 'aerated'}, with_context = false) }}
+            {{ include('parts/description.html.twig', {text: dojo.description, variant: 'aerated'}, with_context = false) }}
 
         </div>
     </div>
@@ -59,30 +59,30 @@
             <hr>
 
             {% for i in 1..5 %}
-                {% if attribute(ecole, 'tech' ~ i ~ 'Nom') is not empty %}
+                {% if attribute(dojo, 'tech' ~ i ~ 'Nom') is not empty %}
                     <div class="technique" id="technique-{{ i }}">
-                        <div class="tech-rang" style="color: {{ ecole.clan.couleur }}">
+                        <div class="tech-rang" style="color: {{ dojo.clan.couleur }}">
                             <strong>Rang</strong><br/>
                             <span class="number-skillrank-effect skill-rank-number">{{ i }}</span>
                         </div>
                         <div>
-                            <h3 class="label-amerigo">{{ attribute(ecole, 'tech' ~ i ~ 'Nom') }}</h3>
-                            <p class="text-justify text-regular">{{ attribute(ecole, 'tech' ~ i ~ 'Desc')|raw|nl2br }}</p>
+                            <h3 class="label-amerigo">{{ attribute(dojo, 'tech' ~ i ~ 'Nom') }}</h3>
+                            <p class="text-justify text-regular">{{ attribute(dojo, 'tech' ~ i ~ 'Desc')|raw|nl2br }}</p>
                         </div>
                     </div>
                 {% endif %}
             {% endfor %}
 
-            {% if ecole.techSpecialNom is not empty %}
+            {% if dojo.techSpecialNom is not empty %}
                 <div class="technique-speciale" id="technique-speciale">
-                    <h3 class="label-amerigo">{{ ecole.techSpecialNom }}</h3>
-                    <p>{{ ecole.techSpecialDesc|raw|nl2br }}</p>
+                    <h3 class="label-amerigo">{{ dojo.techSpecialNom }}</h3>
+                    <p>{{ dojo.techSpecialDesc|raw|nl2br }}</p>
                 </div>
             {% endif %}
 
         </div>
 
-        {% if ecole.sorts is defined and ecole.sorts is not empty %}
+        {% if dojo.sorts is defined and dojo.sorts is not empty %}
         <div class="card card-body">
             <h2 class="heading-cardtitle">Magie</h2>
             <hr>
@@ -90,15 +90,15 @@
             <div class="d-flex justify-content-around align-items-start">
                 <div>
                     <h4>Affinité</h4>
-                    <span class="text-stamp text-large">{{ecole.affinite}}</span>
+                    <span class="text-stamp text-large">{{dojo.affinite}}</span>
                 </div>
                 <div>
                     <h4>Déficience</h4>
-                    <span class="text-stamp text-large">{{ecole.deficience}}</span>
+                    <span class="text-stamp text-large">{{dojo.deficience}}</span>
                 </div>
                 <div>
                     <h4>Sorts de départ</h4>
-                    {{ecole.sorts|lister|raw}}
+                    {{dojo.sorts|list_items|raw}}
                 </div>
             </div>
 

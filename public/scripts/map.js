@@ -21,6 +21,12 @@
   const FOCUS_SCALE = 1;
   const ZOOMED_OUT_SCALE = 0.45;
   const MARKER_MIN_SCALE = 0.5;
+  const HOUR_DISTANCE = 24;
+  const WALK_BLOCK_HOURS = 4;
+  const DAY_HOURS = 24;
+  const HALF_DAY_LIMIT_HOURS = 6;
+  const REST_CYCLE_HOURS = [1, 1, 10];
+  const ROUTE_MARGIN = 0.6;
 
   let x = 0, y = 0, scale = 1;
   let mapW = 0, mapH = 0;
@@ -348,7 +354,7 @@
 
   let wheelLock = 0;
   frame.addEventListener('wheel', function (e) {
-    if (!ready || e.target.closest('.map-panel, .map-search')) return;
+    if (!ready || e.target.closest('.map-panel, .map-search, .map-route')) return;
     e.preventDefault();
     const now = Date.now();
     const locked = now < wheelLock;
@@ -506,5 +512,82 @@
 
   document.addEventListener('click', function (e) {
     if (!search.contains(e.target)) list.classList.remove('show');
+  });
+
+  const routeToggle = frame.querySelector('[data-map-route-toggle]');
+  const route = frame.querySelector('.map-route');
+  const routeLine = frame.querySelector('.map-route-line');
+  const routeSegment = routeLine.querySelector('line');
+  const routeResult = route.querySelector('.map-route-result');
+
+  function showRoute(open) {
+    route.hidden = !open;
+    routeToggle.classList.toggle('active', open);
+    routeToggle.setAttribute('aria-expanded', open);
+    if (open) return;
+    routeLine.classList.remove('shown');
+    routeResult.textContent = '';
+  }
+
+  function selectedPlace(select) {
+    const option = select.selectedOptions[0];
+    if (!option || !option.value) return null;
+    return { x: parseFloat(option.dataset.locx), y: parseFloat(option.dataset.locy) };
+  }
+
+  function hoursLabel(hours) {
+    return hours + (hours > 1 ? ' heures' : ' heure');
+  }
+
+  function duration(hours) {
+    if (hours < DAY_HOURS) return hoursLabel(hours);
+    const rest = hours % DAY_HOURS;
+    const days = Math.floor(hours / DAY_HOURS) + (rest > HALF_DAY_LIMIT_HOURS ? 1 : 0);
+    const half = rest > 0 && rest <= HALF_DAY_LIMIT_HOURS;
+    return days + (days > 1 ? ' jours' : ' jour') + (half ? ' et demi' : '');
+  }
+
+  function travelTime(walkHours) {
+    const walk = Math.max(1, Math.round(walkHours));
+    let total = walk;
+    for (let i = 0; i < Math.ceil(walk / WALK_BLOCK_HOURS) - 1; i++) {
+      total += REST_CYCLE_HOURS[i % REST_CYCLE_HOURS.length];
+    }
+    return duration(total) + ' de voyage';
+  }
+
+  function fitBetween(from, to) {
+    const width = Math.abs(to.x - from.x) / 100 * mapW;
+    const height = Math.abs(to.y - from.y) / 100 * mapH;
+    const level = ZOOM_LEVELS.slice().reverse().find(function (candidate) {
+      return width * candidate <= frame.clientWidth * ROUTE_MARGIN && height * candidate <= frame.clientHeight * ROUTE_MARGIN;
+    });
+    centerOn((from.x + to.x) / 2, (from.y + to.y) / 2, level === undefined ? MIN_SCALE : level);
+    animate();
+    render();
+  }
+
+  routeToggle.addEventListener('click', function () {
+    showRoute(route.hidden);
+  });
+
+  route.addEventListener('submit', function (e) {
+    e.preventDefault();
+    if (!ready) return;
+    const from = selectedPlace(route.elements.from);
+    const to = selectedPlace(route.elements.to);
+    if (!from || !to || (from.x === to.x && from.y === to.y)) {
+      routeLine.classList.remove('shown');
+      routeResult.textContent = !from || !to ? 'Choisissez un départ et une arrivée.' : 'Choisissez deux lieux différents.';
+      return;
+    }
+    const distance = Math.hypot((to.x - from.x) / 100 * mapW, (to.y - from.y) / 100 * mapH);
+    routeSegment.setAttribute('x1', from.x + '%');
+    routeSegment.setAttribute('y1', from.y + '%');
+    routeSegment.setAttribute('x2', to.x + '%');
+    routeSegment.setAttribute('y2', to.y + '%');
+    routeLine.classList.add('shown');
+    routeResult.textContent = travelTime(distance / HOUR_DISTANCE);
+    fitBetween(from, to);
   });
 })();

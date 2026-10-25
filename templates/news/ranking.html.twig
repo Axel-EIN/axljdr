@@ -6,19 +6,19 @@
     {% if xp_precedent != un_personnage.xp %}{% set rang = loop.index %}{% endif %}
     {% set xp_precedent = un_personnage.xp %}
 
-    <a class="ranking-line" href="{{ path('characters_profile', {id: un_personnage.id}) }}" title="{{ un_personnage.prenom }}">
+    <a class="ranking-line" href="{{ path('characters_profile', {id: un_personnage.id}) }}" title="{{ un_personnage.firstName }}">
       <span class="ranking-rank">{{ rang }}</span>
       <span class="portrait-slot">
-        <img class="character-portrait medium outlined {{ un_personnage.id in mine ? '' : 'player' }} {{ un_personnage.estMort ? 'effect-dead' }}"
-             src="{{ asset(un_personnage.icone|default(NA_PERSO_PORTRAIT)) }}"
-             alt="Portrait de {{ un_personnage.prenom }}" />
-        {% if un_personnage.estMort %}
+        <img class="character-portrait medium outlined {{ un_personnage.id in mine ? '' : 'player' }} {{ un_personnage.dead ? 'effect-dead' }}"
+             src="{{ asset(un_personnage.icon|default(NA_PERSO_PORTRAIT)) }}"
+             alt="Portrait de {{ un_personnage.firstName }}" />
+        {% if un_personnage.dead %}
           <img class="character-icon-dead" src="{{ asset(MORT_ICO) }}" alt="est mort" />
         {% endif %}
       </span>
       <span class="ranking-name">
-        <strong>{{ un_personnage.prenom }}</strong>
-        {% if un_personnage.joueur %}<span class="ranking-player">({{ un_personnage.joueur.pseudo }})</span>{% endif %}
+        <strong>{{ un_personnage.firstName }}</strong>
+        {% if un_personnage.player %}<span class="ranking-player">({{ un_personnage.player.pseudo }})</span>{% endif %}
       </span>
       <span class="ranking-xp">{{ include('parts/xp-gain.html.twig', {xp: un_personnage.xp, total: un_personnage.xpWithBonus|default(un_personnage.xp)}) }}</span>
     </a>

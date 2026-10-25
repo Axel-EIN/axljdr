@@ -13,30 +13,30 @@ class ParticipationHandler
     private $sessionFlash;
     private $unlocker;
 
-    public function __construct(PersonnageRepository $personnageRepository, EntityManagerInterface $entityManagerInterface, RequestStack $requestStack, Unlocker $unlocker)
+    public function __construct(PersonnageRepository $characterRepository, EntityManagerInterface $entityManagerInterface, RequestStack $requestStack, Unlocker $unlocker)
     {
-        $this->repo = $personnageRepository;
+        $this->repo = $characterRepository;
         $this->entity = $entityManagerInterface;
         $this->sessionFlash = $requestStack->getSession()->getFlashBag();
         $this->unlocker = $unlocker;
     }
 
-    public function ajouterParticipations($participants_a_ajoutes, $scene)
+    public function addParticipations($participantsToAdd, $scene)
     {
-        if (!empty($participants_a_ajoutes)) {
-            foreach ($participants_a_ajoutes as $cle => $un_participant_a_ajoute) {
-                $personnage = $this->repo->find($participants_a_ajoutes[$cle]['id']);
-                if ($personnage !== null) {
-                    $nouvelle_participation = new Participation;
-                    $nouvelle_participation->setScene($scene);
-                    $nouvelle_participation->setPersonnage($personnage);
-                    $nouvelle_participation->setXpGagne($participants_a_ajoutes[$cle]['xp']);
-                    $nouvelle_participation->setEstMort($participants_a_ajoutes[$cle]['mort']);
-                    $nouvelle_participation->setEstPj($participants_a_ajoutes[$cle]['estPj']);
-                    $nouvelle_participation->setXpBonus(!empty($participants_a_ajoutes[$cle]['xpBonus']));
-                    $this->entity->persist($nouvelle_participation);
+        if (!empty($participantsToAdd)) {
+            foreach ($participantsToAdd as $key => $participant) {
+                $character = $this->repo->find($participantsToAdd[$key]['id']);
+                if ($character !== null) {
+                    $newParticipation = new Participation;
+                    $newParticipation->setScene($scene);
+                    $newParticipation->setPersonnage($character);
+                    $newParticipation->setXpGagne($participantsToAdd[$key]['xp']);
+                    $newParticipation->setEstMort($participantsToAdd[$key]['mort']);
+                    $newParticipation->setEstPj($participantsToAdd[$key]['estPj']);
+                    $newParticipation->setXpBonus(!empty($participantsToAdd[$key]['xpBonus']));
+                    $this->entity->persist($newParticipation);
 
-                    $this->sessionFlash->add('success', 'Le personnage ' . $personnage->getPrenom() . ' a bien été ajouté en participant !');
+                    $this->sessionFlash->add('success', 'Le personnage ' . $character->getPrenom() . ' a bien été ajouté en participant !');
                 } else {
                     $this->sessionFlash->add('danger', 'Le personnage n\'a pu être ajouté en participant !');
                 }
@@ -44,59 +44,59 @@ class ParticipationHandler
         }
     }
 
-    public function fusionnerParticipants($participants_pjs, $participants_pjs_xp, $participants_pjs_mort, $participants_pnjs, $participants_pnjs_mort, $participants_pjs_xpBonus = null) {
+    public function mergeParticipants($pcIds, $pcXp, $pcDead, $npcIds, $npcDead, $pcXpBonus = null) {
 
-        if(!empty($participants_pjs)) {
-            if(empty($participants_pjs_mort))
-                $participants_pjs_mort = [];
-            if(empty($participants_pjs_xpBonus))
-                $participants_pjs_xpBonus = [];
+        if(!empty($pcIds)) {
+            if(empty($pcDead))
+                $pcDead = [];
+            if(empty($pcXpBonus))
+                $pcXpBonus = [];
         } else {
-            $participants_pjs = [];
-            $participants_pjs_xp = [];
-            $participants_pjs_mort = [];
-            $participants_pjs_xpBonus = [];
+            $pcIds = [];
+            $pcXp = [];
+            $pcDead = [];
+            $pcXpBonus = [];
         }
 
-        if(!empty($participants_pnjs)) {
-            if(empty($participants_pnjs_mort))
-                $participants_pnjs_mort = [];
+        if(!empty($npcIds)) {
+            if(empty($npcDead))
+                $npcDead = [];
         } else {
-            $participants_pnjs = [];
-            $participants_pnjs_mort = [];
+            $npcIds = [];
+            $npcDead = [];
         }
 
-        $participants_a_ajoutes = [];
-        $compteur = 0;
+        $participantsToAdd = [];
+        $index = 0;
 
-        if(!empty($participants_pjs)) {
-            foreach($participants_pjs as $key => $un_participant_pj) {
-                $participants_a_ajoutes[$compteur]['id'] = $participants_pjs[$key];
-                $participants_a_ajoutes[$compteur]['xp'] = $participants_pjs_xp[$key];
-                if (!empty($participants_pjs_mort[$key]))
-                    $participants_a_ajoutes[$compteur]['mort'] = 1;
+        if(!empty($pcIds)) {
+            foreach($pcIds as $key => $pcId) {
+                $participantsToAdd[$index]['id'] = $pcIds[$key];
+                $participantsToAdd[$index]['xp'] = $pcXp[$key];
+                if (!empty($pcDead[$key]))
+                    $participantsToAdd[$index]['mort'] = 1;
                 else
-                    $participants_a_ajoutes[$compteur]['mort'] = 0;
-                $participants_a_ajoutes[$compteur]['xpBonus'] = !empty($participants_pjs_xpBonus[$key]) ? 1 : 0;
-                $participants_a_ajoutes[$compteur]['estPj'] = 1;
-                $compteur++;
+                    $participantsToAdd[$index]['mort'] = 0;
+                $participantsToAdd[$index]['xpBonus'] = !empty($pcXpBonus[$key]) ? 1 : 0;
+                $participantsToAdd[$index]['estPj'] = 1;
+                $index++;
             }
         }
 
-        if(!empty($participants_pnjs)) {
-            foreach($participants_pnjs as $cle => $un_participant_pnj) {
-                $participants_a_ajoutes[$compteur]['id'] = $participants_pnjs[$cle];
-                $participants_a_ajoutes[$compteur]['xp'] = 0;
-                if (!empty($participants_pnjs_mort[$cle]))
-                    $participants_a_ajoutes[$compteur]['mort'] = 1;
+        if(!empty($npcIds)) {
+            foreach($npcIds as $key => $npcId) {
+                $participantsToAdd[$index]['id'] = $npcIds[$key];
+                $participantsToAdd[$index]['xp'] = 0;
+                if (!empty($npcDead[$key]))
+                    $participantsToAdd[$index]['mort'] = 1;
                 else
-                    $participants_a_ajoutes[$compteur]['mort'] = 0;
-                $participants_a_ajoutes[$compteur]['xpBonus'] = 0;
-                $participants_a_ajoutes[$compteur]['estPj'] = 0;
-                $compteur++;
+                    $participantsToAdd[$index]['mort'] = 0;
+                $participantsToAdd[$index]['xpBonus'] = 0;
+                $participantsToAdd[$index]['estPj'] = 0;
+                $index++;
             }
         }
 
-        return $participants_a_ajoutes;
+        return $participantsToAdd;
     }
 }

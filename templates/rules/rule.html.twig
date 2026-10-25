@@ -12,21 +12,21 @@
 
             <div class="relative">
 
-                {{ include('rule-lore-library/summary.html.twig', {un_element: rule}) }}
+                {{ include('rule-lore-library/summary.html.twig', {record: rule}) }}
 
                 {{ include('/parts/card-top-image.html.twig', {
                     image: rule.image,
                     na_image: NA_RULE,
-                    alt: 'Image de ' ~ nom,
+                    alt: 'Image de ' ~ name,
                     pdf: rule.pdf,
                     state: element_state(rule),
                     pdf_button: rule.hasParts,
                     img_class: 'crop-169',
-                    titre: nom,
+                    title: name,
                 }) }}
             </div>
 
-            {{ include('rule-lore-library/parts.html.twig', {un_element: rule, entity: 'rule'}) }}
+            {{ include('rule-lore-library/parts.html.twig', {record: rule, entity: 'rule'}) }}
 
         </div>
     </div>

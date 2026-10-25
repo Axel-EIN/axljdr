@@ -1,5 +1,5 @@
 {% set size = size|default(96) %}
-{% set principal = (character is defined ? character : false) ? main_character() : null %}
+{% set principal = (character is defined ? character : false) ? navigating_character() : null %}
 
 {% if principal %}
   <span class="avatar" style="--avatar-size: {{ size }}px">

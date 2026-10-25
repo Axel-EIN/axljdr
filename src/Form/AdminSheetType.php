@@ -22,7 +22,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\Regex;
 
-class AdminFichePersonnageType extends AbstractType
+class AdminSheetType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {

@@ -145,7 +145,7 @@
               <span class="ml-auto badge-rang-{{rang}}">RANG {{rang}}</span>
             </li>
 
-            {% if est_le_joueur or is_granted('ROLE_MJ') %}
+            {% if est_le_joueur or is_mj() %}
 
               <li>
                 <span class="label">Expérience :</span>
@@ -223,7 +223,7 @@
                 {% if nb_bonus_constitution > 0 %}
                   <small class="text-success extrabold">+{{ nb_bonus_constitution }}</small>
                 {% endif %}
-                {% if est_le_joueur or is_granted('ROLE_MJ') %}
+                {% if est_le_joueur or is_mj() %}
                   <span class="text-alternate edit-only" data-cost-for="constitution">
                     {% if xp.trait.constitution > 0 %}-{{ xp.trait.constitution }}xp{% endif %}
                   </span>
@@ -244,7 +244,7 @@
                 {% if nb_bonus_volonte > 0 %}
                   <small class="text-success extrabold">+{{ nb_bonus_volonte }}</small>
                 {% endif %}
-                {% if est_le_joueur or is_granted('ROLE_MJ') %}
+                {% if est_le_joueur or is_mj() %}
                   <span class="text-alternate edit-only" data-cost-for="volonte">
                     {% if xp.trait.volonte > 0 %}-{{ xp.trait.volonte }}xp{% endif %}
                   </span>
@@ -261,7 +261,7 @@
               </div>
 
               <div class="align-self-end">
-                {% if est_le_joueur or is_granted('ROLE_MJ') %}
+                {% if est_le_joueur or is_mj() %}
                   <span class="text-alternate edit-only" data-cost-for="reflexes">
                     {% if xp.trait.reflexes > 0 %}-{{ xp.trait.reflexes }}xp{% endif %}
                   </span>
@@ -282,7 +282,7 @@
               </div>
 
               <div class="align-self-end">
-                {% if est_le_joueur or is_granted('ROLE_MJ') %}
+                {% if est_le_joueur or is_mj() %}
                   <span class="text-alternate edit-only" data-cost-for="intuition">
                     {% if xp.trait.intuition > 0 %}-{{ xp.trait.intuition }}xp{% endif %}
                   </span>
@@ -332,7 +332,7 @@
                 {% if nb_bonus_forceStat > 0 %}
                   <small class="text-success extrabold">+{{ nb_bonus_forceStat }}</small>
                 {% endif %}
-                {% if est_le_joueur or is_granted('ROLE_MJ') %}
+                {% if est_le_joueur or is_mj() %}
                   <span class="text-alternate edit-only" data-cost-for="forceStat">
                     {% if xp.trait.forceStat > 0 %}-{{ xp.trait.forceStat }}xp{% endif %}
                   </span>
@@ -353,7 +353,7 @@
                 {% if nb_bonus_perception > 0 %}
                   <small class="text-success extrabold">+{{ nb_bonus_perception }}</small>
                 {% endif %}
-                {% if est_le_joueur or is_granted('ROLE_MJ') %}
+                {% if est_le_joueur or is_mj() %}
                   <span class="text-alternate edit-only" data-cost-for="perception">
                     {% if xp.trait.perception > 0 %}-{{ xp.trait.perception }}xp{% endif %}
                   </span>
@@ -362,7 +362,7 @@
             </div>
 
             <div class="col-2 m-0 p-0">
-              {% if est_le_joueur or is_granted('ROLE_MJ') %}
+              {% if est_le_joueur or is_mj() %}
                 <div class="flex-col p-1 bg-strong text-fade text-small rounded-8 edit-only">
                   <div class="label-amerigo">Exp.</div>
                   <div class="flex w-100 justify-content-between {% if xp.desavantages == 0 %}d-none{% endif %}" id="xp-desav-row">
@@ -398,7 +398,7 @@
               </div>
 
               <div class="align-self-end">
-                {% if est_le_joueur or is_granted('ROLE_MJ') %}
+                {% if est_le_joueur or is_mj() %}
                   <span class="text-alternate edit-only" data-cost-for="agilite">
                     {% if xp.trait.agilite > 0 %}-{{ xp.trait.agilite }}xp{% endif %}
                   </span>
@@ -419,7 +419,7 @@
               </div>
 
               <div class="align-self-end">
-                {% if est_le_joueur or is_granted('ROLE_MJ') %}
+                {% if est_le_joueur or is_mj() %}
                   <span class="text-alternate edit-only" data-cost-for="intelligence">
                     {% if xp.trait.intelligence > 0 %}-{{ xp.trait.intelligence }}xp{% endif %}
                   </span>
@@ -458,7 +458,7 @@
                 </span>
               </div>
               <div class="flex align-items-center">
-                {% if est_le_joueur or is_granted('ROLE_MJ') %}
+                {% if est_le_joueur or is_mj() %}
                   <span class="text-alternate edit-only" data-cost-for="vide">
                     {% if xp.trait.vide > 0 %}-{{ xp.trait.vide }}xp{% endif %}
                   </span>
@@ -477,7 +477,7 @@
 
         </div>
 
-        {% if est_le_joueur or is_granted('ROLE_MJ') %}
+        {% if est_le_joueur or is_mj() %}
           <div class="my-4 d-flex w-100 justify-content-center align-items-center">
             <button type="button" id="btn-fiche-edit" class="btn-primary-style btn-large{% if not est_le_joueur %} gm{% endif %}">
               <i class="fas fa-edit"></i> {{ est_le_joueur ? 'Éditer ma fiche' : 'Éditer la fiche' }}
@@ -560,7 +560,7 @@
 
     <section class="col-12 col-lg-8">
 
-      {% if est_le_joueur or is_granted('ROLE_MJ') %}
+      {% if est_le_joueur or is_mj() %}
         <div class="card card-bloc">
 
           <div class="card-title-cartouche d-flex align-items-center">
@@ -909,7 +909,7 @@
         </div>
       {% endif %}
 
-      {% if est_le_joueur or is_granted('ROLE_MJ') %}
+      {% if est_le_joueur or is_mj() %}
         {% set signalement = {
           Sexe: fiche.personnage.genre == 'F' ? 'Femme' : (fiche.personnage.genre == 'M' ? 'Homme' : ''),
           Age: fiche.age, Taille: fiche.height, Poids: fiche.weight,
@@ -1254,7 +1254,7 @@
         </div>
       </div>
 
-      {% if est_le_joueur or is_granted('ROLE_MJ') %}
+      {% if est_le_joueur or is_mj() %}
         <div class="card card-bloc mb-2">
           <div class="card-title-cartouche">Armes</div>
 
@@ -1332,7 +1332,7 @@
         });
     </script>
 
-    {% if est_le_joueur or is_granted('ROLE_MJ') %}
+    {% if est_le_joueur or is_mj() %}
     <script>
         window.FICHE_CONFIG = {
             xpBase: {{ xp.creation + xp.progression }},

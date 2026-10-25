@@ -20,7 +20,7 @@ class ContactController extends AbstractController
         $form = $this->createForm(ContactType::class);
         $form->handleRequest($request);
 
-        $notif = '';
+        $notice = '';
 
         if ($form->isSubmitted() && $form->isValid()) {
 
@@ -42,12 +42,12 @@ class ContactController extends AbstractController
                 );
             $mailer->send($email);
 
-            $notif = 'Votre message a bien été envoyé.';
+            $notice = 'Votre message a bien été envoyé.';
         }
 
         return $this->render('contact/index.html.twig', [
-            'notif' => $notif,
-            'formulaire' => $form->createView(),
+            'notice' => $notice,
+            'form' => $form->createView(),
         ]);
     }
 }

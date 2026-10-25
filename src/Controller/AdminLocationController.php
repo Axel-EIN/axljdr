@@ -13,7 +13,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
-use App\Service\Baliseur;
+use App\Service\NameTagger;
 use App\Service\Unlocker;
 
 class AdminLocationController extends AbstractController
@@ -61,7 +61,7 @@ class AdminLocationController extends AbstractController
    * @Route("/admin/location/create", name="admin_location_create")
    * @IsGranted("ROLE_MJ")
    */
-  public function addLocation(Request $request, EntityManagerInterface $em, FileHandler $fileHandler, Baliseur $baliseur, Unlocker $unlocker, TableFilter $tableFilter) {
+  public function addLocation(Request $request, EntityManagerInterface $em, FileHandler $fileHandler, NameTagger $nameTagger, Unlocker $unlocker, TableFilter $tableFilter) {
 
     $location = new Lieu;
     $tableFilter->prefill($location, self::TABLE_FILTERS, $request->query->all('filter'));
@@ -88,8 +88,8 @@ class AdminLocationController extends AbstractController
         $location->setIcone($fileHandler->handle($newIcon, null, $prefix, 'lieux', 'square192'));
       }
 
-      $location->setDescription($baliseur->baliser($location->getDescription()));
-      $location->setRegionDesc($baliseur->baliser($location->getRegionDesc()));
+      $location->setDescription($nameTagger->tag($location->getDescription()));
+      $location->setRegionDesc($nameTagger->tag($location->getRegionDesc()));
 
       $em->persist($location);
       $em->flush();
@@ -120,10 +120,10 @@ class AdminLocationController extends AbstractController
    * @Route("/admin/location/{id}/edit", name="admin_location_edit")
    * @IsGranted("ROLE_MJ")
    */
-  public function editLocation(Request $request, Lieu $location, FileHandler $fileHandler, Baliseur $baliseur, Unlocker $unlocker): Response {
+  public function editLocation(Request $request, Lieu $location, FileHandler $fileHandler, NameTagger $nameTagger, Unlocker $unlocker): Response {
 
-    $location->setDescription($baliseur->debaliser($location->getDescription()));
-    $location->setRegionDesc($baliseur->debaliser($location->getRegionDesc()));
+    $location->setDescription($nameTagger->untag($location->getDescription()));
+    $location->setRegionDesc($nameTagger->untag($location->getRegionDesc()));
 
     $form = $this->createForm(AdminLocationType::class, $location);
     $form->get('unlockedBy')->setData($unlocker->charactersOf($location));
@@ -151,13 +151,13 @@ class AdminLocationController extends AbstractController
         $prefix = 'lieu-' . $location->getNom() . '-icone';
         $location->setIcone($fileHandler->handle($newIcon, $location->getIcone(), $prefix, 'lieux', 'square192'));
       } elseif ($request->request->get('remove_icone') === '1' && $location->getIcone()) {
-        $baliseur->remplacerIconeParDefaut($location);
+        $nameTagger->replaceWithDefaultIcon($location);
         $fileHandler->handle(null, $location->getIcone(), null, 'lieux');
         $location->setIcone(null);
       }
 
-      $location->setDescription($baliseur->baliser($location->getDescription()));
-      $location->setRegionDesc($baliseur->baliser($location->getRegionDesc()));
+      $location->setDescription($nameTagger->tag($location->getDescription()));
+      $location->setRegionDesc($nameTagger->tag($location->getRegionDesc()));
 
       $unlocker->sync($location, $form->get('unlockedBy')->getData());
       $unlocker->syncAccess($location);
@@ -186,7 +186,7 @@ class AdminLocationController extends AbstractController
    * @Route("/admin/location/{id}/delete", name="admin_location_delete", methods={"POST"})
    * @IsGranted("ROLE_MJ")
    */
-  public function deleteLocation(Request $request, Lieu $location, FileHandler $fileHandler, Baliseur $baliseur, Unlocker $unlocker): Response {
+  public function deleteLocation(Request $request, Lieu $location, FileHandler $fileHandler, NameTagger $nameTagger, Unlocker $unlocker): Response {
 
     if ($this->isCsrfTokenValid('delete' . $location->getId(), $request->request->get('_csrf_token'))) {
 
@@ -194,7 +194,7 @@ class AdminLocationController extends AbstractController
 
       $fileHandler->handle(null, $location->getImage(), null, 'lieux');
       $fileHandler->handle(null, $location->getPlanMap(), null, 'lieux');
-      $baliseur->remplacerIconeParDefaut($location);
+      $nameTagger->replaceWithDefaultIcon($location);
       $fileHandler->handle(null, $location->getIcone(), null, 'lieux');
 
       $unlocker->forget($location);

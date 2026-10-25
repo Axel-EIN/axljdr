@@ -74,7 +74,7 @@
 
       {% if main_character %}
         <div class="account-main">
-          <a href="{{ path('personnage_profil', {id: main_character.id}) }}" class="hover-zoom">
+          <a href="{{ path('characters_profile', {id: main_character.id}) }}" class="hover-zoom">
             <img src="{{ asset(main_character.icone|default(NA_PERSO_PORTRAIT)) }}" alt="Portrait de {{ main_character.prenom }}" />
           </a>
           <div>
@@ -83,7 +83,7 @@
             {% endif %}
             <strong>{{ main_character.nomComplet }}</strong>
             {% if main_character.fichePersonnage is not empty %}
-              <a href="{{ path('personnage_fiche', {id: main_character.fichePersonnage.id}) }}">
+              <a href="{{ path('characters_sheet', {id: main_character.fichePersonnage.id}) }}">
                 <i class="fas fa-user-secret" aria-hidden="true"></i> Fiche privée
               </a>
             {% endif %}
@@ -116,12 +116,12 @@
       <div class="account-characters">
         {% for un_personnage in app.user.personnages|filter(p => main_character is empty or p.id != main_character.id) %}
           <article>
-            <a href="{{ path('personnage_profil', {id: un_personnage.id}) }}" class="hover-zoom">
+            <a href="{{ path('characters_profile', {id: un_personnage.id}) }}" class="hover-zoom">
               <img src="{{ asset(un_personnage.icone|default(NA_PERSO_PORTRAIT)) }}" alt="Portrait de {{ un_personnage.prenom }}" />
             </a>
             <strong>{{ un_personnage.nomComplet }}</strong>
             {% if un_personnage.fichePersonnage is not empty %}
-              <a href="{{ path('personnage_fiche', {id: un_personnage.fichePersonnage.id}) }}">
+              <a href="{{ path('characters_sheet', {id: un_personnage.fichePersonnage.id}) }}">
                 <i class="fas fa-user-secret" aria-hidden="true"></i> Fiche privée
               </a>
             {% else %}

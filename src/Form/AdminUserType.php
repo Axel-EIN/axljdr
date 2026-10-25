@@ -47,12 +47,12 @@ class AdminUserType extends AbstractType
         ;
 
         $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) {
-            $utilisateur = $event->getData();
+            $user = $event->getData();
 
             $event->getForm()->add('mainCharacter', EntityType::class, [
                 'label' => 'personnage principal',
                 'class' => Personnage::class,
-                'choices' => $utilisateur ? $utilisateur->getPersonnages() : [],
+                'choices' => $user ? $user->getPersonnages() : [],
                 'choice_label' => 'nomComplet',
                 'placeholder' => 'Automatique — le plus récent',
                 'required' => false,

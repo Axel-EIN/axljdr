@@ -15,6 +15,7 @@ use App\Repository\ObjetRepository;
 use App\Repository\PersonnageRepository;
 use App\Repository\SaisonRepository;
 use App\Repository\SortRepository;
+use App\Service\CharacterMarkdown;
 use App\Service\NameTagger;
 use App\Service\HistoryRanker;
 use App\Service\Locator;
@@ -152,21 +153,21 @@ class CharactersController extends AbstractController
         }
 
         return $this->render('characters/character-profile.html.twig', [
-            'personnage' => $character,
+            'character' => $character,
             'is_own_character' => $isOwnCharacter,
             'can_edit' => $canEdit,
             'form' => $form?->createView(),
             'developments' => $developmentRepository->findByPersonnage($character),
-            'nom' => $character->getNomComplet(),
+            'name' => $character->getNomComplet(),
             'entity' => 'character',
             'category' => 'characters',
-            'un_element' => $character,
+            'record' => $character,
             'xp' => $totalXp,
             'creation_xp' => $creationXp,
             'rank' => $rank,
             'other_characters' => $otherCharacters,
-            'historique' => $historyRanker->forCharacter($character),
-            'saison_courante' => $seasonRepository->findCourante()?->getNumero(),
+            'history' => $historyRanker->forCharacter($character),
+            'current_season' => $seasonRepository->findCourante()?->getNumero(),
         ] + $locator->map($character));
     }
 
@@ -290,7 +291,7 @@ class CharactersController extends AbstractController
         $bareHandsId = $bareHands ? $bareHands->getId() : null;
 
         return $this->render('characters/character-sheet.html.twig', [
-            'fiche'              => $sheet,
+            'sheet'              => $sheet,
             'xp'                 => $xp,
             'rank'               => $xpRanker->rank($xp['total']),
             'is_own_character'   => $isOwnCharacter,
@@ -303,8 +304,8 @@ class CharactersController extends AbstractController
             'bare_hands_id'      => $bareHandsId,
             'category' => 'characters',
             'entity' => 'sheet',
-            'un_element' => $sheet,
-            'nom' => $sheet->getPersonnage()->getNomComplet(),
+            'record' => $sheet,
+            'name' => $sheet->getPersonnage()->getNomComplet(),
         ]);
     }
 
@@ -322,6 +323,25 @@ class CharactersController extends AbstractController
         $response->headers->set('Content-Disposition', $response->headers->makeDisposition(
             ResponseHeaderBag::DISPOSITION_ATTACHMENT,
             $sheetExport->filename($sheet)
+        ));
+
+        return $response;
+    }
+
+    /**
+     * @Route("/characters/profile/{id}/markdown", name="characters_profile_markdown")
+     */
+    public function exportProfile(Personnage $character, CharacterMarkdown $characterMarkdown): Response
+    {
+        if (!$this->isGranted('ROLE_MJ')) {
+            return $this->render('element-hidden.html.twig', [], new Response('', Response::HTTP_NOT_FOUND));
+        }
+
+        $response = new Response($characterMarkdown->build($character));
+        $response->headers->set('Content-Type', 'text/markdown; charset=UTF-8');
+        $response->headers->set('Content-Disposition', $response->headers->makeDisposition(
+            ResponseHeaderBag::DISPOSITION_ATTACHMENT,
+            $characterMarkdown->filename($character)
         ));
 
         return $response;

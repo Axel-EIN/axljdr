@@ -67,22 +67,6 @@ class AdminFichePersonnageType extends AbstractType
                 'query_builder' => fn(EntityRepository $er) => $er->createQueryBuilder('a')
                     ->where('a.genre = :genre')->setParameter('genre', 'Désavantage')->orderBy('a.nom', 'ASC'),
             ])
-            ->add('arme', EntityType::class, [
-                'class' => Objet::class,
-                'choice_label' => 'nom',
-                'placeholder' => '— Aucune —',
-                'required' => false,
-                'query_builder' => fn(EntityRepository $er) => $er->createQueryBuilder('o')
-                    ->where('o.categorie = :cat')->setParameter('cat', 'ARME')->orderBy('o.nom', 'ASC'),
-            ])
-            ->add('arme2', EntityType::class, [
-                'class' => Objet::class,
-                'choice_label' => 'nom',
-                'placeholder' => '— Aucune —',
-                'required' => false,
-                'query_builder' => fn(EntityRepository $er) => $er->createQueryBuilder('o')
-                    ->where('o.categorie = :cat')->setParameter('cat', 'ARME')->orderBy('o.nom', 'ASC'),
-            ])
             ->add('armure', EntityType::class, [
                 'class' => Objet::class,
                 'choice_label' => 'nom',

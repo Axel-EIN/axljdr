@@ -31,7 +31,7 @@
     transition: var(--duration) var(--ease);
 }
 
-.translucide {
+.translucent {
     filter: opacity(0.30);
     transition: var(--duration) var(--ease);
 

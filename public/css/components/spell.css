@@ -5,7 +5,7 @@
     color: var(--color-gray);
 }
 
-.spell-capacites { color: var(--color-strong); }
+.spell-abilities { color: var(--color-strong); }
 
 .spell-link {
     cursor: pointer;

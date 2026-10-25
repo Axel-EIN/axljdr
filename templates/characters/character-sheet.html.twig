@@ -142,10 +142,10 @@
           <ul>
             <li>
               <span class="label">Rang Général :</span>
-              <span class="ml-auto badge-rang-{{rang}}">RANG {{rang}}</span>
+              <span class="ml-auto badge-rang-{{rank}}">RANG {{rank}}</span>
             </li>
 
-            {% if est_le_joueur or is_mj() %}
+            {% if is_own_character or is_mj() %}
 
               <li>
                 <span class="label">Expérience :</span>
@@ -223,7 +223,7 @@
                 {% if nb_bonus_constitution > 0 %}
                   <small class="text-success extrabold">+{{ nb_bonus_constitution }}</small>
                 {% endif %}
-                {% if est_le_joueur or is_mj() %}
+                {% if is_own_character or is_mj() %}
                   <span class="text-alternate edit-only" data-cost-for="constitution">
                     {% if xp.trait.constitution > 0 %}-{{ xp.trait.constitution }}xp{% endif %}
                   </span>
@@ -244,7 +244,7 @@
                 {% if nb_bonus_volonte > 0 %}
                   <small class="text-success extrabold">+{{ nb_bonus_volonte }}</small>
                 {% endif %}
-                {% if est_le_joueur or is_mj() %}
+                {% if is_own_character or is_mj() %}
                   <span class="text-alternate edit-only" data-cost-for="volonte">
                     {% if xp.trait.volonte > 0 %}-{{ xp.trait.volonte }}xp{% endif %}
                   </span>
@@ -261,7 +261,7 @@
               </div>
 
               <div class="align-self-end">
-                {% if est_le_joueur or is_mj() %}
+                {% if is_own_character or is_mj() %}
                   <span class="text-alternate edit-only" data-cost-for="reflexes">
                     {% if xp.trait.reflexes > 0 %}-{{ xp.trait.reflexes }}xp{% endif %}
                   </span>
@@ -282,7 +282,7 @@
               </div>
 
               <div class="align-self-end">
-                {% if est_le_joueur or is_mj() %}
+                {% if is_own_character or is_mj() %}
                   <span class="text-alternate edit-only" data-cost-for="intuition">
                     {% if xp.trait.intuition > 0 %}-{{ xp.trait.intuition }}xp{% endif %}
                   </span>
@@ -332,7 +332,7 @@
                 {% if nb_bonus_forceStat > 0 %}
                   <small class="text-success extrabold">+{{ nb_bonus_forceStat }}</small>
                 {% endif %}
-                {% if est_le_joueur or is_mj() %}
+                {% if is_own_character or is_mj() %}
                   <span class="text-alternate edit-only" data-cost-for="forceStat">
                     {% if xp.trait.forceStat > 0 %}-{{ xp.trait.forceStat }}xp{% endif %}
                   </span>
@@ -353,7 +353,7 @@
                 {% if nb_bonus_perception > 0 %}
                   <small class="text-success extrabold">+{{ nb_bonus_perception }}</small>
                 {% endif %}
-                {% if est_le_joueur or is_mj() %}
+                {% if is_own_character or is_mj() %}
                   <span class="text-alternate edit-only" data-cost-for="perception">
                     {% if xp.trait.perception > 0 %}-{{ xp.trait.perception }}xp{% endif %}
                   </span>
@@ -362,7 +362,7 @@
             </div>
 
             <div class="col-2 m-0 p-0">
-              {% if est_le_joueur or is_mj() %}
+              {% if is_own_character or is_mj() %}
                 <div class="flex-col p-1 bg-strong text-fade text-small rounded-8 edit-only">
                   <div class="label-amerigo">Exp.</div>
                   <div class="flex w-100 justify-content-between {% if xp.desavantages == 0 %}d-none{% endif %}" id="xp-desav-row">
@@ -398,7 +398,7 @@
               </div>
 
               <div class="align-self-end">
-                {% if est_le_joueur or is_mj() %}
+                {% if is_own_character or is_mj() %}
                   <span class="text-alternate edit-only" data-cost-for="agilite">
                     {% if xp.trait.agilite > 0 %}-{{ xp.trait.agilite }}xp{% endif %}
                   </span>
@@ -419,7 +419,7 @@
               </div>
 
               <div class="align-self-end">
-                {% if est_le_joueur or is_mj() %}
+                {% if is_own_character or is_mj() %}
                   <span class="text-alternate edit-only" data-cost-for="intelligence">
                     {% if xp.trait.intelligence > 0 %}-{{ xp.trait.intelligence }}xp{% endif %}
                   </span>
@@ -458,7 +458,7 @@
                 </span>
               </div>
               <div class="flex align-items-center">
-                {% if est_le_joueur or is_mj() %}
+                {% if is_own_character or is_mj() %}
                   <span class="text-alternate edit-only" data-cost-for="vide">
                     {% if xp.trait.vide > 0 %}-{{ xp.trait.vide }}xp{% endif %}
                   </span>
@@ -477,10 +477,10 @@
 
         </div>
 
-        {% if est_le_joueur or is_mj() %}
+        {% if is_own_character or is_mj() %}
           <div class="my-4 d-flex w-100 justify-content-center align-items-center">
-            <button type="button" id="btn-fiche-edit" class="btn-primary-style btn-large{% if not est_le_joueur %} gm{% endif %}">
-              <i class="fas fa-edit"></i> {{ est_le_joueur ? 'Éditer ma fiche' : 'Éditer la fiche' }}
+            <button type="button" id="btn-fiche-edit" class="btn-primary-style btn-large{% if not is_own_character %} gm{% endif %}">
+              <i class="fas fa-edit"></i> {{ is_own_character ? 'Éditer ma fiche' : 'Éditer la fiche' }}
             </button>
             <button type="button" id="btn-fiche-cancel" class="btn btn-secondary btn-sm ml-3" style="display:none;">
               <i class="fas fa-times"></i> Annuler
@@ -488,7 +488,7 @@
             <button type="button" id="btn-fiche-valider" class="btn btn-success btn-sm ml-3" style="display:none;">
               <i class="fas fa-check"></i> Valider
             </button>
-            <a class="btn-icon-medium primary{% if not est_le_joueur %} gm{% endif %} ml-3" href="{{ path('personnage_fiche_pdf', {id: fiche.id}) }}">
+            <a class="btn-icon-medium primary{% if not is_own_character %} gm{% endif %} ml-3" href="{{ path('characters_sheet_pdf', {id: fiche.id}) }}">
               <i class="fas fa-print" title="Imprimer la fiche en PDF"></i>
             </a>
           </div>
@@ -560,7 +560,7 @@
 
     <section class="col-12 col-lg-8">
 
-      {% if est_le_joueur or is_mj() %}
+      {% if is_own_character or is_mj() %}
         <div class="card card-bloc">
 
           <div class="card-title-cartouche d-flex align-items-center">
@@ -743,7 +743,7 @@
             summary: ecole.techSpecialSummary, desc: ecole.techSpecialDesc|striptags
           }] %}
         {% endif %}
-        {% for i in 1..rang %}
+        {% for i in 1..rank %}
           {% if attribute(ecole, 'tech' ~ i ~ 'Nom') is not empty %}
             {% set techniques = techniques|merge([{
               rank: i, anchor: 'technique-' ~ i, nom: attribute(ecole, 'tech' ~ i ~ 'Nom'),
@@ -833,7 +833,7 @@
               <h6>Sorts universels</h6>
               <ul class="spell-list" data-spell-list="UNIVERSEL">
                 {% for spell in spells_by_ring['UNIVERSEL']|default([]) %}
-                  {{ include('/personnages/character-sheet-spell-line.html.twig', {spell: spell}) }}
+                  {{ include('/characters/character-sheet-spell-line.html.twig', {spell: spell}) }}
                 {% endfor %}
               </ul>
               <div class="spell-add edit-only" data-spell-add="UNIVERSEL"></div>
@@ -849,7 +849,7 @@
                 </h6>
                 <ul class="spell-list" data-spell-list="{{ ring }}">
                   {% for spell in spells_by_ring[ring]|default([]) %}
-                    {{ include('/personnages/character-sheet-spell-line.html.twig', {spell: spell}) }}
+                    {{ include('/characters/character-sheet-spell-line.html.twig', {spell: spell}) }}
                   {% endfor %}
                 </ul>
                 <div class="spell-add edit-only" data-spell-add="{{ ring }}"></div>
@@ -879,7 +879,7 @@
                 </h6>
                 <ul class="spell-list" data-spell-list="KIHO_{{ ring }}">
                   {% for kiho in kihos_by_ring[ring]|default([]) %}
-                    {{ include('/personnages/character-sheet-spell-line.html.twig', {spell: kiho}) }}
+                    {{ include('/characters/character-sheet-spell-line.html.twig', {spell: kiho}) }}
                   {% endfor %}
                 </ul>
                 <div class="spell-add edit-only" data-spell-add="KIHO_{{ ring }}"></div>
@@ -899,7 +899,7 @@
           <div class="tattoo-board">
             <ul class="spell-list" data-spell-list="TATOUAGE" data-spell-emblem="{{ asset(tattoo_emblem) }}">
               {% for tattoo in tattoos %}
-                {{ include('/personnages/character-sheet-spell-line.html.twig', {spell: tattoo, emblem: tattoo_emblem}) }}
+                {{ include('/characters/character-sheet-spell-line.html.twig', {spell: tattoo, emblem: tattoo_emblem}) }}
               {% else %}
                 <li class="spell-empty read-only">Aucun tatouage.</li>
               {% endfor %}
@@ -909,7 +909,7 @@
         </div>
       {% endif %}
 
-      {% if est_le_joueur or is_mj() %}
+      {% if is_own_character or is_mj() %}
         {% set signalement = {
           Sexe: fiche.personnage.genre == 'F' ? 'Femme' : (fiche.personnage.genre == 'M' ? 'Homme' : ''),
           Age: fiche.age, Taille: fiche.height, Poids: fiche.weight,
@@ -963,7 +963,7 @@
         <div>
           <ul class="list-group list-group-flush">
 
-            {% set JetInitL = eff_reflexes + rang %}
+            {% set JetInitL = eff_reflexes + rank %}
             {% set JetInitG = eff_reflexes %}
             <li class="list-group-item p-0 px-3 py-1 flex flex-wrap gap-2">
               <div class="flex-grow-1 flex-col">
@@ -982,7 +982,7 @@
                         <br/>/garder
                         Réflèxes
                         <br/>
-                        <br/>/lancer {{eff_reflexes}} + {{rang}}
+                        <br/>/lancer {{eff_reflexes}} + {{rank}}
                         <br/>/garder {{eff_reflexes}}
                         {% if initMod != 0 %}
                           <br/>Modificateur : {{ initMod > 0 ? '+' : '' }}{{ initMod }}
@@ -993,7 +993,7 @@
                 </span>
               </div>
               <div class="text-right text-small">
-                <strong data-stat="initiative-avg">{{ (((rang + eff_reflexes) ~ 'g' ~ eff_reflexes)|jeter) + initMod }}</strong>
+                <strong data-stat="initiative-avg">{{ (((rank + eff_reflexes) ~ 'g' ~ eff_reflexes)|jeter) + initMod }}</strong>
                 <div data-stat="arme-lourde"{% if not (fiche.armeActuelle and fiche.armeActuelle.type == 'LOURDE') %} class="d-none"{% endif %}>-5 (arme lourde)</div>
               </div>
               {{ fiche_macros.stat_mod('initiative', fiche.initiativeModifier ?? '', 'nombre') }}
@@ -1135,7 +1135,7 @@
             <li class="list-group-item px-3 py-2 flex flex-wrap gap-2">
               <div class="flex-grow-1">
                 ND pour être touché
-                <br/><strong class="text-strong ml-2" data-stat="nd-touche">{{ eff_reflexes * 5 + rang + nd_mod }}</strong>
+                <br/><strong class="text-strong ml-2" data-stat="nd-touche">{{ eff_reflexes * 5 + rank + nd_mod }}</strong>
                 &nbsp;
                 <i
                   class="fa-solid fa-arrow-trend-up"
@@ -1149,7 +1149,7 @@
               </div>
               {% if fiche.armure %}
                 <small class="text-right">
-                  <strong data-stat="nd-touche-armure">{{ eff_reflexes * 5 + rang + fiche.armure.ndArmure + nd_mod }}</strong>
+                  <strong data-stat="nd-touche-armure">{{ eff_reflexes * 5 + rank + fiche.armure.ndArmure + nd_mod }}</strong>
                   <br/>
                   Avec Armure
                 </small>
@@ -1215,7 +1215,7 @@
               </div>
               <div class="flex-grow-1">
                 Récupération
-                <br><strong class="ml-2 text-strong" data-stat="recuperation">{{(eff_constitution * 2) + rang}}</strong>
+                <br><strong class="ml-2 text-strong" data-stat="recuperation">{{(eff_constitution * 2) + rank}}</strong>
                 &nbsp;
                 <i 
                   class="fas fa-briefcase-medical text-success"
@@ -1254,7 +1254,7 @@
         </div>
       </div>
 
-      {% if est_le_joueur or is_mj() %}
+      {% if is_own_character or is_mj() %}
         <div class="card card-bloc mb-2">
           <div class="card-title-cartouche">Armes</div>
 
@@ -1332,26 +1332,26 @@
         });
     </script>
 
-    {% if est_le_joueur or is_mj() %}
+    {% if is_own_character or is_mj() %}
     <script>
         window.FICHE_CONFIG = {
             xpBase: {{ xp.creation + xp.progression }},
             persoClasseId: {{ perso_classe_id }},
-            rang: {{ rang }},
+            rank: {{ rank }},
             armureNd: {{ fiche.armure and fiche.armure.ndArmure ? fiche.armure.ndArmure : 0 }},
             ndModifier: {{ fiche.ndModifier ?? 0 }},
             pvIndemneParTerre: {{ pv_indemne_par_terre }},
             pvBlessureParTerre: {{ pv_blessure_par_terre }},
             niveauxBlesses: {{ niveaux_blessure|length - 1 }},
-            editUrl: {{ path('personnage_fiche_edit', {id: fiche.id})|json_encode|raw }},
-            csrfToken: {{ csrf_token('joueur_fiche_personnage')|json_encode|raw }},
-            competences: {{ competences_json|json_encode|raw }},
-            avantages: {{ avantages_json|json_encode|raw }},
-            desavantages: {{ desavantages_json|json_encode|raw }},
-            armes: {{ armes_json|default([])|json_encode|raw }},
+            editUrl: {{ path('characters_sheet_edit', {id: fiche.id})|json_encode|raw }},
+            csrfToken: {{ csrf_token('player_sheet')|json_encode|raw }},
+            skills: {{ skills_json|json_encode|raw }},
+            advantages: {{ advantages_json|json_encode|raw }},
+            disadvantages: {{ disadvantages_json|json_encode|raw }},
+            weapons: {{ weapons_json|default([])|json_encode|raw }},
             spells: {{ spells_json|default([])|json_encode|raw }},
-            objets: {{ objets_json|default([])|json_encode|raw }},
-            mainsNuesId: {{ mains_nues_id ?? 'null' }},
+            objects: {{ objects_json|default([])|json_encode|raw }},
+            bareHandsId: {{ bare_hands_id ?? 'null' }},
             jetMap: {{ jet_map()|json_encode|raw }},
             armeActuelleId: {{ fiche.armeActuelle ? fiche.armeActuelle.id : 0 }},
             compCombatActuelleId: {{ fiche.compCombatActuelle ? fiche.compCombatActuelle.id : 0 }},
@@ -1518,7 +1518,7 @@
                 span.classList.toggle('extrabold', isHigher);
             });
 
-            const initLances = cfg.rang + eff.reflexes;
+            const initLances = cfg.rank + eff.reflexes;
             const initGardes = eff.reflexes;
             const initMod    = cfg.initiativeModifier || 0;
             const initNode = document.querySelector('[data-stat="initiative"]');
@@ -1544,7 +1544,7 @@
             if (attaqueAssautAvgNode) attaqueAssautAvgNode.textContent = jeterMap(attaqueLances + 2, attaqueGardes + 1);
 
             const compCombat = compCombatId
-                ? (cfg.competences || []).find(c => c.id === compCombatId)
+                ? (cfg.skills || []).find(c => c.id === compCombatId)
                 : null;
             document.querySelectorAll('.stat-attaque-with-comp').forEach(el => el.classList.toggle('d-none', !compCombat));
             document.querySelectorAll('.stat-attaque-no-comp').forEach(el => el.classList.toggle('d-none', !!compCombat));
@@ -1553,7 +1553,7 @@
 
             const armeActuelleId = getArmeActuelleId();
             const armeActuelle   = armeActuelleId
-                ? (cfg.armes || []).find(a => a.id === armeActuelleId)
+                ? (cfg.weapons || []).find(a => a.id === armeActuelleId)
                 : null;
             const armeVd = armeActuelle ? armeActuelle.vd : null;
             const dommagesNode         = document.querySelector('[data-stat="dommages"]');
@@ -1574,7 +1574,7 @@
             const armeLourdeNode = document.querySelector('[data-stat="arme-lourde"]');
             if (armeLourdeNode) armeLourdeNode.classList.toggle('d-none', !(armeActuelle && armeActuelle.type === 'LOURDE'));
 
-            const ndBase = eff.reflexes * 5 + cfg.rang + (cfg.ndModifier || 0);
+            const ndBase = eff.reflexes * 5 + cfg.rank + (cfg.ndModifier || 0);
             const ndNode = document.querySelector('[data-stat="nd-touche"]');
             if (ndNode) ndNode.textContent = ndBase;
             const ndArmureNode = document.querySelector('[data-stat="nd-touche-armure"]');
@@ -1590,7 +1590,7 @@
             if (hpTotal) hpTotal.textContent = terre * (cfg.pvIndemneParTerre + cfg.niveauxBlesses * cfg.pvBlessureParTerre);
 
             const recupNode = document.querySelector('[data-stat="recuperation"]');
-            if (recupNode) recupNode.textContent = eff.constitution * 2 + cfg.rang;
+            if (recupNode) recupNode.textContent = eff.constitution * 2 + cfg.rank;
 
             let totalComps = 0;
             let totalSpecs = 0;
@@ -1639,8 +1639,8 @@
             });
             totalComps = totalComps + totalSpecs;
 
-            const avantageById    = new Map((cfg.avantages    || []).map(a => [a.id, a]));
-            const desavantageById = new Map((cfg.desavantages || []).map(a => [a.id, a]));
+            const avantageById    = new Map((cfg.advantages    || []).map(a => [a.id, a]));
+            const desavantageById = new Map((cfg.disadvantages || []).map(a => [a.id, a]));
             let coutAvantages = 0;
             let gainDesavantages = 0;
             document.querySelectorAll('[data-av-slot]').forEach(li => {
@@ -1698,7 +1698,7 @@
 
             setTooltipHtml(
                 document.querySelector('[data-tooltip-stat="initiative"]'),
-                buildInitiativeTooltip(eff.reflexes, cfg.rang)
+                buildInitiativeTooltip(eff.reflexes, cfg.rank)
             );
             setTooltipHtml(
                 document.querySelector('[data-tooltip-stat="attaque"]'),
@@ -1725,7 +1725,7 @@
             emptyOpt.textContent = '— Aucune —';
             select.appendChild(emptyOpt);
             const byCat = {};
-            cfg.competences.forEach(c => {
+            cfg.skills.forEach(c => {
                 const cat = c.categorie || 'Autres';
                 if (!byCat[cat]) byCat[cat] = [];
                 byCat[cat].push(c);
@@ -1963,7 +1963,7 @@
                 emptyOpt.textContent = kind === 'weapons' ? '— Ajouter une arme —' : '— Ajouter un objet —';
                 select.appendChild(emptyOpt);
 
-                const libres = (cfg.objets || [])
+                const libres = (cfg.objects || [])
                     .filter(o => !owned.includes(o.id) && inventoryKind(o.categorie) === kind);
                 const cleDe = o => kind === 'weapons' ? (o.type || 'DIVERS') : o.categorie;
                 const groupes = new Map();
@@ -1993,7 +1993,7 @@
                 });
 
                 select.addEventListener('change', () => {
-                    const objet = (cfg.objets || []).find(o => o.id === parseInt(select.value, 10));
+                    const objet = (cfg.objects || []).find(o => o.id === parseInt(select.value, 10));
                     if (!objet) return;
                     insertInventoryLine(objet);
                     refreshInventorySelect();
@@ -2012,7 +2012,7 @@
             emptyOpt.value = '0';
             emptyOpt.textContent = '— Aucun —';
             select.appendChild(emptyOpt);
-            const list = (kind === 'avantage') ? (cfg.avantages || []) : (cfg.desavantages || []);
+            const list = (kind === 'avantage') ? (cfg.advantages || []) : (cfg.disadvantages || []);
             list.forEach(a => {
                 if (a.exclusiveId && a.exclusiveId !== cfg.persoClasseId && a.id !== selectedId) return;
                 const opt = document.createElement('option');
@@ -2031,7 +2031,7 @@
             emptyOpt.value = '0';
             emptyOpt.textContent = '— Aucune —';
             select.appendChild(emptyOpt);
-            (cfg.competences || [])
+            (cfg.skills || [])
                 .filter(c => c.categorie === 'Bugei')
                 .forEach(c => {
                     const opt = document.createElement('option');
@@ -2052,16 +2052,16 @@
             select.appendChild(emptyOpt);
 
             const owned = new Set(inventoryIds());
-            const choix = (cfg.objets || []).filter(o => owned.has(o.id) && o.categorie === categorie);
+            const choix = (cfg.objects || []).filter(o => owned.has(o.id) && o.categorie === categorie);
 
             (extras || []).forEach(id => {
                 const idNum = parseInt(id, 10) || 0;
                 if (!idNum || choix.some(o => o.id === idNum)) return;
-                const objet = (cfg.objets || []).find(o => o.id === idNum);
+                const objet = (cfg.objects || []).find(o => o.id === idNum);
                 if (objet) choix.push(objet);
             });
 
-            const vdById = new Map((cfg.armes || []).map(a => [a.id, a.vd]));
+            const vdById = new Map((cfg.weapons || []).map(a => [a.id, a.vd]));
             choix.forEach(objet => {
                 const opt = document.createElement('option');
                 opt.value = objet.id;
@@ -2076,7 +2076,7 @@
 
         function refreshEquipmentSelects() {
             [
-                ['[data-arme-actuelle-row]', '[data-arme-actuelle-select-cell]', 'armeActuelleId', 'ARME', 'arme-actuelle-select', [cfg.mainsNuesId]],
+                ['[data-arme-actuelle-row]', '[data-arme-actuelle-select-cell]', 'armeActuelleId', 'ARME', 'arme-actuelle-select', [cfg.bareHandsId]],
                 ['[data-armure-row]', '[data-armure-select-cell]', 'armureId', 'ARMURE', 'armure-select', []],
             ].forEach(([rowSel, cellSel, dataKey, categorie, className, extras]) => {
                 const row = document.querySelector(rowSel);
@@ -2224,7 +2224,7 @@
                 select.addEventListener('change', () => {
                     const newId = parseInt(select.value, 10) || 0;
                     if (summary) {
-                        const list = (kind === 'avantage') ? (cfg.avantages || []) : (cfg.desavantages || []);
+                        const list = (kind === 'avantage') ? (cfg.advantages || []) : (cfg.disadvantages || []);
                         const av = list.find(a => a.id === newId);
                         const description = av ? (av.description || '').replace(/<[^>]*>/g, '') : '';
                         summary.textContent = av ? (av.summary || description) : '';
@@ -2283,7 +2283,7 @@
             if (!cell) return;
             cell.innerHTML = '';
             if (!compId) return;
-            const comp = cfg.competences.find(c => c.id === compId);
+            const comp = cfg.skills.find(c => c.id === compId);
             if (!comp || !Array.isArray(comp.specialisations)) return;
             comp.specialisations.forEach((label, idx) => {
                 if (!label) return;
@@ -2353,7 +2353,7 @@
             traits.forEach(name => {
                 const span = document.querySelector(`[data-trait-eff="${name}"]`);
                 const select = span ? span.querySelector('select') : null;
-                if (select) addInput(`joueur_fiche_personnage[${name}]`, select.value);
+                if (select) addInput(`player_sheet[${name}]`, select.value);
             });
 
             document.querySelectorAll('[data-comp-row]').forEach(row => {
@@ -2368,11 +2368,11 @@
                 const compEcoleVal = compId !== '' && ecoleWrap
                     ? String(parseInt(ecoleWrap.dataset.state, 10) || 0)
                     : '0';
-                addInput(`joueur_fiche_personnage[competence${i}]`, compId);
-                addInput(`joueur_fiche_personnage[valeur${i}]`, valVal);
-                addInput(`joueur_fiche_personnage[specialisations${i}]`, specsVal);
-                addInput(`joueur_fiche_personnage[compEcole${i}]`, compEcoleVal);
-                addInput(`joueur_fiche_personnage[speEcole${i}]`, speEcVal);
+                addInput(`player_sheet[competence${i}]`, compId);
+                addInput(`player_sheet[valeur${i}]`, valVal);
+                addInput(`player_sheet[specialisations${i}]`, specsVal);
+                addInput(`player_sheet[compEcole${i}]`, compEcoleVal);
+                addInput(`player_sheet[speEcole${i}]`, speEcVal);
             });
 
             const slotToField = {av1: 'avantage1', av2: 'avantage2', dv1: 'desavantage1', dv2: 'desavantage2'};
@@ -2381,29 +2381,29 @@
                 if (!li) return;
                 const select = li.querySelector('select.av-select');
                 const id = select && parseInt(select.value, 10) > 0 ? select.value : '';
-                addInput(`joueur_fiche_personnage[${slotToField[slot]}]`, id);
+                addInput(`player_sheet[${slotToField[slot]}]`, id);
             });
 
             const compCombatSelect = document.querySelector('select.comp-combat-select');
             const compCombatId = compCombatSelect && parseInt(compCombatSelect.value, 10) > 0 ? compCombatSelect.value : '';
-            addInput('joueur_fiche_personnage[compCombatActuelle]', compCombatId);
+            addInput('player_sheet[compCombatActuelle]', compCombatId);
 
             const armeActuelleSelect = document.querySelector('select.arme-actuelle-select');
             const armeActuelleId = armeActuelleSelect && parseInt(armeActuelleSelect.value, 10) > 0 ? armeActuelleSelect.value : '';
-            addInput('joueur_fiche_personnage[armeActuelle]', armeActuelleId);
+            addInput('player_sheet[armeActuelle]', armeActuelleId);
 
             const armureSelect = document.querySelector('select.armure-select');
             const armureId = armureSelect && parseInt(armureSelect.value, 10) > 0 ? armureSelect.value : '';
-            addInput('joueur_fiche_personnage[armure]', armureId);
+            addInput('player_sheet[armure]', armureId);
 
             ['koku', 'bu', 'zeni'].forEach(coin => {
                 const el = document.getElementById(`purse-input-${coin}`);
-                addInput(`joueur_fiche_personnage[${coin}]`, el ? el.value.trim() : '');
+                addInput(`player_sheet[${coin}]`, el ? el.value.trim() : '');
             });
 
             ['honneur', 'gloire', 'infamie', 'statut'].forEach(champ => {
                 const el = document.getElementById(`standing-input-${champ}`);
-                addInput(`joueur_fiche_personnage[${champ}]`, el ? el.value.trim() : '');
+                addInput(`player_sheet[${champ}]`, el ? el.value.trim() : '');
             });
 
             const lookIds = {
@@ -2413,7 +2413,7 @@
             };
             Object.keys(lookIds).forEach(field => {
                 const el = document.getElementById(lookIds[field]);
-                addInput(`joueur_fiche_personnage[${field}]`, el ? el.value.trim() : '');
+                addInput(`player_sheet[${field}]`, el ? el.value.trim() : '');
             });
 
             const modIds = {
@@ -2425,18 +2425,18 @@
             };
             Object.keys(modIds).forEach(field => {
                 const el = document.getElementById(modIds[field]);
-                addInput(`joueur_fiche_personnage[${field}]`, el ? el.value.trim() : '');
+                addInput(`player_sheet[${field}]`, el ? el.value.trim() : '');
             });
 
             document.querySelectorAll('[data-inventory-id]').forEach(li => {
-                addInput('joueur_fiche_personnage[inventoryItems][]', li.dataset.inventoryId);
+                addInput('player_sheet[inventoryItems][]', li.dataset.inventoryId);
             });
 
             document.querySelectorAll('[data-spell-id]').forEach(li => {
-                addInput('joueur_fiche_personnage[knownSpells][]', li.dataset.spellId);
+                addInput('player_sheet[knownSpells][]', li.dataset.spellId);
             });
 
-            addInput('joueur_fiche_personnage[_token]', cfg.csrfToken);
+            addInput('player_sheet[_token]', cfg.csrfToken);
             document.body.appendChild(form);
             form.submit();
         }

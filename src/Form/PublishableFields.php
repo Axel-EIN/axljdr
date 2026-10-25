@@ -41,8 +41,8 @@ final class PublishableFields
             ->add('unlockedBy', EntityType::class, [
                 'label' => 'Débloqué par',
                 'class' => Personnage::class,
-                'query_builder' => function (PersonnageRepository $personnageRepository) {
-                    return $personnageRepository->createPJsByNameQueryBuilder();
+                'query_builder' => function (PersonnageRepository $characterRepository) {
+                    return $characterRepository->createPJsByNameQueryBuilder();
                 },
                 'choice_label' => 'nomComplet',
                 'multiple' => true,

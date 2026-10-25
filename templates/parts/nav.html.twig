@@ -4,7 +4,7 @@
 {% if app.user and is_granted('ROLE_ADMIN') %}
   {% set control_panel = {variant: 'admin', icon: 'fa-tools', label: "Panneau d'Administration"} %}
 {% elseif is_gm() %}
-  {% set control_panel = {variant: 'mj', icon: 'fa-scroll', label: 'Panneau du Maître'} %}
+  {% set control_panel = {variant: 'gm', icon: 'fa-scroll', label: 'Panneau du Maître'} %}
 {% endif %}
 
 {% if control_panel and not compact %}

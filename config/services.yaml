@@ -50,5 +50,10 @@ services:
         arguments:
             $targetDirectory: '%image_directory%'
 
+    App\Security\PlayerModeVoter:
+        decorates: security.access.simple_role_voter
+        autoconfigure: false
+        arguments: ['@.inner']
+
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones

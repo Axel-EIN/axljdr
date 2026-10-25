@@ -11,16 +11,16 @@
 {% for item in items %}
 
     {% if not element_readable(item) %}
-        {{ include('rules/list-item-locked.html.twig', {entity: 'competence'}) }}
+        {{ include('rules/list-item-locked.html.twig', {entity: 'skill'}) }}
     {% else %}
         <div class="col-12 p-0 m-0 relative">
 
             {% if is_mj() %}
-                {% set position, size, color, entity, un_element, redirect = 'topleft-overflow', 'btn-icon-mini', 'link-gm', 'competence', item, 'library&libraryID=' ~ library.id %}
+                {% set position, size, color, entity, un_element, redirect = 'topleft-overflow', 'btn-icon-mini', 'link-gm', 'skill', item, 'library&libraryID=' ~ library.id %}
                 {{ include('/btns/btn-icon-edit.html.twig') }}
             {% endif %}
 
-            <a href="#competence{{ item.id }}" class="card item" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="competence{{ item.id }}">
+            <a href="#skill{{ item.id }}" class="card item" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="skill{{ item.id }}">
 
                 <div class="item-line">
                     {{ include('parts/badge-access.html.twig', {state: element_state(item), variant: 'inline'}) }}
@@ -59,7 +59,7 @@
                     </span>
                 </div>
 
-                <div id="competence{{ item.id }}" class="collapse">
+                <div id="skill{{ item.id }}" class="collapse">
                     <span class="badge badge-pill badge-dark mt-2">{{item.categorie}}</span>
                     <br/><br/>
                     <span class="text-muted">Spécialisations : </span>

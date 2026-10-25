@@ -34,7 +34,7 @@ class RulesController extends AbstractController
     {
         $baseRules = $ruleRepository->findBases();
         $baseLibraries = $libraryRepository->findBases();
-        $annexes = $ruleRepository->findAnnexes();
+        $appendices = $ruleRepository->findAnnexes();
         $classes = $classRepository->findAll();
 
         $sections = [];
@@ -78,7 +78,7 @@ class RulesController extends AbstractController
             'sections' => $sections,
             'base_rules' => $baseRules,
             'base_libraries' => $baseLibraries,
-            'annexes' => $annexes,
+            'appendices' => $appendices,
             'classes' => $classes,
         ]);
     }
@@ -96,10 +96,10 @@ class RulesController extends AbstractController
 
         return $this->render('rules/rule.html.twig', [
             'rule' => $rule,
-            'nom' => $rule->getNom(),
+            'name' => $rule->getNom(),
             'entity' => 'rule',
             'category' => 'rules',
-            'un_element' => $rule,
+            'record' => $rule,
             'other_rules' => $otherRules
         ]);
     }
@@ -161,6 +161,9 @@ class RulesController extends AbstractController
 
         if ( !empty( $tab_url_param ) && !empty( $tab_field_name ) )
         {
+            if ( $tab_url_param != 'all' && !in_array($tab_url_param, $tabs) )
+                throw $this->createNotFoundException();
+
             if ( $tab_url_param != 'all')
                 $items = array_filter($items, function ($obj) use ($tab_url_param, $tab_field_name) { return $obj->{ 'get' .  ucfirst( $tab_field_name ) }() == $tab_url_param; });
 
@@ -178,7 +181,7 @@ class RulesController extends AbstractController
                 elseif ($library->getNom() == 'Grimoire' && $tab_url_param == 'MAGIE' )
                     $subtabs = ['AIR', 'EAU', 'FEU', 'TERRE', 'VIDE', 'UNIVERSEL'];
 
-                $subtab_first = $subtabs[0];
+                $subtab_first = $subtabs[0] ?? null;
 
             }
 
@@ -275,8 +278,8 @@ class RulesController extends AbstractController
 
         return $this->render('rules/library-detail.html.twig', [
             'library' => $library,
-            'nom' => $library->getNom(),
-            'un_element' => $library,
+            'name' => $library->getNom(),
+            'record' => $library,
             'entity' => 'library',
             'category' => 'rules',
             'other_libraries' => $otherLibraries,
@@ -304,8 +307,8 @@ class RulesController extends AbstractController
         );
 
         return $this->render('rules/object-detail.html.twig', [
-            'un_element' => $object,
-            'nom' => $object->getNom(),
+            'record' => $object,
+            'name' => $object->getNom(),
             'entity' => 'object',
             'category' => 'rules',
             'other_objects' => array_slice(array_values($otherObjects), 0, 12),
@@ -323,11 +326,11 @@ class RulesController extends AbstractController
         shuffle($playerCharacters);
 
         return $this->render('rules/class-detail.html.twig', [
-            'classe' => $class,
-            'nom' => $class->getNom(),
+            'character_class' => $class,
+            'name' => $class->getNom(),
             'entity' => 'class',
             'category' => 'rules',
-            'un_element' => $class,
+            'record' => $class,
             'player_characters' => $playerCharacters,
             'class_dojos' => $classDojos,
             'classes' => $classes
@@ -346,11 +349,11 @@ class RulesController extends AbstractController
         $otherDojos = $dojoRepository->findAllByClanExceptOne($dojo->getClan()->getId(), $dojo->getId());
 
         return $this->render('rules/dojo-detail.html.twig', [
-            'ecole' => $dojo,
-            'nom' => $dojo->getNom(),
+            'dojo' => $dojo,
+            'name' => $dojo->getNom(),
             'entity' => 'dojo',
             'category' => 'rules',
-            'un_element' => $dojo,
+            'record' => $dojo,
             'other_dojos' => $otherDojos,
             'player_characters' => $this->playerCharacters($dojo->getPersonnages()),
         ]);

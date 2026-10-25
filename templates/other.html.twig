@@ -1,5 +1,5 @@
 {% extends 'base.html.twig' %}
-{% block title %}{{ titre }} {{ parent() }}{% endblock %}
+{% block title %}{{ page_title }} {{ parent() }}{% endblock %}
 
 {% block stylesheets %}
   {{ parent() }}
@@ -11,18 +11,18 @@
   <main class="container-fluid element-page other-page">
     <div class="container">
 
-      {{ include('parts/breadcrumbs.html.twig', {items: [{label: titre}]}) }}
+      {{ include('parts/breadcrumbs.html.twig', {items: [{label: page_title}]}) }}
       {{ include('parts/flash-messages.html.twig') }}
 
       <section>
-        <h1 class="heading-elementdetail"><strong>{{ titre }}</strong></h1>
+        <h1 class="heading-elementdetail"><strong>{{ page_title }}</strong></h1>
         <hr class="hr-title">
 
         <div class="row">
-          {% block cartes %}
+          {% block cards %}
             <div class="col-12">
               <div class="card card-page">
-                {% block contenu %}{% endblock %}
+                {% block content %}{% endblock %}
               </div>
             </div>
           {% endblock %}

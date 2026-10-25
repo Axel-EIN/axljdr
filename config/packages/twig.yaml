@@ -91,7 +91,6 @@ twig:
         NA_MAP: '/assets/placeholders/na_map.jpg'
         NA_ARCHIVE: '/assets/placeholders/na_archive.jpg'
         NA_LIEU: '/assets/placeholders/na_lieu.jpg'
-        NA_LIEU_BG: '/assets/placeholders/na_lieu_bg.jpg'
 
         NA_RULE: '/assets/placeholders/na_rule.jpg'
         NA_LORE: '/assets/placeholders/na_rule.jpg'

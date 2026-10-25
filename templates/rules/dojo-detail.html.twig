@@ -61,7 +61,7 @@
             {% for i in 1..5 %}
                 {% if attribute(dojo, 'tech' ~ i ~ 'Nom') is not empty %}
                     <div class="technique" id="technique-{{ i }}">
-                        <div class="tech-rang" style="color: {{ dojo.clan.couleur }}">
+                        <div class="tech-rank" style="color: {{ dojo.clan.couleur }}">
                             <strong>Rang</strong><br/>
                             <span class="number-skillrank-effect skill-rank-number">{{ i }}</span>
                         </div>
@@ -74,7 +74,7 @@
             {% endfor %}
 
             {% if dojo.techSpecialNom is not empty %}
-                <div class="technique-speciale" id="technique-speciale">
+                <div class="technique-special" id="technique-special">
                     <h3 class="label-amerigo">{{ dojo.techSpecialNom }}</h3>
                     <p>{{ dojo.techSpecialDesc|raw|nl2br }}</p>
                 </div>

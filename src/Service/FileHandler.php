@@ -3,7 +3,7 @@ namespace App\Service;
 
 use App\Service\Uploader;
 use App\Service\ImageNormalizer;
-use App\Service\Baliseur;
+use App\Service\NameTagger;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
@@ -11,13 +11,13 @@ class FileHandler extends AbstractController
 {
     private $uploader;
     private $imageNormalizer;
-    private $baliseur;
+    private $nameTagger;
 
-    public function __construct(Uploader $uploader, ImageNormalizer $imageNormalizer, Baliseur $baliseur)
+    public function __construct(Uploader $uploader, ImageNormalizer $imageNormalizer, NameTagger $nameTagger)
     {
         $this->uploader = $uploader;
         $this->imageNormalizer = $imageNormalizer;
-        $this->baliseur = $baliseur;
+        $this->nameTagger = $nameTagger;
     }
 
     public function handle($fichier, $ancienFichier, $prefix, $dossier, ?string $preset = null)
@@ -54,7 +54,7 @@ class FileHandler extends AbstractController
         $nouveauChemin = 'assets/img/' . $dossier . '/' . $nouveauNomFichier;
 
         if (!empty($ancienFichier) && $ancienFichier !== $nouveauChemin) {
-            $this->baliseur->remplacerChemin($ancienFichier, $nouveauChemin);
+            $this->nameTagger->replacePath($ancienFichier, $nouveauChemin);
         }
 
         return $nouveauChemin;

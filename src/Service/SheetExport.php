@@ -205,17 +205,10 @@ class SheetExport
 
     private function traits(FichePersonnage $fiche): array
     {
-        $personnage = $fiche->getPersonnage();
-        $bonuses = array_filter([
-            $personnage->getFamille() ? $personnage->getFamille()->getBonusStatNom() : null,
-            $personnage->getEcole() ? $personnage->getEcole()->getBonusStatNom() : null,
-        ]);
-
         $traits = [];
 
         foreach (['constitution', 'volonte', 'reflexes', 'intuition', 'agilite', 'intelligence', 'forceStat', 'perception', 'vide'] as $name) {
-            $bonus = count(array_keys($bonuses, $name, true));
-            $traits[$name] = ['value' => (int) $fiche->{'get' . ucfirst($name)}() + $bonus, 'bonus' => $bonus];
+            $traits[$name] = ['value' => $fiche->attributEffectif($name), 'bonus' => $fiche->bonusAttribut($name)];
         }
 
         return $traits;

@@ -17,27 +17,27 @@
                 <i class="fas fa-undo"></i>
             </a>
         {% endif %}
-        {% set filtres = [
-            { nom: 'season',   label: 'Saison',   icone: STORY_SEASON_ICO,   vide: '— Toutes —', options: seasons,   selected: selected_season_id,   inactif: false,                        reset: ['chapter', 'episode'] },
-            { nom: 'chapter',  label: 'Chapitre', icone: STORY_CHAPTER_ICO, vide: '— Tous —',   options: chapters,  selected: selected_chapter_id,  inactif: selected_season_id is null,   reset: ['episode'] },
-            { nom: 'episode',  label: 'Episode',  icone: STORY_EPISODE_ICO,  vide: '— Tous —',   options: episodes,  selected: selected_episode_id,  inactif: selected_chapter_id is null,  reset: [] },
+        {% set filters = [
+            { name: 'season',   label: 'Saison',   icon: STORY_SEASON_ICO,   placeholder: '— Toutes —', options: seasons,   selected: selected_season_id,   disabled: false,                        reset: ['chapter', 'episode'] },
+            { name: 'chapter',  label: 'Chapitre', icon: STORY_CHAPTER_ICO, placeholder: '— Tous —',   options: chapters,  selected: selected_chapter_id,  disabled: selected_season_id is null,   reset: ['episode'] },
+            { name: 'episode',  label: 'Episode',  icon: STORY_EPISODE_ICO,  placeholder: '— Tous —',   options: episodes,  selected: selected_episode_id,  disabled: selected_chapter_id is null,  reset: [] },
         ] %}
 
         <form method="get" action="{{ path('characters') }}" class="form-row align-items-end m-0">
-            {% for filtre in filtres %}
+            {% for filter in filters %}
                 <div class="col-12 col-md-4 mb-2 mb-md-0 px-1 d-flex d-md-block align-items-center">
-                    <label for="filtre-{{ filtre.nom }}" class="mb-0 mb-md-2 mr-3 mr-md-0 ml-md-n1 flex align-items-center">
-                        <img class="img-32 mr-md-1" src="{{ asset(filtre.icone) }}" alt="" />
-                        <span class="label-amerigo d-none d-md-inline">{{ filtre.label }}</span>
+                    <label for="filter-{{ filter.name }}" class="mb-0 mb-md-2 mr-3 mr-md-0 ml-md-n1 flex align-items-center">
+                        <img class="img-32 mr-md-1" src="{{ asset(filter.icon) }}" alt="" />
+                        <span class="label-amerigo d-none d-md-inline">{{ filter.label }}</span>
                     </label>
-                    <select name="{{ filtre.nom }}" id="filtre-{{ filtre.nom }}"
-                            class="form-control form-control-sm{% if active_filter == filtre.nom %} is-active-filter{% endif %}"
-                            onchange="{% for aval in filtre.reset %}document.getElementById('filtre-{{ aval }}').value='';{% endfor %}this.form.submit();"
-                            {% if filtre.inactif %}disabled{% endif %}>
-                        <option value="">{{ filtre.vide }}</option>
-                        {% for option in filtre.options %}
-                            <option value="{{ option.id }}" {% if filtre.selected == option.id %}selected{% endif %}>
-                                {{ filtre.label }} {{ option.numero }} — {{ option.titre }}
+                    <select name="{{ filter.name }}" id="filter-{{ filter.name }}"
+                            class="form-control form-control-sm{% if active_filter == filter.name %} is-active-filter{% endif %}"
+                            onchange="{% for reset_field in filter.reset %}document.getElementById('filter-{{ reset_field }}').value='';{% endfor %}this.form.submit();"
+                            {% if filter.disabled %}disabled{% endif %}>
+                        <option value="">{{ filter.placeholder }}</option>
+                        {% for option in filter.options %}
+                            <option value="{{ option.id }}" {% if filter.selected == option.id %}selected{% endif %}>
+                                {{ filter.label }} {{ option.numero }} — {{ option.titre }}
                             </option>
                         {% endfor %}
                     </select>
@@ -56,8 +56,8 @@
 
 {% block section_content1 %}
     {% set pcs = pcs|filter(p => element_listed(p)) %}
-    {% for perso in element_sort(pcs) %}
-        {{ include('/characters/character-card.html.twig', {perso}) }}
+    {% for character in element_sort(pcs) %}
+        {{ include('/characters/character-card.html.twig', {character}) }}
     {% endfor %}
     {% if pcs is empty %}
         <div class="col-12"><p class="text-muted font-italic">Aucun personnage joueur ne correspond à ce filtre.</p></div>
@@ -67,24 +67,24 @@
 {% block section_content2 %}
     {% set npcs = npcs|filter(p => element_listed(p)) %}
     <div class="col-12">
-        {% set clans_listes = FACTIONS|map(c => c.nom) %}
-        {% set groupes = FACTIONS|map(c => {titre: c.titre, faction: true, persos: npcs|filter(p => p.clan is not empty and p.clan.nom == c.nom)})
-            |merge([{titre: 'Autres', faction: false, persos: npcs|filter(p => p.clan is empty or p.clan.nom not in clans_listes)}]) %}
+        {% set listed_clans = FACTIONS|map(c => c.nom) %}
+        {% set groups = FACTIONS|map(c => {title: c.titre, faction: true, characters: npcs|filter(p => p.clan is not empty and p.clan.nom == c.nom)})
+            |merge([{title: 'Autres', faction: false, characters: npcs|filter(p => p.clan is empty or p.clan.nom not in listed_clans)}]) %}
 
-        {% for groupe in groupes|filter(g => g.persos|length > 0) %}
-            {% set clan_groupe = groupe.faction ? (groupe.persos|first).clan : null %}
+        {% for group in groups|filter(g => g.characters|length > 0) %}
+            {% set group_clan = group.faction ? (group.characters|first).clan : null %}
             {% set scroller_id = 'pnj-' ~ loop.index %}
             <div class="pnj-clan-group">
                 <h3 class="heading-amerigo category-section-sub-heading relative">
-                    <img class="img-40 mr-2" src="{{ asset(clan_groupe ? image_small(clan_groupe.mon|default(NA_MON)) : NA_MON) }}" alt="Mon de la faction" />
-                    {{ groupe.titre }}
-                    <span class="scroller-dots" data-scroller="{{ scroller_id }}"{% if clan_groupe and clan_groupe.couleur %} style="--clan-color: {{ clan_groupe.couleur }}"{% endif %}></span>
+                    <img class="img-40 mr-2" src="{{ asset(group_clan ? image_small(group_clan.mon|default(NA_MON)) : NA_MON) }}" alt="Mon de la faction" />
+                    {{ group.title }}
+                    <span class="scroller-dots" data-scroller="{{ scroller_id }}"{% if group_clan and group_clan.couleur %} style="--clan-color: {{ group_clan.couleur }}"{% endif %}></span>
                 </h3>
                 {% embed 'parts/picture-scroller.html.twig' with {scroller_id, scroller_class: 'desktop-only'} %}
                     {% block track %}
-                        <div class="row scroller-track characters-track {{ groupe.faction ? 'compact' }}">
-                            {% for perso in element_sort(groupe.persos, true) %}
-                                {{ include('/characters/character-card.html.twig', {perso, hide_clan: groupe.faction, compact: groupe.faction}) }}
+                        <div class="row scroller-track characters-track {{ group.faction ? 'compact' }}">
+                            {% for character in element_sort(group.characters, true) %}
+                                {{ include('/characters/character-card.html.twig', {character, hide_clan: group.faction, compact: group.faction}) }}
                             {% endfor %}
                         </div>
                     {% endblock %}

@@ -23,19 +23,19 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use App\Service\Visibility;
 
-class ReglesController extends AbstractController
+class RulesController extends AbstractController
 {
     use VisibilityTrait;
 
     /**
-     * @Route("/regles", name="regles")
+     * @Route("/rules", name="rules")
      */
-    public function viewRegles(RuleRepository $ruleRepository,  ClasseRepository $classeRepository, LibraryRepository $libraryRepository): Response
+    public function index(RuleRepository $ruleRepository, ClasseRepository $classRepository, LibraryRepository $libraryRepository): Response
     {
-        $rulesBases = $ruleRepository->findBases();
-        $librariesBases = $libraryRepository->findBases();
+        $baseRules = $ruleRepository->findBases();
+        $baseLibraries = $libraryRepository->findBases();
         $annexes = $ruleRepository->findAnnexes();
-        $classes = $classeRepository->findAll();
+        $classes = $classRepository->findAll();
 
         $sections = [];
 
@@ -68,52 +68,52 @@ class ReglesController extends AbstractController
         $header_classname = 'rules';
         $header_up = "Mécaniques du Jeu";
         $header_down = "Règles";
-        $category = 'regles';
+        $category = 'rules';
 
-        return $this->render('regles/index.html.twig', [
+        return $this->render('rules/index.html.twig', [
             'header_classname' => $header_classname,
             'header_up' => $header_up,
             'header_down' => $header_down,
             'category' => $category,
             'sections' => $sections,
-            'rulesBases' => $rulesBases,
-            'librariesBases' => $librariesBases,
+            'base_rules' => $baseRules,
+            'base_libraries' => $baseLibraries,
             'annexes' => $annexes,
             'classes' => $classes,
         ]);
     }
 
     /**
-     * @Route("/regles/rule/{id}", name="regles_rule")
+     * @Route("/rules/rule/{id}", name="rules_rule")
      */
-    public function viewRule(Rule $rule, RuleRepository $ruleRepository, Request $request, AvantageRepository $avantageRepository, CompetenceRepository $competenceRepository, ObjetRepository $objetRepository, Visibility $visibility): Response
+    public function showRule(Rule $rule, RuleRepository $ruleRepository, Visibility $visibility): Response
     {
-        if ($response = $this->accessGuard($visibility, $rule, 'rule', 'regles')) {
+        if ($response = $this->accessGuard($visibility, $rule, 'rule', 'rules')) {
             return $response;
         }
 
-        $autresRules = $ruleRepository->findOthersSameType($rule->getId(), $rule->getBase());
+        $otherRules = $ruleRepository->findOthersSameType($rule->getId(), $rule->getBase());
 
-        return $this->render('regles/rule.html.twig', [
+        return $this->render('rules/rule.html.twig', [
             'rule' => $rule,
             'nom' => $rule->getNom(),
             'entity' => 'rule',
-            'category' => 'regles',
+            'category' => 'rules',
             'un_element' => $rule,
-            'autresRules' => $autresRules
+            'other_rules' => $otherRules
         ]);
     }
 
      /**
-     * @Route("/regles/library/{id}", name="regles_library")
+     * @Route("/rules/library/{id}", name="rules_library")
      */
-    public function viewLibrary(Library $library, LibraryRepository $libraryRepository, Request $request,
-                                AvantageRepository $avantageRepository,
-                                CompetenceRepository $competenceRepository,
-                                SortRepository $sortRepository,
-                                ObjetRepository $objetRepository, Visibility $visibility): Response
+    public function showLibrary(Library $library, LibraryRepository $libraryRepository, Request $request,
+                                AvantageRepository $advantageRepository,
+                                CompetenceRepository $skillRepository,
+                                SortRepository $spellRepository,
+                                ObjetRepository $objectRepository, Visibility $visibility): Response
     {
-        if ($response = $this->accessGuard($visibility, $library, 'library', 'regles')) {
+        if ($response = $this->accessGuard($visibility, $library, 'library', 'rules')) {
             return $response;
         }
 
@@ -127,7 +127,14 @@ class ReglesController extends AbstractController
         $keyword_url_param = $request->query->get('keyword');
 
         $entity_name = $library->getEntity();
-        $items = $visibility->listedOnly(${ $entity_name . 'Repository' }->findAll());
+        $repositories = [
+            'avantage' => $advantageRepository,
+            'competence' => $skillRepository,
+            'sort' => $spellRepository,
+            'objet' => $objectRepository,
+        ];
+        $repository = $repositories[$entity_name] ?? throw $this->createNotFoundException();
+        $items = $visibility->listedOnly($repository->findAll());
 
         $tabs = [];
         $subtabs = [];
@@ -223,14 +230,14 @@ class ReglesController extends AbstractController
         if ( $entity_name == 'avantage' ) {
             $discount_getters = [
                 'clan' => ['label' => 'Discount Clan/Faction', 'getter' => 'getDiscountClans'],
-                'classe' => ['label' => 'Discount Classe', 'getter' => 'getDiscountClasses'],
+                'class' => ['label' => 'Discount Classe', 'getter' => 'getDiscountClasses'],
             ];
 
             foreach ( $discount_getters as $param => $discount ) {
                 $options = [];
                 foreach ( $items as $item )
-                    foreach ( $item->{ $discount['getter'] }() as $entite )
-                        $options[$entite->getId()] = $entite->getNom();
+                    foreach ( $item->{ $discount['getter'] }() as $element )
+                        $options[$element->getId()] = $element->getNom();
 
                 asort($options);
 
@@ -242,7 +249,7 @@ class ReglesController extends AbstractController
                 $discount_url_param = $request->query->get($param);
 
                 if ( !empty( $discount_url_param ) )
-                    $items = array_filter($items, fn($item) => in_array($discount_url_param, array_map(fn($entite) => $entite->getId(), $item->{ $discount['getter'] }())));
+                    $items = array_filter($items, fn($item) => in_array($discount_url_param, array_map(fn($element) => $element->getId(), $item->{ $discount['getter'] }())));
             }
         }
 
@@ -266,13 +273,13 @@ class ReglesController extends AbstractController
 
         $otherLibraries = $libraryRepository->findOthersSameType($library->getId(), $library->getBase());
 
-        return $this->render('regles/library-detail.html.twig', [
+        return $this->render('rules/library-detail.html.twig', [
             'library' => $library,
             'nom' => $library->getNom(),
             'un_element' => $library,
             'entity' => 'library',
-            'category' => 'regles',
-            'otherLibraries' => $otherLibraries,
+            'category' => 'rules',
+            'other_libraries' => $otherLibraries,
             'items' => $items,
             'tabs' => $tabs,
             'subtabs' => $subtabs,
@@ -283,74 +290,74 @@ class ReglesController extends AbstractController
     }
 
     /**
-     * @Route("/regles/objet/{id}", name="regles_objet")
+     * @Route("/rules/object/{id}", name="rules_object")
      */
-    public function viewObjet(Objet $objet, ObjetRepository $objetRepository, Visibility $visibility): Response
+    public function showObject(Objet $object, ObjetRepository $objectRepository, Visibility $visibility): Response
     {
-        if ($response = $this->accessGuard($visibility, $objet, 'objet', 'regles')) {
+        if ($response = $this->accessGuard($visibility, $object, 'objet', 'rules')) {
             return $response;
         }
 
-        $autresObjets = array_filter(
-            $objetRepository->findBy(['categorie' => $objet->getCategorie()], ['nom' => 'ASC']),
-            fn (Objet $autre) => $autre->getId() !== $objet->getId() && $visibility->isListed($autre)
+        $otherObjects = array_filter(
+            $objectRepository->findBy(['categorie' => $object->getCategorie()], ['nom' => 'ASC']),
+            fn (Objet $other) => $other->getId() !== $object->getId() && $visibility->isListed($other)
         );
 
-        return $this->render('regles/objet-detail.html.twig', [
-            'un_element' => $objet,
-            'nom' => $objet->getNom(),
+        return $this->render('rules/object-detail.html.twig', [
+            'un_element' => $object,
+            'nom' => $object->getNom(),
             'entity' => 'objet',
-            'category' => 'regles',
-            'autresObjets' => array_slice(array_values($autresObjets), 0, 12),
+            'category' => 'rules',
+            'other_objects' => array_slice(array_values($otherObjects), 0, 12),
         ]);
     }
 
     /**
-     * @Route("/regles/classe/{id}", name="regles_classe")
+     * @Route("/rules/class/{id}", name="rules_class")
      */
-    public function viewClasse(Classe $classe, EcoleRepository $ecoleRepository, ClasseRepository $classeRepository): Response
+    public function showClass(Classe $class, EcoleRepository $dojoRepository, ClasseRepository $classRepository): Response
     {
-        $classes = $classeRepository->FindAll();
-        $personnagesClasse = $this->personnagesJoueurs($classe->getPersonnages());
-        $ecolesClasse = $ecoleRepository->findByClasseSorted($classe->getId());
-        shuffle($personnagesClasse);
+        $classes = $classRepository->findAll();
+        $playerCharacters = $this->playerCharacters($class->getPersonnages());
+        $classDojos = $dojoRepository->findByClasseSorted($class->getId());
+        shuffle($playerCharacters);
 
-        return $this->render('regles/class-detail.html.twig', [
-            'classe' => $classe,
-            'nom' => $classe->getNom(),
+        return $this->render('rules/class-detail.html.twig', [
+            'classe' => $class,
+            'nom' => $class->getNom(),
             'entity' => 'classe',
-            'category' => 'regles',
-            'un_element' => $classe,
-            'personnagesClasse' => $personnagesClasse,
-            'ecolesClasse' => $ecolesClasse,
+            'category' => 'rules',
+            'un_element' => $class,
+            'player_characters' => $playerCharacters,
+            'class_dojos' => $classDojos,
             'classes' => $classes
         ]);
     }
 
     /**
-     * @Route("/regles/ecole/{id}", name="regles_ecole")
+     * @Route("/rules/dojo/{id}", name="rules_dojo")
      */
-    public function viewEcole(Ecole $ecole, EcoleRepository $ecoleRepository, Visibility $visibility): Response
+    public function showDojo(Ecole $dojo, EcoleRepository $dojoRepository, Visibility $visibility): Response
     {
-        if ($response = $this->accessGuard($visibility, $ecole, 'ecole', 'regles')) {
+        if ($response = $this->accessGuard($visibility, $dojo, 'ecole', 'rules')) {
             return $response;
         }
 
-        $autresEcoles = $ecoleRepository->findAllByClanExceptOne($ecole->getClan()->getId(), $ecole->getId());
+        $otherDojos = $dojoRepository->findAllByClanExceptOne($dojo->getClan()->getId(), $dojo->getId());
 
-        return $this->render('regles/dojo-detail.html.twig', [
-            'ecole' => $ecole,
-            'nom' => $ecole->getNom(),
+        return $this->render('rules/dojo-detail.html.twig', [
+            'ecole' => $dojo,
+            'nom' => $dojo->getNom(),
             'entity' => 'ecole',
-            'category' => 'regles',
-            'un_element' => $ecole,
-            'autresEcoles' => $autresEcoles,
-            'personnagesEcole' => $this->personnagesJoueurs($ecole->getPersonnages()),
+            'category' => 'rules',
+            'un_element' => $dojo,
+            'other_dojos' => $otherDojos,
+            'player_characters' => $this->playerCharacters($dojo->getPersonnages()),
         ]);
     }
 
-    private function personnagesJoueurs(Collection $personnages): array
+    private function playerCharacters(Collection $characters): array
     {
-        return $personnages->filter(fn (Personnage $personnage) => $personnage->getEstPj())->getValues();
+        return $characters->filter(fn (Personnage $character) => $character->getEstPj())->getValues();
     }
 }

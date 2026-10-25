@@ -6,7 +6,7 @@
         <div class="vignette-episode {% if un_episode.id == episode.id %}active{% endif %}">
           <span class="titre">{{un_episode.titre}}</span>
           <div class="ratio-169">
-            <a class="{% if un_episode.id == episode.id %}link-disabled{% endif %}" href="{{ path('aventure_episode', { id : un_episode.id, '_fragment': 'read-head' } ) }}" >
+            <a class="{% if un_episode.id == episode.id %}link-disabled{% endif %}" href="{{ path('story_episode', { id : un_episode.id, '_fragment': 'read-head' } ) }}" >
               <img class="ratio-cropped" src="{{ asset(image_small(un_episode.image|default(NA_SESSION))) }}" loading="lazy" alt="image d'une session" />
             </a>
           </div>
@@ -27,7 +27,7 @@
     <div class="dropdown-menu dropdown-dark">
       {% for un_episode in episode.chapitreParent.episodes %}
         {% if un_episode.id != episode.id and (un_episode.scenes|length > 0 or is_mj()) %}
-          <a class="dropdown-item" href="{{ path('aventure_episode', { id: un_episode.id, '_fragment': 'read-head' } ) }}">
+          <a class="dropdown-item" href="{{ path('story_episode', { id: un_episode.id, '_fragment': 'read-head' } ) }}">
             #{{ un_episode.numeroSaison }} {{ un_episode.titre }}
           </a>
         {% endif %}

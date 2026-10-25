@@ -33,28 +33,28 @@ final class OptimizeImagesCommand extends Command
     protected static $defaultName = 'app:images:optimize';
 
     public const TYPES = [
-        'illustration' => ['entity' => Personnage::class, 'field' => 'illustration', 'preset' => 'vertical450'],
-        'saison'       => ['entity' => Saison::class,     'field' => 'image',        'preset' => 'landscape1080'],
-        'chapitre'     => ['entity' => Chapitre::class,   'field' => 'image',        'preset' => 'landscape1080'],
-        'episode'      => ['entity' => Episode::class,    'field' => 'image',        'preset' => 'landscape720'],
-        'scene'        => ['entity' => Scene::class,      'field' => 'image',        'preset' => 'landscape720'],
-        'archive'      => ['entity' => Archive::class,    'field' => 'image',        'preset' => 'landscape720'],
-        'clan'         => ['entity' => Clan::class,       'field' => 'image',        'preset' => 'landscape720'],
-        'lieu'         => ['entity' => Lieu::class,       'field' => 'image',        'preset' => 'landscape720'],
-        'ecole'        => ['entity' => Ecole::class,      'field' => 'image',        'preset' => 'fourthird900'],
-        'rule'         => ['entity' => Rule::class,       'field' => 'image',        'preset' => 'fourthird900'],
-        'lore'         => ['entity' => Lore::class,       'field' => 'image',        'preset' => 'fourthird900'],
-        'library'      => ['entity' => Library::class,    'field' => 'image',        'preset' => 'fourthird900'],
-        'clan-mon'     => ['entity' => Clan::class,       'field' => 'mon',          'preset' => 'square320'],
-        'famille-mon'  => ['entity' => Famille::class,    'field' => 'mon',          'preset' => 'square320'],
-        'classe-icone' => ['entity' => Classe::class,     'field' => 'icone',        'preset' => 'square320'],
-        'lieu-icone'   => ['entity' => Lieu::class,       'field' => 'icone',        'preset' => 'square192'],
-        'plan'         => ['entity' => Lieu::class,       'field' => 'planMap',      'preset' => 'map1920'],
-        'objet'        => ['entity' => Objet::class,      'field' => 'image',        'preset' => 'landscape720'],
-        'objet-icon'   => ['entity' => Objet::class,      'field' => 'icon',         'preset' => 'square320'],
-        'portrait'     => ['entity' => Personnage::class, 'field' => 'icone',        'preset' => 'square240'],
-        'classe'       => ['entity' => Classe::class,     'field' => 'image',        'preset' => 'landscape720'],
-        'avatar'       => ['entity' => Utilisateur::class, 'field' => 'avatar',      'preset' => 'square320'],
+        'illustration'  => ['entity' => Personnage::class, 'field' => 'illustration', 'preset' => 'vertical450'],
+        'season'        => ['entity' => Saison::class,     'field' => 'image',        'preset' => 'landscape1080'],
+        'chapter'       => ['entity' => Chapitre::class,   'field' => 'image',        'preset' => 'landscape1080'],
+        'episode'       => ['entity' => Episode::class,    'field' => 'image',        'preset' => 'landscape720'],
+        'scene'         => ['entity' => Scene::class,      'field' => 'image',        'preset' => 'landscape720'],
+        'archive'       => ['entity' => Archive::class,    'field' => 'image',        'preset' => 'landscape720'],
+        'clan'          => ['entity' => Clan::class,       'field' => 'image',        'preset' => 'landscape720'],
+        'location'      => ['entity' => Lieu::class,       'field' => 'image',        'preset' => 'landscape720'],
+        'dojo'          => ['entity' => Ecole::class,      'field' => 'image',        'preset' => 'fourthird900'],
+        'rule'          => ['entity' => Rule::class,       'field' => 'image',        'preset' => 'fourthird900'],
+        'lore'          => ['entity' => Lore::class,       'field' => 'image',        'preset' => 'fourthird900'],
+        'library'       => ['entity' => Library::class,    'field' => 'image',        'preset' => 'fourthird900'],
+        'clan-mon'      => ['entity' => Clan::class,       'field' => 'mon',          'preset' => 'square320'],
+        'family-mon'    => ['entity' => Famille::class,    'field' => 'mon',          'preset' => 'square320'],
+        'class-icon'    => ['entity' => Classe::class,     'field' => 'icone',        'preset' => 'square320'],
+        'location-icon' => ['entity' => Lieu::class,       'field' => 'icone',        'preset' => 'square192'],
+        'plan'          => ['entity' => Lieu::class,       'field' => 'planMap',      'preset' => 'map1920'],
+        'object'        => ['entity' => Objet::class,      'field' => 'image',        'preset' => 'landscape720'],
+        'object-icon'   => ['entity' => Objet::class,      'field' => 'icon',         'preset' => 'square320'],
+        'portrait'      => ['entity' => Personnage::class, 'field' => 'icone',        'preset' => 'square240'],
+        'class'         => ['entity' => Classe::class,     'field' => 'image',        'preset' => 'landscape720'],
+        'avatar'        => ['entity' => Utilisateur::class, 'field' => 'avatar',      'preset' => 'square320'],
     ];
 
     private $entityManager;
@@ -62,7 +62,7 @@ final class OptimizeImagesCommand extends Command
     private $propertyAccessor;
     private $nameTagger;
     private $publicDirectory;
-    private $renommages = [];
+    private $renames = [];
     private $absents = [];
 
     public function __construct(EntityManagerInterface $entityManager, ImageNormalizer $imageNormalizer, PropertyAccessorInterface $propertyAccessor, NameTagger $nameTagger, string $publicDirectory)
@@ -88,42 +88,42 @@ final class OptimizeImagesCommand extends Command
         $io = new SymfonyStyle($input, $output);
         $types = $input->getArgument('types');
 
-        $inconnus = array_diff($types, array_keys(self::TYPES));
-        if ($inconnus !== []) {
-            $io->error('Type(s) inconnu(s) : ' . implode(', ', $inconnus) . '. Types possibles : ' . implode(', ', array_keys(self::TYPES)) . '.');
+        $unknown = array_diff($types, array_keys(self::TYPES));
+        if ($unknown !== []) {
+            $io->error('Type(s) inconnu(s) : ' . implode(', ', $unknown) . '. Types possibles : ' . implode(', ', array_keys(self::TYPES)) . '.');
 
             return Command::INVALID;
         }
 
-        $echecs = [];
+        $failures = [];
 
         foreach ($types as $type) {
-            $echecs = array_merge($echecs, $this->optimiser($type, $io));
+            $failures = array_merge($failures, $this->optimize($type, $io));
         }
 
         $this->entityManager->flush();
 
-        if ($this->renommages !== []) {
-            $io->writeln(sprintf('%d texte(s) balisé(s) mis à jour pour %d image(s) renommée(s)', $this->remplacerDansLesTextes(), count($this->renommages)));
+        if ($this->renames !== []) {
+            $io->writeln(sprintf('%d texte(s) balisé(s) mis à jour pour %d image(s) renommée(s)', $this->replaceInTexts(), count($this->renames)));
         }
 
         foreach ($this->absents as $absent) {
             $io->note($absent . ' : fichier introuvable, ignoré');
         }
 
-        foreach ($echecs as $echec) {
-            $io->warning($echec);
+        foreach ($failures as $failure) {
+            $io->warning($failure);
         }
 
-        return $echecs === [] ? Command::SUCCESS : Command::FAILURE;
+        return $failures === [] ? Command::SUCCESS : Command::FAILURE;
     }
 
-    private function optimiser(string $type, SymfonyStyle $io): array
+    private function optimize(string $type, SymfonyStyle $io): array
     {
         ['entity' => $entity, 'field' => $field, 'preset' => $preset] = self::TYPES[$type];
-        $avecReduite = isset($this->imageNormalizer->getPreset($preset)['reduced']);
-        $normalises = $reduits = 0;
-        $echecs = [];
+        $hasReduced = isset($this->imageNormalizer->getPreset($preset)['reduced']);
+        $normalized = $reduced = 0;
+        $failures = [];
 
         $elements = $this->entityManager->getRepository($entity)->createQueryBuilder('e')
             ->andWhere('e.' . $field . ' IS NOT NULL')
@@ -133,50 +133,50 @@ final class OptimizeImagesCommand extends Command
 
         foreach ($elements as $element) {
             $image = $this->propertyAccessor->getValue($element, $field);
-            $chemin = $this->publicDirectory . '/' . ltrim($image, '/');
+            $path = $this->publicDirectory . '/' . ltrim($image, '/');
 
-            if (!is_file($chemin)) {
+            if (!is_file($path)) {
                 $this->absents[] = $image;
                 continue;
             }
 
-            if (!$this->imageNormalizer->matchesPreset($chemin, $preset)) {
-                $normalise = $this->imageNormalizer->normalize($chemin, $preset);
+            if (!$this->imageNormalizer->matchesPreset($path, $preset)) {
+                $normalizedPath = $this->imageNormalizer->normalize($path, $preset);
 
-                if ($normalise === null) {
-                    $echecs[] = $image . ' : normalisation impossible';
+                if ($normalizedPath === null) {
+                    $failures[] = $image . ' : normalisation impossible';
                     continue;
                 }
 
-                $nouvelleImage = dirname($image) . '/' . basename($normalise);
-                $this->propertyAccessor->setValue($element, $field, $nouvelleImage);
-                $normalises++;
+                $newImage = dirname($image) . '/' . basename($normalizedPath);
+                $this->propertyAccessor->setValue($element, $field, $newImage);
+                $normalized++;
 
-                if ($nouvelleImage !== $image) {
-                    $this->renommages[$image] = $nouvelleImage;
+                if ($newImage !== $image) {
+                    $this->renames[$image] = $newImage;
                 }
-            } elseif ($avecReduite && !$this->imageNormalizer->reduce($chemin, $preset)) {
-                $echecs[] = $image . ' : version réduite impossible';
+            } elseif ($hasReduced && !$this->imageNormalizer->reduce($path, $preset)) {
+                $failures[] = $image . ' : version réduite impossible';
                 continue;
             }
 
-            if ($avecReduite) {
-                $reduits++;
+            if ($hasReduced) {
+                $reduced++;
             }
         }
 
-        $io->writeln(sprintf('%-12s %3d image(s) normalisée(s), %3d version(s) réduite(s) à jour', $type, $normalises, $reduits));
+        $io->writeln(sprintf('%-12s %3d image(s) normalisée(s), %3d version(s) réduite(s) à jour', $type, $normalized, $reduced));
 
-        return $echecs;
+        return $failures;
     }
 
-    private function remplacerDansLesTextes(): int
+    private function replaceInTexts(): int
     {
-        $lignes = 0;
-        foreach ($this->renommages as $ancien => $nouveau) {
-            $lignes += $this->nameTagger->replacePath($ancien, $nouveau);
+        $rows = 0;
+        foreach ($this->renames as $previous => $new) {
+            $rows += $this->nameTagger->replacePath($previous, $new);
         }
 
-        return $lignes;
+        return $rows;
     }
 }

@@ -77,6 +77,8 @@
         width: 36%;
         height: auto;
         top: 33%;
+
+        @media (max-width: 575.98px) { width: 18%; }
     }
 }
 

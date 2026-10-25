@@ -94,8 +94,8 @@ class AdminEpisodeController extends AbstractController
             $fratrieArrivee = $episodeRepository->findBy(['chapitreParent' => $episode->getChapitreParent()->getId()]);
             $numeroteur->reordonnerNumero($episode->getId(), -1, $episode->getNumero(), [], $fratrieArrivee);
 
-            if (!empty($request->query->get('redirect')) && $request->query->get('redirect') == 'aventure')
-                return $this->redirectToRoute('aventure_saison', ['id' => $episode->getChapitreParent()->getSaisonParent()->getId(),'_fragment' => 'read-head-ch-id' . $episode->getChapitreParent()->getId()]);
+            if (!empty($request->query->get('redirect')) && $request->query->get('redirect') == 'story')
+                return $this->redirectToRoute('story_season', ['id' => $episode->getChapitreParent()->getSaisonParent()->getId(),'_fragment' => 'read-head-ch-id' . $episode->getChapitreParent()->getId()]);
             
             return $this->redirectToRoute('admin_episode');
         } 
@@ -146,8 +146,8 @@ class AdminEpisodeController extends AbstractController
             $this->getDoctrine()->getManager()->flush();
             $this->addFlash('success', 'L\'épisode a bien été modifié.');
 
-            if (!empty($request->query->get('redirect')) && $request->query->get('redirect') == 'aventure')
-                return $this->redirectToRoute('aventure_saison', ['id' => $episode->getChapitreParent()->getSaisonParent()->getId(),'_fragment' => 'read-head-ch-id' . $episode->getChapitreParent()->getId()]);
+            if (!empty($request->query->get('redirect')) && $request->query->get('redirect') == 'story')
+                return $this->redirectToRoute('story_season', ['id' => $episode->getChapitreParent()->getSaisonParent()->getId(),'_fragment' => 'read-head-ch-id' . $episode->getChapitreParent()->getId()]);
 
             return $this->redirectToRoute('admin_episode');
         }
@@ -190,8 +190,8 @@ class AdminEpisodeController extends AbstractController
             $this->addFlash('success', 'L\'épisode a bien été supprimé.');
         }
 
-        if (!empty($request->query->get('redirect')) && $request->query->get('redirect') == 'aventure')
-            return $this->redirectToRoute('aventure_saison', ['id' => $chapitreParent->getSaisonParent()->getId(), '_fragment' => 'read-head-ch-id' . $chapitreParent->getId()]);
+        if (!empty($request->query->get('redirect')) && $request->query->get('redirect') == 'story')
+            return $this->redirectToRoute('story_season', ['id' => $chapitreParent->getSaisonParent()->getId(), '_fragment' => 'read-head-ch-id' . $chapitreParent->getId()]);
 
         return $this->redirectToRoute('admin_episode');
     }

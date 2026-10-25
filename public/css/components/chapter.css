@@ -90,7 +90,7 @@
     left: 0;
 }
 
-.chapter-lieux {
+.chapter-locations {
   position: absolute;
   top: 0.5rem;
   right: 0rem;
@@ -103,23 +103,23 @@
   @media (max-width: 991.98px) { display: none; }
 }
 
-.chapter-lieux-row {
+.chapter-locations-row {
   display: flex;
   flex-wrap: wrap;
   gap: 6px;
   margin-top: 4px;
 
-  .chapter-lieu-link {
+  .chapter-location-link {
     display: block;
     line-height: 0;
 
-    &:hover .chapter-lieu-icon {
+    &:hover .chapter-location-icon {
       transform: scale(1.1);
       opacity: 1;
     }
   }
 
-  .chapter-lieu-icon {
+  .chapter-location-icon {
     width: 48px;
     height: 48px;
     filter: brightness(1);
@@ -160,20 +160,20 @@
   border-radius: 8px;
   width: max-content;
   
-  &.pjs  { right: 80%; text-align: right; .chapter-portraits-grid { direction: rtl; } }
-  &.pnjs { left:  80%; text-align: left;  .chapter-portraits-grid { direction: ltr; } }
+  &.pcs  { right: 80%; text-align: right; .chapter-portraits-grid { direction: rtl; } }
+  &.npcs { left:  80%; text-align: left;  .chapter-portraits-grid { direction: ltr; } }
   &.episode-view .chapter-portraits-grid { grid-template-rows: repeat(3, 40px); }
 
   @media (max-width: 991.98px) { display: none; }
 }
 
-.label-du-groupe {
+.group-label {
   font-family: 'Present';
   color: var(--color-white50);
   text-shadow: var(--shadow-text);
 }
 
-.chapter-portrait, .chapter-lieu-icon {
+.chapter-portrait, .chapter-location-icon {
   opacity: 0.4;
   background-color: var(--color-black50);
   object-fit: cover;

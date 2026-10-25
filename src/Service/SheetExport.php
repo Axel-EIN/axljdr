@@ -2,7 +2,6 @@
 
 namespace App\Service;
 
-use App\Entity\Competence;
 use App\Entity\FichePersonnage;
 use App\Entity\Personnage;
 
@@ -91,7 +90,6 @@ class SheetExport
     private const WEAPON_STEP = 37;
     private const WEAPON_ROWS = 4;
     private const WEAPON_CATEGORY = 'ARME';
-    private const CATEGORY_ORDER = ['OBJET' => 0, 'ARME' => 1, 'PROJECTILE' => 2, 'ARMURE' => 3];
     private const WEAPON_COLUMNS = [
         [1148, 100, PdfWriter::ALIGN_LEFT],
         [1317, 110, PdfWriter::ALIGN_CENTER],
@@ -120,7 +118,6 @@ class SheetExport
         [1094, 1137, 1180, 1224, 1268],
     ];
 
-    private const SEX_LABELS = ['M' => 'Homme', 'F' => 'Femme'];
     private const IDENTITY_BOXES = [
         'sex' => [234, 115],
         'age' => [491, 115],
@@ -154,17 +151,19 @@ class SheetExport
 
     private string $publicDirectory;
     private XpRanker $xpRanker;
+    private SheetReader $reader;
 
-    public function __construct(string $publicDirectory, XpRanker $xpRanker)
+    public function __construct(string $publicDirectory, XpRanker $xpRanker, SheetReader $reader)
     {
         $this->publicDirectory = $publicDirectory;
         $this->xpRanker = $xpRanker;
+        $this->reader = $reader;
     }
 
     public function build(FichePersonnage $sheet): string
     {
         $character = $sheet->getPersonnage();
-        $traits = $this->traits($sheet);
+        $traits = $this->reader->traits($sheet);
         $rank = $this->xpRanker->rank($this->xpRanker->total($character));
         $pdf = new PdfWriter(self::CANVAS_WIDTH);
 
@@ -191,27 +190,12 @@ class SheetExport
 
     public function filename(FichePersonnage $sheet): string
     {
-        $character = $sheet->getPersonnage();
-        $ascii = @iconv('UTF-8', 'ASCII//TRANSLIT', $character->getNomComplet());
-        $slug = strtolower(preg_replace('/[^A-Za-z0-9]+/', '-', $ascii === false ? 'personnage' : $ascii) ?? '');
-
-        return 'fiche-' . trim($slug, '-') . '.pdf';
+        return 'fiche-' . $this->reader->slug($sheet->getPersonnage()) . '.pdf';
     }
 
     private function sheet(string $name): string
     {
         return $this->publicDirectory . self::SHEETS . $name;
-    }
-
-    private function traits(FichePersonnage $sheet): array
-    {
-        $traits = [];
-
-        foreach (['constitution', 'volonte', 'reflexes', 'intuition', 'agilite', 'intelligence', 'forceStat', 'perception', 'vide'] as $name) {
-            $traits[$name] = ['value' => $sheet->attributEffectif($name), 'bonus' => $sheet->bonusAttribut($name)];
-        }
-
-        return $traits;
     }
 
     private function identity(PdfWriter $pdf, FichePersonnage $sheet, int $rank): void
@@ -252,13 +236,7 @@ class SheetExport
             $this->traitBonus($pdf, $traits[$name]['bonus'], $labelX, $labelY);
         }
 
-        $rings = [
-            'terre' => min($traits['constitution']['value'], $traits['volonte']['value']),
-            'air' => min($traits['reflexes']['value'], $traits['intuition']['value']),
-            'eau' => min($traits['forceStat']['value'], $traits['perception']['value']),
-            'feu' => min($traits['agilite']['value'], $traits['intelligence']['value']),
-            'vide' => $traits['vide']['value'],
-        ];
+        $rings = $this->reader->rings($traits);
 
         foreach (self::RINGS as $name => [$x, $y]) {
             $pdf->text((string) $rings[$name], $x, $y + 12, 34, ['bold' => true, 'align' => PdfWriter::ALIGN_CENTER]);
@@ -287,17 +265,9 @@ class SheetExport
 
     private function combat(PdfWriter $pdf, FichePersonnage $sheet, array $traits, int $rank): void
     {
-        $reflexes = $traits['reflexes']['value'];
-        $earth = min($traits['constitution']['value'], $traits['volonte']['value']);
+        $earth = $this->reader->rings($traits)['terre'];
         $armor = $sheet->getArmure();
         $centered = ['bold' => true, 'align' => PdfWriter::ALIGN_CENTER];
-
-        $initiative = ($reflexes + $rank) . 'g' . $reflexes;
-        $modifier = (int) $sheet->getInitiativeModifier();
-
-        if ($modifier !== 0) {
-            $initiative .= ($modifier > 0 ? '+' : '') . $modifier;
-        }
 
         [$left, $indent] = self::COMBAT_LABEL;
         [$line1, $line2, $initiativeBaseline] = self::COMBAT_INITIATIVE;
@@ -309,14 +279,14 @@ class SheetExport
         $pdf->text('/garder Réflexes', $indent, $line2, self::COMBAT_LABEL_SIZE);
         $pdf->text('Réflexes x 5 + Rang Général', $left, $ndLine, self::COMBAT_LABEL_SIZE);
 
-        $this->combatValue($pdf, $initiative, $initiativeBaseline);
-        $this->combatValue($pdf, (string) ($reflexes * 5 + $rank), $ndBaseline);
+        $this->combatValue($pdf, $this->reader->initiative($sheet, $rank), $initiativeBaseline);
+        $this->combatValue($pdf, (string) $this->reader->armorTn($sheet, $rank), $ndBaseline);
 
         if ($armor) {
             $pdf->text('+' . (int) $armor->getNdArmure(), self::COMBAT_ARMOUR[0], self::COMBAT_ARMOUR[1], 30, $centered);
         }
 
-        $reduction = ($armor ? (int) $armor->getReduction() : 0) + (int) $sheet->getReductionModifier();
+        $reduction = $this->reader->reduction($sheet);
 
         if ($reduction > 0) {
             $pdf->text((string) $reduction, self::COMBAT_REDUCTION[0], self::COMBAT_REDUCTION[1], 30, $centered);
@@ -332,7 +302,7 @@ class SheetExport
 
         $pdf->text((string) $total, self::HP_COLUMN, self::HP_FIRST + self::HP_ROWS * self::HP_STEP, 28, $centered);
 
-        $pdf->text((string) ($traits['constitution']['value'] * 2 + $rank), self::COMBAT_RECOVERY[0], self::COMBAT_RECOVERY[1], 30, $centered);
+        $pdf->text((string) $this->reader->recovery($sheet, $rank), self::COMBAT_RECOVERY[0], self::COMBAT_RECOVERY[1], 30, $centered);
     }
 
     private function combatValue(PdfWriter $pdf, string $value, int $baseline): void
@@ -348,7 +318,7 @@ class SheetExport
 
     private function skills(PdfWriter $pdf, FichePersonnage $sheet): void
     {
-        foreach (array_slice($this->orderedSkills($sheet), 0, self::SKILL_ROWS) as $row => $skill) {
+        foreach (array_slice($this->reader->skills($sheet), 0, self::SKILL_ROWS) as $row => $skill) {
             $line = self::SKILL_FIRST + $row * self::SKILL_STEP;
             $baseline = $line - 8;
             $skillEntity = $skill['skill'];
@@ -373,34 +343,6 @@ class SheetExport
                 $this->masteryBlock($pdf, $skillEntity->getMastery6Text(), self::SKILL_COLUMNS['mastery6'], $line);
             }
         }
-    }
-
-    private function orderedSkills(FichePersonnage $sheet): array
-    {
-        $skills = [];
-
-        for ($i = 1; $i <= 20; $i++) {
-            $skillEntity = $sheet->{'getCompetence' . $i}();
-
-            if ($skillEntity === null) {
-                continue;
-            }
-
-            $skills[] = [
-                'skill' => $skillEntity,
-                'value' => (int) $sheet->{'getValeur' . $i}(),
-                'dojo' => (int) $sheet->{'getCompEcole' . $i}(),
-                'specialisations' => $this->specialisations($skillEntity, (string) $sheet->{'getSpecialisations' . $i}()),
-                'tainted' => (bool) $skillEntity->getDegradante(),
-            ];
-        }
-
-        usort($skills, function (array $a, array $b) {
-            return [$a['dojo'] > 0 ? 0 : 1, $this->sortable($a['skill']->getNom())]
-                <=> [$b['dojo'] > 0 ? 0 : 1, $this->sortable($b['skill']->getNom())];
-        });
-
-        return $skills;
     }
 
     private function masteryBlock(PdfWriter $pdf, string $text, array $column, int $line): void
@@ -440,24 +382,9 @@ class SheetExport
         return mb_stripos($label, 'dégradante') !== false;
     }
 
-    private function specialisations(Competence $skillEntity, string $bitmask): array
-    {
-        $labels = [];
-
-        for ($k = 1; $k <= 6; $k++) {
-            $label = $skillEntity->{'getSpecialisation' . $k}();
-
-            if ($label && ($bitmask[$k - 1] ?? '0') === '1') {
-                $labels[] = $label;
-            }
-        }
-
-        return $labels;
-    }
-
     private function weapons(PdfWriter $pdf, FichePersonnage $sheet): void
     {
-        $weapons = array_filter($this->orderedItems($sheet), fn ($item) => $item->getCategorie() === self::WEAPON_CATEGORY);
+        $weapons = array_filter($this->reader->items($sheet), fn ($item) => $item->getCategorie() === self::WEAPON_CATEGORY);
 
         foreach (array_slice(array_values($weapons), 0, self::WEAPON_ROWS) as $row => $weapon) {
             $baseline = self::WEAPON_FIRST + $row * self::WEAPON_STEP + 26;
@@ -498,7 +425,7 @@ class SheetExport
     private function personalInfo(PdfWriter $pdf, FichePersonnage $sheet): void
     {
         $values = [
-            'sex' => self::SEX_LABELS[$sheet->getPersonnage()->getGenre()] ?? '',
+            'sex' => SheetReader::GENDERS[$sheet->getPersonnage()->getGenre()] ?? '',
             'age' => (string) $sheet->getAge(),
             'height' => (string) $sheet->getHeight(),
             'weight' => (string) $sheet->getWeight(),
@@ -521,21 +448,9 @@ class SheetExport
     {
         [$x, $width] = self::INVENTORY_TEXT;
 
-        foreach (array_slice($this->orderedItems($sheet), 0, self::INVENTORY_ROWS) as $row => $item) {
+        foreach (array_slice($this->reader->items($sheet), 0, self::INVENTORY_ROWS) as $row => $item) {
             $pdf->text($item->getNom(), $x, self::INVENTORY_FIRST + $row * self::INVENTORY_STEP, 22, ['width' => $width]);
         }
-    }
-
-    private function orderedItems(FichePersonnage $sheet): array
-    {
-        $items = $sheet->getInventoryItems()->toArray();
-
-        usort($items, function ($a, $b) {
-            return [self::CATEGORY_ORDER[$a->getCategorie()] ?? count(self::CATEGORY_ORDER), $this->sortable($a->getNom())]
-                <=> [self::CATEGORY_ORDER[$b->getCategorie()] ?? count(self::CATEGORY_ORDER), $this->sortable($b->getNom())];
-        });
-
-        return $items;
     }
 
     private function purse(PdfWriter $pdf, FichePersonnage $sheet): void
@@ -602,8 +517,8 @@ class SheetExport
         if ($byRing) {
             $this->fillBlock($pdf, 0, [$dojo->getTechSpecialSummary() ?: $dojo->getTechSpecialDesc()]);
 
-            $affinity = $this->sortable((string) $dojo->getAffinite());
-            $deficiency = $this->sortable((string) $dojo->getDeficience());
+            $affinity = $this->reader->sortable((string) $dojo->getAffinite());
+            $deficiency = $this->reader->sortable((string) $dojo->getDeficience());
 
             foreach (array_keys(self::RING_BADGES) as $index => $ring) {
                 $this->fillBlock($pdf, $index + 1, $this->spellNames($sheet, [$ring]));
@@ -637,7 +552,7 @@ class SheetExport
 
     private function ringBadge(PdfWriter $pdf, string $ring, string $affinity, string $deficiency): void
     {
-        $element = $this->sortable($ring);
+        $element = $this->reader->sortable($ring);
 
         if ($element === $affinity) {
             $label = 'AFFINITÉ';
@@ -679,7 +594,7 @@ class SheetExport
             }
         }
 
-        usort($names, fn ($a, $b) => strcmp($this->sortable($a), $this->sortable($b)));
+        usort($names, fn ($a, $b) => strcmp($this->reader->sortable($a), $this->reader->sortable($b)));
 
         return $names;
     }
@@ -711,12 +626,5 @@ class SheetExport
                 'width' => self::OVERLAY_TEXT[1],
             ]);
         }
-    }
-
-    private function sortable(string $name): string
-    {
-        $ascii = @iconv('UTF-8', 'ASCII//TRANSLIT', $name);
-
-        return strtolower($ascii === false ? $name : $ascii);
     }
 }

@@ -33,8 +33,8 @@ class AdminSkillController extends AbstractController
             'element' => 'skill',
             'label' => 'Compétence',
             'labels' => 'Compétences',
-            'genre' => 'F',
-            'determinant' => 'une',
+            'gender' => 'F',
+            'article' => 'une',
             'table_filters' => self::TABLE_FILTERS,
             'table_cols' => [
                 'nom:Nom',
@@ -83,11 +83,11 @@ class AdminSkillController extends AbstractController
         
 
         return $this->render('back_office/create.html.twig', [
-            'type' => 'Créer',
+            'type' => 'create',
             'entity' => 'skill',
             'label' => 'Compétence',
-            'genre' => 'F',
-            'determinant' => 'une',
+            'gender' => 'F',
+            'article' => 'une',
             'form' => $form->createView()
         ]);
     }
@@ -117,12 +117,12 @@ class AdminSkillController extends AbstractController
         }
 
         return $this->renderForm('back_office/edit.html.twig', [
-            'type' => 'Modifier',
+            'type' => 'edit',
             'skill' => $skill,
             'entity' => 'skill',
             'label' => 'Compétence',
-            'genre' => 'F',
-            'determinant' => 'une',
+            'gender' => 'F',
+            'article' => 'une',
             'form' => $form,
         ]);
     }

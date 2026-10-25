@@ -4,7 +4,7 @@
   justify-content: center;
   align-items: center;
 
-  .carrousel {
+  .episodes-carousel {
     position: relative;
     display: flex;
     flex-direction: row;
@@ -24,10 +24,10 @@
         border: solid var(--color-primary) 1px;
       }
 
-      &:hover .titre { visibility: visible; }
-      &.active .titre { visibility: hidden; }
+      &:hover .title { visibility: visible; }
+      &.active .title { visibility: hidden; }
 
-      .titre {
+      .title {
         visibility: hidden;
         position: absolute;
         z-index: 100;

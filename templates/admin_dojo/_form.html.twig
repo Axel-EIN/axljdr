@@ -65,7 +65,7 @@
                 </div>
             </div>
 
-            <div class="col-12" data-dojo-bloc="technique-speciale">
+            <div class="col-12" data-dojo-bloc="technique-special">
                 <div class="row">
                     <div class="col-12 mt-5">
                         <h2 class="heading-cardtitle">Technique Spéciale</h2>
@@ -98,7 +98,7 @@
         const classe = document.getElementById('{{ form.classe.vars.id }}');
         const visibles = {
             'techniques': nom => nom !== 'Shugenja',
-            'technique-speciale': nom => ['Shugenja', 'Moine'].includes(nom),
+            'technique-special': nom => ['Shugenja', 'Moine'].includes(nom),
             'magie': nom => nom === 'Shugenja',
         };
 

@@ -1,16 +1,3 @@
-.chapter-banner {
-  overflow: hidden;
-
-  &::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    z-index: -1;
-    background-image: linear-gradient(rgb(0 0 0 / 0.6), rgb(0 0 0 / 0), rgb(0 0 0 / 0.3), rgb(0 0 0 / 0.6));
-    pointer-events: none;
-  }
-}
-
 /* ----- BARRE DE SAISON (navigation precedente/suivante) ----- */
 
 .h1-saison {

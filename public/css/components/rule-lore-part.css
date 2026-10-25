@@ -2,7 +2,7 @@
 
 /* ----- SOMMAIRE ----- */
 
-#sommaire {
+#table-of-contents {
     flex-direction: column;
     position: absolute;
     z-index: 10;

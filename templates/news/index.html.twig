@@ -11,27 +11,27 @@
 
 {% block section_content1 %}
 
-    {% set chapitre = dernier_episode ? dernier_episode.chapitreParent : null %}
-    {% set chapter_image = chapitre ? chapitre.image|default(NA_CHAPITRE) : null %}
+    {% set chapter = last_episode ? last_episode.chapitreParent : null %}
+    {% set chapter_image = chapter ? chapter.image|default(NA_CHAPITRE) : null %}
     {% set episode_preset = image_preset('landscape720') %}
 
     <div class="col-12 col-lg-7">
         <div class="card card-body session-card on-image{{ image_bright(chapter_image) ? ' bright' }}"
-            {% if chapitre %}style="--chapter-color: {{ chapitre.couleur }}; --chapter-image: url('{{ asset(chapter_image) }}');"{% endif %}>
+            {% if chapter %}style="--chapter-color: {{ chapter.couleur }}; --chapter-image: url('{{ asset(chapter_image) }}');"{% endif %}>
 
-            {% if dernier_episode %}
+            {% if last_episode %}
                 <div class="session-split">
                     <div>
                         {{ include('/story/episode-card.html.twig', {
-                            un_episode: dernier_episode,
+                            episode: last_episode,
                             wrapper: 'w-100',
                             lazy: false,
                             user_characters_episode_totals: [],
                         }) }}
                     </div>
 
-                    {% if classement %}
-                        {{ include('/news/ranking.html.twig', {items: classement, mine: mes_personnages}) }}
+                    {% if ranking %}
+                        {{ include('/news/ranking.html.twig', {items: ranking, mine: my_characters}) }}
                     {% endif %}
                 </div>
 
@@ -80,31 +80,31 @@
                     {% if session_previous is not empty %}
                         <div class="session-group">
                             <h3 class="label-amerigo news-subtitle text-white mt-4">Séances précédentes</h3>
-                            {% for un_episode in session_previous %}
-                                <a class="episode-row inverted" href="{{ path('story_episode', {id: un_episode.id}) }}">
-                                    <span class="episode-number">#{{ un_episode.numeroSaison }}</span>
+                            {% for episode in session_previous %}
+                                <a class="episode-row inverted" href="{{ path('story_episode', {id: episode.id}) }}">
+                                    <span class="episode-number">#{{ episode.numeroSaison }}</span>
                                     <span class="episode-text">
-                                        <strong>{{ un_episode.titre }}</strong>
-                                        <span class="episode-sub">{{ un_episode.chapitreParent.titre }}</span>
+                                        <strong>{{ episode.titre }}</strong>
+                                        <span class="episode-sub">{{ episode.chapitreParent.titre }}</span>
                                     </span>
-                                    <img class="episode-picture" src="{{ asset(image_small(un_episode.image|default(NA_SESSION))) }}" width="{{ episode_preset.width }}" height="{{ episode_preset.height }}" loading="lazy" alt="" />
+                                    <img class="episode-picture" src="{{ asset(image_small(episode.image|default(NA_SESSION))) }}" width="{{ episode_preset.width }}" height="{{ episode_preset.height }}" loading="lazy" alt="" />
                                 </a>
                             {% endfor %}
                         </div>
                     {% endif %}
                 </div>
 
-                {% if chapitre %}
-                    {% set saison = chapitre.saisonParent %}
+                {% if chapter %}
+                    {% set season = chapter.saisonParent %}
                     <div class="session-links">
-                        <a class="session-link" href="{{ path('story_season', {id: saison.id}) }}">
+                        <a class="session-link" href="{{ path('story_season', {id: season.id}) }}">
                             <img src="{{ asset(STORY_SEASON_ICO) }}" alt="Icône de saison" />
-                            <span>Saison {{ saison.numero }}</span>
+                            <span>Saison {{ season.numero }}</span>
                         </a>
 
-                        <a class="session-link" href="{{ path('story_season', {id: saison.id}) }}#read-head-ch-id{{ chapitre.id }}">
+                        <a class="session-link" href="{{ path('story_season', {id: season.id}) }}#read-head-ch-id{{ chapter.id }}">
                             <img src="{{ asset(STORY_CHAPTER_ICO) }}" alt="Icône de chapitre" />
-                            <span>Chapitre {{ chapitre.numero }} — {{ chapitre.titre }}</span>
+                            <span>Chapitre {{ chapter.numero }} — {{ chapter.titre }}</span>
                         </a>
                     </div>
                 {% endif %}
@@ -116,30 +116,30 @@
 
     <div class="col-12 col-lg-5 news-aside">
 
-        {% if mon_personnage %}
+        {% if my_character %}
             <div class="card card-body participations-card"
-                style="--character-image: url('{{ asset(mon_personnage.illustration|default(NA_PERSO_ILLU)) }}');{% if mon_personnage.clan %} --faction-color: {{ mon_personnage.clan.couleur }};{% endif %}">
+                style="--character-image: url('{{ asset(my_character.illustration|default(NA_PERSO_ILLU)) }}');{% if my_character.clan %} --faction-color: {{ my_character.clan.couleur }};{% endif %}">
                 <div class="character-status">
                     <div class="status-head">
-                        <h3 class="status-name font-present text-white">{{ mon_personnage.nomComplet }}</h3>
-                        <span class="badge-rang-{{ mon_recap.rang }} large">RANG {{ mon_recap.rang }}</span>
+                        <h3 class="status-name font-present text-white">{{ my_character.nomComplet }}</h3>
+                        <span class="badge-rang-{{ my_summary.rank }} large">RANG {{ my_summary.rank }}</span>
                     </div>
-                    {% set niveaux_blessure = constant('App\\Entity\\FichePersonnage::NIVEAUX_BLESSURE')|keys %}
-                    {% if mon_recap.pvMax %}
+                    {% set wound_levels = constant('App\\Entity\\FichePersonnage::NIVEAUX_BLESSURE')|keys %}
+                    {% if my_summary.maxHp %}
                         <div class="status-hp-bar">
-                            {% for niveau in niveaux_blessure %}
-                                <span class="filled" title="{{ niveau }}"></span>
+                            {% for level in wound_levels %}
+                                <span class="filled" title="{{ level }}"></span>
                             {% endfor %}
                         </div>
                     {% endif %}
                     <div class="status-body">
                         <nav class="status-actions" aria-label="Raccourcis du personnage">
-                            <a class="status-link" href="{{ path('characters_profile', {id: mon_personnage.id}) }}" aria-label="Voir le profil">
+                            <a class="status-link" href="{{ path('characters_profile', {id: my_character.id}) }}" aria-label="Voir le profil">
                                 <i class="fa-solid fa-user" aria-hidden="true"></i>
                                 <span class="hover-tooltip below">Voir le profil</span>
                             </a>
-                            {% if mon_personnage.fichePersonnage %}
-                                <a class="status-link" href="{{ path('characters_sheet', {id: mon_personnage.fichePersonnage.id}) }}" aria-label="Voir la Fiche de Jeu">
+                            {% if my_character.fichePersonnage %}
+                                <a class="status-link" href="{{ path('characters_sheet', {id: my_character.fichePersonnage.id}) }}" aria-label="Voir la Fiche de Jeu">
                                     <i class="fa-solid fa-scroll" aria-hidden="true"></i>
                                     <span class="hover-tooltip below">Voir la Fiche de Jeu</span>
                                 </a>
@@ -149,8 +149,8 @@
                                 <span class="hover-tooltip below">Voir sur la carte</span>
                             </a>
                         </nav>
-                        {% if mon_recap.pvMax %}
-                            <div class="status-hp-values text-your-xp">{{ mon_recap.pvMax }} / {{ mon_recap.pvMax }}<span class="status-label">{{ niveaux_blessure|first }}</span></div>
+                        {% if my_summary.maxHp %}
+                            <div class="status-hp-values text-your-xp">{{ my_summary.maxHp }} / {{ my_summary.maxHp }}<span class="status-label">{{ wound_levels|first }}</span></div>
                         {% endif %}
                     </div>
                 </div>
@@ -159,9 +159,9 @@
                     <div class="participations-map d-none d-lg-block">
                         <h3 class="label-amerigo news-subtitle">Position</h3>
                         {{ include('parts/map.html.twig', {
-                            lieux,
+                            locations,
                             current: current_position,
-                            party: current_position ? {(current_position.id): [mon_personnage]} : {},
+                            party: current_position ? {(current_position.id): [my_character]} : {},
                             center: free_position,
                             wanderers: free_position ? [free_position] : [],
                             zoom: current_position ? current_position.zoom : null,
@@ -170,20 +170,20 @@
                     </div>
                 {% endif %}
 
-                {% if mes_participations is not empty %}
+                {% if my_participations is not empty %}
                     <h3 class="label-amerigo news-subtitle">Participations</h3>
-                    {% for participation in mes_participations %}
+                    {% for participation in my_participations %}
                         {% set scene = participation.scene %}
                         {% set episode = scene.episodeParent %}
-                        {% set perso = participation.personnage %}
-                        {% set cumul = participations_xp[participation.id]|default(null) %}
+                        {% set character = participation.personnage %}
+                        {% set episode_totals = participations_xp[participation.id]|default(null) %}
                         <a class="episode-row" href="{{ path('story_episode', {id: episode.id}) }}">
                             <span class="portrait-slot">
                                 <img class="character-portrait medium outlined {{ participation.estMort ? 'effect-dead' }}"
-                                     src="{{ asset(perso.icone|default(NA_PERSO_PORTRAIT)) }}"
-                                     alt="Portrait de {{ perso.prenom }}" title="{{ perso.prenom }}" />
+                                     src="{{ asset(character.icone|default(NA_PERSO_PORTRAIT)) }}"
+                                     alt="Portrait de {{ character.prenom }}" title="{{ character.prenom }}" />
                                 {% if participation.estMort %}<img class="character-icon-dead" src="{{ asset(MORT_ICO) }}" alt="est mort" />{% endif %}
-                                {% if cumul %}<span class="episode-xp">{{ include('parts/xp-gain.html.twig', {xp: cumul.xp, total: cumul.xpWithBonus, signe: '+'}) }}</span>{% endif %}
+                                {% if episode_totals %}<span class="episode-xp">{{ include('parts/xp-gain.html.twig', {xp: episode_totals.xp, total: episode_totals.xpWithBonus, sign: '+'}) }}</span>{% endif %}
                             </span>
                             <span class="episode-text">
                                 <strong>{{ episode.titre }}</strong>
@@ -198,24 +198,24 @@
             <div class="card card-body discoveries-card">
                 <h3 class="label-amerigo news-subtitle"><i class="fa-solid fa-eye" aria-hidden="true"></i> Découvertes</h3>
 
-                {% for decouverte in decouvertes %}
-                    <h4 class="news-qualifier">{{ decouverte.titre }}</h4>
+                {% for discovery in discoveries %}
+                    <h4 class="news-qualifier">{{ discovery.title }}</h4>
                     {{ include('/parts/picture-grid.html.twig', {
-                        items: decouverte.elements,
+                        items: discovery.elements,
                         keep_order: true,
                         badge_pinned: true,
-                        variant: decouverte.variant,
-                        field: decouverte.field|default(null),
-                        na_image: {lieu: NA_LIEU_ICO}[decouverte.cle]|default(null),
-                        per_row: decouverte.max,
-                        empty_message: decouverte.vide,
+                        variant: discovery.variant,
+                        field: discovery.field|default(null),
+                        na_image: {location: NA_LIEU_ICO}[discovery.key]|default(null),
+                        per_row: discovery.max,
+                        empty_message: discovery.empty,
                     }) }}
                 {% endfor %}
             </div>
         {% else %}
             <div class="card card-body ranking-card">
                 <h3 class="label-amerigo news-subtitle">Classement Général</h3>
-                {{ include('/news/ranking.html.twig', {items: classement_general}) }}
+                {{ include('/news/ranking.html.twig', {items: general_ranking}) }}
             </div>
         {% endif %}
 
@@ -226,19 +226,19 @@
 {% block section_content2 %}
     <div class="col-12">
         <div class="news-board">
-            {% for groupe in groupes %}
-                <div class="card card-body news-group{{ groupe.large|default(false) ? ' large' }}">
-                    <h3 class="label-amerigo news-subtitle">{{ groupe.titre }}</h3>
-                    {% if groupe.sections is defined %}
+            {% for group in groups %}
+                <div class="card card-body news-group{{ group.large|default(false) ? ' large' }}">
+                    <h3 class="label-amerigo news-subtitle">{{ group.title }}</h3>
+                    {% if group.sections is defined %}
                         <div class="news-sections">
-                            {% for section in groupe.sections %}
+                            {% for section in group.sections %}
                                 <div class="news-section" style="--span: {{ section.max }}">
-                                    <h4 class="news-qualifier">{{ section.titre }}</h4>
+                                    <h4 class="news-qualifier">{{ section.title }}</h4>
                                     {{ include('/parts/picture-grid.html.twig', {
                                         items: section.elements,
                                         badge_hover: true,
-                                        variant: groupe.variant|default('landscape'),
-                                        field: groupe.field|default(null),
+                                        variant: group.variant|default('landscape'),
+                                        field: group.field|default(null),
                                         per_row: section.max,
                                         wrapper: 'compact',
                                     }) }}
@@ -247,18 +247,18 @@
                         </div>
                     {% else %}
                         {{ include('/parts/picture-grid.html.twig', {
-                            items: groupe.elements,
+                            items: group.elements,
                             badge_hover: true,
-                            variant: groupe.variant|default('landscape'),
-                            field: groupe.field|default(null),
-                            per_row: groupe.perRow,
+                            variant: group.variant|default('landscape'),
+                            field: group.field|default(null),
+                            per_row: group.perRow,
                             wrapper: 'compact',
                         }) }}
                     {% endif %}
                 </div>
             {% endfor %}
 
-            {% if not mon_personnage %}
+            {% if not my_character %}
                 <div class="card card-body news-group{{ secrets_large ? ' large' }} locked">
                     <h3 class="label-amerigo news-subtitle">Secrets</h3>
                     <img class="news-lock fa-beat-fade" src="{{ asset(LOCKED_ICO) }}" alt="Cadenas" />

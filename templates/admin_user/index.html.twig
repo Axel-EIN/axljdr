@@ -26,41 +26,41 @@
                 <th class="p-2 text-center"></th>
             </tr>
 
-            {% for un_utilisateur in users %}
+            {% for user in users %}
 
                 <tr>
                     <td class="p-2" colspan="10"></td>
                 </tr>
 
                 <tr class="bg-surface">
-                    <td class="p-2 border text-center">{{ un_utilisateur.id }}</td>
-                    <td class="p-2 border text-center"><strong>{{ un_utilisateur.pseudo }}</strong></td>
-                    <td class="p-2 border text-center">{{ un_utilisateur.email }}</td>
+                    <td class="p-2 border text-center">{{ user.id }}</td>
+                    <td class="p-2 border text-center"><strong>{{ user.pseudo }}</strong></td>
+                    <td class="p-2 border text-center">{{ user.email }}</td>
                     <td class="p-2 border text-center">
-                        {% if un_utilisateur.isVerified %}
+                        {% if user.isVerified %}
                             <strong class="text-success">vérifié</strong>
                         {% else %}
                             <small class="text-muted">non</small>
                         {% endif %}
                     </td>
-                    <td class="p-2 border text-center">{{ un_utilisateur.roles ? un_utilisateur.roles|join(', ') : '' }}</td>
+                    <td class="p-2 border text-center">{{ user.roles ? user.roles|join(', ') : '' }}</td>
                     <td class="p-2 border text-center">
-                        {{ include('parts/avatar.html.twig', {user: un_utilisateur, size: 64}) }}
+                        {{ include('parts/avatar.html.twig', {user: user, size: 64}) }}
                     </td>
                     <td class="p-2 border text-center">
-                        {% if un_utilisateur.mainCharacter %}
-                            {{ un_utilisateur.mainCharacter.nomComplet }}
+                        {% if user.mainCharacter %}
+                            {{ user.mainCharacter.nomComplet }}
                         {% else %}
                             <small class="text-muted">aucun</small>
                         {% endif %}
                     </td>
                     <td class="p-2 border text-center"><a href="" ><i class="fas fa-eye"></i></a></td>
-                    <td class="p-2 border text-center"><a href="{{ path('admin_user_edit', {id: un_utilisateur.id} ) }}" ><i class="fas fa-edit"></i></a></td>
+                    <td class="p-2 border text-center"><a href="{{ path('admin_user_edit', {id: user.id} ) }}" ><i class="fas fa-edit"></i></a></td>
                     <td class="p-2 border text-center">
-                        <form method="post" action="{{ path('admin_user_delete', {'id': un_utilisateur.id}) }}"
-                              onsubmit="return confirm('Supprimer definitivement le compte {{ un_utilisateur.pseudo|e('js') }} ?');"
+                        <form method="post" action="{{ path('admin_user_delete', {'id': user.id}) }}"
+                              onsubmit="return confirm('Supprimer definitivement le compte {{ user.pseudo|e('js') }} ?');"
                               style="display:inline;">
-                            <input type="hidden" name="_csrf_token" value="{{ csrf_token('delete' ~ un_utilisateur.id) }}" />
+                            <input type="hidden" name="_csrf_token" value="{{ csrf_token('delete' ~ user.id) }}" />
                             <button type="submit" class="wrapper-icon-btn-small">
                                 <i class="fas fa-trash-alt"></i>
                             </button>

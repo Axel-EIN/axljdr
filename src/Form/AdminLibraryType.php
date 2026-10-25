@@ -28,10 +28,10 @@ class AdminLibraryType extends AbstractType
             ->add('entity', ChoiceType::class, [
                 'label' => 'Bibliothèque', 
                 'choices'  => [
-                    'Avantages / Désavantages' => 'avantage',
-                    'Compétences' => 'competence',
+                    'Avantages / Désavantages' => 'advantage',
+                    'Compétences' => 'skill',
                     'Objets' => 'objet',
-                    'Sorts' => 'sort',
+                    'Sorts' => 'spell',
                     'Kihos' => 'kiho',
                     'Sorts de Mahos' => 'maho',
                     'Tatouages' => 'tatoo',

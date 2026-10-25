@@ -30,8 +30,8 @@ class AdminLibraryController extends AbstractController
             'element' => 'library',
             'label' => 'Bibliothèque',
             'labels' => 'Bibliothèques',
-            'genre' => 'F',
-            'determinant' => 'une',
+            'gender' => 'F',
+            'article' => 'une',
             'table_cols' => [
                 'image:Image:image:NA_LIBRARY',
                 'nom:Nom::bold',
@@ -86,11 +86,11 @@ class AdminLibraryController extends AbstractController
         }
 
         return $this->render('back_office/create.html.twig', [
-            'type' => 'Créer',
+            'type' => 'create',
             'entity' => 'library',
             'label' => 'Bibliothèque',
-            'genre' => 'F',
-            'determinant' => 'une',
+            'gender' => 'F',
+            'article' => 'une',
             'form' => $form->createView()
         ]);
     }
@@ -143,12 +143,12 @@ class AdminLibraryController extends AbstractController
         }
 
         return $this->renderForm('back_office/edit.html.twig', [
-            'type' => 'Modifier',
+            'type' => 'edit',
             'library' => $library,
             'entity' => 'library',
             'label' => 'Bibliothèque',
-            'genre' => 'F',
-            'determinant' => 'une',
+            'gender' => 'F',
+            'article' => 'une',
             'form' => $form,
         ]);
     }

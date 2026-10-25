@@ -43,9 +43,9 @@ class AppExtension extends AbstractExtension
     {
         return [
             new TwigFilter('relief', [$this, 'titleRelief']),
-            new TwigFilter('lister', [$this, 'linesToList']),
+            new TwigFilter('list_items', [$this, 'linesToList']),
             new TwigFilter('pricer', [$this, 'formatPrice']),
-            new TwigFilter('jeter', [$this, 'expectedRoll']),
+            new TwigFilter('expected_roll', [$this, 'expectedRoll']),
             new TwigFilter('sortByField', [$this, 'sortByField']),
         ];
     }
@@ -53,7 +53,7 @@ class AppExtension extends AbstractExtension
     public function getFunctions()
     {
         return [
-            new TwigFunction('jet_map', [$this, 'getRollMap']),
+            new TwigFunction('roll_map', [$this, 'getRollMap']),
             new TwigFunction('element_state', [$this->visibility, 'state']),
             new TwigFunction('element_readable', [$this->visibility, 'isReadable']),
             new TwigFunction('element_unseen', [$this->visibility, 'isUnseen']),
@@ -73,7 +73,7 @@ class AppExtension extends AbstractExtension
             new TwigFunction('table_filters', [$this->tableFilter, 'build']),
             new TwigFunction('table_value', [$this->tableFilter, 'valueOf']),
             new TwigFunction('navigating_character', [$this->currentPlayer, 'navigatingCharacter']),
-            new TwigFunction('is_mj', [$this->currentPlayer, 'seesAll']),
+            new TwigFunction('is_gm', [$this->currentPlayer, 'seesAll']),
         ];
     }
 

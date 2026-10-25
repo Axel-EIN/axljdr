@@ -23,30 +23,30 @@ class NewsController extends AbstractController
     private const DISCOVERY_MARGIN = 2;
 
     private const DISCOVERIES = [
-        ['titre' => 'Personnages', 'vide' => 'Aucun personnage découvert', 'variant' => 'portrait', 'cle' => 'character', 'max' => 4],
-        ['titre' => 'Lieux', 'vide' => 'Aucun lieu découvert', 'variant' => 'icon', 'cle' => 'location', 'max' => 3],
-        ['titre' => 'Objets', 'vide' => 'Aucun objet découvert', 'variant' => 'rule', 'field' => 'icon', 'cle' => 'object', 'max' => 3],
+        ['title' => 'Personnages', 'empty' => 'Aucun personnage découvert', 'variant' => 'portrait', 'key' => 'character', 'max' => 4],
+        ['title' => 'Lieux', 'empty' => 'Aucun lieu découvert', 'variant' => 'icon', 'key' => 'location', 'max' => 3],
+        ['title' => 'Objets', 'empty' => 'Aucun objet découvert', 'variant' => 'rule', 'field' => 'icon', 'key' => 'object', 'max' => 3],
     ];
 
     private const GROUPS = [
-        ['titre' => 'Personnages Joueurs', 'variant' => 'portrait', 'cles' => ['character'], 'criteres' => ['estPj' => true]],
-        ['titre' => 'Personnages Non Joueurs', 'variant' => 'portrait', 'cles' => ['character'], 'criteres' => ['estPj' => false]],
-        ['titre' => 'Lieux', 'variant' => 'icon', 'cles' => ['location']],
-        ['titre' => 'Objets & Equipements', 'variant' => 'rule', 'field' => 'icon', 'sections' => [
-            ['titre' => 'Divers', 'cles' => ['object'], 'criteres' => ['categorie' => 'OBJET'], 'max' => 2],
-            ['titre' => 'Armes & Armures', 'cles' => ['object'], 'criteres' => ['categorie' => ['ARME', 'ARMURE', 'PROJECTILE']], 'max' => 2],
+        ['title' => 'Personnages Joueurs', 'variant' => 'portrait', 'keys' => ['character'], 'criteria' => ['estPj' => true]],
+        ['title' => 'Personnages Non Joueurs', 'variant' => 'portrait', 'keys' => ['character'], 'criteria' => ['estPj' => false]],
+        ['title' => 'Lieux', 'variant' => 'icon', 'keys' => ['location']],
+        ['title' => 'Objets & Equipements', 'variant' => 'rule', 'field' => 'icon', 'sections' => [
+            ['title' => 'Divers', 'keys' => ['object'], 'criteria' => ['categorie' => 'OBJET'], 'max' => 2],
+            ['title' => 'Armes & Armures', 'keys' => ['object'], 'criteria' => ['categorie' => ['ARME', 'ARMURE', 'PROJECTILE']], 'max' => 2],
         ]],
-        ['titre' => 'Factions', 'variant' => 'emblem', 'cles' => ['clan']],
-        ['titre' => 'Écoles', 'variant' => 'rule', 'cles' => ['dojo']],
-        ['titre' => 'Archives et Lore', 'sections' => [
-            ['titre' => 'Archives', 'cles' => ['archive'], 'max' => 2],
-            ['titre' => 'Lore', 'cles' => ['lore'], 'max' => 2],
+        ['title' => 'Factions', 'variant' => 'emblem', 'keys' => ['clan']],
+        ['title' => 'Écoles', 'variant' => 'rule', 'keys' => ['dojo']],
+        ['title' => 'Archives et Lore', 'sections' => [
+            ['title' => 'Archives', 'keys' => ['archive'], 'max' => 2],
+            ['title' => 'Lore', 'keys' => ['lore'], 'max' => 2],
         ]],
-        ['titre' => 'Règles', 'variant' => 'rule', 'cles' => ['rule']],
-        ['titre' => 'Bibliothèques', 'variant' => 'rule', 'large' => true, 'sections' => [
-            ['titre' => 'Avantages & Désavantages', 'cles' => ['advantage'], 'max' => 2],
-            ['titre' => 'Compétences', 'cles' => ['skill'], 'max' => 2],
-            ['titre' => 'Sorts', 'cles' => ['spell'], 'max' => 4],
+        ['title' => 'Règles', 'variant' => 'rule', 'keys' => ['rule']],
+        ['title' => 'Bibliothèques', 'variant' => 'rule', 'large' => true, 'sections' => [
+            ['title' => 'Avantages & Désavantages', 'keys' => ['advantage'], 'max' => 2],
+            ['title' => 'Compétences', 'keys' => ['skill'], 'max' => 2],
+            ['title' => 'Sorts', 'keys' => ['spell'], 'max' => 4],
         ]],
     ];
 
@@ -85,7 +85,7 @@ class NewsController extends AbstractController
             if (isset($group['sections'])) {
                 $groupSections = [];
                 foreach ($group['sections'] as $section) {
-                    $elements = $find($section['cles'], $section['max'], $section['criteres'] ?? []);
+                    $elements = $find($section['keys'], $section['max'], $section['criteria'] ?? []);
 
                     if (!empty($elements)) {
                         $groupSections[] = $section + ['elements' => $elements];
@@ -101,7 +101,7 @@ class NewsController extends AbstractController
 
             $portrait = ($group['variant'] ?? null) === 'portrait';
             $max = $portrait ? self::PORTRAIT_THUMBNAILS : self::THUMBNAILS;
-            $elements = $find($group['cles'], $max, $group['criteres'] ?? []);
+            $elements = $find($group['keys'], $max, $group['criteria'] ?? []);
 
             if (!empty($elements)) {
                 $groups[] = $group + [
@@ -120,31 +120,31 @@ class NewsController extends AbstractController
         $discoveries = [];
         if ($myCharacter !== null) {
             $mySummary = [
-                'pvMax' => $myCharacter->getFichePersonnage()?->getPvMax(),
-                'rang' => $xpRanker->rank($xpRanker->total($myCharacter)),
+                'maxHp' => $myCharacter->getFichePersonnage()?->getPvMax(),
+                'rank' => $xpRanker->rank($xpRanker->total($myCharacter)),
             ];
 
             foreach (self::DISCOVERIES as $discovery) {
-                $elements = $newsFeed->lastDiscovered($discovery['cle'], $discovery['max'] * self::DISCOVERY_MARGIN);
+                $elements = $newsFeed->lastDiscovered($discovery['key'], $discovery['max'] * self::DISCOVERY_MARGIN);
                 $discoveries[] = $discovery + ['elements' => array_slice($visibility->listedOnly($elements), 0, $discovery['max'])];
             }
         }
 
         return $this->render('news/index.html.twig', [
-            'dernier_episode' => $lastEpisode,
-            'classement' => $lastEpisode === null ? false : $xpRanker->rankEpisodeCharacters($lastEpisode),
+            'last_episode' => $lastEpisode,
+            'ranking' => $lastEpisode === null ? false : $xpRanker->rankEpisodeCharacters($lastEpisode),
             'session_locations' => $lastEpisode === null ? [] : $newsFeed->episodeLocations($lastEpisode),
             'session_characters' => $lastEpisode === null ? [] : $newsFeed->episodeCharacters($lastEpisode),
             'session_objects' => $lastEpisode === null ? [] : $newsFeed->episodeObjects($lastEpisode),
             'session_previous' => array_slice($episodes, 1),
-            'mes_personnages' => $myCharacters,
-            'mon_personnage' => $myCharacter,
-            'mon_recap' => $mySummary,
-            'mes_participations' => $participations,
-            'classement_general' => $myCharacter === null ? $newsFeed->generalRanking() : [],
-            'decouvertes' => $discoveries,
+            'my_characters' => $myCharacters,
+            'my_character' => $myCharacter,
+            'my_summary' => $mySummary,
+            'my_participations' => $participations,
+            'general_ranking' => $myCharacter === null ? $newsFeed->generalRanking() : [],
+            'discoveries' => $discoveries,
             'participations_xp' => $participationsXp,
-            'groupes' => $groups,
+            'groups' => $groups,
             'secrets_large' => $column === 0,
             'sections' => $sections,
             'header_classname' => 'news',

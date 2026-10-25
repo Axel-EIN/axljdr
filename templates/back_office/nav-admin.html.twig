@@ -1,114 +1,114 @@
 <nav class="nav justify-content-center align-items-center">
 
-    {% if is_mj() %}
+    {% if is_gm() %}
     
         {% set navs = {
             'Saisons': {
                 'element': 'season',
                 'label': 'Saisons',
-                'genre': 'F',
+                'gender': 'F',
             },
             'Chapitres': {
                 'element': 'chapter',
                 'label': 'Chapitres',
-                'genre': 'M',
+                'gender': 'M',
             },
             'Sessions': {
                 'element': 'episode',
                 'label': 'Épisodes',
-                'genre': 'M',
+                'gender': 'M',
             },
             'Scènes': {
                 'element': 'scene',
                 'label': 'Scènes',
-                'genre': 'F',
+                'gender': 'F',
             },
             'Clans': {
                 'element': 'clan',
                 'label': 'Clans',
-                'genre': 'M',
+                'gender': 'M',
             },
             'Familles': {
                 'element': 'family',
                 'label': 'Familles',
-                'genre': 'F',
+                'gender': 'F',
             },
             'Archive': {
                 'element': 'archive',
                 'label': 'Archives',
-                'genre': 'F',
+                'gender': 'F',
             },
             'Lieux': {
                 'element': 'location',
                 'label': 'Lieux',
-                'genre': 'M',
+                'gender': 'M',
             },
             'Lores': {
                 'element': 'lore',
                 'label': 'Lores',
-                'genre': 'M',
+                'gender': 'M',
             },
             'Classes': {
                 'element': 'class',
                 'label': 'Classes',
-                'genre': 'F',
+                'gender': 'F',
             },
             'Écoles': {
                 'element': 'dojo',
                 'label': 'Écoles',
-                'genre': 'F',
+                'gender': 'F',
             },
             'Rule': {
                 'element': 'rule',
                 'label': 'Rules',
-                'genre': 'F',
+                'gender': 'F',
             },
             'Bibliothèques': {
                 'element': 'library',
                 'label': 'Bibliothèques',
-                'genre': 'F',
+                'gender': 'F',
             },
             'Avantages': {
                 'element': 'advantage',
                 'label': 'Avantages / Désavantages',
-                'genre': 'M',
+                'gender': 'M',
             },
             'Compétences': {
                 'element': 'skill',
                 'label': 'Compétences',
-                'genre': 'F',
+                'gender': 'F',
             },
             'Objets': {
                 'element': 'object',
                 'label': 'Objets',
-                'genre': 'M',
+                'gender': 'M',
             },
             'Sorts': {
                 'element': 'spell',
                 'label': 'Sorts',
-                'genre': 'F',
+                'gender': 'F',
             },
             'Fiches': {
                 'element': 'sheet',
                 'label': 'Fiches',
-                'genre': 'F',
+                'gender': 'F',
             },
             'Personnages': {
                 'element': 'character',
                 'label': 'Personnages',
-                'genre': 'M',
+                'gender': 'M',
             },
             'Développements': {
                 'element': 'development',
                 'label': 'Développements',
-                'genre': 'M',
+                'gender': 'M',
             },
         }
         %}
 
         {% for nav in navs %}
-            {% set element, label, genre = nav['element'], nav['label'], nav['genre'] %}
-            {{ include('/back_office/btn-mj-tab-link.html.twig') }}
+            {% set element, label, gender = nav['element'], nav['label'], nav['gender'] %}
+            {{ include('/back_office/btn-gm-tab-link.html.twig') }}
         {% endfor %}
 
     {% endif %}

@@ -93,7 +93,7 @@
                 </a>
               {% endif %}
 
-              <a class="{% if route_courante starts with 'mon_compte' %}active{% endif %}" href="{{ path('mon_compte') }}">
+              <a class="{% if route_courante starts with 'account' %}active{% endif %}" href="{{ path('account') }}">
                 <i class="fas fa-torii-gate couleur-primaire"></i>
                 &nbsp;&nbsp;
                 MON COMPTE
@@ -104,7 +104,7 @@
               </small>
             </div>
 
-            <a class="avatar-link hover-shine" href="{{ path('mon_compte') }}">
+            <a class="avatar-link hover-shine" href="{{ path('account') }}">
               {{ include('parts/avatar.html.twig', {user: app.user, character: true, size: compact ? 48 : 96}) }}
             </a>
 

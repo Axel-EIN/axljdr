@@ -18,7 +18,7 @@ use App\Entity\Rule;
 use App\Entity\Saison;
 use App\Entity\Scene;
 use App\Entity\Utilisateur;
-use App\Service\Baliseur;
+use App\Service\NameTagger;
 use App\Service\ImageNormalizer;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Command\Command;
@@ -60,19 +60,19 @@ final class OptimizeImagesCommand extends Command
     private $entityManager;
     private $imageNormalizer;
     private $propertyAccessor;
-    private $baliseur;
+    private $nameTagger;
     private $publicDirectory;
     private $renommages = [];
     private $absents = [];
 
-    public function __construct(EntityManagerInterface $entityManager, ImageNormalizer $imageNormalizer, PropertyAccessorInterface $propertyAccessor, Baliseur $baliseur, string $publicDirectory)
+    public function __construct(EntityManagerInterface $entityManager, ImageNormalizer $imageNormalizer, PropertyAccessorInterface $propertyAccessor, NameTagger $nameTagger, string $publicDirectory)
     {
         parent::__construct();
 
         $this->entityManager = $entityManager;
         $this->imageNormalizer = $imageNormalizer;
         $this->propertyAccessor = $propertyAccessor;
-        $this->baliseur = $baliseur;
+        $this->nameTagger = $nameTagger;
         $this->publicDirectory = $publicDirectory;
     }
 
@@ -174,7 +174,7 @@ final class OptimizeImagesCommand extends Command
     {
         $lignes = 0;
         foreach ($this->renommages as $ancien => $nouveau) {
-            $lignes += $this->baliseur->remplacerChemin($ancien, $nouveau);
+            $lignes += $this->nameTagger->replacePath($ancien, $nouveau);
         }
 
         return $lignes;

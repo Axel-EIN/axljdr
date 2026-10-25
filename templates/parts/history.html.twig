@@ -38,13 +38,13 @@
   </h5>
 
   <div id="episode{{ un_episode.id }}" class="collapse">
-    {% for ligne in un_bloc.lignes %}
+    {% for ligne in un_bloc.lines %}
       <div class="historique-scene">
         <a href="{{ path('story_episode', {id: un_episode.id, '_fragment': 'scn' ~ ligne.scene.numero}) }}">
           Scène {{ ligne.scene.numero }} — <strong>{{ ligne.scene.titre }}</strong>
         </a>
 
-        {% if ligne.mort %}
+        {% if ligne.dead %}
           <strong class="text-dead">MORT</strong>
         {% elseif ligne.xp > 0 %}
           <span class="text-nowrap historique-xp">

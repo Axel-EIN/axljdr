@@ -74,7 +74,7 @@
 
     <script>
     (function () {
-        const compsMeta = {{ competences_json|default({})|json_encode|raw }};
+        const compsMeta = {{ skills_json|default({})|json_encode|raw }};
         document.querySelectorAll('.admin-comp-slot').forEach(slot => {
             const i = slot.dataset.compSlot;
             const compSelect = slot.querySelector(`select[name$="[competence${i}]"]`);

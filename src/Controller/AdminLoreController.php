@@ -4,7 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Lore;
 use App\Form\AdminLoreType;
-use App\Service\Numeroteur;
+use App\Service\Orderer;
 use App\Service\FileHandler;
 use App\Repository\LoreRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -52,7 +52,7 @@ class AdminLoreController extends AbstractController
      * @Route("/admin/lore/create", name="admin_lore_create")
      * @IsGranted("ROLE_MJ")
      */
-    public function addLore(Request $request, EntityManagerInterface $em, FileHandler $fileHandler, LoreRepository $loreRepository, Numeroteur $numeroteur, Unlocker $unlocker): Response
+    public function addLore(Request $request, EntityManagerInterface $em, FileHandler $fileHandler, LoreRepository $loreRepository, Orderer $orderer, Unlocker $unlocker): Response
     {
         $lore = new Lore;
         $form = $this->createForm(AdminLoreType::class, $lore);
@@ -80,7 +80,7 @@ class AdminLoreController extends AbstractController
             $this->addFlash('success', 'Le Lore a bien été ajouté');
 
             $fratrieArrivee = $loreRepository->findAll();
-            $numeroteur->reordonnerNumero($lore->getId(), -1, $lore->getNumero(), [], $fratrieArrivee);
+            $orderer->reorderNumber($lore->getId(), -1, $lore->getNumero(), [], $fratrieArrivee);
 
             if (!empty($request->query->get('redirect')) && $request->query->get('redirect') == 'lore')
                 return $this->redirectToRoute('world_lore', ['id' => $lore->getId()]);
@@ -102,7 +102,7 @@ class AdminLoreController extends AbstractController
      * @Route("/admin/lore/{id}/edit", name="admin_lore_edit")
      * @IsGranted("ROLE_MJ")
      */
-    public function editLore(Request $request, Lore $lore, FileHandler $fileHandler, LoreRepository $loreRepository, Numeroteur $numeroteur, Unlocker $unlocker): Response
+    public function editLore(Request $request, Lore $lore, FileHandler $fileHandler, LoreRepository $loreRepository, Orderer $orderer, Unlocker $unlocker): Response
     {
         $numeroDepart = $lore->getNumero();
 
@@ -130,7 +130,7 @@ class AdminLoreController extends AbstractController
             if ($numeroDepart != $lore->getNumero())
             {
                 $fratrie = $loreRepository->findAll();
-                $numeroteur->reordonnerNumero($lore->getId(), $numeroDepart, $lore->getNumero(), $fratrie, $fratrie);
+                $orderer->reorderNumber($lore->getId(), $numeroDepart, $lore->getNumero(), $fratrie, $fratrie);
             }
 
             $unlocker->sync($lore, $form->get('unlockedBy')->getData());
@@ -159,7 +159,7 @@ class AdminLoreController extends AbstractController
      * @Route("/admin/lore/{id}/delete", name="admin_lore_delete", methods={"POST"})
      * @IsGranted("ROLE_MJ")
      */
-    public function deleteLore(Request $request, Lore $lore, FileHandler $fileHandler, EntityManagerInterface $em, LoreRepository $loreRepository, Numeroteur $numeroteur, Unlocker $unlocker): Response
+    public function deleteLore(Request $request, Lore $lore, FileHandler $fileHandler, EntityManagerInterface $em, LoreRepository $loreRepository, Orderer $orderer, Unlocker $unlocker): Response
     {
         if ( $this->isCsrfTokenValid('delete' . $lore->getId(), $request->request->get('_csrf_token')))
         {
@@ -168,7 +168,7 @@ class AdminLoreController extends AbstractController
             $fileHandler->handle(null, $lore->getPdf(), null, 'pdf-lores');
 
             $fratrie = $loreRepository->findAll();
-            $numeroteur->reordonnerNumero($lore->getId(), $lore->getNumero(), -1, $fratrie, []);
+            $orderer->reorderNumber($lore->getId(), $lore->getNumero(), -1, $fratrie, []);
 
             $unlocker->forget($lore);
             $em->remove($lore);

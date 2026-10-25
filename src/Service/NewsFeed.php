@@ -17,7 +17,7 @@ class NewsFeed
     private $visibility;
     private $participationRepository;
     private $personnageRepository;
-    private $classeurXP;
+    private $xpRanker;
 
     public function __construct(
         EntityManagerInterface $entityManager,
@@ -25,14 +25,14 @@ class NewsFeed
         Visibility $visibility,
         ParticipationRepository $participationRepository,
         PersonnageRepository $personnageRepository,
-        ClasseurXP $classeurXP
+        XpRanker $xpRanker
     ) {
         $this->entityManager = $entityManager;
         $this->currentPlayer = $currentPlayer;
         $this->visibility = $visibility;
         $this->participationRepository = $participationRepository;
         $this->personnageRepository = $personnageRepository;
-        $this->classeurXP = $classeurXP;
+        $this->xpRanker = $xpRanker;
     }
 
     public function generalRanking(): array
@@ -46,16 +46,16 @@ class NewsFeed
 
             $classement[] = [
                 'id' => $personnage->getId(),
-                'prenom' => $personnage->getPrenom(),
-                'icone' => $personnage->getIcone(),
-                'joueur' => $personnage->getJoueur(),
-                'xp' => $this->classeurXP->total($personnage),
-                'estMort' => $personnage->isDead() ? 1 : 0,
+                'firstName' => $personnage->getPrenom(),
+                'icon' => $personnage->getIcone(),
+                'player' => $personnage->getJoueur(),
+                'xp' => $this->xpRanker->total($personnage),
+                'dead' => $personnage->isDead() ? 1 : 0,
             ];
         }
 
         usort($classement, function ($a, $b) {
-            return [$b['xp'], $a['prenom']] <=> [$a['xp'], $b['prenom']];
+            return [$b['xp'], $a['firstName']] <=> [$a['xp'], $b['firstName']];
         });
 
         return $classement;

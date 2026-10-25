@@ -5,7 +5,7 @@ namespace App\Controller;
 use App\Service\TableFilter;
 use App\Entity\Episode;
 use App\Service\FileHandler;
-use App\Service\Numeroteur;
+use App\Service\Orderer;
 use App\Form\AdminEpisodeType;
 use App\Repository\EpisodeRepository;
 use App\Repository\ChapitreRepository;
@@ -57,7 +57,7 @@ class AdminEpisodeController extends AbstractController
      * @Route("/admin/episode/create", name="admin_episode_create")
      * @IsGranted("ROLE_MJ")
      */
-    public function addEpisode(Request $request, EntityManagerInterface $em, FileHandler $fileHandler, ChapitreRepository $chapitreRepository, Numeroteur $numeroteur, EpisodeRepository $episodeRepository, Unlocker $unlocker, TableFilter $tableFilter) {
+    public function addEpisode(Request $request, EntityManagerInterface $em, FileHandler $fileHandler, ChapitreRepository $chapitreRepository, Orderer $orderer, EpisodeRepository $episodeRepository, Unlocker $unlocker, TableFilter $tableFilter) {
 
         $episode = new Episode;
         $tableFilter->prefill($episode, self::TABLE_FILTERS, $request->query->all('filter'));
@@ -92,7 +92,7 @@ class AdminEpisodeController extends AbstractController
             $this->addFlash('success', 'L\'épisode a bien été crée.');
 
             $fratrieArrivee = $episodeRepository->findBy(['chapitreParent' => $episode->getChapitreParent()->getId()]);
-            $numeroteur->reordonnerNumero($episode->getId(), -1, $episode->getNumero(), [], $fratrieArrivee);
+            $orderer->reorderNumber($episode->getId(), -1, $episode->getNumero(), [], $fratrieArrivee);
 
             if (!empty($request->query->get('redirect')) && $request->query->get('redirect') == 'story')
                 return $this->redirectToRoute('story_season', ['id' => $episode->getChapitreParent()->getSaisonParent()->getId(),'_fragment' => 'read-head-ch-id' . $episode->getChapitreParent()->getId()]);
@@ -114,7 +114,7 @@ class AdminEpisodeController extends AbstractController
      * @Route("/admin/episode/{id}/edit", name="admin_episode_edit")
      * @IsGranted("ROLE_MJ")
      */
-    public function editEpisode(Request $request, Episode $episode, FileHandler $fileHandler, Numeroteur $numeroteur, EpisodeRepository $episodeRepository, Unlocker $unlocker): Response {
+    public function editEpisode(Request $request, Episode $episode, FileHandler $fileHandler, Orderer $orderer, EpisodeRepository $episodeRepository, Unlocker $unlocker): Response {
 
         $numeroDepart = $episode->getNumero();
         $fratrieDepartId = $episode->getChapitreParent()->getId();
@@ -138,7 +138,7 @@ class AdminEpisodeController extends AbstractController
             {
                 $fratrieDepart = $episodeRepository->findBy(['chapitreParent' => $fratrieDepartId]);
                 $fratrieArrivee = $episodeRepository->findBy(['chapitreParent' => $episode->getChapitreParent()->getId()]);
-                $numeroteur->reordonnerNumero($episode->getId(), $numeroDepart, $episode->getNumero(), $fratrieDepart, $fratrieArrivee);
+                $orderer->reorderNumber($episode->getId(), $numeroDepart, $episode->getNumero(), $fratrieDepart, $fratrieArrivee);
             }
 
             $unlocker->sync($episode, $form->get('unlockedBy')->getData());
@@ -167,7 +167,7 @@ class AdminEpisodeController extends AbstractController
      * @Route("/admin/episode/{id}/delete", name="admin_episode_delete", methods={"POST"})
      * @IsGranted("ROLE_MJ")
      */
-    public function deleteEpisode(Request $request, Episode $episode, Numeroteur $numeroteur, EpisodeRepository $episodeRepository, FileHandler $fileHandler, Unlocker $unlocker): Response {
+    public function deleteEpisode(Request $request, Episode $episode, Orderer $orderer, EpisodeRepository $episodeRepository, FileHandler $fileHandler, Unlocker $unlocker): Response {
         $chapitreParent = $episode->getChapitreParent();
 
         if ($this->isCsrfTokenValid('delete' . $episode->getId(), $request->request->get('_csrf_token'))) {
@@ -181,7 +181,7 @@ class AdminEpisodeController extends AbstractController
 
             $fratrieDepartId = $episode->getChapitreParent()->getId();
             $fratrieDepart = $episodeRepository->findBy(['chapitreParent' => $fratrieDepartId]);
-            $numeroteur->reordonnerNumero($episode->getId(), $episode->getNumero(), -1, $fratrieDepart, []);
+            $orderer->reorderNumber($episode->getId(), $episode->getNumero(), -1, $fratrieDepart, []);
 
             $entityManager = $this->getDoctrine()->getManager();
             $unlocker->forget($episode);

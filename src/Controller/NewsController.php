@@ -37,7 +37,7 @@ class NewsController extends AbstractController
             ['titre' => 'Armes & Armures', 'cles' => ['objet'], 'criteres' => ['categorie' => ['ARME', 'ARMURE', 'PROJECTILE']], 'max' => 2],
         ]],
         ['titre' => 'Factions', 'variant' => 'emblem', 'cles' => ['clan']],
-        ['titre' => 'Écoles', 'variant' => 'rule', 'cles' => ['ecole']],
+        ['titre' => 'Écoles', 'variant' => 'rule', 'cles' => ['dojo']],
         ['titre' => 'Archives et Lore', 'sections' => [
             ['titre' => 'Archives', 'cles' => ['archive'], 'max' => 2],
             ['titre' => 'Lore', 'cles' => ['lore'], 'max' => 2],

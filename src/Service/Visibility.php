@@ -17,7 +17,7 @@ class Visibility
     public const COMMON_DISCOVERED = 'common-discovered';
     public const PUBLIC = 'public';
 
-    public const FRAICHEUR_JOURS = 14;
+    public const FRESHNESS_DAYS = 14;
 
     private const READABLE = [self::PUBLIC, self::UNLOCKED, self::DISCOVERED, self::COMMON_DISCOVERED];
 
@@ -29,7 +29,7 @@ class Visibility
         Access::COMMON => self::COMMON_DISCOVERED,
     ];
 
-    private const PALIERS = [
+    private const LEVELS = [
         Access::SECRET => self::SECRET,
         Access::LOCKED => self::LOCKED,
         Access::COMMON => self::COMMON,
@@ -60,7 +60,7 @@ class Visibility
         }
 
         if ($this->currentPlayer->seesAll()) {
-            return self::PALIERS[$access];
+            return self::LEVELS[$access];
         }
 
         if ($access === Access::PUBLIC) {
@@ -68,7 +68,7 @@ class Visibility
         }
 
         if ($revealSession && !$this->isIndividualSecret($element)) {
-            return self::PALIERS[$access];
+            return self::LEVELS[$access];
         }
 
         return Access::isHidden($access) ? self::HIDDEN : self::LOCKED;
@@ -143,10 +143,10 @@ class Visibility
 
     public function discoveredAt($element): ?\DateTimeInterface
     {
-        $personnel = $this->unlockedAt($element);
+        $personal = $this->unlockedAt($element);
 
-        if ($personnel !== null) {
-            return $personnel;
+        if ($personal !== null) {
+            return $personal;
         }
 
         return $this->publishedAt($element);
@@ -162,7 +162,7 @@ class Visibility
 
         return $date !== null
             && $date <= new \DateTime()
-            && $date >= new \DateTime('-' . self::FRAICHEUR_JOURS . ' days');
+            && $date >= new \DateTime('-' . self::FRESHNESS_DAYS . ' days');
     }
 
     private function publishedAt($element): ?\DateTimeInterface
@@ -202,9 +202,9 @@ class Visibility
             return true;
         }
 
-        $publie = $element->getPublishedAt();
+        $publishedAt = $element->getPublishedAt();
 
-        return $publie === null || $publie <= new \DateTime();
+        return $publishedAt === null || $publishedAt <= new \DateTime();
     }
 
     private function isUnlocked($element): bool
@@ -226,13 +226,13 @@ class Visibility
         }
 
         $this->owned = [];
-        $personnage = $this->currentPlayer->navigatingCharacter();
+        $character = $this->currentPlayer->navigatingCharacter();
 
-        if ($personnage === null) {
+        if ($character === null) {
             return $this->owned;
         }
 
-        foreach ($this->possessionsOf($personnage) as $element) {
+        foreach ($this->possessionsOf($character) as $element) {
             $key = EntityRegistry::keyOf($element);
 
             if ($key !== null) {
@@ -243,27 +243,27 @@ class Visibility
         return $this->owned;
     }
 
-    private function possessionsOf(Personnage $personnage): array
+    private function possessionsOf(Personnage $character): array
     {
-        $possessions = [$personnage, $personnage->getEcole(), $personnage->getClan()];
-        $fiche = $personnage->getFichePersonnage();
+        $possessions = [$character, $character->getEcole(), $character->getClan()];
+        $sheet = $character->getFichePersonnage();
 
-        if ($fiche === null) {
+        if ($sheet === null) {
             return $possessions;
         }
 
-        $competences = [$fiche->getCompCombatActuelle()];
+        $skills = [$sheet->getCompCombatActuelle()];
         for ($i = 1; $i <= 20; $i++) {
-            $competences[] = $fiche->{'getCompetence' . $i}();
+            $skills[] = $sheet->{'getCompetence' . $i}();
         }
 
         return array_merge(
             $possessions,
-            [$fiche->getArmeActuelle(), $fiche->getArmure()],
-            [$fiche->getAvantage1(), $fiche->getAvantage2(), $fiche->getDesavantage1(), $fiche->getDesavantage2()],
-            $competences,
-            $fiche->getInventoryItems()->toArray(),
-            $fiche->getKnownSpells()->toArray()
+            [$sheet->getArmeActuelle(), $sheet->getArmure()],
+            [$sheet->getAvantage1(), $sheet->getAvantage2(), $sheet->getDesavantage1(), $sheet->getDesavantage2()],
+            $skills,
+            $sheet->getInventoryItems()->toArray(),
+            $sheet->getKnownSpells()->toArray()
         );
     }
 

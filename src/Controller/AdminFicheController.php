@@ -43,7 +43,7 @@ class AdminFicheController extends AbstractController
                 'avantage2:av2:bool',
                 'desavantage1:des1:bool',
                 'desavantage2:des2:bool',
-                'arme:Arme:bool',
+                'armeActuelle:Arme:bool',
                 'armure:Armure:bool',
                 'reductionModifier:Sreduc:number',
                 'honneur:Honneur:number',

@@ -35,8 +35,8 @@ class AdminObjectController extends AbstractController
             'element' => 'object',
             'label' => 'Objet',
             'labels' => 'Objets',
-            'genre' => 'M',
-            'determinant' => 'un',
+            'gender' => 'M',
+            'article' => 'un',
             'table_filters' => self::TABLE_FILTERS,
             'table_cols' => [
                 'icon:Icône:symbol:NA_ICON',
@@ -115,11 +115,11 @@ class AdminObjectController extends AbstractController
         
 
         return $this->render('back_office/create.html.twig', [
-            'type' => 'Créer',
+            'type' => 'create',
             'entity' => 'object',
             'label' => 'Objet',
-            'genre' => 'M',
-            'determinant' => 'un',
+            'gender' => 'M',
+            'article' => 'un',
             'form' => $form->createView()
         ]);
     }
@@ -188,12 +188,12 @@ class AdminObjectController extends AbstractController
         }
 
         return $this->renderForm('back_office/edit.html.twig', [
-            'type' => 'Modifier',
+            'type' => 'edit',
             'object' => $object,
             'entity' => 'object',
             'label' => 'Objet',
-            'genre' => 'M',
-            'determinant' => 'un',
+            'gender' => 'M',
+            'article' => 'un',
             'form' => $form,
         ]);
     }

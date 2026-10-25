@@ -153,19 +153,19 @@ class SheetExport
     private const DETAIL_DISADVANTAGE = [883, 9];
 
     private string $publicDirectory;
-    private ClasseurXP $classeurXP;
+    private XpRanker $xpRanker;
 
-    public function __construct(string $publicDirectory, ClasseurXP $classeurXP)
+    public function __construct(string $publicDirectory, XpRanker $xpRanker)
     {
         $this->publicDirectory = $publicDirectory;
-        $this->classeurXP = $classeurXP;
+        $this->xpRanker = $xpRanker;
     }
 
     public function build(FichePersonnage $fiche): string
     {
         $personnage = $fiche->getPersonnage();
         $traits = $this->traits($fiche);
-        $rang = $this->classeurXP->rank($this->classeurXP->total($personnage));
+        $rang = $this->xpRanker->rank($this->xpRanker->total($personnage));
         $pdf = new PdfWriter(self::CANVAS_WIDTH);
 
         $pdf->background($this->sheet(self::RECTO));
@@ -223,8 +223,8 @@ class SheetExport
             'clan' => $personnage->getClan() ? $personnage->getClan()->getNom() : '',
             'ecole' => $personnage->getEcole() ? $personnage->getEcole()->getNom() : '',
             'rang' => (string) $rang,
-            'exp' => (string) $this->classeurXP->total($fiche->getPersonnage()),
-            'reste' => (string) $this->classeurXP->remaining($fiche),
+            'exp' => (string) $this->xpRanker->total($fiche->getPersonnage()),
+            'reste' => (string) $this->xpRanker->remaining($fiche),
             'joueur' => $personnage->getJoueur() ? $personnage->getJoueur()->getPseudo() : '',
         ];
 
@@ -569,7 +569,7 @@ class SheetExport
 
                 $baseline = $top + $row * self::DETAIL_STEP + 29;
                 $pdf->text($item->getNom(), self::DETAIL_TEXT[0], $baseline, 24, ['bold' => true, 'width' => self::DETAIL_TEXT[1]]);
-                $pdf->text((string) $this->classeurXP->advantageCost($fiche, $item), self::DETAIL_POINTS, $baseline, 22, ['align' => PdfWriter::ALIGN_RIGHT]);
+                $pdf->text((string) $this->xpRanker->advantageCost($fiche, $item), self::DETAIL_POINTS, $baseline, 22, ['align' => PdfWriter::ALIGN_RIGHT]);
 
                 $pdf->block(
                     [$item->getSummary() ?: (string) $item->getDescription()],

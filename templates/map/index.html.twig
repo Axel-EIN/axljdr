@@ -17,15 +17,15 @@
 
     {{ include('parts/map.html.twig', {
       lieux,
-      place_groups: groupes_lieux,
-      players: joueurs,
+      place_groups: location_groups,
+      players,
       variant: 'world',
-      center: cible ?? position_principal,
-      highlight: cible,
-      recenter: position_principal,
+      center: target ?? main_position,
+      highlight: target,
+      recenter: main_position,
       party: positions,
-      wanderers: libres,
-      trail: chemin,
+      wanderers,
+      trail,
     }, with_context = false) }}
   </main>
 {% endblock %}

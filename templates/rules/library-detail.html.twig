@@ -10,8 +10,8 @@
 {% block element_content %}
 
     {% set accueil = app.request.get('tab') is not defined or app.request.get('tab') is empty %}
-    {% set pluriel_onglet = un_element.entity in ['advantage', 'skill', 'objet'] ? 's' : '' %}
-    {% set pluriel_sous_onglet = un_element.entity == 'objet' ? 's' : '' %}
+    {% set pluriel_onglet = un_element.entity in ['advantage', 'skill', 'object'] ? 's' : '' %}
+    {% set pluriel_sous_onglet = un_element.entity == 'object' ? 's' : '' %}
     {% set pluriels = {
         'BUGEI': 'Bugei', 'COUTEAU': 'Couteaux', 'DIVERS': 'Divers',
         'HAST': 'Hast', 'MARCHAND': 'Marchand', 'NINJUTSU': 'Ninjutsu',

@@ -20,7 +20,7 @@ class AdminClanController extends AbstractController
      * @Route("/admin/clan", name="admin_clan")
      * @IsGranted("ROLE_MJ")
      */
-    public function afficherAdminClans(ClanRepository $clanRepository): Response
+    public function viewAdminClans(ClanRepository $clanRepository): Response
     {
         $clans = $clanRepository->findBy(array(), array('id' => 'DESC'));
 
@@ -61,22 +61,22 @@ class AdminClanController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
 
-            $nouveauMon = $form->get('mon')->getData();
-            if (!empty($nouveauMon)) {
+            $newMon = $form->get('mon')->getData();
+            if (!empty($newMon)) {
                 $prefix = 'clan-' . $clan->getNom() . '-mon';
-                $clan->setMon($fileHandler->handle($nouveauMon, null, $prefix, 'clans', 'square320'));
+                $clan->setMon($fileHandler->handle($newMon, null, $prefix, 'clans', 'square320'));
             }
 
-            $nouvelleImage = $form->get('image')->getData();
-            if (!empty($nouvelleImage)) {
+            $newImage = $form->get('image')->getData();
+            if (!empty($newImage)) {
                 $prefix = 'clan-' . $clan->getNom() . '-image';
-                $clan->setImage($fileHandler->handle($nouvelleImage, null, $prefix, 'clans', 'landscape720'));
+                $clan->setImage($fileHandler->handle($newImage, null, $prefix, 'clans', 'landscape720'));
             }
 
-            $nouvelleVideo = $form->get('video')->getData();
-            if (!empty($nouvelleVideo)) {
+            $newVideo = $form->get('video')->getData();
+            if (!empty($newVideo)) {
                 $prefix = 'clan-' . $clan->getNom() . '-video';
-                $clan->setVideo($fileHandler->handle($nouvelleVideo, null, $prefix, 'video'));
+                $clan->setVideo($fileHandler->handle($newVideo, null, $prefix, 'video'));
             }
 
             $em->persist($clan);
@@ -112,29 +112,29 @@ class AdminClanController extends AbstractController
 
         if($form->isSubmitted() && $form->isValid()) {
 
-            $nouveauMon = $form->get('mon')->getData();
+            $newMon = $form->get('mon')->getData();
 
-            if (!empty($nouveauMon)) {
+            if (!empty($newMon)) {
                 $prefix = 'clan-' . $clan->getNom() . '-mon';
-                $clan->setMon($fileHandler->handle($nouveauMon, $clan->getMon(), $prefix, 'clans', 'square320'));
+                $clan->setMon($fileHandler->handle($newMon, $clan->getMon(), $prefix, 'clans', 'square320'));
             } elseif ($request->request->get('remove_mon') === '1' && $clan->getMon()) {
                 $fileHandler->handle(null, $clan->getMon(), null, 'clans');
                 $clan->setMon(null);
             }
 
-            $nouvelleImage = $form->get('image')->getData();
-            if (!empty($nouvelleImage)) {
+            $newImage = $form->get('image')->getData();
+            if (!empty($newImage)) {
                 $prefix = 'clan-' . $clan->getNom() . '-image';
-                $clan->setImage($fileHandler->handle($nouvelleImage, $clan->getImage(), $prefix, 'clans', 'landscape720'));
+                $clan->setImage($fileHandler->handle($newImage, $clan->getImage(), $prefix, 'clans', 'landscape720'));
             } elseif ($request->request->get('remove_image') === '1' && $clan->getImage()) {
                 $fileHandler->handle(null, $clan->getImage(), null, 'clans');
                 $clan->setImage(null);
             }
 
-            $nouvelleVideo = $form->get('video')->getData();
-            if (!empty($nouvelleVideo)) {
+            $newVideo = $form->get('video')->getData();
+            if (!empty($newVideo)) {
                 $prefix = 'clan-' . $clan->getNom() . '-video';
-                $clan->setVideo($fileHandler->handle($nouvelleVideo, $clan->getVideo(), $prefix, 'video'));
+                $clan->setVideo($fileHandler->handle($newVideo, $clan->getVideo(), $prefix, 'video'));
             }
 
             $unlocker->sync($clan, $form->get('unlockedBy')->getData());

@@ -26,7 +26,7 @@ class ElementUrl
         }
 
         if ($element instanceof Scene) {
-            return $this->router->generate('aventure_episode', ['id' => $element->getEpisodeParent()->getId(), '_fragment' => 'scn' . $element->getNumero()]);
+            return $this->router->generate('story_episode', ['id' => $element->getEpisodeParent()->getId(), '_fragment' => 'scn' . $element->getNumero()]);
         }
 
         $key = EntityRegistry::keyOf($element);

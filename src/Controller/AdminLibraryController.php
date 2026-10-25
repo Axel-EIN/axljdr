@@ -3,7 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Library;
-use App\Service\Numeroteur;
+use App\Service\Orderer;
 use App\Service\FileHandler;
 use App\Form\AdminLibraryType;
 use App\Repository\LibraryRepository;
@@ -50,7 +50,7 @@ class AdminLibraryController extends AbstractController
      * @Route("/admin/library/create", name="admin_library_create")
      * @IsGranted("ROLE_MJ")
      */
-    public function addLibrary(Request $request, FileHandler $fileHandler, EntityManagerInterface $em, LibraryRepository $libraryRepository, Numeroteur $numeroteur, Unlocker $unlocker)
+    public function addLibrary(Request $request, FileHandler $fileHandler, EntityManagerInterface $em, LibraryRepository $libraryRepository, Orderer $orderer, Unlocker $unlocker)
     {
         $library = new Library;
         $form = $this->createForm(AdminLibraryType::class, $library);
@@ -77,7 +77,7 @@ class AdminLibraryController extends AbstractController
             $this->addFlash('success', 'La Bibliothèque a bien été ajoutée');
 
             $fratrieArrivee = $libraryRepository->findBy(['base' => $library->getBase()]);
-            $numeroteur->reordonnerNumero($library->getId(), -1, $library->getNumero(), [], $fratrieArrivee);
+            $orderer->reorderNumber($library->getId(), -1, $library->getNumero(), [], $fratrieArrivee);
 
             if (!empty($request->query->get('redirect')) && $request->query->get('redirect') == 'library')
                 return $this->redirectToRoute('rules_library', ['id' => $library->getId()]);
@@ -99,7 +99,7 @@ class AdminLibraryController extends AbstractController
      * @Route("/admin/library/{id}/edit", name="admin_library_edit")
      * @IsGranted("ROLE_MJ")
      */
-    public function editLibrary(Request $request, Library $library, FileHandler $fileHandler, LibraryRepository $libraryRepository, Numeroteur $numeroteur, Unlocker $unlocker): Response
+    public function editLibrary(Request $request, Library $library, FileHandler $fileHandler, LibraryRepository $libraryRepository, Orderer $orderer, Unlocker $unlocker): Response
     {
         $numeroDepart = $library->getNumero();
         $fratrieDepartId = $library->getBase();
@@ -129,7 +129,7 @@ class AdminLibraryController extends AbstractController
             {
                 $fratrieDepart = $libraryRepository->findBy(['base' => $fratrieDepartId]);
                 $fratrieArrivee = $libraryRepository->findBy(['base' => $library->getBase()]);
-                $numeroteur->reordonnerNumero($library->getId(), $numeroDepart, $library->getNumero(), $fratrieDepart, $fratrieArrivee);
+                $orderer->reorderNumber($library->getId(), $numeroDepart, $library->getNumero(), $fratrieDepart, $fratrieArrivee);
             }
 
             $unlocker->sync($library, $form->get('unlockedBy')->getData());
@@ -157,7 +157,7 @@ class AdminLibraryController extends AbstractController
      * @Route("/admin/library/{id}/delete", name="admin_library_delete", methods={"POST"})
      * @IsGranted("ROLE_MJ")
      */
-    public function deleteLibrary(Request $request, Library $library, FileHandler $fileHandler, LibraryRepository $libraryRepository, Numeroteur $numeroteur, Unlocker $unlocker): Response
+    public function deleteLibrary(Request $request, Library $library, FileHandler $fileHandler, LibraryRepository $libraryRepository, Orderer $orderer, Unlocker $unlocker): Response
     {
         if ( $this->isCsrfTokenValid('delete' . $library->getId(), $request->request->get('_csrf_token')))
         {
@@ -167,7 +167,7 @@ class AdminLibraryController extends AbstractController
 
             $fratrieDepartId = $library->getBase();
             $fratrieDepart = $libraryRepository->findBy(['base' => $fratrieDepartId]);
-            $numeroteur->reordonnerNumero($library->getId(), $library->getNumero(), -1, $fratrieDepart, []);
+            $orderer->reorderNumber($library->getId(), $library->getNumero(), -1, $fratrieDepart, []);
 
             $unlocker->forget($library);
             $this->getDoctrine()->getManager()->remove($library);

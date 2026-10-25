@@ -103,21 +103,21 @@
         <li class="list-group-item infos-item">Joueur : <span class="bold">{{ personnage.joueur.pseudo }}</span></li>
       {% endif %}
 
-      {% if position_libre or position_actuelle %}
-        <li class="list-group-item infos-item{% if carte_visible %} with-map{% endif %}">
+      {% if free_position or current_position %}
+        <li class="list-group-item infos-item{% if map_visible %} with-map{% endif %}">
           Position :
-          <a href="{{ position_connue ? path('map', {location: position_actuelle.id}) : path('map') }}" title="Voir sur la carte">
-            {{ position_libre ? EN_DEPLACEMENT : (position_connue ? position_actuelle.nom : 'Inconnue') }}
+          <a href="{{ known_position ? path('map', {location: current_position.id}) : path('map') }}" title="Voir sur la carte">
+            {{ free_position ? EN_DEPLACEMENT : (known_position ? current_position.nom : 'Inconnue') }}
             <i class="fa-solid fa-map-location-dot"></i>
           </a>
-          {% if carte_visible %}
+          {% if map_visible %}
             {{ include('parts/map.html.twig', {
               lieux,
-              current: position_connue ? position_actuelle : null,
-              party: position_connue ? {(position_actuelle.id): [personnage]} : {},
-              center: position_libre,
-              wanderers: position_libre ? [position_libre] : [],
-              zoom: position_connue ? position_actuelle.zoom : null,
+              current: known_position ? current_position : null,
+              party: known_position ? {(current_position.id): [personnage]} : {},
+              center: free_position,
+              wanderers: free_position ? [free_position] : [],
+              zoom: known_position ? current_position.zoom : null,
               variant: 'mini',
               hide_minimap: true,
             }, with_context = false) }}
@@ -292,7 +292,7 @@
 
 {% block javascripts %}
     {{ parent() }}
-    {% if carte_visible %}<script src="{{ asset('scripts/map.js') }}"></script>{% endif %}
+    {% if map_visible %}<script src="{{ asset('scripts/map.js') }}"></script>{% endif %}
     {% if can_edit %}
         <script>
             (function () {

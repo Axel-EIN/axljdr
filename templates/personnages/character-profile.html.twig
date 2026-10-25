@@ -106,7 +106,7 @@
       {% if position_libre or position_actuelle %}
         <li class="list-group-item infos-item{% if carte_visible %} with-map{% endif %}">
           Position :
-          <a href="{{ position_connue ? path('carte', {lieu: position_actuelle.id}) : path('carte') }}" title="Voir sur la carte">
+          <a href="{{ position_connue ? path('map', {location: position_actuelle.id}) : path('map') }}" title="Voir sur la carte">
             {{ position_libre ? EN_DEPLACEMENT : (position_connue ? position_actuelle.nom : 'Inconnue') }}
             <i class="fa-solid fa-map-location-dot"></i>
           </a>

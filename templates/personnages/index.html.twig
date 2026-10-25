@@ -18,9 +18,9 @@
             </a>
         {% endif %}
         {% set filtres = [
-            { nom: 'saison',   label: 'Saison',   icone: AVENTURE_SAISON_ICO,   vide: '— Toutes —', options: saisons,   selected: selected_saison_id,   inactif: false,                        reset: ['chapitre', 'episode'] },
-            { nom: 'chapitre', label: 'Chapitre', icone: AVENTURE_CHAPITRE_ICO, vide: '— Tous —',   options: chapitres, selected: selected_chapitre_id, inactif: selected_saison_id is null,   reset: ['episode'] },
-            { nom: 'episode',  label: 'Episode',  icone: AVENTURE_EPISODE_ICO,  vide: '— Tous —',   options: episodes,  selected: selected_episode_id,  inactif: selected_chapitre_id is null, reset: [] },
+            { nom: 'saison',   label: 'Saison',   icone: STORY_SEASON_ICO,   vide: '— Toutes —', options: saisons,   selected: selected_saison_id,   inactif: false,                        reset: ['chapitre', 'episode'] },
+            { nom: 'chapitre', label: 'Chapitre', icone: STORY_CHAPTER_ICO, vide: '— Tous —',   options: chapitres, selected: selected_chapitre_id, inactif: selected_saison_id is null,   reset: ['episode'] },
+            { nom: 'episode',  label: 'Episode',  icone: STORY_EPISODE_ICO,  vide: '— Tous —',   options: episodes,  selected: selected_episode_id,  inactif: selected_chapitre_id is null, reset: [] },
         ] %}
 
         <form method="get" action="{{ path('personnages') }}" class="form-row align-items-end m-0">

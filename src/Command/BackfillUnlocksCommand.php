@@ -17,7 +17,7 @@ final class BackfillUnlocksCommand extends Command
 {
     protected static $defaultName = 'app:unlocks:backfill';
 
-    private const CIBLES = [
+    private const TARGETS = [
         'character' => 'e.estPj = false',
         'location' => null,
         'object' => null,
@@ -50,13 +50,13 @@ final class BackfillUnlocksCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
-        $quand = new \DateTime($input->getOption('date'));
-        $avant = $this->compterDeblocages();
+        $date = new \DateTime($input->getOption('date'));
+        $before = $this->countUnlocks();
 
-        foreach (self::CIBLES as $cle => $condition) {
+        foreach (self::TARGETS as $key => $condition) {
             $qb = $this->entityManager->createQueryBuilder()
                 ->select('e')
-                ->from(EntityRegistry::className($cle), 'e')
+                ->from(EntityRegistry::className($key), 'e')
                 ->andWhere('e.access < :public')
                 ->andWhere('e.manualUnlock = false')
                 ->setParameter('public', Access::PUBLIC);
@@ -68,24 +68,24 @@ final class BackfillUnlocksCommand extends Command
             $elements = $qb->getQuery()->getResult();
 
             foreach ($elements as $element) {
-                $this->unlocker->syncAccess($element, $quand);
+                $this->unlocker->syncAccess($element, $date);
             }
 
-            $io->writeln(sprintf('%-12s %4d élément(s) en déblocage automatique', $cle, count($elements)));
+            $io->writeln(sprintf('%-12s %4d élément(s) en déblocage automatique', $key, count($elements)));
         }
 
         $this->entityManager->flush();
 
         $io->success(sprintf(
             '%d déblocage(s) ajouté(s), datés du %s.',
-            $this->compterDeblocages() - $avant,
-            $quand->format('d/m/Y')
+            $this->countUnlocks() - $before,
+            $date->format('d/m/Y')
         ));
 
         return Command::SUCCESS;
     }
 
-    private function compterDeblocages(): int
+    private function countUnlocks(): int
     {
         return (int) $this->entityManager
             ->createQuery('SELECT COUNT(u.id) FROM ' . Unlock::class . ' u')

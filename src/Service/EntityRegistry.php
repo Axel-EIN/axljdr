@@ -27,7 +27,7 @@ final class EntityRegistry
         'lore'       => ['class' => Lore::class,       'route' => 'world_lore',         'label' => 'Lore'],
         'rule'       => ['class' => Rule::class,       'route' => 'rules_rule',         'label' => 'Règle'],
         'library'    => ['class' => Library::class,    'route' => 'rules_library',      'label' => 'Bibliothèque'],
-        'ecole'      => ['class' => Ecole::class,      'route' => 'rules_dojo',         'label' => 'École'],
+        'dojo'       => ['class' => Ecole::class,      'route' => 'rules_dojo',         'label' => 'École'],
         'objet'      => ['class' => Objet::class,      'route' => 'rules_object',       'label' => 'Objet'],
         'spell'      => ['class' => Sort::class,       'route' => null,                 'label' => 'Sort'],
         'skill'      => ['class' => Competence::class, 'route' => null,                 'label' => 'Compétence'],

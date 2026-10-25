@@ -92,7 +92,7 @@
         {% if personnage.ecole is defined and personnage.ecole is not empty %}
             <li class="list-group-item infos-item">
                 École :
-                <a href="{{ path('regles_ecole', {id: personnage.ecole.id} ) }}">
+                <a href="{{ path('rules_dojo', {id: personnage.ecole.id} ) }}">
                     {{ personnage.ecole.nom }}
                     <img class="img-48" src="{{ asset(image_small(personnage.classe.icone|default(NA_CLASS_ICO))) }}" alt="Classe {{personnage.classe.nom}}" title="Classe {{personnage.classe.nom}}" />
                 </a>

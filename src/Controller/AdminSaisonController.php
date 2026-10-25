@@ -69,8 +69,8 @@ class AdminSaisonController extends AbstractController
             $fratrieArrivee = $saisonRepository->findAll();
             $numeroteur->reordonnerNumero($saison->getId(), -1, $saison->getNumero(), [], $fratrieArrivee);
 
-            if (!empty($request->query->get('redirect')) && $request->query->get('redirect') == 'aventure')
-                return $this->redirectToRoute('aventure_saison', ['id' => $saison->getId()]);
+            if (!empty($request->query->get('redirect')) && $request->query->get('redirect') == 'story')
+                return $this->redirectToRoute('story_season', ['id' => $saison->getId()]);
 
             return $this->redirectToRoute('admin_saison');
 
@@ -119,8 +119,8 @@ class AdminSaisonController extends AbstractController
             $this->getDoctrine()->getManager()->flush();
             $this->addFlash('success', 'La saison a bien été modifiée.');
 
-            if (!empty($request->query->get('redirect')) && $request->query->get('redirect') == 'aventure')
-                return $this->redirectToRoute('aventure_saison', ['id' => $saison->getId()]);
+            if (!empty($request->query->get('redirect')) && $request->query->get('redirect') == 'story')
+                return $this->redirectToRoute('story_season', ['id' => $saison->getId()]);
             
             return $this->redirectToRoute('admin_saison');
         }
@@ -161,8 +161,8 @@ class AdminSaisonController extends AbstractController
         } else
             $this->addFlash('danger', 'Token de protection invalide !');
 
-        if (!empty($request->query->get('redirect')) && $request->query->get('redirect') == 'aventure')
-            return $this->redirectToRoute('aventure');
+        if (!empty($request->query->get('redirect')) && $request->query->get('redirect') == 'story')
+            return $this->redirectToRoute('story');
 
         return $this->redirectToRoute('admin_saison');
     }

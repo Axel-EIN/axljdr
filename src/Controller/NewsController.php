@@ -2,7 +2,6 @@
 
 namespace App\Controller;
 
-use App\Repository\LieuRepository;
 use App\Service\ClasseurXP;
 use App\Service\CurrentPlayer;
 use App\Service\Localisateur;
@@ -17,9 +16,17 @@ class NewsController extends AbstractController
     private const VIGNETTES = 4;
     private const VIGNETTES_PORTRAITS = 8;
 
-    private const PARTICIPATIONS = 3;
+    private const PARTICIPATIONS = 2;
 
     private const SEANCES_PRECEDENTES = 3;
+
+    private const MARGE_DECOUVERTES = 2;
+
+    private const DECOUVERTES = [
+        ['titre' => 'Personnages', 'vide' => 'Aucun personnage débloqué', 'variant' => 'portrait', 'cle' => 'personnage', 'max' => 4],
+        ['titre' => 'Lieux', 'vide' => 'Aucun lieu débloqué', 'variant' => 'icon', 'cle' => 'lieu', 'max' => 3],
+        ['titre' => 'Objets', 'vide' => 'Aucun objet débloqué', 'variant' => 'rule', 'field' => 'icon', 'cle' => 'objet', 'max' => 3],
+    ];
 
     private const GROUPES = [
         ['titre' => 'Personnages Joueurs', 'variant' => 'portrait', 'cles' => ['personnage'], 'criteres' => ['estPj' => true]],
@@ -46,15 +53,13 @@ class NewsController extends AbstractController
     /**
      * @Route("/", name="news")
      */
-    public function viewNews(NewsFeed $newsFeed, ClasseurXP $classeurXP, CurrentPlayer $currentPlayer, Visibility $visibility, Localisateur $localisateur, LieuRepository $lieuRepository): Response
+    public function viewNews(NewsFeed $newsFeed, ClasseurXP $classeurXP, CurrentPlayer $currentPlayer, Visibility $visibility, Localisateur $localisateur): Response
     {
         $mesPersonnages = $currentPlayer->characterIds();
         $monPersonnage = $currentPlayer->main();
-        $maPositionLibre = $localisateur->positionLibre($monPersonnage);
-        $maPosition = $maPositionLibre === null ? $localisateur->position($monPersonnage) : null;
 
         $participations = $newsFeed->lastParticipations(self::PARTICIPATIONS);
-        $carteVisible = $participations !== [] && ($maPosition !== null || $maPositionLibre !== null);
+        $carte = $localisateur->carte($participations === [] ? null : $monPersonnage, true);
         $episodes = $newsFeed->lastEpisodes(1 + self::SEANCES_PRECEDENTES);
         $dernierEpisode = $episodes[0] ?? null;
 
@@ -72,19 +77,8 @@ class NewsController extends AbstractController
         ];
 
         $groupes = [];
-        $secretsParEntite = $newsFeed->unlockedByEntity(self::VIGNETTES_PORTRAITS);
-
-        $trouver = function (array $cles, int $max, array $criteres = []) use ($newsFeed, $visibility, $secretsParEntite) {
-            $elements = [];
-            foreach ($cles as $cle) {
-                $elements = array_merge($elements, $secretsParEntite[$cle] ?? []);
-            }
-            $elements = array_filter($elements, function ($element) use ($criteres) {
-                return $this->respecte($element, $criteres);
-            });
-            $elements = array_merge($elements, $newsFeed->latestAmong($cles, $max, $criteres));
-
-            return array_slice($visibility->listedOnly($elements), 0, $max);
+        $trouver = function (array $cles, int $max, array $criteres = []) use ($newsFeed, $visibility) {
+            return array_slice($visibility->listedOnly($newsFeed->latestAmong($cles, $max, $criteres)), 0, $max);
         };
 
         foreach (self::GROUPES as $groupe) {
@@ -122,6 +116,20 @@ class NewsController extends AbstractController
             $colonne = ($groupe['large'] ?? false) ? 0 : 1 - $colonne;
         }
 
+        $monRecap = null;
+        $decouvertes = [];
+        if ($monPersonnage !== null) {
+            $monRecap = [
+                'pvMax' => $monPersonnage->getFichePersonnage()?->getPvMax(),
+                'rang' => $classeurXP->rank($classeurXP->total($monPersonnage)),
+            ];
+
+            foreach (self::DECOUVERTES as $decouverte) {
+                $elements = $newsFeed->lastDiscovered($decouverte['cle'], $decouverte['max'] * self::MARGE_DECOUVERTES);
+                $decouvertes[] = $decouverte + ['elements' => array_slice($visibility->listedOnly($elements), 0, $decouverte['max'])];
+            }
+        }
+
         return $this->render('news/index.html.twig', [
             'dernier_episode' => $dernierEpisode,
             'classement' => $dernierEpisode === null ? false : $classeurXP->classerPersosEpisode($dernierEpisode),
@@ -131,13 +139,11 @@ class NewsController extends AbstractController
             'session_previous' => array_slice($episodes, 1),
             'mes_personnages' => $mesPersonnages,
             'mon_personnage' => $monPersonnage,
+            'mon_recap' => $monRecap,
             'mes_participations' => $participations,
-            'classement_general' => $newsFeed->generalRanking(),
+            'classement_general' => $monPersonnage === null ? $newsFeed->generalRanking() : [],
+            'decouvertes' => $decouvertes,
             'participations_xp' => $participationsXp,
-            'ma_position' => $maPosition,
-            'ma_position_libre' => $maPositionLibre,
-            'carte_visible' => $carteVisible,
-            'lieux' => $carteVisible ? $lieuRepository->findAllSorted() : [],
             'groupes' => $groupes,
             'secrets_large' => $colonne === 0,
             'sections' => $sections,
@@ -145,19 +151,6 @@ class NewsController extends AbstractController
             'header_up' => 'Accueil',
             'header_down' => 'Bienvenue à Rokugan',
             'category' => 'news',
-        ]);
-    }
-
-    private function respecte($element, array $criteres): bool
-    {
-        foreach ($criteres as $champ => $valeur) {
-            $actuelle = $element->{'get' . ucfirst($champ)}();
-
-            if (is_array($valeur) ? !in_array($actuelle, $valeur, true) : $actuelle !== $valeur) {
-                return false;
-            }
-        }
-
-        return true;
+        ] + $carte);
     }
 }

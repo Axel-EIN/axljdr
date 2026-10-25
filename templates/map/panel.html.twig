@@ -37,7 +37,7 @@
       <h3 class="map-panel-heading">Personnages présents</h3>
       <div class="map-panel-party">
         {% for perso in present_characters %}
-          <a href="{{ path('personnage_profil', {id: perso.id}) }}" title="{{ perso.nomComplet }}">
+          <a href="{{ path('characters_profile', {id: perso.id}) }}" title="{{ perso.nomComplet }}">
             <img src="{{ asset(perso.icone|default(NA_PERSO_PORTRAIT)) }}" alt="Portrait de {{ perso.prenom }}" />
           </a>
         {% endfor %}
@@ -64,7 +64,7 @@
 
   {% if lisible %}
     {% if character %}
-      <a class="btn-primary-style btn-medium text-center" href="{{ path('personnage_profil', {id: character.id}) }}">Voir le profil</a>
+      <a class="btn-primary-style btn-medium text-center" href="{{ path('characters_profile', {id: character.id}) }}">Voir le profil</a>
     {% else %}
       <a class="btn-primary-style btn-medium text-center" href="{{ path('world_location', {id: location.id}) }}">Ouvrir la fiche</a>
     {% endif %}

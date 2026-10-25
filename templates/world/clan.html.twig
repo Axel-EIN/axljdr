@@ -26,7 +26,7 @@
                     <hr{% if not loop.first %} class="my-5"{% endif %}>
                     <article id="{{ une_famille.nom }}" class="famille relative">
 
-                        {% if app.user and is_granted("ROLE_MJ") %}
+                        {% if is_mj() %}
                             {% set redirect, entity, un_element, size, color, position = 'clan', 'famille', une_famille, 'btn-icon-small', 'link-gm', 'topright-corner-snap' %}
                             {{ include('/btns/btn-icon-edit.html.twig') }}
                         {% endif %}

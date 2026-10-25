@@ -14,7 +14,7 @@ use Symfony\Component\Form\Extension\Core\Type\ColorType;
 use Symfony\Component\Validator\Constraints\File;
 use Symfony\Component\Validator\Constraints\Length;
 
-class AdminClasseType extends AbstractType
+class AdminClassType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {

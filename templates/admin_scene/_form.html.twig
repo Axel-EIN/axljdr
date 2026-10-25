@@ -18,14 +18,14 @@
                     label: 'Image (1280×720 16:9 recommandé)', width: 1280, height: 720 }) }}
             </div>
 
-            {% macro perso_options(personnages, selected_id) %}
+            {% macro character_options(characters, selected_id) %}
                 {% set current_clan = '__init__' %}
-                {% for p in personnages %}
-                    {% set clan_nom = p.clan ? p.clan.nom : 'Sans clan' %}
-                    {% if clan_nom != current_clan %}
+                {% for p in characters %}
+                    {% set clan_name = p.clan ? p.clan.nom : 'Sans clan' %}
+                    {% if clan_name != current_clan %}
                         {% if current_clan != '__init__' %}</optgroup>{% endif %}
-                        <optgroup label="{{ clan_nom }}">
-                        {% set current_clan = clan_nom %}
+                        <optgroup label="{{ clan_name }}">
+                        {% set current_clan = clan_name %}
                     {% endif %}
                     <option value="{{ p.id }}" {% if selected_id is not null and p.id == selected_id %}selected{% endif %}>
                         {{ p.nomComplet }}
@@ -44,16 +44,16 @@
                             <small class="ml-1">bonus x2</small>
                             <small class="ml-auto mr-3">XP gagné / mort</small>
                         </div>
-                        {% if type != 'Créer' and participations_pjs is not empty %}
-                            {% for une_participation in participations_pjs %}
-                                {% set nbr_pjs = loop.index0 %}
+                        {% if type != 'create' and pc_participations is not empty %}
+                            {% for participation in pc_participations %}
+                                {% set pc_count = loop.index0 %}
                                 <div class="participants form-row">
-                                    <input class="mt-1 col-1" type="checkbox" title="Bonus XP x2 (rattrapage)" name="participants_xpBonus[{{ nbr_pjs }}]" id="data[participants_xpBonus][{{ nbr_pjs }}]" {% if une_participation.xpBonus %}checked{% endif %} />
-                                    <select class="form-control mt-1 ml-1 col-7" name="participants[{{ nbr_pjs }}]" required id="data[participants][{{ nbr_pjs }}]">
-                                        {{ macros.perso_options(tout_pjs, une_participation.personnage.id) }}
+                                    <input class="mt-1 col-1" type="checkbox" title="Bonus XP x2 (rattrapage)" name="participants_xpBonus[{{ pc_count }}]" id="data[participants_xpBonus][{{ pc_count }}]" {% if participation.xpBonus %}checked{% endif %} />
+                                    <select class="form-control mt-1 ml-1 col-7" name="participants[{{ pc_count }}]" required id="data[participants][{{ pc_count }}]">
+                                        {{ macros.character_options(all_pcs, participation.personnage.id) }}
                                     </select>
-                                    <input class="form-control ml-1 mt-1 col-2" type="number" value="{{ une_participation.xpGagne }}" name="participants_xp[{{ nbr_pjs }}]" id="data[participants_xp][{{ nbr_pjs }}]" />
-                                    <input class="mt-1 ml-1 col-1" type="checkbox" title="Mort" name="participants_mort[{{ nbr_pjs }}]" id="data[participants_mort][{{ nbr_pjs }}]" {% if une_participation.estMort %}checked{% endif %} />
+                                    <input class="form-control ml-1 mt-1 col-2" type="number" value="{{ participation.xpGagne }}" name="participants_xp[{{ pc_count }}]" id="data[participants_xp][{{ pc_count }}]" />
+                                    <input class="mt-1 ml-1 col-1" type="checkbox" title="Mort" name="participants_dead[{{ pc_count }}]" id="data[participants_dead][{{ pc_count }}]" {% if participation.estMort %}checked{% endif %} />
                                 </div>
                             {% endfor %}
                         {% endif %}
@@ -62,18 +62,18 @@
 
                     <div class="col-6 text-center">
                         <div class="text-right"><small class="mr-4">Mort</small></div>
-                        {% if type != 'Créer' and participations_pnjs is not empty %}
-                            {% for une_participation_pnj in participations_pnjs %}
-                                {% set nbr_pnjs = loop.index0 %}
-                                <div class="participants_pnjs form-row">
-                                    <select class="form-control mt-1 col-10" name="participants_pnjs[{{ nbr_pnjs }}]" required id="data[participants_pnjs][{{ nbr_pnjs }}]">
-                                        {{ macros.perso_options(tout_pnjs, une_participation_pnj.personnage.id) }}
+                        {% if type != 'create' and npc_participations is not empty %}
+                            {% for npc_participation in npc_participations %}
+                                {% set npc_count = loop.index0 %}
+                                <div class="npc_participants form-row">
+                                    <select class="form-control mt-1 col-10" name="npc_participants[{{ npc_count }}]" required id="data[npc_participants][{{ npc_count }}]">
+                                        {{ macros.character_options(all_npcs, npc_participation.personnage.id) }}
                                     </select>
-                                    <input class="mt-1 ml-1 col-1" type="checkbox" name="participants_pnjs_mort[{{ nbr_pnjs }}]" id="data[participants_pnjs_mort][{{ nbr_pnjs }}]" {% if une_participation_pnj.estMort %}checked{% endif %} />
+                                    <input class="mt-1 ml-1 col-1" type="checkbox" name="npc_participants_dead[{{ npc_count }}]" id="data[npc_participants_dead][{{ npc_count }}]" {% if npc_participation.estMort %}checked{% endif %} />
                                 </div>
                             {% endfor %}
                         {% endif %}
-                        <button type="button" class="btn btn-medium btn-secondary-style mt-3" id="add-participants_pnjs">Ajouter un PNJ</button>
+                        <button type="button" class="btn btn-medium btn-secondary-style mt-3" id="add-npc_participants">Ajouter un PNJ</button>
                     </div>
 
                 </div>
@@ -85,22 +85,22 @@
 </div>
 
 <script type="text/javascript">
-    {% set pjs_data = [] %}
-    {% for p in tout_pjs %}
-        {% set pjs_data = pjs_data|merge([{
+    {% set pcs_data = [] %}
+    {% for p in all_pcs %}
+        {% set pcs_data = pcs_data|merge([{
             id: p.id, nomComplet: p.nomComplet,
             clan: p.clan ? p.clan.nom : 'Sans clan'
         }]) %}
     {% endfor %}
-    {% set pnjs_data = [] %}
-    {% for p in tout_pnjs %}
-        {% set pnjs_data = pnjs_data|merge([{
+    {% set npcs_data = [] %}
+    {% for p in all_npcs %}
+        {% set npcs_data = npcs_data|merge([{
             id: p.id, nomComplet: p.nomComplet,
             clan: p.clan ? p.clan.nom : 'Sans clan'
         }]) %}
     {% endfor %}
-    const pjs  = {{ pjs_data|json_encode|raw }};
-    const pnjs = {{ pnjs_data|json_encode|raw }};
+    const pjs  = {{ pcs_data|json_encode|raw }};
+    const pnjs = {{ npcs_data|json_encode|raw }};
 
     document.addEventListener('DOMContentLoaded', function() {
 
@@ -175,21 +175,21 @@
             extraInputs: function(n) {
                 return '<input class="form-control ml-1 mt-1 col-2" type="number" name="participants_xp[' + n + ']"'
                      + ' value="0" id="data[participants_xp][' + n + ']" />'
-                     + '<input class="mt-1 ml-1 col-1" type="checkbox" title="Mort" name="participants_mort[' + n + ']"'
-                     + ' id="data[participants_mort][' + n + ']" />';
+                     + '<input class="mt-1 ml-1 col-1" type="checkbox" title="Mort" name="participants_dead[' + n + ']"'
+                     + ' id="data[participants_dead][' + n + ']" />';
             }
         });
 
         setupParticipantSection({
             data:              pnjs,
-            addBtnId:          'add-participants_pnjs',
-            removeBtnClass:    'remove-participants_pnjs',
-            rowClass:          'participants_pnjs',
-            selectNamePrefix:  'participants_pnjs',
+            addBtnId:          'add-npc_participants',
+            removeBtnClass:    'remove-npc_participants',
+            rowClass:          'npc_participants',
+            selectNamePrefix:  'npc_participants',
             selectClass:       'form-control mt-1 col-10',
             extraInputs: function(n) {
-                return '<input class="mt-1 ml-1 col-1" type="checkbox" name="participants_pnjs_mort[' + n + ']"'
-                     + ' id="data[participants_pnjs_mort][' + n + ']" />';
+                return '<input class="mt-1 ml-1 col-1" type="checkbox" name="npc_participants_dead[' + n + ']"'
+                     + ' id="data[npc_participants_dead][' + n + ']" />';
             }
         });
 

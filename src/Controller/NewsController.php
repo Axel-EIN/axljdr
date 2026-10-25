@@ -24,17 +24,17 @@ class NewsController extends AbstractController
 
     private const DECOUVERTES = [
         ['titre' => 'Personnages', 'vide' => 'Aucun personnage découvert', 'variant' => 'portrait', 'cle' => 'personnage', 'max' => 4],
-        ['titre' => 'Lieux', 'vide' => 'Aucun lieu découvert', 'variant' => 'icon', 'cle' => 'lieu', 'max' => 3],
-        ['titre' => 'Objets', 'vide' => 'Aucun objet découvert', 'variant' => 'rule', 'field' => 'icon', 'cle' => 'objet', 'max' => 3],
+        ['titre' => 'Lieux', 'vide' => 'Aucun lieu découvert', 'variant' => 'icon', 'cle' => 'location', 'max' => 3],
+        ['titre' => 'Objets', 'vide' => 'Aucun objet découvert', 'variant' => 'rule', 'field' => 'icon', 'cle' => 'object', 'max' => 3],
     ];
 
     private const GROUPES = [
         ['titre' => 'Personnages Joueurs', 'variant' => 'portrait', 'cles' => ['personnage'], 'criteres' => ['estPj' => true]],
         ['titre' => 'Personnages Non Joueurs', 'variant' => 'portrait', 'cles' => ['personnage'], 'criteres' => ['estPj' => false]],
-        ['titre' => 'Lieux', 'variant' => 'icon', 'cles' => ['lieu']],
+        ['titre' => 'Lieux', 'variant' => 'icon', 'cles' => ['location']],
         ['titre' => 'Objets & Equipements', 'variant' => 'rule', 'field' => 'icon', 'sections' => [
-            ['titre' => 'Divers', 'cles' => ['objet'], 'criteres' => ['categorie' => 'OBJET'], 'max' => 2],
-            ['titre' => 'Armes & Armures', 'cles' => ['objet'], 'criteres' => ['categorie' => ['ARME', 'ARMURE', 'PROJECTILE']], 'max' => 2],
+            ['titre' => 'Divers', 'cles' => ['object'], 'criteres' => ['categorie' => 'OBJET'], 'max' => 2],
+            ['titre' => 'Armes & Armures', 'cles' => ['object'], 'criteres' => ['categorie' => ['ARME', 'ARMURE', 'PROJECTILE']], 'max' => 2],
         ]],
         ['titre' => 'Factions', 'variant' => 'emblem', 'cles' => ['clan']],
         ['titre' => 'Écoles', 'variant' => 'rule', 'cles' => ['dojo']],

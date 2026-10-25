@@ -109,7 +109,7 @@ class AdminPersonnageController extends AbstractController
             $this->addFlash('success', 'Le personnage a bien été ajouté.');
 
             if (!empty($request->query->get('redirect')) && $request->query->get('redirect') == 'personnage')
-                return $this->redirectToRoute('personnages');
+                return $this->redirectToRoute('characters');
 
             return $this->redirectToRoute('admin_personnage');
         }
@@ -182,7 +182,7 @@ class AdminPersonnageController extends AbstractController
             $this->addFlash('success', 'Le personnage a bien été modifié.');
 
             if (!empty($request->query->get('redirect')) && $request->query->get('redirect') == 'personnage')
-                return $this->redirectToRoute('personnage_profil', ['id' => $personnage->getId()]);
+                return $this->redirectToRoute('characters_profile', ['id' => $personnage->getId()]);
 
             return $this->redirectToRoute('admin_personnage');
         }

@@ -1,6 +1,6 @@
 {% extends 'back_office/index.html.twig' %}
-{% block title %}Ajouter {{determinant}} {{label}} | {{ parent() }}{% endblock %}
-{% block h1 %}Ajouter {{determinant}} {{label}}{% endblock %}
+{% block title %}Ajouter {{article}} {{label}} | {{ parent() }}{% endblock %}
+{% block h1 %}Ajouter {{article}} {{label}}{% endblock %}
 {% block child %}
     {{ include('admin_' ~ entity ~ '/_form.html.twig', {'button_label': 'Créer', 'button_gm': true}) }}
 {% endblock %}

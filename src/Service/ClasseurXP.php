@@ -104,15 +104,8 @@ class ClasseurXP
 
     private function traitCost(FichePersonnage $fiche, string $trait): int
     {
-        $personnage = $fiche->getPersonnage();
-        $bonuses = array_filter([
-            $personnage->getFamille() ? $personnage->getFamille()->getBonusStatNom() : null,
-            $personnage->getEcole() ? $personnage->getEcole()->getBonusStatNom() : null,
-        ]);
-
-        $bonus = count(array_keys($bonuses, $trait, true));
-        $effective = (int) $fiche->{'get' . ucfirst($trait)}() + $bonus;
-        $free = 2 + $bonus;
+        $effective = $fiche->attributEffectif($trait);
+        $free = 2 + $fiche->bonusAttribut($trait);
 
         if ($effective <= $free) {
             return 0;

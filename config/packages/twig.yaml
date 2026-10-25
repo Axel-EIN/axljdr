@@ -3,7 +3,7 @@ twig:
     form_themes: ['bootstrap_4_layout.html.twig']
 
     globals:
-        nom_du_site: "Aventure d'Axel dans le Livre des Cinq Anneaux"
+        site_name: "Aventure d'Axel dans le Livre des Cinq Anneaux"
         EN_DEPLACEMENT: 'En déplacement'
 
         ACCESS_MARKS:
@@ -16,6 +16,7 @@ twig:
 
         ENTITY_LABELS:
             archive: 'Archive'
+            chapter: 'Chapitre'
             clan: 'Faction'
             class: 'Classe'
             dojo: 'École'
@@ -26,6 +27,7 @@ twig:
             object: 'Objet'
             character: 'Personnage'
             rule: 'Règle'
+            scene: 'Scène'
 
         NA_ICON: &NA_ICON '/assets/placeholders/na_icon.png'
         NA_MON: '/assets/placeholders/na_mon.png'

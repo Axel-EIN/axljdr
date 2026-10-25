@@ -340,7 +340,7 @@ class CharactersController extends AbstractController
 
         $form = $this->createForm(PlayerSheetType::class, $sheet, [
             'sees_locked' => $this->isGranted('ROLE_MJ'),
-            'unlocked' => $visibility->unlockedIds('objet'),
+            'unlocked' => $visibility->unlockedIds('object'),
         ]);
         $form->handleRequest($request);
 

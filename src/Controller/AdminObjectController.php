@@ -88,13 +88,13 @@ class AdminObjectController extends AbstractController
                 $object->setImage($fileHandler->handle($newImage, null, $prefix, 'objets', 'landscape720'));
             }
 
-            $formNumero = $form->get('numero')->getData();
+            $formNumber = $form->get('numero')->getData();
             $newSiblings = $objectRepository->findBy(['type' => $form->get('type')->getData()]);
 
-            if ( empty($formNumero) || !is_numeric($formNumero) || $formNumero < 1 )
+            if ( empty($formNumber) || !is_numeric($formNumber) || $formNumber < 1 )
                 $object->setNumero( count($newSiblings) + 1 );
             else
-                $object->setNumero( $formNumero );
+                $object->setNumero( $formNumber );
 
             $em->persist($object);
             $em->flush();

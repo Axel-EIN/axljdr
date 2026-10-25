@@ -125,7 +125,7 @@ class AdminDevelopmentController extends AbstractController
     private function redirectApres(Request $request, Development $development): Response
     {
         if ($request->query->get('redirect') === 'development') {
-            return $this->redirectToRoute('personnage_profil', ['id' => $development->getPersonnage()->getId()]);
+            return $this->redirectToRoute('characters_profile', ['id' => $development->getPersonnage()->getId()]);
         }
 
         return $this->redirectToRoute('admin_development');

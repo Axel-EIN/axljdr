@@ -5,9 +5,9 @@ namespace App\Controller;
 use App\Service\TableFilter;
 use App\Entity\Scene;
 use App\Service\FileHandler;
-use App\Service\Numeroteur;
-use App\Service\Baliseur;
-use App\Service\Localisateur;
+use App\Service\Orderer;
+use App\Service\NameTagger;
+use App\Service\Locator;
 use App\Service\ParticipationHandler;
 use App\Service\Unlocker;
 use App\Form\AdminSceneType;
@@ -61,9 +61,9 @@ class AdminSceneController extends AbstractController
      * @Route("/admin/scene/create", name="admin_scene_create")
      * @IsGranted("ROLE_MJ")
      */
-    public function addScene(Request $request, EntityManagerInterface $em, FileHandler $fileHandler, Baliseur $baliseur,
+    public function addScene(Request $request, EntityManagerInterface $em, FileHandler $fileHandler, NameTagger $nameTagger,
                             ParticipationHandler $participationHandler, PersonnageRepository $personnageRepository,
-                            EpisodeRepository $episodeRepository, Numeroteur $numeroteur, SceneRepository $sceneRepository, Unlocker $unlocker, TableFilter $tableFilter, Localisateur $localisateur) {
+                            EpisodeRepository $episodeRepository, Orderer $orderer, SceneRepository $sceneRepository, Unlocker $unlocker, TableFilter $tableFilter, Locator $locator) {
 
         $scene = new Scene;
         $tableFilter->prefill($scene, self::TABLE_FILTERS, $request->query->all('filter'));
@@ -97,7 +97,7 @@ class AdminSceneController extends AbstractController
 
             $participationHandler->ajouterParticipations($participants_a_ajoutes, $scene);
 
-            $scene->setTexte($baliseur->baliser($scene->getTexte()));
+            $scene->setTexte($nameTagger->tag($scene->getTexte()));
             
             $em->persist($scene);
             $em->flush();
@@ -108,9 +108,9 @@ class AdminSceneController extends AbstractController
             $this->addFlash('success', 'La scène a bien été créée.');
 
             $fratrieArrivee = $sceneRepository->findBy(['episodeParent' => $scene->getEpisodeParent()->getId()]);
-            $numeroteur->reordonnerNumero($scene->getId(), -1, $scene->getNumero(), [], $fratrieArrivee);
+            $orderer->reorderNumber($scene->getId(), -1, $scene->getNumero(), [], $fratrieArrivee);
 
-            $this->signalerPositionsEffacees($localisateur->effacerPositionsLibres($scene));
+            $this->signalerPositionsEffacees($locator->clearFreePositions($scene));
 
             if (!empty($request->query->get('redirect')) && $request->query->get('redirect') == 'episode')
                 return $this->redirectToRoute('story_episode', ['id' => $scene->getEpisodeParent()->getId(),'_fragment' => 'scn' . $scene->getNumero()]);
@@ -134,9 +134,9 @@ class AdminSceneController extends AbstractController
      * @Route("/admin/scene/{id}/edit", name="admin_scene_edit")
      * @IsGranted("ROLE_MJ")
      */
-    public function editScene(Request $request, Scene $scene, FileHandler $fileHandler, Numeroteur $numeroteur, Baliseur $baliseur,
+    public function editScene(Request $request, Scene $scene, FileHandler $fileHandler, Orderer $orderer, NameTagger $nameTagger,
                                 ParticipationHandler $participationHandler, PersonnageRepository $personnageRepository,
-                                ParticipationRepository $participationRepository, SceneRepository $sceneRepository, Unlocker $unlocker, Localisateur $localisateur): Response {
+                                ParticipationRepository $participationRepository, SceneRepository $sceneRepository, Unlocker $unlocker, Locator $locator): Response {
 
         $numeroDepart = $scene->getNumero();
         $fratrieDepartId = $scene->getEpisodeParent()->getId();
@@ -147,7 +147,7 @@ class AdminSceneController extends AbstractController
         $participations_pjs = $participationRepository->findBy(array('scene' => $scene, 'estPj' => true));
         $participations_pnjs = $participationRepository->findBy(array('scene' => $scene, 'estPj' => false));
 
-        $scene->setTexte($baliseur->debaliser($scene->getTexte()));
+        $scene->setTexte($nameTagger->untag($scene->getTexte()));
 
         $form = $this->createForm(AdminSceneType::class, $scene);
         $form->handleRequest($request);
@@ -223,13 +223,13 @@ class AdminSceneController extends AbstractController
                 }
             }
 
-            $scene->setTexte($baliseur->baliser($scene->getTexte()));
+            $scene->setTexte($nameTagger->tag($scene->getTexte()));
 
             if ($numeroDepart != $scene->getNumero() || $fratrieDepartId != $scene->getEpisodeParent()->getId())
             {
                 $fratrieDepart = $sceneRepository->findBy(['episodeParent' => $fratrieDepartId]);
                 $fratrieArrivee = $sceneRepository->findBy(['episodeParent' => $scene->getEpisodeParent()->getId()]);
-                $numeroteur->reordonnerNumero($scene->getId(), $numeroDepart, $scene->getNumero(), $fratrieDepart, $fratrieArrivee);
+                $orderer->reorderNumber($scene->getId(), $numeroDepart, $scene->getNumero(), $fratrieDepart, $fratrieArrivee);
             }
 
             $this->getDoctrine()->getManager()->flush();
@@ -237,7 +237,7 @@ class AdminSceneController extends AbstractController
             $unlocker->syncScene($scene);
             $this->getDoctrine()->getManager()->flush();
 
-            $this->signalerPositionsEffacees($localisateur->effacerPositionsLibres($scene, $lieuDepart === $scene->getLieu() ? $ajoutes : null));
+            $this->signalerPositionsEffacees($locator->clearFreePositions($scene, $lieuDepart === $scene->getLieu() ? $ajoutes : null));
 
             $this->addFlash('success', 'La scène a bien été modifiée.');
 
@@ -266,7 +266,7 @@ class AdminSceneController extends AbstractController
      * @Route("/admin/scene/{id}/delete", name="admin_scene_delete", methods={"POST"})
      * @IsGranted("ROLE_MJ")
      */
-    public function deleteScene(Request $request, Scene $scene, Numeroteur $numeroteur, SceneRepository $sceneRepository, FileHandler $fileHandler): Response {
+    public function deleteScene(Request $request, Scene $scene, Orderer $orderer, SceneRepository $sceneRepository, FileHandler $fileHandler): Response {
         
         $episodeParent = $scene->getEpisodeParent();
 
@@ -279,7 +279,7 @@ class AdminSceneController extends AbstractController
 
             $fratrieDepartId = $scene->getEpisodeParent()->getId();
             $fratrieDepart = $sceneRepository->findBy(['episodeParent' => $fratrieDepartId]);
-            $numeroteur->reordonnerNumero($scene->getId(), $scene->getNumero(), -1, $fratrieDepart, []);
+            $orderer->reorderNumber($scene->getId(), $scene->getNumero(), -1, $fratrieDepart, []);
 
             $entityManager->remove($scene);
             $entityManager->flush();

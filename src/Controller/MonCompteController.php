@@ -3,6 +3,8 @@
 namespace App\Controller;
 
 use App\Entity\Personnage;
+use App\Entity\Utilisateur;
+use App\Service\CurrentPlayer;
 use App\Service\FileHandler;
 use App\Form\MonCompteMdpType;
 use App\Form\MonCompteAvatarType;
@@ -21,9 +23,11 @@ class MonCompteController extends AbstractController
     /**
      * @Route("/mon_compte", name="mon_compte")
      */
-    public function afficherMonCompte(): Response
+    public function afficherMonCompte(CurrentPlayer $currentPlayer): Response
     {
-        return $this->render('mon_compte/index.html.twig');
+        return $this->render('mon_compte/index.html.twig', [
+            'principal' => $currentPlayer->mainCharacter(),
+        ]);
     }
 
     /**
@@ -74,6 +78,26 @@ class MonCompteController extends AbstractController
             $this->getDoctrine()->getManager()->flush();
 
             $this->addFlash('success', 'Votre personnage principal a bien été modifié !');
+        }
+
+        return $this->redirectToRoute('mon_compte');
+    }
+
+    /**
+     * @Route("/mon_compte/navigation-mode", name="mon_compte_navigation_mode", methods={"POST"})
+     */
+    public function choisirModeNavigation(Request $request): Response
+    {
+        $utilisateur = $this->getUser();
+
+        if ($utilisateur->isGameMaster() && $this->isCsrfTokenValid('navigation-mode', $request->request->get('_csrf_token'))) {
+
+            $utilisateur->setPlayerMode($request->request->get('mode') === Utilisateur::MODE_PLAYER);
+            $this->getDoctrine()->getManager()->flush();
+
+            $this->addFlash('success', $utilisateur->isPlayerMode()
+                ? 'Vous naviguez en mode Joueur.'
+                : 'Vous naviguez en mode MJ.');
         }
 
         return $this->redirectToRoute('mon_compte');

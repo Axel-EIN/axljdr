@@ -1,56 +1,56 @@
-{% if element_listed(perso) %}
+{% if element_listed(character) %}
 
-{% set state = element_state(perso) %}
-{% set readable = element_readable(perso) %}
-{% set locked = state == 'locked' and not is_mj() %}
+{% set state = element_state(character) %}
+{% set readable = element_readable(character) %}
+{% set locked = state == 'locked' and not is_gm() %}
 {% set hide_clan = hide_clan|default(false) %}
 {% set compact = compact|default(false) %}
 
-<article class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2 {{ compact ? 'py-2' : 'py-3' }} {{ perso.dead or perso.missing ? 'perso-inactif' }}">
+<article class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2 {{ compact ? 'py-2' : 'py-3' }} {{ character.dead or character.missing ? 'perso-inactif' }}">
 
     {% if readable %}
-        <a href="{{ path('characters_profile', {id: perso.id} ) }}" title="Voir le profil de {{perso.prenom}}">
+        <a href="{{ path('characters_profile', {id: character.id} ) }}" title="Voir le profil de {{character.prenom}}">
     {% endif %}
 
-    {% set zoom, translucide, hover_opaque, text, tint, grayscale = 'hover-zoom', '', '', 'text-white', '', '' %}
+    {% set zoom, translucent, hover_opaque, text, tint, grayscale = 'hover-zoom', '', '', 'text-white', '', '' %}
 
     {% if not readable %}
-        {% set zoom, translucide, hover_opaque, text, tint, grayscale = '', 'translucide', '', 'text-white', '', 'grayscale' %}
-    {% elseif perso.dead %}
-        {% set zoom, translucide, hover_opaque, text, tint, grayscale = 'hover-zoom', 'translucide', 'hover-opaque', 'text-danger', 'effect-dead', '' %}
-    {% elseif perso.missing %}
-        {% set zoom, translucide, hover_opaque, text, tint, grayscale = 'hover-zoom', 'translucide', 'hover-opaque', 'text-AIR', 'missing', '' %}
+        {% set zoom, translucent, hover_opaque, text, tint, grayscale = '', 'translucide', '', 'text-white', '', 'grayscale' %}
+    {% elseif character.dead %}
+        {% set zoom, translucent, hover_opaque, text, tint, grayscale = 'hover-zoom', 'translucide', 'hover-opaque', 'text-danger', 'effect-dead', '' %}
+    {% elseif character.missing %}
+        {% set zoom, translucent, hover_opaque, text, tint, grayscale = 'hover-zoom', 'translucide', 'hover-opaque', 'text-AIR', 'missing', '' %}
     {% endif %}
 
-            <div class="card character-card text-white shadow-more {{zoom}} {{translucide}} {{hover_opaque}} relative {{ locked ? 'locked' }}">
+            <div class="card character-card text-white shadow-more {{zoom}} {{translucent}} {{hover_opaque}} relative {{ locked ? 'locked' }}">
 
                 {% if locked %}
                     <img class="icon-lock in-character-card" src="{{ asset(LOCKED_ICO) }}" alt="Cadenas" />
                 {% endif %}
 
-                {% if element_fresh(perso) %}
+                {% if element_fresh(character) %}
                     {{ include('parts/badge-new.html.twig', { variant: 'pin-centerleft' }) }}
                 {% endif %}
 
-                {{ include('parts/badge-catalog.html.twig', {item: perso}) }}
+                {{ include('parts/badge-catalog.html.twig', {item: character}) }}
 
-                {% if perso.dead %}
+                {% if character.dead %}
                     <img class="absolute icon-dead-big" src="{{ asset(MORT_ICO) }}" alt="Icône est mort" />
-                {% elseif perso.missing %}
+                {% elseif character.missing %}
                     <i class="absolute icon-missing-big fas fa-circle-question" title="Disparu"></i>
                 {% endif %}
 
-                {% if perso.clan and not hide_clan %}
-                    <img class="absolute corner-badge {{grayscale}} {{tint}}" src="{{ asset(image_small(perso.clan.mon|default(NA_MON))) }}" alt="Mon d'un clan"/>
+                {% if character.clan and not hide_clan %}
+                    <img class="absolute corner-badge {{grayscale}} {{tint}}" src="{{ asset(image_small(character.clan.mon|default(NA_MON))) }}" alt="Mon d'un clan"/>
                 {% endif %}
 
-                {% if perso.illustration is null and perso.genre == 'F' %}
+                {% if character.illustration is null and character.genre == 'F' %}
                     {% set NA_PERSO_ILLU = NA_PERSO_ILLU_F %}
-                {% elseif perso.illustration is null and perso.genre == 'M' %}
+                {% elseif character.illustration is null and character.genre == 'M' %}
                     {% set NA_PERSO_ILLU = NA_PERSO_ILLU_M %}
                 {% endif %}
 
-                {% set illustration = perso.illustration|default(NA_PERSO_ILLU) %}
+                {% set illustration = character.illustration|default(NA_PERSO_ILLU) %}
                 {% set illustration_srcset = image_srcset(illustration) %}
 
                 <div class="ratio-916 gradient-after-down">
@@ -63,12 +63,12 @@
                 </div>
 
                 <div class="card-img-overlay">
-                    <h4 class="card-title-cartouche {{text}}">{{ perso.nomComplet }}</h4>
-                    {% if perso.estPj == 1 %}
-                        <p class="card-text {{text}}"><small>{{ perso.joueur.pseudo }}</small></p>
+                    <h4 class="card-title-cartouche {{text}}">{{ character.nomComplet }}</h4>
+                    {% if character.estPj == 1 %}
+                        <p class="card-text {{text}}"><small>{{ character.joueur.pseudo }}</small></p>
                     {% endif %}
-                    {% if perso.titres %}
-                        <p class="card-text card-titres {{text}}"><small>{{ perso.titres }}</small></p>
+                    {% if character.titres %}
+                        <p class="card-text card-titres {{text}}"><small>{{ character.titres }}</small></p>
                     {% endif %}
                 </div>
             </div>

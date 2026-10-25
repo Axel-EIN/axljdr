@@ -9,21 +9,21 @@
 
 {% block content_top %}
     {% set active_filter = selected_episode_id is not null ? 'episode'
-                         : (selected_chapitre_id is not null ? 'chapitre'
-                         : (selected_saison_id is not null ? 'saison' : null)) %}
+                         : (selected_chapter_id is not null ? 'chapter'
+                         : (selected_season_id is not null ? 'season' : null)) %}
     <div class="characters-filters bg-stroke-container">
         {% if active_filter is not null %}
-            <a href="{{ path('personnages') }}" class="btn-reset-icon" title="Réinitialiser les filtres">
+            <a href="{{ path('characters') }}" class="btn-reset-icon" title="Réinitialiser les filtres">
                 <i class="fas fa-undo"></i>
             </a>
         {% endif %}
         {% set filtres = [
-            { nom: 'saison',   label: 'Saison',   icone: STORY_SEASON_ICO,   vide: '— Toutes —', options: saisons,   selected: selected_saison_id,   inactif: false,                        reset: ['chapitre', 'episode'] },
-            { nom: 'chapitre', label: 'Chapitre', icone: STORY_CHAPTER_ICO, vide: '— Tous —',   options: chapitres, selected: selected_chapitre_id, inactif: selected_saison_id is null,   reset: ['episode'] },
-            { nom: 'episode',  label: 'Episode',  icone: STORY_EPISODE_ICO,  vide: '— Tous —',   options: episodes,  selected: selected_episode_id,  inactif: selected_chapitre_id is null, reset: [] },
+            { nom: 'season',   label: 'Saison',   icone: STORY_SEASON_ICO,   vide: '— Toutes —', options: seasons,   selected: selected_season_id,   inactif: false,                        reset: ['chapter', 'episode'] },
+            { nom: 'chapter',  label: 'Chapitre', icone: STORY_CHAPTER_ICO, vide: '— Tous —',   options: chapters,  selected: selected_chapter_id,  inactif: selected_season_id is null,   reset: ['episode'] },
+            { nom: 'episode',  label: 'Episode',  icone: STORY_EPISODE_ICO,  vide: '— Tous —',   options: episodes,  selected: selected_episode_id,  inactif: selected_chapter_id is null,  reset: [] },
         ] %}
 
-        <form method="get" action="{{ path('personnages') }}" class="form-row align-items-end m-0">
+        <form method="get" action="{{ path('characters') }}" class="form-row align-items-end m-0">
             {% for filtre in filtres %}
                 <div class="col-12 col-md-4 mb-2 mb-md-0 px-1 d-flex d-md-block align-items-center">
                     <label for="filtre-{{ filtre.nom }}" class="mb-0 mb-md-2 mr-3 mr-md-0 ml-md-n1 flex align-items-center">
@@ -55,21 +55,21 @@
 {% endblock %}
 
 {% block section_content1 %}
-    {% set pjs = pjs|filter(p => element_listed(p)) %}
-    {% for perso in element_sort(pjs) %}
-        {{ include('/personnages/character-card.html.twig', {perso}) }}
+    {% set pcs = pcs|filter(p => element_listed(p)) %}
+    {% for perso in element_sort(pcs) %}
+        {{ include('/characters/character-card.html.twig', {perso}) }}
     {% endfor %}
-    {% if pjs is empty %}
+    {% if pcs is empty %}
         <div class="col-12"><p class="text-muted font-italic">Aucun personnage joueur ne correspond à ce filtre.</p></div>
     {% endif %}
 {% endblock %}
 
 {% block section_content2 %}
-    {% set pnjs = pnjs|filter(p => element_listed(p)) %}
+    {% set npcs = npcs|filter(p => element_listed(p)) %}
     <div class="col-12">
         {% set clans_listes = FACTIONS|map(c => c.nom) %}
-        {% set groupes = FACTIONS|map(c => {titre: c.titre, faction: true, persos: pnjs|filter(p => p.clan is not empty and p.clan.nom == c.nom)})
-            |merge([{titre: 'Autres', faction: false, persos: pnjs|filter(p => p.clan is empty or p.clan.nom not in clans_listes)}]) %}
+        {% set groupes = FACTIONS|map(c => {titre: c.titre, faction: true, persos: npcs|filter(p => p.clan is not empty and p.clan.nom == c.nom)})
+            |merge([{titre: 'Autres', faction: false, persos: npcs|filter(p => p.clan is empty or p.clan.nom not in clans_listes)}]) %}
 
         {% for groupe in groupes|filter(g => g.persos|length > 0) %}
             {% set clan_groupe = groupe.faction ? (groupe.persos|first).clan : null %}
@@ -84,7 +84,7 @@
                     {% block track %}
                         <div class="row scroller-track characters-track {{ groupe.faction ? 'compact' }}">
                             {% for perso in element_sort(groupe.persos, true) %}
-                                {{ include('/personnages/character-card.html.twig', {perso, hide_clan: groupe.faction, compact: groupe.faction}) }}
+                                {{ include('/characters/character-card.html.twig', {perso, hide_clan: groupe.faction, compact: groupe.faction}) }}
                             {% endfor %}
                         </div>
                     {% endblock %}
@@ -92,7 +92,7 @@
             </div>
         {% endfor %}
 
-        {% if pnjs is empty %}
+        {% if npcs is empty %}
             <p class="text-muted font-italic">Aucun autre personnage ne correspond à ce filtre.</p>
         {% endif %}
     </div>

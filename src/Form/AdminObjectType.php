@@ -47,7 +47,7 @@ class AdminObjectType extends AbstractType
                     'DIVERS' => 'DIVERS',
                 ],
             ])
-            ->add('prix', PrixType::class, [
+            ->add('prix', PriceType::class, [
                 'label' => 'Prix',
                 'help' => '1 koku = 5 bu = 50 zeni',
             ])

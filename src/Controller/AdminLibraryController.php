@@ -76,8 +76,8 @@ class AdminLibraryController extends AbstractController
             $em->flush();
             $this->addFlash('success', 'La Bibliothèque a bien été ajoutée');
 
-            $fratrieArrivee = $libraryRepository->findBy(['base' => $library->getBase()]);
-            $orderer->reorderNumber($library->getId(), -1, $library->getNumero(), [], $fratrieArrivee);
+            $newSiblings = $libraryRepository->findBy(['base' => $library->getBase()]);
+            $orderer->reorderNumber($library->getId(), -1, $library->getNumero(), [], $newSiblings);
 
             if (!empty($request->query->get('redirect')) && $request->query->get('redirect') == 'library')
                 return $this->redirectToRoute('rules_library', ['id' => $library->getId()]);
@@ -101,8 +101,8 @@ class AdminLibraryController extends AbstractController
      */
     public function editLibrary(Request $request, Library $library, FileHandler $fileHandler, LibraryRepository $libraryRepository, Orderer $orderer, Unlocker $unlocker): Response
     {
-        $numeroDepart = $library->getNumero();
-        $fratrieDepartId = $library->getBase();
+        $previousNumber = $library->getNumero();
+        $previousSiblingsId = $library->getBase();
 
         $form = $this->createForm(AdminLibraryType::class, $library);
         $form->get('unlockedBy')->setData($unlocker->charactersOf($library));
@@ -110,26 +110,26 @@ class AdminLibraryController extends AbstractController
 
         if ( $form->isSubmitted() && $form->isValid() ) {
 
-            $nouvelleImage = $form->get('image')->getData();
-            if (!empty($nouvelleImage)) {
+            $newImage = $form->get('image')->getData();
+            if (!empty($newImage)) {
                 $prefix = 'library-' . $library->getNom() . '-image';
-                $library->setImage($fileHandler->handle($nouvelleImage, $library->getImage(), $prefix, 'libraries', 'fourthird900'));
+                $library->setImage($fileHandler->handle($newImage, $library->getImage(), $prefix, 'libraries', 'fourthird900'));
             } elseif ($request->request->get('remove_image') === '1' && $library->getImage()) {
                 $fileHandler->handle(null, $library->getImage(), null, 'libraries');
                 $library->setImage(null);
             }
 
-            $nouveauPDF = $form->get('pdf')->getData();
-            if (!empty($nouveauPDF)) {
+            $newPdf = $form->get('pdf')->getData();
+            if (!empty($newPdf)) {
                 $prefix = 'library-' . $library->getNom() . '-pdf';
-                $library->setPdf($fileHandler->handle($nouveauPDF, $library->getPdf(), $prefix, 'libraries-pdfs'));
+                $library->setPdf($fileHandler->handle($newPdf, $library->getPdf(), $prefix, 'libraries-pdfs'));
             }
 
-            if ($numeroDepart != $library->getNumero() || $fratrieDepartId != $library->getBase())
+            if ($previousNumber != $library->getNumero() || $previousSiblingsId != $library->getBase())
             {
-                $fratrieDepart = $libraryRepository->findBy(['base' => $fratrieDepartId]);
-                $fratrieArrivee = $libraryRepository->findBy(['base' => $library->getBase()]);
-                $orderer->reorderNumber($library->getId(), $numeroDepart, $library->getNumero(), $fratrieDepart, $fratrieArrivee);
+                $previousSiblings = $libraryRepository->findBy(['base' => $previousSiblingsId]);
+                $newSiblings = $libraryRepository->findBy(['base' => $library->getBase()]);
+                $orderer->reorderNumber($library->getId(), $previousNumber, $library->getNumero(), $previousSiblings, $newSiblings);
             }
 
             $unlocker->sync($library, $form->get('unlockedBy')->getData());
@@ -165,9 +165,9 @@ class AdminLibraryController extends AbstractController
             $fileHandler->handle(null, $library->getImage(), null, 'libraries');
             $fileHandler->handle(null, $library->getPdf(), null, 'libraries-pdfs');
 
-            $fratrieDepartId = $library->getBase();
-            $fratrieDepart = $libraryRepository->findBy(['base' => $fratrieDepartId]);
-            $orderer->reorderNumber($library->getId(), $library->getNumero(), -1, $fratrieDepart, []);
+            $previousSiblingsId = $library->getBase();
+            $previousSiblings = $libraryRepository->findBy(['base' => $previousSiblingsId]);
+            $orderer->reorderNumber($library->getId(), $library->getNumero(), -1, $previousSiblings, []);
 
             $unlocker->forget($library);
             $this->getDoctrine()->getManager()->remove($library);

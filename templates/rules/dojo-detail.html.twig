@@ -110,7 +110,7 @@
     {{ include('/parts/picture-grid.html.twig', {
         variant: 'portrait',
         title: 'Personnages joueurs',
-        items: personnagesEcole, route: 'personnage_profil', hide_dead: true,
+        items: player_characters, route: 'personnage_profil', hide_dead: true,
         wrapper: 'col-12 col-lg-4',
         per_row: {desktop: 2, tablet: 4, mobile: 2},
         empty_message: "Il n'y a pas encore de personnages dans cette école.",
@@ -119,7 +119,7 @@
     {{ include('/parts/picture-grid.html.twig', {
         variant: 'rule',
         title: 'Autres Écoles',
-        items: autresEcoles, route: 'regles_ecole',
+        items: other_dojos, route: 'rules_dojo',
         na_image: NA_ECOLE,
     }) }}
 

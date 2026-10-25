@@ -11,7 +11,7 @@
 
 <section class="saison-bar container-fluid" style="background-color: {{ season.couleur }}">
     <div class="container">
-        {{ include('/parts/messages-flashes.html.twig') }}
+        {{ include('/parts/flash-messages.html.twig') }}
         <a class="btn-quaternary-style text-white50{{ previous_season is empty ? ' invisible' : '' }}"
            {% if previous_season is not empty %}href="{{ path('story_season', {id: previous_season.id}) }}" title="Voir saison précédente"{% endif %}>
             <span class="text-small"><i class="fa-solid fa-caret-left"></i><span class="d-none d-lg-inline"> Saison Précédente</span></span>

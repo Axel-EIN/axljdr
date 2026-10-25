@@ -62,10 +62,10 @@
           <input type="hidden" name="_csrf_token" value="{{ csrf_token('navigation-mode') }}" />
           <span>Mode de navigation</span>
           <div class="account-mode-switch">
-            <button type="submit" name="mode" value="{{ constant('App\\Entity\\Utilisateur::MODE_GAME_MASTER') }}" class="mj{{ is_gm() ? ' active' }}" aria-pressed="{{ is_gm() ? 'true' : 'false' }}"{% if is_gm() %} disabled{% endif %} title="Tous les droits du MJ, sans personnage principal">
+            <button type="submit" name="mode" value="{{ constant('App\\Entity\\Utilisateur::MODE_GAME_MASTER') }}" class="gm{{ is_gm() ? ' active' }}" aria-pressed="{{ is_gm() ? 'true' : 'false' }}"{% if is_gm() %} disabled{% endif %} title="Tous les droits du MJ, sans personnage principal">
               <i class="fas fa-scroll" aria-hidden="true"></i> MJ
             </button>
-            <button type="submit" name="mode" value="{{ constant('App\\Entity\\Utilisateur::MODE_PLAYER') }}" class="joueur{{ not is_gm() ? ' active' }}" aria-pressed="{{ is_gm() ? 'false' : 'true' }}"{% if not is_gm() %} disabled{% endif %} title="Votre personnage principal, sans les droits du MJ">
+            <button type="submit" name="mode" value="{{ constant('App\\Entity\\Utilisateur::MODE_PLAYER') }}" class="player{{ not is_gm() ? ' active' }}" aria-pressed="{{ is_gm() ? 'false' : 'true' }}"{% if not is_gm() %} disabled{% endif %} title="Votre personnage principal, sans les droits du MJ">
               <i class="fas fa-user" aria-hidden="true"></i> Joueur
             </button>
           </div>

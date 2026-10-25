@@ -1,9 +1,9 @@
 {% set compact = compact|default(false) %}
-{% set avec_recherche = not compact %}
+{% set with_search = not compact %}
 {% set control_panel = null %}
 {% if app.user and is_granted('ROLE_ADMIN') %}
   {% set control_panel = {variant: 'admin', icon: 'fa-tools', label: "Panneau d'Administration"} %}
-{% elseif is_mj() %}
+{% elseif is_gm() %}
   {% set control_panel = {variant: 'mj', icon: 'fa-scroll', label: 'Panneau du Maître'} %}
 {% endif %}
 
@@ -18,15 +18,15 @@
 {% endif %}
 
 {% set nav_sections = [
-  { label: 'ACCUEIL',      route: 'news',       actives: ['news'] },
-  { label: 'AVENTURE',    route: 'story',       actives: ['story', 'story_season', 'story_episode'] },
-  { label: 'PERSONNAGES', route: 'characters',  actives: ['characters', 'characters_profile', 'characters_sheet', 'characters_sheet_edit'] },
-  { label: 'UNIVERS',      route: 'world',      actives: ['world', 'world_clan', 'world_archive', 'world_location', 'world_lore'] },
-  { label: 'RÈGLES',      route: 'rules',       actives: ['rules', 'rules_rule', 'rules_library', 'rules_object', 'rules_class', 'rules_dojo'] },
-  { label: 'CARTE',       route: 'map',         actives: ['map'] },
+  { label: 'ACCUEIL',      route: 'news',       active_routes: ['news'] },
+  { label: 'AVENTURE',    route: 'story',       active_routes: ['story', 'story_season', 'story_episode'] },
+  { label: 'PERSONNAGES', route: 'characters',  active_routes: ['characters', 'characters_profile', 'characters_sheet', 'characters_sheet_edit'] },
+  { label: 'UNIVERS',      route: 'world',      active_routes: ['world', 'world_clan', 'world_archive', 'world_location', 'world_lore'] },
+  { label: 'RÈGLES',      route: 'rules',       active_routes: ['rules', 'rules_rule', 'rules_library', 'rules_object', 'rules_class', 'rules_dojo'] },
+  { label: 'CARTE',       route: 'map',         active_routes: ['map'] },
 ] %}
-{% set route_courante = app.request.get('_route') %}
-{% set section_active = nav_sections|filter(s => route_courante in s.actives)|first %}
+{% set current_route = app.request.get('_route') %}
+{% set active_section = nav_sections|filter(s => current_route in s.active_routes)|first %}
 
 <header class="container-fluid navigation-bar{% if compact %} compact{% endif %}">
   <div class="container">
@@ -38,21 +38,21 @@
 
       <div class="nav-mobile-menu dropdown{{ compact ? '' : ' d-lg-none' }}">
         <button
-          class="nav-link nav-mobile-toggle-full chevron-toggle{% if section_active %} active{% endif %}" type="button"
+          class="nav-link nav-mobile-toggle-full chevron-toggle{% if active_section %} active{% endif %}" type="button"
           data-toggle="dropdown" aria-expanded="false" aria-label="Ouvrir le menu des sections"
         >
-          {{ section_active.label|default('MENU') }}
+          {{ active_section.label|default('MENU') }}
           <i class="fas fa-chevron-down"></i>
         </button>
 
         <div class="dropdown-menu dropdown-dark">
-          {% for une_section in nav_sections %}
-            <a class="dropdown-item{% if route_courante in une_section.actives %} active{% endif %}" href="{{ path(une_section.route) }}">{{ une_section.label }}</a>
+          {% for section in nav_sections %}
+            <a class="dropdown-item{% if current_route in section.active_routes %} active{% endif %}" href="{{ path(section.route) }}">{{ section.label }}</a>
           {% endfor %}
         </div>
       </div>
 
-      {% if avec_recherche %}
+      {% if with_search %}
         <button
           class="search-toggle d-lg-none" type="button"
           data-toggle="collapse" data-target="#search-mobile" aria-controls="search-mobile" aria-expanded="false" aria-label="Ouvrir la recherche"
@@ -64,18 +64,18 @@
       <div class="navbar-collapse d-lg-flex {{ compact ? 'justify-content-lg-end' : 'justify-content-lg-between' }} align-items-lg-center w-100" id="navbarNav">
 
         <ul class="navbar-nav d-none{{ compact ? '' : ' d-lg-flex' }}">
-          {% for une_section in nav_sections %}
+          {% for section in nav_sections %}
             <li class="nav-item">
-              <a  href="{{ path(une_section.route) }}"
-                  class="nav-link{% if route_courante in une_section.actives %} active{% endif %}"
+              <a  href="{{ path(section.route) }}"
+                  class="nav-link{% if current_route in section.active_routes %} active{% endif %}"
               >
-                {{ une_section.label }}
+                {{ section.label }}
               </a>
             </li>
           {% endfor %}
         </ul>
 
-        {% if avec_recherche %}
+        {% if with_search %}
           {{ include('parts/search-bar.html.twig', {variant: 'd-none d-lg-flex ml-auto mr-4'}) }}
         {% endif %}
 
@@ -93,7 +93,7 @@
                 </a>
               {% endif %}
 
-              <a class="{% if route_courante starts with 'account' %}active{% endif %}" href="{{ path('account') }}">
+              <a class="{% if current_route starts with 'account' %}active{% endif %}" href="{{ path('account') }}">
                 <i class="fas fa-torii-gate couleur-primaire"></i>
                 &nbsp;&nbsp;
                 MON COMPTE
@@ -128,7 +128,7 @@
       </div>
     </nav>
 
-    {% if avec_recherche %}
+    {% if with_search %}
       <div id="search-mobile" class="search-collapse collapse d-lg-none">
         {{ include('parts/search-bar.html.twig', {variant: 'mobile'}) }}
       </div>

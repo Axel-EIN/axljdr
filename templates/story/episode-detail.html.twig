@@ -24,7 +24,7 @@
 
   <header class="container header header-episode veiled">
 
-    {{ include('/parts/messages-flashes.html.twig') }}
+    {{ include('/parts/flash-messages.html.twig') }}
 
     <div class="relative d-flex w-100 flex-column">
       {% set chapitres_voisins = {precedent: previous_chapter, suivant: next_chapter}|map(c => c ? c.episodes|filter(e => e.scenes|length > 0 or is_mj())|first : null) %}

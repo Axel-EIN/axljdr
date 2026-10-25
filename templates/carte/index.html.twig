@@ -18,6 +18,7 @@
     {{ include('parts/map.html.twig', {
       lieux,
       place_groups: groupes_lieux,
+      players: joueurs,
       variant: 'world',
       center: cible ?? position_principal,
       highlight: cible,

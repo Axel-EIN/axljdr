@@ -64,7 +64,7 @@ class AdminDevelopmentController extends AbstractController
             $em->flush();
             $this->addFlash('success', 'Le Développement a bien été ajouté');
 
-            return $this->redirectApres($request, $development);
+            return $this->redirectAfter($request, $development);
         }
 
         return $this->render('back_office/create.html.twig', [
@@ -93,7 +93,7 @@ class AdminDevelopmentController extends AbstractController
             $em->flush();
             $this->addFlash('success', 'Le Développement a bien été modifié');
 
-            return $this->redirectApres($request, $development);
+            return $this->redirectAfter($request, $development);
         }
 
         return $this->renderForm('back_office/edit.html.twig', [
@@ -122,7 +122,7 @@ class AdminDevelopmentController extends AbstractController
         return $this->redirectToRoute('admin_development');
     }
 
-    private function redirectApres(Request $request, Development $development): Response
+    private function redirectAfter(Request $request, Development $development): Response
     {
         if ($request->query->get('redirect') === 'development') {
             return $this->redirectToRoute('characters_profile', ['id' => $development->getPersonnage()->getId()]);

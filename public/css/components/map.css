@@ -430,7 +430,7 @@
     border: 2px solid var(--color-white50);
     pointer-events: none;
 
-    .localisator-ui {
+    .locator-ui {
       z-index: 5;
       width: 200%;
       transform: translate(-50%, -50%);
@@ -454,7 +454,7 @@
     pointer-events: none;
   }
 
-  .lieu-pulse-icon {
+  .location-pulse-icon {
     z-index: 6;
     width: var(--current-size);
     height: var(--current-size);
@@ -464,7 +464,7 @@
     animation: lieu-pulse 1.6s ease-in-out infinite;
   }
 
-  .lieu-current-label {
+  .location-current-label {
     --tag-border: #8a6a2f;
     --tag-bottom: #d8b56a;
 
@@ -495,7 +495,7 @@
     }
   }
 
-  .lieu-other-icon {
+  .other-location-marker {
     --icon-base: 84px;
 
     z-index: 3;
@@ -516,7 +516,7 @@
 
     &[href] { cursor: pointer; }
 
-    .lieu-icon {
+    .location-marker-icon {
       display: block;
       width: 100%;
       height: 100%;
@@ -526,9 +526,9 @@
       transition: filter var(--duration) var(--ease);
     }
 
-    &.focused .lieu-icon { animation: map-focus-pulse 1.6s ease-in-out 3; }
+    &.focused .location-marker-icon { animation: map-focus-pulse 1.6s ease-in-out 3; }
 
-    &:hover .lieu-icon {
+    &:hover .location-marker-icon {
       filter: drop-shadow(0 0 6px rgba(0, 0, 0, 0.8)) drop-shadow(0 0 10px var(--clan-color, #ffffff));
     }
 
@@ -545,7 +545,7 @@
       pointer-events: none;
     }
 
-    .lieu-other-unknown {
+    .other-location-unknown {
       position: absolute;
       top: 50%;
       left: 50%;
@@ -565,7 +565,7 @@
       transition: border-color var(--duration) var(--ease), color var(--duration) var(--ease);
     }
 
-    &:hover .lieu-other-unknown {
+    &:hover .other-location-unknown {
       border-color: var(--color-white);
       color: var(--color-white);
     }
@@ -710,7 +710,7 @@
   }
 
   &.compact {
-    .lieu-other-icon:not(:hover) & {
+    .other-location-marker:not(:hover) & {
       gap: 0.35rem;
 
       .map-label-mon {
@@ -726,7 +726,7 @@
 
     }
 
-    :is(.labels-hidden, .zoomed-out:not(.labels-shown)) .lieu-other-icon:not(:hover) & {
+    :is(.labels-hidden, .zoomed-out:not(.labels-shown)) .other-location-marker:not(:hover) & {
       &::after,
       > * { opacity: 0; }
     }

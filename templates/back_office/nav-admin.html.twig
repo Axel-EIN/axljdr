@@ -4,12 +4,12 @@
     
         {% set navs = {
             'Saisons': {
-                'element': 'saison',
+                'element': 'season',
                 'label': 'Saisons',
                 'genre': 'F',
             },
             'Chapitres': {
-                'element': 'chapitre',
+                'element': 'chapter',
                 'label': 'Chapitres',
                 'genre': 'M',
             },
@@ -29,7 +29,7 @@
                 'genre': 'M',
             },
             'Familles': {
-                'element': 'famille',
+                'element': 'family',
                 'label': 'Familles',
                 'genre': 'F',
             },
@@ -115,10 +115,10 @@
 
     {% if app.user and is_granted("ROLE_ADMIN") %}
 
-        <a class="nav-link admin-link{% if app.request.get('_route') == 'admin_utilisateur'
-                            or app.request.get('_route') == 'admin_utilisateur_create'
-                            or app.request.get('_route') == 'admin_utilisateur_edit' %}active{% endif %}" 
-                            href="{{ path('admin_utilisateur') }}">Utilisateurs</a>
+        <a class="nav-link admin-link{% if app.request.get('_route') == 'admin_user'
+                            or app.request.get('_route') == 'admin_user_create'
+                            or app.request.get('_route') == 'admin_user_edit' %}active{% endif %}" 
+                            href="{{ path('admin_user') }}">Utilisateurs</a>
                             
     {% endif %}
 

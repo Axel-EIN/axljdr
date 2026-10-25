@@ -16,7 +16,7 @@
                     width: 1200, height: 900 }) }}
             </div>
 
-            {{ include('rule-lore-library/part-fields.html.twig', {form, un_element: rule|default(null)}) }}
+            {{ include('rule-lore-library/part-fields.html.twig', {form, record: rule|default(null)}) }}
 
             {{ include('/btns/btn-form.html.twig') }}
         </div>

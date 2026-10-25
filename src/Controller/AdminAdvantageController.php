@@ -34,8 +34,8 @@ class AdminAdvantageController extends AbstractController
             'element' => 'advantage',
             'label' => 'Avantage',
             'labels' => 'Avantages / Désavantages',
-            'genre' => 'M',
-            'determinant' => 'un',
+            'gender' => 'M',
+            'article' => 'un',
             'table_filters' => self::TABLE_FILTERS,
             'table_cols' => [
                 'nom:Nom',
@@ -81,11 +81,11 @@ class AdminAdvantageController extends AbstractController
         
 
         return $this->render('back_office/create.html.twig', [
-            'type' => 'Créer',
+            'type' => 'create',
             'entity' => 'advantage',
             'label' => 'Avantage/Désavantage',
-            'genre' => 'M',
-            'determinant' => 'un',
+            'gender' => 'M',
+            'article' => 'un',
             'form' => $form->createView()
         ]);
     }
@@ -115,12 +115,12 @@ class AdminAdvantageController extends AbstractController
         }
 
         return $this->renderForm('back_office/edit.html.twig', [
-            'type' => 'Modifier',
+            'type' => 'edit',
             'advantage' => $advantage,
             'entity' => 'advantage',
             'label' => 'Avantage/Désavantage',
-            'genre' => 'M',
-            'determinant' => 'un',
+            'gender' => 'M',
+            'article' => 'un',
             'form' => $form,
         ]);
     }

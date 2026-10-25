@@ -1,0 +1,11 @@
+<div class="col-12">
+    {{ form_start(form) }}
+        {% if user is defined %}
+            {{ include('parts/avatar.html.twig', {user: user, size: 128}) }}
+        {% endif %}
+        {{ form_row(form.avatar) }}
+        {{ include('parts/image-delete-button.html.twig', {input_id: 'admin_user_avatar', field_name: 'avatar', current: user.avatar|default(null)}) }}
+            {{ form_widget(form) }}
+        {{ include('/btns/btn-form.html.twig') }}
+    {{ form_end(form) }}
+</div>

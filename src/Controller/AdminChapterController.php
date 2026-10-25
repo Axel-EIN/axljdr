@@ -5,7 +5,7 @@ namespace App\Controller;
 use App\Service\TableFilter;
 use App\Entity\Chapitre;
 use App\Service\FileHandler;
-use App\Service\Numeroteur;
+use App\Service\Orderer;
 use App\Form\AdminChapterType;
 use App\Repository\SaisonRepository;
 use App\Repository\ChapitreRepository;
@@ -53,7 +53,7 @@ class AdminChapterController extends AbstractController
      * @Route("/admin/chapter/create", name="admin_chapter_create")
      * @IsGranted("ROLE_MJ")
      */
-    public function addChapter(Request $request, EntityManagerInterface $em, FileHandler $fileHandler, SaisonRepository $seasonRepository, Numeroteur $numeroteur, ChapitreRepository $chapterRepository, TableFilter $tableFilter) {
+    public function addChapter(Request $request, EntityManagerInterface $em, FileHandler $fileHandler, SaisonRepository $seasonRepository, Orderer $orderer, ChapitreRepository $chapterRepository, TableFilter $tableFilter) {
 
         $chapter = new Chapitre;
         $tableFilter->prefill($chapter, self::TABLE_FILTERS, $request->query->all('filter'));
@@ -83,7 +83,7 @@ class AdminChapterController extends AbstractController
             $this->addFlash('success', 'Le chapitre a bien été crée.');
 
             $newSiblings = $chapterRepository->findBy(['saisonParent' => $chapter->getSaisonParent()->getId()]);
-            $numeroteur->reordonnerNumero($chapter->getId(), -1, $chapter->getNumero(), [], $newSiblings);
+            $orderer->reorderNumber($chapter->getId(), -1, $chapter->getNumero(), [], $newSiblings);
 
             if (!empty($request->query->get('redirect')) && $request->query->get('redirect') == 'story')
                 return $this->redirectToRoute('story_season', ['id' => $chapter->getSaisonParent()->getId(),'_fragment' => 'read-head-ch-id' . $chapter->getId()]);
@@ -106,7 +106,7 @@ class AdminChapterController extends AbstractController
      * @Route("/admin/chapter/{id}/edit", name="admin_chapter_edit")
      * @IsGranted("ROLE_MJ")
      */
-    public function editChapter(Request $request, Chapitre $chapter, FileHandler $fileHandler, Numeroteur $numeroteur, ChapitreRepository $chapterRepository): Response {
+    public function editChapter(Request $request, Chapitre $chapter, FileHandler $fileHandler, Orderer $orderer, ChapitreRepository $chapterRepository): Response {
 
         $previousNumber = $chapter->getNumero();
         $previousSiblingsId = $chapter->getSaisonParent()->getId();
@@ -129,7 +129,7 @@ class AdminChapterController extends AbstractController
             {
                 $previousSiblings = $chapterRepository->findBy(['saisonParent' => $previousSiblingsId]);
                 $newSiblings = $chapterRepository->findBy(['saisonParent' => $chapter->getSaisonParent()->getId()]);
-                $numeroteur->reordonnerNumero($chapter->getId(), $previousNumber, $chapter->getNumero(), $previousSiblings, $newSiblings);
+                $orderer->reorderNumber($chapter->getId(), $previousNumber, $chapter->getNumero(), $previousSiblings, $newSiblings);
             }
 
             $this->getDoctrine()->getManager()->flush();
@@ -156,7 +156,7 @@ class AdminChapterController extends AbstractController
      * @Route("/admin/chapter/{id}/delete", name="admin_chapter_delete", methods={"POST"})
      * @IsGranted("ROLE_MJ")
      */
-    public function deleteChapter(Request $request, Chapitre $chapter, Numeroteur $numeroteur, FileHandler $fileHandler, ChapitreRepository $chapterRepository): Response {
+    public function deleteChapter(Request $request, Chapitre $chapter, Orderer $orderer, FileHandler $fileHandler, ChapitreRepository $chapterRepository): Response {
 
         $parentSeason = $chapter->getSaisonParent();
 
@@ -171,7 +171,7 @@ class AdminChapterController extends AbstractController
 
             $previousSiblingsId = $chapter->getSaisonParent()->getId();
             $previousSiblings = $chapterRepository->findBy(['saisonParent' => $previousSiblingsId]);
-            $numeroteur->reordonnerNumero($chapter->getId(), $chapter->getNumero(), -1, $previousSiblings, []);
+            $orderer->reorderNumber($chapter->getId(), $chapter->getNumero(), -1, $previousSiblings, []);
 
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($chapter);

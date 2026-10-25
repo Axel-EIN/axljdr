@@ -1,20 +1,20 @@
-{% set lieu = lieu|default(null) %}
-{% set personnage = personnage|default(null) %}
-{% set presents = presents|default([]) %}
-{% set element = lieu ?? personnage %}
+{% set location = location|default(null) %}
+{% set character = character|default(null) %}
+{% set present_characters = present_characters|default([]) %}
+{% set element = location ?? character %}
 {% set etat = element_state(element) %}
 {% set lisible = element_readable(element) %}
-{% set type = personnage ? personnage.classe.nom ?? null : lieu.type %}
+{% set type = character ? character.classe.nom ?? null : location.type %}
 
-{% if personnage and lisible %}
-  <img class="map-panel-banner portrait" src="{{ asset(personnage.illustration|default(NA_PERSO_ILLU)) }}" alt="Illustration de {{ personnage.nomComplet }}" />
-{% elseif lieu and lieu.image %}
-  <img class="map-panel-banner" src="{{ asset(image_small(lieu.image)) }}" alt="Image de {{ lieu.nom }}" />
+{% if character and lisible %}
+  <img class="map-panel-banner portrait" src="{{ asset(character.illustration|default(NA_PERSO_ILLU)) }}" alt="Illustration de {{ character.nomComplet }}" />
+{% elseif location and location.image %}
+  <img class="map-panel-banner" src="{{ asset(image_small(location.image)) }}" alt="Image de {{ location.nom }}" />
 {% endif %}
 
 <div class="map-panel-body">
   <h2 class="map-panel-title">
-    {{ personnage ? personnage.nomComplet : lieu.nom }}
+    {{ character ? character.nomComplet : location.nom }}
     {{ include('parts/badge-access.html.twig', {state: etat, variant: 'inline'}) }}
   </h2>
 
@@ -32,11 +32,11 @@
     {% endif %}
   {% endif %}
 
-  {% if presents is not empty %}
+  {% if present_characters is not empty %}
     <div>
       <h3 class="map-panel-heading">Personnages présents</h3>
       <div class="map-panel-party">
-        {% for perso in presents %}
+        {% for perso in present_characters %}
           <a href="{{ path('personnage_profil', {id: perso.id}) }}" title="{{ perso.nomComplet }}">
             <img src="{{ asset(perso.icone|default(NA_PERSO_PORTRAIT)) }}" alt="Portrait de {{ perso.prenom }}" />
           </a>
@@ -45,11 +45,11 @@
     </div>
   {% endif %}
 
-  {% if historique is not empty %}
+  {% if history is not empty %}
     <div>
       <h3 class="map-panel-heading">Dernières scènes</h3>
       <ul class="map-panel-history">
-        {% for un_bloc in historique %}
+        {% for un_bloc in history %}
           {% set derniere = un_bloc.lignes|first.scene %}
           <li>
             <a href="{{ path('aventure_episode', {id: un_bloc.episode.id, '_fragment': 'scn' ~ derniere.numero}) }}">
@@ -63,10 +63,10 @@
   {% endif %}
 
   {% if lisible %}
-    {% if personnage %}
-      <a class="btn-primary-style btn-medium text-center" href="{{ path('personnage_profil', {id: personnage.id}) }}">Voir le profil</a>
+    {% if character %}
+      <a class="btn-primary-style btn-medium text-center" href="{{ path('personnage_profil', {id: character.id}) }}">Voir le profil</a>
     {% else %}
-      <a class="btn-primary-style btn-medium text-center" href="{{ path('world_lieu', {id: lieu.id}) }}">Ouvrir la fiche</a>
+      <a class="btn-primary-style btn-medium text-center" href="{{ path('world_location', {id: location.id}) }}">Ouvrir la fiche</a>
     {% endif %}
   {% endif %}
 </div>

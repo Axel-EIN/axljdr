@@ -34,8 +34,8 @@ class AdminLocationController extends AbstractController
       'element' => 'location',
       'label' => 'Lieu',
       'labels' => 'Lieux',
-      'genre' => 'M',
-      'determinant' => 'un',
+      'gender' => 'M',
+      'article' => 'un',
       'table_filters' => self::TABLE_FILTERS,
       'table_cols' => [
         'icone:Icone:symbol:NA_LIEU_ICO',
@@ -107,11 +107,11 @@ class AdminLocationController extends AbstractController
     }
 
     return $this->render('back_office/create.html.twig', [
-      'type' => 'Créer',
+      'type' => 'create',
       'entity' => 'location',
       'label' => 'Lieu',
-      'genre' => 'M',
-      'determinant' => 'un',
+      'gender' => 'M',
+      'article' => 'un',
       'form' => $form->createView()
     ]);
   }
@@ -172,12 +172,12 @@ class AdminLocationController extends AbstractController
     }
 
     return $this->renderForm('back_office/edit.html.twig', [
-      'type' => 'Modifier',
+      'type' => 'edit',
       'location' => $location,
       'entity' => 'location',
       'label' => 'Lieu',
-      'genre' => 'M',
-      'determinant' => 'un',
+      'gender' => 'M',
+      'article' => 'un',
       'form' => $form,
     ]);
   }

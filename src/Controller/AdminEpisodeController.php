@@ -36,8 +36,8 @@ class AdminEpisodeController extends AbstractController
             'element' => 'episode',
             'label' => 'Épisode',
             'labels' => 'Épisodes',
-            'genre' => 'M',
-            'determinant' => 'un',
+            'gender' => 'M',
+            'article' => 'un',
             'table_filters' => self::TABLE_FILTERS,
             'table_cols' => [
                 'image:Image:image:NA_SESSION',
@@ -62,10 +62,10 @@ class AdminEpisodeController extends AbstractController
         $episode = new Episode;
         $tableFilter->prefill($episode, self::TABLE_FILTERS, $request->query->all('filter'));
 
-        if ( !empty($request->query->get('numero')) && $request->query->get('numero') > 0
+        if ( !empty($request->query->get('number')) && $request->query->get('number') > 0
           && !empty($request->query->get('chapterID')) && $request->query->get('chapterID') > 0 )
         {
-                $episode->setNumero($request->query->get('numero'));
+                $episode->setNumero($request->query->get('number'));
                 $parentChapter = $chapterRepository->find($request->query->get('chapterID'));
                 if ($parentChapter !== null)
                     $episode->setChapitreParent($parentChapter);
@@ -101,11 +101,11 @@ class AdminEpisodeController extends AbstractController
         } 
 
         return $this->render('back_office/create.html.twig', [
-            'type' => 'Créer',
+            'type' => 'create',
             'entity' => 'episode',
             'label' => 'Épisode',
-            'genre' => 'M',
-            'determinant' => 'un',
+            'gender' => 'M',
+            'article' => 'un',
             'form' => $form->createView()
         ]);
     }
@@ -153,12 +153,12 @@ class AdminEpisodeController extends AbstractController
         }
 
         return $this->renderForm('back_office/edit.html.twig', [
-            'type' => 'Modifier',
+            'type' => 'edit',
             'episode' => $episode,
             'entity' => 'episode',
             'label' => 'Épisode',
-            'genre' => 'M',
-            'determinant' => 'un',
+            'gender' => 'M',
+            'article' => 'un',
             'form' => $form,
         ]);
     }

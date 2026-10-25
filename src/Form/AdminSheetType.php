@@ -145,11 +145,11 @@ class AdminSheetType extends AbstractType
             ->add('knownSpells', EntityType::class, [
                 'class' => Sort::class,
                 'label' => 'Sorts, kihos et tatouages connus (Ctrl + clic pour en sélectionner plusieurs)',
-                'choice_label' => fn(Sort $sort) => $sort->getNom() . ($sort->getNiveau() !== null ? ' (' . $sort->getNiveau() . ')' : ''),
-                'group_by' => fn(Sort $sort) => match ($sort->getCategorie()) {
-                    'KIHO' => 'Kiho ' . $sort->getAnneau(),
+                'choice_label' => fn(Sort $spell) => $spell->getNom() . ($spell->getNiveau() !== null ? ' (' . $spell->getNiveau() . ')' : ''),
+                'group_by' => fn(Sort $spell) => match ($spell->getCategorie()) {
+                    'KIHO' => 'Kiho ' . $spell->getAnneau(),
                     'TATOUAGE' => 'Tatouages',
-                    default => $sort->getAnneau(),
+                    default => $spell->getAnneau(),
                 },
                 'multiple' => true,
                 'required' => false,
@@ -160,20 +160,20 @@ class AdminSheetType extends AbstractType
             ])
         ;
 
-        $competenceOptions = [
+        $skillOptions = [
             'class' => Competence::class,
             'choice_label' => 'nom',
             'group_by' => 'categorie',
             'placeholder' => '— Aucune —',
             'required' => false,
         ];
-        $valeurOptions = [
+        $valueOptions = [
             'placeholder' => '—',
             'required' => false,
             'choices' => array_combine(range(1, 10), range(1, 10)),
         ];
 
-        $compEcoleOptions = [
+        $dojoSkillOptions = [
             'required' => false,
             'placeholder' => false,
             'choices' => ['Non' => 0, 'Offerte (1pt)' => 1, 'Offerte (2pts)' => 2],
@@ -182,10 +182,10 @@ class AdminSheetType extends AbstractType
 
         for ($i = 1; $i <= 20; $i++) {
             $builder
-                ->add('competence' . $i, EntityType::class, $competenceOptions)
-                ->add('valeur' . $i, ChoiceType::class, $valeurOptions)
+                ->add('competence' . $i, EntityType::class, $skillOptions)
+                ->add('valeur' . $i, ChoiceType::class, $valueOptions)
                 ->add('specialisations' . $i, HiddenType::class, ['required' => false])
-                ->add('compEcole' . $i, ChoiceType::class, $compEcoleOptions)
+                ->add('compEcole' . $i, ChoiceType::class, $dojoSkillOptions)
                 ->add('speEcole' . $i, HiddenType::class, ['required' => false]);
         }
     }

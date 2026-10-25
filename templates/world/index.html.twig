@@ -68,7 +68,7 @@
 {% endblock %}
 
 {% block section_content3 %}
-    {% for groupe in groupesLieux %}
+    {% for groupe in location_groups %}
         {% set scroller_id = 'lieux-' ~ loop.index %}
         <div class="col-12">
             <h3 class="heading-amerigo category-section-sub-heading flex-wrap relative">
@@ -89,7 +89,7 @@
                 variant: 'icon',
                 scroll: true, scroll_id: scroller_id,
                 type_icon: true,
-                items: groupe.lieux, route: 'world_lieu', na_image: NA_LIEU_ICO,
+                items: groupe.lieux, route: 'world_location', na_image: NA_LIEU_ICO,
                 per_row: {desktop: 6, mobile: 2},
             }) }}
         </div>

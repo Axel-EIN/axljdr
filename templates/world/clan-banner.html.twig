@@ -62,7 +62,7 @@
         <nav class="col-12 relative" style="z-index: 3; border-bottom: 4px solid {{clan.couleur}}">
 
             <div class="d-none d-lg-flex justify-content-center">
-                {% for un_autre_clan in toutClans %}
+                {% for un_autre_clan in all_clans %}
                     <a class="text-white py-2 px-3" {% if un_autre_clan.id == clan.id %}style="background-color: {{clan.couleur}}"{% endif %}
                     href="{{ path('world_clan', { id: un_autre_clan.id, '_fragment' : 'element-banner' } ) }}">
                         <strong>{{un_autre_clan.nom|upper}}</strong>
@@ -79,7 +79,7 @@
                     <i class="fas fa-chevron-down ml-2"></i>
                 </a>
                 <div class="dropdown-menu dropdown-dark">
-                    {% for un_autre_clan in toutClans|filter(c => c.id != clan.id) %}
+                    {% for un_autre_clan in all_clans|filter(c => c.id != clan.id) %}
                         <a class="dropdown-item" href="{{ path('world_clan', { id: un_autre_clan.id, '_fragment' : 'element-banner' } ) }}">
                             {{un_autre_clan.nom|upper}}
                         </a>

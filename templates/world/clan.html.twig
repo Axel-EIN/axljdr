@@ -9,7 +9,7 @@
 
 {% block element_content %}
 
-    {{ include('world/clan-banner.html.twig', {clan, toutClans}) }}
+    {{ include('world/clan-banner.html.twig', {clan, all_clans}) }}
 
     <div class="col-12 col-lg-8">
         <div class="card card-body relative">
@@ -123,7 +123,7 @@
                             <h3 class="heading-amerigo mb-3">{{ groupe.titre }}</h3>
                             {{ include('/parts/picture-grid.html.twig', {
                                 variant: 'icon',
-                                items: groupe.items, route: 'world_lieu', na_image: NA_LIEU_ICO,
+                                items: groupe.items, route: 'world_location', na_image: NA_LIEU_ICO,
                                 per_row: {desktop: groupe.par_ligne, tablet: 4, mobile: 2},
                             }) }}
                         </div>

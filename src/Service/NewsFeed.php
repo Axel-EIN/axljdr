@@ -16,7 +16,7 @@ class NewsFeed
     private $currentPlayer;
     private $visibility;
     private $participationRepository;
-    private $personnageRepository;
+    private $characterRepository;
     private $xpRanker;
 
     public function __construct(
@@ -24,48 +24,48 @@ class NewsFeed
         CurrentPlayer $currentPlayer,
         Visibility $visibility,
         ParticipationRepository $participationRepository,
-        PersonnageRepository $personnageRepository,
+        PersonnageRepository $characterRepository,
         XpRanker $xpRanker
     ) {
         $this->entityManager = $entityManager;
         $this->currentPlayer = $currentPlayer;
         $this->visibility = $visibility;
         $this->participationRepository = $participationRepository;
-        $this->personnageRepository = $personnageRepository;
+        $this->characterRepository = $characterRepository;
         $this->xpRanker = $xpRanker;
     }
 
     public function generalRanking(): array
     {
-        $classement = [];
+        $ranking = [];
 
-        foreach ($this->personnageRepository->findRankable() as $personnage) {
-            if ($personnage->isDead() || $personnage->isMissing()) {
+        foreach ($this->characterRepository->findRankable() as $character) {
+            if ($character->isDead() || $character->isMissing()) {
                 continue;
             }
 
-            $classement[] = [
-                'id' => $personnage->getId(),
-                'firstName' => $personnage->getPrenom(),
-                'icon' => $personnage->getIcone(),
-                'player' => $personnage->getJoueur(),
-                'xp' => $this->xpRanker->total($personnage),
-                'dead' => $personnage->isDead() ? 1 : 0,
+            $ranking[] = [
+                'id' => $character->getId(),
+                'firstName' => $character->getPrenom(),
+                'icon' => $character->getIcone(),
+                'player' => $character->getJoueur(),
+                'xp' => $this->xpRanker->total($character),
+                'dead' => $character->isDead() ? 1 : 0,
             ];
         }
 
-        usort($classement, function ($a, $b) {
+        usort($ranking, function ($a, $b) {
             return [$b['xp'], $a['firstName']] <=> [$a['xp'], $b['firstName']];
         });
 
-        return $classement;
+        return $ranking;
     }
 
     public function lastEpisodes(int $limit): array
     {
-        return $this->parus(Episode::class, true)
-            ->andWhere('e.access = :palier')
-            ->setParameter('palier', Access::PUBLIC)
+        return $this->published(Episode::class, true)
+            ->andWhere('e.access = :access')
+            ->setParameter('access', Access::PUBLIC)
             ->orderBy('e.numeroSaison', 'DESC')
             ->setMaxResults($limit)
             ->getQuery()
@@ -74,43 +74,43 @@ class NewsFeed
 
     public function episodeLocations(Episode $episode): array
     {
-        $lieux = [];
+        $locations = [];
 
         foreach ($episode->getScenes() as $scene) {
             if ($scene->getLieu() !== null) {
-                $lieux[$scene->getLieu()->getId()] = $scene->getLieu();
+                $locations[$scene->getLieu()->getId()] = $scene->getLieu();
             }
         }
 
-        return array_values($lieux);
+        return array_values($locations);
     }
 
     public function episodeCharacters(Episode $episode): array
     {
-        $personnages = [];
+        $characters = [];
 
         foreach ($episode->getScenes() as $scene) {
             foreach ($scene->getParticipations() as $participation) {
                 if (!$participation->getEstPj()) {
-                    $personnages[$participation->getPersonnage()->getId()] = $participation->getPersonnage();
+                    $characters[$participation->getPersonnage()->getId()] = $participation->getPersonnage();
                 }
             }
         }
 
-        return array_values($personnages);
+        return array_values($characters);
     }
 
     public function episodeObjects(Episode $episode): array
     {
-        $objets = [];
+        $objects = [];
 
         foreach ($episode->getScenes() as $scene) {
-            foreach ($scene->getFoundObjects() as $objet) {
-                $objets[$objet->getId()] = $objet;
+            foreach ($scene->getFoundObjects() as $object) {
+                $objects[$object->getId()] = $object;
             }
         }
 
-        return array_values($objets);
+        return array_values($objects);
     }
 
     public function lastParticipations(int $limit): array
@@ -118,7 +118,7 @@ class NewsFeed
         return $this->participationRepository->findLastByEpisode($this->characterIds(), $limit);
     }
 
-    public function latest(string $key, int $limit, array $criteres = []): array
+    public function latest(string $key, int $limit, array $criteria = []): array
     {
         $class = EntityRegistry::className($key);
 
@@ -126,34 +126,34 @@ class NewsFeed
             return [];
         }
 
-        $filtre = '';
-        foreach ($criteres as $champ => $valeur) {
-            $filtre .= ' AND e.' . $champ . (is_array($valeur) ? ' IN (:' . $champ . ')' : ' = :' . $champ);
+        $filter = '';
+        foreach ($criteria as $field => $value) {
+            $filter .= ' AND e.' . $field . (is_array($value) ? ' IN (:' . $field . ')' : ' = :' . $field);
         }
 
-        return $this->publies($class, $limit, 'e.access = :palier' . $filtre, ['palier' => Access::PUBLIC] + $criteres);
+        return $this->latestPublished($class, $limit, 'e.access = :access' . $filter, ['access' => Access::PUBLIC] + $criteria);
     }
 
-    private function publies(string $class, int $limit, string $condition, array $parametres): array
+    private function latestPublished(string $class, int $limit, string $condition, array $parameters): array
     {
-        $qb = $this->parus($class, false)
+        $qb = $this->published($class, false)
             ->andWhere($condition)
             ->orderBy('e.publishedAt', 'DESC')
             ->addOrderBy('e.id', 'DESC')
             ->setMaxResults($limit);
 
-        foreach ($parametres as $nom => $valeur) {
-            $qb->setParameter($nom, $valeur);
+        foreach ($parameters as $name => $value) {
+            $qb->setParameter($name, $value);
         }
 
         return $qb->getQuery()->getResult();
     }
 
-    public function latestAmong(array $keys, int $limit, array $criteres = []): array
+    public function latestAmong(array $keys, int $limit, array $criteria = []): array
     {
         $elements = [];
         foreach ($keys as $key) {
-            foreach ($this->latest($key, $limit, $criteres) as $element) {
+            foreach ($this->latest($key, $limit, $criteria) as $element) {
                 $elements[] = $element;
             }
         }
@@ -174,14 +174,14 @@ class NewsFeed
             return [];
         }
 
-        $parDate = function ($a, $b) {
+        $byDate = function ($a, $b) {
             return $this->visibility->unlockedAt($b) <=> $this->visibility->unlockedAt($a);
         };
 
         $references = array_map(function ($id) use ($class) {
             return $this->entityManager->getReference($class, $id);
         }, $ids);
-        usort($references, $parDate);
+        usort($references, $byDate);
 
         $qb = $this->entityManager->createQueryBuilder()
             ->select('e')
@@ -190,8 +190,8 @@ class NewsFeed
             ->setParameter('ids', array_map(function ($reference) {
                 return $reference->getId();
             }, array_slice($references, 0, $limit)));
-        $elements = $this->joindreFiche($qb, $class)->getQuery()->getResult();
-        usort($elements, $parDate);
+        $elements = $this->joinSheet($qb, $class)->getQuery()->getResult();
+        usort($elements, $byDate);
 
         return $elements;
     }
@@ -201,19 +201,19 @@ class NewsFeed
         return $this->currentPlayer->characterIds();
     }
 
-    private function parus(string $class, bool $memeSansDate): QueryBuilder
+    private function published(string $class, bool $includeUndated): QueryBuilder
     {
         $qb = $this->entityManager->createQueryBuilder()
             ->select('e')
             ->from($class, 'e')
-            ->andWhere($memeSansDate ? 'e.publishedAt IS NULL OR e.publishedAt <= :maintenant' : 'e.publishedAt <= :maintenant')
-            ->setParameter('maintenant', new \DateTime());
+            ->andWhere($includeUndated ? 'e.publishedAt IS NULL OR e.publishedAt <= :now' : 'e.publishedAt <= :now')
+            ->setParameter('now', new \DateTime());
 
-        return $this->joindreFiche($qb, $class);
+        return $this->joinSheet($qb, $class);
     }
 
-    private function joindreFiche(QueryBuilder $qb, string $class): QueryBuilder
+    private function joinSheet(QueryBuilder $qb, string $class): QueryBuilder
     {
-        return $class === Personnage::class ? $qb->leftJoin('e.fichePersonnage', 'fiche')->addSelect('fiche') : $qb;
+        return $class === Personnage::class ? $qb->leftJoin('e.fichePersonnage', 'sheet')->addSelect('sheet') : $qb;
     }
 }

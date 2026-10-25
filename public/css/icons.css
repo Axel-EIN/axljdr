@@ -73,6 +73,13 @@
 
     &.in-icon { height: 48.6%; }
 
+    &.in-glyph {
+        height: auto;
+        color: var(--color-white);
+        font-size: var(--fontsize-larger);
+        text-shadow: 0 2px 6px var(--color-black);
+    }
+
     &.in-character-card {
         width: 36%;
         height: auto;

@@ -116,7 +116,7 @@ class AdminClasseController extends AbstractController
             $this->addFlash('success', 'La classe a bien été modifiée.');
 
             if (!empty($request->query->get('redirect')) && $request->query->get('redirect') == 'classe')
-                return $this->redirectToRoute('regles_classe', ['id' => $classe->getId()]);
+                return $this->redirectToRoute('rules_class', ['id' => $classe->getId()]);
 
             return $this->redirectToRoute('admin_classe');
         }

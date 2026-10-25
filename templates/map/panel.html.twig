@@ -50,7 +50,7 @@
       <h3 class="map-panel-heading">Dernières scènes</h3>
       <ul class="map-panel-history">
         {% for un_bloc in history %}
-          {% set derniere = un_bloc.lignes|first.scene %}
+          {% set derniere = un_bloc.lines|first.scene %}
           <li>
             <a href="{{ path('story_episode', {id: un_bloc.episode.id, '_fragment': 'scn' ~ derniere.numero}) }}">
               <span class="text-muted">#{{ un_bloc.episode.numeroSaison }}</span>

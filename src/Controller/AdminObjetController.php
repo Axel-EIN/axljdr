@@ -108,7 +108,7 @@ class AdminObjetController extends AbstractController
 
             if (!empty($request->query->get('redirect')) && $request->query->get('redirect') == 'library'
             && !empty($request->query->get('libraryID')) && $request->query->get('libraryID') > 0)
-                return $this->redirectToRoute( 'regles_library', [ 'id' => $request->query->get('libraryID') , 'tab' => $objet->getCategorie() ] );
+                return $this->redirectToRoute( 'rules_library', [ 'id' => $request->query->get('libraryID') , 'tab' => $objet->getCategorie() ] );
 
             return $this->redirectToRoute('admin_objet');
         }
@@ -179,7 +179,7 @@ class AdminObjetController extends AbstractController
 
             if (!empty($request->query->get('redirect')) && $request->query->get('redirect') == 'library'
             && !empty($request->query->get('libraryID')) && $request->query->get('libraryID') > 0)
-                return $this->redirectToRoute( 'regles_library', [ 'id' => $request->query->get('libraryID') , 'tab' => $objet->getCategorie() ] );
+                return $this->redirectToRoute( 'rules_library', [ 'id' => $request->query->get('libraryID') , 'tab' => $objet->getCategorie() ] );
 
             return $this->redirectToRoute('admin_objet');
         }

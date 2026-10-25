@@ -4,7 +4,7 @@ namespace App\Controller;
 
 use App\Service\TableFilter;
 use App\Service\FileHandler;
-use App\Service\Baliseur;
+use App\Service\NameTagger;
 use App\Entity\Personnage;
 use App\Form\AdminCharacterType;
 use App\Repository\PersonnageRepository;
@@ -61,7 +61,7 @@ class AdminCharacterController extends AbstractController
      * @Route("/admin/character/create", name="admin_character_create")
      * @IsGranted("ROLE_MJ")
      */
-    public function addCharacter(Request $request, EntityManagerInterface $em, FileHandler $fileHandler, Baliseur $baliseur, Unlocker $unlocker, TableFilter $tableFilter) {
+    public function addCharacter(Request $request, EntityManagerInterface $em, FileHandler $fileHandler, NameTagger $nameTagger, Unlocker $unlocker, TableFilter $tableFilter) {
 
         $character = new Personnage;
         $tableFilter->prefill($character, self::TABLE_FILTERS, $request->query->all('filter'));
@@ -98,7 +98,7 @@ class AdminCharacterController extends AbstractController
                 $character->setIllustration($fileHandler->handle($newIllustration, null, $prefix, 'personnages', 'vertical450'));
             }
 
-            $character->setDescription($baliseur->baliser($character->getDescription()));
+            $character->setDescription($nameTagger->tag($character->getDescription()));
 
             $em->persist($character);
             $em->flush();
@@ -128,9 +128,9 @@ class AdminCharacterController extends AbstractController
      * @Route("/admin/character/{id}/edit", name="admin_character_edit")
      * @IsGranted("ROLE_MJ")
      */
-    public function editCharacter(Request $request, Personnage $character, FileHandler $fileHandler, Baliseur $baliseur, Unlocker $unlocker): Response {
+    public function editCharacter(Request $request, Personnage $character, FileHandler $fileHandler, NameTagger $nameTagger, Unlocker $unlocker): Response {
 
-        $character->setDescription($baliseur->debaliser($character->getDescription()));
+        $character->setDescription($nameTagger->untag($character->getDescription()));
 
         $form = $this->createForm(AdminCharacterType::class, $character);
         $form->get('unlockedBy')->setData($unlocker->charactersOf($character));
@@ -151,7 +151,7 @@ class AdminCharacterController extends AbstractController
                 $prefix = $prefix . '-portrait';
                 $character->setIcone($fileHandler->handle($newIcon, $character->getIcone(), $prefix, 'personnages', 'square240'));
             } elseif ($request->request->get('remove_icone') === '1' && $character->getIcone()) {
-                $baliseur->remplacerIconeParDefaut($character);
+                $nameTagger->replaceWithDefaultIcon($character);
                 $fileHandler->handle(null, $character->getIcone(), null, 'personnages');
                 $character->setIcone(null);
             }
@@ -173,7 +173,7 @@ class AdminCharacterController extends AbstractController
                 $character->setIllustration(null);
             }
 
-            $character->setDescription($baliseur->baliser($character->getDescription()));
+            $character->setDescription($nameTagger->tag($character->getDescription()));
 
             $unlocker->sync($character, $form->get('unlockedBy')->getData());
             $unlocker->syncAccess($character);
@@ -202,13 +202,13 @@ class AdminCharacterController extends AbstractController
      * @Route("/admin/character/{id}/delete", name="admin_character_delete", methods={"POST"})
      * @IsGranted("ROLE_MJ")
      */
-    public function deleteCharacter(Request $request, Personnage $character, FileHandler $fileHandler, Baliseur $baliseur, Unlocker $unlocker): Response {
+    public function deleteCharacter(Request $request, Personnage $character, FileHandler $fileHandler, NameTagger $nameTagger, Unlocker $unlocker): Response {
 
         if ($this->isCsrfTokenValid('delete' . $character->getId(), $request->request->get('_csrf_token'))) {
 
             $entityManager = $this->getDoctrine()->getManager();
 
-            $baliseur->remplacerIconeParDefaut($character);
+            $nameTagger->replaceWithDefaultIcon($character);
             $fileHandler->handle(null, $character->getIcone(), null, 'personnages');
             $fileHandler->handle(null, $character->getIllustration(), null, 'personnages');
 

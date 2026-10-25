@@ -83,12 +83,12 @@
     </div>
   </div>
 
-  {% if autresObjets is not empty %}
+  {% if other_objects is not empty %}
     <div class="col-12">
       {{ include('/parts/picture-grid.html.twig', {
-        items: autresObjets,
+        items: other_objects,
         title: 'Autres ' ~ (categories[un_element.categorie]|default(un_element.categorie))|lower ~ 's',
-        route: 'regles_objet',
+        route: 'rules_object',
         variant: 'rule',
         field: 'icon',
         na_image: NA_43,

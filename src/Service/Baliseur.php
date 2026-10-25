@@ -106,7 +106,7 @@ class Baliseur
             if ($personnage_trouve != null) {
                 $icone_personnage = '../../' . ($personnage_trouve->getIcone() ?: $this->iconeParDefaut($personnage_trouve));
                 $tableau_remplacement[] =
-                    '<a class="tag-character hover-zoom-quick character-icon bg-background pr-1 pt-0 pb-0 pl-0" href="../../personnages/profil/' . $personnage_trouve->getId() . '">'
+                    '<a class="tag-character hover-zoom-quick character-icon bg-background pr-1 pt-0 pb-0 pl-0" href="../../characters/profile/' . $personnage_trouve->getId() . '">'
                                 . '<img class="character-portrait small" src="../../' . $icone_personnage
                                 . '" alt="Icône personnage" /> ' . $personnage_trouve->getPrenom() . '</a>';
             } else

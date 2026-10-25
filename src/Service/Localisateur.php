@@ -32,14 +32,31 @@ class Localisateur
     public function positions(): array
     {
         $positions = [];
-        $libres = $this->libres();
-        foreach ($this->parcours() as $id => $parcours) {
-            if (!isset($libres[$id])) {
-                $positions[$parcours['lieux'][0]->getId()][] = $parcours['personnage'];
+        foreach ($this->joueurs() as $joueur) {
+            if ($joueur['lieu'] !== null) {
+                $positions[$joueur['lieu']->getId()][] = $joueur['personnage'];
             }
         }
 
         return $positions;
+    }
+
+    public function joueurs(): array
+    {
+        $joueurs = [];
+        $libres = $this->libres();
+        foreach ($this->parcours() as $id => $parcours) {
+            if (!isset($libres[$id])) {
+                $lieu = $parcours['lieux'][0];
+                $joueurs[] = ['personnage' => $parcours['personnage'], 'lieu' => $lieu, 'locX' => $lieu->getLocX(), 'locY' => $lieu->getLocY()];
+            }
+        }
+
+        foreach ($libres as $libre) {
+            $joueurs[] = ['personnage' => $libre['personnage'], 'lieu' => null, 'locX' => $libre['locX'], 'locY' => $libre['locY']];
+        }
+
+        return $joueurs;
     }
 
     public function libres(): array
@@ -64,7 +81,7 @@ class Localisateur
         return $libres[$personnage->getId()] ?? null;
     }
 
-    public function chemin(?Personnage $personnage, int $longueur = 5): array
+    public function chemin(?Personnage $personnage, int $longueur = 6): array
     {
         if ($personnage === null) {
             return [];

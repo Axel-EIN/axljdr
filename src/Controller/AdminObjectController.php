@@ -4,7 +4,7 @@ namespace App\Controller;
 
 use App\Service\TableFilter;
 use App\Entity\Objet;
-use App\Service\Numeroteur;
+use App\Service\Orderer;
 use App\Form\AdminObjectType;
 use App\Service\FileHandler;
 use App\Repository\ObjetRepository;
@@ -63,7 +63,7 @@ class AdminObjectController extends AbstractController
      * @Route("/admin/object/create", name="admin_object_create")
      * @IsGranted("ROLE_MJ")
      */
-    public function addObject(Request $request, EntityManagerInterface $em, FileHandler $fileHandler, ObjetRepository $objectRepository, Numeroteur $numeroteur, Unlocker $unlocker, TableFilter $tableFilter) {
+    public function addObject(Request $request, EntityManagerInterface $em, FileHandler $fileHandler, ObjetRepository $objectRepository, Orderer $orderer, Unlocker $unlocker, TableFilter $tableFilter) {
 
         $object = new Objet;
         $tableFilter->prefill($object, self::TABLE_FILTERS, $request->query->all('filter'));
@@ -104,7 +104,7 @@ class AdminObjectController extends AbstractController
             $em->flush();
             $this->addFlash('success', "L'Objet a bien été ajouté.");
 
-            $numeroteur->reordonnerNumero( $object->getId() , -1 , $object->getNumero() , [] , $newSiblings );
+            $orderer->reorderNumber( $object->getId() , -1 , $object->getNumero() , [] , $newSiblings );
 
             if (!empty($request->query->get('redirect')) && $request->query->get('redirect') == 'library'
             && !empty($request->query->get('libraryID')) && $request->query->get('libraryID') > 0)
@@ -128,7 +128,7 @@ class AdminObjectController extends AbstractController
      * @Route("/admin/object/{id}/edit", name="admin_object_edit")
      * @IsGranted("ROLE_MJ")
      */
-    public function editObject(Request $request, Objet $object, FileHandler $fileHandler, ObjetRepository $objectRepository, Numeroteur $numeroteur, Unlocker $unlocker): Response {
+    public function editObject(Request $request, Objet $object, FileHandler $fileHandler, ObjetRepository $objectRepository, Orderer $orderer, Unlocker $unlocker): Response {
 
         if ( empty( $object->getNumero() ) || !is_numeric( $object->getNumero() ) || $object->getNumero() < 0)
             $previousNumber = -1;
@@ -168,7 +168,7 @@ class AdminObjectController extends AbstractController
             {
                 $previousSiblings = $objectRepository->findBy(['type' => $previousSiblingsId]);
                 $newSiblings = $objectRepository->findBy(['type' => $object->getType()]);
-                $numeroteur->reordonnerNumero($object->getId(), $previousNumber, $object->getNumero(), $previousSiblings, $newSiblings);
+                $orderer->reorderNumber($object->getId(), $previousNumber, $object->getNumero(), $previousSiblings, $newSiblings);
             }
 
             $unlocker->sync($object, $form->get('unlockedBy')->getData());

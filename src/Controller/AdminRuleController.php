@@ -30,8 +30,8 @@ class AdminRuleController extends AbstractController
             'element' => 'rule',
             'label' => 'Rule',
             'labels' => 'Rules',
-            'genre' => 'F',
-            'determinant' => 'une',
+            'gender' => 'F',
+            'article' => 'une',
             'table_cols' => [
                 'image:Image:image:NA_RULE',
                 'nom:Nom::bold',
@@ -90,11 +90,11 @@ class AdminRuleController extends AbstractController
         }
 
         return $this->render('back_office/create.html.twig', [
-            'type' => 'Créer',
+            'type' => 'create',
             'entity' => 'rule',
             'label' => 'Rule',
-            'genre' => 'F',
-            'determinant' => 'une',
+            'gender' => 'F',
+            'article' => 'une',
             'form' => $form->createView()
         ]);
     }
@@ -148,12 +148,12 @@ class AdminRuleController extends AbstractController
         }
 
         return $this->renderForm('back_office/edit.html.twig', [
-            'type' => 'Modifier',
+            'type' => 'edit',
             'rule' => $rule,
             'entity' => 'rule',
             'label' => 'Rule',
-            'genre' => 'F',
-            'determinant' => 'une',
+            'gender' => 'F',
+            'article' => 'une',
             'form' => $form,
         ]);
     }

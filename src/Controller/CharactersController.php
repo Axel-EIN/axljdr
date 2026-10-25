@@ -89,13 +89,13 @@ class CharactersController extends AbstractController
 
         $sections = [];
         $sections[0]['name'] = "PJs";
-        $sections[0]['entity'] = 'personnage';
+        $sections[0]['entity'] = 'character';
         $sections[0]['label_one'] = "un personnage";
         $sections[0]['titleLight'] = '';
         $sections[0]['titleStrong'] = 'Personnages Joueurs';
 
         $sections[1]['name'] = "PNJs";
-        $sections[1]['entity'] = 'personnage';
+        $sections[1]['entity'] = 'character';
         $sections[1]['label_one'] = "un personnage";
         $sections[1]['titleLight'] = '';
         $sections[1]['titleStrong'] = 'Personnages non-joueurs';
@@ -127,7 +127,7 @@ class CharactersController extends AbstractController
      */
     public function showProfile(Personnage $character, PersonnageRepository $characterRepository, ClasseurHistorique $classeur, SaisonRepository $seasonRepository, Visibility $visibility, DevelopmentRepository $developmentRepository, Baliseur $baliseur, ClasseurXP $classeurXP, Localisateur $localisateur): Response {
 
-        if ($response = $this->accessGuard($visibility, $character, 'personnage', 'characters')) {
+        if ($response = $this->accessGuard($visibility, $character, 'character', 'characters')) {
             return $response;
         }
 
@@ -158,7 +158,7 @@ class CharactersController extends AbstractController
             'form' => $form?->createView(),
             'developments' => $developmentRepository->findByPersonnage($character),
             'nom' => $character->getNomComplet(),
-            'entity' => 'personnage',
+            'entity' => 'character',
             'category' => 'characters',
             'un_element' => $character,
             'xp' => $totalXp,

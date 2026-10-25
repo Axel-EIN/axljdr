@@ -43,8 +43,8 @@ class AdminSceneController extends AbstractController
             'element' => 'scene',
             'label' => 'Scène',
             'labels' => 'Scènes',
-            'genre' => 'F',
-            'determinant' => 'une',
+            'gender' => 'F',
+            'article' => 'une',
             'table_filters' => self::TABLE_FILTERS,
             'table_cols' => [
                 'image:Image:image:NA_SCENE',
@@ -71,10 +71,10 @@ class AdminSceneController extends AbstractController
         $allPcs  = $characterRepository->findAllPJsSorted();
         $allNpcs = $characterRepository->findAllPNJsSorted();
 
-        if ( !empty($request->query->get('numero')) && $request->query->get('numero') > 0
+        if ( !empty($request->query->get('number')) && $request->query->get('number') > 0
         && !empty($request->query->get('episodeID')) && $request->query->get('episodeID') > 0 )
         {
-            $scene->setNumero($request->query->get('numero'));
+            $scene->setNumero($request->query->get('number'));
             $episodeParent = $episodeRepository->find($request->query->get('episodeID'));
             if ($episodeParent !== null)
                 $scene->setEpisodeParent($episodeParent);
@@ -92,8 +92,8 @@ class AdminSceneController extends AbstractController
             }
 
             $participantsToAdd = $participationHandler->mergeParticipants($request->get('participants'), $request->get('participants_xp'),
-                                                                                    $request->get('participants_mort'), $request->get('participants_pnjs'),
-                                                                                    $request->get('participants_pnjs_mort'), $request->get('participants_xpBonus'));
+                                                                                    $request->get('participants_dead'), $request->get('npc_participants'),
+                                                                                    $request->get('npc_participants_dead'), $request->get('participants_xpBonus'));
 
             $participationHandler->addParticipations($participantsToAdd, $scene);
 
@@ -119,13 +119,13 @@ class AdminSceneController extends AbstractController
         }
 
         return $this->render('back_office/create.html.twig', [
-            'type' => 'Créer',
+            'type' => 'create',
             'entity' => 'scene',
             'label' => 'Scène',
-            'genre' => 'F',
-            'determinant' => 'une',
-            'tout_pjs' => $allPcs,
-            'tout_pnjs' => $allNpcs,
+            'gender' => 'F',
+            'article' => 'une',
+            'all_pcs' => $allPcs,
+            'all_npcs' => $allNpcs,
             'form' => $form->createView(),
         ]);
     }
@@ -164,8 +164,8 @@ class AdminSceneController extends AbstractController
             }
 
             $updatedParticipants = $participationHandler->mergeParticipants($request->get('participants'), $request->get('participants_xp'),
-                                                                                    $request->get('participants_mort'), $request->get('participants_pnjs'),
-                                                                                    $request->get('participants_pnjs_mort'), $request->get('participants_xpBonus'));
+                                                                                    $request->get('participants_dead'), $request->get('npc_participants'),
+                                                                                    $request->get('npc_participants_dead'), $request->get('participants_xpBonus'));
 
             $allParticipations = array_merge($pcParticipations, $npcParticipations);
 
@@ -248,17 +248,17 @@ class AdminSceneController extends AbstractController
         }
 
         return $this->renderForm('back_office/edit.html.twig', [
-            'type' => 'Modifier',
+            'type' => 'edit',
             'scene' => $scene,
             'entity' => 'scene',
             'label' => 'Scène',
-            'genre' => 'F',
-            'determinant' => 'une',
+            'gender' => 'F',
+            'article' => 'une',
             'form' => $form,
-            'participations_pjs' => $pcParticipations,
-            'participations_pnjs' => $npcParticipations,
-            'tout_pjs' => $allPcs,
-            'tout_pnjs' => $allNpcs,
+            'pc_participations' => $pcParticipations,
+            'npc_participations' => $npcParticipations,
+            'all_pcs' => $allPcs,
+            'all_npcs' => $allNpcs,
         ]);
     }
 

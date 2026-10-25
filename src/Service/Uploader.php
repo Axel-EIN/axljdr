@@ -31,15 +31,15 @@ class Uploader extends AbstractController
         $this->targetDirectory = $targetDirectory;
     }
 
-    public function upload(UploadedFile $fichierForm, $prefix, $categorie, ?string $ancienFichier = null): ?string
+    public function upload(UploadedFile $uploadedFile, $prefix, $category, ?string $previousFile = null): ?string
     {
-        $mimeType = $this->detectRealMimeType($fichierForm);
+        $mimeType = $this->detectRealMimeType($uploadedFile);
         if (!in_array($mimeType, self::ALLOWED_MIME_TYPES, true)) {
             $this->addFlash('danger', 'Type de fichier non autorisé (' . $mimeType . ')');
             return null;
         }
 
-        $extension = $this->resolveExtension($fichierForm, $mimeType);
+        $extension = $this->resolveExtension($uploadedFile, $mimeType);
         if (!in_array($extension, self::ALLOWED_EXTENSIONS, true)) {
             $this->addFlash('danger', 'Extension de fichier non autorisée (' . $extension . ')');
             return null;
@@ -62,16 +62,16 @@ class Uploader extends AbstractController
         }
 
         $base = $prefix;
-        $rang = 2;
-        while ($this->nomPris($categorie, $prefix, $ancienFichier)) {
-            $prefix = $base . '-' . $rang++;
+        $suffix = 2;
+        while ($this->isNameTaken($category, $prefix, $previousFile)) {
+            $prefix = $base . '-' . $suffix++;
         }
 
-        $nouveau_nomFichier = $prefix . '.' . $extension;
+        $newFilename = $prefix . '.' . $extension;
 
         try
         {
-            $fichierForm->move($this->getTargetDirectory($categorie), $nouveau_nomFichier);
+            $uploadedFile->move($this->getTargetDirectory($category), $newFilename);
         }
         catch (FileException $e)
         {
@@ -79,26 +79,26 @@ class Uploader extends AbstractController
             return null;
         }
 
-        return $nouveau_nomFichier;
+        return $newFilename;
     }
 
-    private function nomPris(string $categorie, string $nom, ?string $ancienFichier): bool
+    private function isNameTaken(string $category, string $name, ?string $previousFile): bool
     {
-        if ($ancienFichier !== null && pathinfo($ancienFichier, PATHINFO_FILENAME) === $nom) {
+        if ($previousFile !== null && pathinfo($previousFile, PATHINFO_FILENAME) === $name) {
             return false;
         }
 
-        return !empty(glob($this->getTargetDirectory($categorie) . '/' . $nom . '.*'));
+        return !empty(glob($this->getTargetDirectory($category) . '/' . $name . '.*'));
     }
 
-    private function detectRealMimeType(UploadedFile $fichier): string
+    private function detectRealMimeType(UploadedFile $file): string
     {
         $finfo = new \finfo(FILEINFO_MIME_TYPE);
 
-        return $finfo->file($fichier->getPathname());
+        return $finfo->file($file->getPathname());
     }
 
-    private function resolveExtension(UploadedFile $fichier, string $mimeType): ?string
+    private function resolveExtension(UploadedFile $file, string $mimeType): ?string
     {
         $mimeTypes = new MimeTypes();
         $extensions = $mimeTypes->getExtensions($mimeType);
@@ -107,15 +107,15 @@ class Uploader extends AbstractController
             return $extensions[0];
         }
 
-        return $fichier->guessExtension();
+        return $file->guessExtension();
     }
 
-    public function getTargetDirectory($categorie)
+    public function getTargetDirectory($category)
     {
-        if (!preg_match('/^[a-zA-Z0-9\-]+$/', $categorie)) {
+        if (!preg_match('/^[a-zA-Z0-9\-]+$/', $category)) {
             throw new \InvalidArgumentException('Catégorie de fichier invalide');
         }
 
-        return $this->targetDirectory . '/' . $categorie;
+        return $this->targetDirectory . '/' . $category;
     }
 }

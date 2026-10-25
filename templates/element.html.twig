@@ -11,7 +11,7 @@
   <main class="container-fluid element-page">
     <div class="container relative">
 
-      {% set category_label = {world: 'Univers'}[category] ?? category|capitalize %}
+      {% set category_label = {world: 'Univers', story: 'Aventure'}[category] ?? category|capitalize %}
       {% if category == 'personnages' and entity == 'fiche' %}
         {% set fil = [
           { label: category_label, path: path(category) },

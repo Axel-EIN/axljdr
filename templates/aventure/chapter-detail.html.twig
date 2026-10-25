@@ -1,5 +1,5 @@
 {% set chapter_image = un_chapitre.image|default(NA_CHAPITRE) %}
-<section class="chapter-backdrop chapter-banner" style="--chapter-color: {{ un_chapitre.couleur }}">
+<section id="read-head-ch-id{{ un_chapitre.id }}" class="chapter-backdrop banner" style="--chapter-color: {{ un_chapitre.couleur }}">
 
   <img class="chapter-backdrop-image zoomed{{ image_bright(chapter_image) ? ' bright' }}" src="{{ asset(chapter_image) }}" {% if lazy ?? true %}loading="lazy"{% endif %} alt="" />
 
@@ -39,7 +39,7 @@
       {{ include('aventure/chapter-characters.html.twig', {un_chapitre, bloc: 'lieux'}) }}
 
       <div>
-        <h2 id="read-head-ch-id{{ un_chapitre.id }}" class="heading-chapter{% if un_chapitre.titre|length > 20 %} reduced{% endif %}">{{ un_chapitre.titre|relief|raw }}</h2>
+        <h2 class="heading-chapter{% if un_chapitre.titre|length > 20 %} reduced{% endif %}">{{ un_chapitre.titre|relief|raw }}</h2>
         <div class="chapter-intro relative">
           {{ include('aventure/chapter-characters.html.twig', {un_chapitre}) }}
           {% if un_chapitre.citation is not empty %}

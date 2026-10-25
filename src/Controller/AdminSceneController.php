@@ -273,7 +273,6 @@ class AdminSceneController extends AbstractController
         if ($this->isCsrfTokenValid('delete' . $scene->getId(), $request->request->get('_csrf_token'))) {
 
             $entityManager = $this->getDoctrine()->getManager();
-            $nomImageASupprimer = basename($scene->getImage());
 
             $fileHandler->handle(null, $scene->getImage(), null, 'scenes');
 

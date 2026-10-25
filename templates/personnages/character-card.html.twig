@@ -3,11 +3,13 @@
 {% set state = element_state(perso) %}
 {% set readable = element_readable(perso) %}
 {% set locked = state == 'locked' and not (app.user and is_granted('ROLE_MJ')) %}
+{% set hide_clan = hide_clan|default(false) %}
+{% set compact = compact|default(false) %}
 
-<article class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2 py-3 {{ perso.dead or perso.missing ? 'perso-inactif' }}">
+<article class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2 {{ compact ? 'py-2' : 'py-3' }} {{ perso.dead or perso.missing ? 'perso-inactif' }}">
 
     {% if readable %}
-        <a href="{{ path('personnage_profil', {id: perso.id} ) }}" alt="Carte d'un personnage" title="Voir le profil de {{perso.prenom}}">
+        <a href="{{ path('personnage_profil', {id: perso.id} ) }}" title="Voir le profil de {{perso.prenom}}">
     {% endif %}
 
     {% set zoom, translucide, hover_opaque, text, tint, grayscale = 'hover-zoom', '', '', 'text-white', '', '' %}
@@ -38,7 +40,7 @@
                     <i class="absolute icon-missing-big fas fa-circle-question" title="Disparu"></i>
                 {% endif %}
 
-                {% if perso.clan %}
+                {% if perso.clan and not hide_clan %}
                     <img class="absolute corner-badge {{grayscale}} {{tint}}" src="{{ asset(image_small(perso.clan.mon|default(NA_MON))) }}" alt="Mon d'un clan"/>
                 {% endif %}
 

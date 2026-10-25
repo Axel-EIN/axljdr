@@ -198,13 +198,13 @@
         {% set other_size = other_secret ? '' : {'Cité': ' city', 'Ville': ' city', 'Région': ' region', 'Temple': ' temple'}[other.type] ?? '' %}
         {% set other_color = other_secret ? null : other.clan.couleur ?? null %}
         <a {% if other_secret %}aria-disabled="true"{% else %}href="{{ path('world_location', {id: other.id}) }}"{% if worldmap %} data-panel="{{ path('map_location', {id: other.id}) }}"{% endif %}{% endif %}
-           class="absolute lieu-other-icon{{ other_size }}" data-lieu="{{ other.id }}"
+           class="absolute other-location-marker{{ other_size }}" data-lieu="{{ other.id }}"
            style="left:{{other.locX}}%; top:{{other.locY}}%;{% if other_color %} --clan-color: {{other_color}};{% endif %}">
           {% if other_secret %}
-            <span class="lieu-other-unknown">?</span>
+            <span class="other-location-unknown">?</span>
             {{ include('parts/map-label.html.twig', {name: 'Inconnu', variant: 'compact'}) }}
           {% else %}
-            <img class="lieu-icon" src="{{ asset(other.icone|default(NA_LIEU_ICO)) }}" alt="Icone de {{ other.nom }}" />
+            <img class="location-marker-icon" src="{{ asset(other.icone|default(NA_LIEU_ICO)) }}" alt="Icone de {{ other.nom }}" />
             {{ include('parts/map-label.html.twig', {
               name: other.nom,
               mon: other.clan.mon ?? null,
@@ -242,9 +242,9 @@
     {% endif %}
 
     {% if current %}
-      <img class="absolute lieu-pulse-icon" style="left:{{current.locX}}%; top:{{current.locY}}%" src="{{ asset(current.icone|default(NA_LIEU_ICO)) }}" alt="Icone de {{current.nom}}" />
+      <img class="absolute location-pulse-icon" style="left:{{current.locX}}%; top:{{current.locY}}%" src="{{ asset(current.icone|default(NA_LIEU_ICO)) }}" alt="Icone de {{current.nom}}" />
 
-      <div class="absolute lieu-current-label" style="left:{{current.locX}}%; top:{{current.locY}}%">Lieu actuel</div>
+      <div class="absolute location-current-label" style="left:{{current.locX}}%; top:{{current.locY}}%">Lieu actuel</div>
 
       {{ include('parts/map-label.html.twig', {
         name: current.nom,
@@ -269,7 +269,7 @@
     <div class="minimap absolute">
       <div class="relative overflow-hidden">
         {% if current %}
-          <img class="absolute localisator-ui" style="left:{{current.locX}}%; top:{{current.locY}}%" src="{{asset('assets/maps/mini-localisator.png')}}" alt="" />
+          <img class="absolute locator-ui" style="left:{{current.locX}}%; top:{{current.locY}}%" src="{{asset('assets/maps/mini-localisator.png')}}" alt="" />
         {% else %}
           <span class="absolute minimap-view"></span>
         {% endif %}

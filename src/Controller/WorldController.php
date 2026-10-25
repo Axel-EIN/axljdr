@@ -60,7 +60,7 @@ class WorldController extends AbstractController
 
     $i++;
     $sections[$i]['name'] = "Lieux";
-    $sections[$i]['entity'] = 'lieu';
+    $sections[$i]['entity'] = 'location';
     $sections[$i]['label_one'] = "un lieu";
     $sections[$i]['titleLight'] = 'Les ';
     $sections[$i]['titleStrong'] = 'Lieux';
@@ -141,7 +141,7 @@ class WorldController extends AbstractController
    */
   public function showLocation(Lieu $location, LieuRepository $locationRepository, ClasseurHistorique $classeur, SaisonRepository $seasonRepository, Visibility $visibility): Response
   {
-    if ($response = $this->accessGuard($visibility, $location, 'lieu', 'world')) {
+    if ($response = $this->accessGuard($visibility, $location, 'location', 'world')) {
       return $response;
     }
 
@@ -158,7 +158,7 @@ class WorldController extends AbstractController
     return $this->render('world/location.html.twig', [
       'un_element' => $location,
       'nom' => $location->getNom(),
-      'entity' => 'lieu',
+      'entity' => 'location',
       'category' => 'world',
       'lieux' => $locations,
       'other_locations' => $otherLocations,

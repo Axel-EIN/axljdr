@@ -22,11 +22,11 @@
             {% if dernier_episode %}
                 <div class="session-split">
                     <div>
-                        {{ include('/aventure/episode-card.html.twig', {
+                        {{ include('/story/episode-card.html.twig', {
                             un_episode: dernier_episode,
                             wrapper: 'w-100',
                             lazy: false,
-                            user_personnages_cumul_episodes: [],
+                            user_characters_episode_totals: [],
                         }) }}
                     </div>
 
@@ -81,7 +81,7 @@
                         <div class="session-group">
                             <h3 class="label-amerigo news-subtitle text-white mt-4">Séances précédentes</h3>
                             {% for un_episode in session_previous %}
-                                <a class="episode-row inverted" href="{{ path('aventure_episode', {id: un_episode.id}) }}">
+                                <a class="episode-row inverted" href="{{ path('story_episode', {id: un_episode.id}) }}">
                                     <span class="episode-number">#{{ un_episode.numeroSaison }}</span>
                                     <span class="episode-text">
                                         <strong>{{ un_episode.titre }}</strong>
@@ -97,13 +97,13 @@
                 {% if chapitre %}
                     {% set saison = chapitre.saisonParent %}
                     <div class="session-links">
-                        <a class="session-link" href="{{ path('aventure_saison', {id: saison.id}) }}">
-                            <img src="{{ asset(AVENTURE_SAISON_ICO) }}" alt="Icône de saison" />
+                        <a class="session-link" href="{{ path('story_season', {id: saison.id}) }}">
+                            <img src="{{ asset(STORY_SEASON_ICO) }}" alt="Icône de saison" />
                             <span>Saison {{ saison.numero }}</span>
                         </a>
 
-                        <a class="session-link" href="{{ path('aventure_saison', {id: saison.id}) }}#read-head-ch-id{{ chapitre.id }}">
-                            <img src="{{ asset(AVENTURE_CHAPITRE_ICO) }}" alt="Icône de chapitre" />
+                        <a class="session-link" href="{{ path('story_season', {id: saison.id}) }}#read-head-ch-id{{ chapitre.id }}">
+                            <img src="{{ asset(STORY_CHAPTER_ICO) }}" alt="Icône de chapitre" />
                             <span>Chapitre {{ chapitre.numero }} — {{ chapitre.titre }}</span>
                         </a>
                     </div>
@@ -177,7 +177,7 @@
                         {% set episode = scene.episodeParent %}
                         {% set perso = participation.personnage %}
                         {% set cumul = participations_xp[participation.id]|default(null) %}
-                        <a class="episode-row" href="{{ path('aventure_episode', {id: episode.id}) }}">
+                        <a class="episode-row" href="{{ path('story_episode', {id: episode.id}) }}">
                             <span class="portrait-slot">
                                 <img class="character-portrait medium outlined {{ participation.estMort ? 'effect-dead' }}"
                                      src="{{ asset(perso.icone|default(NA_PERSO_PORTRAIT)) }}"

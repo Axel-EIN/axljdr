@@ -70,30 +70,30 @@ class AdminSpellController extends AbstractController
         $spell = new Sort;
         $tableFilter->prefill($spell, self::TABLE_FILTERS, $request->query->all('filter'));
 
-        $param_numero = $request->query->get('numero');
-        if ( !empty($param_numero) && is_numeric($param_numero) && $param_numero > 0 )
-            $spell->setNumero($param_numero);
+        $numberParam = $request->query->get('numero');
+        if ( !empty($numberParam) && is_numeric($numberParam) && $numberParam > 0 )
+            $spell->setNumero($numberParam);
 
-        $param_categorie = $request->query->get('tab');
-        if ( !empty($param_categorie) && !is_numeric($param_categorie) )
-            $spell->setCategorie($param_categorie);
+        $categoryParam = $request->query->get('tab');
+        if ( !empty($categoryParam) && !is_numeric($categoryParam) )
+            $spell->setCategorie($categoryParam);
 
-        $param_anneau = $request->query->get('subtab');
-        if ( !empty($param_anneau) && !is_numeric($param_anneau) )
-            $spell->setAnneau($param_anneau);
+        $ringParam = $request->query->get('subtab');
+        if ( !empty($ringParam) && !is_numeric($ringParam) )
+            $spell->setAnneau($ringParam);
 
         $form = $this->createForm(AdminSpellType::class, $spell);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
 
-            $formNumero = $form->get('numero')->getData();
+            $formNumber = $form->get('numero')->getData();
             $newSiblings = $spellRepository->findBy(['anneau' => $form->get('anneau')->getData()]);
 
-            if ( empty($formNumero) || !is_numeric($formNumero) || $formNumero < 1 )
+            if ( empty($formNumber) || !is_numeric($formNumber) || $formNumber < 1 )
                 $spell->setNumero( count($newSiblings) + 1 );
             else
-                $spell->setNumero( $formNumero );
+                $spell->setNumero( $formNumber );
 
             $em->persist($spell);
             $em->flush();

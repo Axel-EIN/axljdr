@@ -47,13 +47,13 @@ class AdminDevelopmentController extends AbstractController
      * @Route("/admin/development/create", name="admin_development_create")
      * @IsGranted("ROLE_MJ")
      */
-    public function addDevelopment(Request $request, EntityManagerInterface $em, PersonnageRepository $personnageRepository, Baliseur $baliseur): Response
+    public function addDevelopment(Request $request, EntityManagerInterface $em, PersonnageRepository $characterRepository, Baliseur $baliseur): Response
     {
         $development = new Development;
         $form = $this->createForm(AdminDevelopmentType::class, $development);
 
-        if ($personnageId = $request->query->get('personnage')) {
-            $form->get('personnage')->setData($personnageRepository->find($personnageId));
+        if ($characterId = $request->query->get('character')) {
+            $form->get('personnage')->setData($characterRepository->find($characterId));
         }
 
         $form->handleRequest($request);

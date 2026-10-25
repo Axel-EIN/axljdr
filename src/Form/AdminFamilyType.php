@@ -17,7 +17,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Validator\Constraints\File;
 use Symfony\Component\Validator\Constraints\Length;
 
-class AdminFamilleType extends AbstractType
+class AdminFamilyType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {

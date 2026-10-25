@@ -7,8 +7,8 @@
 
             <div class="col-12 mt-3 mb-5">
                 {{ include('parts/image-field.html.twig', {
-                    field: form.image, input_id: 'admin_saison_image', prefix: 'image',
-                    current: saison.image|default(null), fallback: NA_SAISON,
+                    field: form.image, input_id: 'admin_season_image', prefix: 'image',
+                    current: season.image|default(null), fallback: NA_SAISON,
                     label: 'Image (1920×1080 16:9 recommandé)', width: 1920, height: 1080 }) }}
             </div>
 

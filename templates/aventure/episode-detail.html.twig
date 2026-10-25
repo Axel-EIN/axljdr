@@ -15,7 +15,7 @@
 {% set chapter_srcset = image_srcset(chapter_image) %}
 <div class="chapter-backdrop padded" style="--chapter-color: {{ episode.chapitreParent.couleur }}">
 
-  <img class="chapter-backdrop-image{{ image_bright(chapter_image) ? ' bright' }}" src="{{ asset(chapter_image) }}"
+  <img class="chapter-backdrop-image tall{{ image_bright(chapter_image) ? ' bright' }}" src="{{ asset(chapter_image) }}"
     {% if chapter_srcset %}
       srcset="{{ chapter_srcset }}"
       sizes="100vw"
@@ -146,7 +146,7 @@
                     <div class="relative inlineblock mr-4">
                       {% if mvp == true and rank == 1 %}<i class="crown fa-solid fa-crown fa-2xl text-primary mr-4"></i>{% endif %}
                       <span class="heading-present">
-                        <span class="text-body-c">{{un_personnage.prenom}}</span>
+                        <span class="text-strong">{{un_personnage.prenom}}</span>
                       </span>
                     </div>
                     <div class="ml-auto text-right">

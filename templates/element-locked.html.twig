@@ -1,6 +1,6 @@
 {% extends 'element.html.twig' %}
 
-{% set nom = ENTITY_LABELS[entity]|default('Élément') ~ ' à découvrir' %}
+{% set name = ENTITY_LABELS[entity]|default('Élément') ~ ' à découvrir' %}
 
 {% block element_content %}
 
@@ -9,7 +9,7 @@
     location: NA_LIEU, lore: NA_LORE, object: NA_OBJET, rule: NA_RULE,
   } %}
 
-  {% set attentes = {
+  {% set locked_texts = {
     archive:    "Cette archive n'a pas encore été déverrouillée dans l'aventure. Seules vos actions, jeunes samuraïs, vous permettront d'en percer les secrets.",
     clan:       "Cette faction n'a pas encore été déverrouillée dans l'aventure. Seules vos actions, jeunes samuraïs, vous permettront un jour de la côtoyer.",
     dojo:       "Cette école n'a pas encore été déverrouillée dans l'aventure. Seules vos actions, jeunes samuraïs, vous permettront un jour d'en apprendre les techniques.",
@@ -30,13 +30,13 @@
         {{ include('/parts/card-top-image.html.twig', {
           image: placeholders[entity]|default(NA_1610),
           na_image: NA_1610,
-          alt: nom,
+          alt: name,
           img_class: 'crop-169 grayscale',
-          titre: nom,
+          title: name,
         }) }}
       </div>
 
-      <p class="card-description texte-attente leading-15">{{ attentes[entity]|default("Cet élément n'a pas encore été déverrouillé dans l'aventure. Seules vos actions, jeunes samuraïs, vous permettront un jour de le découvrir.") }}</p>
+      <p class="card-description texte-attente leading-15">{{ locked_texts[entity]|default("Cet élément n'a pas encore été déverrouillé dans l'aventure. Seules vos actions, jeunes samuraïs, vous permettront un jour de le découvrir.") }}</p>
 
     </div>
   </div>

@@ -28,18 +28,18 @@
 
             {% block child %}
 
-                {% if is_mj() %}
+                {% if is_gm() %}
                     {% for section in [
-                        {titre: 'Aventure',    texte: "Éléments ajoutés pour le descriptif de l'aventure."},
-                        {titre: 'Personnages', texte: 'Tous les personnages enregistrés.'},
-                        {titre: 'Univers',     texte: "Éléments ajoutés pour le descriptif de l'univers de jeu."},
-                        {titre: 'Règles',      texte: 'Éléments ajoutés pour les mécaniques de jeu.'},
+                        {title: 'Aventure',    text: "Éléments ajoutés pour le descriptif de l'aventure."},
+                        {title: 'Personnages', text: 'Tous les personnages enregistrés.'},
+                        {title: 'Univers',     text: "Éléments ajoutés pour le descriptif de l'univers de jeu."},
+                        {title: 'Règles',      text: 'Éléments ajoutés pour les mécaniques de jeu.'},
                     ] %}
-                        <h2 class="heading-categorysubsection mt-5">{{ section.titre }}</h2>
-                        <p class="mb-4 text-muted">{{ section.texte }}</p>
+                        <h2 class="heading-categorysubsection mt-5">{{ section.title }}</h2>
+                        <p class="mb-4 text-muted">{{ section.text }}</p>
                         <section class="row pb-5">
-                            {% for admin_element in admin_elements|filter(e => e.categorie == section.titre) %}
-                                {{ include('back_office/card-element-resume.html.twig', admin_element) }}
+                            {% for admin_element in admin_elements|filter(e => e.category == section.title) %}
+                                {{ include('back_office/card-element-summary.html.twig', admin_element) }}
                             {% endfor %}
                         </section>
                     {% endfor %}
@@ -49,12 +49,12 @@
                     <h2 class="heading-categorysubsection mt-5">Comptes Utilisateurs</h2>
                     <p class="mb-4 text-muted">Tous les comptes utilisateurs.</p>
                     <section class="row pb-5">
-                        {{ include('back_office/card-element-resume.html.twig', {
+                        {{ include('back_office/card-element-summary.html.twig', {
                             label: 'Utilisateurs',
                             element: 'user',
-                            nbr: nbrUsers,
+                            count: userCount,
                             last: lastUser,
-                            nom: lastUser ? lastUser.pseudo : null,
+                            name: lastUser ? lastUser.pseudo : null,
                             image: lastUser ? lastUser.avatar : null,
                         }) }}
                     </section>

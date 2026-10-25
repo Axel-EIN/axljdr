@@ -30,7 +30,7 @@ class AdminLibraryType extends AbstractType
                 'choices'  => [
                     'Avantages / Désavantages' => 'advantage',
                     'Compétences' => 'skill',
-                    'Objets' => 'objet',
+                    'Objets' => 'object',
                     'Sorts' => 'spell',
                     'Kihos' => 'kiho',
                     'Sorts de Mahos' => 'maho',

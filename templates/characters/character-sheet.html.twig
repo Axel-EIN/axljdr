@@ -154,8 +154,8 @@
                 <small>
                   (
                   {{ xp.creation }}
-                  {% if xp.desavantages > 0 %}
-                    + <span class="xp-desav-value text-success">{{ xp.desavantages }}</span>
+                  {% if xp.disadvantages > 0 %}
+                    + <span class="xp-desav-value text-success">{{ xp.disadvantages }}</span>
                   {% endif %}
                   + {{ xp.progression }}
                   )
@@ -163,24 +163,24 @@
               </li>
               <li>
                 <span class="label">Dépensés :</span>
-                <strong><span class="xp-spent-value">{{ xp.depense }}</span>xp</strong>
+                <strong><span class="xp-spent-value">{{ xp.spent }}</span>xp</strong>
                 &nbsp;
                 <small>
                   (
                   <span class="xp-traits-value">
-                    {% if xp.avantages > 0 %}
-                      <span class="xp-avant-value text-danger">{{ xp.avantages }} +</span>
+                    {% if xp.advantages > 0 %}
+                      <span class="xp-avant-value text-danger">{{ xp.advantages }} +</span>
                     {% endif %}
                     {{ xp.traits }}
                   </span>
                   +
-                  <span class="xp-comps-value">{{ xp.competences }}</span>
+                  <span class="xp-comps-value">{{ xp.skills }}</span>
                   )
                 </small>
               </li>
               <li>
                 <span class="label">Restants :</span>
-                <strong><span class="xp-remaining text-success">{{ xp.restant }}xp</span></strong>
+                <strong><span class="xp-remaining text-success">{{ xp.remaining }}xp</span></strong>
               </li>
             {% endif %}
 
@@ -365,13 +365,13 @@
               {% if is_own_character or is_mj() %}
                 <div class="flex-col p-1 bg-strong text-fade text-small rounded-8 edit-only">
                   <div class="label-amerigo">Exp.</div>
-                  <div class="flex w-100 justify-content-between {% if xp.desavantages == 0 %}d-none{% endif %}" id="xp-desav-row">
+                  <div class="flex w-100 justify-content-between {% if xp.disadvantages == 0 %}d-none{% endif %}" id="xp-desav-row">
                     Désavantages
-                    <span id="xp-desav-total" class="text-success">+{{ xp.desavantages }}xp</span>
+                    <span id="xp-desav-total" class="text-success">+{{ xp.disadvantages }}xp</span>
                   </div>
-                  <div class="flex w-100 justify-content-between {% if xp.avantages == 0 %}d-none{% endif %}" id="xp-avant-row">
+                  <div class="flex w-100 justify-content-between {% if xp.advantages == 0 %}d-none{% endif %}" id="xp-avant-row">
                     Avantages
-                    <span id="xp-avant-total" class="text-danger">-{{ xp.avantages }}xp</span>
+                    <span id="xp-avant-total" class="text-danger">-{{ xp.advantages }}xp</span>
                   </div>
                   <div class="flex w-100 justify-content-between">
                     Traits
@@ -379,11 +379,11 @@
                   </div>
                   <div class="flex w-100 justify-content-between">
                     Compétences
-                    <span id="xp-comps-total">-{{ xp.competences }}xp</span>
+                    <span id="xp-comps-total">-{{ xp.skills }}xp</span>
                   </div>
                   <div class="flex w-100 justify-content-between extrabold">
                     Restants
-                    <span class="xp-remaining text-success">{{ xp.restant }}xp</span>
+                    <span class="xp-remaining text-success">{{ xp.remaining }}xp</span>
                   </div>
                 </div>
               {% endif %}
@@ -663,7 +663,7 @@
                     {% set bought_specs = bought_specs|merge([{label: lab, ecole: bit_ec == '1'}]) %}
                   {% endif %}
                 {% endfor %}
-                {% set cout_slot = xp.competence[slot.i] %}
+                {% set cout_slot = xp.skill[slot.i] %}
                 <tr
                   class="p-0" data-comp-row="{{ slot.i }}" data-comp-id="{{ slot.comp.id }}"
                   data-comp-val="{{ slot.val ?? 0 }}" data-comp-specs="{{ bitmask }}"
@@ -690,7 +690,7 @@
                       {% endif %}
                     </td>
                   {% endfor %}
-                  <td class="edit-only text-alternate" data-comp-cost-cell>{% if cout_slot.rang > 0 %}-{{ cout_slot.rang }}xp{% endif %}</td>
+                  <td class="edit-only text-alternate" data-comp-cost-cell>{% if cout_slot.rank > 0 %}-{{ cout_slot.rank }}xp{% endif %}</td>
                 </tr>
                 <tr data-comp-specs-row="{{ slot.i }}" class="comp-specs-row">
                   <td></td>
@@ -1367,7 +1367,7 @@
     <script>
     (function () {
         const cfg = window.FICHE_CONFIG;
-        const COUT_PAR_SPE = {{ constant('App\\Service\\ClasseurXP::SPECIALISATION_COST') }};
+        const COUT_PAR_SPE = {{ constant('App\\Service\\XpRanker::SPECIALISATION_COST') }};
         const traits = ['constitution','volonte','reflexes','intuition','agilite','intelligence','forceStat','perception','vide'];
         const btnEdit = document.getElementById('btn-fiche-edit');
         const btnCancel = document.getElementById('btn-fiche-cancel');

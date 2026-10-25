@@ -6,6 +6,7 @@ use App\Entity\Participation;
 use App\Entity\Personnage;
 use App\Entity\Scene;
 use App\Repository\FichePersonnageRepository;
+use App\Repository\LieuRepository;
 use App\Repository\ParticipationRepository;
 use Doctrine\ORM\EntityManagerInterface;
 
@@ -15,15 +16,17 @@ class Localisateur
     private $fichePersonnageRepository;
     private $visibility;
     private $entityManager;
+    private $lieuRepository;
     private $parcours;
     private $libres;
 
-    public function __construct(ParticipationRepository $participationRepository, FichePersonnageRepository $fichePersonnageRepository, Visibility $visibility, EntityManagerInterface $entityManager)
+    public function __construct(ParticipationRepository $participationRepository, FichePersonnageRepository $fichePersonnageRepository, Visibility $visibility, EntityManagerInterface $entityManager, LieuRepository $lieuRepository)
     {
         $this->participationRepository = $participationRepository;
         $this->fichePersonnageRepository = $fichePersonnageRepository;
         $this->visibility = $visibility;
         $this->entityManager = $entityManager;
+        $this->lieuRepository = $lieuRepository;
     }
 
     public function positions(): array
@@ -117,6 +120,22 @@ class Localisateur
     public function position(?Personnage $personnage): ?Lieu
     {
         return $personnage === null ? null : $this->parcours()[$personnage->getId()]['lieux'][0] ?? null;
+    }
+
+    public function carte(?Personnage $personnage, bool $lieuMasqueInclus = false): array
+    {
+        $positionLibre = $this->positionLibre($personnage);
+        $positionActuelle = $positionLibre === null ? $this->position($personnage) : null;
+        $positionConnue = $positionActuelle !== null && ($lieuMasqueInclus || $this->visibility->isListed($positionActuelle));
+        $carteVisible = $positionLibre !== null || $positionConnue;
+
+        return [
+            'position_libre' => $positionLibre,
+            'position_actuelle' => $positionActuelle,
+            'position_connue' => $positionConnue,
+            'carte_visible' => $carteVisible,
+            'lieux' => $carteVisible ? $this->lieuRepository->findAllSorted() : [],
+        ];
     }
 
     private function listerLibres(array $fiches): array

@@ -1,7 +1,6 @@
 
 {% set pj_ids, pjs, pnj_ids, pnjs = [], [], [], [] %}
 {% set lieu_ids, lieux_chapitre = [], [] %}
-{% set is_mj = app.user and is_granted('ROLE_MJ') %}
 {% set bloc = bloc|default('personnages') %}
 
 {% for un_episode in episode is defined ? [episode] : un_chapitre.episodes %}
@@ -52,8 +51,8 @@
             <img class="chapter-portrait{{ vue }}{% if episode is defined %} in-episode{% endif %}"
                  src="{{ asset(perso.icone|default(fallback)) }}" alt="Portrait de {{ perso.prenom }}" />
             {% set state = element_state(perso) %}
-            {% if is_mj or (state == 'discovered' and perso.manualUnlock) %}
-              {{ include('parts/badge-access.html.twig', {state: state, variant: is_mj ? 'mini hover-only' : 'mini'}) }}
+            {% if is_mj() or (state == 'discovered' and perso.manualUnlock) %}
+              {{ include('parts/badge-access.html.twig', {state: state, variant: is_mj() ? 'mini hover-only' : 'mini'}) }}
             {% endif %}
           </a>
         {% endfor %}

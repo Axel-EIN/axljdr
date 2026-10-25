@@ -16,12 +16,12 @@
 
             <div class="col-12 mt-3 mb-4">
                 {{ include('parts/image-field.html.twig', {
-                    field: form.image, input_id: 'admin_ecole_image', prefix: 'image',
-                    current: ecole.image|default(null), fallback: NA_169, label: 'Image (1200×900 4:3 recommandé)',
+                    field: form.image, input_id: 'admin_dojo_image', prefix: 'image',
+                    current: dojo.image|default(null), fallback: NA_169, label: 'Image (1200×900 4:3 recommandé)',
                     width: 1200, height: 900 }) }}
             </div>
 
-            <div class="col-12" data-ecole-bloc="techniques">
+            <div class="col-12" data-dojo-bloc="techniques">
                 <div class="row">
                     <div class="col-12 mt-5">
                         <h2 class="heading-cardtitle">Technique #1</h2>
@@ -65,7 +65,7 @@
                 </div>
             </div>
 
-            <div class="col-12" data-ecole-bloc="technique-speciale">
+            <div class="col-12" data-dojo-bloc="technique-speciale">
                 <div class="row">
                     <div class="col-12 mt-5">
                         <h2 class="heading-cardtitle">Technique Spéciale</h2>
@@ -77,7 +77,7 @@
                 </div>
             </div>
 
-            <div class="col-12" data-ecole-bloc="magie">
+            <div class="col-12" data-dojo-bloc="magie">
                 <div class="row">
                     <div class="col-12 mt-5">
                         <h2 class="heading-cardtitle">Magie</h2>
@@ -104,8 +104,8 @@
 
         function refresh() {
             const nom = classe.options[classe.selectedIndex]?.text.trim() ?? '';
-            document.querySelectorAll('[data-ecole-bloc]').forEach(bloc => {
-                bloc.hidden = !visibles[bloc.dataset.ecoleBloc](nom);
+            document.querySelectorAll('[data-dojo-bloc]').forEach(bloc => {
+                bloc.hidden = !visibles[bloc.dataset.dojoBloc](nom);
             });
         }
 

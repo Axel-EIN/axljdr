@@ -18,7 +18,7 @@ final class BackfillUnlocksCommand extends Command
     protected static $defaultName = 'app:unlocks:backfill';
 
     private const CIBLES = [
-        'personnage' => 'e.estPj = false',
+        'character' => 'e.estPj = false',
         'location' => null,
         'object' => null,
     ];

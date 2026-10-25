@@ -15,7 +15,7 @@ use App\Entity\Clan;
 use App\Entity\Classe;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 
-class AdminAvantageType extends AbstractType
+class AdminAdvantageType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {

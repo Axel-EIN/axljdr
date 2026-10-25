@@ -36,8 +36,8 @@ class AdminCharacterController extends AbstractController
             'element' => 'character',
             'label' => 'Personnage',
             'labels' => 'Personnages',
-            'genre' => 'M',
-            'determinant' => 'un',
+            'gender' => 'M',
+            'article' => 'un',
             'table_filters' => self::TABLE_FILTERS,
             'table_cols' => [
               'estPj:PJ:bool',
@@ -115,11 +115,11 @@ class AdminCharacterController extends AbstractController
         }
 
         return $this->render('back_office/create.html.twig', [
-            'type' => 'Créer',
+            'type' => 'create',
             'entity' => 'character',
             'label' => 'Personnage',
-            'genre' => 'M',
-            'determinant' => 'un',
+            'gender' => 'M',
+            'article' => 'un',
             'form' => $form->createView()
         ]);
     }
@@ -188,12 +188,12 @@ class AdminCharacterController extends AbstractController
         }
 
         return $this->renderForm('back_office/edit.html.twig', [
-            'type' => 'Modifier',
+            'type' => 'edit',
             'character' => $character,
             'entity' => 'character',
             'label' => 'Personnage',
-            'genre' => 'M',
-            'determinant' => 'un',
+            'gender' => 'M',
+            'article' => 'un',
             'form' => $form,
         ]);
     }

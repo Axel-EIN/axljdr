@@ -26,12 +26,12 @@ class WorldController extends AbstractController
   /**
    * @Route("/world", name="world")
    */
-  public function afficherWorld(ClanRepository $clanRepository,
-                                 ArchiveRepository $archiveRepository,
-                                 LieuRepository $lieuRepository,
-                                 LoreRepository $loreRepository,
-                                 Visibility $visibility,
-                                 ClasseurLieux $classeurLieux): Response
+  public function index(ClanRepository $clanRepository,
+                        ArchiveRepository $archiveRepository,
+                        LieuRepository $locationRepository,
+                        LoreRepository $loreRepository,
+                        Visibility $visibility,
+                        ClasseurLieux $locationGrouper): Response
   {
     $factions = array_fill_keys(array_keys(FactionType::GROUPS), []);
     foreach ($clanRepository->findAllSorted() as $clan) {
@@ -40,7 +40,7 @@ class WorldController extends AbstractController
       }
     }
     $archives = $archiveRepository->findall();
-    $groupesLieux = $classeurLieux->parFaction($lieuRepository->findAllSorted());
+    $locationGroups = $locationGrouper->parFaction($locationRepository->findAllSorted());
     $lores = $loreRepository->findall();
 
     $sections = [];
@@ -80,7 +80,7 @@ class WorldController extends AbstractController
     return $this->render('world/index.html.twig', [
       'factions' => $factions,
       'archives' => $archives,
-      'groupesLieux' => $groupesLieux,
+      'location_groups' => $locationGroups,
       'lores' => $lores,
       'sections' => $sections,
       'header_classname' => $header_classname,
@@ -93,15 +93,15 @@ class WorldController extends AbstractController
   /**
    * @Route("/world/clan/{id}", name="world_clan")
    */
-  public function afficherClan(Clan $clan, ClanRepository $clanRepository, Visibility $visibility): Response
+  public function showClan(Clan $clan, ClanRepository $clanRepository, Visibility $visibility): Response
   {
     if ($response = $this->accessGuard($visibility, $clan, 'clan', 'world')) {
       return $response;
     }
 
-    $toutClans = array_filter(
+    $allClans = array_filter(
       $clanRepository->findByTypes(FactionType::siblingTypes($clan->getType())),
-      fn (Clan $autre) => $visibility->isListed($autre)
+      fn (Clan $other) => $visibility->isListed($other)
     );
 
     return $this->render('world/clan.html.twig', [
@@ -110,21 +110,21 @@ class WorldController extends AbstractController
       'entity' => 'clan',
       'category' => 'world',
       'un_element' => $clan,
-      'toutClans' => $toutClans,
+      'all_clans' => $allClans,
     ]);
   }
 
   /**
    * @Route("/world/archive/{id}", name="world_archive")
    */
-  public function afficherArchive(Archive $archive, ArchiveRepository $archiveRepository, Visibility $visibility): Response
+  public function showArchive(Archive $archive, ArchiveRepository $archiveRepository, Visibility $visibility): Response
   {
     if ($response = $this->accessGuard($visibility, $archive, 'archive', 'world')) {
       return $response;
     }
 
     $archives = $archiveRepository->findall();
-    $autresArchives = $archiveRepository->findAllExceptOne($archive->getId());
+    $otherArchives = $archiveRepository->findAllExceptOne($archive->getId());
 
     return $this->render('world/archive.html.twig', [
       'un_element' => $archive,
@@ -132,37 +132,37 @@ class WorldController extends AbstractController
       'entity' => 'archive',
       'category' => 'world',
       'archives' => $archives,
-      'autresArchives' => $autresArchives
+      'other_archives' => $otherArchives
     ]);
   }
 
   /**
-   * @Route("/world/lieu/{id}", name="world_lieu")
+   * @Route("/world/location/{id}", name="world_location")
    */
-  public function afficherLocation(Lieu $lieu, LieuRepository $lieuRepository, ClasseurHistorique $classeur, SaisonRepository $saisonRepository, Visibility $visibility): Response
+  public function showLocation(Lieu $location, LieuRepository $locationRepository, ClasseurHistorique $classeur, SaisonRepository $saisonRepository, Visibility $visibility): Response
   {
-    if ($response = $this->accessGuard($visibility, $lieu, 'lieu', 'world')) {
+    if ($response = $this->accessGuard($visibility, $location, 'lieu', 'world')) {
       return $response;
     }
 
-    $lieux = $lieuRepository->findAllSorted();
-    $autresLieux = array_values(array_filter(
-      $lieuRepository->findAllExceptOne($lieu->getId()),
-      fn (Lieu $autre) => $autre->getClan() === $lieu->getClan() && $visibility->isReadable($autre)
+    $locations = $locationRepository->findAllSorted();
+    $otherLocations = array_values(array_filter(
+      $locationRepository->findAllExceptOne($location->getId()),
+      fn (Lieu $other) => $other->getClan() === $location->getClan() && $visibility->isReadable($other)
     ));
-    shuffle($autresLieux);
-    $autresLieux = array_slice($autresLieux, 0, 12);
+    shuffle($otherLocations);
+    $otherLocations = array_slice($otherLocations, 0, 12);
 
-    $historique = $classeur->pourLieu($lieu);
+    $history = $classeur->pourLieu($location);
 
     return $this->render('world/location.html.twig', [
-      'un_element' => $lieu,
-      'nom' => $lieu->getNom(),
+      'un_element' => $location,
+      'nom' => $location->getNom(),
       'entity' => 'lieu',
       'category' => 'world',
-      'lieux' => $lieux,
-      'autresLieux' => $autresLieux,
-      'historique' => $historique,
+      'lieux' => $locations,
+      'other_locations' => $otherLocations,
+      'historique' => $history,
       'saison_courante' => $saisonRepository->findCourante()?->getNumero(),
     ]);
   }
@@ -170,7 +170,7 @@ class WorldController extends AbstractController
   /**
    * @Route("/world/lore/{id}", name="world_lore")
    */
-  public function afficherLore(Lore $lore, LoreRepository $loreRepository, Visibility $visibility): Response
+  public function showLore(Lore $lore, LoreRepository $loreRepository, Visibility $visibility): Response
   {
     if ($response = $this->accessGuard($visibility, $lore, 'lore', 'world')) {
       return $response;
@@ -181,7 +181,7 @@ class WorldController extends AbstractController
       'nom' => $lore->getNom(),
       'entity' => 'lore',
       'category' => 'world',
-      'autresLores' => $loreRepository->findAllExceptOne($lore->getId()),
+      'other_lores' => $loreRepository->findAllExceptOne($lore->getId()),
     ]);
   }
 }

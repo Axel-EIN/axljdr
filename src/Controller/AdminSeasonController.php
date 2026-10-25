@@ -29,8 +29,8 @@ class AdminSeasonController extends AbstractController
             'element' => 'season',
             'label' => 'Saison',
             'labels' => 'Saisons',
-            'genre' => 'F',
-            'determinant' => 'une',
+            'gender' => 'F',
+            'article' => 'une',
             'table_cols' => [
                 'numero:Ordre:number',
                 'image:Image:image:NA_SAISON',
@@ -48,8 +48,8 @@ class AdminSeasonController extends AbstractController
 
         $season = new Saison;
 
-        if (!empty($request->query->get('numero')) && $request->query->get('numero') > 0)
-            $season->setNumero($request->query->get('numero'));
+        if (!empty($request->query->get('number')) && $request->query->get('number') > 0)
+            $season->setNumero($request->query->get('number'));
 
         $form = $this->createForm(AdminSeasonType::class, $season);
         $form->handleRequest($request);
@@ -77,11 +77,11 @@ class AdminSeasonController extends AbstractController
         }
 
         return $this->render('back_office/create.html.twig', [
-            'type' => 'Créer',
+            'type' => 'create',
             'entity' => 'season',
             'label' => 'Saison',
-            'genre' => 'F',
-            'determinant' => 'une',
+            'gender' => 'F',
+            'article' => 'une',
             'form' => $form->createView()
         ]);
     }
@@ -126,12 +126,12 @@ class AdminSeasonController extends AbstractController
         }
 
         return $this->renderForm('back_office/edit.html.twig', [
-            'type' => 'Modifier',
+            'type' => 'edit',
             'season' => $season,
             'entity' => 'season',
             'label' => 'Saison',
-            'genre' => 'F',
-            'determinant' => 'une',
+            'gender' => 'F',
+            'article' => 'une',
             'form' => $form,
         ]); 
     }

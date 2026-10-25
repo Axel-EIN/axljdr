@@ -12,26 +12,26 @@ use Symfony\Component\HttpFoundation\Request;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Entity\Avantage;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
-use App\Form\AdminAvantageType;
+use App\Form\AdminAdvantageType;
 use App\Service\Unlocker;
 
-class AdminAvantageController extends AbstractController
+class AdminAdvantageController extends AbstractController
 {
     private const TABLE_FILTERS = [
         'genre:Genre',
     ];
 
     /**
-     * @Route("/admin/avantage", name="admin_avantage")
+     * @Route("/admin/advantage", name="admin_advantage")
      * @IsGranted("ROLE_MJ")
      */
-    public function viewAdminAvantages(AvantageRepository $avantageRepository): Response
+    public function viewAdminAdvantages(AvantageRepository $advantageRepository): Response
     {
-        $avantages = $avantageRepository->findBy(array(), array('id' => 'DESC'));
+        $advantages = $advantageRepository->findBy(array(), array('id' => 'DESC'));
 
         return $this->render('back_office/list-element.html.twig', [
-            'elements' => $avantages,
-            'element' => 'avantage',
+            'elements' => $advantages,
+            'element' => 'advantage',
             'label' => 'Avantage',
             'labels' => 'Avantages / Désavantages',
             'genre' => 'M',
@@ -53,36 +53,36 @@ class AdminAvantageController extends AbstractController
     }
 
     /**
-     * @Route("/admin/avantage/create", name="admin_avantage_create")
+     * @Route("/admin/advantage/create", name="admin_advantage_create")
      * @IsGranted("ROLE_MJ")
      */
-    public function addAvantage(Request $request, EntityManagerInterface $em, Unlocker $unlocker, TableFilter $tableFilter) {
+    public function addAdvantage(Request $request, EntityManagerInterface $em, Unlocker $unlocker, TableFilter $tableFilter) {
 
-        $avantage = new Avantage;
-        $tableFilter->prefill($avantage, self::TABLE_FILTERS, $request->query->all('filter'));
-        $form = $this->createForm(AdminAvantageType::class, $avantage);
+        $advantage = new Avantage;
+        $tableFilter->prefill($advantage, self::TABLE_FILTERS, $request->query->all('filter'));
+        $form = $this->createForm(AdminAdvantageType::class, $advantage);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
 
-            $em->persist($avantage);
+            $em->persist($advantage);
             $em->flush();
 
-            $unlocker->sync($avantage, $form->get('unlockedBy')->getData());
+            $unlocker->sync($advantage, $form->get('unlockedBy')->getData());
             $em->flush();
             $this->addFlash('success', "L'Avantage a bien été ajouté.");
 
             if (!empty($request->query->get('redirect')) && $request->query->get('redirect') == 'library'
                 && !empty($request->query->get('libraryID')) && $request->query->get('libraryID') > 0)
-                return $this->redirectToRoute( 'rules_library', [ 'id' => $request->query->get('libraryID') , 'tab' => $avantage->getGenre(), 'subtab' => $avantage->getType() ] );
+                return $this->redirectToRoute( 'rules_library', [ 'id' => $request->query->get('libraryID') , 'tab' => $advantage->getGenre(), 'subtab' => $advantage->getType() ] );
 
-            return $this->redirectToRoute('admin_avantage');
+            return $this->redirectToRoute('admin_advantage');
         }
         
 
         return $this->render('back_office/create.html.twig', [
             'type' => 'Créer',
-            'entity' => 'avantage',
+            'entity' => 'advantage',
             'label' => 'Avantage/Désavantage',
             'genre' => 'M',
             'determinant' => 'un',
@@ -91,33 +91,33 @@ class AdminAvantageController extends AbstractController
     }
 
     /**
-     * @Route("/admin/avantage/{id}/edit", name="admin_avantage_edit")
+     * @Route("/admin/advantage/{id}/edit", name="admin_advantage_edit")
      * @IsGranted("ROLE_MJ")
      */
-    public function editAvantage(Request $request, Avantage $avantage, Unlocker $unlocker): Response {
+    public function editAdvantage(Request $request, Avantage $advantage, Unlocker $unlocker): Response {
 
-        $form = $this->createForm(AdminAvantageType::class, $avantage);
-        $form->get('unlockedBy')->setData($unlocker->charactersOf($avantage));
+        $form = $this->createForm(AdminAdvantageType::class, $advantage);
+        $form->get('unlockedBy')->setData($unlocker->charactersOf($advantage));
         $form->handleRequest($request);
 
         if($form->isSubmitted() && $form->isValid()) {
 
-            $unlocker->sync($avantage, $form->get('unlockedBy')->getData());
+            $unlocker->sync($advantage, $form->get('unlockedBy')->getData());
 
             $this->getDoctrine()->getManager()->flush();
             $this->addFlash('success', 'La Avantage a bien été modifiée.');
 
             if (!empty($request->query->get('redirect')) && $request->query->get('redirect') == 'library'
                 && !empty($request->query->get('libraryID')) && $request->query->get('libraryID') > 0)
-                return $this->redirectToRoute( 'rules_library', [ 'id' => $request->query->get('libraryID') , 'tab' => $avantage->getGenre(), 'subtab' => $avantage->getType() ] );
+                return $this->redirectToRoute( 'rules_library', [ 'id' => $request->query->get('libraryID') , 'tab' => $advantage->getGenre(), 'subtab' => $advantage->getType() ] );
 
-            return $this->redirectToRoute('admin_avantage');
+            return $this->redirectToRoute('admin_advantage');
         }
 
         return $this->renderForm('back_office/edit.html.twig', [
             'type' => 'Modifier',
-            'avantage' => $avantage,
-            'entity' => 'avantage',
+            'advantage' => $advantage,
+            'entity' => 'advantage',
             'label' => 'Avantage/Désavantage',
             'genre' => 'M',
             'determinant' => 'un',
@@ -126,29 +126,29 @@ class AdminAvantageController extends AbstractController
     }
 
     /**
-     * @Route("/admin/avantage/{id}/delete", name="admin_avantage_delete", methods={"POST"})
+     * @Route("/admin/advantage/{id}/delete", name="admin_advantage_delete", methods={"POST"})
      * @IsGranted("ROLE_MJ")
      */
-    public function deleteAvantage(Request $request, Avantage $avantage, Unlocker $unlocker, FichePersonnageRepository $ficheRepository): Response {
+    public function deleteAdvantage(Request $request, Avantage $advantage, Unlocker $unlocker, FichePersonnageRepository $sheetRepository): Response {
 
-        if ($this->isCsrfTokenValid('delete' . $avantage->getId(), $request->request->get('_csrf_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $advantage->getId(), $request->request->get('_csrf_token'))) {
 
-            $fiches = $ficheRepository->findByAvantage($avantage);
+            $sheets = $sheetRepository->findByAvantage($advantage);
 
-            if (!empty($fiches)) {
-                $personnages = array_map(fn($fiche) => $fiche->getPersonnage()->getNom(), $fiches);
-                $this->addFlash('danger', 'Impossible de supprimer « ' . $avantage->getNom() . ' », utilisé par : ' . implode(', ', $personnages) . '.');
+            if (!empty($sheets)) {
+                $characters = array_map(fn($sheet) => $sheet->getPersonnage()->getNom(), $sheets);
+                $this->addFlash('danger', 'Impossible de supprimer « ' . $advantage->getNom() . ' », utilisé par : ' . implode(', ', $characters) . '.');
 
-                return $this->redirectToRoute('admin_avantage');
+                return $this->redirectToRoute('admin_advantage');
             }
 
             $entityManager = $this->getDoctrine()->getManager();
-            $unlocker->forget($avantage);
-            $entityManager->remove($avantage);
+            $unlocker->forget($advantage);
+            $entityManager->remove($advantage);
             $entityManager->flush();
             $this->addFlash('success', 'La Avantage a bien été supprimée.');
         }
 
-        return $this->redirectToRoute('admin_avantage');
+        return $this->redirectToRoute('admin_advantage');
     }
 }

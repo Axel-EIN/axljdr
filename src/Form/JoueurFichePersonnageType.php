@@ -29,11 +29,7 @@ class JoueurFichePersonnageType extends AbstractType
         $spellCategories = $fiche?->getPersonnage()?->getEcole()?->hasTattoos()
             ? ['MAGIE', 'KIHO', 'TATOUAGE']
             : ['MAGIE', 'KIHO'];
-        $equipped = array_filter([
-            $fiche?->getArme()?->getId(),
-            $fiche?->getArme2()?->getId(),
-            $fiche?->getArmeActuelle()?->getId(),
-        ]) ?: [0];
+        $equipped = array_filter([$fiche?->getArmeActuelle()?->getId()]) ?: [0];
 
         $armes = function (EntityRepository $er, ?string $categorie) use ($options, $equipped) {
             $qb = $er->createQueryBuilder('o')->orderBy('o.nom', 'ASC');
@@ -90,13 +86,6 @@ class JoueurFichePersonnageType extends AbstractType
                 'required' => false,
                 'query_builder' => fn(EntityRepository $er) => $er->createQueryBuilder('c')
                     ->where('c.categorie = :cat')->setParameter('cat', 'Bugei')->orderBy('c.nom', 'ASC'),
-            ])
-            ->add('arme2', EntityType::class, [
-                'class' => Objet::class,
-                'choice_label' => 'nom',
-                'placeholder' => '— Aucune —',
-                'required' => false,
-                'query_builder' => fn(EntityRepository $er) => $armes($er, 'ARME'),
             ])
             ->add('armure', EntityType::class, [
                 'class' => Objet::class,

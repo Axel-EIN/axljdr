@@ -226,11 +226,7 @@ class PersonnagesController extends AbstractController
                 $desavantagesJson[] = $serialize($a);
             }
 
-            $equipped = array_filter([
-                $fiche->getArme()?->getId(),
-                $fiche->getArme2()?->getId(),
-                $fiche->getArmeActuelle()?->getId(),
-            ]);
+            $equipped = array_filter([$fiche->getArmeActuelle()?->getId()]);
 
             foreach ($objetRepository->findBy(['categorie' => 'ARME'], ['nom' => 'ASC']) as $o) {
                 if (!$visibility->isReadable($o) && !in_array($o->getId(), $equipped, true)) {

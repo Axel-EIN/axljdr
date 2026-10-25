@@ -84,7 +84,7 @@ class AdminRuleController extends AbstractController
             $numeroteur->reordonnerNumero($rule->getId(), -1, $rule->getNumero(), [], $fratrieArrivee);
 
             if (!empty($request->query->get('redirect')) && $request->query->get('redirect') == 'rule')
-                return $this->redirectToRoute('regles_rule', ['id' => $rule->getId()]);
+                return $this->redirectToRoute('rules_rule', ['id' => $rule->getId()]);
 
             return $this->redirectToRoute('admin_rule');
         }
@@ -142,7 +142,7 @@ class AdminRuleController extends AbstractController
             $this->addFlash('success', 'La Règle a bien été modifiée');
 
             if (!empty($request->query->get('redirect')) && $request->query->get('redirect') == 'rule')
-                return $this->redirectToRoute('regles_rule', ['id' => $rule->getId()]);
+                return $this->redirectToRoute('rules_rule', ['id' => $rule->getId()]);
 
             return $this->redirectToRoute('admin_rule');
         }

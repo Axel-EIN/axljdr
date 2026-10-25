@@ -4,7 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Saison;
 use App\Entity\Episode;
-use App\Service\ClasseurXP;
+use App\Service\XpRanker;
 use App\Service\Visibility;
 use App\Repository\SaisonRepository;
 use App\Repository\ChapitreRepository;
@@ -35,7 +35,7 @@ class StoryController extends AbstractController
     /**
      * @Route("/story/{id}", name="story_season")
      */
-    public function showSeason(Saison $season, SaisonRepository $seasonRepository, ParticipationRepository $participationRepository, ClasseurXP $classeurXP): Response
+    public function showSeason(Saison $season, SaisonRepository $seasonRepository, ParticipationRepository $participationRepository, XpRanker $xpRanker): Response
     {
         $previous = $seasonRepository->findPrevious($season->getNumero());
         $next = $seasonRepository->findNext($season->getNumero());
@@ -43,7 +43,7 @@ class StoryController extends AbstractController
         $userCharactersEpisodeTotals = [];
         if ($user != null) {
             $ids = $user->getPersonnages()->map(fn ($character) => $character->getId())->toArray();
-            $userCharactersEpisodeTotals = $classeurXP->cumulsParEpisode(
+            $userCharactersEpisodeTotals = $xpRanker->totalsByEpisode(
                 $participationRepository->findForCharactersInSaison($season, $ids),
                 $ids
             );
@@ -60,14 +60,14 @@ class StoryController extends AbstractController
     /**
      * @Route("/story/episode/{id}", name="story_episode")
      */
-    public function showEpisode(Episode $episode, EpisodeRepository $episodeRepository, ClasseurXP $classeurXP, ChapitreRepository $chapterRepository, Visibility $visibility): Response
+    public function showEpisode(Episode $episode, EpisodeRepository $episodeRepository, XpRanker $xpRanker, ChapitreRepository $chapterRepository, Visibility $visibility): Response
     {
         if ($response = $this->accessGuard($visibility, $episode, 'episode', 'story')) {
             return $response;
         }
 
         $next = $episodeRepository->findNext($episode->getChapitreParent()->getId(), $episode->getNumero());
-        $episodeRanking = $classeurXP->classerPersosEpisode($episode);
+        $episodeRanking = $xpRanker->rankEpisodeCharacters($episode);
 
         $previousChapter = $chapterRepository->findPrevious($episode->getChapitreParent()->getSaisonParent()->getId(), $episode->getChapitreParent()->getNumero());
 

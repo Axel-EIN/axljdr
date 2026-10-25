@@ -1,5 +1,5 @@
 {% set has_pdf = pdf is defined and pdf is not empty %}
-{% set show_button = pdf_button|default(false) or is_mj() %}
+{% set show_button = pdf_button|default(false) or is_gm() %}
 
 <div class="gradient-after-down {{ classes|default('') }}">
   {% if has_pdf and not show_button and app.user %}
@@ -18,7 +18,7 @@
 
   {% if state is defined %}{{ include('parts/badge-access.html.twig', {state: state, title: state_title|default(null), variant: 'inset glass'}) }}{% endif %}
 
-  {% if titre is defined %}
-    <span class="heading-elementdetail card-top-titre d-lg-none" aria-hidden="true">{{ titre }}</span>
+  {% if title is defined %}
+    <span class="heading-elementdetail card-top-titre d-lg-none" aria-hidden="true">{{ title }}</span>
   {% endif %}
 </div>

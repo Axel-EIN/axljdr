@@ -162,8 +162,8 @@ class AdminLibraryController extends AbstractController
         if ( $this->isCsrfTokenValid('delete' . $library->getId(), $request->request->get('_csrf_token')))
         {
 
-            $fileHandler->handle(null, $library->getImage(), null, 'librarys');
-            $fileHandler->handle(null, $library->getPdf(), null, 'librarys-pdfs');
+            $fileHandler->handle(null, $library->getImage(), null, 'libraries');
+            $fileHandler->handle(null, $library->getPdf(), null, 'libraries-pdfs');
 
             $fratrieDepartId = $library->getBase();
             $fratrieDepart = $libraryRepository->findBy(['base' => $fratrieDepartId]);

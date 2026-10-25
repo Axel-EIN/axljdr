@@ -17,6 +17,19 @@ use App\Entity\Sort;
  */
 class FichePersonnage
 {
+    public const PV_INDEMNE_PAR_TERRE = 5;
+    public const PV_BLESSURE_PAR_TERRE = 2;
+    public const NIVEAUX_BLESSURE = [
+        'Indemne' => 0,
+        'Égratigné' => 3,
+        'Légèrement blessé' => 5,
+        'Blessé' => 10,
+        'Gravement blessé' => 15,
+        'Impotent' => 20,
+        'Épuisé' => 30,
+        'Hors de combat' => null,
+    ];
+
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
@@ -519,6 +532,35 @@ class FichePersonnage
         $this->volonte = $volonte;
 
         return $this;
+    }
+
+    public function getTerre(): int
+    {
+        return min($this->attributEffectif('constitution'), $this->attributEffectif('volonte'));
+    }
+
+    public function getPvMax(): int
+    {
+        $niveauxBlesses = count(self::NIVEAUX_BLESSURE) - 1;
+
+        return $this->getTerre() * (self::PV_INDEMNE_PAR_TERRE + $niveauxBlesses * self::PV_BLESSURE_PAR_TERRE);
+    }
+
+    public function bonusAttribut(string $nom): int
+    {
+        $bonus = 0;
+        foreach ([$this->personnage?->getFamille(), $this->personnage?->getEcole()] as $source) {
+            if ($source !== null && $source->getBonusStatNom() === $nom) {
+                $bonus++;
+            }
+        }
+
+        return $bonus;
+    }
+
+    public function attributEffectif(string $nom): int
+    {
+        return (int) $this->{'get' . ucfirst($nom)}() + $this->bonusAttribut($nom);
     }
 
     public function getReflexes(): ?int

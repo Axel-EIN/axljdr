@@ -51,7 +51,7 @@
             {% elseif fiche_addable %}
                 <div class="profile-btn-fiche">
                     {{ include('btns/btn-add-element.html.twig', {
-                        entity: 'fiche', label_one: 'Fiche Personnage', options: 'personnage=' ~ personnage.id, position: ''
+                        entity: 'sheet', label_one: 'Fiche Personnage', options: 'character=' ~ personnage.id, position: ''
                     }) }}
                 </div>
             {% endif %}

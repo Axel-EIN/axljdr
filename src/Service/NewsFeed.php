@@ -6,7 +6,6 @@ use App\Entity\Access;
 use App\Entity\Episode;
 use App\Repository\ParticipationRepository;
 use App\Repository\PersonnageRepository;
-use App\Repository\UnlockRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\QueryBuilder;
 
@@ -14,23 +13,22 @@ class NewsFeed
 {
     private $entityManager;
     private $currentPlayer;
-    private $unlockRepository;
+    private $visibility;
     private $participationRepository;
     private $personnageRepository;
     private $classeurXP;
-    private $unlocks;
 
     public function __construct(
         EntityManagerInterface $entityManager,
         CurrentPlayer $currentPlayer,
-        UnlockRepository $unlockRepository,
+        Visibility $visibility,
         ParticipationRepository $participationRepository,
         PersonnageRepository $personnageRepository,
         ClasseurXP $classeurXP
     ) {
         $this->entityManager = $entityManager;
         $this->currentPlayer = $currentPlayer;
-        $this->unlockRepository = $unlockRepository;
+        $this->visibility = $visibility;
         $this->participationRepository = $participationRepository;
         $this->personnageRepository = $personnageRepository;
         $this->classeurXP = $classeurXP;
@@ -132,24 +130,7 @@ class NewsFeed
             $filtre .= ' AND e.' . $champ . (is_array($valeur) ? ' IN (:' . $champ . ')' : ' = :' . $champ);
         }
 
-        $elements = $this->publies($class, $limit, 'e.access = :palier' . $filtre, ['palier' => Access::PUBLIC] + $criteres);
-        $rencontres = $this->metDates($key);
-
-        if (!empty($rencontres)) {
-            arsort($rencontres);
-            $elements = array_merge($elements, $this->publies(
-                $class,
-                $limit,
-                'e.access = :palier AND e.id IN (:croises)' . $filtre,
-                ['palier' => Access::COMMON, 'croises' => array_slice(array_keys($rencontres), 0, $limit)] + $criteres
-            ));
-        }
-
-        usort($elements, function ($a, $b) use ($rencontres) {
-            return $this->decouverteLe($b, $rencontres) <=> $this->decouverteLe($a, $rencontres);
-        });
-
-        return array_slice($elements, 0, $limit);
+        return $this->publies($class, $limit, 'e.access = :palier' . $filtre, ['palier' => Access::PUBLIC] + $criteres);
     }
 
     private function publies(string $class, int $limit, string $condition, array $parametres): array
@@ -165,11 +146,6 @@ class NewsFeed
         }
 
         return $qb->getQuery()->getResult();
-    }
-
-    private function decouverteLe($element, array $rencontres): \DateTimeInterface
-    {
-        return $rencontres[$element->getId()] ?? $element->getPublishedAt();
     }
 
     public function latestAmong(array $keys, int $limit, array $criteres = []): array
@@ -188,69 +164,30 @@ class NewsFeed
         return array_slice($elements, 0, $limit);
     }
 
-    public function unlockedByEntity(int $limit): array
+    public function lastDiscovered(string $key, int $limit): array
     {
-        $parEntite = [];
+        $class = EntityRegistry::className($key);
+        $ids = $this->visibility->unlockedIds($key);
 
-        foreach ($this->unlockedByCharacters($limit * 12) as $element) {
-            $cle = EntityRegistry::keyOf($element);
-
-            if ($cle !== null && count($parEntite[$cle] ?? []) < $limit) {
-                $parEntite[$cle][] = $element;
-            }
-        }
-
-        return $parEntite;
-    }
-
-    public function unlockedByCharacters(int $limit): array
-    {
-        $personnages = $this->characterIds();
-
-        if (empty($personnages)) {
+        if ($class === null || $ids === []) {
             return [];
         }
 
-        $dates = [];
-        $elements = [];
+        $parDate = function ($a, $b) {
+            return $this->visibility->unlockedAt($b) <=> $this->visibility->unlockedAt($a);
+        };
 
-        foreach ($this->unlockRepository->mapForCharacters($personnages) as $key => $lignes) {
-            $class = EntityRegistry::className($key);
+        $references = array_map(function ($id) use ($class) {
+            return $this->entityManager->getReference($class, $id);
+        }, $ids);
+        usort($references, $parDate);
 
-            if ($class === null) {
-                continue;
-            }
+        $elements = $this->entityManager->getRepository($class)->findBy(['id' => array_map(function ($reference) {
+            return $reference->getId();
+        }, array_slice($references, 0, $limit))]);
+        usort($elements, $parDate);
 
-            $trouves = $this->entityManager->createQueryBuilder()
-                ->select('e')
-                ->from($class, 'e')
-                ->andWhere('e.id IN (:ids)')
-                ->andWhere('e.access <= :locked')
-                ->setParameter('ids', array_keys($lignes))
-                ->setParameter('locked', Access::LOCKED)
-                ->getQuery()
-                ->getResult();
-
-            foreach ($trouves as $element) {
-                $elements[] = $element;
-                $dates[spl_object_id($element)] = $lignes[$element->getId()];
-            }
-        }
-
-        usort($elements, function ($a, $b) use ($dates) {
-            return $dates[spl_object_id($b)] <=> $dates[spl_object_id($a)];
-        });
-
-        return array_slice($elements, 0, $limit);
-    }
-
-    private function metDates(string $key): array
-    {
-        if ($this->unlocks === null) {
-            $this->unlocks = $this->unlockRepository->mapForCharacters($this->characterIds());
-        }
-
-        return $this->unlocks[$key] ?? [];
+        return $elements;
     }
 
     private function characterIds(): array

@@ -7,7 +7,7 @@
 
     {% if is_mj() %}
 
-      {% if un_chapitre.numero == saison.chapitres|length %}
+      {% if un_chapitre.numero == season.chapitres|length %}
         {% set label, numero, position = 'Ajouter', (un_chapitre.numero + 1), 'top-center' %}
       {% else %}
         {% set label, numero, position = 'Insérer', (un_chapitre.numero + 1), 'top-center' %}
@@ -29,19 +29,19 @@
     <div class="header header-chapter d-flex flex-column" >
       <span class="chapter-number text-left">
         {% if is_mj() %}
-          {% set color, position, redirect, entity, un_element, size = 'text-white50', 'mr-2 align-middle', 'aventure', 'chapitre', un_chapitre, 'btn-icon-medium' %}
+          {% set color, position, redirect, entity, un_element, size = 'text-white50', 'mr-2 align-middle', 'story', 'chapitre', un_chapitre, 'btn-icon-medium' %}
           {{ include('/btns/btn-icon-edit.html.twig') }}
         {% endif %}
         CHAPITRE {{ un_chapitre.numero }}
       </span>
       <div><hr></div>
 
-      {{ include('aventure/chapter-characters.html.twig', {un_chapitre, bloc: 'lieux'}) }}
+      {{ include('story/chapter-characters.html.twig', {un_chapitre, bloc: 'lieux'}) }}
 
       <div>
         <h2 class="heading-chapter{% if un_chapitre.titre|length > 20 %} reduced{% endif %}">{{ un_chapitre.titre|relief|raw }}</h2>
         <div class="chapter-intro relative">
-          {{ include('aventure/chapter-characters.html.twig', {un_chapitre}) }}
+          {{ include('story/chapter-characters.html.twig', {un_chapitre}) }}
           {% if un_chapitre.citation is not empty %}
             <p class="quote quote-chapter">{{ un_chapitre.citation|nl2br }}</p>
           {% endif %}
@@ -55,7 +55,7 @@
             <div class="alert alert-light mx-auto alert-persist">
               <strong>Il n'y a pas encore de session disponible !</strong>&nbsp;&nbsp;
               {% if is_mj() %}
-                <a class="btn-quaternary-style text-white50" href="{{path('admin_episode_create')}}?numero=1&chapitreID={{un_chapitre.id}}&redirect=aventure">
+                <a class="btn-quaternary-style text-white50" href="{{path('admin_episode_create')}}?numero=1&chapitreID={{un_chapitre.id}}&redirect=story">
                   <i class="fas fa-plus-square" aria-hidden="true"></i>&nbsp;&nbsp;<strong>Ajouter une Session</strong>
                 </a>
               {% endif %}
@@ -71,11 +71,11 @@
         <div class="row justify-content-center relative">
 
           {% for un_episode in episodes_visibles %}
-            {{ include('/aventure/episode-card.html.twig') }}
+            {{ include('/story/episode-card.html.twig') }}
           {% endfor %}
 
           {% if is_mj() %}
-            <a class="absolute btn-display-icon" href="{{path('admin_episode_create')}}?numero={{(un_chapitre.episodes|length)+1}}&chapitreID={{un_chapitre.id}}&redirect=aventure">
+            <a class="absolute btn-display-icon" href="{{path('admin_episode_create')}}?numero={{(un_chapitre.episodes|length)+1}}&chapitreID={{un_chapitre.id}}&redirect=story">
               <i class="fas fa-plus-square" title="Ajouter une Session"></i>
             </a>
           {% endif %}

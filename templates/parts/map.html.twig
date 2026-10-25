@@ -15,6 +15,7 @@
 {% set territories_on = territories or territories_on|default(false) %}
 {% set labels_on = worldmap or labels_on|default(false) %}
 {% set large_markers = large_markers|default(false) %}
+{% set hide_minimap = hide_minimap|default(false) %}
 {% set emblem = emblem|default(null) %}
 {% set emblem_at = emblem_at|default(center) %}
 {% set main_character = main_character() %}
@@ -243,15 +244,17 @@
 
   </div>
 
-  <div class="minimap absolute">
-    <div class="relative overflow-hidden">
-      {% if current %}
-        <img class="absolute localisator-ui" style="left:{{current.locX}}%; top:{{current.locY}}%" src="{{asset('assets/maps/mini-localisator.png')}}" alt="" />
-      {% else %}
-        <span class="absolute minimap-view"></span>
-      {% endif %}
-      <img class="img-fluid" src="{{asset('assets/maps/map-rokugan-frontiers-mini.jpg')}}" alt="Carte de Rokugan">
+  {% if not hide_minimap %}
+    <div class="minimap absolute">
+      <div class="relative overflow-hidden">
+        {% if current %}
+          <img class="absolute localisator-ui" style="left:{{current.locX}}%; top:{{current.locY}}%" src="{{asset('assets/maps/mini-localisator.png')}}" alt="" />
+        {% else %}
+          <span class="absolute minimap-view"></span>
+        {% endif %}
+        <img class="img-fluid" src="{{asset('assets/maps/map-rokugan-frontiers-mini.jpg')}}" alt="Carte de Rokugan">
+      </div>
     </div>
-  </div>
+  {% endif %}
 
 </div>

@@ -35,13 +35,13 @@ class BackOfficeController extends AbstractController
      * @Security("is_granted('ROLE_MJ') or is_granted('ROLE_ADMIN')")
      */
     public function index(
-        SaisonRepository $saisonRepository,
-        ChapitreRepository $chapitreRepository,
+        SaisonRepository $seasonRepository,
+        ChapitreRepository $chapterRepository,
         EpisodeRepository $episodeRepository,
         SceneRepository $sceneRepository,
 
         ClanRepository $clanRepository,
-        FamilleRepository $familleRepository,
+        FamilleRepository $familyRepository,
         ArchiveRepository $archiveRepository,
         LieuRepository $lieuRepository,
         LoreRepository $loreRepository,
@@ -59,21 +59,21 @@ class BackOfficeController extends AbstractController
         FichePersonnageRepository $fichePersonnageRepository,
         DevelopmentRepository $developmentRepository,
 
-        UtilisateurRepository $utilisateurRepository ): Response
+        UtilisateurRepository $userRepository ): Response
     {
         $admin_elements = [];
         $i = 0;
 
-        $admin_elements[$i]['element'] = 'saison' ;
+        $admin_elements[$i]['element'] = 'season' ;
         $admin_elements[$i]['label'] = 'Saisons';
         $admin_elements[$i]['genre'] = 'F';
         $admin_elements[$i]['categorie'] = 'Aventure';
-        $admin_elements[$i]['nbr'] = $saisonRepository->countSaisons();
-        $lastSaison = $saisonRepository->findOneBy(array(),array('id' => 'DESC'));
-        if (!empty($lastSaison)) {
-            $admin_elements[$i]['last'] = $lastSaison;
-            $admin_elements[$i]['nom'] = $lastSaison->getTitre();
-            $admin_elements[$i]['image'] = $lastSaison->getImage();
+        $admin_elements[$i]['nbr'] = $seasonRepository->countSaisons();
+        $lastSeason = $seasonRepository->findOneBy(array(),array('id' => 'DESC'));
+        if (!empty($lastSeason)) {
+            $admin_elements[$i]['last'] = $lastSeason;
+            $admin_elements[$i]['nom'] = $lastSeason->getTitre();
+            $admin_elements[$i]['image'] = $lastSeason->getImage();
         } else {
             $admin_elements[$i]['last'] = '';
             $admin_elements[$i]['nom'] = '';
@@ -81,16 +81,16 @@ class BackOfficeController extends AbstractController
         }
 
         $i++;
-        $admin_elements[$i]['element'] = 'chapitre' ;
+        $admin_elements[$i]['element'] = 'chapter' ;
         $admin_elements[$i]['label'] = 'Chapitres';
         $admin_elements[$i]['genre'] = 'M';
         $admin_elements[$i]['categorie'] = 'Aventure';
-        $admin_elements[$i]['nbr'] = $chapitreRepository->countChapitres();
-        $lastChapitre = $chapitreRepository->findOneBy(array(),array('id' => 'DESC'));
-        if (!empty($lastChapitre)) {
-            $admin_elements[$i]['last'] = $lastChapitre;
-            $admin_elements[$i]['nom'] = $lastChapitre->getTitre();
-            $admin_elements[$i]['image'] = $lastChapitre->getImage();
+        $admin_elements[$i]['nbr'] = $chapterRepository->countChapitres();
+        $lastChapter = $chapterRepository->findOneBy(array(),array('id' => 'DESC'));
+        if (!empty($lastChapter)) {
+            $admin_elements[$i]['last'] = $lastChapter;
+            $admin_elements[$i]['nom'] = $lastChapter->getTitre();
+            $admin_elements[$i]['image'] = $lastChapter->getImage();
         } else {
             $admin_elements[$i]['last'] = '';
             $admin_elements[$i]['nom'] = '';
@@ -149,16 +149,16 @@ class BackOfficeController extends AbstractController
         }
 
         $i++;
-        $admin_elements[$i]['element'] = 'famille' ;
+        $admin_elements[$i]['element'] = 'family' ;
         $admin_elements[$i]['label'] = 'Familles';
         $admin_elements[$i]['genre'] = 'F';
         $admin_elements[$i]['categorie'] = 'Univers';
-        $admin_elements[$i]['nbr'] = $familleRepository->countFamilles();
-        $lastFamille = $familleRepository->findOneBy(array(),array('id' => 'DESC'));
-        if (!empty($lastFamille)) {
-            $admin_elements[$i]['last'] = $lastFamille;
-            $admin_elements[$i]['nom'] = $lastFamille->getNom();
-            $admin_elements[$i]['image'] = $lastFamille->getMon();
+        $admin_elements[$i]['nbr'] = $familyRepository->countFamilles();
+        $lastFamily = $familyRepository->findOneBy(array(),array('id' => 'DESC'));
+        if (!empty($lastFamily)) {
+            $admin_elements[$i]['last'] = $lastFamily;
+            $admin_elements[$i]['nom'] = $lastFamily->getNom();
+            $admin_elements[$i]['image'] = $lastFamily->getMon();
         } else {
             $admin_elements[$i]['last'] = '';
             $admin_elements[$i]['nom'] = '';
@@ -403,12 +403,12 @@ class BackOfficeController extends AbstractController
             $admin_elements[$i]['image'] = '';
         }
 
-        $nbrUtilisateurs = $utilisateurRepository->countUtilisateurs();
-        $lastUtilisateur = $utilisateurRepository->findOneBy(array(),array('id' => 'DESC'));
+        $nbrUsers = $userRepository->countUtilisateurs();
+        $lastUser = $userRepository->findOneBy(array(),array('id' => 'DESC'));
 
         return $this->render('back_office/index.html.twig', [
-            'nbrUtilisateurs' => $nbrUtilisateurs,
-            'lastUtilisateur' => $lastUtilisateur,
+            'nbrUsers' => $nbrUsers,
+            'lastUser' => $lastUser,
             'admin_elements' => $admin_elements,
         ]);
     }

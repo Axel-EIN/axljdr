@@ -27,26 +27,26 @@
     {{ include('/parts/messages-flashes.html.twig') }}
 
     <div class="relative d-flex w-100 flex-column">
-      {% set chapitres_voisins = {precedent: chapitre_precedent, suivant: chapitre_suivant}|map(c => c ? c.episodes|filter(e => e.scenes|length > 0 or is_mj())|first : null) %}
+      {% set chapitres_voisins = {precedent: previous_chapter, suivant: next_chapter}|map(c => c ? c.episodes|filter(e => e.scenes|length > 0 or is_mj())|first : null) %}
       <span class="chapter-number navigable display-5">
         <a class="prev btn-quaternary-style text-white50{{ chapitres_voisins.precedent is empty ? ' invisible' }}"
-           {% if chapitres_voisins.precedent is not empty %}href="{{ path('aventure_episode', {id: chapitres_voisins.precedent.id}) }}" title="Chapitre précédent"{% endif %}>
+           {% if chapitres_voisins.precedent is not empty %}href="{{ path('story_episode', {id: chapitres_voisins.precedent.id}) }}" title="Chapitre précédent"{% endif %}>
           <i class="fa-solid fa-chevron-left"></i>
         </a>
         CHAPITRE {{ episode.chapitreParent.numero }}
         <a class="btn-quaternary-style text-white50{{ chapitres_voisins.suivant is empty ? ' invisible' }}"
-           {% if chapitres_voisins.suivant is not empty %}href="{{ path('aventure_episode', {id: chapitres_voisins.suivant.id}) }}" title="Chapitre suivant"{% endif %}>
+           {% if chapitres_voisins.suivant is not empty %}href="{{ path('story_episode', {id: chapitres_voisins.suivant.id}) }}" title="Chapitre suivant"{% endif %}>
           <i class="fa-solid fa-chevron-right"></i>
         </a>
       </span>
       <div><hr></div>
-      <a class="btn-primary-style btn-medium hue-gray chapter-backbtn" href="{{ path('aventure_saison', {id: episode.chapitreParent.saisonParent.id, '_fragment': 'read-head-ch-id' ~ episode.chapitreParent.id } ) }}" title="Retour à l'Aventure" aria-label="Retour à l'Aventure"><i class="fa-solid fa-reply" aria-hidden="true"></i></a>
+      <a class="btn-primary-style btn-medium hue-gray chapter-backbtn" href="{{ path('story_season', {id: episode.chapitreParent.saisonParent.id, '_fragment': 'read-head-ch-id' ~ episode.chapitreParent.id } ) }}" title="Retour à l'Aventure" aria-label="Retour à l'Aventure"><i class="fa-solid fa-reply" aria-hidden="true"></i></a>
     </div>
 
     <h2 id="read-head" class="heading-chapter">{{ episode.chapitreParent.titre|relief|raw }}</h2>
 
     <div class="chapter-intro relative">
-      {{ include('aventure/chapter-characters.html.twig', {un_chapitre: episode.chapitreParent, episode}) }}
+      {{ include('story/chapter-characters.html.twig', {un_chapitre: episode.chapitreParent, episode}) }}
       <p class="quote quote-chapter">{{ episode.chapitreParent.citation|nl2br }}</p>
     </div>
 
@@ -58,14 +58,14 @@
      <div class="row">
 
       <div class="col-12 relative">
-        {{ include('aventure/episodes-line.html.twig', {episode}) }}
+        {{ include('story/episodes-line.html.twig', {episode}) }}
       </div>
 
       <div class="col-12 bg-stroke-container relative">
         {{ include('parts/badge-access.html.twig', {state: element_state(episode)}) }}
         <h1 class="heading-episodedetail mb-0 mt-3 py-3">
           {{episode.titre}}
-          {% if is_mj() %}            {% set color, position, redirect, entity, un_element, size = 'text-white50', '', 'aventure', 'episode', episode, 'btn-icon-medium' %}
+          {% if is_mj() %}            {% set color, position, redirect, entity, un_element, size = 'text-white50', '', 'story', 'episode', episode, 'btn-icon-medium' %}
             {{ include('/btns/btn-icon-edit.html.twig') }}
           {% endif %}
         </h1>
@@ -84,7 +84,7 @@
               </div>
             {% endif %}
 
-            {{ include('/aventure/scene-detail.html.twig', {une_scene, lazy: not loop.first}) }}
+            {{ include('/story/scene-detail.html.twig', {une_scene, lazy: not loop.first}) }}
 
           {% else %}
             <p class="text-center text-light py-5">Il n'y a pas encore de scènes pour cette épisode.</p>
@@ -111,14 +111,14 @@
             </div>
           {% endif %}
 
-          {% if classement_episode %}
+          {% if episode_ranking %}
             <div class="d-flex justify-content-center">
               <div class="list-group list-group-flush">
                 {% set mvp = false %}
                 {% if episode.issue is not empty and episode.issue == 'Win' %}
                   {% set mvp = true %}
-                  {% for un_personnage in classement_episode %}
-                    {% if un_personnage != classement_episode|first and un_personnage.xp == classement_episode|first.xp %}
+                  {% for un_personnage in episode_ranking %}
+                    {% if un_personnage != episode_ranking|first and un_personnage.xp == episode_ranking|first.xp %}
                       {% set mvp = false %}
                     {% endif %}
                   {% endfor %}
@@ -126,7 +126,7 @@
 
                 {% set previous_xp = null %}
                 {% set rank = 0 %}
-                {% for un_personnage in classement_episode %}
+                {% for un_personnage in episode_ranking %}
 
                   {% if previous_xp != un_personnage.xp %}
                     {% set rank = rank + 1 %}
@@ -171,15 +171,15 @@
             <div class="col text-center">
             </div>
             <div class="col text-right pr-0">
-              {% if episode_suivant is not empty %}
-                {% if episode_suivant.scenes|length > 0 or is_mj() %}
-                  <a class="btn-primary-style btn-medium" href="{{ path('aventure_episode', {id: episode_suivant.id}) }}">
+              {% if next_episode is not empty %}
+                {% if next_episode.scenes|length > 0 or is_mj() %}
+                  <a class="btn-primary-style btn-medium" href="{{ path('story_episode', {id: next_episode.id}) }}">
                     Suivant
                   </a>
                 {% endif %}
               {% else %}
-                {% if episode_chapitre_suivant is not empty %}
-                  <a class="btn-primary-style btn-medium hue-fuschia" href="{{ path('aventure_episode', {id: episode_chapitre_suivant.id}) }}">
+                {% if next_chapter_episode is not empty %}
+                  <a class="btn-primary-style btn-medium hue-fuschia" href="{{ path('story_episode', {id: next_chapter_episode.id}) }}">
                     Chapitre suivant&nbsp;<i class="fa-solid fa-book-open" aria-hidden="true"></i>
                   </a>
                 {% endif %}

@@ -34,7 +34,7 @@ class MapController extends AbstractController
         $locations = $locationRepository->findAllSorted();
 
         return $this->render('map/index.html.twig', [
-            'lieux' => $locations,
+            'locations' => $locations,
             'location_groups' => $locationGrouper->byFaction($locations),
             'players' => $locator->players(),
             'positions' => $locator->positions(),

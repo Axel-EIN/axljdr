@@ -64,7 +64,7 @@ class AdminUserController extends AbstractController
         return $this->render('back_office/create.html.twig', [
             'entity' => 'user',
             'label' => 'Utilisateur',
-            'determinant' => 'un',
+            'article' => 'un',
             'form' => $form->createView()
         ]);
     }
@@ -110,7 +110,7 @@ class AdminUserController extends AbstractController
         return $this->renderForm('back_office/edit.html.twig', [
             'entity' => 'user',
             'label' => 'Utilisateur',
-            'determinant' => 'un',
+            'article' => 'un',
             'user' => $user,
             'form' => $form,
         ]);

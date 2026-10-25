@@ -80,7 +80,7 @@ class AdminLibraryController extends AbstractController
             $numeroteur->reordonnerNumero($library->getId(), -1, $library->getNumero(), [], $fratrieArrivee);
 
             if (!empty($request->query->get('redirect')) && $request->query->get('redirect') == 'library')
-                return $this->redirectToRoute('regles_library', ['id' => $library->getId()]);
+                return $this->redirectToRoute('rules_library', ['id' => $library->getId()]);
 
             return $this->redirectToRoute('admin_library');
         }
@@ -137,7 +137,7 @@ class AdminLibraryController extends AbstractController
             $this->addFlash('success', 'La Bibliothèque a bien été modifiée');
 
             if (!empty($request->query->get('redirect')) && $request->query->get('redirect') == 'library')
-                return $this->redirectToRoute('regles_library', ['id' => $library->getId()]);
+                return $this->redirectToRoute('rules_library', ['id' => $library->getId()]);
 
             return $this->redirectToRoute('admin_library');
         }

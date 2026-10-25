@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Personnage;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -21,34 +22,21 @@ class PersonnageRepository extends ServiceEntityRepository
         parent::__construct($registry, Personnage::class);
     }
 
-    public function findAllSorted()
-    {
-        return $this->orderByFaction($this->createQueryBuilder('p')
-            ->leftJoin('p.clan', 'c'))
-            ->getQuery()
-            ->getResult();
-    }
-
     public function findAllPJsSorted(?int $saisonId = null, ?int $chapitreId = null, ?int $episodeId = null)
     {
-        $qb = $this->createQueryBuilder('p')
-            ->andWhere('p.estPj = :val')
-            ->setParameter('val', 1)
-            ->leftJoin('p.clan', 'c');
-
-        $this->applySaisonChapitreEpisodeFilter($qb, $saisonId, $chapitreId, $episodeId);
-
-        return $this->orderByFaction($qb->addOrderBy('p.status', 'ASC'))
-            ->addOrderBy('p.nom', 'ASC')
-            ->getQuery()
-            ->getResult();
+        return $this->findSorted(true, $saisonId, $chapitreId, $episodeId);
     }
 
     public function findAllPNJsSorted(?int $saisonId = null, ?int $chapitreId = null, ?int $episodeId = null)
     {
-        $qb = $this->createQueryBuilder('p')
-            ->andWhere('p.estPj = :val')
-            ->setParameter('val', 0)
+        return $this->findSorted(false, $saisonId, $chapitreId, $episodeId);
+    }
+
+    private function findSorted(bool $estPj, ?int $saisonId, ?int $chapitreId, ?int $episodeId): array
+    {
+        $qb = $this->createListQueryBuilder()
+            ->andWhere('p.estPj = :estPj')
+            ->setParameter('estPj', $estPj)
             ->leftJoin('p.clan', 'c');
 
         $this->applySaisonChapitreEpisodeFilter($qb, $saisonId, $chapitreId, $episodeId);
@@ -86,39 +74,34 @@ class PersonnageRepository extends ServiceEntityRepository
         $qb->andWhere($qb->expr()->in('p.id', $sub->getDQL()));
     }
 
-    public function findAllExceptOne($id)
-    {
-        return $this->createQueryBuilder('p')
-            ->andWhere('p.id != :value_id')
-            ->setParameter('value_id', $id)
-            ->getQuery()
-            ->getResult();
-
-    }
-
     public function findAllPJsExceptOne($id)
     {
-        return $this->createQueryBuilder('p')
-            ->andWhere('p.estPj = :val')
-            ->andWhere('p.id != :value_id')
-            ->setParameter('val', 1)
-            ->setParameter('value_id', $id)
-            ->getQuery()
-            ->getResult();
+        return $this->findExceptOne(true, $id);
     }
 
     public function findAllPNJsExceptOne($id)
     {
-        return $this->createQueryBuilder('p')
-            ->andWhere('p.estPj = :val')
+        return $this->findExceptOne(false, $id);
+    }
+
+    private function findExceptOne(bool $estPj, $id): array
+    {
+        return $this->createListQueryBuilder()
+            ->andWhere('p.estPj = :estPj')
             ->andWhere('p.id != :value_id')
-            ->setParameter('val', 0)
+            ->setParameter('estPj', $estPj)
             ->setParameter('value_id', $id)
             ->getQuery()
             ->getResult();
     }
 
-    
+    public function createPJsByNameQueryBuilder(): QueryBuilder
+    {
+        return $this->createListQueryBuilder()
+            ->andWhere('p.estPj = true')
+            ->orderBy('p.nom', 'ASC')
+            ->addOrderBy('p.prenom', 'ASC');
+    }
 
     public function countPersonnages() {
         return $this->createQueryBuilder('p')
@@ -129,11 +112,17 @@ class PersonnageRepository extends ServiceEntityRepository
 
     public function findRankable(): array
     {
-        return $this->createQueryBuilder('p')
+        return $this->createListQueryBuilder()
             ->andWhere('p.estPj = true')
             ->addOrderBy('p.prenom', 'ASC')
             ->getQuery()
             ->getResult();
     }
 
+    private function createListQueryBuilder(): QueryBuilder
+    {
+        return $this->createQueryBuilder('p')
+            ->leftJoin('p.fichePersonnage', 'fiche')
+            ->addSelect('fiche');
+    }
 }

@@ -7,7 +7,7 @@
 
   {% if nouvelle_saison %}
     <h3 class="historique-saison{{ precedent is null ? ' first' : '' }}">
-      <img class="img-48 mr-2" src="{{ asset(AVENTURE_SAISON_ICO) }}" alt="" />
+      <img class="img-48 mr-2" src="{{ asset(STORY_SEASON_ICO) }}" alt="" />
       <span class="text-white">{{ saison.numero == saison_courante|default(null) ? 'Saison en cours' : saison.titre }}</span>
     </h3>
   {% endif %}
@@ -15,7 +15,7 @@
   {% if precedent is null or precedent.chapitreParent.id != chapitre.id %}
     {% if not nouvelle_saison %}<hr class="my-4 mx-n3">{% endif %}
     <h4 class="ml-2 p-0">
-      <img class="img-36 invert mr-2" src="{{ asset(AVENTURE_CHAPITRE_ICO) }}" alt="" />
+      <img class="img-36 invert mr-2" src="{{ asset(STORY_CHAPTER_ICO) }}" alt="" />
       {{ chapitre.titre }}
     </h4>
   {% endif %}
@@ -24,7 +24,7 @@
     <a  class="chevron-toggle d-flex align-items-center flex-grow-1"
         data-toggle="collapse" href="#episode{{ un_episode.id }}" role="button"
         aria-expanded="false" aria-controls="episode{{ un_episode.id }}">
-      <img class="img-24 invert mr-2" src="{{ asset(AVENTURE_EPISODE_ICO) }}" alt="" />
+      <img class="img-24 invert mr-2" src="{{ asset(STORY_EPISODE_ICO) }}" alt="" />
       <span class="historique-numero text-muted mr-2">#{{ un_episode.numeroSaison }}</span>
       {{ un_episode.titre }}
       <i class="fas fa-chevron-down ml-2 text-small"></i>
@@ -32,7 +32,7 @@
         <span class="ml-auto text-nowrap historique-xp">{{ include('parts/xp-gain.html.twig', {xp: un_bloc.xp, total: un_bloc.xpWithBonus, format: 'moyen', signe: '+'}) }}</span>
       {% endif %}
     </a>
-    <a class="ml-2 mr-2 mr-lg-0 text-small" href="{{ path('aventure_episode', {id: un_episode.id}) }}" title="Voir l'épisode">
+    <a class="ml-2 mr-2 mr-lg-0 text-small" href="{{ path('story_episode', {id: un_episode.id}) }}" title="Voir l'épisode">
       <i class="fas fa-external-link-alt"></i>
     </a>
   </h5>
@@ -40,7 +40,7 @@
   <div id="episode{{ un_episode.id }}" class="collapse">
     {% for ligne in un_bloc.lignes %}
       <div class="historique-scene">
-        <a href="{{ path('aventure_episode', {id: un_episode.id, '_fragment': 'scn' ~ ligne.scene.numero}) }}">
+        <a href="{{ path('story_episode', {id: un_episode.id, '_fragment': 'scn' ~ ligne.scene.numero}) }}">
           Scène {{ ligne.scene.numero }} — <strong>{{ ligne.scene.titre }}</strong>
         </a>
 

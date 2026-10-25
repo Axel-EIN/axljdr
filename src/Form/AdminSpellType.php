@@ -12,7 +12,7 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 
-class AdminSortType extends AbstractType
+class AdminSpellType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {

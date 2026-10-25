@@ -5,7 +5,7 @@ namespace App\Controller;
 use App\Service\TableFilter;
 use App\Entity\Sort;
 use App\Form\AdminSpellType;
-use App\Service\Numeroteur;
+use App\Service\Orderer;
 use App\Service\FileHandler;
 use App\Repository\SortRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -65,7 +65,7 @@ class AdminSpellController extends AbstractController
      * @Route("/admin/spell/create", name="admin_spell_create")
      * @IsGranted("ROLE_MJ")
      */
-    public function addSpell(Request $request, EntityManagerInterface $em, FileHandler $fileHandler, SortRepository $spellRepository, Numeroteur $numeroteur, Unlocker $unlocker, TableFilter $tableFilter) {
+    public function addSpell(Request $request, EntityManagerInterface $em, FileHandler $fileHandler, SortRepository $spellRepository, Orderer $orderer, Unlocker $unlocker, TableFilter $tableFilter) {
 
         $spell = new Sort;
         $tableFilter->prefill($spell, self::TABLE_FILTERS, $request->query->all('filter'));
@@ -124,7 +124,7 @@ class AdminSpellController extends AbstractController
      * @Route("/admin/spell/{id}/edit", name="admin_spell_edit")
      * @IsGranted("ROLE_MJ")
      */
-    public function editSpell(Request $request, Sort $spell, SortRepository $spellRepository, Numeroteur $numeroteur, Unlocker $unlocker): Response {
+    public function editSpell(Request $request, Sort $spell, SortRepository $spellRepository, Orderer $orderer, Unlocker $unlocker): Response {
 
         if ( empty( $spell->getNumero() ) || !is_numeric( $spell->getNumero() ) || $spell->getNumero() < 0)
             $previousNumber = -1;
@@ -143,7 +143,7 @@ class AdminSpellController extends AbstractController
             {
                 $previousSiblings = $spellRepository->findBy(['anneau' => $previousSiblingsId]);
                 $newSiblings = $spellRepository->findBy(['anneau' => $spell->getAnneau()]);
-                $numeroteur->reordonnerNumero($spell->getId(), $previousNumber, $spell->getNumero(), $previousSiblings, $newSiblings);
+                $orderer->reorderNumber($spell->getId(), $previousNumber, $spell->getNumero(), $previousSiblings, $newSiblings);
             }
 
             $unlocker->sync($spell, $form->get('unlockedBy')->getData());

@@ -4,7 +4,7 @@ namespace App\Controller;
 
 use Exception;
 use App\Entity\Utilisateur;
-use App\Form\MonCompteMdpType;
+use App\Form\AccountPasswordType;
 use App\Form\ResetPassType;
 use Symfony\Component\Mime\Email;
 use App\Repository\UtilisateurRepository;
@@ -116,7 +116,7 @@ class LoginController extends AbstractController
             return $this->redirectToRoute('app_login');
         }
 
-        $form = $this->createForm(MonCompteMdpType::class);
+        $form = $this->createForm(AccountPasswordType::class);
 
         $form->handleRequest($request);
 
@@ -135,7 +135,7 @@ class LoginController extends AbstractController
 
             return $this->redirectToRoute('app_login');
         }else {
-            return $this->render('mon_compte/modifier_mdp.html.twig',['form' => $form->createView()]);
+            return $this->render('account/edit-password.html.twig',['form' => $form->createView()]);
         }
     }
 }

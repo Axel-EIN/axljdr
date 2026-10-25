@@ -168,13 +168,13 @@
                     {% set scene = development.scene %}
                     {% set episode = scene.episodeParent %}
                     {% set chapitre = episode.chapitreParent %}
-                    {% set scene_url = path('aventure_episode', {id: episode.id, '_fragment': 'scn' ~ scene.numero}) %}
+                    {% set scene_url = path('story_episode', {id: episode.id, '_fragment': 'scn' ~ scene.numero}) %}
 
                     <article class="development-line">
                         <div class="development-head">
                             <span class="development-title">
                                 <a href="{{ scene_url }}">
-                                    <img class="img-18 invert mr-1 align-middle" src="{{ asset(AVENTURE_EPISODE_ICO) }}" alt="" />
+                                    <img class="img-18 invert mr-1 align-middle" src="{{ asset(STORY_EPISODE_ICO) }}" alt="" />
                                     <strong>{{ scene.titre }}</strong>
                                 </a>
                                 {% if is_mj() %}

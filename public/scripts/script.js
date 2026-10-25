@@ -5,11 +5,11 @@ $('.cacher, .voir').each(function () {
         $($button.data('target'))
             .on('show.bs.collapse', function (e) {
                 if (e.target !== this) return;
-                $button.removeClass('voir btn-primary-style').addClass('cacher btn-tertiary-style').html('<i class="fa-solid fa-eye-slash" aria-hidden="true"></i>&nbsp;&nbsp;Cacher');
+                $button.removeClass('voir').addClass('cacher hue-gray').html('<i class="fa-solid fa-eye-slash" aria-hidden="true"></i>&nbsp;&nbsp;Cacher');
             })
             .on('hide.bs.collapse', function (e) {
                 if (e.target !== this) return;
-                $button.removeClass('cacher btn-tertiary-style').addClass('voir btn-primary-style').html('<i class="fa-solid fa-scroll fa-bounce" aria-hidden="true"></i>&nbsp;&nbsp;Voir les Épisodes');
+                $button.removeClass('cacher hue-gray').addClass('voir').html('<i class="fa-solid fa-scroll fa-bounce" aria-hidden="true"></i>&nbsp;&nbsp;Voir les Épisodes');
             });
 
 });
@@ -42,23 +42,26 @@ $('.modal').on('shown.bs.modal', function () {
 
 document.querySelectorAll('.picture-scroller').forEach(function (scroller) {
 
-    const grid = scroller.querySelector('.picture-grid');
-    const items = grid.querySelectorAll('.picture-item');
+    const track = scroller.querySelector('.scroller-track');
     const buttons = scroller.querySelectorAll('.scroller-btn');
     const dots = scroller.id ? document.querySelector('.scroller-dots[data-scroller="' + scroller.id + '"]') : null;
     let page = 0;
 
-    function perPage() {
-        return parseInt(getComputedStyle(grid).getPropertyValue('--cols'), 10) || 1;
+    function visibleItems() {
+        return Array.from(track.children).filter(function (item) { return item.offsetParent !== null; });
     }
 
-    function pageWidth() {
+    function perPage() {
+        return parseInt(getComputedStyle(track).getPropertyValue('--cols'), 10) || 1;
+    }
+
+    function pageWidth(items) {
         const cols = perPage();
-        return items.length > cols ? items[cols].offsetLeft - items[0].offsetLeft : grid.clientWidth;
+        return items.length > cols ? items[cols].offsetLeft - items[0].offsetLeft : track.clientWidth;
     }
 
     function goTo(target) {
-        grid.scrollTo({ left: target * pageWidth() });
+        track.scrollTo({ left: target * pageWidth(visibleItems()) });
     }
 
     function renderDots(pages) {
@@ -75,13 +78,14 @@ document.querySelectorAll('.picture-scroller').forEach(function (scroller) {
     }
 
     function update() {
-        const max = grid.scrollWidth - grid.clientWidth;
+        const items = visibleItems();
+        const max = track.scrollWidth - track.clientWidth;
         const pages = max > 1 ? Math.ceil(items.length / perPage()) : 0;
-        page = grid.scrollLeft >= max - 1 ? pages - 1 : Math.round(grid.scrollLeft / pageWidth());
+        page = track.scrollLeft >= max - 1 ? pages - 1 : Math.round(track.scrollLeft / pageWidth(items));
 
         scroller.classList.toggle('overflowing', max > 1);
         buttons.forEach(function (button) {
-            button.disabled = button.dataset.direction < 0 ? grid.scrollLeft <= 1 : grid.scrollLeft >= max - 1;
+            button.disabled = button.dataset.direction < 0 ? track.scrollLeft <= 1 : track.scrollLeft >= max - 1;
         });
 
         if (dots) {
@@ -98,7 +102,9 @@ document.querySelectorAll('.picture-scroller').forEach(function (scroller) {
         });
     });
 
-    grid.addEventListener('scroll', update, { passive: true });
-    new ResizeObserver(update).observe(grid);
+    track.addEventListener('scroll', update, { passive: true });
+    const observer = new ResizeObserver(update);
+    observer.observe(track);
+    Array.from(track.children).forEach(function (item) { observer.observe(item); });
 
 });

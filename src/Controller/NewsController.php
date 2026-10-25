@@ -13,22 +13,22 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class NewsController extends AbstractController
 {
-    private const VIGNETTES = 4;
-    private const VIGNETTES_PORTRAITS = 8;
+    private const THUMBNAILS = 4;
+    private const PORTRAIT_THUMBNAILS = 8;
 
     private const PARTICIPATIONS = 2;
 
-    private const SEANCES_PRECEDENTES = 3;
+    private const PREVIOUS_SESSIONS = 3;
 
-    private const MARGE_DECOUVERTES = 2;
+    private const DISCOVERY_MARGIN = 2;
 
-    private const DECOUVERTES = [
+    private const DISCOVERIES = [
         ['titre' => 'Personnages', 'vide' => 'Aucun personnage découvert', 'variant' => 'portrait', 'cle' => 'character', 'max' => 4],
         ['titre' => 'Lieux', 'vide' => 'Aucun lieu découvert', 'variant' => 'icon', 'cle' => 'location', 'max' => 3],
         ['titre' => 'Objets', 'vide' => 'Aucun objet découvert', 'variant' => 'rule', 'field' => 'icon', 'cle' => 'object', 'max' => 3],
     ];
 
-    private const GROUPES = [
+    private const GROUPS = [
         ['titre' => 'Personnages Joueurs', 'variant' => 'portrait', 'cles' => ['character'], 'criteres' => ['estPj' => true]],
         ['titre' => 'Personnages Non Joueurs', 'variant' => 'portrait', 'cles' => ['character'], 'criteres' => ['estPj' => false]],
         ['titre' => 'Lieux', 'variant' => 'icon', 'cles' => ['location']],
@@ -55,13 +55,13 @@ class NewsController extends AbstractController
      */
     public function index(NewsFeed $newsFeed, XpRanker $xpRanker, CurrentPlayer $currentPlayer, Visibility $visibility, Locator $locator): Response
     {
-        $mesPersonnages = $currentPlayer->characterIds();
-        $monPersonnage = $currentPlayer->navigatingCharacter();
+        $myCharacters = $currentPlayer->characterIds();
+        $myCharacter = $currentPlayer->navigatingCharacter();
 
         $participations = $newsFeed->lastParticipations(self::PARTICIPATIONS);
-        $map = $locator->map($participations === [] ? null : $monPersonnage, true);
-        $episodes = $newsFeed->lastEpisodes(1 + self::SEANCES_PRECEDENTES);
-        $dernierEpisode = $episodes[0] ?? null;
+        $map = $locator->map($participations === [] ? null : $myCharacter, true);
+        $episodes = $newsFeed->lastEpisodes(1 + self::PREVIOUS_SESSIONS);
+        $lastEpisode = $episodes[0] ?? null;
 
         $participationsXp = [];
         foreach ($participations as $participation) {
@@ -76,76 +76,76 @@ class NewsController extends AbstractController
             ['entity' => 'news', 'titleLight' => '', 'titleStrong' => 'Nouveautés'],
         ];
 
-        $groupes = [];
-        $trouver = function (array $cles, int $max, array $criteres = []) use ($newsFeed, $visibility) {
-            return array_slice($visibility->listedOnly($newsFeed->latestAmong($cles, $max, $criteres)), 0, $max);
+        $groups = [];
+        $find = function (array $keys, int $max, array $criteria = []) use ($newsFeed, $visibility) {
+            return array_slice($visibility->listedOnly($newsFeed->latestAmong($keys, $max, $criteria)), 0, $max);
         };
 
-        foreach (self::GROUPES as $groupe) {
-            if (isset($groupe['sections'])) {
-                $sectionsDuGroupe = [];
-                foreach ($groupe['sections'] as $section) {
-                    $elements = $trouver($section['cles'], $section['max'], $section['criteres'] ?? []);
+        foreach (self::GROUPS as $group) {
+            if (isset($group['sections'])) {
+                $groupSections = [];
+                foreach ($group['sections'] as $section) {
+                    $elements = $find($section['cles'], $section['max'], $section['criteres'] ?? []);
 
                     if (!empty($elements)) {
-                        $sectionsDuGroupe[] = $section + ['elements' => $elements];
+                        $groupSections[] = $section + ['elements' => $elements];
                     }
                 }
 
-                if (!empty($sectionsDuGroupe)) {
-                    $groupes[] = ['sections' => $sectionsDuGroupe] + $groupe;
+                if (!empty($groupSections)) {
+                    $groups[] = ['sections' => $groupSections] + $group;
                 }
 
                 continue;
             }
 
-            $portrait = ($groupe['variant'] ?? null) === 'portrait';
-            $max = $portrait ? self::VIGNETTES_PORTRAITS : self::VIGNETTES;
-            $elements = $trouver($groupe['cles'], $max, $groupe['criteres'] ?? []);
+            $portrait = ($group['variant'] ?? null) === 'portrait';
+            $max = $portrait ? self::PORTRAIT_THUMBNAILS : self::THUMBNAILS;
+            $elements = $find($group['cles'], $max, $group['criteres'] ?? []);
 
             if (!empty($elements)) {
-                $groupes[] = $groupe + [
+                $groups[] = $group + [
                     'perRow' => ['desktop' => $portrait ? $max / 2 : $max, 'tablet' => $max / 2],
                     'elements' => $elements,
                 ];
             }
         }
 
-        $colonne = 0;
-        foreach ($groupes as $groupe) {
-            $colonne = ($groupe['large'] ?? false) ? 0 : 1 - $colonne;
+        $column = 0;
+        foreach ($groups as $group) {
+            $column = ($group['large'] ?? false) ? 0 : 1 - $column;
         }
 
-        $monRecap = null;
-        $decouvertes = [];
-        if ($monPersonnage !== null) {
-            $monRecap = [
-                'pvMax' => $monPersonnage->getFichePersonnage()?->getPvMax(),
-                'rang' => $xpRanker->rank($xpRanker->total($monPersonnage)),
+        $mySummary = null;
+        $discoveries = [];
+        if ($myCharacter !== null) {
+            $mySummary = [
+                'pvMax' => $myCharacter->getFichePersonnage()?->getPvMax(),
+                'rang' => $xpRanker->rank($xpRanker->total($myCharacter)),
             ];
 
-            foreach (self::DECOUVERTES as $decouverte) {
-                $elements = $newsFeed->lastDiscovered($decouverte['cle'], $decouverte['max'] * self::MARGE_DECOUVERTES);
-                $decouvertes[] = $decouverte + ['elements' => array_slice($visibility->listedOnly($elements), 0, $decouverte['max'])];
+            foreach (self::DISCOVERIES as $discovery) {
+                $elements = $newsFeed->lastDiscovered($discovery['cle'], $discovery['max'] * self::DISCOVERY_MARGIN);
+                $discoveries[] = $discovery + ['elements' => array_slice($visibility->listedOnly($elements), 0, $discovery['max'])];
             }
         }
 
         return $this->render('news/index.html.twig', [
-            'dernier_episode' => $dernierEpisode,
-            'classement' => $dernierEpisode === null ? false : $xpRanker->rankEpisodeCharacters($dernierEpisode),
-            'session_locations' => $dernierEpisode === null ? [] : $newsFeed->episodeLocations($dernierEpisode),
-            'session_characters' => $dernierEpisode === null ? [] : $newsFeed->episodeCharacters($dernierEpisode),
-            'session_objects' => $dernierEpisode === null ? [] : $newsFeed->episodeObjects($dernierEpisode),
+            'dernier_episode' => $lastEpisode,
+            'classement' => $lastEpisode === null ? false : $xpRanker->rankEpisodeCharacters($lastEpisode),
+            'session_locations' => $lastEpisode === null ? [] : $newsFeed->episodeLocations($lastEpisode),
+            'session_characters' => $lastEpisode === null ? [] : $newsFeed->episodeCharacters($lastEpisode),
+            'session_objects' => $lastEpisode === null ? [] : $newsFeed->episodeObjects($lastEpisode),
             'session_previous' => array_slice($episodes, 1),
-            'mes_personnages' => $mesPersonnages,
-            'mon_personnage' => $monPersonnage,
-            'mon_recap' => $monRecap,
+            'mes_personnages' => $myCharacters,
+            'mon_personnage' => $myCharacter,
+            'mon_recap' => $mySummary,
             'mes_participations' => $participations,
-            'classement_general' => $monPersonnage === null ? $newsFeed->generalRanking() : [],
-            'decouvertes' => $decouvertes,
+            'classement_general' => $myCharacter === null ? $newsFeed->generalRanking() : [],
+            'decouvertes' => $discoveries,
             'participations_xp' => $participationsXp,
-            'groupes' => $groupes,
-            'secrets_large' => $colonne === 0,
+            'groupes' => $groups,
+            'secrets_large' => $column === 0,
             'sections' => $sections,
             'header_classname' => 'news',
             'header_up' => 'Accueil',

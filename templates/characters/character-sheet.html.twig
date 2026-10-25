@@ -105,7 +105,7 @@
                 Aucun
               {% endif %}
             </li>
-            <li class="fiche-ligne-classe">
+            <li class="sheet-class-line">
               <span class="label">Classe :</span>
               {% if sheet.personnage.classe %}
                 <a class="extrabold" href="{{ path('rules_class', {id: sheet.personnage.classe.id}) }}">
@@ -142,7 +142,7 @@
           <ul>
             <li>
               <span class="label">Rang Général :</span>
-              <span class="ml-auto badge-rang-{{rank}}">RANG {{rank}}</span>
+              <span class="ml-auto badge-rank-{{rank}}">RANG {{rank}}</span>
             </li>
 
             {% if is_own_character or is_gm() %}
@@ -191,11 +191,11 @@
       <hr class="my-2 d-none d-lg-block">
 
       <div class="row mt-4 d-none d-lg-flex">
-        <div class="col-12 anneaux-board"
+        <div class="col-12 rings-board"
              style="--mon-clan: url('{{ asset(sheet.personnage.clan.mon|default(NA_MON)) }}');">
 
           {% for i in 1..3 %}
-            <img class="anneaux-glow" src="{{ asset(sheet.personnage.classe.icone|default(NA_MON)) }}" />
+            <img class="rings-glow" src="{{ asset(sheet.personnage.classe.icone|default(NA_MON)) }}" />
           {% endfor %}
 
           <div class="row text-center">
@@ -203,7 +203,7 @@
 
             <div class="col-4 flex-col align-items-center">
               <div class="flex align-items-start">
-                <span class="anneau-rang" data-ring="terre">
+                <span class="ring-rank" data-ring="terre">
                   {{ min(eff_constitution, eff_willpower) }}
                 </span>
                 <img src="{{FLAT_TERRE}}" class="ml-3 img-72" />
@@ -211,7 +211,7 @@
 
               <div class="align-self-start">
                 <span
-                  class="trait-rang
+                  class="trait-rank
                     {% if eff_constitution > eff_willpower %} text-strong {% endif %}"
                   data-trait-eff="constitution" data-base="{{ sheet.constitution }}"
                   data-bonus="{{ constitution_bonus_count }}" data-multiplier="4"
@@ -232,7 +232,7 @@
               
               <div class="align-self-start">
                 <span
-                  class="trait-rang
+                  class="trait-rank
                     {% if eff_willpower > eff_constitution %} text-strong {% endif %}"
                   data-trait-eff="volonte" data-base="{{ sheet.volonte }}"
                   data-bonus="{{ willpower_bonus_count }}" data-multiplier="4"
@@ -255,7 +255,7 @@
             <div class="col-4 flex-col align-items-center">
               <div class="flex align-items-start">
                 <img src="{{FLAT_AIR}}" class="img-72 mr-3" />
-                <span class="anneau-rang" data-ring="air">
+                <span class="ring-rank" data-ring="air">
                   {{ min(eff_reflexes, eff_intuition) }}
                 </span>
               </div>
@@ -272,7 +272,7 @@
                 {% endif %}
                 &nbsp;
                 <span
-                  class="trait-rang
+                  class="trait-rank
                     {% if eff_reflexes > eff_intuition %} text-strong {% endif %}"
                   data-trait-eff="reflexes" data-base="{{ sheet.reflexes }}"
                   data-bonus="{{ reflexes_bonus_count }}" data-multiplier="4"
@@ -293,7 +293,7 @@
                 {% endif %}
                 &nbsp;
                 <span
-                  class="trait-rang
+                  class="trait-rank
                     {% if eff_intuition > eff_reflexes %} text-strong {% endif %}"
                   data-trait-eff="intuition" data-base="{{ sheet.intuition }}"
                   data-bonus="{{ intuition_bonus_count }}" data-multiplier="4"
@@ -312,7 +312,7 @@
 
             <div class="col-4 flex-col align-items-center">
               <div class="flex align-items-center">
-                <span class="anneau-rang" data-ring="eau">
+                <span class="ring-rank" data-ring="eau">
                   {{ min(eff_strength, eff_perception) }}
                 </span>
                 <img src="{{FLAT_EAU}}" class="img-72 ml-3" />
@@ -320,7 +320,7 @@
 
               <div class="align-self-start">
                 <span
-                  class="trait-rang
+                  class="trait-rank
                     {% if eff_strength > eff_perception %} text-strong {% endif %}"
                   data-trait-eff="forceStat" data-base="{{ sheet.forceStat }}"
                   data-bonus="{{ strength_bonus_count }}" data-multiplier="4"
@@ -341,7 +341,7 @@
 
               <div class="align-self-start">
                 <span
-                  class="trait-rang
+                  class="trait-rank
                     {% if eff_perception > eff_strength %} text-strong {% endif %}"
                   data-trait-eff="perception" data-base="{{ sheet.perception }}"
                   data-bonus="{{ perception_bonus_count }}" data-multiplier="4"
@@ -392,7 +392,7 @@
             <div class="col-4 flex-col align-items-center">
               <div class="flex align-items-center">
                 <img src="{{FLAT_FEU}}" class="img-72 mr-2" />
-                <span class="anneau-rang" data-ring="feu">
+                <span class="ring-rank" data-ring="feu">
                   {{ min(eff_agility, eff_intelligence) }}
                 </span>
               </div>
@@ -409,7 +409,7 @@
                 {% endif %}
                 &nbsp;
                 <span
-                  class="trait-rang
+                  class="trait-rank
                     {% if eff_agility > eff_intelligence %} text-strong {% endif %}"
                   data-trait-eff="agilite" data-base="{{ sheet.agilite }}"
                   data-bonus="{{ agility_bonus_count }}" data-multiplier="4"
@@ -430,7 +430,7 @@
                 {% endif %}
                 &nbsp;
                 <span
-                  class="trait-rang
+                  class="trait-rank
                     {% if eff_intelligence > eff_agility %} text-strong {% endif %}"
                   data-trait-eff="intelligence" data-base="{{ sheet.intelligence }}"
                   data-bonus="{{ intelligence_bonus_count }}" data-multiplier="4"
@@ -450,7 +450,7 @@
             <div class="col-4 flex-col align-items-center">
               <div class="flex align-items-center">
                 <img class="img-72 ml-5 mr-3" src="{{FLAT_VIDE}}"/>
-                <span class="anneau-rang"
+                <span class="ring-rank"
                   data-trait-eff="vide" data-base="{{ sheet.vide }}"
                   data-bonus="{{ void_bonus_count }}" data-multiplier="6"
                 >
@@ -518,23 +518,23 @@
       { name: 'Vide', icon: FLAT_VIDE, rank: eff_void, traits: [] }
     ] %}
     <div class="illu-col col-12 col-lg-4 order-first order-lg-last">
-      <div class="fiche-illu-wrap">
+      <div class="sheet-illu-wrap">
         {% set illustration_preset = image_preset('vertical450') %}
-        <img class="fiche-illu img-fluid rounded-8 d-block mx-auto" src="{{ asset(sheet.personnage.illustration|default(NA_PERSO_ILLU)) }}" width="{{ illustration_preset.width }}" height="{{ illustration_preset.height }}" />
+        <img class="sheet-illu img-fluid rounded-8 d-block mx-auto" src="{{ asset(sheet.personnage.illustration|default(NA_PERSO_ILLU)) }}" width="{{ illustration_preset.width }}" height="{{ illustration_preset.height }}" />
 
-        <div class="fiche-traits d-lg-none">
+        <div class="sheet-traits d-lg-none">
           {% for mobile_ring in mobile_rings %}
-            <div class="fiche-anneau-groupe{% if mobile_ring.traits is empty %} fiche-anneau-solo{% endif %}">
-              <div class="fiche-anneau-line">
-                <img class="fiche-anneau-ico" src="{{ mobile_ring.icon }}" alt="" />
+            <div class="sheet-ring-group{% if mobile_ring.traits is empty %} sheet-ring-solo{% endif %}">
+              <div class="sheet-ring-line">
+                <img class="sheet-ring-icon" src="{{ mobile_ring.icon }}" alt="" />
                 <span class="text-plus extrabold">{{ mobile_ring.name }}</span>
-                <strong class="fiche-anneau-rang text-plus">{{ mobile_ring.rank }}</strong>
+                <strong class="sheet-ring-rank text-plus">{{ mobile_ring.rank }}</strong>
               </div>
               {% for trait in mobile_ring.traits %}
-                <div class="fiche-trait-line">
+                <div class="sheet-trait-line">
                   <span>{{ trait.name }}</span>
                   {% if trait.bonus > 0 %}<small class="text-success">+{{ trait.bonus }}</small>{% endif %}
-                  <strong class="fiche-trait-value">{{ trait.val }}</strong>
+                  <strong class="sheet-trait-value">{{ trait.val }}</strong>
                 </div>
               {% endfor %}
             </div>
@@ -542,7 +542,7 @@
         </div>
       </div>
 
-      <ul class="fiche-standings">
+      <ul class="sheet-standings">
         {% for field in ['honneur', 'gloire', 'infamie', 'statut'] %}
           {% set value = attribute(sheet, field) %}
           <li>
@@ -556,12 +556,12 @@
     </div>
   </div>
 
-  <div class="row bloc-row">
+  <div class="row block-row">
 
     <section class="col-12 col-lg-8">
 
       {% if is_own_character or is_gm() %}
-        <div class="card card-bloc">
+        <div class="card card-block">
 
           <div class="card-title-cartouche d-flex align-items-center">
             Avantages & Désavantages
@@ -584,7 +584,7 @@
                     {% set item = advantage_items[slot] %}
                     <li data-av-slot="{{ slot }}" data-av-kind="{{ kind }}"
                         data-av-id="{{ item ? item.id : 0 }}"
-                        {% if not item %}class="av-row-empty"{% endif %}
+                        {% if not item %}class="advantage-row-empty"{% endif %}
                     >
                       {% set advantage_text = item ? (item.summary ?: item.description|striptags) : '' %}
                       <div>
@@ -613,7 +613,7 @@
         </div>
       {% endif %}
 
-      <div class="card card-body card-bloc">
+      <div class="card card-body card-block">
         <table class="table m-0 p-0" id="comp-table">
           <thead>
             <tr class="card-title-cartouche p-0 py-2">
@@ -622,12 +622,12 @@
               </th>
               <th class="px-0 py-2 font-regular" scope="col">
                 Compétences
-                <span class="comp-legende text-reddanger"><i class="comp-degradante fa-solid fa-arrow-down-wide-short" aria-hidden="true"></i>compétence dégradante</span>
+                <span class="skill-legend text-reddanger"><i class="skill-degrading fa-solid fa-arrow-down-wide-short" aria-hidden="true"></i>compétence dégradante</span>
               </th>
               <th class="px-1 py-2 text-small font-barlow semi-visible text-center" scope="col">Rang</th>
               <th class="px-1 py-2 text-small font-barlow semi-visible text-center d-none d-lg-table-cell" scope="col">Trait</th>
-              <th class="comp-cap px-1 py-2 text-small font-barlow semi-visible text-center" scope="col">Capacité R3</th>
-              <th class="comp-cap px-1 py-2 text-small font-barlow semi-visible text-center" scope="col">Capacité R6</th>
+              <th class="skill-cap px-1 py-2 text-small font-barlow semi-visible text-center" scope="col">Capacité R3</th>
+              <th class="skill-cap px-1 py-2 text-small font-barlow semi-visible text-center" scope="col">Capacité R6</th>
               <th class="px-0 py-2 text-small semi-visible edit-only" scope="col">Coût XP</th>
             </tr>
           </thead>
@@ -677,13 +677,13 @@
                   </td>
                   <th class="text-strong extrabold" scope="row" data-comp-name>
                     <a href="{{ element_url(slot.skill) }}"><strong>{{ slot.skill.nom }}</strong></a>
-                    {% if slot.skill.degradante %}<i class="comp-degradante after fa-solid fa-arrow-down-wide-short" title="Compétence dégradante"></i>{% endif %}
+                    {% if slot.skill.degradante %}<i class="skill-degrading after fa-solid fa-arrow-down-wide-short" title="Compétence dégradante"></i>{% endif %}
                   </th>
                   <td class="text-strong extrabold text-center" data-comp-val-cell>{{ slot.val ?? '' }}</td>
                   <td class="text-body-c text-mini text-center d-none d-lg-table-cell" title="{{ slot.skill.trait }}" data-comp-trait-cell>{{ slot.skill.traitCourt }}</td>
                   {% for rank_cap, cap_text in {3: slot.skill.mastery3Text, 6: slot.skill.mastery6Text} %}
                     {% set cap_long = not attribute(slot.skill, 'mastery' ~ rank_cap ~ 'Summary') %}
-                    <td class="comp-cap text-mini text-body-c text-center" rowspan="2">
+                    <td class="skill-cap text-mini text-body-c text-center" rowspan="2">
                       {% if slot.val >= rank_cap %}
                         <span class="text-clamp-2"{% if cap_long %} data-toggle="tooltip" title="{{ cap_text|striptags }}"{% endif %}>{{ cap_text|striptags }}</span>
                       {% endif %}
@@ -691,7 +691,7 @@
                   {% endfor %}
                   <td class="edit-only text-alternate" data-comp-cost-cell>{% if cost_slot.rank > 0 %}-{{ cost_slot.rank }}xp{% endif %}</td>
                 </tr>
-                <tr data-comp-specs-row="{{ slot.i }}" class="comp-specs-row">
+                <tr data-comp-specs-row="{{ slot.i }}" class="skill-specs-row">
                   <td></td>
                   <td colspan="3" data-comp-specs-cell>
                     {% if bought_specs|length > 0 %}
@@ -712,16 +712,16 @@
             {% endfor %}
 
             {% for slot in empty_slots %}
-              <tr data-comp-row="{{ slot.i }}" data-comp-id="0" data-comp-val="0" data-comp-specs="" data-comp-ecole="0" data-comp-spe-ecole="" class="comp-row-empty">
+              <tr data-comp-row="{{ slot.i }}" data-comp-id="0" data-comp-val="0" data-comp-specs="" data-comp-ecole="0" data-comp-spe-ecole="" class="skill-row-empty">
                 <td class="text-center" data-comp-ecole-cell></td>
                 <th class="text-strong extrabold" scope="row" data-comp-name></th>
                 <td class="text-strong extrabold text-center" data-comp-val-cell></td>
                 <td class="text-body-c text-mini text-center d-none d-lg-table-cell" data-comp-trait-cell></td>
-                <td class="comp-cap" rowspan="2"></td>
-                <td class="comp-cap" rowspan="2"></td>
+                <td class="skill-cap" rowspan="2"></td>
+                <td class="skill-cap" rowspan="2"></td>
                 <td class="edit-only text-alternate" data-comp-cost-cell></td>
               </tr>
-              <tr data-comp-specs-row="{{ slot.i }}" class="comp-specs-row comp-row-empty">
+              <tr data-comp-specs-row="{{ slot.i }}" class="skill-specs-row skill-row-empty">
                 <td></td>
                 <td class="text-body-c" colspan="3" data-comp-specs-cell></td>
                 <td class="edit-only text-alternate" data-comp-specs-cost-cell></td>
@@ -738,7 +738,7 @@
         {% set techniques = [] %}
         {% if class_name in ['Shugenja', 'Moine'] and dojo.techSpecialNom is not empty %}
           {% set techniques = [{
-            rank: null, anchor: 'technique-speciale', name: dojo.techSpecialNom,
+            rank: null, anchor: 'technique-special', name: dojo.techSpecialNom,
             summary: dojo.techSpecialSummary, description: dojo.techSpecialDesc|striptags
           }] %}
         {% endif %}
@@ -751,7 +751,7 @@
           {% endif %}
         {% endfor %}
 
-        <div class="card card-bloc">
+        <div class="card card-block">
           <div class="card-title-cartouche">Techniques d'École</div>
 
           <ul class="technique-list">
@@ -797,11 +797,11 @@
           {% set rings = rings|merge({VIDE: FLAT_VIDE}) %}
         {% endif %}
 
-        <div class="card card-bloc">
+        <div class="card card-block">
 
           <div class="card-title-cartouche">Magie</div>
 
-          <div class="row no-gutters magie-entete">
+          <div class="row no-gutters magic-header">
 
             <div class="col-6 col-lg-3">
               <h6>Affinité</h6>
@@ -840,7 +840,7 @@
 
           </div>
 
-          <div class="row no-gutters magie-anneaux">
+          <div class="row no-gutters magic-rings">
             {% for ring, icon in rings %}
               <div class="col-6 col-lg knownspells-column">
                 <h6 class="element-header text-{{ ring }}-lighten bg-{{ ring }}-darken extrabold">
@@ -866,11 +866,11 @@
 
       {% if class_name == 'Moine' or kihos_by_ring is not empty %}
 
-        <div class="card card-bloc">
+        <div class="card card-block">
 
           <div class="card-title-cartouche">Kihos</div>
 
-          <div class="row no-gutters magie-anneaux">
+          <div class="row no-gutters magic-rings">
             {% for ring, icon in {TERRE: FLAT_TERRE, AIR: FLAT_AIR, FEU: FLAT_FEU, EAU: FLAT_EAU, VIDE: FLAT_VIDE} %}
               <div class="col-6 col-lg knownspells-column">
                 <h6 class="element-header text-{{ ring }}-lighten bg-{{ ring }}-darken extrabold">
@@ -891,7 +891,7 @@
       {% endif %}
 
       {% if dojo and dojo.hasTattoos %}
-        <div class="card card-bloc">
+        <div class="card card-block">
           <div class="card-title-cartouche">Tatouages</div>
 
           {% set tattoo_emblem = dojo.clan.mon|default(NA_MON) %}
@@ -914,10 +914,10 @@
           Age: sheet.age, Taille: sheet.height, Poids: sheet.weight,
           Cheveux: sheet.hair, Yeux: sheet.eyes
         } %}
-        <div class="card card-bloc">
+        <div class="card card-block">
           <div class="card-title-cartouche">Apparence</div>
 
-          <ul class="signalement-board">
+          <ul class="appearance-board">
             {% for label, value in report %}
               <li>
                 <span class="label">{{ label }}</span>
@@ -931,17 +931,17 @@
             {% endfor %}
           </ul>
 
-          <div class="signalement-texte">
+          <div class="appearance-text">
             <p class="read-only">{{ sheet.appearance ?: 'Aucune description.' }}</p>
             <textarea id="look-input-appearance" rows="2"
                       class="form-control form-control-sm edit-only">{{ sheet.appearance }}</textarea>
           </div>
         </div>
 
-        <div class="card card-bloc">
+        <div class="card card-block">
           <div class="card-title-cartouche">Notes de Jeu</div>
 
-          <div class="signalement-texte">
+          <div class="appearance-text">
             <p class="read-only">{{ sheet.notes ? sheet.notes|nl2br : 'Aucune note.' }}</p>
             <textarea id="look-input-notes" rows="5"
                       class="form-control form-control-sm edit-only">{{ sheet.notes }}</textarea>
@@ -953,7 +953,7 @@
 
     <section class="col-12 col-lg-4">
 
-      <div class="card card-bloc">
+      <div class="card card-block">
 
         <div class="card-title-cartouche">
           Statistiques de Combat
@@ -1254,7 +1254,7 @@
       </div>
 
       {% if is_own_character or is_gm() %}
-        <div class="card card-bloc mb-2">
+        <div class="card card-block mb-2">
           <div class="card-title-cartouche">Armes</div>
 
           <table class="inventory-weapons">
@@ -1278,7 +1278,7 @@
           <div class="inventory-add edit-only" data-inventory-add="weapons"></div>
         </div>
 
-        <div class="card card-bloc">
+        <div class="card card-block">
           <div class="card-title-cartouche">Équipement & Possessions</div>
 
           {% set inventory_order = {'OBJET': 0, 'PROJECTILE': 1, 'ARMURE': 2} %}
@@ -1419,7 +1419,7 @@
             if (!compId) return 0;
             const rows = document.querySelectorAll('[data-comp-row]');
             for (const row of rows) {
-                const compSelect = row.querySelector('.comp-select');
+                const compSelect = row.querySelector('.skill-select');
                 const valSelect = row.querySelector('.val-select');
                 const rowCompId = compSelect ? (parseInt(compSelect.value, 10) || 0) : (parseInt(row.dataset.compId, 10) || 0);
                 if (rowCompId === compId) {
@@ -1594,7 +1594,7 @@
             let totalComps = 0;
             let totalSpecs = 0;
             document.querySelectorAll('[data-comp-row]').forEach(row => {
-                const compSelect = row.querySelector('.comp-select');
+                const compSelect = row.querySelector('.skill-select');
                 const valSelect = row.querySelector('.val-select');
                 let compId, val, nEcole;
                 if (compSelect && valSelect) {
@@ -1604,7 +1604,7 @@
                     compId = parseInt(row.dataset.compId, 10) || 0;
                     val = parseInt(row.dataset.compVal, 10) || 0;
                 }
-                const ecoleWrap = row.querySelector('.comp-ecole-tri');
+                const ecoleWrap = row.querySelector('.skill-dojo-sort');
                 if (ecoleWrap) {
                     nEcole = parseInt(ecoleWrap.dataset.state, 10) || 0;
                 } else {
@@ -1617,7 +1617,7 @@
                 let paidSpecs = 0;
                 const specsRow = document.querySelector(`[data-comp-specs-row="${row.dataset.compRow}"]`);
                 if (compId > 0 && specsRow) {
-                    const wraps = specsRow.querySelectorAll('.comp-spec-tri');
+                    const wraps = specsRow.querySelectorAll('.skill-spec-sort');
                     if (wraps.length > 0) {
                         wraps.forEach(w => {
                             if ((parseInt(w.dataset.state, 10) || 0) === 1) paidSpecs += 1;
@@ -1643,7 +1643,7 @@
             let coutAvantages = 0;
             let gainDesavantages = 0;
             document.querySelectorAll('[data-av-slot]').forEach(li => {
-                const select = li.querySelector('select.av-select');
+                const select = li.querySelector('select.advantage-select');
                 const id = select ? parseInt(select.value, 10) : parseInt(li.dataset.avId, 10);
                 const kind = li.dataset.avKind;
                 const av = id ? (kind === 'avantage' ? avantageById.get(id) : desavantageById.get(id)) : null;
@@ -1718,7 +1718,7 @@
         const COMP_CAT_ORDER = ['Bugei', 'Noble', 'Marchand', 'Dégradante'];
         function buildCompSelect(selectedId) {
             const select = document.createElement('select');
-            select.className = 'form-control form-control-sm comp-select';
+            select.className = 'form-control form-control-sm skill-select';
             const emptyOpt = document.createElement('option');
             emptyOpt.value = '0';
             emptyOpt.textContent = '— Aucune —';
@@ -2006,7 +2006,7 @@
 
         function buildAvantageSelect(kind, selectedId) {
             const select = document.createElement('select');
-            select.className = 'form-control form-control-sm av-select';
+            select.className = 'form-control form-control-sm advantage-select';
             const emptyOpt = document.createElement('option');
             emptyOpt.value = '0';
             emptyOpt.textContent = '— Aucun —';
@@ -2169,12 +2169,12 @@
 
                 ecoleCell.innerHTML = '';
                 const ecoleWrap = document.createElement('span');
-                ecoleWrap.className = 'comp-ecole-tri';
+                ecoleWrap.className = 'skill-dojo-sort';
                 ecoleWrap.title = "Cycle : rien → offerte +1 → offerte +2";
                 const ecoleIcon = document.createElement('i');
                 ecoleWrap.appendChild(ecoleIcon);
                 const ecoleTag = document.createElement('small');
-                ecoleTag.className = 'comp-ecole-tag';
+                ecoleTag.className = 'skill-dojo-tag';
                 ecoleWrap.appendChild(ecoleTag);
                 ecoleCell.appendChild(ecoleWrap);
                 bindTriState(ecoleWrap, ecoleIcon, compEcole, COMP_ECOLE_ICONS, (state) => {
@@ -2254,14 +2254,14 @@
         }
 
         const COMP_ECOLE_ICONS = {
-            0: 'tri-icon fa-regular fa-square',
-            1: 'tri-icon fa-solid fa-graduation-cap',
-            2: 'tri-icon fa-solid fa-graduation-cap'
+            0: 'sort-icon fa-regular fa-square',
+            1: 'sort-icon fa-solid fa-graduation-cap',
+            2: 'sort-icon fa-solid fa-graduation-cap'
         };
         const SPEC_ECOLE_ICONS = {
-            0: 'tri-icon fa-regular fa-square',
-            1: 'tri-icon fa-solid fa-square-check',
-            2: 'tri-icon fa-solid fa-graduation-cap'
+            0: 'sort-icon fa-regular fa-square',
+            1: 'sort-icon fa-solid fa-square-check',
+            2: 'sort-icon fa-solid fa-graduation-cap'
         };
         function bindTriState(wrap, icon, initialState, iconClasses, onState) {
             function apply(state) {
@@ -2287,7 +2287,7 @@
             comp.specialisations.forEach((label, idx) => {
                 if (!label) return;
                 const wrap = document.createElement('span');
-                wrap.className = 'comp-spec-tri';
+                wrap.className = 'skill-spec-sort';
                 wrap.dataset.specIndex = String(idx);
                 const icon = document.createElement('i');
                 wrap.appendChild(icon);
@@ -2295,7 +2295,7 @@
                 txt.textContent = label;
                 wrap.appendChild(txt);
                 const tag = document.createElement('small');
-                tag.className = 'spec-ecole-tag';
+                tag.className = 'spec-dojo-tag';
                 tag.textContent = 'offerte école';
                 wrap.appendChild(tag);
 
@@ -2311,7 +2311,7 @@
         function readBitmask(row) {
             const specsRow = document.querySelector(`[data-comp-specs-row="${row.dataset.compRow}"]`);
             if (!specsRow) return '';
-            const wraps = specsRow.querySelectorAll('.comp-spec-tri');
+            const wraps = specsRow.querySelectorAll('.skill-spec-sort');
             if (wraps.length === 0) return '';
             const bits = ['0','0','0','0','0','0'];
             wraps.forEach(w => {
@@ -2325,7 +2325,7 @@
         function readSpeEcoleBitmask(row) {
             const specsRow = document.querySelector(`[data-comp-specs-row="${row.dataset.compRow}"]`);
             if (!specsRow) return '';
-            const wraps = specsRow.querySelectorAll('.comp-spec-tri');
+            const wraps = specsRow.querySelectorAll('.skill-spec-sort');
             if (wraps.length === 0) return '';
             const bits = ['0','0','0','0','0','0'];
             wraps.forEach(w => {
@@ -2357,9 +2357,9 @@
 
             document.querySelectorAll('[data-comp-row]').forEach(row => {
                 const i = row.dataset.compRow;
-                const compSelect = row.querySelector('.comp-select');
+                const compSelect = row.querySelector('.skill-select');
                 const valSelect = row.querySelector('.val-select');
-                const ecoleWrap = row.querySelector('.comp-ecole-tri');
+                const ecoleWrap = row.querySelector('.skill-dojo-sort');
                 const compId = compSelect && parseInt(compSelect.value, 10) > 0 ? compSelect.value : '';
                 const valVal = compId !== '' && valSelect && valSelect.value ? valSelect.value : '';
                 const specsVal     = compId !== '' ? readBitmask(row) : '';
@@ -2378,7 +2378,7 @@
             Object.keys(slotToField).forEach(slot => {
                 const li = document.querySelector(`[data-av-slot="${slot}"]`);
                 if (!li) return;
-                const select = li.querySelector('select.av-select');
+                const select = li.querySelector('select.advantage-select');
                 const id = select && parseInt(select.value, 10) > 0 ? select.value : '';
                 addInput(`player_sheet[${slotToField[slot]}]`, id);
             });

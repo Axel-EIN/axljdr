@@ -35,8 +35,8 @@ class AdminSpellController extends AbstractController
             'elements' => $spells,
             'label' => 'Sort',
             'labels' => "Sorts",
-            'genre' => 'M',
-            'determinant' => 'un',
+            'gender' => 'M',
+            'article' => 'un',
             'element' => 'spell',
             'table_filters' => self::TABLE_FILTERS,
             'table_cols' => [
@@ -70,7 +70,7 @@ class AdminSpellController extends AbstractController
         $spell = new Sort;
         $tableFilter->prefill($spell, self::TABLE_FILTERS, $request->query->all('filter'));
 
-        $numberParam = $request->query->get('numero');
+        $numberParam = $request->query->get('number');
         if ( !empty($numberParam) && is_numeric($numberParam) && $numberParam > 0 )
             $spell->setNumero($numberParam);
 
@@ -111,11 +111,11 @@ class AdminSpellController extends AbstractController
         
 
         return $this->render('back_office/create.html.twig', [
-            'type' => 'Créer',
+            'type' => 'create',
             'entity' => 'spell',
             'label' => 'Sort',
-            'genre' => 'M',
-            'determinant' => 'un',
+            'gender' => 'M',
+            'article' => 'un',
             'form' => $form->createView()
         ]);
     }
@@ -159,12 +159,12 @@ class AdminSpellController extends AbstractController
         }
 
         return $this->renderForm('back_office/edit.html.twig', [
-            'type' => 'Modifier',
+            'type' => 'edit',
             'spell' => $spell,
             'entity' => 'spell',
             'label' => 'Sort',
-            'genre' => 'M',
-            'determinant' => 'un',
+            'gender' => 'M',
+            'article' => 'un',
             'form' => $form,
         ]);
     }

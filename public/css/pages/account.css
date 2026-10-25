@@ -51,11 +51,11 @@
       &.active {
         color: var(--color-white);
 
-        &.mj {
+        &.gm {
           background-color: var(--accent);
           color: var(--color-blacktar);
         }
-        &.joueur { background-color: var(--color-primary); }
+        &.player { background-color: var(--color-primary); }
       }
     }
   }

@@ -79,8 +79,8 @@ class AdminLoreController extends AbstractController
             $em->flush();
             $this->addFlash('success', 'Le Lore a bien été ajouté');
 
-            $fratrieArrivee = $loreRepository->findAll();
-            $orderer->reorderNumber($lore->getId(), -1, $lore->getNumero(), [], $fratrieArrivee);
+            $newSiblings = $loreRepository->findAll();
+            $orderer->reorderNumber($lore->getId(), -1, $lore->getNumero(), [], $newSiblings);
 
             if (!empty($request->query->get('redirect')) && $request->query->get('redirect') == 'lore')
                 return $this->redirectToRoute('world_lore', ['id' => $lore->getId()]);
@@ -104,7 +104,7 @@ class AdminLoreController extends AbstractController
      */
     public function editLore(Request $request, Lore $lore, FileHandler $fileHandler, LoreRepository $loreRepository, Orderer $orderer, Unlocker $unlocker): Response
     {
-        $numeroDepart = $lore->getNumero();
+        $previousNumber = $lore->getNumero();
 
         $form = $this->createForm(AdminLoreType::class, $lore);
         $form->get('unlockedBy')->setData($unlocker->charactersOf($lore));
@@ -112,25 +112,25 @@ class AdminLoreController extends AbstractController
 
         if ( $form->isSubmitted() && $form->isValid() ) {
 
-            $nouvelleImage = $form->get('image')->getData();
-            if (!empty($nouvelleImage)) {
+            $newImage = $form->get('image')->getData();
+            if (!empty($newImage)) {
                 $prefix = 'lore-' . $lore->getNom() . '-image';
-                $lore->setImage($fileHandler->handle($nouvelleImage, $lore->getImage(), $prefix, 'lores', 'fourthird900'));
+                $lore->setImage($fileHandler->handle($newImage, $lore->getImage(), $prefix, 'lores', 'fourthird900'));
             } elseif ($request->request->get('remove_image') === '1' && $lore->getImage()) {
                 $fileHandler->handle(null, $lore->getImage(), null, 'lores');
                 $lore->setImage(null);
             }
 
-            $nouveauPDF = $form->get('pdf')->getData();
-            if (!empty($nouveauPDF)) {
+            $newPdf = $form->get('pdf')->getData();
+            if (!empty($newPdf)) {
                 $prefix = 'lore-' . $lore->getNom() . '-pdf';
-                $lore->setPdf($fileHandler->handle($nouveauPDF, $lore->getPdf(), $prefix, 'pdf-lores'));
+                $lore->setPdf($fileHandler->handle($newPdf, $lore->getPdf(), $prefix, 'pdf-lores'));
             }
 
-            if ($numeroDepart != $lore->getNumero())
+            if ($previousNumber != $lore->getNumero())
             {
-                $fratrie = $loreRepository->findAll();
-                $orderer->reorderNumber($lore->getId(), $numeroDepart, $lore->getNumero(), $fratrie, $fratrie);
+                $siblings = $loreRepository->findAll();
+                $orderer->reorderNumber($lore->getId(), $previousNumber, $lore->getNumero(), $siblings, $siblings);
             }
 
             $unlocker->sync($lore, $form->get('unlockedBy')->getData());
@@ -167,8 +167,8 @@ class AdminLoreController extends AbstractController
             $fileHandler->handle(null, $lore->getImage(), null, 'lores');
             $fileHandler->handle(null, $lore->getPdf(), null, 'pdf-lores');
 
-            $fratrie = $loreRepository->findAll();
-            $orderer->reorderNumber($lore->getId(), $lore->getNumero(), -1, $fratrie, []);
+            $siblings = $loreRepository->findAll();
+            $orderer->reorderNumber($lore->getId(), $lore->getNumero(), -1, $siblings, []);
 
             $unlocker->forget($lore);
             $em->remove($lore);

@@ -18,6 +18,11 @@
       border-color var(--duration) var(--ease),
       box-shadow var(--duration) var(--ease);
     color: #fff;
+
+    &.large {
+        padding: 0.35em 0.7em;
+        font-size: var(--fontsize-medium);
+    }
 }
 
 .badge-rang-1 {

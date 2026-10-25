@@ -76,11 +76,11 @@
                     {% for clan in groupe.clans|default([]) %}
                         <img class="img-40" src="{{ asset(image_small(clan.mon|default(NA_MON))) }}" alt="Mon de la faction" title="{{ clan.nom }}" />
                     {% endfor %}
-                    {% if groupe.clans|default([]) is empty or groupe.sansGroupe|default(false) %}
+                    {% if groupe.clans|default([]) is empty or groupe.ungrouped|default(false) %}
                         <img class="img-40" src="{{ asset(NA_MON) }}" alt="Mon de la faction" />
                     {% endif %}
                 </span>
-                {{ groupe.titre }}
+                {{ groupe.title }}
                 {% set dots_color = groupe.clans|default([])|length == 1 ? (groupe.clans|first).couleur : null %}
                 <span class="scroller-dots" data-scroller="{{ scroller_id }}"{% if dots_color %} style="--clan-color: {{ dots_color }}"{% endif %}></span>
             </h3>
@@ -89,7 +89,7 @@
                 variant: 'icon',
                 scroll: true, scroll_id: scroller_id,
                 type_icon: true,
-                items: groupe.lieux, route: 'world_location', na_image: NA_LIEU_ICO,
+                items: groupe.locations, route: 'world_location', na_image: NA_LIEU_ICO,
                 per_row: {desktop: 6, mobile: 2},
             }) }}
         </div>

@@ -108,7 +108,7 @@
             <li class="fiche-ligne-classe">
               <span class="label">Classe :</span>
               {% if fiche.personnage.classe %}
-                <a class="extrabold" href="{{ path('regles_classe', {id: fiche.personnage.classe.id}) }}">
+                <a class="extrabold" href="{{ path('rules_class', {id: fiche.personnage.classe.id}) }}">
                   <img  class="img-24" src="{{ asset(image_small(fiche.personnage.classe.icone|default(NA_MON))) }}"
                         title="Mon de la classe {{ fiche.personnage.classe.nom }}" />
                   {{ fiche.personnage.classe.nom }}
@@ -120,13 +120,13 @@
             <li>
               <span class="label">Ecole :</span>
               {% if fiche.personnage.classe %}
-                <a class="d-lg-none" href="{{ path('regles_classe', {id: fiche.personnage.classe.id}) }}"
+                <a class="d-lg-none" href="{{ path('rules_class', {id: fiche.personnage.classe.id}) }}"
                    title="Classe {{ fiche.personnage.classe.nom }}">
                   <img class="img-24" src="{{ asset(image_small(fiche.personnage.classe.icone|default(NA_MON))) }}" alt="" />
                 </a>
               {% endif %}
               {% if fiche.personnage.ecole %}
-                <a class="extrabold" href="{{ path('regles_ecole', {id: fiche.personnage.ecole.id}) }}">
+                <a class="extrabold" href="{{ path('rules_dojo', {id: fiche.personnage.ecole.id}) }}">
                   {{ fiche.personnage.ecole.nom }}
                 </a>
                 {% if bonusNomEcole %}

@@ -4,7 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Saison;
 use App\Service\FileHandler;
-use App\Service\Numeroteur;
+use App\Service\Orderer;
 use App\Form\AdminSeasonType;
 use App\Repository\SaisonRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -44,7 +44,7 @@ class AdminSeasonController extends AbstractController
      * @Route("/admin/season/create", name="admin_season_create")
      * @IsGranted("ROLE_MJ")
      */
-    public function addSeason(Request $request, EntityManagerInterface $em, FileHandler $fileHandler, SaisonRepository $seasonRepository, Numeroteur $numeroteur) {
+    public function addSeason(Request $request, EntityManagerInterface $em, FileHandler $fileHandler, SaisonRepository $seasonRepository, Orderer $orderer) {
 
         $season = new Saison;
 
@@ -67,7 +67,7 @@ class AdminSeasonController extends AbstractController
             $this->addFlash('success', 'La saison a bien été créee.');
 
             $newSiblings = $seasonRepository->findAll();
-            $numeroteur->reordonnerNumero($season->getId(), -1, $season->getNumero(), [], $newSiblings);
+            $orderer->reorderNumber($season->getId(), -1, $season->getNumero(), [], $newSiblings);
 
             if (in_array($request->query->get('redirect'), ['story', 'season'], true))
                 return $this->redirectToRoute('story_season', ['id' => $season->getId()]);
@@ -90,7 +90,7 @@ class AdminSeasonController extends AbstractController
      * @Route("/admin/season/{id}/edit", name="admin_season_edit")
      * @IsGranted("ROLE_MJ")
      */
-    public function editSeason(Request $request, Saison $season, FileHandler $fileHandler, Numeroteur $numeroteur, SaisonRepository $seasonRepository): Response {
+    public function editSeason(Request $request, Saison $season, FileHandler $fileHandler, Orderer $orderer, SaisonRepository $seasonRepository): Response {
 
         $previousNumber = $season->getNumero();
         $previousSiblings = $seasonRepository->findAll();
@@ -113,7 +113,7 @@ class AdminSeasonController extends AbstractController
             {
                 $previousSiblings = $seasonRepository->findAll();
                 $newSiblings = $seasonRepository->findAll();
-                $numeroteur->reordonnerNumero($season->getId(), $previousNumber, $season->getNumero(), $previousSiblings, $newSiblings);
+                $orderer->reorderNumber($season->getId(), $previousNumber, $season->getNumero(), $previousSiblings, $newSiblings);
             }
 
             $this->getDoctrine()->getManager()->flush();
@@ -140,7 +140,7 @@ class AdminSeasonController extends AbstractController
      * @Route("/admin/season/{id}/delete", name="admin_season_delete", methods={"POST"})
      * @IsGranted("ROLE_MJ")
      */
-    public function deleteSeason(Request $request, Saison $season, Numeroteur $numeroteur, SaisonRepository $seasonRepository, FileHandler $fileHandler): Response {
+    public function deleteSeason(Request $request, Saison $season, Orderer $orderer, SaisonRepository $seasonRepository, FileHandler $fileHandler): Response {
 
         if ($this->isCsrfTokenValid('delete' . $season->getId(), $request->request->get('_csrf_token'))) {
 
@@ -152,7 +152,7 @@ class AdminSeasonController extends AbstractController
             $fileHandler->handle(null, $season->getImage(), null, 'saisons');
 
             $previousSiblings = $seasonRepository->findAll();
-            $numeroteur->reordonnerNumero($season->getId(), $season->getNumero(), -1, $previousSiblings, []);
+            $orderer->reorderNumber($season->getId(), $season->getNumero(), -1, $previousSiblings, []);
 
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($season);

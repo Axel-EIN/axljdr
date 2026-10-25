@@ -47,7 +47,7 @@
           {% if perso.icone is null and perso.genre == 'F' %}{% set fallback = attribute(_context, 'NA_PERSO_PORTRAIT_F')|default(NA_PERSO_PORTRAIT) %}
           {% elseif perso.icone is null and perso.genre == 'M' %}{% set fallback = attribute(_context, 'NA_PERSO_PORTRAIT_M')|default(NA_PERSO_PORTRAIT) %}
           {% endif %}
-          <a class="chapter-portrait-link" href="{{ path('personnage_profil', {id: perso.id}) }}" title="{{ perso.prenom }}">
+          <a class="chapter-portrait-link" href="{{ path('characters_profile', {id: perso.id}) }}" title="{{ perso.prenom }}">
             <img class="chapter-portrait{{ vue }}{% if episode is defined %} in-episode{% endif %}"
                  src="{{ asset(perso.icone|default(fallback)) }}" alt="Portrait de {{ perso.prenom }}" />
             {% set state = element_state(perso) %}

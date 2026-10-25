@@ -4,6 +4,7 @@
     {{parent()}}
     <link rel="stylesheet" href="{{asset('css/components/history.css')}}" />
     <link rel="stylesheet" href="{{asset('css/components/edit-mode.css')}}" />
+    <link rel="stylesheet" href="{{asset('css/components/map.css')}}" />
     <link rel="stylesheet" href="{{asset('css/pages/character-profile.css')}}" />
 {% endblock %}
 
@@ -32,28 +33,38 @@
 <div class="col-12 col-lg-4 order-2 order-lg-1">
     <div class="card card-body profile-infos">
 
-        <div class="relative d-none d-lg-block">
-            <img class="img-fluid w-100" src="{{ illustration_src }}" width="{{ illustration_preset.width }}" height="{{ illustration_preset.height }}" alt="{{ personnage.nomComplet }}" title="{{ personnage.nomComplet }}" />
-            {{ include('parts/badge-access.html.twig', {state: element_state(personnage)}) }}
+        {% set fiche_visible = personnage.fichePersonnage is not null and (est_le_joueur or is_granted('ROLE_MJ')) %}
+        {% set fiche_addable = personnage.fichePersonnage is null and is_granted('ROLE_MJ') %}
+
+        <div class="relative">
+            <div class="profile-illustration d-none d-lg-block {{ fiche_visible or fiche_addable ? 'with-btn' }}">
+                <img class="img-fluid w-100" src="{{ illustration_src }}" width="{{ illustration_preset.width }}" height="{{ illustration_preset.height }}" alt="{{ personnage.nomComplet }}" title="{{ personnage.nomComplet }}" />
+                {{ include('parts/badge-access.html.twig', {state: element_state(personnage)}) }}
+            </div>
+
+            {% if fiche_visible %}
+                <div class="profile-btn-fiche">
+                    <a class="btn-primary-style btn-medium{% if not est_le_joueur %} gm{% endif %}" href="{{ path('personnage_fiche', {id: personnage.fichePersonnage.id}) }}">
+                        <i class="fas fa-scroll"></i> Voir la Fiche de Jeu
+                    </a>
+                </div>
+            {% elseif fiche_addable %}
+                <div class="profile-btn-fiche">
+                    {{ include('btns/btn-add-element.html.twig', {
+                        entity: 'fiche', label_one: 'Fiche Personnage', options: 'personnage=' ~ personnage.id, position: ''
+                    }) }}
+                </div>
+            {% endif %}
         </div>
 
         <ul class="list-group list-group-flush profile-infos-list">
 
-            <li class="list-group-item infos-item">
-                <div class="d-flex flex-column">
-                    <span class="text-muted text-small">Création : <strong>{{xp_creation}}</strong></span>
-                    {% if xp_desavantages > 0 %}
-                        <span class="text-muted text-small">Désavantages : <strong>{{xp_desavantages}}</strong></span>
-                    {% endif %}
-                    <span class="text-muted text-small">Progression : <strong>{{xp_progression}}</strong></span>
-                </div>
-                {% if xp > 0 %}
-                    <div class="profile-xp-and-rank">
-                        <span class="xp-number">{{xp}} XP</span>
-                        <span class="xp-rank badge-rang-{{rang}}">RANG {{rang}}</span>
-                    </div>
-                {% endif %}
+        {% if xp > 0 %}
+            <li class="list-group-item infos-item profile-xp-and-rank">
+                <span class="xp-rank badge-rang-{{rang}}">RANG {{rang}}</span>
+                <span class="xp-number">{{xp}} XP</span>
             </li>
+        {% endif %}
 
         {% if personnage.clan is defined and personnage.clan is not empty %}
             <li class="list-group-item infos-item">
@@ -80,40 +91,37 @@
 
         {% if personnage.ecole is defined and personnage.ecole is not empty %}
             <li class="list-group-item infos-item">
-                Ecole :
+                École :
                 <a href="{{ path('regles_ecole', {id: personnage.ecole.id} ) }}">
                     {{ personnage.ecole.nom }}
                     <img class="img-48" src="{{ asset(image_small(personnage.classe.icone|default(NA_CLASS_ICO))) }}" alt="Classe {{personnage.classe.nom}}" title="Classe {{personnage.classe.nom}}" />
-                </a>           
+                </a>
             </li>
-        {% endif %} 
+        {% endif %}
 
       {% if personnage.joueur is not empty %}
         <li class="list-group-item infos-item">Joueur : <span class="bold">{{ personnage.joueur.pseudo }}</span></li>
       {% endif %}
 
       {% if position_libre or position_actuelle %}
-        {% set position_connue = not position_libre and element_state(position_actuelle) != 'hidden' %}
-        <li class="list-group-item infos-item">
+        <li class="list-group-item infos-item{% if carte_visible %} with-map{% endif %}">
           Position :
           <a href="{{ position_connue ? path('carte', {lieu: position_actuelle.id}) : path('carte') }}" title="Voir sur la carte">
             {{ position_libre ? EN_DEPLACEMENT : (position_connue ? position_actuelle.nom : 'Inconnue') }}
             <i class="fa-solid fa-map-location-dot"></i>
           </a>
-        </li>
-      {% endif %}
-
-      {% if personnage.fichePersonnage is not null and (est_le_joueur or is_granted('ROLE_MJ')) %}
-        <li class="list-group-item d-flex justify-content-center profil-btn-fiche">
-          <a class="btn-primary-style btn-medium{% if not est_le_joueur %} gm{% endif %}" href="{{ path('personnage_fiche', {id: personnage.fichePersonnage.id}) }}">
-            <i class="fas fa-scroll"></i> Voir la Fiche de Jeu
-          </a>
-        </li>
-      {% elseif personnage.fichePersonnage is null and is_granted('ROLE_MJ') %}
-        <li class="list-group-item d-flex justify-content-center profil-btn-fiche">
-          {{ include('btns/btn-add-element.html.twig', {
-            entity: 'fiche', label_one: 'Fiche Personnage', options: 'personnage=' ~ personnage.id, position: ''
-          }) }}
+          {% if carte_visible %}
+            {{ include('parts/map.html.twig', {
+              lieux,
+              current: position_connue ? position_actuelle : null,
+              party: position_connue ? {(position_actuelle.id): [personnage]} : {},
+              center: position_libre,
+              wanderers: position_libre ? [position_libre] : [],
+              zoom: position_connue ? position_actuelle.zoom : null,
+              variant: 'mini',
+              hide_minimap: true,
+            }, with_context = false) }}
+          {% endif %}
         </li>
       {% endif %}
     </ul>
@@ -132,7 +140,7 @@
         {{ form_start(form, {action: path('personnage_profil_edit', {id: personnage.id})}) }}
         {% endif %}
 
-        <div class="profile-maincontent profil-zone">
+        <div class="profile-maincontent profile-zone">
 
             {# ================================ #}
             {# ===== [CARD-SECTION] STORY ===== #}
@@ -155,7 +163,7 @@
             {# ===== [CARD-SECTION] DEVELOPPEMENTS ===== #}
             {# ========================================= #}
 
-            <div class="profil-developments">
+            <div class="profile-developments">
                 {% for development in developments %}
                     {% set scene = development.scene %}
                     {% set episode = scene.episodeParent %}
@@ -207,7 +215,7 @@
                 {# ===== [CARD-SECTION] SECRET PLAYER'S NOTES ===== #}
                 {# ================================================ #}
 
-                <div class="profil-zone">
+                <div class="profile-zone">
                     {{ include('/parts/divider-ornament.html.twig') }}
                     <h2 class="profile-description-title">Secrets</h2>
 
@@ -227,9 +235,9 @@
                     {# ===== [CARD-SECTION] GM's NOTES ===== #}
                     {# ===================================== #}
 
-                    <div class="profil-zone">
+                    <div class="profile-zone">
                         {{ include('/parts/divider-ornament.html.twig') }}
-                        <h2 class="profile-description-title">Notes du Maître de Jeu</h2>
+                        <h2 class="profile-description-title gm">Notes du Maître de Jeu</h2>
 
                         {% if personnage.gmNotes is not empty %}
                             <p class="text-description text-compact read-only">{{ personnage.gmNotes|nl2br }}</p>
@@ -257,10 +265,10 @@
     <div class="card card-body">
         <h2 class="heading-cardtitle">Historique</h2>
         <hr>
-        <div class="card-text profil-historique">
+        <div class="card-text profile-historique">
             {{ include('parts/history.html.twig', {historique, saison_courante}) }}
             {% if xp_creation > 0 %}
-            <p class="profil-creation">Création du personnage {{ personnage.prenom }} avec <strong>{{ xp_creation }}xp</strong>.</p>
+            <p class="profile-creation">Création du personnage {{ personnage.prenom }} avec <strong>{{ xp_creation }}xp</strong>.</p>
             {% endif %}
         </div>
     </div>
@@ -284,11 +292,12 @@
 
 {% block javascripts %}
     {{ parent() }}
+    {% if carte_visible %}<script src="{{ asset('scripts/map.js') }}"></script>{% endif %}
     {% if peut_editer %}
         <script>
             (function () {
             const bascule = (selecteur, action) => document.querySelectorAll(selecteur).forEach(
-                btn => btn.addEventListener('click', () => btn.closest('.profil-zone').classList[action]('edit-mode'))
+                btn => btn.addEventListener('click', () => btn.closest('.profile-zone').classList[action]('edit-mode'))
             );
             bascule('[data-edit-open]', 'add');
             bascule('[data-edit-cancel]', 'remove');

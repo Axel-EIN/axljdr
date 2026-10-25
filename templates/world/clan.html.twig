@@ -24,25 +24,25 @@
 
                 {% for family in clan.familles %}
                     <hr{% if not loop.first %} class="my-5"{% endif %}>
-                    <article id="{{ family.nom }}" class="famille relative">
+                    <article id="{{ family.nom }}" class="family relative">
 
                         {% if is_gm() %}
                             {% set redirect, entity, record, size, color, position = 'clan', 'family', family, 'btn-icon-small', 'link-gm', 'topright-corner-snap' %}
                             {{ include('/btns/btn-icon-edit.html.twig') }}
                         {% endif %}
 
-                        <div class="famille-mon">
+                        <div class="family-mon">
                             <img class="img-fluid circle-crop" src="{{ asset(family.mon|default(NA_MON)) }}" alt="Mon Famille" />
 
                             {% if family.chef is not empty %}
-                                <a class="famille-daimyo hover-zoom" href="{{ path('characters_profile', {id: family.chef.id} ) }}" title="{{ family.chef.nomComplet }}">
+                                <a class="family-daimyo hover-zoom" href="{{ path('characters_profile', {id: family.chef.id} ) }}" title="{{ family.chef.nomComplet }}">
                                     <span class="text-muted">Daimyo</span>
                                     <img class="character-portrait medium" src="{{ asset(family.chef.icone|default(NA_PERSO_PORTRAIT)) }}" alt="Icône du personnage" />
                                 </a>
                             {% endif %}
                         </div>
 
-                        <div class="famille-entete">
+                        <div class="family-header">
                             <h3><strong>{{ family.nom }}</strong></h3>
                             {% if family.bonusStatNom %}
                                 {% set labels = {'constitution':'Constitution','volonte':'Volonté','reflexes':'Réflexes','intuition':'Intuition','agilite':'Agilité','intelligence':'Intelligence','forceStat':'Force','perception':'Perception','vide':'Vide'} %}
@@ -50,7 +50,7 @@
                             {% endif %}
                         </div>
 
-                        <p class="famille-description text-description">{{ family.description|raw|nl2br }}</p>
+                        <p class="family-description text-description">{{ family.description|raw|nl2br }}</p>
 
                     </article>
                 {% else %}

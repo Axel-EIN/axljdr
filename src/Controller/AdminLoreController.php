@@ -30,8 +30,8 @@ class AdminLoreController extends AbstractController
             'element' => 'lore',
             'label' => 'Lore',
             'labels' => 'Lores',
-            'genre' => 'M',
-            'determinant' => 'un',
+            'gender' => 'M',
+            'article' => 'un',
             'table_cols' => [
                 'image:Image:image:NA_LORE',
                 'nom:Nom::bold',
@@ -89,11 +89,11 @@ class AdminLoreController extends AbstractController
         }
 
         return $this->render('back_office/create.html.twig', [
-            'type' => 'Créer',
+            'type' => 'create',
             'entity' => 'lore',
             'label' => 'Lore',
-            'genre' => 'M',
-            'determinant' => 'un',
+            'gender' => 'M',
+            'article' => 'un',
             'form' => $form->createView()
         ]);
     }
@@ -145,12 +145,12 @@ class AdminLoreController extends AbstractController
         }
 
         return $this->renderForm('back_office/edit.html.twig', [
-            'type' => 'Modifier',
+            'type' => 'edit',
             'lore' => $lore,
             'entity' => 'lore',
             'label' => 'Lore',
-            'genre' => 'M',
-            'determinant' => 'un',
+            'gender' => 'M',
+            'article' => 'un',
             'form' => $form,
         ]);
     }

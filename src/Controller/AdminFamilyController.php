@@ -34,8 +34,8 @@ class AdminFamilyController extends AbstractController
             'element' => 'family',
             'label' => 'Famille',
             'labels' => 'Familles',
-            'genre' => 'F',
-            'determinant' => 'une',
+            'gender' => 'F',
+            'article' => 'une',
             'table_filters' => self::TABLE_FILTERS,
             'table_cols' => [
                 'mon:Mon:symbol:NA_MON',
@@ -87,11 +87,11 @@ class AdminFamilyController extends AbstractController
         
 
         return $this->render('back_office/create.html.twig', [
-            'type' => 'Créer',
+            'type' => 'create',
             'entity' => 'family',
             'label' => 'Famille',
-            'genre' => 'F',
-            'determinant' => 'une',
+            'gender' => 'F',
+            'article' => 'une',
             'form' => $form->createView()
         ]);
     }
@@ -126,12 +126,12 @@ class AdminFamilyController extends AbstractController
         }
 
         return $this->renderForm('back_office/edit.html.twig', [
-            'type' => 'Modifier',
+            'type' => 'edit',
             'family' => $family,
             'entity' => 'family',
             'label' => 'Famille',
-            'genre' => 'F',
-            'determinant' => 'une',
+            'gender' => 'F',
+            'article' => 'une',
             'form' => $form,
         ]);
     }

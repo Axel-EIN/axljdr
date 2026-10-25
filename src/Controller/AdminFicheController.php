@@ -76,7 +76,7 @@ class AdminFicheController extends AbstractController
             $this->addFlash('success', 'La Fiche a bien été ajoutée.');
 
             if ($request->query->get('redirect') === 'fiche') {
-                return $this->redirectToRoute('personnage_fiche', ['id' => $fiche->getId()]);
+                return $this->redirectToRoute('characters_sheet', ['id' => $fiche->getId()]);
             }
 
             return $this->redirectToRoute('admin_fiche');

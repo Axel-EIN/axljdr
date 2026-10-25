@@ -53,10 +53,10 @@ twig:
         FLAT_TERRE_KIHO: '/assets/icons/elements/terre-kiho.png'
         FLAT_VIDE_KIHO: '/assets/icons/elements/vide-kiho.png'
 
-        AVENTURE_SCENE_ICO: '/assets/icons/aventure/aventure-scene.png'
-        AVENTURE_EPISODE_ICO: '/assets/icons/aventure/aventure-episode.png'
-        AVENTURE_CHAPITRE_ICO: '/assets/icons/aventure/aventure-chapitre.png'
-        AVENTURE_SAISON_ICO: '/assets/icons/aventure/aventure-saison.png'
+        STORY_SCENE_ICO: '/assets/icons/story/story-scene.png'
+        STORY_EPISODE_ICO: '/assets/icons/story/story-episode.png'
+        STORY_CHAPTER_ICO: '/assets/icons/story/story-chapter.png'
+        STORY_SEASON_ICO: '/assets/icons/story/story-season.png'
 
         MORT_ICO: '/assets/ui/mort.png'
         ORNAMENT_ICO: '/assets/ui/ornament.png'
@@ -69,10 +69,10 @@ twig:
         NA_1610: '/assets/placeholders/na_1610.jpg'
         NA_169: &NA_169 '/assets/placeholders/na_169.jpg'
 
-        NA_SAISON: '/assets/placeholders/na_aventure_saison.jpg'
-        NA_CHAPITRE: '/assets/placeholders/na_aventure_chapitre.jpg'
-        NA_SESSION: '/assets/placeholders/na_aventure_session.jpg'
-        NA_SCENE: '/assets/placeholders/na_aventure_scene.jpg'
+        NA_SAISON: '/assets/placeholders/na_story_season.jpg'
+        NA_CHAPITRE: '/assets/placeholders/na_story_chapter.jpg'
+        NA_SESSION: '/assets/placeholders/na_story_session.jpg'
+        NA_SCENE: '/assets/placeholders/na_story_scene.jpg'
 
         NA_CLAN: '/assets/placeholders/na_clan.jpg'
         NA_MAP: '/assets/placeholders/na_map.jpg'

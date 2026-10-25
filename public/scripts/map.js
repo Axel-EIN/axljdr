@@ -4,7 +4,7 @@
 
   const map = frame.querySelector('.map-drag');
   const mapImage = map.querySelector('.map-image');
-  const pointer = frame.querySelector('.minimap .localisator-ui');
+  const pointer = frame.querySelector('.minimap .locator-ui');
   const view = frame.querySelector('.minimap .minimap-view');
   const zoomLevel = frame.querySelector('.map-zoom-level');
   const world = frame.classList.contains('world');
@@ -137,11 +137,11 @@
   }
 
   function highlight(id) {
-    frame.querySelectorAll('.lieu-other-icon.focused').forEach(function (marker) {
+    frame.querySelectorAll('.other-location-marker.focused').forEach(function (marker) {
       marker.classList.remove('focused');
     });
     if (!id) return;
-    const marker = frame.querySelector('.lieu-other-icon[data-lieu="' + id + '"]');
+    const marker = frame.querySelector('.other-location-marker[data-lieu="' + id + '"]');
     if (!marker) return;
     void marker.offsetWidth;
     marker.classList.add('focused');
@@ -414,7 +414,7 @@
   }
 
   map.addEventListener('click', function (e) {
-    const trigger = e.target.closest('.lieu-other-icon[data-panel], .map-portrait-toggle');
+    const trigger = e.target.closest('.other-location-marker[data-panel], .map-portrait-toggle');
     if (!trigger) return;
     e.preventDefault();
     openPanel(trigger);
@@ -475,7 +475,7 @@
     if (item.dataset.personnage) {
       openPortrait(item.dataset.personnage);
     } else {
-      openPanel(frame.querySelector('.lieu-other-icon[data-lieu="' + item.dataset.lieu + '"]'));
+      openPanel(frame.querySelector('.other-location-marker[data-lieu="' + item.dataset.lieu + '"]'));
     }
   }
 

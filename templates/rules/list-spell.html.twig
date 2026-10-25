@@ -1,37 +1,37 @@
-{% macro mot_cle(cle) %}
+{% macro keyword_icon(key) %}
   {% set table = {
-    'Affliction':  {icone: 'fa-arrow-down-wide-short', label: 'Affliction'},
-    'Arme':        {icone: 'fa-gavel',                 label: 'Arme'},
-    'Artisanat':   {icone: 'fa-cube',                  label: 'Artisanat'},
-    'Atemi':       {icone: 'fa-hand-fist',             label: 'Atemi'},
-    'Bénédiction': {icone: 'fa-arrow-up-wide-short',   label: 'Bénédiction'},
-    'Detection':   {icone: 'fa-eye',                   label: 'Detection'},
-    'Divination':  {icone: 'fa-hat-wizard',            label: 'Divination'},
-    'Défense':     {icone: 'fa-shield-halved',         label: 'Défense'},
-    'Explosion':   {icone: 'fa-bomb',                  label: 'Explosion'},
-    'Glyphe':      {icone: 'fa-austral-sign',          label: 'Glyphe'},
-    'Guerre':      {icone: 'fa-chess-knight',          label: 'Art de la Guerre'},
-    'Illusion':    {icone: 'fa-eye-low-vision',        label: 'Illusion'},
-    'Invocation':  {icone: 'fa-ghost',                 label: 'Invocation'},
-    'Jade':        {icone: 'fa-gem',                   label: 'Jade'},
-    'Soins':       {icone: 'fa-heart',                 label: 'Soins'},
-    'Souillure':   {icone: 'fa-biohazard',             label: 'Souillure'},
-    'Tonnerre':    {icone: 'fa-bolt-lightning',        label: 'Tonnerre'},
-    'Voyage':      {icone: 'fa-person-running',        label: 'Voyage'},
+    'Affliction':  {icon: 'fa-arrow-down-wide-short', label: 'Affliction'},
+    'Arme':        {icon: 'fa-gavel',                 label: 'Arme'},
+    'Artisanat':   {icon: 'fa-cube',                  label: 'Artisanat'},
+    'Atemi':       {icon: 'fa-hand-fist',             label: 'Atemi'},
+    'Bénédiction': {icon: 'fa-arrow-up-wide-short',   label: 'Bénédiction'},
+    'Detection':   {icon: 'fa-eye',                   label: 'Detection'},
+    'Divination':  {icon: 'fa-hat-wizard',            label: 'Divination'},
+    'Défense':     {icon: 'fa-shield-halved',         label: 'Défense'},
+    'Explosion':   {icon: 'fa-bomb',                  label: 'Explosion'},
+    'Glyphe':      {icon: 'fa-austral-sign',          label: 'Glyphe'},
+    'Guerre':      {icon: 'fa-chess-knight',          label: 'Art de la Guerre'},
+    'Illusion':    {icon: 'fa-eye-low-vision',        label: 'Illusion'},
+    'Invocation':  {icon: 'fa-ghost',                 label: 'Invocation'},
+    'Jade':        {icon: 'fa-gem',                   label: 'Jade'},
+    'Soins':       {icon: 'fa-heart',                 label: 'Soins'},
+    'Souillure':   {icon: 'fa-biohazard',             label: 'Souillure'},
+    'Tonnerre':    {icon: 'fa-bolt-lightning',        label: 'Tonnerre'},
+    'Voyage':      {icon: 'fa-person-running',        label: 'Voyage'},
   } %}
-  {% if table[cle] is defined %}<i class="fa-solid {{ table[cle].icone }}" title="{{ table[cle].label }}"></i>{% endif %}
+  {% if table[key] is defined %}<i class="fa-solid {{ table[key].icon }}" title="{{ table[key].label }}"></i>{% endif %}
 {% endmacro %}
-{% import _self as icones %}
+{% import _self as icons %}
 
 {% set past_rank = 1 %}
-{% set library = un_element %}
+{% set library = record %}
 
     <div class="col-12 list-heading">
 
-        {% if is_mj() %}
-            {% set numero = items|length + 1 %}
+        {% if is_gm() %}
+            {% set number = items|length + 1 %}
             {% set action, entity, position, color, size = 'create', 'spell', 'topleft-overflow', 'link-gm', 'btn-icon-mini' %}
-            {% set redirect = 'library&libraryID=' ~ library.id ~ '&tab=' ~ app.request.get('tab') ~ '&subtab=' ~ app.request.get('subtab') ~ '&numero=' ~ numero %}
+            {% set redirect = 'library&libraryID=' ~ library.id ~ '&tab=' ~ app.request.get('tab') ~ '&subtab=' ~ app.request.get('subtab') ~ '&number=' ~ number %}
             {{ include('/btns/btn-icon.html.twig') }}
         {% endif %}
 
@@ -59,37 +59,37 @@
 
         {% if app.request.get('tab') == 'MAGIE' %}
             {% if item.anneau == 'AIR' %}
-                {% set icone = FLAT_AIR %}
+                {% set icon = FLAT_AIR %}
             {% elseif item.anneau == 'EAU' %}
-                {% set icone = FLAT_EAU %}
+                {% set icon = FLAT_EAU %}
             {% elseif item.anneau == 'FEU' %}
-                {% set icone = FLAT_FEU %}
+                {% set icon = FLAT_FEU %}
             {% elseif item.anneau == 'TERRE' %}
-                {% set icone = FLAT_TERRE %}
+                {% set icon = FLAT_TERRE %}
             {% elseif item.anneau == 'VIDE' %}
-                {% set icone = FLAT_VIDE %}
+                {% set icon = FLAT_VIDE %}
             {% endif %}
         {% elseif app.request.get('tab') == 'MAHO' %}
             {% if item.anneau == 'AIR' %}
-                {% set icone = FLAT_AIR_MAHO %}
+                {% set icon = FLAT_AIR_MAHO %}
             {% elseif item.anneau == 'EAU' %}
-                {% set icone = FLAT_EAU_MAHO %}
+                {% set icon = FLAT_EAU_MAHO %}
             {% elseif item.anneau == 'FEU' %}
-                {% set icone = FLAT_FEU_MAHO %}
+                {% set icon = FLAT_FEU_MAHO %}
             {% elseif item.anneau == 'TERRE' %}
-                {% set icone = FLAT_TERRE_MAHO %}
+                {% set icon = FLAT_TERRE_MAHO %}
             {% endif %}
         {% elseif app.request.get('tab') == 'KIHO' %}
             {% if item.anneau == 'AIR' %}
-                {% set icone = FLAT_AIR_KIHO %}
+                {% set icon = FLAT_AIR_KIHO %}
             {% elseif item.anneau == 'EAU' %}
-                {% set icone = FLAT_EAU_KIHO %}
+                {% set icon = FLAT_EAU_KIHO %}
             {% elseif item.anneau == 'FEU' %}
-                {% set icone = FLAT_FEU_KIHO %}
+                {% set icon = FLAT_FEU_KIHO %}
             {% elseif item.anneau == 'TERRE' %}
-                {% set icone = FLAT_TERRE_KIHO %}
+                {% set icon = FLAT_TERRE_KIHO %}
             {% elseif item.anneau == 'VIDE' %}
-                {% set icone = FLAT_VIDE_KIHO %}
+                {% set icon = FLAT_VIDE_KIHO %}
             {% endif %}
         {% endif %}
 
@@ -100,8 +100,8 @@
     {% else %}
         <div class="col-12 p-0 m-0 {% if past_rank != item.niveau %}mt-3{% endif %} relative">
 
-            {% if is_mj() %}
-                {% set position, size, color, entity, un_element, redirect = 'topleft-overflow', 'btn-icon-mini', 'link-gm', 'spell', item, 'library&libraryID=' ~ library.id %}
+            {% if is_gm() %}
+                {% set position, size, color, entity, record, redirect = 'topleft-overflow', 'btn-icon-mini', 'link-gm', 'spell', item, 'library&libraryID=' ~ library.id %}
                 {{ include('/btns/btn-icon-edit.html.twig') }}
             {% endif %}
 
@@ -111,11 +111,11 @@
 
                     <div class="col-6 p-0 m-0 ml-2 text-left">
                         {% if app.request.get('tab') != 'TATOUAGE' %}
-                            <img class="img-24" src="{{asset(icone|default(NA_ICON))}}" />
+                            <img class="img-24" src="{{asset(icon|default(NA_ICON))}}" />
                         {% endif %}
                         {{ include('parts/badge-access.html.twig', {state: element_state(item), variant: 'inline'}) }}
                         <strong class="item-name ml-1">{{ item.nom }}</strong>
-                        {% if is_mj() %}<em class="ml-2 text-muted">- {{ item.originalName }}</em>{% endif %}
+                        {% if is_gm() %}<em class="ml-2 text-muted">- {{ item.originalName }}</em>{% endif %}
                     </div>
 
                     {% if app.request.get('tab') == 'KIHO' %}
@@ -130,18 +130,18 @@
                     <div class="col-1 p-0 m-0 align-bottom text-{{item.anneau}}">
 
                         {% if item.keyword1 %}
-                            {{ icones.mot_cle(item.keyword1) }}
+                            {{ icons.keyword_icon(item.keyword1) }}
                         {% endif %}
 
                         {% if item.keyword2 %}
                             <span class="ml-1">
-                                {{ icones.mot_cle(item.keyword2) }}
+                                {{ icons.keyword_icon(item.keyword2) }}
                             </span>
                         {% endif %}
 
                         {% if item.keyword3 %}
                             <span class="ml-1">
-                                {{ icones.mot_cle(item.keyword3) }}
+                                {{ icons.keyword_icon(item.keyword3) }}
                             </span>
                         {% endif %}
 

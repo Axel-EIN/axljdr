@@ -1,8 +1,8 @@
-{% set library = un_element %}
+{% set library = record %}
 
 <div class="col-12 list-heading">
 
-    {% if is_mj() %}
+    {% if is_gm() %}
         {% set action, entity, redirect, position, color, size = 'create', 'advantage', 'library&libraryID=' ~ library.id ~ '&tab=' ~ app.request.get('tab'), 'topleft-overflow', 'link-gm', 'btn-icon-mini' %}
         {{ include('/btns/btn-icon.html.twig') }}
     {% endif %}
@@ -21,8 +21,8 @@
     {% else %}
         <div class="col-12 p-0 m-0 relative">
 
-            {% if is_mj() %}
-                {% set position, size, color, entity, un_element, redirect = 'topleft-overflow', 'btn-icon-mini', 'link-gm', 'advantage', item, 'library&libraryID=' ~ library.id %}
+            {% if is_gm() %}
+                {% set position, size, color, entity, record, redirect = 'topleft-overflow', 'btn-icon-mini', 'link-gm', 'advantage', item, 'library&libraryID=' ~ library.id %}
                 {{ include('/btns/btn-icon-edit.html.twig') }}
             {% endif %}
 
@@ -53,16 +53,16 @@
                         {{ item.description|raw|nl2br }}
                     </p>
                     {% if item.discount %}
-                        {% set groupes = {
+                        {% set groups = {
                             'du clan': [item.discountClan, item.discountClan2]|filter(e => e),
                             'de la classe': [item.discountClasse, item.discountClasse2]|filter(e => e),
                         }|filter(g => g is not empty) %}
                         <div class="text-small text-green ml-2">
                             Les personnages
-                            {% for prefixe, entites in groupes %}
+                            {% for prefix, linked_entities in groups %}
                                 {% if not loop.first %}ou{% endif %}
-                                {{ prefixe }}
-                                {% for entite in entites %}<strong>{{ entite.nom }}</strong>{% if not loop.last %}, {% endif %}{% endfor %}
+                                {{ prefix }}
+                                {% for linked_entity in linked_entities %}<strong>{{ linked_entity.nom }}</strong>{% if not loop.last %}, {% endif %}{% endfor %}
                             {% endfor %}
                                 {% if item.genre == 'Avantage' %}
                                     peuvent dépenser <strong>{{item.discount}} xp</strong>

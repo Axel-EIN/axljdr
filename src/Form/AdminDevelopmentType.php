@@ -33,8 +33,8 @@ class AdminDevelopmentType extends AbstractType
                 'class' => Participation::class,
                 'label' => 'Scène',
                 'placeholder' => '— Choisir une scène —',
-                'choice_label' => fn(Participation $p) => self::libelleScene($p),
-                'group_by' => fn(Participation $p) => self::libelleChapitre($p),
+                'choice_label' => fn(Participation $p) => self::sceneLabel($p),
+                'group_by' => fn(Participation $p) => self::chapterLabel($p),
                 'choice_attr' => fn(Participation $p) => ['data-personnage' => $p->getPersonnage()->getId()],
                 'query_builder' => fn(EntityRepository $er) => $er->createQueryBuilder('part')
                     ->join('part.personnage', 'p')
@@ -61,7 +61,7 @@ class AdminDevelopmentType extends AbstractType
         ]);
     }
 
-    private static function libelleScene(Participation $participation): string
+    private static function sceneLabel(Participation $participation): string
     {
         $scene = $participation->getScene();
 
@@ -74,15 +74,15 @@ class AdminDevelopmentType extends AbstractType
         );
     }
 
-    private static function libelleChapitre(Participation $participation): string
+    private static function chapterLabel(Participation $participation): string
     {
-        $chapitre = $participation->getScene()->getEpisodeParent()->getChapitreParent();
+        $chapter = $participation->getScene()->getEpisodeParent()->getChapitreParent();
 
         return sprintf(
             'Saison %d — Chapitre %d : %s',
-            $chapitre->getSaisonParent()->getNumero(),
-            $chapitre->getNumero(),
-            $chapitre->getTitre()
+            $chapter->getSaisonParent()->getNumero(),
+            $chapter->getNumero(),
+            $chapter->getTitre()
         );
     }
 }

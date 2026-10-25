@@ -44,21 +44,21 @@ class LoginController extends AbstractController
     }
 
     /**
-     * @Route("/oubli-pass", name="app_forgotten_password")
+     * @Route("/forgot-password", name="app_forgotten_password")
      */
-    public function passOublie(
-                                Request $request,
-                                UtilisateurRepository $utilisateurs,
-                                MailerInterface $mailer,
-                                TokenGeneratorInterface $tokenGenerator): Response
+    public function forgotPassword(
+                                    Request $request,
+                                    UtilisateurRepository $userRepository,
+                                    MailerInterface $mailer,
+                                    TokenGeneratorInterface $tokenGenerator): Response
     {
         $form = $this->createForm(ResetPassType::class);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $donnees = $form->getData();
+            $data = $form->getData();
 
-            $user = $utilisateurs->findOneBy( [ 'email' => $donnees['email'] ] );
+            $user = $userRepository->findOneBy( [ 'email' => $data['email'] ] );
 
             if ($user === null) {
                 $this->addFlash('danger', 'Cette adresse e-mail est inconnue');
@@ -105,7 +105,7 @@ class LoginController extends AbstractController
     }
 
     /**
-     * @Route("/reset_pass/{token}", name="app_reset_password")
+     * @Route("/reset-password/{token}", name="app_reset_password")
      */
     public function resetPassword(Request $request, string $token, UserPasswordHasherInterface $userPasswordHasherInterface)
     {
@@ -121,11 +121,11 @@ class LoginController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $mdp = $form->get('plainPassword')->getData();
+            $password = $form->get('plainPassword')->getData();
 
             $user->setResetToken(null);
 
-            $user->setPassword($userPasswordHasherInterface->hashPassword($user, $mdp));
+            $user->setPassword($userPasswordHasherInterface->hashPassword($user, $password));
 
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($user);

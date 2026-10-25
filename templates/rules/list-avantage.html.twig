@@ -17,7 +17,7 @@
 {% for item in items %}
 
     {% if not element_readable(item) %}
-        {{ include('regles/list-item-locked.html.twig', {entity: 'avantage'}) }}
+        {{ include('rules/list-item-locked.html.twig', {entity: 'avantage'}) }}
     {% else %}
         <div class="col-12 p-0 m-0 relative">
 

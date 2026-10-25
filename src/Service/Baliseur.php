@@ -153,7 +153,7 @@ class Baliseur
                 $icone_lieu = '../../' . ($lieu_trouve->getIcone() ?: $this->iconeParDefaut($lieu_trouve));
 
                 $tableau_remplacement[] =
-                    '<a class="tag-location hover-zoom-quick location-icon bg-background pr-1 pt-0 pb-0 pl-0" href="../../world/lieu/' . $lieu_trouve->getId() . '">'
+                    '<a class="tag-location hover-zoom-quick location-icon bg-background pr-1 pt-0 pb-0 pl-0" href="../../world/location/' . $lieu_trouve->getId() . '">'
                                 . '<img class="location-icon-small" src="../../' . $icone_lieu
                                 . '" alt="Icône Lieu" title="Voir ' . $lieu_trouve->getNom() .'" /> ' . $lieu_trouve->getNom() . '</a>';
             } else

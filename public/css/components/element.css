@@ -39,7 +39,7 @@
   }
 }
 
-.texte-attente {
+.waiting-text {
   text-align: center;
   font-style: italic;
   margin-bottom: 0;
@@ -72,7 +72,7 @@
   .card-page .gradient-after-down:not(.gradient-desktop)::after { content: none; }
 }
 
-.gradient-after-down .card-top-titre {
+.gradient-after-down .card-top-title {
   position: absolute;
   bottom: 0;
   left: 0;
@@ -83,7 +83,7 @@
 }
 
 @media (max-width: 991.98px) {
-  .element-page:has(.card-top-titre) > .container > section > h1 {
+  .element-page:has(.card-top-title) > .container > section > h1 {
     position: absolute;
     width: 1px;
     height: 1px;

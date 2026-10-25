@@ -20,7 +20,7 @@ final class EntityRegistry
 {
     private const ENTITIES = [
         'episode'    => ['class' => Episode::class,    'route' => 'story_episode',      'label' => 'Épisode'],
-        'personnage' => ['class' => Personnage::class, 'route' => 'characters_profile', 'label' => 'Personnage'],
+        'character'  => ['class' => Personnage::class, 'route' => 'characters_profile', 'label' => 'Personnage'],
         'archive'    => ['class' => Archive::class,    'route' => 'world_archive',      'label' => 'Archive'],
         'clan'       => ['class' => Clan::class,       'route' => 'world_clan',         'label' => 'Faction'],
         'location'   => ['class' => Lieu::class,       'route' => 'world_location',     'label' => 'Lieu'],

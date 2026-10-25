@@ -1,6 +1,6 @@
 <nav class="nav justify-content-center align-items-center">
 
-    {% if app.user and is_granted("ROLE_MJ") %}
+    {% if is_mj() %}
     
         {% set navs = {
             'Saisons': {

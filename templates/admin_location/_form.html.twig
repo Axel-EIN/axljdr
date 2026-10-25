@@ -15,17 +15,17 @@
 
       <div class="col-4 mt-3 mb-5 d-flex flex-column text-center">
         {{ include('parts/image-field.html.twig', {
-            field: form.icone, input_id: 'admin_lieu_icone', prefix: 'icon', current: lieu.icone|default(null),
+            field: form.icone, input_id: 'admin_location_icone', prefix: 'icon', current: location.icone|default(null),
             fallback: NA_LIEU_ICO, label: 'Icone (192×192 1:1 recommandé)', width: 192, height: 192 }) }}
       </div>
 
       <div class="col-8 mt-3 mb-5">
         {{ include('parts/image-field.html.twig', {
-            field: form.image, input_id: 'admin_lieu_image', prefix: 'image', current: lieu.image|default(null),
+            field: form.image, input_id: 'admin_location_image', prefix: 'image', current: location.image|default(null),
             fallback: NA_LIEU, label: 'Image (1280×720 16:9 recommandé)', width: 1280, height: 720 }) }}
       </div>
 
-      {% set plan_rempli = lieu.planMap|default(null) or lieu.planDesc|default(null) %}
+      {% set plan_rempli = location.planMap|default(null) or location.planDesc|default(null) %}
 
       <div class="col-12 mt-5">
         <h2 class="heading-cardtitle">Carte</h2>
@@ -51,7 +51,7 @@
 
           <div class="col-12 mt-3 mb-5">
             {{ include('parts/image-field.html.twig', {
-                field: form.planMap, input_id: 'admin_lieu_planMap', prefix: 'plan', current: lieu.planMap|default(null),
+                field: form.planMap, input_id: 'admin_location_planMap', prefix: 'plan', current: location.planMap|default(null),
                 fallback: NA_MAP, deletable: false }) }}
           </div>
 

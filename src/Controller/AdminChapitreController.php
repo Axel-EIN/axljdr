@@ -85,8 +85,8 @@ class AdminChapitreController extends AbstractController
             $fratrieArrivee = $chapitreRepository->findBy(['saisonParent' => $chapitre->getSaisonParent()->getId()]);
             $numeroteur->reordonnerNumero($chapitre->getId(), -1, $chapitre->getNumero(), [], $fratrieArrivee);
 
-            if (!empty($request->query->get('redirect')) && $request->query->get('redirect') == 'aventure')
-                return $this->redirectToRoute('aventure_saison', ['id' => $chapitre->getSaisonParent()->getId(),'_fragment' => 'read-head-ch-id' . $chapitre->getId()]);
+            if (!empty($request->query->get('redirect')) && $request->query->get('redirect') == 'story')
+                return $this->redirectToRoute('story_season', ['id' => $chapitre->getSaisonParent()->getId(),'_fragment' => 'read-head-ch-id' . $chapitre->getId()]);
             
             return $this->redirectToRoute('admin_chapitre');
         }
@@ -135,8 +135,8 @@ class AdminChapitreController extends AbstractController
             $this->getDoctrine()->getManager()->flush();
             $this->addFlash('success', 'Le chapitre a bien été modifié.');
 
-            if (!empty($request->query->get('redirect')) && $request->query->get('redirect') == 'aventure')
-                return $this->redirectToRoute('aventure_saison', ['id' => $chapitre->getSaisonParent()->getId(),'_fragment' => 'read-head-ch-id' . $chapitre->getId()]);
+            if (!empty($request->query->get('redirect')) && $request->query->get('redirect') == 'story')
+                return $this->redirectToRoute('story_season', ['id' => $chapitre->getSaisonParent()->getId(),'_fragment' => 'read-head-ch-id' . $chapitre->getId()]);
             
             return $this->redirectToRoute('admin_chapitre');
         }
@@ -181,8 +181,8 @@ class AdminChapitreController extends AbstractController
         } else
             $this->addFlash('danger', 'Token de protection invalide !');
 
-        if (!empty($request->query->get('redirect')) && $request->query->get('redirect') == 'aventure')
-            return $this->redirectToRoute('aventure_saison', ['id' => $saisonParent->getId()], Response::HTTP_SEE_OTHER);
+        if (!empty($request->query->get('redirect')) && $request->query->get('redirect') == 'story')
+            return $this->redirectToRoute('story_season', ['id' => $saisonParent->getId()], Response::HTTP_SEE_OTHER);
         
         return $this->redirectToRoute('admin_chapitre');
     }

@@ -194,16 +194,17 @@
 .participations-card {
   --faction-tint:
     color-mix(in srgb, var(--faction-color, transparent) 60%, transparent);
-  --illustration-offset: calc(-2.5rem - 16px);
+  --illustration-offset: -2.5rem;
 
   background-image:
-  linear-gradient(
-    to bottom,
-    rgb(255 255 255 / 0) 0%,
-    var(--color-white) 60%),
+    linear-gradient(to bottom, rgb(0 0 0 / 0.65) 0, transparent 7rem),
+    linear-gradient(
+      to bottom,
+      rgb(255 255 255 / 0) 0%,
+      var(--color-white) 60%),
     linear-gradient(var(--faction-tint), var(--faction-tint)),
     var(--character-image);
-  background-position: top right, top right, right 0 top var(--illustration-offset);
+  background-position: top right, top right, top right, right 0 top var(--illustration-offset);
   background-size: cover;
   background-repeat: no-repeat;
   background-color: var(--faction-tint);
@@ -246,7 +247,10 @@
       align-items: center;
       gap: 0.5rem;
 
-      > .news-subtitle { margin: 0; }
+      .status-name {
+        margin: 0;
+        font-size: var(--fontsize-bigger);
+      }
     }
 
     .status-hp-bar {
@@ -265,7 +269,7 @@
     }
 
     .status-body {
-      --illustration-space: 7rem;
+      --illustration-space: 5rem;
 
       display: flex;
       justify-content: space-between;
@@ -279,16 +283,17 @@
       flex-direction: column;
       align-items: flex-end;
       line-height: var(--leading-1);
-      font-size: var(--fontsize-medium);
-
-      > strong { font-size: var(--fontsize-large); }
+      font-size: var(--fontsize-bigger);
+      .status-label {
+        font-size: var(--fontsize-large);
+      }
     }
 
     .status-actions {
       display: flex;
       align-items: center;
       gap: 0.5rem;
-      align-self: flex-end;
+      margin-top: var(--spacer-semi);
 
       .status-link {
         position: relative;
@@ -449,19 +454,6 @@
       gap: var(--gap);
 
       > .news-section { grid-column: span var(--span); }
-    }
-  }
-
-  .picture-grid {
-    align-content: start;
-
-    &:has(.icon) { --image-max: 8rem; }
-
-    .label {
-      display: -webkit-box;
-      -webkit-box-orient: vertical;
-      -webkit-line-clamp: 2;
-      overflow: hidden;
     }
   }
 }

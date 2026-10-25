@@ -4,7 +4,7 @@ namespace App\Controller;
 
 use App\Service\TableFilter;
 use App\Entity\Sort;
-use App\Form\AdminSortType;
+use App\Form\AdminSpellType;
 use App\Service\Numeroteur;
 use App\Service\FileHandler;
 use App\Repository\SortRepository;
@@ -16,7 +16,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use App\Service\Unlocker;
 
-class AdminSortController extends AbstractController
+class AdminSpellController extends AbstractController
 {
     private const TABLE_FILTERS = [
         'categorie:Catégorie',
@@ -24,20 +24,20 @@ class AdminSortController extends AbstractController
     ];
 
     /**
-     * @Route("/admin/sort", name="admin_sort")
+     * @Route("/admin/spell", name="admin_spell")
      * @IsGranted("ROLE_MJ")
      */
-    public function viewAdminSorts( SortRepository $sortRepository ): Response
+    public function viewAdminSpells( SortRepository $spellRepository ): Response
     {
-        $sorts = $sortRepository->findBy( [] , ['id' => 'DESC'] );
+        $spells = $spellRepository->findBy( [] , ['id' => 'DESC'] );
 
         return $this->render('back_office/list-element.html.twig', [
-            'elements' => $sorts,
+            'elements' => $spells,
             'label' => 'Sort',
             'labels' => "Sorts",
             'genre' => 'M',
             'determinant' => 'un',
-            'element' => 'sort',
+            'element' => 'spell',
             'table_filters' => self::TABLE_FILTERS,
             'table_cols' => [
                 'nom:Nom::bold',
@@ -62,57 +62,57 @@ class AdminSortController extends AbstractController
     }
 
     /**
-     * @Route("/admin/sort/create", name="admin_sort_create")
+     * @Route("/admin/spell/create", name="admin_spell_create")
      * @IsGranted("ROLE_MJ")
      */
-    public function addSort(Request $request, EntityManagerInterface $em, FileHandler $fileHandler, SortRepository $sortRepository, Numeroteur $numeroteur, Unlocker $unlocker, TableFilter $tableFilter) {
+    public function addSpell(Request $request, EntityManagerInterface $em, FileHandler $fileHandler, SortRepository $spellRepository, Numeroteur $numeroteur, Unlocker $unlocker, TableFilter $tableFilter) {
 
-        $sort = new Sort;
-        $tableFilter->prefill($sort, self::TABLE_FILTERS, $request->query->all('filter'));
+        $spell = new Sort;
+        $tableFilter->prefill($spell, self::TABLE_FILTERS, $request->query->all('filter'));
 
         $param_numero = $request->query->get('numero');
         if ( !empty($param_numero) && is_numeric($param_numero) && $param_numero > 0 )
-            $sort->setNumero($param_numero);
+            $spell->setNumero($param_numero);
 
         $param_categorie = $request->query->get('tab');
         if ( !empty($param_categorie) && !is_numeric($param_categorie) )
-            $sort->setCategorie($param_categorie);
+            $spell->setCategorie($param_categorie);
 
         $param_anneau = $request->query->get('subtab');
         if ( !empty($param_anneau) && !is_numeric($param_anneau) )
-            $sort->setAnneau($param_anneau);
+            $spell->setAnneau($param_anneau);
 
-        $form = $this->createForm(AdminSortType::class, $sort);
+        $form = $this->createForm(AdminSpellType::class, $spell);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
 
             $formNumero = $form->get('numero')->getData();
-            $fratrieArrivee = $sortRepository->findBy(['anneau' => $form->get('anneau')->getData()]);
+            $newSiblings = $spellRepository->findBy(['anneau' => $form->get('anneau')->getData()]);
 
             if ( empty($formNumero) || !is_numeric($formNumero) || $formNumero < 1 )
-                $sort->setNumero( count($fratrieArrivee) + 1 );
+                $spell->setNumero( count($newSiblings) + 1 );
             else
-                $sort->setNumero( $formNumero );
+                $spell->setNumero( $formNumero );
 
-            $em->persist($sort);
+            $em->persist($spell);
             $em->flush();
 
-            $unlocker->sync($sort, $form->get('unlockedBy')->getData());
+            $unlocker->sync($spell, $form->get('unlockedBy')->getData());
             $em->flush();
             $this->addFlash('success', "Le sort a bien été ajouté.");
 
             if (!empty($request->query->get('redirect')) && $request->query->get('redirect') == 'library'
             && !empty($request->query->get('libraryID')) && $request->query->get('libraryID') > 0)
-                return $this->redirectToRoute( 'rules_library', [ 'id' => $request->query->get('libraryID') , 'tab' => $sort->getCategorie() , 'subtab' => $sort->getAnneau() ] );
+                return $this->redirectToRoute( 'rules_library', [ 'id' => $request->query->get('libraryID') , 'tab' => $spell->getCategorie() , 'subtab' => $spell->getAnneau() ] );
 
-            return $this->redirectToRoute('admin_sort');
+            return $this->redirectToRoute('admin_spell');
         }
         
 
         return $this->render('back_office/create.html.twig', [
             'type' => 'Créer',
-            'entity' => 'sort',
+            'entity' => 'spell',
             'label' => 'Sort',
             'genre' => 'M',
             'determinant' => 'un',
@@ -121,47 +121,47 @@ class AdminSortController extends AbstractController
     }
 
     /**
-     * @Route("/admin/sort/{id}/edit", name="admin_sort_edit")
+     * @Route("/admin/spell/{id}/edit", name="admin_spell_edit")
      * @IsGranted("ROLE_MJ")
      */
-    public function editSort(Request $request, Sort $sort, SortRepository $sortRepository, Numeroteur $numeroteur, Unlocker $unlocker): Response {
+    public function editSpell(Request $request, Sort $spell, SortRepository $spellRepository, Numeroteur $numeroteur, Unlocker $unlocker): Response {
 
-        if ( empty( $sort->getNumero() ) || !is_numeric( $sort->getNumero() ) || $sort->getNumero() < 0)
-            $numeroDepart = -1;
+        if ( empty( $spell->getNumero() ) || !is_numeric( $spell->getNumero() ) || $spell->getNumero() < 0)
+            $previousNumber = -1;
         else
-            $numeroDepart = $sort->getNumero();
+            $previousNumber = $spell->getNumero();
 
-        $fratrieDepartId = $sort->getAnneau();
+        $previousSiblingsId = $spell->getAnneau();
 
-        $form = $this->createForm(AdminSortType::class, $sort);
-        $form->get('unlockedBy')->setData($unlocker->charactersOf($sort));
+        $form = $this->createForm(AdminSpellType::class, $spell);
+        $form->get('unlockedBy')->setData($unlocker->charactersOf($spell));
         $form->handleRequest($request);
 
         if($form->isSubmitted() && $form->isValid()) {
 
-            if ($numeroDepart != $sort->getNumero() || $fratrieDepartId != $sort->getAnneau())
+            if ($previousNumber != $spell->getNumero() || $previousSiblingsId != $spell->getAnneau())
             {
-                $fratrieDepart = $sortRepository->findBy(['anneau' => $fratrieDepartId]);
-                $fratrieArrivee = $sortRepository->findBy(['anneau' => $sort->getAnneau()]);
-                $numeroteur->reordonnerNumero($sort->getId(), $numeroDepart, $sort->getNumero(), $fratrieDepart, $fratrieArrivee);
+                $previousSiblings = $spellRepository->findBy(['anneau' => $previousSiblingsId]);
+                $newSiblings = $spellRepository->findBy(['anneau' => $spell->getAnneau()]);
+                $numeroteur->reordonnerNumero($spell->getId(), $previousNumber, $spell->getNumero(), $previousSiblings, $newSiblings);
             }
 
-            $unlocker->sync($sort, $form->get('unlockedBy')->getData());
+            $unlocker->sync($spell, $form->get('unlockedBy')->getData());
 
             $this->getDoctrine()->getManager()->flush();
             $this->addFlash('success', "Le Sort a bien été modifié.");
 
             if (!empty($request->query->get('redirect')) && $request->query->get('redirect') == 'library'
             && !empty($request->query->get('libraryID')) && $request->query->get('libraryID') > 0)
-                return $this->redirectToRoute( 'rules_library', [ 'id' => $request->query->get('libraryID') , 'tab' => $sort->getCategorie() , 'subtab' => $sort->getAnneau() ] );
+                return $this->redirectToRoute( 'rules_library', [ 'id' => $request->query->get('libraryID') , 'tab' => $spell->getCategorie() , 'subtab' => $spell->getAnneau() ] );
 
-            return $this->redirectToRoute('admin_sort');
+            return $this->redirectToRoute('admin_spell');
         }
 
         return $this->renderForm('back_office/edit.html.twig', [
             'type' => 'Modifier',
-            'sort' => $sort,
-            'entity' => 'sort',
+            'spell' => $spell,
+            'entity' => 'spell',
             'label' => 'Sort',
             'genre' => 'M',
             'determinant' => 'un',
@@ -170,21 +170,21 @@ class AdminSortController extends AbstractController
     }
 
     /**
-     * @Route("/admin/sort/{id}/delete", name="admin_sort_delete", methods={"POST"})
+     * @Route("/admin/spell/{id}/delete", name="admin_spell_delete", methods={"POST"})
      * @IsGranted("ROLE_MJ")
      */
-    public function deleteSort(Request $request, Sort $sort, FileHandler $fileHandler, Unlocker $unlocker): Response {
+    public function deleteSpell(Request $request, Sort $spell, FileHandler $fileHandler, Unlocker $unlocker): Response {
 
-        if ($this->isCsrfTokenValid('delete' . $sort->getId(), $request->request->get('_csrf_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $spell->getId(), $request->request->get('_csrf_token'))) {
 
             $entityManager = $this->getDoctrine()->getManager();
-            $unlocker->forget($sort);
-            $entityManager->remove($sort);
+            $unlocker->forget($spell);
+            $entityManager->remove($spell);
             $entityManager->flush();
             $this->addFlash('success', "Le Sort a bien été supprimé.");
         }
 
-        return $this->redirectToRoute('admin_sort');
+        return $this->redirectToRoute('admin_spell');
     }
 
 }

@@ -1,6 +1,6 @@
 /* ----- BARRE DE SAISON (navigation precedente/suivante) ----- */
 
-.h1-saison {
+.h1-season {
   margin: 0;
   font-size: var(--fontsize-base);
   font-weight: bold;
@@ -8,7 +8,7 @@
   text-align: center;
 }
 
-.saison-bar {
+.season-bar {
   position: relative;
   box-shadow: 0px 2px 8px #00000040;
 

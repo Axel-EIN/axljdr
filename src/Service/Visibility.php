@@ -259,7 +259,7 @@ class Visibility
 
         return array_merge(
             $possessions,
-            [$fiche->getArme(), $fiche->getArme2(), $fiche->getArmeActuelle(), $fiche->getArmure()],
+            [$fiche->getArmeActuelle(), $fiche->getArmure()],
             [$fiche->getAvantage1(), $fiche->getAvantage2(), $fiche->getDesavantage1(), $fiche->getDesavantage2()],
             $competences,
             $fiche->getInventoryItems()->toArray(),

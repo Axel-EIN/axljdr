@@ -33,8 +33,8 @@
 <div class="col-12 col-lg-4 order-2 order-lg-1">
     <div class="card card-body profile-infos">
 
-        {% set fiche_visible = personnage.fichePersonnage is not null and (est_le_joueur or is_granted('ROLE_MJ')) %}
-        {% set fiche_addable = personnage.fichePersonnage is null and is_granted('ROLE_MJ') %}
+        {% set fiche_visible = personnage.fichePersonnage is not null and (est_le_joueur or is_mj()) %}
+        {% set fiche_addable = personnage.fichePersonnage is null and is_mj() %}
 
         <div class="relative">
             <div class="profile-illustration d-none d-lg-block {{ fiche_visible or fiche_addable ? 'with-btn' }}">
@@ -61,7 +61,7 @@
 
         {% if xp > 0 %}
             <li class="list-group-item infos-item profile-xp-and-rank">
-                <span class="xp-rank badge-rang-{{rang}}">RANG {{rang}}</span>
+                <span class="badge-rang-{{rang}} large">RANG {{rang}}</span>
                 <span class="xp-number">{{xp}} XP</span>
             </li>
         {% endif %}
@@ -177,7 +177,7 @@
                                     <img class="img-18 invert mr-1 align-middle" src="{{ asset(AVENTURE_EPISODE_ICO) }}" alt="" />
                                     <strong>{{ scene.titre }}</strong>
                                 </a>
-                                {% if is_granted('ROLE_MJ') %}
+                                {% if is_mj() %}
                                     {{ include('/btns/btn-icon-edit.html.twig', {
                                     entity: 'development', un_element: development, position: 'align-middle',
                                     redirect: 'development', size: 'btn-icon-mini', color: 'link-gm',
@@ -230,7 +230,7 @@
                 </div>
 
 
-                {% if app.user and is_granted("ROLE_MJ") %}
+                {% if is_mj() %}
                     {# ===================================== #}
                     {# ===== [CARD-SECTION] GM's NOTES ===== #}
                     {# ===================================== #}

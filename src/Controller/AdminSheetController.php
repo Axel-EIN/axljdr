@@ -29,8 +29,8 @@ class AdminSheetController extends AbstractController
             'element' => 'sheet',
             'label' => 'Fiche',
             'labels' => 'Fiches',
-            'genre' => 'F',
-            'determinant' => 'une',
+            'gender' => 'F',
+            'article' => 'une',
             'table_filters' => [
                 'personnage.estPj:Type:PJ|PNJ',
                 'personnage.clan.nom:Clan',
@@ -83,11 +83,11 @@ class AdminSheetController extends AbstractController
         }
 
         return $this->render('back_office/create.html.twig', [
-            'type' => 'Créer',
+            'type' => 'create',
             'entity' => 'sheet',
             'label' => 'Fiche',
-            'genre' => 'F',
-            'determinant' => 'une',
+            'gender' => 'F',
+            'article' => 'une',
             'form' => $form->createView(),
             'skills_json' => $this->buildSkillsJson($skillRepository),
         ]);
@@ -111,12 +111,12 @@ class AdminSheetController extends AbstractController
         }
 
         return $this->renderForm('back_office/edit.html.twig', [
-            'type' => 'Modifier',
+            'type' => 'edit',
             'sheet' => $sheet,
             'entity' => 'sheet',
             'label' => 'Fiche',
-            'genre' => 'F',
-            'determinant' => 'une',
+            'gender' => 'F',
+            'article' => 'une',
             'form' => $form,
             'skills_json' => $this->buildSkillsJson($skillRepository),
         ]);

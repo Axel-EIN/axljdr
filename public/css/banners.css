@@ -13,7 +13,7 @@
 .header-bg-characters {
   background-image:
     linear-gradient(rgba(40,0,0,0.5),rgba(40,0,0,0.5)),
-    url('../assets/rubriques/personnages.jpg');
+    url('../assets/rubriques/characters.jpg');
   background-position: center;
 }
 

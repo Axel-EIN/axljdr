@@ -3,7 +3,7 @@
 {% set page_title = 'Modifier votre avatar' %}
 
 {% block content %}
-  <div class="formulaire-etroit">
+  <div class="form-narrow">
     {% if app.user.avatar %}
       <img class="img-fluid" src="{{ asset(app.user.avatar) }}" alt="Avatar de l'utilisateur" />
     {% else %}

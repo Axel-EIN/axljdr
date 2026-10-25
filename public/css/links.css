@@ -35,7 +35,7 @@ a {
 
 /* BACK OFFICE MJ LINKS TABS */
 
-.mj-link {
+.gm-link {
     color: var(--color-linkondark-hover) !important;
     &:hover {
         color: var(--color-link-hover) !important;

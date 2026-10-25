@@ -155,16 +155,16 @@
                     </div>
                 </div>
 
-                {% if carte_visible %}
+                {% if map_visible %}
                     <div class="participations-map d-none d-lg-block">
                         <h3 class="label-amerigo news-subtitle">Position</h3>
                         {{ include('parts/map.html.twig', {
                             lieux,
-                            current: position_actuelle,
-                            party: position_actuelle ? {(position_actuelle.id): [mon_personnage]} : {},
-                            center: position_libre,
-                            wanderers: position_libre ? [position_libre] : [],
-                            zoom: position_actuelle ? position_actuelle.zoom : null,
+                            current: current_position,
+                            party: current_position ? {(current_position.id): [mon_personnage]} : {},
+                            center: free_position,
+                            wanderers: free_position ? [free_position] : [],
+                            zoom: current_position ? current_position.zoom : null,
                             variant: 'mini',
                         }, with_context = false) }}
                     </div>
@@ -276,5 +276,5 @@
 
 {% block javascripts %}
     {{ parent() }}
-    {% if carte_visible %}<script src="{{ asset('scripts/map.js') }}"></script>{% endif %}
+    {% if map_visible %}<script src="{{ asset('scripts/map.js') }}"></script>{% endif %}
 {% endblock %}

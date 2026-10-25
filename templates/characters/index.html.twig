@@ -48,8 +48,8 @@
 {% endblock %}
 
 {% block section_aside1 %}
-    <label class="voir-inactifs" for="voir-inactifs">
-        <input type="checkbox" id="voir-inactifs">
+    <label class="show-inactive" for="show-inactive">
+        <input type="checkbox" id="show-inactive">
         Afficher les morts et disparus
     </label>
 {% endblock %}
@@ -74,7 +74,7 @@
         {% for group in groups|filter(g => g.characters|length > 0) %}
             {% set group_clan = group.faction ? (group.characters|first).clan : null %}
             {% set scroller_id = 'pnj-' ~ loop.index %}
-            <div class="pnj-clan-group">
+            <div class="npc-clan-group">
                 <h3 class="heading-amerigo category-section-sub-heading relative">
                     <img class="img-40 mr-2" src="{{ asset(group_clan ? image_small(group_clan.mon|default(NA_MON)) : NA_MON) }}" alt="Mon de la faction" />
                     {{ group.title }}

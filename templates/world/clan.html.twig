@@ -15,7 +15,7 @@
         <div class="card card-body relative">
 
             {{ include('/btns/btn-add-element.html.twig', {
-                entity: 'famille', label_one: 'une famille',
+                entity: 'family', label_one: 'une famille',
                 position: 'topright-corner-inside-more', options: 'clanID=' ~ clan.id,
             }) }}
 
@@ -27,7 +27,7 @@
                     <article id="{{ une_famille.nom }}" class="famille relative">
 
                         {% if is_mj() %}
-                            {% set redirect, entity, un_element, size, color, position = 'clan', 'famille', une_famille, 'btn-icon-small', 'link-gm', 'topright-corner-snap' %}
+                            {% set redirect, entity, un_element, size, color, position = 'clan', 'family', une_famille, 'btn-icon-small', 'link-gm', 'topright-corner-snap' %}
                             {{ include('/btns/btn-icon-edit.html.twig') }}
                         {% endif %}
 

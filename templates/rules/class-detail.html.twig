@@ -7,12 +7,12 @@
 
 {% block element_content %}
 
-    {{ include('regles/class-banner.html.twig', {classe, classes}) }}
+    {{ include('rules/class-banner.html.twig', {classe, classes}) }}
 
     {{ include('/parts/picture-grid.html.twig', {
         title: 'Écoles de ' ~ classe.nom,
         variant: 'rule',
-        items: ecolesClasse, route: 'regles_ecole',
+        items: class_dojos, route: 'rules_dojo',
         na_image: NA_ECOLE,
         per_row: {desktop: 4, mobile: 2},
         wrapper: 'col-12 col-lg-8',
@@ -22,7 +22,7 @@
     {{ include('/parts/picture-grid.html.twig', {
         variant: 'portrait',
         title: 'Personnages joueurs',
-        items: personnagesClasse, route: 'personnage_profil', hide_dead: true,
+        items: player_characters, route: 'personnage_profil', hide_dead: true,
         limit: 16,
         wrapper: 'col-12 col-lg-4',
         per_row: {desktop: 2, tablet: 4, mobile: 2},

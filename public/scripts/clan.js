@@ -1,5 +1,5 @@
 
-$('#zone-mon').hover(playVisible, playInvisible);
+$('#mon-zone').hover(playVisible, playInvisible);
 
 function playVisible() {
     var test = $('#icon-play');

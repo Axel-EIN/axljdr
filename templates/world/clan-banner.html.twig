@@ -26,7 +26,7 @@
 
                 {% if clan.video is defined and clan.video is not empty %}
                     <button id="btn-play" class="btn-unstyled" onclick="focusVideo()">
-                        <div id="zone-mon" class="animation-shine hover-zoom">
+                        <div id="mon-zone" class="animation-shine hover-zoom">
                             <i id="icon-play" class="invisible fa-solid fa-video fa-4x"></i>
                             <img class="img-240 filter-shadow" src="{{ asset(clan.mon|default(NA_MON)) }}" alt="Blason" title="Visualiser/Écouter la Vidéo" />
                         </div>

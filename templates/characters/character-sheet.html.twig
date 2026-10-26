@@ -1344,7 +1344,7 @@
             tnModifier: {{ sheet.ndModifier ?? 0 }},
             healthyHpPerEarth: {{ healthy_hp_per_earth }},
             woundedHpPerEarth: {{ wounded_hp_per_earth }},
-            woundLevels: {{ wound_levels|length - 1 }},
+            woundedLevelCount: {{ wound_levels|length - 1 }},
             editUrl: {{ path('characters_sheet_edit', {id: sheet.id})|json_encode|raw }},
             csrfToken: {{ csrf_token('player_sheet')|json_encode|raw }},
             skills: {{ skills_json|json_encode|raw }},
@@ -1358,12 +1358,12 @@
             currentWeaponId: {{ sheet.armeActuelle ? sheet.armeActuelle.id : 0 }},
             currentCombatSkillId: {{ sheet.compCombatActuelle ? sheet.compCombatActuelle.id : 0 }},
             initiativeModifier: {{ sheet.initiativeModifier ?? 0 }},
-            attackRolledMod:  {{ attack_rolled_mod }},
-            attackKeptMod:  {{ attack_kept_mod }},
-            damageRolledMod:  {{ damage_rolled_mod }},
-            damageKeptMod:  {{ damage_kept_mod }},
-            attackModifierStr:    {% if sheet.attaqueModifier %}{{ sheet.attaqueModifier|json_encode|raw }}{% else %}null{% endif %},
-            damageModifierStr:        {% if sheet.dmgModifier %}{{ sheet.dmgModifier|json_encode|raw }}{% else %}null{% endif %}
+            attackRolledMod: {{ attack_rolled_mod }},
+            attackKeptMod: {{ attack_kept_mod }},
+            damageRolledMod: {{ damage_rolled_mod }},
+            damageKeptMod: {{ damage_kept_mod }},
+            attackModifierStr: {% if sheet.attaqueModifier %}{{ sheet.attaqueModifier|json_encode|raw }}{% else %}null{% endif %},
+            damageModifierStr: {% if sheet.dmgModifier %}{{ sheet.dmgModifier|json_encode|raw }}{% else %}null{% endif %}
         };
     </script>
     <script>
@@ -1529,7 +1529,7 @@
                 initNode.textContent = `${initiativeRolled}g${initiativeKept}${suffix}`;
             }
 
-            const combatSkillId  = getCombatSkillId();
+            const combatSkillId = getCombatSkillId();
             const combatSkillValue = getCombatSkillValue();
             const attackRolled = eff.agilite + Math.ceil(combatSkillValue / 2) + cfg.attackRolledMod;
             const attackKept = eff.agilite + cfg.attackKeptMod;
@@ -1558,15 +1558,15 @@
                 ? (cfg.weapons || []).find(a => a.id === currentWeaponId)
                 : null;
             const weaponDr = currentWeapon ? currentWeapon.vd : null;
-            const damageNode         = document.querySelector('[data-stat="damage"]');
-            const damageAvgNode      = document.querySelector('[data-stat="damage-avg"]');
-            const damageRaise3AvgNode  = document.querySelector('[data-stat="damage-raise3-avg"]');
+            const damageNode = document.querySelector('[data-stat="damage"]');
+            const damageAvgNode = document.querySelector('[data-stat="damage-avg"]');
+            const damageRaise3AvgNode = document.querySelector('[data-stat="damage-raise3-avg"]');
             if (weaponDr) {
                 const parts = weaponDr.split('g');
                 const rolled = (parseInt(parts[0], 10) || 0) + eff.forceStat + cfg.damageRolledMod;
                 const kept   = (parseInt(parts[1], 10) || 0) + cfg.damageKeptMod;
-                if (damageNode)        damageNode.textContent        = `${rolled}g${kept}`;
-                if (damageAvgNode)     damageAvgNode.textContent     = expectedRoll(rolled, kept);
+                if (damageNode) damageNode.textContent = `${rolled}g${kept}`;
+                if (damageAvgNode) damageAvgNode.textContent = expectedRoll(rolled, kept);
                 if (damageRaise3AvgNode) damageRaise3AvgNode.textContent = expectedRoll(rolled + 3, kept);
             }
             document.querySelectorAll('.stat-damage-with-weapon').forEach(el => el.classList.toggle('d-none', !currentWeapon));
@@ -1582,14 +1582,14 @@
             const armorTnNode = document.querySelector('[data-stat="tn-hit-armor"]');
             if (armorTnNode) armorTnNode.textContent = tnBase + cfg.armorTn;
 
-            const earth = Math.min(eff.constitution, eff.volonte);
+            const earth = rings.terre;
             const hpHealthy = document.querySelector('[data-stat="hp-healthy"]');
             if (hpHealthy) hpHealthy.textContent = cfg.healthyHpPerEarth * earth;
             document.querySelectorAll('[data-stat="hp-wounded"]').forEach(td => {
                 td.textContent = cfg.woundedHpPerEarth * earth;
             });
             const hpTotal = document.querySelector('[data-stat="hp-total"]');
-            if (hpTotal) hpTotal.textContent = earth * (cfg.healthyHpPerEarth + cfg.woundLevels * cfg.woundedHpPerEarth);
+            if (hpTotal) hpTotal.textContent = earth * (cfg.healthyHpPerEarth + cfg.woundedLevelCount * cfg.woundedHpPerEarth);
 
             const recoveryNode = document.querySelector('[data-stat="recovery"]');
             if (recoveryNode) recoveryNode.textContent = eff.constitution * 2 + cfg.rank;
@@ -1626,7 +1626,7 @@
                             if ((parseInt(w.dataset.state, 10) || 0) === 1) paidSpecs += 1;
                         });
                     } else {
-                        const specMask   = row.dataset.skillSpecs || '';
+                        const specMask = row.dataset.skillSpecs || '';
                         const dojoSpecMask = row.dataset.skillDojoSpec || '';
                         for (let k = 0; k < specMask.length; k++) {
                             if (specMask[k] === '1' && dojoSpecMask[k] !== '1') paidSpecs += 1;
@@ -1672,8 +1672,8 @@
 
             const tt = document.getElementById('xp-traits-total');
             if (tt) tt.textContent = `-${totalTraits}xp`;
-            const tc = document.getElementById('xp-skills-total');
-            if (tc) tc.textContent = `-${totalSkills}xp`;
+            const skillsTotal = document.getElementById('xp-skills-total');
+            if (skillsTotal) skillsTotal.textContent = `-${totalSkills}xp`;
             const advantageRow = document.getElementById('xp-advantages-row');
             if (advantageRow) {
                 advantageRow.classList.toggle('d-none', advantagesCost === 0);
@@ -1706,9 +1706,9 @@
                 document.querySelector('[data-tooltip-stat="attack"]'),
                 buildAttackTooltip(eff.agilite, combatSkillValue)
             );
-            const dmgTooltipEl = document.querySelector('[data-tooltip-stat="damage"]');
-            if (dmgTooltipEl && currentWeapon) {
-                setTooltipHtml(dmgTooltipEl, buildDamageTooltip(eff.forceStat, currentWeapon));
+            const damageTooltipEl = document.querySelector('[data-tooltip-stat="damage"]');
+            if (damageTooltipEl && currentWeapon) {
+                setTooltipHtml(damageTooltipEl, buildDamageTooltip(eff.forceStat, currentWeapon));
             }
 
             if (btnSave) {
@@ -2067,8 +2067,8 @@
             choices.forEach(object => {
                 const opt = document.createElement('option');
                 opt.value = object.id;
-                const vd = drById.get(object.id);
-                opt.textContent = vd ? `${object.nom} (${vd})` : object.nom;
+                const dr = drById.get(object.id);
+                opt.textContent = dr ? `${object.nom} (${dr})` : object.nom;
                 if (parseInt(selectedId, 10) === object.id) opt.selected = true;
                 select.appendChild(opt);
             });
@@ -2155,7 +2155,7 @@
             document.querySelectorAll('[data-skill-row]').forEach(row => {
                 const skillId = parseInt(row.dataset.skillId, 10) || 0;
                 const val = parseInt(row.dataset.skillVal, 10) || 0;
-                const skillDojo = parseInt(row.dataset.skillDojo, 10) || 0;
+                const dojoCount = parseInt(row.dataset.skillDojo, 10) || 0;
                 const dojoSpecMask = row.dataset.skillDojoSpec || '';
                 const dojoCell = row.querySelector('[data-skill-dojo-cell]');
                 const nameCell = row.querySelector('[data-skill-name]');
@@ -2180,7 +2180,7 @@
                 dojoTag.className = 'skill-dojo-tag';
                 dojoWrap.appendChild(dojoTag);
                 dojoCell.appendChild(dojoWrap);
-                bindTriState(dojoWrap, dojoIcon, skillDojo, SKILL_DOJO_ICONS, (state) => {
+                bindTriState(dojoWrap, dojoIcon, dojoCount, SKILL_DOJO_ICONS, (state) => {
                     dojoTag.textContent = state === 2 ? 'offerte école R2' : '';
                 });
                 if (skillId === 0) {
@@ -2364,15 +2364,15 @@
                 const valSelect = row.querySelector('.val-select');
                 const dojoWrap = row.querySelector('.skill-dojo-sort');
                 const skillId = skillSelect && parseInt(skillSelect.value, 10) > 0 ? skillSelect.value : '';
-                const valVal = skillId !== '' && valSelect && valSelect.value ? valSelect.value : '';
-                const specsVal     = skillId !== '' ? readBitmask(row) : '';
-                const dojoSpecValue     = skillId !== '' ? readDojoSpecBitmask(row) : '';
+                const rankValue = skillId !== '' && valSelect && valSelect.value ? valSelect.value : '';
+                const specsValue = skillId !== '' ? readBitmask(row) : '';
+                const dojoSpecValue = skillId !== '' ? readDojoSpecBitmask(row) : '';
                 const skillDojoValue = skillId !== '' && dojoWrap
                     ? String(parseInt(dojoWrap.dataset.state, 10) || 0)
                     : '0';
                 addInput(`player_sheet[competence${i}]`, skillId);
-                addInput(`player_sheet[valeur${i}]`, valVal);
-                addInput(`player_sheet[specialisations${i}]`, specsVal);
+                addInput(`player_sheet[valeur${i}]`, rankValue);
+                addInput(`player_sheet[specialisations${i}]`, specsValue);
                 addInput(`player_sheet[compEcole${i}]`, skillDojoValue);
                 addInput(`player_sheet[speEcole${i}]`, dojoSpecValue);
             });
@@ -2408,13 +2408,8 @@
                 addInput(`player_sheet[${field}]`, el ? el.value.trim() : '');
             });
 
-            const lookIds = {
-                age: 'look-input-age', height: 'look-input-height', weight: 'look-input-weight',
-                hair: 'look-input-hair', eyes: 'look-input-eyes', appearance: 'look-input-appearance',
-                notes: 'look-input-notes',
-            };
-            Object.keys(lookIds).forEach(field => {
-                const el = document.getElementById(lookIds[field]);
+            ['age', 'height', 'weight', 'hair', 'eyes', 'appearance', 'notes'].forEach(field => {
+                const el = document.getElementById(`look-input-${field}`);
                 addInput(`player_sheet[${field}]`, el ? el.value.trim() : '');
             });
 

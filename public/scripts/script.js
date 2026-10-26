@@ -1,4 +1,4 @@
-$('.conceal, .reveal').each(function () {
+$('.reveal').each(function () {
 
         const $button = $(this);
 

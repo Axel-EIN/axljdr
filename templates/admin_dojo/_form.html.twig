@@ -21,7 +21,7 @@
                     width: 1200, height: 900 }) }}
             </div>
 
-            <div class="col-12" data-dojo-bloc="techniques">
+            <div class="col-12" data-dojo-block="techniques">
                 <div class="row">
                     <div class="col-12 mt-5">
                         <h2 class="heading-cardtitle">Technique #1</h2>
@@ -65,7 +65,7 @@
                 </div>
             </div>
 
-            <div class="col-12" data-dojo-bloc="technique-special">
+            <div class="col-12" data-dojo-block="technique-special">
                 <div class="row">
                     <div class="col-12 mt-5">
                         <h2 class="heading-cardtitle">Technique Spéciale</h2>
@@ -77,7 +77,7 @@
                 </div>
             </div>
 
-            <div class="col-12" data-dojo-bloc="magie">
+            <div class="col-12" data-dojo-block="magic">
                 <div class="row">
                     <div class="col-12 mt-5">
                         <h2 class="heading-cardtitle">Magie</h2>
@@ -95,22 +95,22 @@
 
     <script type="text/javascript">
     (function() {
-        const classe = document.getElementById('{{ form.classe.vars.id }}');
-        const visibles = {
-            'techniques': nom => nom !== 'Shugenja',
-            'technique-special': nom => ['Shugenja', 'Moine'].includes(nom),
-            'magie': nom => nom === 'Shugenja',
+        const classSelect = document.getElementById('{{ form.classe.vars.id }}');
+        const visibilityRules = {
+            'techniques': name => name !== 'Shugenja',
+            'technique-special': name => ['Shugenja', 'Moine'].includes(name),
+            'magic': name => name === 'Shugenja',
         };
 
         function refresh() {
-            const nom = classe.options[classe.selectedIndex]?.text.trim() ?? '';
-            document.querySelectorAll('[data-dojo-bloc]').forEach(bloc => {
-                bloc.hidden = !visibles[bloc.dataset.dojoBloc](nom);
+            const name = classSelect.options[classSelect.selectedIndex]?.text.trim() ?? '';
+            document.querySelectorAll('[data-dojo-block]').forEach(block => {
+                block.hidden = !visibilityRules[block.dataset.dojoBlock](name);
             });
         }
 
         refresh();
-        classe.addEventListener('change', refresh);
+        classSelect.addEventListener('change', refresh);
     })();
     </script>
 </div>

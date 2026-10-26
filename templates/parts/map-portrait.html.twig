@@ -2,7 +2,7 @@
 {% set interactive = interactive ?? true %}
 {% set portrait %}<img src="{{ asset(character.icone|default(NA_PERSO_PORTRAIT)) }}" alt="Portrait de {{ character.prenom }}" draggable="false" />{% endset %}
 
-<div class="map-portrait{{ mine|default(false) ? ' mine' }}" data-personnage="{{ character.id }}">
+<div class="map-portrait{{ mine|default(false) ? ' mine' }}" data-character="{{ character.id }}">
   {% if interactive %}
     <button type="button" class="map-portrait-toggle" data-panel="{{ path('map_character', {id: character.id}) }}" aria-expanded="false" aria-label="{{ title }}" title="{{ title }}">
       {{ portrait }}

@@ -2,13 +2,11 @@
 $('#mon-zone').hover(playVisible, playInvisible);
 
 function playVisible() {
-    var test = $('#icon-play');
     $('#icon-play').removeClass('invisible');
     $('#icon-play').addClass('visible');
 };
 
 function playInvisible() {
-    var test = $('#icon-play');
     $('#icon-play').removeClass('visible');
     $('#icon-play').addClass('invisible');
 };

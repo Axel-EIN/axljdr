@@ -40,14 +40,14 @@
 
       <div class="col-12 mt-5">
 
-        <a class="w-100" data-toggle="collapse" href="#part-lieu-collapse" role="button"
+        <a class="w-100" data-toggle="collapse" href="#part-location-collapse" role="button"
           aria-expanded="{{ plan_filled ? 'true' : 'false' }}"
-          aria-controls="part-lieu-collapse">
+          aria-controls="part-location-collapse">
           <h2 class="heading-cardtitle">Plan ...</h2>
         </a>
         <hr>
 
-        <div id="part-lieu-collapse" class="collapse{% if plan_filled %} show{% endif %}">
+        <div id="part-location-collapse" class="collapse{% if plan_filled %} show{% endif %}">
 
           <div class="col-12 mt-3 mb-5">
             {{ include('parts/image-field.html.twig', {

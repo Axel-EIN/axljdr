@@ -48,7 +48,7 @@
                 {{ group.title }}
               </h6>
               {% for location in group.locations %}
-                <button type="button" class="dropdown-item search-suggestion" data-lieu="{{ location.id }}" data-locx="{{ location.locX }}" data-locy="{{ location.locY }}">
+                <button type="button" class="dropdown-item search-suggestion" data-location="{{ location.id }}" data-locx="{{ location.locX }}" data-locy="{{ location.locY }}">
                   <span class="search-suggestion-label">{{ location.nom }}</span>
                   <small class="search-suggestion-group">{{ location.type }}</small>
                   {{ include('parts/badge-access.html.twig', {state: element_state(location), variant: 'inline'}) }}
@@ -67,7 +67,7 @@
                 {% else %}
                   {% set position = player.location.nom %}
                 {% endif %}
-                <button type="button" class="dropdown-item search-suggestion"{% if player.location %} data-lieu="{{ player.location.id }}"{% endif %} data-personnage="{{ player.character.id }}" data-locx="{{ player.locX }}" data-locy="{{ player.locY }}">
+                <button type="button" class="dropdown-item search-suggestion"{% if player.location %} data-location="{{ player.location.id }}"{% endif %} data-character="{{ player.character.id }}" data-locx="{{ player.locX }}" data-locy="{{ player.locY }}">
                   <img class="img-24" src="{{ asset(player.character.icone|default(NA_PERSO_PORTRAIT)) }}" alt="" />
                   <span class="search-suggestion-label">{{ player.character.nomComplet }}</span>
                   <small class="search-suggestion-group">{{ position }}</small>
@@ -198,7 +198,7 @@
         {% set other_size = other_secret ? '' : {'Cité': ' city', 'Ville': ' city', 'Région': ' region', 'Temple': ' temple'}[other.type] ?? '' %}
         {% set other_color = other_secret ? null : other.clan.couleur ?? null %}
         <a {% if other_secret %}aria-disabled="true"{% else %}href="{{ path('world_location', {id: other.id}) }}"{% if worldmap %} data-panel="{{ path('map_location', {id: other.id}) }}"{% endif %}{% endif %}
-           class="absolute other-location-marker{{ other_size }}" data-lieu="{{ other.id }}"
+           class="absolute other-location-marker{{ other_size }}" data-location="{{ other.id }}"
            style="left:{{other.locX}}%; top:{{other.locY}}%;{% if other_color %} --clan-color: {{other_color}};{% endif %}">
           {% if other_secret %}
             <span class="other-location-unknown">?</span>

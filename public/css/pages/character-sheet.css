@@ -209,7 +209,7 @@
   .edit-mode & { min-width: 14em; }
 }
 
-[data-av-slot] {
+[data-advantage-slot] {
   .edit-mode & > * { display: flex; justify-content: flex-start; align-items: center; }
 }
 
@@ -458,7 +458,7 @@
   text-align: center;
 }
 
-#comp-table {
+#skill-table {
   .skill-legend {
     margin-left: 0.75rem;
     font-size: var(--fontsize-small);

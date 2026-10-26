@@ -35,7 +35,7 @@ class AdminDevelopmentType extends AbstractType
                 'placeholder' => '— Choisir une scène —',
                 'choice_label' => fn(Participation $p) => self::sceneLabel($p),
                 'group_by' => fn(Participation $p) => self::chapterLabel($p),
-                'choice_attr' => fn(Participation $p) => ['data-personnage' => $p->getPersonnage()->getId()],
+                'choice_attr' => fn(Participation $p) => ['data-character' => $p->getPersonnage()->getId()],
                 'query_builder' => fn(EntityRepository $er) => $er->createQueryBuilder('part')
                     ->join('part.personnage', 'p')
                     ->join('part.scene', 's')

@@ -141,7 +141,7 @@
       marker.classList.remove('focused');
     });
     if (!id) return;
-    const marker = frame.querySelector('.other-location-marker[data-lieu="' + id + '"]');
+    const marker = frame.querySelector('.other-location-marker[data-location="' + id + '"]');
     if (!marker) return;
     void marker.offsetWidth;
     marker.classList.add('focused');
@@ -399,7 +399,7 @@
     const current = ++panelRequest;
     const portrait = trigger.closest('.map-portrait');
     selectPortrait(portrait);
-    if (!portrait) highlight(trigger.dataset.lieu);
+    if (!portrait) highlight(trigger.dataset.location);
     fetch(trigger.dataset.panel)
       .then(function (response) { return response.ok ? response.text() : Promise.reject(response); })
       .then(function (html) {
@@ -459,7 +459,7 @@
   }
 
   function openPortrait(id) {
-    const portrait = frame.querySelector('.map-portrait[data-personnage="' + id + '"]');
+    const portrait = frame.querySelector('.map-portrait[data-character="' + id + '"]');
     if (!portrait) return;
     if (frame.classList.contains('party-hidden')) frame.querySelector('[data-map-toggle="party"]').click();
     openPanel(portrait.querySelector('.map-portrait-toggle'));
@@ -471,11 +471,11 @@
     input.blur();
     if (!ready) return;
     flyTo(parseFloat(item.dataset.locx), parseFloat(item.dataset.locy));
-    highlight(item.dataset.lieu);
-    if (item.dataset.personnage) {
-      openPortrait(item.dataset.personnage);
+    highlight(item.dataset.location);
+    if (item.dataset.character) {
+      openPortrait(item.dataset.character);
     } else {
-      openPanel(frame.querySelector('.other-location-marker[data-lieu="' + item.dataset.lieu + '"]'));
+      openPanel(frame.querySelector('.other-location-marker[data-location="' + item.dataset.location + '"]'));
     }
   }
 

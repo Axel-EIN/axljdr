@@ -94,7 +94,7 @@
               {% endif %}
 
               <a class="{% if current_route starts with 'account' %}active{% endif %}" href="{{ path('account') }}">
-                <i class="fas fa-torii-gate couleur-primaire"></i>
+                <i class="fas fa-torii-gate"></i>
                 &nbsp;&nbsp;
                 MON COMPTE
               </a>
@@ -112,9 +112,9 @@
         {% else %}
           <div id="user-zone" class="disconnected">
             {% if compact %}
-              <a href="#connexion" data-toggle="modal" role="button">Se connecter</a>
+              <a href="#login-modal" data-toggle="modal" role="button">Se connecter</a>
             {% else %}
-              <button class="btn-primary-style btn-medium" data-toggle="modal" data-target="#connexion">Se connecter</button>
+              <button class="btn-primary-style btn-medium" data-toggle="modal" data-target="#login-modal">Se connecter</button>
               <a class="mt-1" href="{{ path('app_register') }}">Créer un compte</a>
             {% endif %}
           </div>

@@ -99,8 +99,8 @@
             clan: p.clan ? p.clan.nom : 'Sans clan'
         }]) %}
     {% endfor %}
-    const pjs  = {{ pcs_data|json_encode|raw }};
-    const pnjs = {{ npcs_data|json_encode|raw }};
+    const pcs  = {{ pcs_data|json_encode|raw }};
+    const npcs = {{ npcs_data|json_encode|raw }};
 
     document.addEventListener('DOMContentLoaded', function() {
 
@@ -162,7 +162,7 @@
         }
 
         setupParticipantSection({
-            data:              pjs,
+            data:              pcs,
             addBtnId:          'add-participants',
             removeBtnClass:    'remove-participants',
             rowClass:          'participants',
@@ -181,7 +181,7 @@
         });
 
         setupParticipantSection({
-            data:              pnjs,
+            data:              npcs,
             addBtnId:          'add-npc_participants',
             removeBtnClass:    'remove-npc_participants',
             rowClass:          'npc_participants',

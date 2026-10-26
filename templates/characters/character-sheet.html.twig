@@ -155,7 +155,7 @@
                   (
                   {{ xp.creation }}
                   {% if xp.disadvantages > 0 %}
-                    + <span class="xp-desav-value text-success">{{ xp.disadvantages }}</span>
+                    + <span class="xp-disadvantages-value text-success">{{ xp.disadvantages }}</span>
                   {% endif %}
                   + {{ xp.progression }}
                   )
@@ -169,12 +169,12 @@
                   (
                   <span class="xp-traits-value">
                     {% if xp.advantages > 0 %}
-                      <span class="xp-avant-value text-danger">{{ xp.advantages }} +</span>
+                      <span class="xp-advantages-value text-danger">{{ xp.advantages }} +</span>
                     {% endif %}
                     {{ xp.traits }}
                   </span>
                   +
-                  <span class="xp-comps-value">{{ xp.skills }}</span>
+                  <span class="xp-skills-value">{{ xp.skills }}</span>
                   )
                 </small>
               </li>
@@ -365,13 +365,13 @@
               {% if is_own_character or is_gm() %}
                 <div class="flex-col p-1 bg-strong text-fade text-small rounded-8 edit-only">
                   <div class="label-amerigo">Exp.</div>
-                  <div class="flex w-100 justify-content-between {% if xp.disadvantages == 0 %}d-none{% endif %}" id="xp-desav-row">
+                  <div class="flex w-100 justify-content-between {% if xp.disadvantages == 0 %}d-none{% endif %}" id="xp-disadvantages-row">
                     Désavantages
-                    <span id="xp-desav-total" class="text-success">+{{ xp.disadvantages }}xp</span>
+                    <span id="xp-disadvantages-total" class="text-success">+{{ xp.disadvantages }}xp</span>
                   </div>
-                  <div class="flex w-100 justify-content-between {% if xp.advantages == 0 %}d-none{% endif %}" id="xp-avant-row">
+                  <div class="flex w-100 justify-content-between {% if xp.advantages == 0 %}d-none{% endif %}" id="xp-advantages-row">
                     Avantages
-                    <span id="xp-avant-total" class="text-danger">-{{ xp.advantages }}xp</span>
+                    <span id="xp-advantages-total" class="text-danger">-{{ xp.advantages }}xp</span>
                   </div>
                   <div class="flex w-100 justify-content-between">
                     Traits
@@ -379,7 +379,7 @@
                   </div>
                   <div class="flex w-100 justify-content-between">
                     Compétences
-                    <span id="xp-comps-total">-{{ xp.skills }}xp</span>
+                    <span id="xp-skills-total">-{{ xp.skills }}xp</span>
                   </div>
                   <div class="flex w-100 justify-content-between extrabold">
                     Restants
@@ -479,13 +479,13 @@
 
         {% if is_own_character or is_gm() %}
           <div class="my-4 d-flex w-100 justify-content-center align-items-center">
-            <button type="button" id="btn-fiche-edit" class="btn-primary-style btn-large{% if not is_own_character %} gm{% endif %}">
+            <button type="button" id="btn-sheet-edit" class="btn-primary-style btn-large{% if not is_own_character %} gm{% endif %}">
               <i class="fas fa-edit"></i> {{ is_own_character ? 'Éditer ma fiche' : 'Éditer la fiche' }}
             </button>
-            <button type="button" id="btn-fiche-cancel" class="btn btn-secondary btn-sm ml-3" style="display:none;">
+            <button type="button" id="btn-sheet-cancel" class="btn btn-secondary btn-sm ml-3" style="display:none;">
               <i class="fas fa-times"></i> Annuler
             </button>
-            <button type="button" id="btn-fiche-valider" class="btn btn-success btn-sm ml-3" style="display:none;">
+            <button type="button" id="btn-sheet-save" class="btn btn-success btn-sm ml-3" style="display:none;">
               <i class="fas fa-check"></i> Valider
             </button>
             <a class="btn-icon-medium primary{% if not is_own_character %} gm{% endif %} ml-3" href="{{ path('characters_sheet_pdf', {id: sheet.id}) }}">
@@ -524,7 +524,7 @@
 
         <div class="sheet-traits d-lg-none">
           {% for mobile_ring in mobile_rings %}
-            <div class="sheet-ring-group{% if mobile_ring.traits is empty %} sheet-ring-solo{% endif %}">
+            <div{% if mobile_ring.traits is empty %} class="sheet-ring-solo"{% endif %}>
               <div class="sheet-ring-line">
                 <img class="sheet-ring-icon" src="{{ mobile_ring.icon }}" alt="" />
                 <span class="text-plus extrabold">{{ mobile_ring.name }}</span>
@@ -574,29 +574,29 @@
           <div class="row p-3">
 
             {% for kind, advantage_group in {
-              avantage: {title: 'Avantages', slots: ['av1', 'av2'], sign: '-', color: 'text-danger'},
-              desavantage: {title: 'Désavantages', slots: ['dv1', 'dv2'], sign: '+', color: 'text-success'},
+              advantage: {title: 'Avantages', slots: ['av1', 'av2'], sign: '-', color: 'text-danger'},
+              disadvantage: {title: 'Désavantages', slots: ['dv1', 'dv2'], sign: '+', color: 'text-success'},
             } %}
               <div class="col-12 col-lg-6">
                 <h6>{{ advantage_group.title }}</h6>
                 <ul class="list-decored flex-col gap-4 ml-2">
                   {% for slot in advantage_group.slots %}
                     {% set item = advantage_items[slot] %}
-                    <li data-av-slot="{{ slot }}" data-av-kind="{{ kind }}"
-                        data-av-id="{{ item ? item.id : 0 }}"
+                    <li data-advantage-slot="{{ slot }}" data-advantage-kind="{{ kind }}"
+                        data-advantage-id="{{ item ? item.id : 0 }}"
                         {% if not item %}class="advantage-row-empty"{% endif %}
                     >
                       {% set advantage_text = item ? (item.summary ?: item.description|striptags) : '' %}
                       <div>
-                        <span data-av-name class="text-strong extrabold">
+                        <span data-advantage-name class="text-strong extrabold">
                           {% if item %}<a href="{{ element_url(item) }}">{{ item.nom }}</a>{% endif %}
                         </span>
                       </div>
-                      <div class="text-clamp-2 text-small text-body-c" data-av-summary
+                      <div class="text-clamp-2 text-small text-body-c" data-advantage-summary
                            {% if item and not item.summary %}data-toggle="tooltip" title="{{ advantage_text }}"{% endif %}>
                         {{ advantage_text }}
                       </div>
-                      <span class="edit-only {{ advantage_group.color }} text-small ml-2" data-av-cost>
+                      <span class="edit-only {{ advantage_group.color }} text-small ml-2" data-advantage-cost>
                         {% if item %}{{ advantage_group.sign }}{{ xp.slots[slot] }}xp
                           {% if xp.slots[slot] != item.cout %}
                             (promo)
@@ -614,7 +614,7 @@
       {% endif %}
 
       <div class="card card-body card-block">
-        <table class="table m-0 p-0" id="comp-table">
+        <table class="table m-0 p-0" id="skill-table">
           <thead>
             <tr class="card-title-cartouche p-0 py-2">
               <th class="text-mini font-regular font-barlow text-center text-lowercase px-1" style='width: 24px;' scope="col">
@@ -664,23 +664,23 @@
                 {% endfor %}
                 {% set cost_slot = xp.skill[slot.i] %}
                 <tr
-                  class="p-0" data-comp-row="{{ slot.i }}" data-comp-id="{{ slot.skill.id }}"
-                  data-comp-val="{{ slot.val ?? 0 }}" data-comp-specs="{{ spec_bitmask }}"
-                  data-comp-ecole="{{ slot.dojo_skill ?? 0 }}" data-comp-spe-ecole="{{ dojo_spec_bitmask }}"
+                  class="p-0" data-skill-row="{{ slot.i }}" data-skill-id="{{ slot.skill.id }}"
+                  data-skill-val="{{ slot.val ?? 0 }}" data-skill-specs="{{ spec_bitmask }}"
+                  data-skill-dojo="{{ slot.dojo_skill ?? 0 }}" data-skill-dojo-spec="{{ dojo_spec_bitmask }}"
                 >
-                  <td class="text-center" data-comp-ecole-cell>
+                  <td class="text-center" data-skill-dojo-cell>
                     {% if slot.dojo_skill > 0 %}
                       <img src="{{ asset(image_small(sheet.personnage.ecole.clan.mon)) }}" class="img-24" title="Compétence de l'École {{ sheet.personnage.ecole.nom }}" />
                     {% else %}
                       <span class="d-inline-flex icon-20 rounded-circle border-base">&nbsp;</span>
                     {% endif %}
                   </td>
-                  <th class="text-strong extrabold" scope="row" data-comp-name>
+                  <th class="text-strong extrabold" scope="row" data-skill-name>
                     <a href="{{ element_url(slot.skill) }}"><strong>{{ slot.skill.nom }}</strong></a>
                     {% if slot.skill.degradante %}<i class="skill-degrading after fa-solid fa-arrow-down-wide-short" title="Compétence dégradante"></i>{% endif %}
                   </th>
-                  <td class="text-strong extrabold text-center" data-comp-val-cell>{{ slot.val ?? '' }}</td>
-                  <td class="text-body-c text-mini text-center d-none d-lg-table-cell" title="{{ slot.skill.trait }}" data-comp-trait-cell>{{ slot.skill.traitCourt }}</td>
+                  <td class="text-strong extrabold text-center" data-skill-val-cell>{{ slot.val ?? '' }}</td>
+                  <td class="text-body-c text-mini text-center d-none d-lg-table-cell" title="{{ slot.skill.trait }}" data-skill-trait-cell>{{ slot.skill.traitCourt }}</td>
                   {% for rank_cap, cap_text in {3: slot.skill.mastery3Text, 6: slot.skill.mastery6Text} %}
                     {% set cap_long = not attribute(slot.skill, 'mastery' ~ rank_cap ~ 'Summary') %}
                     <td class="skill-cap text-mini text-body-c text-center" rowspan="2">
@@ -689,11 +689,11 @@
                       {% endif %}
                     </td>
                   {% endfor %}
-                  <td class="edit-only text-alternate" data-comp-cost-cell>{% if cost_slot.rank > 0 %}-{{ cost_slot.rank }}xp{% endif %}</td>
+                  <td class="edit-only text-alternate" data-skill-cost-cell>{% if cost_slot.rank > 0 %}-{{ cost_slot.rank }}xp{% endif %}</td>
                 </tr>
-                <tr data-comp-specs-row="{{ slot.i }}" class="skill-specs-row">
+                <tr data-skill-specs-row="{{ slot.i }}" class="skill-specs-row">
                   <td></td>
-                  <td colspan="3" data-comp-specs-cell>
+                  <td colspan="3" data-skill-specs-cell>
                     {% if bought_specs|length > 0 %}
                       <small class="text-body-c">
                         <span class="text-alternate">Spé. :</span>
@@ -703,7 +703,7 @@
                       </small>
                     {% endif %}
                   </td>
-                  <td class="edit-only text-alternate" data-comp-specs-cost-cell>
+                  <td class="edit-only text-alternate" data-skill-specs-cost-cell>
                     {% if cost_slot.specialisations > 0 %}
                       <small>-{{ cost_slot.specialisations }}xp (spé)</small>
                     {% endif %}
@@ -712,19 +712,19 @@
             {% endfor %}
 
             {% for slot in empty_slots %}
-              <tr data-comp-row="{{ slot.i }}" data-comp-id="0" data-comp-val="0" data-comp-specs="" data-comp-ecole="0" data-comp-spe-ecole="" class="skill-row-empty">
-                <td class="text-center" data-comp-ecole-cell></td>
-                <th class="text-strong extrabold" scope="row" data-comp-name></th>
-                <td class="text-strong extrabold text-center" data-comp-val-cell></td>
-                <td class="text-body-c text-mini text-center d-none d-lg-table-cell" data-comp-trait-cell></td>
+              <tr data-skill-row="{{ slot.i }}" data-skill-id="0" data-skill-val="0" data-skill-specs="" data-skill-dojo="0" data-skill-dojo-spec="" class="skill-row-empty">
+                <td class="text-center" data-skill-dojo-cell></td>
+                <th class="text-strong extrabold" scope="row" data-skill-name></th>
+                <td class="text-strong extrabold text-center" data-skill-val-cell></td>
+                <td class="text-body-c text-mini text-center d-none d-lg-table-cell" data-skill-trait-cell></td>
                 <td class="skill-cap" rowspan="2"></td>
                 <td class="skill-cap" rowspan="2"></td>
-                <td class="edit-only text-alternate" data-comp-cost-cell></td>
+                <td class="edit-only text-alternate" data-skill-cost-cell></td>
               </tr>
-              <tr data-comp-specs-row="{{ slot.i }}" class="skill-specs-row skill-row-empty">
+              <tr data-skill-specs-row="{{ slot.i }}" class="skill-specs-row skill-row-empty">
                 <td></td>
-                <td class="text-body-c" colspan="3" data-comp-specs-cell></td>
-                <td class="edit-only text-alternate" data-comp-specs-cost-cell></td>
+                <td class="text-body-c" colspan="3" data-skill-specs-cell></td>
+                <td class="edit-only text-alternate" data-skill-specs-cost-cell></td>
               </tr>
             {% endfor %}
           </tbody>
@@ -910,22 +910,25 @@
 
       {% if is_own_character or is_gm() %}
         {% set report = {
-          Sexe: sheet.personnage.genre == 'F' ? 'Femme' : (sheet.personnage.genre == 'M' ? 'Homme' : ''),
-          Age: sheet.age, Taille: sheet.height, Poids: sheet.weight,
-          Cheveux: sheet.hair, Yeux: sheet.eyes
+          sex: {label: 'Sexe', value: sheet.personnage.genre == 'F' ? 'Femme' : (sheet.personnage.genre == 'M' ? 'Homme' : '')},
+          age: {label: 'Age', value: sheet.age},
+          height: {label: 'Taille', value: sheet.height},
+          weight: {label: 'Poids', value: sheet.weight},
+          hair: {label: 'Cheveux', value: sheet.hair},
+          eyes: {label: 'Yeux', value: sheet.eyes}
         } %}
         <div class="card card-block">
           <div class="card-title-cartouche">Apparence</div>
 
           <ul class="appearance-board">
-            {% for label, value in report %}
+            {% for field, entry in report %}
               <li>
-                <span class="label">{{ label }}</span>
-                <strong class="read-only">{{ value ?: '—' }}</strong>
-                {% if label != 'Sexe' %}
-                  <input type="{{ label == 'Age' ? 'number' : 'text' }}" {% if label == 'Age' %}min="0"{% endif %}
-                         id="look-input-{{ label|lower }}" class="form-control form-control-sm edit-only"
-                         value="{{ value }}" />
+                <span class="label">{{ entry.label }}</span>
+                <strong class="read-only">{{ entry.value ?: '—' }}</strong>
+                {% if field != 'sex' %}
+                  <input type="{{ field == 'age' ? 'number' : 'text' }}" {% if field == 'age' %}min="0"{% endif %}
+                         id="look-input-{{ field }}" class="form-control form-control-sm edit-only"
+                         value="{{ entry.value }}" />
                 {% endif %}
               </li>
             {% endfor %}
@@ -993,7 +996,7 @@
               </div>
               <div class="text-right text-small">
                 <strong data-stat="initiative-avg">{{ (((rank + eff_reflexes) ~ 'g' ~ eff_reflexes)|expected_roll) + initiative_mod }}</strong>
-                <div data-stat="arme-lourde"{% if not (sheet.armeActuelle and sheet.armeActuelle.type == 'LOURDE') %} class="d-none"{% endif %}>-5 (arme lourde)</div>
+                <div data-stat="heavy-weapon"{% if not (sheet.armeActuelle and sheet.armeActuelle.type == 'LOURDE') %} class="d-none"{% endif %}>-5 (arme lourde)</div>
               </div>
               {{ sheet_macros.stat_mod('initiative', sheet.initiativeModifier ?? '', 'nombre') }}
             </li>
@@ -1009,29 +1012,29 @@
             {% endif %}
 
             <li class="list-group-item p-0 px-3 py-1 flex gap-2 edit-only"
-                data-comp-combat-row
-                data-comp-combat-id="{{ sheet.compCombatActuelle ? sheet.compCombatActuelle.id : 0 }}">
+                data-combat-skill-row
+                data-combat-skill-id="{{ sheet.compCombatActuelle ? sheet.compCombatActuelle.id : 0 }}">
               <div class="flex-grow-1">
                 Compétence de combat
                 <i  class="fas fa-info-circle text-disabled ml-1"
                   data-toggle="tooltip" data-placement="right"
                   title="Compétence Bugei utilisée pour le calcul du Jet d'Attaque"></i>
-                <span data-comp-combat-select-cell class="ml-2"></span>
+                <span data-combat-skill-select-cell class="ml-2"></span>
               </div>
             </li>
 
             {% set attack_rolled = eff_agility + attack_rolled_mod + (combat_skill_value / 2)|round(0, 'ceil') %}
             {% set attack_kept = eff_agility + attack_kept_mod %}
             <li class="list-group-item p-0 px-3 py-1 flex flex-wrap gap-2">
-              <div class="flex-grow-1 stat-attaque-with-comp{% if not sheet.compCombatActuelle %} d-none{% endif %}">
-                Attaque <span class="text-small text-grayash">(<span data-stat="comp-combat-nom">{{ sheet.compCombatActuelle ? sheet.compCombatActuelle.nom : '' }}</span>)</span>
+              <div class="flex-grow-1 stat-attack-with-skill{% if not sheet.compCombatActuelle %} d-none{% endif %}">
+                Attaque <span class="text-small text-grayash">(<span data-stat="combat-skill-name">{{ sheet.compCombatActuelle ? sheet.compCombatActuelle.nom : '' }}</span>)</span>
                 <br/>
                 <span>
-                  <strong class="text-strong ml-2" data-stat="attaque">{{attack_rolled}}g{{attack_kept}}</strong>
+                  <strong class="text-strong ml-2" data-stat="attack">{{attack_rolled}}g{{attack_kept}}</strong>
                   &nbsp;
                   <i
                     class="fa-solid fa-dice text-accent"
-                    data-tooltip-stat="attaque"
+                    data-tooltip-stat="attack"
                     data-toggle="tooltip" data-placement="right" data-html="true"
                     title="
                       <div class='text-mini text-left'>
@@ -1049,39 +1052,39 @@
                     "></i>
                 </span>
               </div>
-              <div class="text-right text-small stat-attaque-with-comp{% if not sheet.compCombatActuelle %} d-none{% endif %}">
-                <strong data-stat="attaque-avg">{{(attack_rolled ~ 'g' ~ attack_kept)|expected_roll}}</strong>
-                <br/><span class="edit-only">en Assaut : <span data-stat="attaque-assaut-avg">{{((attack_rolled + 2) ~ 'g' ~ (attack_kept + 1))|expected_roll}}</span></span>
+              <div class="text-right text-small stat-attack-with-skill{% if not sheet.compCombatActuelle %} d-none{% endif %}">
+                <strong data-stat="attack-avg">{{(attack_rolled ~ 'g' ~ attack_kept)|expected_roll}}</strong>
+                <br/><span class="edit-only">en Assaut : <span data-stat="attack-assault-avg">{{((attack_rolled + 2) ~ 'g' ~ (attack_kept + 1))|expected_roll}}</span></span>
               </div>
-              <div class="stat-attaque-no-comp{% if sheet.compCombatActuelle %} d-none{% endif %}">
+              <div class="stat-attack-no-skill{% if sheet.compCombatActuelle %} d-none{% endif %}">
                 Jet Attaque
                 <br/>
                 <small class="text-alternate">Choisissez une compétence de combat principal</small>
               </div>
-              {{ sheet_macros.stat_mod('attaque', sheet.attaqueModifier ?? '', 'XgY') }}
+              {{ sheet_macros.stat_mod('attack', sheet.attaqueModifier ?? '', 'XgY') }}
             </li>
 
             <li class="list-group-item p-0 px-3 py-1 flex gap-2 edit-only"
-                data-arme-actuelle-row
-                data-arme-actuelle-id="{{ sheet.armeActuelle ? sheet.armeActuelle.id : 0 }}">
+                data-current-weapon-row
+                data-current-weapon-id="{{ sheet.armeActuelle ? sheet.armeActuelle.id : 0 }}">
               <div class="flex-grow-1">
                 Arme actuelle
                 <i  class="fas fa-info-circle text-disabled ml-1"
                   data-toggle="tooltip" data-placement="right"
                   title="Arme utilisée pour le calcul du Jet de Dommages, choisie parmi l'inventaire"></i>
-                <span data-arme-actuelle-select-cell class="ml-2"></span>
+                <span data-current-weapon-select-cell class="ml-2"></span>
               </div>
             </li>
 
             <li class="list-group-item p-0 px-3 py-1 flex gap-2 edit-only"
-                data-armure-row
-                data-armure-id="{{ sheet.armure ? sheet.armure.id : 0 }}">
+                data-armor-row
+                data-armor-id="{{ sheet.armure ? sheet.armure.id : 0 }}">
               <div class="flex-grow-1">
                 Armure actuelle
                 <i  class="fas fa-info-circle text-disabled ml-1"
                   data-toggle="tooltip" data-placement="right"
                   title="Armure portée, choisie parmi l'inventaire"></i>
-                <span data-armure-select-cell class="ml-2"></span>
+                <span data-armor-select-cell class="ml-2"></span>
               </div>
             </li>
 
@@ -1089,15 +1092,15 @@
             {% set damage_rolled = damage_parts[0] + damage_rolled_mod + eff_strength %}
             {% set damage_kept = damage_parts[1] + damage_kept_mod %}
             <li class="list-group-item px-3 py-2 flex flex-wrap gap-2">
-              <div class="flex-grow-1 flex-col stat-dommages-with-arme{% if not sheet.armeActuelle %} d-none{% endif %}">
+              <div class="flex-grow-1 flex-col stat-damage-with-weapon{% if not sheet.armeActuelle %} d-none{% endif %}">
                 <span>
-                  Dommages <span class="text-small text-grayash">(<span data-stat="arme-actuelle-nom">{{ sheet.armeActuelle ? sheet.armeActuelle.nom : '' }}</span>)</span>
+                  Dommages <span class="text-small text-grayash">(<span data-stat="current-weapon-name">{{ sheet.armeActuelle ? sheet.armeActuelle.nom : '' }}</span>)</span>
                 </span>
                 <span class="ml-2 text-grayash">
-                  <strong class="text-strong" data-stat="dommages">{{ damage_rolled ~ 'g' ~ damage_kept }}</strong>
+                  <strong class="text-strong" data-stat="damage">{{ damage_rolled ~ 'g' ~ damage_kept }}</strong>
                   &nbsp;
                   <i class="fa-solid fa-dice text-accent"
-                      data-tooltip-stat="dommages"
+                      data-tooltip-stat="damage"
                       data-toggle="tooltip" data-placement="right" data-html="true"
                       title="
                         <div class='text-mini text-left'>
@@ -1118,11 +1121,11 @@
                   </i>
                 </span>
               </div>
-              <div class="text-right text-small stat-dommages-with-arme{% if not sheet.armeActuelle %} d-none{% endif %}">
-                <strong data-stat="dommages-avg">{{ ( damage_rolled ~  'g' ~ damage_kept  )|expected_roll }}</strong>
-                <br/><span class="edit-only">3 Aug. : <span data-stat="dommages-aug3-avg">{{ ( (damage_rolled + 3) ~  'g' ~ damage_kept  )|expected_roll }}</span></span>
+              <div class="text-right text-small stat-damage-with-weapon{% if not sheet.armeActuelle %} d-none{% endif %}">
+                <strong data-stat="damage-avg">{{ ( damage_rolled ~  'g' ~ damage_kept  )|expected_roll }}</strong>
+                <br/><span class="edit-only">3 Aug. : <span data-stat="damage-raise3-avg">{{ ( (damage_rolled + 3) ~  'g' ~ damage_kept  )|expected_roll }}</span></span>
               </div>
-              <div class="stat-dommages-no-arme{% if sheet.armeActuelle %} d-none{% endif %}">
+              <div class="stat-damage-no-weapon{% if sheet.armeActuelle %} d-none{% endif %}">
                 Jet Dommages
                 <br/>
                 <small class="text-alternate">Choisissez une arme principale</small>
@@ -1134,7 +1137,7 @@
             <li class="list-group-item px-3 py-2 flex flex-wrap gap-2">
               <div class="flex-grow-1">
                 ND pour être touché
-                <br/><strong class="text-strong ml-2" data-stat="nd-touche">{{ eff_reflexes * 5 + rank + tn_mod }}</strong>
+                <br/><strong class="text-strong ml-2" data-stat="tn-hit">{{ eff_reflexes * 5 + rank + tn_mod }}</strong>
                 &nbsp;
                 <i
                   class="fa-solid fa-arrow-trend-up"
@@ -1148,12 +1151,12 @@
               </div>
               {% if sheet.armure %}
                 <small class="text-right">
-                  <strong data-stat="nd-touche-armure">{{ eff_reflexes * 5 + rank + sheet.armure.ndArmure + tn_mod }}</strong>
+                  <strong data-stat="tn-hit-armor">{{ eff_reflexes * 5 + rank + sheet.armure.ndArmure + tn_mod }}</strong>
                   <br/>
                   Avec Armure
                 </small>
               {% endif %}
-              {{ sheet_macros.stat_mod('nd', sheet.ndModifier ?? '', 'nombre') }}
+              {{ sheet_macros.stat_mod('tn', sheet.ndModifier ?? '', 'nombre') }}
             </li>
 
             {% if sheet.armure %}
@@ -1214,7 +1217,7 @@
               </div>
               <div class="flex-grow-1">
                 Récupération
-                <br><strong class="ml-2 text-strong" data-stat="recuperation">{{(eff_constitution * 2) + rank}}</strong>
+                <br><strong class="ml-2 text-strong" data-stat="recovery">{{(eff_constitution * 2) + rank}}</strong>
                 &nbsp;
                 <i 
                   class="fas fa-briefcase-medical text-success"
@@ -1242,9 +1245,9 @@
                   <td>{{ state }}</td>
                   <td>{{ malus is null ? 'ne peut agir' : (malus > 0 ? '+' ~ malus : malus) }}</td>
                   {% if loop.first %}
-                    <td data-stat="hp-indemne">{{ healthy_hp_per_earth * sheet.terre }}</td>
+                    <td data-stat="hp-healthy">{{ healthy_hp_per_earth * sheet.terre }}</td>
                   {% else %}
-                    <td data-stat="hp-blesse">{{ wounded_hp_per_earth * sheet.terre }}</td>
+                    <td data-stat="hp-wounded">{{ wounded_hp_per_earth * sheet.terre }}</td>
                   {% endif %}
                 </tr>
               {% endfor %}
@@ -1263,7 +1266,7 @@
             </thead>
             <tbody data-inventory-list="weapons">
               {% for weapon in sheet.inventoryItems|filter(o => o.categorie == 'ARME')|sort((a, b) => a.nom|u.ascii|lower <=> b.nom|u.ascii|lower) %}
-                <tr class="inventory-line" data-inventory-id="{{ weapon.id }}" data-inventory-categorie="ARME">
+                <tr class="inventory-line" data-inventory-id="{{ weapon.id }}" data-inventory-category="ARME">
                   <th scope="row" class="inventory-name">{{ weapon.nom }}</th>
                   <td>{{ weapon.taille|lower|capitalize|default('—') }}</td>
                   <td>{{ weapon.poids|lower|capitalize|default('—') }}</td>
@@ -1286,7 +1289,7 @@
             {% for object in sheet.inventoryItems|filter(o => o.categorie != 'ARME')|sort((a, b) =>
                 [inventory_order[a.categorie]|default(9), a.nom|u.ascii|lower]
                 <=> [inventory_order[b.categorie]|default(9), b.nom|u.ascii|lower]) %}
-              <li class="inventory-line" data-inventory-id="{{ object.id }}" data-inventory-categorie="{{ object.categorie }}">
+              <li class="inventory-line" data-inventory-id="{{ object.id }}" data-inventory-category="{{ object.categorie }}">
                 <span class="inventory-name">{{ object.nom }}</span>
                 {% if object.categorie == 'ARMURE' %}
                   <i class="fa-solid fa-shield-halved text-graydust" title="Armure"></i>
@@ -1333,15 +1336,15 @@
 
     {% if is_own_character or is_gm() %}
     <script>
-        window.FICHE_CONFIG = {
+        window.SHEET_CONFIG = {
             xpBase: {{ xp.creation + xp.progression }},
-            persoClasseId: {{ character_class_id }},
+            characterClassId: {{ character_class_id }},
             rank: {{ rank }},
-            armureNd: {{ sheet.armure and sheet.armure.ndArmure ? sheet.armure.ndArmure : 0 }},
-            ndModifier: {{ sheet.ndModifier ?? 0 }},
-            pvIndemneParTerre: {{ healthy_hp_per_earth }},
-            pvBlessureParTerre: {{ wounded_hp_per_earth }},
-            niveauxBlesses: {{ wound_levels|length - 1 }},
+            armorTn: {{ sheet.armure and sheet.armure.ndArmure ? sheet.armure.ndArmure : 0 }},
+            tnModifier: {{ sheet.ndModifier ?? 0 }},
+            healthyHpPerEarth: {{ healthy_hp_per_earth }},
+            woundedHpPerEarth: {{ wounded_hp_per_earth }},
+            woundLevels: {{ wound_levels|length - 1 }},
             editUrl: {{ path('characters_sheet_edit', {id: sheet.id})|json_encode|raw }},
             csrfToken: {{ csrf_token('player_sheet')|json_encode|raw }},
             skills: {{ skills_json|json_encode|raw }},
@@ -1351,26 +1354,26 @@
             spells: {{ spells_json|default([])|json_encode|raw }},
             objects: {{ objects_json|default([])|json_encode|raw }},
             bareHandsId: {{ bare_hands_id ?? 'null' }},
-            jetMap: {{ roll_map()|json_encode|raw }},
-            armeActuelleId: {{ sheet.armeActuelle ? sheet.armeActuelle.id : 0 }},
-            compCombatActuelleId: {{ sheet.compCombatActuelle ? sheet.compCombatActuelle.id : 0 }},
+            rollMap: {{ roll_map()|json_encode|raw }},
+            currentWeaponId: {{ sheet.armeActuelle ? sheet.armeActuelle.id : 0 }},
+            currentCombatSkillId: {{ sheet.compCombatActuelle ? sheet.compCombatActuelle.id : 0 }},
             initiativeModifier: {{ sheet.initiativeModifier ?? 0 }},
-            atkModL:  {{ attack_rolled_mod }},
-            atkModG:  {{ attack_kept_mod }},
-            dmgModL:  {{ damage_rolled_mod }},
-            dmgModG:  {{ damage_kept_mod }},
-            attaqueModifierStr:    {% if sheet.attaqueModifier %}{{ sheet.attaqueModifier|json_encode|raw }}{% else %}null{% endif %},
-            dmgModifierStr:        {% if sheet.dmgModifier %}{{ sheet.dmgModifier|json_encode|raw }}{% else %}null{% endif %}
+            attackRolledMod:  {{ attack_rolled_mod }},
+            attackKeptMod:  {{ attack_kept_mod }},
+            damageRolledMod:  {{ damage_rolled_mod }},
+            damageKeptMod:  {{ damage_kept_mod }},
+            attackModifierStr:    {% if sheet.attaqueModifier %}{{ sheet.attaqueModifier|json_encode|raw }}{% else %}null{% endif %},
+            damageModifierStr:        {% if sheet.dmgModifier %}{{ sheet.dmgModifier|json_encode|raw }}{% else %}null{% endif %}
         };
     </script>
     <script>
     (function () {
-        const cfg = window.FICHE_CONFIG;
-        const COUT_PAR_SPE = {{ constant('App\\Service\\XpRanker::SPECIALISATION_COST') }};
+        const cfg = window.SHEET_CONFIG;
+        const COST_PER_SPEC = {{ constant('App\\Service\\XpRanker::SPECIALISATION_COST') }};
         const traits = ['constitution','volonte','reflexes','intuition','agilite','intelligence','forceStat','perception','vide'];
-        const btnEdit = document.getElementById('btn-fiche-edit');
-        const btnCancel = document.getElementById('btn-fiche-cancel');
-        const btnValider = document.getElementById('btn-fiche-valider');
+        const btnEdit = document.getElementById('btn-sheet-edit');
+        const btnCancel = document.getElementById('btn-sheet-cancel');
+        const btnSave = document.getElementById('btn-sheet-save');
         const article = document.getElementById('character-sheet');
 
         function traitCost(eff, bonusCount, multiplier) {
@@ -1388,52 +1391,52 @@
             return parseInt(span.dataset.base, 10);
         }
 
-        function compCost(val, nEcole) {
+        function skillCost(val, dojoCount) {
             if (!val || val < 1) return 0;
-            const n = parseInt(nEcole, 10) || 0;
+            const n = parseInt(dojoCount, 10) || 0;
             const raw = Math.round(val * (val + 1) / 2);
             const offset = Math.round(n * (n + 1) / 2);
             return Math.max(0, raw - offset);
         }
 
-        function jeterMap(rolled, kept) {
+        function expectedRoll(rolled, kept) {
             if (kept < 1) return 0;
             if (rolled < kept) kept = rolled;
             let bonus = 0;
             if (rolled > 10) { bonus += rolled - 10; rolled = 10; }
             if (kept   > 10) { bonus += (kept - 10) * 2; kept = 10; }
-            const row = cfg.jetMap[rolled];
+            const row = cfg.rollMap[rolled];
             if (!row) return 0;
             return (row[kept] ?? 0) + bonus;
         }
 
-        function getCompCombatId() {
-            const row = document.querySelector('[data-comp-combat-row]');
-            const select = row ? row.querySelector('select.comp-combat-select') : null;
+        function getCombatSkillId() {
+            const row = document.querySelector('[data-combat-skill-row]');
+            const select = row ? row.querySelector('select.combat-skill-select') : null;
             if (select) return parseInt(select.value, 10) || 0;
-            return parseInt(cfg.compCombatActuelleId, 10) || 0;
+            return parseInt(cfg.currentCombatSkillId, 10) || 0;
         }
 
-        function getCompCombatVal() {
-            const compId = getCompCombatId();
-            if (!compId) return 0;
-            const rows = document.querySelectorAll('[data-comp-row]');
+        function getCombatSkillValue() {
+            const skillId = getCombatSkillId();
+            if (!skillId) return 0;
+            const rows = document.querySelectorAll('[data-skill-row]');
             for (const row of rows) {
-                const compSelect = row.querySelector('.skill-select');
+                const skillSelect = row.querySelector('.skill-select');
                 const valSelect = row.querySelector('.val-select');
-                const rowCompId = compSelect ? (parseInt(compSelect.value, 10) || 0) : (parseInt(row.dataset.compId, 10) || 0);
-                if (rowCompId === compId) {
-                    return valSelect ? (parseInt(valSelect.value, 10) || 0) : (parseInt(row.dataset.compVal, 10) || 0);
+                const rowSkillId = skillSelect ? (parseInt(skillSelect.value, 10) || 0) : (parseInt(row.dataset.skillId, 10) || 0);
+                if (rowSkillId === skillId) {
+                    return valSelect ? (parseInt(valSelect.value, 10) || 0) : (parseInt(row.dataset.skillVal, 10) || 0);
                 }
             }
             return 0;
         }
 
-        function getArmeActuelleId() {
-            const row = document.querySelector('[data-arme-actuelle-row]');
-            const select = row ? row.querySelector('select.arme-actuelle-select') : null;
+        function getCurrentWeaponId() {
+            const row = document.querySelector('[data-current-weapon-row]');
+            const select = row ? row.querySelector('select.current-weapon-select') : null;
             if (select) return parseInt(select.value, 10) || 0;
-            return parseInt(cfg.armeActuelleId, 10) || 0;
+            return parseInt(cfg.currentWeaponId, 10) || 0;
         }
 
         function setTooltipHtml(el, html) {
@@ -1442,34 +1445,34 @@
             el.setAttribute('title', html);
         }
 
-        function buildInitiativeTooltip(effRefl, rang) {
+        function buildInitiativeTooltip(effReflexes, rank) {
             const initMod = cfg.initiativeModifier || 0;
             const mod = initMod !== 0
                 ? `<br/>Modificateur : ${initMod > 0 ? '+' : ''}${initMod}`
                 : '';
             return `<div class='text-mini text-left'>`
                 + `/lancer<br/>Réflèxes + RangGen.<br/>/garder Réflèxes`
-                + `<br/><br/>/lancer ${effRefl} + ${rang}<br/>/garder ${effRefl}${mod}`
+                + `<br/><br/>/lancer ${effReflexes} + ${rank}<br/>/garder ${effReflexes}${mod}`
                 + `</div>`;
         }
 
-        function buildAttaqueTooltip(effAgi, compCombatVal) {
-            const mod = cfg.attaqueModifierStr ? `<br/>Modificateur : ${cfg.attaqueModifierStr}` : '';
+        function buildAttackTooltip(effAgility, combatSkillValue) {
+            const mod = cfg.attackModifierStr ? `<br/>Modificateur : ${cfg.attackModifierStr}` : '';
             return `<div class='text-mini text-left'>`
                 + `/lancer<br/>Agilité + CompCombat/2 arrSup.<br/>/garder Agilité`
-                + `<br/><br/>/lancer ${effAgi} + ${compCombatVal / 2}<br/>/garder ${effAgi}${mod}`
+                + `<br/><br/>/lancer ${effAgility} + ${combatSkillValue / 2}<br/>/garder ${effAgility}${mod}`
                 + `</div>`;
         }
 
-        function buildDommagesTooltip(effFor, arme) {
-            if (!arme) return '';
-            const mod = cfg.dmgModifierStr
-                ? `<br/><br/>Modificateurs :<br/> - Av./Techniques : +${cfg.dmgModifierStr}`
+        function buildDamageTooltip(effStrength, weapon) {
+            if (!weapon) return '';
+            const mod = cfg.damageModifierStr
+                ? `<br/><br/>Modificateurs :<br/> - Av./Techniques : +${cfg.damageModifierStr}`
                 : '';
             return `<div class='text-mini text-left'>`
                 + `/lancer<br/>VD de l'Arme + Force<br/>/garder VD de l'Arme`
-                + `<br/><br/>- VD ${arme.nom} : ${arme.vd || '0g1'}`
-                + `<br/>- Force : +${effFor}g0${mod}`
+                + `<br/><br/>- VD ${weapon.nom} : ${weapon.vd || '0g1'}`
+                + `<br/>- Force : +${effStrength}g0${mod}`
                 + `</div>`;
         }
 
@@ -1517,145 +1520,145 @@
                 span.classList.toggle('extrabold', isHigher);
             });
 
-            const initLances = cfg.rank + eff.reflexes;
-            const initGardes = eff.reflexes;
+            const initiativeRolled = cfg.rank + eff.reflexes;
+            const initiativeKept = eff.reflexes;
             const initMod    = cfg.initiativeModifier || 0;
             const initNode = document.querySelector('[data-stat="initiative"]');
             if (initNode) {
                 const suffix = initMod !== 0 ? ` ${initMod > 0 ? '+' : ''}${initMod}` : '';
-                initNode.textContent = `${initLances}g${initGardes}${suffix}`;
+                initNode.textContent = `${initiativeRolled}g${initiativeKept}${suffix}`;
             }
 
-            const compCombatId  = getCompCombatId();
-            const compCombatVal = getCompCombatVal();
-            const attaqueLances = eff.agilite + Math.ceil(compCombatVal / 2) + cfg.atkModL;
-            const attaqueGardes = eff.agilite + cfg.atkModG;
-            const attaqueNode = document.querySelector('[data-stat="attaque"]');
-            if (attaqueNode) attaqueNode.textContent = `${attaqueLances}g${attaqueGardes}`;
+            const combatSkillId  = getCombatSkillId();
+            const combatSkillValue = getCombatSkillValue();
+            const attackRolled = eff.agilite + Math.ceil(combatSkillValue / 2) + cfg.attackRolledMod;
+            const attackKept = eff.agilite + cfg.attackKeptMod;
+            const attackNode = document.querySelector('[data-stat="attack"]');
+            if (attackNode) attackNode.textContent = `${attackRolled}g${attackKept}`;
 
             const initAvgNode = document.querySelector('[data-stat="initiative-avg"]');
-            if (initAvgNode) initAvgNode.textContent = jeterMap(initLances, initGardes) + initMod;
+            if (initAvgNode) initAvgNode.textContent = expectedRoll(initiativeRolled, initiativeKept) + initMod;
 
-            const attaqueAvgNode = document.querySelector('[data-stat="attaque-avg"]');
-            if (attaqueAvgNode) attaqueAvgNode.textContent = jeterMap(attaqueLances, attaqueGardes);
+            const attackAvgNode = document.querySelector('[data-stat="attack-avg"]');
+            if (attackAvgNode) attackAvgNode.textContent = expectedRoll(attackRolled, attackKept);
 
-            const attaqueAssautAvgNode = document.querySelector('[data-stat="attaque-assaut-avg"]');
-            if (attaqueAssautAvgNode) attaqueAssautAvgNode.textContent = jeterMap(attaqueLances + 2, attaqueGardes + 1);
+            const attackAssaultAvgNode = document.querySelector('[data-stat="attack-assault-avg"]');
+            if (attackAssaultAvgNode) attackAssaultAvgNode.textContent = expectedRoll(attackRolled + 2, attackKept + 1);
 
-            const compCombat = compCombatId
-                ? (cfg.skills || []).find(c => c.id === compCombatId)
+            const combatSkill = combatSkillId
+                ? (cfg.skills || []).find(c => c.id === combatSkillId)
                 : null;
-            document.querySelectorAll('.stat-attaque-with-comp').forEach(el => el.classList.toggle('d-none', !compCombat));
-            document.querySelectorAll('.stat-attaque-no-comp').forEach(el => el.classList.toggle('d-none', !!compCombat));
-            const compCombatNomNode = document.querySelector('[data-stat="comp-combat-nom"]');
-            if (compCombatNomNode) compCombatNomNode.textContent = compCombat ? compCombat.nom : '';
+            document.querySelectorAll('.stat-attack-with-skill').forEach(el => el.classList.toggle('d-none', !combatSkill));
+            document.querySelectorAll('.stat-attack-no-skill').forEach(el => el.classList.toggle('d-none', !!combatSkill));
+            const combatSkillNameNode = document.querySelector('[data-stat="combat-skill-name"]');
+            if (combatSkillNameNode) combatSkillNameNode.textContent = combatSkill ? combatSkill.nom : '';
 
-            const armeActuelleId = getArmeActuelleId();
-            const armeActuelle   = armeActuelleId
-                ? (cfg.weapons || []).find(a => a.id === armeActuelleId)
+            const currentWeaponId = getCurrentWeaponId();
+            const currentWeapon   = currentWeaponId
+                ? (cfg.weapons || []).find(a => a.id === currentWeaponId)
                 : null;
-            const armeVd = armeActuelle ? armeActuelle.vd : null;
-            const dommagesNode         = document.querySelector('[data-stat="dommages"]');
-            const dommagesAvgNode      = document.querySelector('[data-stat="dommages-avg"]');
-            const dommagesAug3AvgNode  = document.querySelector('[data-stat="dommages-aug3-avg"]');
-            if (armeVd) {
-                const parts = armeVd.split('g');
-                const rolled = (parseInt(parts[0], 10) || 0) + eff.forceStat + cfg.dmgModL;
-                const kept   = (parseInt(parts[1], 10) || 0) + cfg.dmgModG;
-                if (dommagesNode)        dommagesNode.textContent        = `${rolled}g${kept}`;
-                if (dommagesAvgNode)     dommagesAvgNode.textContent     = jeterMap(rolled, kept);
-                if (dommagesAug3AvgNode) dommagesAug3AvgNode.textContent = jeterMap(rolled + 3, kept);
+            const weaponDr = currentWeapon ? currentWeapon.vd : null;
+            const damageNode         = document.querySelector('[data-stat="damage"]');
+            const damageAvgNode      = document.querySelector('[data-stat="damage-avg"]');
+            const damageRaise3AvgNode  = document.querySelector('[data-stat="damage-raise3-avg"]');
+            if (weaponDr) {
+                const parts = weaponDr.split('g');
+                const rolled = (parseInt(parts[0], 10) || 0) + eff.forceStat + cfg.damageRolledMod;
+                const kept   = (parseInt(parts[1], 10) || 0) + cfg.damageKeptMod;
+                if (damageNode)        damageNode.textContent        = `${rolled}g${kept}`;
+                if (damageAvgNode)     damageAvgNode.textContent     = expectedRoll(rolled, kept);
+                if (damageRaise3AvgNode) damageRaise3AvgNode.textContent = expectedRoll(rolled + 3, kept);
             }
-            document.querySelectorAll('.stat-dommages-with-arme').forEach(el => el.classList.toggle('d-none', !armeActuelle));
-            document.querySelectorAll('.stat-dommages-no-arme').forEach(el => el.classList.toggle('d-none', !!armeActuelle));
-            const armeNomNode = document.querySelector('[data-stat="arme-actuelle-nom"]');
-            if (armeNomNode) armeNomNode.textContent = armeActuelle ? armeActuelle.nom : '';
-            const armeLourdeNode = document.querySelector('[data-stat="arme-lourde"]');
-            if (armeLourdeNode) armeLourdeNode.classList.toggle('d-none', !(armeActuelle && armeActuelle.type === 'LOURDE'));
+            document.querySelectorAll('.stat-damage-with-weapon').forEach(el => el.classList.toggle('d-none', !currentWeapon));
+            document.querySelectorAll('.stat-damage-no-weapon').forEach(el => el.classList.toggle('d-none', !!currentWeapon));
+            const weaponNameNode = document.querySelector('[data-stat="current-weapon-name"]');
+            if (weaponNameNode) weaponNameNode.textContent = currentWeapon ? currentWeapon.nom : '';
+            const heavyWeaponNode = document.querySelector('[data-stat="heavy-weapon"]');
+            if (heavyWeaponNode) heavyWeaponNode.classList.toggle('d-none', !(currentWeapon && currentWeapon.type === 'LOURDE'));
 
-            const ndBase = eff.reflexes * 5 + cfg.rank + (cfg.ndModifier || 0);
-            const ndNode = document.querySelector('[data-stat="nd-touche"]');
-            if (ndNode) ndNode.textContent = ndBase;
-            const ndArmureNode = document.querySelector('[data-stat="nd-touche-armure"]');
-            if (ndArmureNode) ndArmureNode.textContent = ndBase + cfg.armureNd;
+            const tnBase = eff.reflexes * 5 + cfg.rank + (cfg.tnModifier || 0);
+            const tnNode = document.querySelector('[data-stat="tn-hit"]');
+            if (tnNode) tnNode.textContent = tnBase;
+            const armorTnNode = document.querySelector('[data-stat="tn-hit-armor"]');
+            if (armorTnNode) armorTnNode.textContent = tnBase + cfg.armorTn;
 
-            const terre = Math.min(eff.constitution, eff.volonte);
-            const hpIndemne = document.querySelector('[data-stat="hp-indemne"]');
-            if (hpIndemne) hpIndemne.textContent = cfg.pvIndemneParTerre * terre;
-            document.querySelectorAll('[data-stat="hp-blesse"]').forEach(td => {
-                td.textContent = cfg.pvBlessureParTerre * terre;
+            const earth = Math.min(eff.constitution, eff.volonte);
+            const hpHealthy = document.querySelector('[data-stat="hp-healthy"]');
+            if (hpHealthy) hpHealthy.textContent = cfg.healthyHpPerEarth * earth;
+            document.querySelectorAll('[data-stat="hp-wounded"]').forEach(td => {
+                td.textContent = cfg.woundedHpPerEarth * earth;
             });
             const hpTotal = document.querySelector('[data-stat="hp-total"]');
-            if (hpTotal) hpTotal.textContent = terre * (cfg.pvIndemneParTerre + cfg.niveauxBlesses * cfg.pvBlessureParTerre);
+            if (hpTotal) hpTotal.textContent = earth * (cfg.healthyHpPerEarth + cfg.woundLevels * cfg.woundedHpPerEarth);
 
-            const recupNode = document.querySelector('[data-stat="recuperation"]');
-            if (recupNode) recupNode.textContent = eff.constitution * 2 + cfg.rank;
+            const recoveryNode = document.querySelector('[data-stat="recovery"]');
+            if (recoveryNode) recoveryNode.textContent = eff.constitution * 2 + cfg.rank;
 
-            let totalComps = 0;
+            let totalSkills = 0;
             let totalSpecs = 0;
-            document.querySelectorAll('[data-comp-row]').forEach(row => {
-                const compSelect = row.querySelector('.skill-select');
+            document.querySelectorAll('[data-skill-row]').forEach(row => {
+                const skillSelect = row.querySelector('.skill-select');
                 const valSelect = row.querySelector('.val-select');
-                let compId, val, nEcole;
-                if (compSelect && valSelect) {
-                    compId = parseInt(compSelect.value, 10) || 0;
+                let skillId, val, dojoCount;
+                if (skillSelect && valSelect) {
+                    skillId = parseInt(skillSelect.value, 10) || 0;
                     val = parseInt(valSelect.value, 10) || 0;
                 } else {
-                    compId = parseInt(row.dataset.compId, 10) || 0;
-                    val = parseInt(row.dataset.compVal, 10) || 0;
+                    skillId = parseInt(row.dataset.skillId, 10) || 0;
+                    val = parseInt(row.dataset.skillVal, 10) || 0;
                 }
-                const ecoleWrap = row.querySelector('.skill-dojo-sort');
-                if (ecoleWrap) {
-                    nEcole = parseInt(ecoleWrap.dataset.state, 10) || 0;
+                const dojoWrap = row.querySelector('.skill-dojo-sort');
+                if (dojoWrap) {
+                    dojoCount = parseInt(dojoWrap.dataset.state, 10) || 0;
                 } else {
-                    nEcole = parseInt(row.dataset.compEcole, 10) || 0;
+                    dojoCount = parseInt(row.dataset.skillDojo, 10) || 0;
                 }
-                const rowCost = (compId > 0 && val > 0) ? compCost(val, nEcole) : 0;
-                if (rowCost > 0) totalComps += rowCost;
-                const costCell = row.querySelector('[data-comp-cost-cell]');
+                const rowCost = (skillId > 0 && val > 0) ? skillCost(val, dojoCount) : 0;
+                if (rowCost > 0) totalSkills += rowCost;
+                const costCell = row.querySelector('[data-skill-cost-cell]');
                 if (costCell) costCell.textContent = rowCost > 0 ? `-${rowCost}xp` : '';
                 let paidSpecs = 0;
-                const specsRow = document.querySelector(`[data-comp-specs-row="${row.dataset.compRow}"]`);
-                if (compId > 0 && specsRow) {
+                const specsRow = document.querySelector(`[data-skill-specs-row="${row.dataset.skillRow}"]`);
+                if (skillId > 0 && specsRow) {
                     const wraps = specsRow.querySelectorAll('.skill-spec-sort');
                     if (wraps.length > 0) {
                         wraps.forEach(w => {
                             if ((parseInt(w.dataset.state, 10) || 0) === 1) paidSpecs += 1;
                         });
                     } else {
-                        const bm   = row.dataset.compSpecs || '';
-                        const bmEc = row.dataset.compSpeEcole || '';
-                        for (let k = 0; k < bm.length; k++) {
-                            if (bm[k] === '1' && bmEc[k] !== '1') paidSpecs += 1;
+                        const specMask   = row.dataset.skillSpecs || '';
+                        const dojoSpecMask = row.dataset.skillDojoSpec || '';
+                        for (let k = 0; k < specMask.length; k++) {
+                            if (specMask[k] === '1' && dojoSpecMask[k] !== '1') paidSpecs += 1;
                         }
                     }
-                    totalSpecs += paidSpecs * COUT_PAR_SPE;
+                    totalSpecs += paidSpecs * COST_PER_SPEC;
                 }
-                const specsCostCell = specsRow ? specsRow.querySelector('[data-comp-specs-cost-cell]') : null;
+                const specsCostCell = specsRow ? specsRow.querySelector('[data-skill-specs-cost-cell]') : null;
                 if (specsCostCell) {
-                    specsCostCell.innerHTML = paidSpecs > 0 ? `<small>-${paidSpecs * COUT_PAR_SPE}xp (spé)</small>` : '';
+                    specsCostCell.innerHTML = paidSpecs > 0 ? `<small>-${paidSpecs * COST_PER_SPEC}xp (spé)</small>` : '';
                 }
             });
-            totalComps = totalComps + totalSpecs;
+            totalSkills = totalSkills + totalSpecs;
 
-            const avantageById    = new Map((cfg.advantages    || []).map(a => [a.id, a]));
-            const desavantageById = new Map((cfg.disadvantages || []).map(a => [a.id, a]));
-            let coutAvantages = 0;
-            let gainDesavantages = 0;
-            document.querySelectorAll('[data-av-slot]').forEach(li => {
+            const advantageById    = new Map((cfg.advantages    || []).map(a => [a.id, a]));
+            const disadvantageById = new Map((cfg.disadvantages || []).map(a => [a.id, a]));
+            let advantagesCost = 0;
+            let disadvantagesGain = 0;
+            document.querySelectorAll('[data-advantage-slot]').forEach(li => {
                 const select = li.querySelector('select.advantage-select');
-                const id = select ? parseInt(select.value, 10) : parseInt(li.dataset.avId, 10);
-                const kind = li.dataset.avKind;
-                const av = id ? (kind === 'avantage' ? avantageById.get(id) : desavantageById.get(id)) : null;
-                const cost = av ? av.coutEffectif : 0;
-                if (av) {
-                    if (kind === 'avantage') coutAvantages += cost; else gainDesavantages += cost;
+                const id = select ? parseInt(select.value, 10) : parseInt(li.dataset.advantageId, 10);
+                const kind = li.dataset.advantageKind;
+                const advantage = id ? (kind === 'advantage' ? advantageById.get(id) : disadvantageById.get(id)) : null;
+                const cost = advantage ? advantage.coutEffectif : 0;
+                if (advantage) {
+                    if (kind === 'advantage') advantagesCost += cost; else disadvantagesGain += cost;
                 }
-                const costSpan = li.querySelector('[data-av-cost]');
+                const costSpan = li.querySelector('[data-advantage-cost]');
                 if (costSpan) {
-                    if (av) {
-                        const sign = kind === 'avantage' ? '-' : '+';
-                        const promo = cost !== av.cout ? ' <small class="text-success">(promo)</small>' : '';
+                    if (advantage) {
+                        const sign = kind === 'advantage' ? '-' : '+';
+                        const promo = cost !== advantage.cout ? ' <small class="text-success">(promo)</small>' : '';
                         costSpan.innerHTML = `${sign}${cost}xp${promo}`;
                     } else {
                         costSpan.innerHTML = '';
@@ -1663,32 +1666,32 @@
                 }
             });
 
-            const totalSpent = totalTraits + totalComps + coutAvantages;
-            const xpEffectif = cfg.xpBase + gainDesavantages;
-            const remaining = xpEffectif - totalSpent;
+            const totalSpent = totalTraits + totalSkills + advantagesCost;
+            const effectiveXp = cfg.xpBase + disadvantagesGain;
+            const remaining = effectiveXp - totalSpent;
 
             const tt = document.getElementById('xp-traits-total');
             if (tt) tt.textContent = `-${totalTraits}xp`;
-            const tc = document.getElementById('xp-comps-total');
-            if (tc) tc.textContent = `-${totalComps}xp`;
-            const avRow = document.getElementById('xp-avant-row');
-            if (avRow) {
-                avRow.classList.toggle('d-none', coutAvantages === 0);
-                const avTotal = document.getElementById('xp-avant-total');
-                if (avTotal) avTotal.textContent = `-${coutAvantages}xp`;
+            const tc = document.getElementById('xp-skills-total');
+            if (tc) tc.textContent = `-${totalSkills}xp`;
+            const advantageRow = document.getElementById('xp-advantages-row');
+            if (advantageRow) {
+                advantageRow.classList.toggle('d-none', advantagesCost === 0);
+                const advantagesTotal = document.getElementById('xp-advantages-total');
+                if (advantagesTotal) advantagesTotal.textContent = `-${advantagesCost}xp`;
             }
-            const dvRow = document.getElementById('xp-desav-row');
-            if (dvRow) {
-                dvRow.classList.toggle('d-none', gainDesavantages === 0);
-                const dvTotal = document.getElementById('xp-desav-total');
-                if (dvTotal) dvTotal.textContent = `+${gainDesavantages}xp`;
+            const disadvantageRow = document.getElementById('xp-disadvantages-row');
+            if (disadvantageRow) {
+                disadvantageRow.classList.toggle('d-none', disadvantagesGain === 0);
+                const disadvantagesTotal = document.getElementById('xp-disadvantages-total');
+                if (disadvantagesTotal) disadvantagesTotal.textContent = `+${disadvantagesGain}xp`;
             }
             document.querySelectorAll('.xp-traits-value').forEach(n => { n.textContent = totalTraits; });
-            document.querySelectorAll('.xp-comps-value').forEach(n => { n.textContent = totalComps; });
+            document.querySelectorAll('.xp-skills-value').forEach(n => { n.textContent = totalSkills; });
             document.querySelectorAll('.xp-spent-value').forEach(n => { n.textContent = totalSpent; });
-            document.querySelectorAll('.xp-total-value').forEach(n => { n.textContent = xpEffectif; });
-            document.querySelectorAll('.xp-avant-value').forEach(n => { n.textContent = coutAvantages; });
-            document.querySelectorAll('.xp-desav-value').forEach(n => { n.textContent = gainDesavantages; });
+            document.querySelectorAll('.xp-total-value').forEach(n => { n.textContent = effectiveXp; });
+            document.querySelectorAll('.xp-advantages-value').forEach(n => { n.textContent = advantagesCost; });
+            document.querySelectorAll('.xp-disadvantages-value').forEach(n => { n.textContent = disadvantagesGain; });
             document.querySelectorAll('.xp-remaining').forEach(tr => {
                 tr.textContent = `${remaining} xp`;
                 tr.classList.toggle('text-danger', remaining < 0);
@@ -1700,23 +1703,23 @@
                 buildInitiativeTooltip(eff.reflexes, cfg.rank)
             );
             setTooltipHtml(
-                document.querySelector('[data-tooltip-stat="attaque"]'),
-                buildAttaqueTooltip(eff.agilite, compCombatVal)
+                document.querySelector('[data-tooltip-stat="attack"]'),
+                buildAttackTooltip(eff.agilite, combatSkillValue)
             );
-            const dmgTooltipEl = document.querySelector('[data-tooltip-stat="dommages"]');
-            if (dmgTooltipEl && armeActuelle) {
-                setTooltipHtml(dmgTooltipEl, buildDommagesTooltip(eff.forceStat, armeActuelle));
+            const dmgTooltipEl = document.querySelector('[data-tooltip-stat="damage"]');
+            if (dmgTooltipEl && currentWeapon) {
+                setTooltipHtml(dmgTooltipEl, buildDamageTooltip(eff.forceStat, currentWeapon));
             }
 
-            if (btnValider) {
-                btnValider.disabled = remaining < 0;
-                btnValider.classList.toggle('btn-danger', remaining < 0);
-                btnValider.classList.toggle('btn-success', remaining >= 0);
+            if (btnSave) {
+                btnSave.disabled = remaining < 0;
+                btnSave.classList.toggle('btn-danger', remaining < 0);
+                btnSave.classList.toggle('btn-success', remaining >= 0);
             }
         }
 
-        const COMP_CAT_ORDER = ['Bugei', 'Noble', 'Marchand', 'Dégradante'];
-        function buildCompSelect(selectedId) {
+        const SKILL_CAT_ORDER = ['Bugei', 'Noble', 'Marchand', 'Dégradante'];
+        function buildSkillSelect(selectedId) {
             const select = document.createElement('select');
             select.className = 'form-control form-control-sm skill-select';
             const emptyOpt = document.createElement('option');
@@ -1730,9 +1733,9 @@
                 byCat[cat].push(c);
             });
             const extraCats = Object.keys(byCat)
-                .filter(cat => !COMP_CAT_ORDER.includes(cat))
+                .filter(cat => !SKILL_CAT_ORDER.includes(cat))
                 .sort((a, b) => a.localeCompare(b, 'fr'));
-            const orderedCats = COMP_CAT_ORDER.filter(cat => byCat[cat]).concat(extraCats);
+            const orderedCats = SKILL_CAT_ORDER.filter(cat => byCat[cat]).concat(extraCats);
             orderedCats.forEach(cat => {
                 const group = document.createElement('optgroup');
                 group.label = cat;
@@ -1827,11 +1830,11 @@
             }
             li.appendChild(buildSpellRemove());
 
-            const niveau = spell.niveau || 0;
+            const spellLevel = spell.niveau || 0;
             const next = Array.from(list.children).find(existing => {
                 const badge = existing.querySelector('.text-rank');
                 const level = badge ? parseInt(badge.textContent, 10) || 0 : 0;
-                if (level !== niveau) return level > niveau;
+                if (level !== spellLevel) return level > spellLevel;
                 return existing.querySelector('.spell-link, .spell-name')
                     .textContent.trim().localeCompare(spell.nom, 'fr') > 0;
             });
@@ -1860,13 +1863,13 @@
             ['ARMURE', 'Armures'],
         ];
 
-        function inventoryRank(categorie) {
-            const i = INVENTORY_GROUPS.findIndex(([c]) => c === categorie);
+        function inventoryRank(category) {
+            const i = INVENTORY_GROUPS.findIndex(([c]) => c === category);
             return i === -1 ? INVENTORY_GROUPS.length : i;
         }
 
-        function inventoryKind(categorie) {
-            return categorie === 'ARME' ? 'weapons' : 'items';
+        function inventoryKind(category) {
+            return category === 'ARME' ? 'weapons' : 'items';
         }
 
         function inventoryIds() {
@@ -1889,16 +1892,16 @@
             (line.querySelector('[data-inventory-remove]') || line).appendChild(btn);
         }
 
-        function buildWeaponLine(objet) {
+        function buildWeaponLine(object) {
             const tr = document.createElement('tr');
             const name = document.createElement('th');
             name.scope = 'row';
             name.className = 'inventory-name';
-            name.textContent = objet.nom;
+            name.textContent = object.nom;
             tr.appendChild(name);
 
             const label = v => v ? v.charAt(0).toUpperCase() + v.slice(1).toLowerCase() : '—';
-            [label(objet.taille), label(objet.poids), objet.vdOuForce || '—'].forEach((value, i) => {
+            [label(object.taille), label(object.poids), object.vdOuForce || '—'].forEach((value, i) => {
                 const td = document.createElement('td');
                 if (i === 2) td.className = 'extrabold';
                 td.textContent = value;
@@ -1912,14 +1915,14 @@
             return tr;
         }
 
-        function buildItemLine(objet) {
+        function buildItemLine(object) {
             const li = document.createElement('li');
             const name = document.createElement('span');
             name.className = 'inventory-name';
-            name.textContent = objet.nom;
+            name.textContent = object.nom;
             li.appendChild(name);
 
-            if (objet.categorie === 'ARMURE') {
+            if (object.categorie === 'ARMURE') {
                 const icon = document.createElement('i');
                 icon.className = 'fa-solid fa-shield-halved text-graydust';
                 li.appendChild(icon);
@@ -1927,25 +1930,25 @@
             return li;
         }
 
-        function insertInventoryLine(objet) {
-            const kind = inventoryKind(objet.categorie);
+        function insertInventoryLine(object) {
+            const kind = inventoryKind(object.categorie);
             const list = document.querySelector(`[data-inventory-list="${kind}"]`);
             if (!list) return;
 
             const empty = list.querySelector('.inventory-empty');
             if (empty) empty.remove();
 
-            const line = kind === 'weapons' ? buildWeaponLine(objet) : buildItemLine(objet);
+            const line = kind === 'weapons' ? buildWeaponLine(object) : buildItemLine(object);
             line.classList.add('inventory-line');
-            line.dataset.inventoryId = objet.id;
-            line.dataset.inventoryCategorie = objet.categorie;
+            line.dataset.inventoryId = object.id;
+            line.dataset.inventoryCategory = object.categorie;
             appendInventoryRemove(line);
 
-            const rank = inventoryRank(objet.categorie);
+            const rank = inventoryRank(object.categorie);
             const next = Array.from(list.children).find(existing => {
-                const other = inventoryRank(existing.dataset.inventoryCategorie);
+                const other = inventoryRank(existing.dataset.inventoryCategory);
                 if (other !== rank) return other > rank;
-                return existing.querySelector('.inventory-name').textContent.trim().localeCompare(objet.nom, 'fr') > 0;
+                return existing.querySelector('.inventory-name').textContent.trim().localeCompare(object.nom, 'fr') > 0;
             });
             list.insertBefore(line, next || null);
         }
@@ -1962,27 +1965,27 @@
                 emptyOpt.textContent = kind === 'weapons' ? '— Ajouter une arme —' : '— Ajouter un objet —';
                 select.appendChild(emptyOpt);
 
-                const libres = (cfg.objects || [])
+                const freeObjects = (cfg.objects || [])
                     .filter(o => !owned.includes(o.id) && inventoryKind(o.categorie) === kind);
-                const cleDe = o => kind === 'weapons' ? (o.type || 'DIVERS') : o.categorie;
-                const groupes = new Map();
+                const keyOf = o => kind === 'weapons' ? (o.type || 'DIVERS') : o.categorie;
+                const groups = new Map();
 
                 if (kind === 'weapons') {
-                    libres.map(cleDe)
+                    freeObjects.map(keyOf)
                         .sort((a, b) => a.localeCompare(b, 'fr'))
-                        .forEach(type => groupes.set(type, type.charAt(0) + type.slice(1).toLowerCase()));
+                        .forEach(type => groups.set(type, type.charAt(0) + type.slice(1).toLowerCase()));
                 } else {
-                    INVENTORY_GROUPS.forEach(([categorie, titre]) => groupes.set(categorie, titre));
-                    libres.forEach(o => { if (!groupes.has(o.categorie)) groupes.set(o.categorie, o.categorie); });
+                    INVENTORY_GROUPS.forEach(([category, title]) => groups.set(category, title));
+                    freeObjects.forEach(o => { if (!groups.has(o.categorie)) groups.set(o.categorie, o.categorie); });
                 }
 
-                groupes.forEach((titre, cle) => {
-                    const objets = libres.filter(o => cleDe(o) === cle);
-                    if (!objets.length) return;
+                groups.forEach((title, key) => {
+                    const groupObjects = freeObjects.filter(o => keyOf(o) === key);
+                    if (!groupObjects.length) return;
 
                     const group = document.createElement('optgroup');
-                    group.label = titre;
-                    objets.forEach(o => {
+                    group.label = title;
+                    groupObjects.forEach(o => {
                         const opt = document.createElement('option');
                         opt.value = o.id;
                         opt.textContent = o.nom;
@@ -1992,9 +1995,9 @@
                 });
 
                 select.addEventListener('change', () => {
-                    const objet = (cfg.objects || []).find(o => o.id === parseInt(select.value, 10));
-                    if (!objet) return;
-                    insertInventoryLine(objet);
+                    const object = (cfg.objects || []).find(o => o.id === parseInt(select.value, 10));
+                    if (!object) return;
+                    insertInventoryLine(object);
                     refreshInventorySelect();
                     refreshEquipmentSelects();
                 });
@@ -2004,16 +2007,16 @@
             });
         }
 
-        function buildAvantageSelect(kind, selectedId) {
+        function buildAdvantageSelect(kind, selectedId) {
             const select = document.createElement('select');
             select.className = 'form-control form-control-sm advantage-select';
             const emptyOpt = document.createElement('option');
             emptyOpt.value = '0';
             emptyOpt.textContent = '— Aucun —';
             select.appendChild(emptyOpt);
-            const list = (kind === 'avantage') ? (cfg.advantages || []) : (cfg.disadvantages || []);
+            const list = (kind === 'advantage') ? (cfg.advantages || []) : (cfg.disadvantages || []);
             list.forEach(a => {
-                if (a.exclusiveId && a.exclusiveId !== cfg.persoClasseId && a.id !== selectedId) return;
+                if (a.exclusiveId && a.exclusiveId !== cfg.characterClassId && a.id !== selectedId) return;
                 const opt = document.createElement('option');
                 opt.value = a.id;
                 opt.textContent = a.nom;
@@ -2023,9 +2026,9 @@
             return select;
         }
 
-        function buildCompCombatSelect(selectedId) {
+        function buildCombatSkillSelect(selectedId) {
             const select = document.createElement('select');
-            select.className = 'form-control form-control-sm comp-combat-select';
+            select.className = 'form-control form-control-sm combat-skill-select';
             const emptyOpt = document.createElement('option');
             emptyOpt.value = '0';
             emptyOpt.textContent = '— Aucune —';
@@ -2042,7 +2045,7 @@
             return select;
         }
 
-        function buildOwnedSelect(categorie, selectedId, className, extras) {
+        function buildOwnedSelect(category, selectedId, className, extras) {
             const select = document.createElement('select');
             select.className = 'form-control form-control-sm ' + className;
             const emptyOpt = document.createElement('option');
@@ -2051,22 +2054,22 @@
             select.appendChild(emptyOpt);
 
             const owned = new Set(inventoryIds());
-            const choix = (cfg.objects || []).filter(o => owned.has(o.id) && o.categorie === categorie);
+            const choices = (cfg.objects || []).filter(o => owned.has(o.id) && o.categorie === category);
 
             (extras || []).forEach(id => {
                 const idNum = parseInt(id, 10) || 0;
-                if (!idNum || choix.some(o => o.id === idNum)) return;
-                const objet = (cfg.objects || []).find(o => o.id === idNum);
-                if (objet) choix.push(objet);
+                if (!idNum || choices.some(o => o.id === idNum)) return;
+                const object = (cfg.objects || []).find(o => o.id === idNum);
+                if (object) choices.push(object);
             });
 
-            const vdById = new Map((cfg.weapons || []).map(a => [a.id, a.vd]));
-            choix.forEach(objet => {
+            const drById = new Map((cfg.weapons || []).map(a => [a.id, a.vd]));
+            choices.forEach(object => {
                 const opt = document.createElement('option');
-                opt.value = objet.id;
-                const vd = vdById.get(objet.id);
-                opt.textContent = vd ? `${objet.nom} (${vd})` : objet.nom;
-                if (parseInt(selectedId, 10) === objet.id) opt.selected = true;
+                opt.value = object.id;
+                const vd = drById.get(object.id);
+                opt.textContent = vd ? `${object.nom} (${vd})` : object.nom;
+                if (parseInt(selectedId, 10) === object.id) opt.selected = true;
                 select.appendChild(opt);
             });
 
@@ -2075,16 +2078,16 @@
 
         function refreshEquipmentSelects() {
             [
-                ['[data-arme-actuelle-row]', '[data-arme-actuelle-select-cell]', 'armeActuelleId', 'ARME', 'arme-actuelle-select', [cfg.bareHandsId]],
-                ['[data-armure-row]', '[data-armure-select-cell]', 'armureId', 'ARMURE', 'armure-select', []],
-            ].forEach(([rowSel, cellSel, dataKey, categorie, className, extras]) => {
+                ['[data-current-weapon-row]', '[data-current-weapon-select-cell]', 'currentWeaponId', 'ARME', 'current-weapon-select', [cfg.bareHandsId]],
+                ['[data-armor-row]', '[data-armor-select-cell]', 'armorId', 'ARMURE', 'armor-select', []],
+            ].forEach(([rowSel, cellSel, dataKey, category, className, extras]) => {
                 const row = document.querySelector(rowSel);
                 const cell = row ? row.querySelector(cellSel) : null;
                 if (!cell) return;
 
                 const previous = cell.querySelector('select');
                 const currentId = previous ? previous.value : (row.dataset[dataKey] || 0);
-                const select = buildOwnedSelect(categorie, currentId, className, extras.concat([currentId]));
+                const select = buildOwnedSelect(category, currentId, className, extras.concat([currentId]));
                 select.addEventListener('change', recalculate);
                 cell.innerHTML = '';
                 cell.appendChild(select);
@@ -2105,32 +2108,32 @@
             return select;
         }
 
-        function sortCompRowsAlphabetically() {
-            const tbody = document.querySelector('#comp-table tbody');
+        function sortSkillRowsAlphabetically() {
+            const tbody = document.querySelector('#skill-table tbody');
             if (!tbody) return;
-            [...tbody.querySelectorAll('[data-comp-row]')]
+            [...tbody.querySelectorAll('[data-skill-row]')]
                 .sort((a, b) => {
-                    const na = a.querySelector('[data-comp-name]').textContent.trim();
-                    const nb = b.querySelector('[data-comp-name]').textContent.trim();
+                    const na = a.querySelector('[data-skill-name]').textContent.trim();
+                    const nb = b.querySelector('[data-skill-name]').textContent.trim();
                     if (!na || !nb) return (!na) - (!nb);
-                    const ea = (parseInt(a.dataset.compEcole, 10) || 0) > 0 ? 0 : 1;
-                    const eb = (parseInt(b.dataset.compEcole, 10) || 0) > 0 ? 0 : 1;
+                    const ea = (parseInt(a.dataset.skillDojo, 10) || 0) > 0 ? 0 : 1;
+                    const eb = (parseInt(b.dataset.skillDojo, 10) || 0) > 0 ? 0 : 1;
                     if (ea !== eb) return ea - eb;
                     return na.localeCompare(nb, 'fr');
                 })
                 .forEach(row => {
                     tbody.appendChild(row);
-                    const specsRow = tbody.querySelector(`[data-comp-specs-row="${row.dataset.compRow}"]`);
+                    const specsRow = tbody.querySelector(`[data-skill-specs-row="${row.dataset.skillRow}"]`);
                     if (specsRow) tbody.appendChild(specsRow);
                 });
         }
 
         function enterEditMode() {
             article.classList.add('edit-mode');
-            sortCompRowsAlphabetically();
+            sortSkillRowsAlphabetically();
             btnEdit.style.display = 'none';
             btnCancel.style.display = '';
-            btnValider.style.display = '';
+            btnSave.style.display = '';
 
             traits.forEach(name => {
                 const span = document.querySelector(`[data-trait-eff="${name}"]`);
@@ -2149,64 +2152,64 @@
                 span.prepend(select);
             });
 
-            document.querySelectorAll('[data-comp-row]').forEach(row => {
-                const compId = parseInt(row.dataset.compId, 10) || 0;
-                const val = parseInt(row.dataset.compVal, 10) || 0;
-                const compEcole = parseInt(row.dataset.compEcole, 10) || 0;
-                const speEcoleMask = row.dataset.compSpeEcole || '';
-                const ecoleCell = row.querySelector('[data-comp-ecole-cell]');
-                const nameCell = row.querySelector('[data-comp-name]');
-                const valCell = row.querySelector('[data-comp-val-cell]');
-                const traitCell = row.querySelector('[data-comp-trait-cell]');
-                const costCell = row.querySelector('[data-comp-cost-cell]');
+            document.querySelectorAll('[data-skill-row]').forEach(row => {
+                const skillId = parseInt(row.dataset.skillId, 10) || 0;
+                const val = parseInt(row.dataset.skillVal, 10) || 0;
+                const skillDojo = parseInt(row.dataset.skillDojo, 10) || 0;
+                const dojoSpecMask = row.dataset.skillDojoSpec || '';
+                const dojoCell = row.querySelector('[data-skill-dojo-cell]');
+                const nameCell = row.querySelector('[data-skill-name]');
+                const valCell = row.querySelector('[data-skill-val-cell]');
+                const traitCell = row.querySelector('[data-skill-trait-cell]');
+                const costCell = row.querySelector('[data-skill-cost-cell]');
                 const specsCell = getSpecsCell(row);
 
-                const compSelect = buildCompSelect(compId);
+                const skillSelect = buildSkillSelect(skillId);
                 const valSelect = buildValSelect(val);
                 valSelect.addEventListener('change', recalculate);
                 valCell.innerHTML = '';
                 valCell.appendChild(valSelect);
 
-                ecoleCell.innerHTML = '';
-                const ecoleWrap = document.createElement('span');
-                ecoleWrap.className = 'skill-dojo-sort';
-                ecoleWrap.title = "Cycle : rien → offerte +1 → offerte +2";
-                const ecoleIcon = document.createElement('i');
-                ecoleWrap.appendChild(ecoleIcon);
-                const ecoleTag = document.createElement('small');
-                ecoleTag.className = 'skill-dojo-tag';
-                ecoleWrap.appendChild(ecoleTag);
-                ecoleCell.appendChild(ecoleWrap);
-                bindTriState(ecoleWrap, ecoleIcon, compEcole, COMP_ECOLE_ICONS, (state) => {
-                    ecoleTag.textContent = state === 2 ? 'offerte école R2' : '';
+                dojoCell.innerHTML = '';
+                const dojoWrap = document.createElement('span');
+                dojoWrap.className = 'skill-dojo-sort';
+                dojoWrap.title = "Cycle : rien → offerte +1 → offerte +2";
+                const dojoIcon = document.createElement('i');
+                dojoWrap.appendChild(dojoIcon);
+                const dojoTag = document.createElement('small');
+                dojoTag.className = 'skill-dojo-tag';
+                dojoWrap.appendChild(dojoTag);
+                dojoCell.appendChild(dojoWrap);
+                bindTriState(dojoWrap, dojoIcon, skillDojo, SKILL_DOJO_ICONS, (state) => {
+                    dojoTag.textContent = state === 2 ? 'offerte école R2' : '';
                 });
-                if (compId === 0) {
+                if (skillId === 0) {
                     valSelect.style.display = 'none';
-                    ecoleWrap.style.display = 'none';
+                    dojoWrap.style.display = 'none';
                 }
 
-                renderSpecsCheckboxes(specsCell, compId, row.dataset.compSpecs || '', speEcoleMask);
+                renderSpecsCheckboxes(specsCell, skillId, row.dataset.skillSpecs || '', dojoSpecMask);
 
-                compSelect.addEventListener('change', () => {
-                    const opt = compSelect.options[compSelect.selectedIndex];
-                    const newCompId = parseInt(compSelect.value, 10) || 0;
+                skillSelect.addEventListener('change', () => {
+                    const opt = skillSelect.options[skillSelect.selectedIndex];
+                    const newSkillId = parseInt(skillSelect.value, 10) || 0;
                     traitCell.textContent = opt && opt.dataset.traitCourt ? opt.dataset.traitCourt : '';
-                    valSelect.style.display = newCompId > 0 ? '' : 'none';
-                    ecoleWrap.style.display = newCompId > 0 ? '' : 'none';
-                    renderSpecsCheckboxes(specsCell, newCompId, '', '');
+                    valSelect.style.display = newSkillId > 0 ? '' : 'none';
+                    dojoWrap.style.display = newSkillId > 0 ? '' : 'none';
+                    renderSpecsCheckboxes(specsCell, newSkillId, '', '');
                     recalculate();
                 });
                 nameCell.innerHTML = '';
-                nameCell.appendChild(compSelect);
+                nameCell.appendChild(skillSelect);
             });
 
-            const compCombatRow = document.querySelector('[data-comp-combat-row]');
-            if (compCombatRow) {
-                const cell = compCombatRow.querySelector('[data-comp-combat-select-cell]');
-                const currentId = parseInt(compCombatRow.dataset.compCombatId, 10) || 0;
+            const combatSkillRow = document.querySelector('[data-combat-skill-row]');
+            if (combatSkillRow) {
+                const cell = combatSkillRow.querySelector('[data-combat-skill-select-cell]');
+                const currentId = parseInt(combatSkillRow.dataset.combatSkillId, 10) || 0;
                 if (cell) {
                     cell.innerHTML = '';
-                    const select = buildCompCombatSelect(currentId);
+                    const select = buildCombatSkillSelect(currentId);
                     select.addEventListener('change', recalculate);
                     cell.appendChild(select);
                 }
@@ -2214,22 +2217,22 @@
 
             refreshEquipmentSelects();
 
-            document.querySelectorAll('[data-av-slot]').forEach(li => {
-                const kind = li.dataset.avKind;
-                const currentId = parseInt(li.dataset.avId, 10) || 0;
-                const nameSpan = li.querySelector('[data-av-name]');
-                const summary  = li.querySelector('[data-av-summary]');
-                const select = buildAvantageSelect(kind, currentId);
+            document.querySelectorAll('[data-advantage-slot]').forEach(li => {
+                const kind = li.dataset.advantageKind;
+                const currentId = parseInt(li.dataset.advantageId, 10) || 0;
+                const nameSpan = li.querySelector('[data-advantage-name]');
+                const summary  = li.querySelector('[data-advantage-summary]');
+                const select = buildAdvantageSelect(kind, currentId);
                 select.addEventListener('change', () => {
                     const newId = parseInt(select.value, 10) || 0;
                     if (summary) {
-                        const list = (kind === 'avantage') ? (cfg.advantages || []) : (cfg.disadvantages || []);
-                        const av = list.find(a => a.id === newId);
-                        const description = av ? (av.description || '').replace(/<[^>]*>/g, '') : '';
-                        summary.textContent = av ? (av.summary || description) : '';
+                        const list = (kind === 'advantage') ? (cfg.advantages || []) : (cfg.disadvantages || []);
+                        const advantage = list.find(a => a.id === newId);
+                        const description = advantage ? (advantage.description || '').replace(/<[^>]*>/g, '') : '';
+                        summary.textContent = advantage ? (advantage.summary || description) : '';
                         $(summary).tooltip('dispose');
                         summary.removeAttribute('title');
-                        if (av && !av.summary) {
+                        if (advantage && !advantage.summary) {
                             summary.title = description;
                             $(summary).tooltip();
                         }
@@ -2249,16 +2252,16 @@
         }
 
         function getSpecsCell(row) {
-            const specsRow = document.querySelector(`[data-comp-specs-row="${row.dataset.compRow}"]`);
-            return specsRow ? specsRow.querySelector('[data-comp-specs-cell]') : null;
+            const specsRow = document.querySelector(`[data-skill-specs-row="${row.dataset.skillRow}"]`);
+            return specsRow ? specsRow.querySelector('[data-skill-specs-cell]') : null;
         }
 
-        const COMP_ECOLE_ICONS = {
+        const SKILL_DOJO_ICONS = {
             0: 'sort-icon fa-regular fa-square',
             1: 'sort-icon fa-solid fa-graduation-cap',
             2: 'sort-icon fa-solid fa-graduation-cap'
         };
-        const SPEC_ECOLE_ICONS = {
+        const SPEC_DOJO_ICONS = {
             0: 'sort-icon fa-regular fa-square',
             1: 'sort-icon fa-solid fa-square-check',
             2: 'sort-icon fa-solid fa-graduation-cap'
@@ -2278,13 +2281,13 @@
             });
         }
 
-        function renderSpecsCheckboxes(cell, compId, bitmask, bitmaskEcole) {
+        function renderSpecsCheckboxes(cell, skillId, bitmask, dojoBitmask) {
             if (!cell) return;
             cell.innerHTML = '';
-            if (!compId) return;
-            const comp = cfg.skills.find(c => c.id === compId);
-            if (!comp || !Array.isArray(comp.specialisations)) return;
-            comp.specialisations.forEach((label, idx) => {
+            if (!skillId) return;
+            const skill = cfg.skills.find(c => c.id === skillId);
+            if (!skill || !Array.isArray(skill.specialisations)) return;
+            skill.specialisations.forEach((label, idx) => {
                 if (!label) return;
                 const wrap = document.createElement('span');
                 wrap.className = 'skill-spec-sort';
@@ -2300,16 +2303,16 @@
                 wrap.appendChild(tag);
 
                 let initial = 0;
-                if (bitmaskEcole && bitmaskEcole[idx] === '1') initial = 2;
+                if (dojoBitmask && dojoBitmask[idx] === '1') initial = 2;
                 else if (bitmask && bitmask[idx] === '1') initial = 1;
-                bindTriState(wrap, icon, initial, SPEC_ECOLE_ICONS);
+                bindTriState(wrap, icon, initial, SPEC_DOJO_ICONS);
 
                 cell.appendChild(wrap);
             });
         }
 
         function readBitmask(row) {
-            const specsRow = document.querySelector(`[data-comp-specs-row="${row.dataset.compRow}"]`);
+            const specsRow = document.querySelector(`[data-skill-specs-row="${row.dataset.skillRow}"]`);
             if (!specsRow) return '';
             const wraps = specsRow.querySelectorAll('.skill-spec-sort');
             if (wraps.length === 0) return '';
@@ -2322,8 +2325,8 @@
             return bits.join('');
         }
 
-        function readSpeEcoleBitmask(row) {
-            const specsRow = document.querySelector(`[data-comp-specs-row="${row.dataset.compRow}"]`);
+        function readDojoSpecBitmask(row) {
+            const specsRow = document.querySelector(`[data-skill-specs-row="${row.dataset.skillRow}"]`);
             if (!specsRow) return '';
             const wraps = specsRow.querySelectorAll('.skill-spec-sort');
             if (wraps.length === 0) return '';
@@ -2336,7 +2339,7 @@
             return bits.join('');
         }
 
-        function submitFiche() {
+        function submitSheet() {
             const form = document.createElement('form');
             form.method = 'POST';
             form.action = cfg.editUrl;
@@ -2355,59 +2358,59 @@
                 if (select) addInput(`player_sheet[${name}]`, select.value);
             });
 
-            document.querySelectorAll('[data-comp-row]').forEach(row => {
-                const i = row.dataset.compRow;
-                const compSelect = row.querySelector('.skill-select');
+            document.querySelectorAll('[data-skill-row]').forEach(row => {
+                const i = row.dataset.skillRow;
+                const skillSelect = row.querySelector('.skill-select');
                 const valSelect = row.querySelector('.val-select');
-                const ecoleWrap = row.querySelector('.skill-dojo-sort');
-                const compId = compSelect && parseInt(compSelect.value, 10) > 0 ? compSelect.value : '';
-                const valVal = compId !== '' && valSelect && valSelect.value ? valSelect.value : '';
-                const specsVal     = compId !== '' ? readBitmask(row) : '';
-                const speEcVal     = compId !== '' ? readSpeEcoleBitmask(row) : '';
-                const compEcoleVal = compId !== '' && ecoleWrap
-                    ? String(parseInt(ecoleWrap.dataset.state, 10) || 0)
+                const dojoWrap = row.querySelector('.skill-dojo-sort');
+                const skillId = skillSelect && parseInt(skillSelect.value, 10) > 0 ? skillSelect.value : '';
+                const valVal = skillId !== '' && valSelect && valSelect.value ? valSelect.value : '';
+                const specsVal     = skillId !== '' ? readBitmask(row) : '';
+                const dojoSpecValue     = skillId !== '' ? readDojoSpecBitmask(row) : '';
+                const skillDojoValue = skillId !== '' && dojoWrap
+                    ? String(parseInt(dojoWrap.dataset.state, 10) || 0)
                     : '0';
-                addInput(`player_sheet[competence${i}]`, compId);
+                addInput(`player_sheet[competence${i}]`, skillId);
                 addInput(`player_sheet[valeur${i}]`, valVal);
                 addInput(`player_sheet[specialisations${i}]`, specsVal);
-                addInput(`player_sheet[compEcole${i}]`, compEcoleVal);
-                addInput(`player_sheet[speEcole${i}]`, speEcVal);
+                addInput(`player_sheet[compEcole${i}]`, skillDojoValue);
+                addInput(`player_sheet[speEcole${i}]`, dojoSpecValue);
             });
 
             const slotToField = {av1: 'avantage1', av2: 'avantage2', dv1: 'desavantage1', dv2: 'desavantage2'};
             Object.keys(slotToField).forEach(slot => {
-                const li = document.querySelector(`[data-av-slot="${slot}"]`);
+                const li = document.querySelector(`[data-advantage-slot="${slot}"]`);
                 if (!li) return;
                 const select = li.querySelector('select.advantage-select');
                 const id = select && parseInt(select.value, 10) > 0 ? select.value : '';
                 addInput(`player_sheet[${slotToField[slot]}]`, id);
             });
 
-            const compCombatSelect = document.querySelector('select.comp-combat-select');
-            const compCombatId = compCombatSelect && parseInt(compCombatSelect.value, 10) > 0 ? compCombatSelect.value : '';
-            addInput('player_sheet[compCombatActuelle]', compCombatId);
+            const combatSkillSelect = document.querySelector('select.combat-skill-select');
+            const combatSkillId = combatSkillSelect && parseInt(combatSkillSelect.value, 10) > 0 ? combatSkillSelect.value : '';
+            addInput('player_sheet[compCombatActuelle]', combatSkillId);
 
-            const armeActuelleSelect = document.querySelector('select.arme-actuelle-select');
-            const armeActuelleId = armeActuelleSelect && parseInt(armeActuelleSelect.value, 10) > 0 ? armeActuelleSelect.value : '';
-            addInput('player_sheet[armeActuelle]', armeActuelleId);
+            const currentWeaponSelect = document.querySelector('select.current-weapon-select');
+            const currentWeaponId = currentWeaponSelect && parseInt(currentWeaponSelect.value, 10) > 0 ? currentWeaponSelect.value : '';
+            addInput('player_sheet[armeActuelle]', currentWeaponId);
 
-            const armureSelect = document.querySelector('select.armure-select');
-            const armureId = armureSelect && parseInt(armureSelect.value, 10) > 0 ? armureSelect.value : '';
-            addInput('player_sheet[armure]', armureId);
+            const armorSelect = document.querySelector('select.armor-select');
+            const armorId = armorSelect && parseInt(armorSelect.value, 10) > 0 ? armorSelect.value : '';
+            addInput('player_sheet[armure]', armorId);
 
             ['koku', 'bu', 'zeni'].forEach(coin => {
                 const el = document.getElementById(`purse-input-${coin}`);
                 addInput(`player_sheet[${coin}]`, el ? el.value.trim() : '');
             });
 
-            ['honneur', 'gloire', 'infamie', 'statut'].forEach(champ => {
-                const el = document.getElementById(`standing-input-${champ}`);
-                addInput(`player_sheet[${champ}]`, el ? el.value.trim() : '');
+            ['honneur', 'gloire', 'infamie', 'statut'].forEach(field => {
+                const el = document.getElementById(`standing-input-${field}`);
+                addInput(`player_sheet[${field}]`, el ? el.value.trim() : '');
             });
 
             const lookIds = {
-                age: 'look-input-age', height: 'look-input-taille', weight: 'look-input-poids',
-                hair: 'look-input-cheveux', eyes: 'look-input-yeux', appearance: 'look-input-appearance',
+                age: 'look-input-age', height: 'look-input-height', weight: 'look-input-weight',
+                hair: 'look-input-hair', eyes: 'look-input-eyes', appearance: 'look-input-appearance',
                 notes: 'look-input-notes',
             };
             Object.keys(lookIds).forEach(field => {
@@ -2417,9 +2420,9 @@
 
             const modIds = {
                 initiativeModifier: 'mod-input-initiative',
-                attaqueModifier:    'mod-input-attaque',
+                attaqueModifier:    'mod-input-attack',
                 dmgModifier:        'mod-input-dmg',
-                ndModifier:         'mod-input-nd',
+                ndModifier:         'mod-input-tn',
                 reductionModifier:  'mod-input-reduction',
             };
             Object.keys(modIds).forEach(field => {
@@ -2442,7 +2445,7 @@
 
         if (btnEdit) btnEdit.addEventListener('click', enterEditMode);
         if (btnCancel) btnCancel.addEventListener('click', () => location.reload());
-        if (btnValider) btnValider.addEventListener('click', submitFiche);
+        if (btnSave) btnSave.addEventListener('click', submitSheet);
     })();
     </script>
     {% endif %}

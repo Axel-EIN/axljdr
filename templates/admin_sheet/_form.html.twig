@@ -50,13 +50,13 @@
                 <h3>Compétences</h3>
                 <hr>
                 {% for i in 1..20 %}
-                    <div class="row mb-2 align-items-end admin-comp-slot" data-comp-slot="{{ i }}">
+                    <div class="row mb-2 align-items-end admin-skill-slot" data-skill-slot="{{ i }}">
                         <div class="col-5">{{ form_row(attribute(form, 'competence' ~ i)) }}</div>
                         <div class="col-2">{{ form_row(attribute(form, 'valeur' ~ i)) }}</div>
                         <div class="col-2">{{ form_row(attribute(form, 'compEcole' ~ i)) }}</div>
                         <div class="col-3">
                             <label class="d-block">Spé. offertes</label>
-                            <div class="admin-spe-ecole-checkboxes" data-spe-ecole-target="{{ i }}"></div>
+                            <div class="admin-dojo-spec-checkboxes"></div>
                             {{ form_widget(attribute(form, 'speEcole' ~ i)) }}
                         </div>
                     </div>
@@ -74,13 +74,13 @@
 
     <script>
     (function () {
-        const compsMeta = {{ skills_json|default({})|json_encode|raw }};
-        document.querySelectorAll('.admin-comp-slot').forEach(slot => {
-            const i = slot.dataset.compSlot;
-            const compSelect = slot.querySelector(`select[name$="[competence${i}]"]`);
-            const hiddenSpe = slot.querySelector(`input[name$="[speEcole${i}]"]`);
-            const checkboxesWrap = slot.querySelector('.admin-spe-ecole-checkboxes');
-            if (!compSelect || !hiddenSpe || !checkboxesWrap) return;
+        const skillsMeta = {{ skills_json|default({})|json_encode|raw }};
+        document.querySelectorAll('.admin-skill-slot').forEach(slot => {
+            const i = slot.dataset.skillSlot;
+            const skillSelect = slot.querySelector(`select[name$="[competence${i}]"]`);
+            const hiddenDojoSpec = slot.querySelector(`input[name$="[speEcole${i}]"]`);
+            const checkboxesWrap = slot.querySelector('.admin-dojo-spec-checkboxes');
+            if (!skillSelect || !hiddenDojoSpec || !checkboxesWrap) return;
 
             function readBitmask() {
                 const cbs = checkboxesWrap.querySelectorAll('input[type="checkbox"]');
@@ -95,8 +95,8 @@
 
             function render(initialBitmask) {
                 checkboxesWrap.innerHTML = '';
-                const compId = parseInt(compSelect.value, 10) || 0;
-                const meta = compsMeta[compId];
+                const skillId = parseInt(skillSelect.value, 10) || 0;
+                const meta = skillsMeta[skillId];
                 if (!meta || !Array.isArray(meta.specialisations)) return;
                 meta.specialisations.forEach((label, idx) => {
                     if (!label) return;
@@ -107,7 +107,7 @@
                     cb.type = 'checkbox';
                     cb.dataset.specIndex = String(idx);
                     if (initialBitmask && initialBitmask[idx] === '1') cb.checked = true;
-                    cb.addEventListener('change', () => { hiddenSpe.value = readBitmask(); });
+                    cb.addEventListener('change', () => { hiddenDojoSpec.value = readBitmask(); });
                     const txt = document.createElement('span');
                     txt.textContent = ' ' + label;
                     wrap.appendChild(cb);
@@ -116,11 +116,11 @@
                 });
             }
 
-            render(hiddenSpe.value || '');
-            compSelect.addEventListener('change', () => {
-                const current = readBitmask() || hiddenSpe.value || '';
+            render(hiddenDojoSpec.value || '');
+            skillSelect.addEventListener('change', () => {
+                const current = readBitmask() || hiddenDojoSpec.value || '';
                 render(current);
-                hiddenSpe.value = readBitmask();
+                hiddenDojoSpec.value = readBitmask();
             });
         });
     })();

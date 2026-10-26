@@ -46,7 +46,7 @@
             <p class="quote quote-chapter">{{ chapter.citation|nl2br }}</p>
           {% endif %}
           {% if visible_episodes is not empty %}
-            <button type="button" class="btn-primary-style btn-large voir" data-toggle="collapse"
+            <button type="button" class="btn-primary-style btn-large reveal" data-toggle="collapse"
                data-target="#ch{{ chapter.numero }}-episodes" aria-controls="ch{{ chapter.numero }}-episodes"
                aria-expanded="false" aria-label="Voir les épisodes du chapitre {{ chapter.numero }}">
               <i class="fa-solid fa-scroll fa-bounce" aria-hidden="true"></i>&nbsp;&nbsp;Voir les Épisodes

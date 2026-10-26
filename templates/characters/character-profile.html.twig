@@ -302,11 +302,11 @@
     {% if can_edit %}
         <script>
             (function () {
-            const toggleAll = (selector, action) => document.querySelectorAll(selector).forEach(
+            const bindEditMode = (selector, action) => document.querySelectorAll(selector).forEach(
                 btn => btn.addEventListener('click', () => btn.closest('.profile-zone').classList[action]('edit-mode'))
             );
-            toggleAll('[data-edit-open]', 'add');
-            toggleAll('[data-edit-cancel]', 'remove');
+            bindEditMode('[data-edit-open]', 'add');
+            bindEditMode('[data-edit-cancel]', 'remove');
             })();
         </script>
     {% endif %}

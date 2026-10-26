@@ -13,45 +13,45 @@
 
 <script>
 (function () {
-    const personnage = document.getElementById('admin_development_personnage');
+    const characterSelect = document.getElementById('admin_development_personnage');
     const scene = document.getElementById('admin_development_participation');
-    if (!personnage || !scene) return;
+    if (!characterSelect || !scene) return;
 
-    const toutes = Array.from(scene.querySelectorAll('option')).map(option => ({
+    const allOptions = Array.from(scene.querySelectorAll('option')).map(option => ({
         option,
-        chapitre: option.parentElement.tagName === 'OPTGROUP' ? option.parentElement.label : null,
+        chapter: option.parentElement.tagName === 'OPTGROUP' ? option.parentElement.label : null,
     }));
 
-    function filtrer() {
-        const choisie = scene.value;
+    function filterOptions() {
+        const selected = scene.value;
         scene.innerHTML = '';
 
-        let courant = null;
-        let groupe = null;
+        let currentChapter = null;
+        let group = null;
 
-        toutes
-            .filter(({ option }) => !option.value || option.dataset.personnage === personnage.value)
-            .forEach(({ option, chapitre }) => {
-                if (chapitre === null) {
+        allOptions
+            .filter(({ option }) => !option.value || option.dataset.character === characterSelect.value)
+            .forEach(({ option, chapter }) => {
+                if (chapter === null) {
                     scene.add(option);
-                    courant = null;
+                    currentChapter = null;
                     return;
                 }
 
-                if (chapitre !== courant) {
-                    groupe = document.createElement('optgroup');
-                    groupe.label = chapitre;
-                    scene.add(groupe);
-                    courant = chapitre;
+                if (chapter !== currentChapter) {
+                    group = document.createElement('optgroup');
+                    group.label = chapter;
+                    scene.add(group);
+                    currentChapter = chapter;
                 }
 
-                groupe.appendChild(option);
+                group.appendChild(option);
             });
 
-        scene.value = choisie;
+        scene.value = selected;
     }
 
-    personnage.addEventListener('change', filtrer);
-    filtrer();
+    characterSelect.addEventListener('change', filterOptions);
+    filterOptions();
 })();
 </script>

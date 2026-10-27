@@ -217,9 +217,9 @@
 
 /* --- ELEMENT AIR --- */
 
-    --color-airlight: hsl(from var(--AIR) h calc(s - 10) calc(l + 15));
+    --color-airlight: hsl(from var(--color-air) h calc(s - 10) calc(l + 15));
     --color-air: #7AA9FF;
-    --color-airdark: hsl(from var(--AIR) h s calc(l - 20));
+    --color-airdark: hsl(from var(--color-air) h s calc(l - 20));
 
     .text-airlight { color: var(--color-airlight); }
     .text-air { color: var(--color-air); }
@@ -231,9 +231,9 @@
 
 /* --- ELEMENT WATER --- */
 
-    --color-waterlight: hsl(from var(--EAU) h calc(s - 10) calc(l + 15));
+    --color-waterlight: hsl(from var(--color-water) h calc(s - 10) calc(l + 15));
     --color-water: #44BDC4;
-    --color-waterdark: hsl(from var(--EAU) h s calc(l - 20));
+    --color-waterdark: hsl(from var(--color-water) h s calc(l - 20));
 
     .text-waterlight { color: var(--color-waterlight); }
     .text-water, .text-eau { color: var(--color-water); }
@@ -245,9 +245,9 @@
 
 /* --- ELEMENT FIRE --- */
 
-    --color-firelight: hsl(from var(--FEU) h calc(s - 10) calc(l + 15));
+    --color-firelight: hsl(from var(--color-fire) h calc(s - 10) calc(l + 15));
     --color-fire: #FF9D4C;
-    --color-firedark: hsl(from var(--FEU) h s calc(l - 20));
+    --color-firedark: hsl(from var(--color-fire) h s calc(l - 20));
 
     .text-firelight { color: var(--color-firelight); }
     .text-fire, .text-feu { color: var(--color-fire); }

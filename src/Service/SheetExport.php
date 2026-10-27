@@ -3,6 +3,7 @@
 namespace App\Service;
 
 use App\Entity\FichePersonnage;
+use App\Entity\Sort;
 use App\Entity\Personnage;
 
 class SheetExport
@@ -109,6 +110,20 @@ class SheetExport
     private const RING_BADGES = ['TERRE' => 323, 'AIR' => 562, 'FEU' => 801, 'EAU' => 1043];
 
     private const TATTOOS_PER_RANK = 2;
+
+    private const LEVEL_RADIUS = 11;
+    private const LEVEL_GAP = 7;
+    private const LEVEL_SIZE = 16;
+    private const LEVEL_BASELINE = 6;
+    private const LEVEL_INK = [1.0, 1.0, 1.0];
+    private const LEVEL_FILL_DEFAULT = [0.30, 0.32, 0.38];
+    private const LEVEL_FILLS = [
+        'TERRE' => [0.38, 0.31, 0.25],
+        'AIR' => [0.08, 0.40, 1.00],
+        'FEU' => [0.90, 0.41, 0.00],
+        'EAU' => [0.15, 0.46, 0.48],
+        'VIDE' => [0.41, 0.18, 1.00],
+    ];
 
     private const OVERLAY_BLOCKS = [
         [129, 172, 215, 259],
@@ -521,22 +536,22 @@ class SheetExport
             $deficiency = $this->reader->sortable((string) $dojo->getDeficience());
 
             foreach (array_keys(self::RING_BADGES) as $index => $ring) {
-                $this->fillBlock($pdf, $index + 1, $this->spellNames($sheet, [$ring]));
+                $this->fillSpellBlock($pdf, $index + 1, $this->spellsOfRing($sheet, [$ring]));
                 $this->ringBadge($pdf, $ring, $affinity, $deficiency);
             }
 
             return;
         }
 
-        $kihos = $this->spellNamesOf($sheet, 'KIHO');
-        $tattoos = $this->spellNamesOf($sheet, 'TATOUAGE');
+        $kihos = $this->spellsOf($sheet, 'KIHO');
+        $tattoos = $this->spellsOf($sheet, 'TATOUAGE');
 
         for ($i = 1; $i <= 5; $i++) {
-            $footers = isset($kihos[$i - 1]) ? ['[KIHO] ' . $kihos[$i - 1]] : [];
+            $footers = isset($kihos[$i - 1]) ? [['[KIHO] ', $kihos[$i - 1]]] : [];
 
             if ($i % 2 === 1) {
                 foreach (array_slice($tattoos, $i - 1, self::TATTOOS_PER_RANK) as $tattoo) {
-                    $footers[] = '[TATOUAGE] ' . $tattoo;
+                    $footers[] = ['[TATOUAGE] ', $tattoo];
                 }
             }
 
@@ -571,32 +586,61 @@ class SheetExport
         ]);
     }
 
-    private function spellNames(FichePersonnage $sheet, array $rings): array
+    private function spellsOfRing(FichePersonnage $sheet, array $rings): array
     {
-        $names = [];
+        $spells = [];
 
         foreach ($sheet->getKnownSpells() as $spell) {
             if ($spell->getCategorie() !== 'KIHO' && in_array($spell->getAnneau(), $rings, true)) {
-                $names[] = $spell->getNom();
+                $spells[] = $spell;
             }
         }
 
-        return $names;
+        return $spells;
     }
 
-    private function spellNamesOf(FichePersonnage $sheet, string $category): array
+    private function spellsOf(FichePersonnage $sheet, string $category): array
     {
-        $names = [];
+        $spells = [];
 
         foreach ($sheet->getKnownSpells() as $spell) {
             if ($spell->getCategorie() === $category) {
-                $names[] = $spell->getNom();
+                $spells[] = $spell;
             }
         }
 
-        usort($names, fn ($a, $b) => strcmp($this->reader->sortable($a), $this->reader->sortable($b)));
+        usort($spells, fn ($a, $b) => strcmp(
+            $this->reader->sortable($a->getNom()),
+            $this->reader->sortable($b->getNom())
+        ));
 
-        return $names;
+        return $spells;
+    }
+
+    private function spellLine(PdfWriter $pdf, Sort $spell, int $baseline, array $options, string $prefix = ''): void
+    {
+        [$x, $width] = self::OVERLAY_TEXT;
+        $level = (int) $spell->getNiveau();
+        $label = $prefix . $spell->getNom();
+        $room = $level > 0 ? $width - 2 * self::LEVEL_RADIUS - self::LEVEL_GAP : $width;
+
+        $pdf->text($label, $x, $baseline, self::OVERLAY_SIZE, $options + ['width' => $room]);
+
+        if ($level < 1) {
+            return;
+        }
+
+        $bold = (bool) ($options['bold'] ?? false);
+        $written = $pdf->fitted($label, self::OVERLAY_SIZE, $room, $bold);
+        $center = $x + (int) round($pdf->widthOf($written, self::OVERLAY_SIZE, $bold)) + self::LEVEL_GAP + self::LEVEL_RADIUS;
+        $middle = $baseline - self::LEVEL_RADIUS + 4;
+
+        $pdf->disc($center, $middle, self::LEVEL_RADIUS, self::LEVEL_FILLS[(string) $spell->getAnneau()] ?? self::LEVEL_FILL_DEFAULT);
+        $pdf->text((string) $level, $center, $middle + self::LEVEL_BASELINE, self::LEVEL_SIZE, [
+            'bold' => true,
+            'align' => PdfWriter::ALIGN_CENTER,
+            'ink' => self::LEVEL_INK,
+        ]);
     }
 
     private function fillBlock(PdfWriter $pdf, int $index, array $lines, bool $locked = false, array $footers = []): void
@@ -620,11 +664,17 @@ class SheetExport
             $options + ['lines' => count($baselines) - count($footers)]
         );
 
-        foreach ($footers as $k => $footer) {
-            $pdf->text($footer, self::OVERLAY_TEXT[0], $baselines[$written + $k], self::OVERLAY_SIZE, $options + [
-                'bold' => true,
-                'width' => self::OVERLAY_TEXT[1],
-            ]);
+        foreach ($footers as $k => [$prefix, $spell]) {
+            $this->spellLine($pdf, $spell, $baselines[$written + $k], $options + ['bold' => true], $prefix);
+        }
+    }
+
+    private function fillSpellBlock(PdfWriter $pdf, int $index, array $spells): void
+    {
+        $baselines = self::OVERLAY_BLOCKS[$index];
+
+        foreach (array_slice($spells, 0, count($baselines)) as $row => $spell) {
+            $this->spellLine($pdf, $spell, $baselines[$row], ['ink' => PdfWriter::INK_DEFAULT]);
         }
     }
 }

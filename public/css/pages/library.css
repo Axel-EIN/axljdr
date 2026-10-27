@@ -28,7 +28,7 @@
     &.AIR {
         box-shadow:
             inset 2px 2px 0 0 var(--color-background),
-            0px 0px .5rem 0 var(--AIR);
+            0px 0px .5rem 0 var(--color-air);
     }
 }
 

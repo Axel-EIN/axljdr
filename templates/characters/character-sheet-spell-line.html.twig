@@ -4,7 +4,7 @@
     {% if emblem is defined %}
         <img class="img-24" src="{{ asset(emblem) }}" alt="" />
     {% endif %}
-    <a class="spell-link extrabold{% if spell.categorie != 'TATOUAGE' %} text-{{ ring }}{% endif %}" href="{{ element_url(spell) }}">{{ spell.nom }}</a>
+    <a class="spell-link link-strong extrabold" href="{{ element_url(spell) }}">{{ spell.nom }}</a>
     <a  class="spell-info" role="button" tabindex="0" aria-label="Description de {{ spell.nom }}"
         data-toggle="popover" data-html="true" data-trigger="focus"
         data-container="body" data-placement="top"

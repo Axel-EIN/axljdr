@@ -9,13 +9,16 @@ a {
         text-decoration: none;
     }
 
-    &:is(.character-icon, .location-icon) {
-        display: inline-block;
-        background-color: transparent !important;
-        text-decoration: none;
+    &:is(.link-strong, .character-icon, .location-icon) {
         color: var(--color-strong);
 
         &:hover { color: var(--color-link); }
+
+        &:is(.character-icon, .location-icon) {
+            display: inline-block;
+            background-color: transparent !important;
+            text-decoration: none;
+        }
     }
 }
 

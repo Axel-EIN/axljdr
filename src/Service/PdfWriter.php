@@ -16,6 +16,7 @@ class PdfWriter
     private const PAGE_WIDTH = 595.28;
     private const PAGE_HEIGHT = 841.89;
     private const JPEG_QUALITY = 88;
+    private const BEZIER_CIRCLE = 0.5523;
     private const FIXED_OBJECTS = 2;
     private const FONT_OBJECTS = 2;
 
@@ -59,6 +60,26 @@ class PdfWriter
     public function cover(string $path, int $x, int $y, int $width, int $height, float $verticalFocus = 0.5): void
     {
         $this->place($this->rasterize($path, $width / $height, $verticalFocus), $x, $y, $width, $height);
+    }
+
+    public function disc(int $centerX, int $centerY, int $radius, array $fill): void
+    {
+        $cx = $centerX * $this->scale;
+        $cy = self::PAGE_HEIGHT - $centerY * $this->scale;
+        $r = $radius * $this->scale;
+        $k = $r * self::BEZIER_CIRCLE;
+
+        $this->pages[$this->current] .= sprintf(
+            "q %.3f %.3f %.3f rg %.2f %.2f m "
+            . "%.2f %.2f %.2f %.2f %.2f %.2f c %.2f %.2f %.2f %.2f %.2f %.2f c "
+            . "%.2f %.2f %.2f %.2f %.2f %.2f c %.2f %.2f %.2f %.2f %.2f %.2f c f Q\n",
+            $fill[0], $fill[1], $fill[2],
+            $cx - $r, $cy,
+            $cx - $r, $cy + $k, $cx - $k, $cy + $r, $cx, $cy + $r,
+            $cx + $k, $cy + $r, $cx + $r, $cy + $k, $cx + $r, $cy,
+            $cx + $r, $cy - $k, $cx + $k, $cy - $r, $cx, $cy - $r,
+            $cx - $k, $cy - $r, $cx - $r, $cy - $k, $cx - $r, $cy
+        );
     }
 
     public function text(string $text, int $x, int $y, int $size, array $options = []): void
@@ -132,6 +153,11 @@ class PdfWriter
     public function lineCount(string $text, int $size, int $width, bool $bold = false): int
     {
         return count($this->wrap($this->flatten($text), $size, $bold, $width));
+    }
+
+    public function fitted(string $text, int $size, int $width, bool $bold = false): string
+    {
+        return $this->fit($this->flatten($text), $size, $bold, $width);
     }
 
     public function widthOf(string $text, int $size, bool $bold = false): float

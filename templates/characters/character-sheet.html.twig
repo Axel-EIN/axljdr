@@ -82,7 +82,7 @@
             <li>
               <span class="label">Clan :</span>
               {% if sheet.personnage.clan %}
-                <a class="extrabold" href="{{ path('world_clan', {id: sheet.personnage.clan.id}) }}">
+                <a class="link-strong extrabold" href="{{ path('world_clan', {id: sheet.personnage.clan.id}) }}">
                   <img  class="img-24" src="{{ asset(image_small(sheet.personnage.clan.mon|default(NA_MON))) }}"
                         title="Mon du clan {{ sheet.personnage.clan.nom }}" />
                   {{ sheet.personnage.clan.nom }}
@@ -94,7 +94,7 @@
             <li>
               <span class="label">Famille :</span>
               {% if sheet.personnage.famille %}
-                <a class="extrabold" href="{{ path('world_clan', {id: sheet.personnage.clan.id, '_fragment': sheet.personnage.famille.nom}) }}">
+                <a class="link-strong extrabold" href="{{ path('world_clan', {id: sheet.personnage.clan.id, '_fragment': sheet.personnage.famille.nom}) }}">
                   <img  class="img-24 rounded-circle" src="{{ asset(image_small(sheet.personnage.famille.mon|default(NA_MON))) }}"
                         title="Mon de la famille {{ sheet.personnage.famille.nom }}" />
                   {{ sheet.personnage.famille.nom }}
@@ -108,7 +108,7 @@
             <li class="sheet-class-line">
               <span class="label">Classe :</span>
               {% if sheet.personnage.classe %}
-                <a class="extrabold" href="{{ path('rules_class', {id: sheet.personnage.classe.id}) }}">
+                <a class="link-strong extrabold" href="{{ path('rules_class', {id: sheet.personnage.classe.id}) }}">
                   <img  class="img-24" src="{{ asset(image_small(sheet.personnage.classe.icone|default(NA_MON))) }}"
                         title="Mon de la classe {{ sheet.personnage.classe.nom }}" />
                   {{ sheet.personnage.classe.nom }}
@@ -120,13 +120,13 @@
             <li>
               <span class="label">Ecole :</span>
               {% if sheet.personnage.classe %}
-                <a class="d-lg-none" href="{{ path('rules_class', {id: sheet.personnage.classe.id}) }}"
+                <a class="link-strong d-lg-none" href="{{ path('rules_class', {id: sheet.personnage.classe.id}) }}"
                    title="Classe {{ sheet.personnage.classe.nom }}">
                   <img class="img-24" src="{{ asset(image_small(sheet.personnage.classe.icone|default(NA_MON))) }}" alt="" />
                 </a>
               {% endif %}
               {% if sheet.personnage.ecole %}
-                <a class="extrabold" href="{{ path('rules_dojo', {id: sheet.personnage.ecole.id}) }}">
+                <a class="link-strong extrabold" href="{{ path('rules_dojo', {id: sheet.personnage.ecole.id}) }}">
                   {{ sheet.personnage.ecole.nom }}
                 </a>
                 {% if dojo_bonus_name %}
@@ -589,7 +589,7 @@
                       {% set advantage_text = item ? (item.summary ?: item.description|striptags) : '' %}
                       <div>
                         <span data-advantage-name class="text-strong extrabold">
-                          {% if item %}<a href="{{ element_url(item) }}">{{ item.nom }}</a>{% endif %}
+                          {% if item %}<a class="link-strong" href="{{ element_url(item) }}">{{ item.nom }}</a>{% endif %}
                         </span>
                       </div>
                       <div class="text-clamp-2 text-small text-body-c" data-advantage-summary
@@ -676,7 +676,7 @@
                     {% endif %}
                   </td>
                   <th class="text-strong extrabold" scope="row" data-skill-name>
-                    <a href="{{ element_url(slot.skill) }}"><strong>{{ slot.skill.nom }}</strong></a>
+                    <a class="link-strong" href="{{ element_url(slot.skill) }}"><strong>{{ slot.skill.nom }}</strong></a>
                     {% if slot.skill.degradante %}<i class="skill-degrading after fa-solid fa-arrow-down-wide-short" title="Compétence dégradante"></i>{% endif %}
                   </th>
                   <td class="text-strong extrabold text-center" data-skill-val-cell>{{ slot.val ?? '' }}</td>
@@ -761,7 +761,7 @@
                   {% if technique.rank %}{{ technique.rank }}{% else %}<i class="fa-solid fa-star text-small" title="Technique spéciale"></i>{% endif %}
                 </span>
                 <div>
-                  <strong class="text-strong extrabold"><a href="{{ element_url(dojo) }}#{{ technique.anchor }}">{{ technique.name }}</a></strong>
+                  <strong class="extrabold"><a class="link-strong" href="{{ element_url(dojo) }}#{{ technique.anchor }}">{{ technique.name }}</a></strong>
                   <p class="text-small text-body-c{% if not technique.summary %} text-clamp-2{% endif %}"
                      {% if not technique.summary %}data-toggle="tooltip" title="{{ technique.description }}"{% endif %}>
                     {{ technique.summary ?: technique.description }}
@@ -816,7 +816,7 @@
             <div class="col-6 col-lg-3">
               <h6>Technique de l'École</h6>
               {% if dojo and dojo.techSpecialNom is not empty %}
-                <a  class="spell-link extrabold" role="button" tabindex="0"
+                <a  class="spell-link link-strong extrabold" role="button" tabindex="0"
                     data-toggle="popover" data-html="true" data-trigger="focus"
                     data-container="body" data-placement="top"
                     title="{{ dojo.techSpecialNom }}"

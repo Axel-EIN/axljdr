@@ -1023,7 +1023,7 @@
               </div>
             </li>
 
-            {% set attack_rolled = eff_agility + attack_rolled_mod + (combat_skill_value / 2)|round(0, 'ceil') %}
+            {% set attack_rolled = eff_agility + attack_rolled_mod + combat_skill_value %}
             {% set attack_kept = eff_agility + attack_kept_mod %}
             <li class="list-group-item p-0 px-3 py-1 flex flex-wrap gap-2">
               <div class="flex-grow-1 stat-attack-with-skill{% if not sheet.compCombatActuelle %} d-none{% endif %}">
@@ -1039,11 +1039,11 @@
                     title="
                       <div class='text-mini text-left'>
                         /lancer
-                        <br/>Agilité + CompCombat/2 arrSup.
+                        <br/>Agilité + CompCombat
                         <br/>/garder
                         Agilité
                         <br/>
-                        <br/>/lancer {{eff_agility}} + {{combat_skill_value / 2}}
+                        <br/>/lancer {{eff_agility}} + {{combat_skill_value}}
                         <br/>/garder {{eff_agility}}
                         {% if sheet.attaqueModifier %}
                           Modificateur : {{ sheet.attaqueModifier }}
@@ -1459,8 +1459,8 @@
         function buildAttackTooltip(effAgility, combatSkillValue) {
             const mod = cfg.attackModifierStr ? `<br/>Modificateur : ${cfg.attackModifierStr}` : '';
             return `<div class='text-mini text-left'>`
-                + `/lancer<br/>Agilité + CompCombat/2 arrSup.<br/>/garder Agilité`
-                + `<br/><br/>/lancer ${effAgility} + ${combatSkillValue / 2}<br/>/garder ${effAgility}${mod}`
+                + `/lancer<br/>Agilité + CompCombat<br/>/garder Agilité`
+                + `<br/><br/>/lancer ${effAgility} + ${combatSkillValue}<br/>/garder ${effAgility}${mod}`
                 + `</div>`;
         }
 
@@ -1531,7 +1531,7 @@
 
             const combatSkillId = getCombatSkillId();
             const combatSkillValue = getCombatSkillValue();
-            const attackRolled = eff.agilite + Math.ceil(combatSkillValue / 2) + cfg.attackRolledMod;
+            const attackRolled = eff.agilite + combatSkillValue + cfg.attackRolledMod;
             const attackKept = eff.agilite + cfg.attackKeptMod;
             const attackNode = document.querySelector('[data-stat="attack"]');
             if (attackNode) attackNode.textContent = `${attackRolled}g${attackKept}`;

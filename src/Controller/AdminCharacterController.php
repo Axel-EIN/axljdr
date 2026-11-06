@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Service\TableFilter;
+use App\Service\DeletionGuard;
 use App\Service\FileHandler;
 use App\Service\NameTagger;
 use App\Entity\Personnage;
@@ -202,9 +203,16 @@ class AdminCharacterController extends AbstractController
      * @Route("/admin/character/{id}/delete", name="admin_character_delete", methods={"POST"})
      * @IsGranted("ROLE_MJ")
      */
-    public function deleteCharacter(Request $request, Personnage $character, FileHandler $fileHandler, NameTagger $nameTagger, Unlocker $unlocker): Response {
+    public function deleteCharacter(Request $request, Personnage $character, FileHandler $fileHandler, NameTagger $nameTagger, Unlocker $unlocker, DeletionGuard $deletionGuard): Response {
 
         if ($this->isCsrfTokenValid('delete' . $character->getId(), $request->request->get('_csrf_token'))) {
+
+            $refusal = $deletionGuard->refusal($character, $character->getNomComplet());
+
+            if ($refusal !== null) {
+                $this->addFlash('danger', $refusal);
+                return $this->redirectToRoute('admin_character');
+            }
 
             $entityManager = $this->getDoctrine()->getManager();
 

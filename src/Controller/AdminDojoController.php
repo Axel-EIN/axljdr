@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Service\TableFilter;
+use App\Service\DeletionGuard;
 use App\Entity\Ecole;
 use App\Service\FileHandler;
 use App\Form\AdminDojoType;
@@ -160,12 +161,14 @@ class AdminDojoController extends AbstractController
      * @Route("/admin/dojo/{id}/delete", name="admin_dojo_delete", methods={"POST"})
      * @IsGranted("ROLE_MJ")
      */
-    public function deleteDojo(Request $request, Ecole $dojo, FileHandler $fileHandler, Unlocker $unlocker): Response {
+    public function deleteDojo(Request $request, Ecole $dojo, FileHandler $fileHandler, Unlocker $unlocker, DeletionGuard $deletionGuard): Response {
 
         if ($this->isCsrfTokenValid('delete' . $dojo->getId(), $request->request->get('_csrf_token'))) {
 
-            if (!$dojo->getPersonnages()->isEmpty()) {
-                $this->addFlash('warning', 'Veuillez supprimer les personnages enfants au prélable !');
+            $refusal = $deletionGuard->refusal($dojo, $dojo->getNom());
+
+            if ($refusal !== null) {
+                $this->addFlash('danger', $refusal);
                 return $this->redirectToRoute('admin_dojo');
             }
 

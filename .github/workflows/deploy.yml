@@ -39,6 +39,7 @@ jobs:
             public/assets/img/**
             public/assets/pdf/**
             public/assets/video/**
+            storage/**
 
       # Cache + migrations via un script jetable : déposé sous un nom aléatoire,
       # appelé une fois avec un jeton à usage unique, supprimé quoi qu'il arrive.

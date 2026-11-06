@@ -69,7 +69,7 @@ class AdminLoreController extends AbstractController
             $pdf = $form->get('pdf')->getData();
             if (!empty($pdf)) {
                 $prefix = 'lore-' . $lore->getNom() . '-pdf';
-                $lore->setPdf($fileHandler->handle($pdf, null, $prefix, 'pdf-lores'));
+                $lore->setPdf($fileHandler->handlePdf($pdf, null, $prefix, 'lores'));
             }
 
             $em->persist($lore);
@@ -124,7 +124,7 @@ class AdminLoreController extends AbstractController
             $newPdf = $form->get('pdf')->getData();
             if (!empty($newPdf)) {
                 $prefix = 'lore-' . $lore->getNom() . '-pdf';
-                $lore->setPdf($fileHandler->handle($newPdf, $lore->getPdf(), $prefix, 'pdf-lores'));
+                $lore->setPdf($fileHandler->handlePdf($newPdf, $lore->getPdf(), $prefix, 'lores'));
             }
 
             if ($previousNumber != $lore->getNumero())
@@ -165,7 +165,7 @@ class AdminLoreController extends AbstractController
         {
 
             $fileHandler->handle(null, $lore->getImage(), null, 'lores');
-            $fileHandler->handle(null, $lore->getPdf(), null, 'pdf-lores');
+            $fileHandler->handlePdf(null, $lore->getPdf(), null, 'lores');
 
             $siblings = $loreRepository->findAll();
             $orderer->reorderNumber($lore->getId(), $lore->getNumero(), -1, $siblings, []);

@@ -86,6 +86,8 @@
         top: 33%;
 
         @media (max-width: 575.98px) { width: 18%; }
+
+        &.in-glyph { width: auto; }
     }
 }
 

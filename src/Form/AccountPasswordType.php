@@ -3,11 +3,11 @@
 namespace App\Form;
 
 use App\Entity\Utilisateur;
+use App\Validator\StrongPassword;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
-use Symfony\Component\Validator\Constraints\Regex;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
@@ -31,7 +31,7 @@ class AccountPasswordType extends AbstractType
                     new NotBlank([
                         'message' => 'Veuillez entrer un mot de passe',
                     ]),
-                    new Regex('/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d).{8,32}$/'),
+                    new StrongPassword(),
                 ]
             ],
             'second_options' => ['label' => 'Confirmation du mot de passe'],

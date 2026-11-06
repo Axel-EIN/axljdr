@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Service\TableFilter;
+use App\Service\DeletionGuard;
 use App\Entity\Lieu;
 use App\Service\FileHandler;
 use App\Form\AdminLocationType;
@@ -186,9 +187,16 @@ class AdminLocationController extends AbstractController
    * @Route("/admin/location/{id}/delete", name="admin_location_delete", methods={"POST"})
    * @IsGranted("ROLE_MJ")
    */
-  public function deleteLocation(Request $request, Lieu $location, FileHandler $fileHandler, NameTagger $nameTagger, Unlocker $unlocker): Response {
+  public function deleteLocation(Request $request, Lieu $location, FileHandler $fileHandler, NameTagger $nameTagger, Unlocker $unlocker, DeletionGuard $deletionGuard): Response {
 
     if ($this->isCsrfTokenValid('delete' . $location->getId(), $request->request->get('_csrf_token'))) {
+
+      $refusal = $deletionGuard->refusal($location, $location->getNom());
+
+      if ($refusal !== null) {
+        $this->addFlash('danger', $refusal);
+        return $this->redirectToRoute('admin_location');
+      }
 
       $entityManager = $this->getDoctrine()->getManager();
 

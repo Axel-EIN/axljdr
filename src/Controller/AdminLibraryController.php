@@ -67,7 +67,7 @@ class AdminLibraryController extends AbstractController
             $pdf = $form->get('pdf')->getData();
             if (!empty($pdf)) {
                 $prefix = 'library-' . $library->getNom() . '-pdf';
-                $library->setPdf($fileHandler->handle($pdf, null, $prefix, 'libraries-pdfs'));
+                $library->setPdf($fileHandler->handlePdf($pdf, null, $prefix, 'libraries'));
             }
 
             $em->persist($library);
@@ -122,7 +122,7 @@ class AdminLibraryController extends AbstractController
             $newPdf = $form->get('pdf')->getData();
             if (!empty($newPdf)) {
                 $prefix = 'library-' . $library->getNom() . '-pdf';
-                $library->setPdf($fileHandler->handle($newPdf, $library->getPdf(), $prefix, 'libraries-pdfs'));
+                $library->setPdf($fileHandler->handlePdf($newPdf, $library->getPdf(), $prefix, 'libraries'));
             }
 
             if ($previousNumber != $library->getNumero() || $previousSiblingsId != $library->getBase())
@@ -163,7 +163,7 @@ class AdminLibraryController extends AbstractController
         {
 
             $fileHandler->handle(null, $library->getImage(), null, 'libraries');
-            $fileHandler->handle(null, $library->getPdf(), null, 'libraries-pdfs');
+            $fileHandler->handlePdf(null, $library->getPdf(), null, 'libraries');
 
             $previousSiblingsId = $library->getBase();
             $previousSiblings = $libraryRepository->findBy(['base' => $previousSiblingsId]);

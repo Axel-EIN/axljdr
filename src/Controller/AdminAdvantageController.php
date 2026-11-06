@@ -3,8 +3,8 @@
 namespace App\Controller;
 
 use App\Service\TableFilter;
+use App\Service\DeletionGuard;
 use App\Repository\AvantageRepository;
-use App\Repository\FichePersonnageRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -129,16 +129,14 @@ class AdminAdvantageController extends AbstractController
      * @Route("/admin/advantage/{id}/delete", name="admin_advantage_delete", methods={"POST"})
      * @IsGranted("ROLE_MJ")
      */
-    public function deleteAdvantage(Request $request, Avantage $advantage, Unlocker $unlocker, FichePersonnageRepository $sheetRepository): Response {
+    public function deleteAdvantage(Request $request, Avantage $advantage, Unlocker $unlocker, DeletionGuard $deletionGuard): Response {
 
         if ($this->isCsrfTokenValid('delete' . $advantage->getId(), $request->request->get('_csrf_token'))) {
 
-            $sheets = $sheetRepository->findByAvantage($advantage);
+            $refusal = $deletionGuard->refusal($advantage, $advantage->getNom());
 
-            if (!empty($sheets)) {
-                $characters = array_map(fn($sheet) => $sheet->getPersonnage()->getNom(), $sheets);
-                $this->addFlash('danger', 'Impossible de supprimer « ' . $advantage->getNom() . ' », utilisé par : ' . implode(', ', $characters) . '.');
-
+            if ($refusal !== null) {
+                $this->addFlash('danger', $refusal);
                 return $this->redirectToRoute('admin_advantage');
             }
 

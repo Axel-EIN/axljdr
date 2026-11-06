@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Service\TableFilter;
+use App\Service\DeletionGuard;
 use App\Repository\CompetenceRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -131,9 +132,16 @@ class AdminSkillController extends AbstractController
      * @Route("/admin/skill/{id}/delete", name="admin_skill_delete", methods={"POST"})
      * @IsGranted("ROLE_MJ")
      */
-    public function deleteSkill(Request $request, Competence $skill, Unlocker $unlocker): Response {
+    public function deleteSkill(Request $request, Competence $skill, Unlocker $unlocker, DeletionGuard $deletionGuard): Response {
 
         if ($this->isCsrfTokenValid('delete' . $skill->getId(), $request->request->get('_csrf_token'))) {
+
+            $refusal = $deletionGuard->refusal($skill, $skill->getNom());
+
+            if ($refusal !== null) {
+                $this->addFlash('danger', $refusal);
+                return $this->redirectToRoute('admin_skill');
+            }
 
             $entityManager = $this->getDoctrine()->getManager();
             $unlocker->forget($skill);

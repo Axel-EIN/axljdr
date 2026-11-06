@@ -70,7 +70,7 @@ class AdminRuleController extends AbstractController
             $pdf = $form->get('pdf')->getData();
             if (!empty($pdf)) {
                 $prefix = 'rule-' . $rule->getNom() . '-pdf';
-                $rule->setPdf($fileHandler->handle($pdf, null, $prefix, 'pdf-rules'));
+                $rule->setPdf($fileHandler->handlePdf($pdf, null, $prefix, 'rules'));
             }
 
             $em->persist($rule);
@@ -126,7 +126,7 @@ class AdminRuleController extends AbstractController
             $newPdf = $form->get('pdf')->getData();
             if (!empty($newPdf)) {
                 $prefix = 'rule-' . $rule->getNom() . '-pdf';
-                $rule->setPdf($fileHandler->handle($newPdf, $rule->getPdf(), $prefix, 'pdf-rules'));
+                $rule->setPdf($fileHandler->handlePdf($newPdf, $rule->getPdf(), $prefix, 'rules'));
             }
 
             if ($previousNumber != $rule->getNumero() || $previousSiblingsId != $rule->getBase())
@@ -168,7 +168,7 @@ class AdminRuleController extends AbstractController
         {
 
             $fileHandler->handle(null, $rule->getImage(), null, 'rules');
-            $fileHandler->handle(null, $rule->getPdf(), null, 'pdf-rules');
+            $fileHandler->handlePdf(null, $rule->getPdf(), null, 'rules');
 
             $previousSiblingsId = $rule->getBase();
             $previousSiblings = $ruleRepository->findBy(['base' => $previousSiblingsId]);

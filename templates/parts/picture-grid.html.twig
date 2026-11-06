@@ -62,7 +62,7 @@
       {% set pdf_only = item.pdf|default(null) and not item.hasParts|default(false) %}
       {% set image_na = pdf_only ? NA_PDF : na_image|default(NA_ICON) %}
       {% set pdf_link = pdf_only and not is_gm() and app.user %}
-      {% set href = pdf_link ? asset(item.pdf) : (route is defined ? path(route, {id: item.id}) : element_url(item)) %}
+      {% set href = pdf_link ? pdf_url(item) : (route is defined ? path(route, {id: item.id}) : element_url(item)) %}
 
       <a class="picture-item {{ variant }} {{ item_class }}"
          {% if restricted or not href %}aria-disabled="true"{% else %}{% if show_label %}title="{{ name }}" {% endif %}{% if pdf_link %}target="_blank" rel="noopener" {% endif %}href="{{ href }}"{% endif %}>

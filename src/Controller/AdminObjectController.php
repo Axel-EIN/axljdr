@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Service\TableFilter;
+use App\Service\DeletionGuard;
 use App\Entity\Objet;
 use App\Service\Orderer;
 use App\Form\AdminObjectType;
@@ -202,9 +203,16 @@ class AdminObjectController extends AbstractController
      * @Route("/admin/object/{id}/delete", name="admin_object_delete", methods={"POST"})
      * @IsGranted("ROLE_MJ")
      */
-    public function deleteObject(Request $request, Objet $object, FileHandler $fileHandler, Unlocker $unlocker): Response {
+    public function deleteObject(Request $request, Objet $object, FileHandler $fileHandler, Unlocker $unlocker, DeletionGuard $deletionGuard): Response {
 
         if ($this->isCsrfTokenValid('delete' . $object->getId(), $request->request->get('_csrf_token'))) {
+
+            $refusal = $deletionGuard->refusal($object, $object->getNom());
+
+            if ($refusal !== null) {
+                $this->addFlash('danger', $refusal);
+                return $this->redirectToRoute('admin_object');
+            }
 
             $entityManager = $this->getDoctrine()->getManager();
             $fileHandler->handle(null, $object->getIcon(), null, 'objets');

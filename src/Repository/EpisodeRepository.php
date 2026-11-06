@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\Access;
 use App\Entity\Episode;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -41,6 +42,19 @@ class EpisodeRepository extends ServiceEntityRepository
             ->getQuery()
             ->getOneOrNullResult()
         ;
+    }
+
+    public function findLastPublished(int $limit): array
+    {
+        return $this->createQueryBuilder('e')
+            ->andWhere('e.access = :access')
+            ->andWhere('e.publishedAt IS NULL OR e.publishedAt <= :now')
+            ->setParameter('access', Access::PUBLIC)
+            ->setParameter('now', new \DateTime())
+            ->orderBy('e.numeroSaison', 'DESC')
+            ->setMaxResults($limit)
+            ->getQuery()
+            ->getResult();
     }
 
     public function nextCampaignNumber(): int

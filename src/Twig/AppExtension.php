@@ -63,6 +63,7 @@ class AppExtension extends AbstractExtension
             new TwigFunction('element_sort', [$this->visibility, 'sortByAccess']),
             new TwigFunction('element_key', [EntityRegistry::class, 'keyOf']),
             new TwigFunction('element_url', [$this->elementUrl, 'of']),
+            new TwigFunction('pdf_url', [$this->elementUrl, 'pdf']),
             new TwigFunction('access_label', [$this, 'accessLabel']),
             new TwigFunction('status_label', [$this, 'statusLabel']),
             new TwigFunction('faction_label', [$this, 'factionLabel']),

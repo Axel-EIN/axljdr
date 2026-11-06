@@ -17,7 +17,7 @@ class Visibility
     public const COMMON_DISCOVERED = 'common-discovered';
     public const PUBLIC = 'public';
 
-    public const FRESHNESS_DAYS = 14;
+    private const FRESHNESS_DAYS = 7;
 
     private const READABLE = [self::PUBLIC, self::UNLOCKED, self::DISCOVERED, self::COMMON_DISCOVERED];
 
@@ -38,13 +38,15 @@ class Visibility
 
     private $currentPlayer;
     private $unlockRepository;
+    private $currentChapter;
     private $unlocks;
     private $owned;
 
-    public function __construct(CurrentPlayer $currentPlayer, UnlockRepository $unlockRepository)
+    public function __construct(CurrentPlayer $currentPlayer, UnlockRepository $unlockRepository, CurrentChapter $currentChapter)
     {
         $this->currentPlayer = $currentPlayer;
         $this->unlockRepository = $unlockRepository;
+        $this->currentChapter = $currentChapter;
     }
 
     public function state($element, bool $revealSession = false): string
@@ -67,7 +69,7 @@ class Visibility
             return $this->isPublished($element) ? self::PUBLIC : self::HIDDEN;
         }
 
-        if ($revealSession && !$this->isIndividualSecret($element)) {
+        if (($revealSession || $this->currentChapter->contains($element)) && !$this->isIndividualSecret($element)) {
             return self::LEVELS[$access];
         }
 
@@ -141,28 +143,26 @@ class Visibility
         }));
     }
 
-    public function discoveredAt($element): ?\DateTimeInterface
-    {
-        $personal = $this->unlockedAt($element);
-
-        if ($personal !== null) {
-            return $personal;
-        }
-
-        return $this->publishedAt($element);
-    }
-
     public function isFresh($element): bool
     {
-        if ($this->publishedAt($element) === null || !in_array($this->state($element), self::READABLE, true)) {
-            return false;
+        $publishedAt = $this->publishedAt($element);
+
+        return $publishedAt !== null
+            && $publishedAt <= new \DateTime()
+            && $publishedAt >= $this->freshSince()
+            && in_array($this->state($element), self::READABLE, true);
+    }
+
+    public function freshSince(): \DateTimeInterface
+    {
+        $since = new \DateTime('-' . self::FRESHNESS_DAYS . ' days');
+        $episodeDate = $this->currentChapter->lastEpisode()?->getPublishedAt();
+
+        if ($episodeDate === null) {
+            return $since;
         }
 
-        $date = $this->discoveredAt($element);
-
-        return $date !== null
-            && $date <= new \DateTime()
-            && $date >= new \DateTime('-' . self::FRESHNESS_DAYS . ' days');
+        return min($since, \DateTime::createFromInterface($episodeDate)->setTime(0, 0));
     }
 
     private function publishedAt($element): ?\DateTimeInterface

@@ -19,6 +19,8 @@
     {% if not element_readable(item) %}
         {{ include('rules/list-item-locked.html.twig', {entity: 'advantage'}) }}
     {% else %}
+        {% set discount_clans = item.discountClans|filter(clan => element_listed(clan)) %}
+        {% set discount_classes = item.discountClasses %}
         <div class="col-12 p-0 m-0 relative">
 
             {% if is_gm() %}
@@ -37,10 +39,12 @@
                         </div>
                     {% endif %}
                     <span class="ml-auto">
-                        {% if item.discountClasse %}<span class="badge badge-info">{{item.discountClasse.nom}}</span>{% endif %}
-                        {% if item.discountClasse2 %}<span class="badge badge-info">{{item.discountClasse2.nom}}</span>{% endif %}
-                        {% if item.discountClan %}<span class="badge badge-success">{{item.discountClan.nom}}</span>{% endif %}
-                        {% if item.discountClan2 %}<span class="badge badge-success">{{item.discountClan2.nom}}</span>{% endif %}
+                        {% for discount_class in discount_classes %}
+                            <span class="badge badge-info">{{ discount_class.nom }}</span>
+                        {% endfor %}
+                        {% for discount_clan in discount_clans %}
+                            <span class="badge badge-success">{{ discount_clan.nom }}</span>
+                        {% endfor %}
                         <strong class="ml-3 {% if item.genre == 'Avantage' %}text-dead{% elseif item.genre == 'Désavantage' %}text-your-xp{% endif %}">
                             {% if item.genre == 'Avantage' %}-{% elseif item.genre == 'Désavantage' %}+{% endif %}{{ item.cout }} xp
                         </strong>
@@ -52,10 +56,10 @@
                     <p class="p-2 m-0 item-description">
                         {{ item.description|raw|nl2br }}
                     </p>
-                    {% if item.discount %}
+                    {% if item.discount and (discount_clans is not empty or discount_classes is not empty) %}
                         {% set groups = {
-                            'du clan': [item.discountClan, item.discountClan2]|filter(e => e),
-                            'de la classe': [item.discountClasse, item.discountClasse2]|filter(e => e),
+                            'du clan': discount_clans,
+                            'de la classe': discount_classes,
                         }|filter(g => g is not empty) %}
                         <div class="text-small text-green ml-2">
                             Les personnages

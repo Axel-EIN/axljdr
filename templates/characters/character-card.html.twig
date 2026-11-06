@@ -1,8 +1,6 @@
 {% if element_listed(character) %}
 
-{% set state = element_state(character) %}
 {% set readable = element_readable(character) %}
-{% set locked = state == 'locked' and not is_gm() %}
 {% set hide_clan = hide_clan|default(false) %}
 {% set compact = compact|default(false) %}
 
@@ -22,10 +20,11 @@
         {% set zoom, translucent, hover_opaque, text, tint, grayscale = 'hover-zoom', 'translucent', 'hover-opaque', 'text-AIR', 'missing', '' %}
     {% endif %}
 
-            <div class="card character-card text-white shadow-more {{zoom}} {{translucent}} {{hover_opaque}} relative {{ locked ? 'locked' }}">
+            <div class="card character-card text-white shadow-more {{zoom}} {{translucent}} {{hover_opaque}} relative {{ not readable ? 'locked' }}">
 
-                {% if locked %}
-                    <img class="icon-lock in-character-card" src="{{ asset(LOCKED_ICO) }}" alt="Cadenas" />
+                {% if not readable %}
+                    {{ include('parts/icon-lock.html.twig', {state: element_state(character), classes: 'in-character-card'}) }}
+                    {{ include('parts/access-hint.html.twig') }}
                 {% endif %}
 
                 {% if element_fresh(character) %}

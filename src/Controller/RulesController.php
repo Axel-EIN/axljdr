@@ -239,7 +239,7 @@ class RulesController extends AbstractController
             foreach ( $discount_getters as $param => $discount ) {
                 $options = [];
                 foreach ( $items as $item )
-                    foreach ( $item->{ $discount['getter'] }() as $element )
+                    foreach ( $visibility->listedOnly($item->{ $discount['getter'] }()) as $element )
                         $options[$element->getId()] = $element->getNom();
 
                 asort($options);
@@ -251,7 +251,7 @@ class RulesController extends AbstractController
             foreach ( $discount_getters as $param => $discount ) {
                 $discount_url_param = $request->query->get($param);
 
-                if ( !empty( $discount_url_param ) )
+                if ( isset( $discounts[$param]['options'][$discount_url_param] ) )
                     $items = array_filter($items, fn($item) => in_array($discount_url_param, array_map(fn($element) => $element->getId(), $item->{ $discount['getter'] }())));
             }
         }

@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Saison;
 use App\Service\FileHandler;
+use App\Service\DeletionGuard;
 use App\Service\Orderer;
 use App\Form\AdminSeasonType;
 use App\Repository\SaisonRepository;
@@ -140,12 +141,14 @@ class AdminSeasonController extends AbstractController
      * @Route("/admin/season/{id}/delete", name="admin_season_delete", methods={"POST"})
      * @IsGranted("ROLE_MJ")
      */
-    public function deleteSeason(Request $request, Saison $season, Orderer $orderer, SaisonRepository $seasonRepository, FileHandler $fileHandler): Response {
+    public function deleteSeason(Request $request, Saison $season, Orderer $orderer, SaisonRepository $seasonRepository, FileHandler $fileHandler, DeletionGuard $deletionGuard): Response {
 
         if ($this->isCsrfTokenValid('delete' . $season->getId(), $request->request->get('_csrf_token'))) {
 
-            if (!$season->getChapitres()->isEmpty()) {
-                $this->addFlash('warning', 'Veuillez supprimer les chapitres enfants au prélable !');
+            $refusal = $deletionGuard->refusal($season, $season->getTitre());
+
+            if ($refusal !== null) {
+                $this->addFlash('danger', $refusal);
                 return $this->redirectToRoute('admin_season');
             }
 

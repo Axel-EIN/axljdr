@@ -49,7 +49,7 @@ class Clan
     private $personnages;
 
     /**
-     * @ORM\OneToOne(targetEntity=Personnage::class, cascade={"persist", "remove"})
+     * @ORM\OneToOne(targetEntity=Personnage::class, cascade={"persist"})
      */
     private $chef;
 

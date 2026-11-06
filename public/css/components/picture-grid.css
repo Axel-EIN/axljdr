@@ -235,39 +235,6 @@
     }
   }
 
-  .hover-tooltip {
-    display: inline-flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    height: 24px;
-    bottom: 0;
-    left: 0;
-    padding: 0.25rem;
-    border-radius: 0rem 0rem 0.5rem 0.5rem;
-    opacity: 0;
-    transform: translateY(16px);
-    transition:
-      opacity var(--duration) var(--ease),
-      transform var(--duration) var(--ease),
-      visibility var(--duration)
-    ;
-
-    .label {
-      min-width: 0;
-      margin-top: 0;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      font-size: var(--fontsize-mini);
-    }
-  }
-
-  &:hover .hover-tooltip {
-    visibility: visible;
-    opacity: 1;
-    transform: translateY(0);
-  }
-
   &.rule .label { font-size: var(--fontsize-medium); }
 
   &.emblem,
@@ -311,40 +278,6 @@
 
   &.restricted {
     &:hover .icon-lock { filter: grayscale(1) opacity(0); }
-
-    .access-tooltip {
-      position: absolute;
-      z-index: 100;
-      top: 100%;
-      left: var(--tip-left, 50%);
-      right: var(--tip-right, auto);
-      width: max-content;
-      max-width: 12rem;
-      margin-top: 0.25rem;
-      padding: 0.25rem 0.5rem;
-      border-radius: 0.5rem;
-      background-color: var(--color-primarydarken);
-      color: var(--color-white);
-      font-size: var(--fontsize-mini);
-      line-height: var(--leading-base);
-      text-align: center;
-      white-space: normal;
-      visibility: hidden;
-      opacity: 0;
-      transform: translateX(var(--tip-shift, -50%)) scale(0);
-      transform-origin: top var(--tip-origin, center);
-      pointer-events: none;
-      transition:
-        opacity var(--duration) var(--ease),
-        transform var(--duration) var(--ease),
-        visibility var(--duration);
-    }
-
-    &:hover .access-tooltip {
-      visibility: visible;
-      opacity: 1;
-      transform: translateX(var(--tip-shift, -50%)) scale(1);
-    }
 
     &.start-desktop {
       @media (min-width: 992px) {

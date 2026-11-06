@@ -38,7 +38,7 @@ class FichePersonnage
     private $id;
 
     /**
-     * @ORM\OneToOne(targetEntity=Personnage::class, inversedBy="fichePersonnage", cascade={"persist", "remove"})
+     * @ORM\OneToOne(targetEntity=Personnage::class, inversedBy="fichePersonnage", cascade={"persist"})
      * @ORM\JoinColumn(nullable=false)
      */
     private $personnage;

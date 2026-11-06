@@ -1,9 +1,12 @@
+{% set state = element_state(item) %}
+
 <div id="{{ entity }}{{ item.id }}" class="col-12 p-0 m-0 relative {{ classes|default('') }}">
     <div class="card item locked">
         <div class="item-line">
-            {{ include('parts/badge-access.html.twig', {state: 'locked', variant: 'inline'}) }}
+            {{ include('parts/badge-access.html.twig', {state: state, variant: 'inline'}) }}
             <strong class="item-name ml-2">{{ item.nom }}</strong>
-            <span class="ml-auto text-small">À débloquer</span>
+            <span class="ml-auto text-small">{{ state == 'locked' ? 'À débloquer' : 'À découvrir' }}</span>
         </div>
+        {{ include('parts/access-hint.html.twig') }}
     </div>
 </div>

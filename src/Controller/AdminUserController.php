@@ -3,10 +3,13 @@
 namespace App\Controller;
 
 use App\Service\FileHandler;
+use App\Service\DeletionGuard;
 use App\Entity\Utilisateur;
 use App\Form\AdminUserType;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\UtilisateurRepository;
+use Symfony\Component\Form\FormError;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -41,12 +44,7 @@ class AdminUserController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
 
-            $user->setPassword(
-                $userPasswordHasherInterface->hashPassword(
-                    $user,
-                    $form->get('password')->getData()
-                )
-            );
+            $this->applyPassword($user, $form, $userPasswordHasherInterface);
 
             $newAvatar = $form->get('avatar')->getData();
             if (!empty($newAvatar)) {
@@ -75,23 +73,16 @@ class AdminUserController extends AbstractController
      */
     public function editUser(Request $request, Utilisateur $user, FileHandler $fileHandler, UserPasswordHasherInterface $userPasswordHasherInterface): Response {
 
-        $previousPassword = $user->getPassword();
-        $user->setPassword('******');
         $form = $this->createForm(AdminUserType::class, $user);
         $form->handleRequest($request);
 
-        if($form->isSubmitted() && $form->isValid()) {
+        if ($form->isSubmitted() && $this->isSelf($user) && !in_array('ROLE_ADMIN', $user->getRoles(), true)) {
+            $form->get('roles')->addError(new FormError('Vous ne pouvez pas retirer votre propre rôle Administrateur.'));
+        }
 
-            if ($form->get('password')->getData() != '******') {
-                $user->setPassword(
-                    $userPasswordHasherInterface->hashPassword(
-                        $user,
-                        $form->get('password')->getData()
-                    )
-                );
-            } else {
-                $user->setPassword($previousPassword);
-            }
+        if ($form->isSubmitted() && $form->isValid()) {
+
+            $this->applyPassword($user, $form, $userPasswordHasherInterface);
 
             $newAvatar = $form->get('avatar')->getData();
             if (!empty($newAvatar)) {
@@ -120,8 +111,20 @@ class AdminUserController extends AbstractController
      * @Route("/admin/user/{id}/delete", name="admin_user_delete", methods={"POST"})
      * @IsGranted("ROLE_ADMIN")
      */
-    public function deleteUser(Request $request, Utilisateur $user, FileHandler $fileHandler): Response {
+    public function deleteUser(Request $request, Utilisateur $user, FileHandler $fileHandler, DeletionGuard $deletionGuard): Response {
         if ($this->isCsrfTokenValid('delete' . $user->getId(), $request->request->get('_csrf_token'))) {
+
+            if ($this->isSelf($user)) {
+                $this->addFlash('danger', 'Vous ne pouvez pas supprimer votre propre compte.');
+                return $this->redirectToRoute('admin_user');
+            }
+
+            $refusal = $deletionGuard->refusal($user, $user->getPseudo());
+
+            if ($refusal !== null) {
+                $this->addFlash('danger', $refusal);
+                return $this->redirectToRoute('admin_user');
+            }
 
             $entityManager = $this->getDoctrine()->getManager();
 
@@ -133,5 +136,21 @@ class AdminUserController extends AbstractController
         }
 
         return $this->redirectToRoute('admin_user');
+    }
+
+    private function isSelf(Utilisateur $user): bool
+    {
+        $current = $this->getUser();
+
+        return $current instanceof Utilisateur && $current->getId() === $user->getId();
+    }
+
+    private function applyPassword(Utilisateur $user, FormInterface $form, UserPasswordHasherInterface $passwordHasher): void
+    {
+        $plainPassword = $form->get('plainPassword')->getData();
+
+        if (!empty($plainPassword)) {
+            $user->setPassword($passwordHasher->hashPassword($user, $plainPassword));
+        }
     }
 }

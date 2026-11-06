@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Clan;
 use App\Service\FileHandler;
+use App\Service\DeletionGuard;
 use App\Form\AdminClanType;
 use App\Repository\ClanRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -163,12 +164,14 @@ class AdminClanController extends AbstractController
      * @Route("/admin/clan/{id}/delete", name="admin_clan_delete", methods={"POST"})
      * @IsGranted("ROLE_MJ")
      */
-    public function deleteClan(Request $request, Clan $clan, FileHandler $fileHandler, Unlocker $unlocker): Response {
+    public function deleteClan(Request $request, Clan $clan, FileHandler $fileHandler, Unlocker $unlocker, DeletionGuard $deletionGuard): Response {
 
         if ($this->isCsrfTokenValid('delete' . $clan->getId(), $request->request->get('_csrf_token'))) {
 
-            if (!$clan->getEcoles()->isEmpty()) {
-                $this->addFlash('warning', 'Veuillez supprimer les écoles enfants au prélable !');
+            $refusal = $deletionGuard->refusal($clan, $clan->getNom());
+
+            if ($refusal !== null) {
+                $this->addFlash('danger', $refusal);
                 return $this->redirectToRoute('admin_clan');
             }
 

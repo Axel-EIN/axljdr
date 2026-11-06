@@ -6,6 +6,7 @@
 parameters:
     assets_directory: '%kernel.project_dir%/public/assets'
     image_directory: '%kernel.project_dir%/public/assets/img'
+    pdf_directory: '%kernel.project_dir%/storage/pdf'
     factions:
         - { nom: 'Imperial', titre: 'Familles Impériales' }
         - { nom: 'Crabe', titre: 'Clan du Crabe' }

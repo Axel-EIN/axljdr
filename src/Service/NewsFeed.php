@@ -5,6 +5,7 @@ namespace App\Service;
 use App\Entity\Access;
 use App\Entity\Episode;
 use App\Entity\Personnage;
+use App\Repository\EpisodeRepository;
 use App\Repository\ParticipationRepository;
 use App\Repository\PersonnageRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -15,6 +16,7 @@ class NewsFeed
     private $entityManager;
     private $currentPlayer;
     private $visibility;
+    private $episodeRepository;
     private $participationRepository;
     private $characterRepository;
     private $xpRanker;
@@ -23,6 +25,7 @@ class NewsFeed
         EntityManagerInterface $entityManager,
         CurrentPlayer $currentPlayer,
         Visibility $visibility,
+        EpisodeRepository $episodeRepository,
         ParticipationRepository $participationRepository,
         PersonnageRepository $characterRepository,
         XpRanker $xpRanker
@@ -30,6 +33,7 @@ class NewsFeed
         $this->entityManager = $entityManager;
         $this->currentPlayer = $currentPlayer;
         $this->visibility = $visibility;
+        $this->episodeRepository = $episodeRepository;
         $this->participationRepository = $participationRepository;
         $this->characterRepository = $characterRepository;
         $this->xpRanker = $xpRanker;
@@ -63,13 +67,7 @@ class NewsFeed
 
     public function lastEpisodes(int $limit): array
     {
-        return $this->published(Episode::class, true)
-            ->andWhere('e.access = :access')
-            ->setParameter('access', Access::PUBLIC)
-            ->orderBy('e.numeroSaison', 'DESC')
-            ->setMaxResults($limit)
-            ->getQuery()
-            ->getResult();
+        return $this->episodeRepository->findLastPublished($limit);
     }
 
     public function episodeLocations(Episode $episode): array
@@ -131,12 +129,21 @@ class NewsFeed
             $filter .= ' AND e.' . $field . (is_array($value) ? ' IN (:' . $field . ')' : ' = :' . $field);
         }
 
-        return $this->latestPublished($class, $limit, 'e.access = :access' . $filter, ['access' => Access::PUBLIC] + $criteria);
+        $elements = array_merge(
+            $this->latestPublished($class, 'e.access = :access' . $filter, ['access' => Access::PUBLIC] + $criteria, $limit),
+            $this->visibility->listedOnly($this->latestPublished(
+                $class,
+                'e.access <> :access AND e.publishedAt >= :freshSince' . $filter,
+                ['access' => Access::PUBLIC, 'freshSince' => $this->visibility->freshSince()] + $criteria
+            ))
+        );
+
+        return array_slice($this->newestFirst($elements), 0, $limit);
     }
 
-    private function latestPublished(string $class, int $limit, string $condition, array $parameters): array
+    private function latestPublished(string $class, string $condition, array $parameters, ?int $limit = null): array
     {
-        $qb = $this->published($class, false)
+        $qb = $this->published($class)
             ->andWhere($condition)
             ->orderBy('e.publishedAt', 'DESC')
             ->addOrderBy('e.id', 'DESC')
@@ -158,11 +165,16 @@ class NewsFeed
             }
         }
 
+        return array_slice($this->newestFirst($elements), 0, $limit);
+    }
+
+    private function newestFirst(array $elements): array
+    {
         usort($elements, function ($a, $b) {
             return [$b->getPublishedAt(), $b->getId()] <=> [$a->getPublishedAt(), $a->getId()];
         });
 
-        return array_slice($elements, 0, $limit);
+        return $elements;
     }
 
     public function lastDiscovered(string $key, int $limit): array
@@ -201,12 +213,12 @@ class NewsFeed
         return $this->currentPlayer->characterIds();
     }
 
-    private function published(string $class, bool $includeUndated): QueryBuilder
+    private function published(string $class): QueryBuilder
     {
         $qb = $this->entityManager->createQueryBuilder()
             ->select('e')
             ->from($class, 'e')
-            ->andWhere($includeUndated ? 'e.publishedAt IS NULL OR e.publishedAt <= :now' : 'e.publishedAt <= :now')
+            ->andWhere('e.publishedAt <= :now')
             ->setParameter('now', new \DateTime());
 
         return $this->joinSheet($qb, $class);

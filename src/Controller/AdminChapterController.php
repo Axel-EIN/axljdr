@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Service\TableFilter;
+use App\Service\DeletionGuard;
 use App\Entity\Chapitre;
 use App\Service\FileHandler;
 use App\Service\Orderer;
@@ -156,14 +157,16 @@ class AdminChapterController extends AbstractController
      * @Route("/admin/chapter/{id}/delete", name="admin_chapter_delete", methods={"POST"})
      * @IsGranted("ROLE_MJ")
      */
-    public function deleteChapter(Request $request, Chapitre $chapter, Orderer $orderer, FileHandler $fileHandler, ChapitreRepository $chapterRepository): Response {
+    public function deleteChapter(Request $request, Chapitre $chapter, Orderer $orderer, FileHandler $fileHandler, ChapitreRepository $chapterRepository, DeletionGuard $deletionGuard): Response {
 
         $parentSeason = $chapter->getSaisonParent();
 
         if ($this->isCsrfTokenValid('delete' . $chapter->getId(), $request->request->get('_csrf_token'))) {
 
-            if (!$chapter->getEpisodes()->isEmpty()) {
-                $this->addFlash('warning', 'Veuillez supprimer les épisodes enfants au prélable !');
+            $refusal = $deletionGuard->refusal($chapter, $chapter->getTitre());
+
+            if ($refusal !== null) {
+                $this->addFlash('danger', $refusal);
                 return $this->redirectToRoute('admin_chapter');
             }
 

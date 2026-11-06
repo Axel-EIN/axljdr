@@ -1,0 +1,5 @@
+{% if state == 'locked' %}
+  <img class="icon-lock {{ classes|default('') }}" src="{{ asset(LOCKED_ICO) }}" alt="Cadenas" />
+{% else %}
+  <i class="icon-lock in-glyph {{ classes|default('') }} fas {{ ACCESS_MARKS[state][0] }}" aria-hidden="true"></i>
+{% endif %}

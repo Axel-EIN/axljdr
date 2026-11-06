@@ -31,7 +31,7 @@ class Uploader extends AbstractController
         $this->targetDirectory = $targetDirectory;
     }
 
-    public function upload(UploadedFile $uploadedFile, $prefix, $category, ?string $previousFile = null): ?string
+    public function upload(UploadedFile $uploadedFile, $prefix, $category, ?string $previousFile = null, ?string $root = null): ?string
     {
         $mimeType = $this->detectRealMimeType($uploadedFile);
         if (!in_array($mimeType, self::ALLOWED_MIME_TYPES, true)) {
@@ -63,7 +63,7 @@ class Uploader extends AbstractController
 
         $base = $prefix;
         $suffix = 2;
-        while ($this->isNameTaken($category, $prefix, $previousFile)) {
+        while ($this->isNameTaken($category, $prefix, $previousFile, $root)) {
             $prefix = $base . '-' . $suffix++;
         }
 
@@ -71,7 +71,7 @@ class Uploader extends AbstractController
 
         try
         {
-            $uploadedFile->move($this->getTargetDirectory($category), $newFilename);
+            $uploadedFile->move($this->getTargetDirectory($category, $root), $newFilename);
         }
         catch (FileException $e)
         {
@@ -82,13 +82,13 @@ class Uploader extends AbstractController
         return $newFilename;
     }
 
-    private function isNameTaken(string $category, string $name, ?string $previousFile): bool
+    private function isNameTaken(string $category, string $name, ?string $previousFile, ?string $root): bool
     {
         if ($previousFile !== null && pathinfo($previousFile, PATHINFO_FILENAME) === $name) {
             return false;
         }
 
-        return !empty(glob($this->getTargetDirectory($category) . '/' . $name . '.*'));
+        return !empty(glob($this->getTargetDirectory($category, $root) . '/' . $name . '.*'));
     }
 
     private function detectRealMimeType(UploadedFile $file): string
@@ -110,12 +110,12 @@ class Uploader extends AbstractController
         return $file->guessExtension();
     }
 
-    public function getTargetDirectory($category)
+    public function getTargetDirectory($category, ?string $root = null)
     {
         if (!preg_match('/^[a-zA-Z0-9\-]+$/', $category)) {
             throw new \InvalidArgumentException('Catégorie de fichier invalide');
         }
 
-        return $this->targetDirectory . '/' . $category;
+        return ($root ?? $this->targetDirectory) . '/' . $category;
     }
 }

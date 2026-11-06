@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Classe;
 use App\Service\FileHandler;
+use App\Service\DeletionGuard;
 use App\Form\AdminClassType;
 use App\Repository\ClasseRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -136,12 +137,14 @@ class AdminClassController extends AbstractController
      * @Route("/admin/class/{id}/delete", name="admin_class_delete", methods={"POST"})
      * @IsGranted("ROLE_MJ")
      */
-    public function deleteClass(Request $request, Classe $class, FileHandler $fileHandler): Response {
+    public function deleteClass(Request $request, Classe $class, FileHandler $fileHandler, DeletionGuard $deletionGuard): Response {
 
         if ($this->isCsrfTokenValid('delete' . $class->getId(), $request->request->get('_csrf_token'))) {
 
-            if (!$class->getEcoles()->isEmpty()) {
-                $this->addFlash('warning', 'Veuillez supprimer les écoles enfants au prélable !');
+            $refusal = $deletionGuard->refusal($class, $class->getNom());
+
+            if ($refusal !== null) {
+                $this->addFlash('danger', $refusal);
                 return $this->redirectToRoute('admin_class');
             }
 

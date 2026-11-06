@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Service\TableFilter;
+use App\Service\DeletionGuard;
 use App\Entity\Famille;
 use App\Service\FileHandler;
 use App\Form\AdminFamilyType;
@@ -140,9 +141,16 @@ class AdminFamilyController extends AbstractController
      * @Route("/admin/family/{id}/delete", name="admin_family_delete", methods={"POST"})
      * @IsGranted("ROLE_MJ")
      */
-    public function deleteFamily(Request $request, Famille $family, FileHandler $fileHandler): Response {
+    public function deleteFamily(Request $request, Famille $family, FileHandler $fileHandler, DeletionGuard $deletionGuard): Response {
 
         if ($this->isCsrfTokenValid('delete' . $family->getId(), $request->request->get('_csrf_token'))) {
+
+            $refusal = $deletionGuard->refusal($family, $family->getNom());
+
+            if ($refusal !== null) {
+                $this->addFlash('danger', $refusal);
+                return $this->redirectToRoute('admin_family');
+            }
 
             $entityManager = $this->getDoctrine()->getManager();
 

@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Service\TableFilter;
+use App\Service\DeletionGuard;
 use App\Entity\Episode;
 use App\Service\FileHandler;
 use App\Service\Orderer;
@@ -167,13 +168,15 @@ class AdminEpisodeController extends AbstractController
      * @Route("/admin/episode/{id}/delete", name="admin_episode_delete", methods={"POST"})
      * @IsGranted("ROLE_MJ")
      */
-    public function deleteEpisode(Request $request, Episode $episode, Orderer $orderer, EpisodeRepository $episodeRepository, FileHandler $fileHandler, Unlocker $unlocker): Response {
+    public function deleteEpisode(Request $request, Episode $episode, Orderer $orderer, EpisodeRepository $episodeRepository, FileHandler $fileHandler, Unlocker $unlocker, DeletionGuard $deletionGuard): Response {
         $parentChapter = $episode->getChapitreParent();
 
         if ($this->isCsrfTokenValid('delete' . $episode->getId(), $request->request->get('_csrf_token'))) {
 
-            if (!$episode->getScenes()->isEmpty()) {
-                $this->addFlash('warning', 'Veuillez supprimer les scènes enfants au prélable !');
+            $refusal = $deletionGuard->refusal($episode, $episode->getTitre());
+
+            if ($refusal !== null) {
+                $this->addFlash('danger', $refusal);
                 return $this->redirectToRoute('admin_episode');
             }
 

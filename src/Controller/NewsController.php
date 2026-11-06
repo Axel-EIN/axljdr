@@ -77,15 +77,12 @@ class NewsController extends AbstractController
         ];
 
         $groups = [];
-        $find = function (array $keys, int $max, array $criteria = []) use ($newsFeed, $visibility) {
-            return array_slice($visibility->listedOnly($newsFeed->latestAmong($keys, $max, $criteria)), 0, $max);
-        };
 
         foreach (self::GROUPS as $group) {
             if (isset($group['sections'])) {
                 $groupSections = [];
                 foreach ($group['sections'] as $section) {
-                    $elements = $find($section['keys'], $section['max'], $section['criteria'] ?? []);
+                    $elements = $newsFeed->latestAmong($section['keys'], $section['max'], $section['criteria'] ?? []);
 
                     if (!empty($elements)) {
                         $groupSections[] = $section + ['elements' => $elements];
@@ -101,7 +98,7 @@ class NewsController extends AbstractController
 
             $portrait = ($group['variant'] ?? null) === 'portrait';
             $max = $portrait ? self::PORTRAIT_THUMBNAILS : self::THUMBNAILS;
-            $elements = $find($group['keys'], $max, $group['criteria'] ?? []);
+            $elements = $newsFeed->latestAmong($group['keys'], $max, $group['criteria'] ?? []);
 
             if (!empty($elements)) {
                 $groups[] = $group + [

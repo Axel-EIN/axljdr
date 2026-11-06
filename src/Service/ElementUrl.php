@@ -9,6 +9,8 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class ElementUrl
 {
+    public const PDF_KEYS = ['rule', 'lore', 'library'];
+
     private $router;
     private $libraryRepository;
     private $libraries;
@@ -42,6 +44,17 @@ class ElementUrl
         }
 
         return $this->inLibrary($element);
+    }
+
+    public function pdf($element): ?string
+    {
+        $key = EntityRegistry::keyOf($element);
+
+        if (!in_array($key, self::PDF_KEYS, true) || empty($element->getPdf())) {
+            return null;
+        }
+
+        return $this->router->generate('pdf', ['key' => $key, 'id' => $element->getId()]);
     }
 
     public function inLibrary($element): ?string

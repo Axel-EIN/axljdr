@@ -22,12 +22,11 @@ class FileHandler extends AbstractController
 
     public function handle($file, $previousFile, $prefix, $folder, ?string $preset = null)
     {
-        if (!preg_match('/^[a-zA-Z0-9\-]+$/', $folder)) {
-            throw new \InvalidArgumentException('Nom de dossier invalide');
-        }
+        $this->checkFolder($folder);
+        $root = $this->getParameter('image_directory');
 
         if (empty($file)) {
-            $this->delete($previousFile, $folder);
+            $this->delete($previousFile, $folder, $root);
 
             return null;
         }
@@ -39,11 +38,11 @@ class FileHandler extends AbstractController
         }
 
         if (basename((string) $previousFile) !== $newFilename) {
-            $this->delete($previousFile, $folder);
+            $this->delete($previousFile, $folder, $root);
         }
 
         if ($preset !== null && $this->imageNormalizer->hasPreset($preset)) {
-            $absolutePath = $this->getParameter('image_directory') . '/' . $folder . '/' . $newFilename;
+            $absolutePath = $root . '/' . $folder . '/' . $newFilename;
             $normalizedPath = $this->imageNormalizer->normalize($absolutePath, $preset);
 
             if ($normalizedPath !== null) {
@@ -60,13 +59,44 @@ class FileHandler extends AbstractController
         return $newPath;
     }
 
-    private function delete(?string $previousFile, string $folder): void
+    public function handlePdf($file, $previousFile, $prefix, $folder): ?string
+    {
+        $this->checkFolder($folder);
+        $root = $this->getParameter('pdf_directory');
+
+        if (empty($file)) {
+            $this->delete($previousFile, $folder, $root);
+
+            return null;
+        }
+
+        $newFilename = $this->uploader->upload($file, $prefix, $folder, $previousFile, $root);
+
+        if ($newFilename === null) {
+            return $previousFile;
+        }
+
+        if (basename((string) $previousFile) !== $newFilename) {
+            $this->delete($previousFile, $folder, $root);
+        }
+
+        return $folder . '/' . $newFilename;
+    }
+
+    private function checkFolder(string $folder): void
+    {
+        if (!preg_match('/^[a-zA-Z0-9\-]+$/', $folder)) {
+            throw new \InvalidArgumentException('Nom de dossier invalide');
+        }
+    }
+
+    private function delete(?string $previousFile, string $folder, string $root): void
     {
         if (empty($previousFile)) {
             return;
         }
 
-        $path = $this->getParameter('image_directory') . '/' . $folder . '/' . basename($previousFile);
+        $path = $root . '/' . $folder . '/' . basename($previousFile);
 
         if (!is_dir($path)) {
             (new Filesystem())->remove(array_merge([$path], $this->imageNormalizer->reducedPaths($path)));

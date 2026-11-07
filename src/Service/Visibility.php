@@ -25,15 +25,19 @@ class Visibility
         self::UNLOCKED => 1,
         self::DISCOVERED => 1,
         self::COMMON_DISCOVERED => 1,
-        self::LOCKED => 2,
-        self::HIDDEN => 3,
-        self::SECRET => 3,
-        self::COMMON => 3,
+        self::LOCKED => 3,
+        self::HIDDEN => 4,
+        self::SECRET => 4,
+        self::COMMON => 4,
     ];
 
+    private const CHAPTER_REVEALED_RANK = 2;
+
+    private const CHAPTER_REVEALED = [self::SECRET, self::COMMON];
+
     private const INACTIVE_RANKS = [
-        Status::MISSING => 4,
-        Status::DEAD => 5,
+        Status::MISSING => 5,
+        Status::DEAD => 6,
     ];
 
     private const READABLE = [self::PUBLIC, self::UNLOCKED, self::DISCOVERED, self::COMMON_DISCOVERED];
@@ -70,12 +74,8 @@ class Visibility
     {
         $access = $this->accessOf($element);
 
-        if ($this->isOwned($element)) {
+        if ($this->isOwned($element) || $this->isUnlocked($element)) {
             return Access::needsUnlock($access) ? self::REVEALED[$access] : self::PUBLIC;
-        }
-
-        if (Access::needsUnlock($access) && $this->isUnlocked($element)) {
-            return self::REVEALED[$access];
         }
 
         if ($this->currentPlayer->seesAll()) {
@@ -86,7 +86,7 @@ class Visibility
             return $this->isPublished($element) ? self::PUBLIC : self::HIDDEN;
         }
 
-        if (($revealSession || $this->currentChapter->isRevealed($element)) && !$this->isIndividualSecret($element)) {
+        if (($revealSession || $this->currentChapter->isRevealed($element)) && !$this->isIndividuallyHidden($element)) {
             return self::LEVELS[$access];
         }
 
@@ -129,7 +129,13 @@ class Visibility
             return self::INACTIVE_RANKS[$element->getStatus()];
         }
 
-        return self::RANKS[$this->state($element)];
+        $state = $this->state($element);
+
+        if (!$this->currentPlayer->seesAll() && in_array($state, self::CHAPTER_REVEALED, true)) {
+            return self::CHAPTER_REVEALED_RANK;
+        }
+
+        return self::RANKS[$state];
     }
 
     public function isListed($element, bool $revealSession = false): bool
@@ -194,9 +200,9 @@ class Visibility
         return (int) $element->getAccess();
     }
 
-    private function isIndividualSecret($element): bool
+    private function isIndividuallyHidden($element): bool
     {
-        return $this->accessOf($element) === Access::SECRET && $element->isManualUnlock();
+        return Access::isHidden($this->accessOf($element)) && $element->isManualUnlock();
     }
 
     private function isPublished($element): bool

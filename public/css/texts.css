@@ -80,8 +80,24 @@ p.text-medium {
   line-height: var(--leading-18);
 }
 
-p > mark {
-  color: unset;
+mark {
+  padding: 0.25rem;
+  border-radius: 0.5rem;
+  background: none;
+  color: inherit;
+  font-weight: bold;
+  color: var(--color-primarydarker);
+  background-color: rgb(from var(--color-primarydark) r g b / 7%);
+
+  &::before {
+    content: "";
+    display: inline-block;
+    width: 1.1em;
+    height: 1.1em;
+    margin-right: 0.3em;
+    vertical-align: -0.2em;
+    background: url('/assets/ui/stamp.png') center / contain no-repeat;
+  }
 }
 
 /* ----- DESCRIPTION ----- */
@@ -121,8 +137,7 @@ label.required::after {
 }
 
 strong, .extrabold {
-  font-weight: 900 !important;
-  text-shadow: 0.5px 0 0 currentColor;
+  font-weight: 600 !important;
 }
 
 .text-shadow {

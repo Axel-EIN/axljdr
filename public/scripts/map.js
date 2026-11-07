@@ -17,7 +17,6 @@
   const MIN_SCALE = ZOOM_LEVELS[0];
   const MAX_SCALE = ZOOM_LEVELS[ZOOM_LEVELS.length - 1];
   const NORMAL_IMAGE_SCALE = 0.5;
-  const HD_SCALE = NORMAL_IMAGE_SCALE;
   const FOCUS_SCALE = 1;
   const ZOOMED_OUT_SCALE = 0.45;
   const MARKER_MIN_SCALE = 0.5;
@@ -89,7 +88,7 @@
   }
 
   function imageSource() {
-    return mapImage.dataset[(territories ? 'frontier' : 'clean') + (scale > HD_SCALE ? 'Hd' : '')];
+    return mapImage.dataset[(territories ? 'frontier' : 'clean') + (scale > NORMAL_IMAGE_SCALE ? 'Hd' : '')];
   }
 
   function updateImage() {

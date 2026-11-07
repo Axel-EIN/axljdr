@@ -33,7 +33,7 @@
 
     {{ include('/parts/picture-grid.html.twig', {
         variant: 'rule',
-        title: 'Autres Règles ' ~ (rule.base ? 'de Bases' : 'Annexes'),
+        title: 'Autres Règles ' ~ (rule.base ? 'de Base' : 'Annexes'),
         items: other_rules, route: 'rules_rule',
         na_image: NA_RULE,
     }) }}

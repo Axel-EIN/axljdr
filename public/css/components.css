@@ -131,6 +131,25 @@
             opacity: 1;
             transform: translateY(0);
         }
+
+        @container portrait (max-width: 6rem) {
+            top: calc(100% + 0.25rem);
+            bottom: auto;
+            left: 50%;
+            width: max-content;
+            max-width: 8rem;
+            height: auto;
+            border-radius: 0.5rem;
+            line-height: var(--leading-base);
+            transform: translate(-50%, -0.5rem);
+
+            .label {
+                overflow: visible;
+                white-space: normal;
+            }
+
+            :hover > & { transform: translate(-50%, 0); }
+        }
     }
 }
 

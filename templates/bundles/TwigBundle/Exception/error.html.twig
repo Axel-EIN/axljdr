@@ -1,0 +1,27 @@
+{% extends 'other.html.twig' %}
+
+{% set page_title = {404: 'Page introuvable', 403: 'Accès refusé'}[status_code] ?? 'Erreur' %}
+
+{% block content %}
+  <p class="card-description waiting-text leading-15">
+    {% if status_code == 404 %}
+      Cette page n'existe pas, ou n'est pas accessible depuis votre compte.
+    {% elseif status_code == 403 %}
+      Vous n'avez pas accès à cette page.
+    {% else %}
+      Une erreur est survenue. Réessayez dans un instant.
+    {% endif %}
+  </p>
+
+  <div class="text-center">
+    {% if status_code == 403 and not app.user %}
+      <a class="btn-primary-style btn-medium" href="{{ path('app_login') }}">
+        <i class="fas fa-sign-in-alt" aria-hidden="true"></i>&nbsp;&nbsp;Se connecter
+      </a>
+    {% else %}
+      <a class="btn-primary-style btn-medium" href="{{ path('news') }}">
+        <i class="fas fa-home" aria-hidden="true"></i>&nbsp;&nbsp;Retour à l'accueil
+      </a>
+    {% endif %}
+  </div>
+{% endblock %}

@@ -1,12 +1,31 @@
 <?php
 namespace App\Service;
 
+use App\Entity\Development;
 use App\Entity\Lieu;
 use App\Entity\Personnage;
 use App\Entity\Scene;
+use App\Repository\DevelopmentRepository;
 
 class HistoryRanker
 {
+    private Visibility $visibility;
+    private DevelopmentRepository $developmentRepository;
+
+    public function __construct(Visibility $visibility, DevelopmentRepository $developmentRepository)
+    {
+        $this->visibility = $visibility;
+        $this->developmentRepository = $developmentRepository;
+    }
+
+    public function developmentsFor(Personnage $character): array
+    {
+        return array_values(array_filter(
+            $this->developmentRepository->findByPersonnage($character),
+            fn (Development $development) => $this->visibility->isReadable($development->getScene()->getEpisodeParent())
+        ));
+    }
+
     public function forLocation(Lieu $location): array
     {
         $scenes = $location->getScenes()->toArray();
@@ -64,6 +83,11 @@ class HistoryRanker
         $history = [];
         foreach ($lines as $line) {
             $episode = $line['scene']->getEpisodeParent();
+
+            if (!$this->visibility->isReadable($episode)) {
+                continue;
+            }
+
             $id = $episode->getId();
             $history[$id]['episode'] = $episode;
             $history[$id]['xp'] = ($history[$id]['xp'] ?? 0) + $line['xp'];

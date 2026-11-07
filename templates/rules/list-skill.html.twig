@@ -84,16 +84,16 @@
                         Aucune
                     {% endif %}
                     <p class="p-2 m-0 item-description">
-                        {{ item.description|raw|nl2br }}
+                        {{ item.description|text }}
                     </p>
                     <div>
                         <span class="label-amerigo">Capacités de Maîtrise</span>
                         <ul>
                           {% if item.capacite is defined and item.capacite is not empty %}
-                            <li><strong>RANG 3</strong> : {{ item.capacite|raw|nl2br }}</li>
+                            <li><strong>RANG 3</strong> : {{ item.capacite|text }}</li>
                           {% endif %}
                           {% if item.capacite2 is defined and item.capacite2 is not empty %}
-                            <li><strong>RANG 6</strong> : {{ item.capacite2|raw|nl2br }}</li>
+                            <li><strong>RANG 6</strong> : {{ item.capacite2|text }}</li>
                           {% endif %}
                         </ul>
                     </div>

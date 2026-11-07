@@ -28,7 +28,7 @@
     </div>
 
     {% if element.description %}
-      <p class="map-panel-description">{{ element.description|striptags|raw }}</p>
+      <p class="map-panel-description">{{ element.description|text|striptags|raw }}</p>
     {% endif %}
   {% endif %}
 

@@ -17,7 +17,7 @@ use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
-use Symfony\Component\Validator\Constraints\File;
+use App\Validator\ImageFile;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
 class AdminUserType extends AbstractType
@@ -58,7 +58,7 @@ class AdminUserType extends AbstractType
             ])
             ->add('avatar', FileType::class, [
                 'mapped' => false, 'data_class' => null, 'required' => false,
-                'constraints' => [new File(['maxSize' => '5M'])],
+                'constraints' => [new ImageFile()],
             ])
         ;
 

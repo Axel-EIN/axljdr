@@ -145,8 +145,12 @@
 
         mark {
             padding: 0;
-            background-color: var(--color-primary40);
+            background: var(--color-primary40);
             color: inherit;
+
+            &::before {
+                content: none;
+            }
         }
     }
 }

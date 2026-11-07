@@ -17,6 +17,8 @@ use App\Service\Unlocker;
 
 class AdminSkillController extends AbstractController
 {
+    use CsrfTokenTrait;
+
     private const TABLE_FILTERS = [
         'categorie:Catégorie',
     ];
@@ -84,10 +86,8 @@ class AdminSkillController extends AbstractController
         
 
         return $this->render('back_office/create.html.twig', [
-            'type' => 'create',
             'entity' => 'skill',
             'label' => 'Compétence',
-            'gender' => 'F',
             'article' => 'une',
             'form' => $form->createView()
         ]);
@@ -118,11 +118,9 @@ class AdminSkillController extends AbstractController
         }
 
         return $this->renderForm('back_office/edit.html.twig', [
-            'type' => 'edit',
             'skill' => $skill,
             'entity' => 'skill',
             'label' => 'Compétence',
-            'gender' => 'F',
             'article' => 'une',
             'form' => $form,
         ]);
@@ -134,7 +132,7 @@ class AdminSkillController extends AbstractController
      */
     public function deleteSkill(Request $request, Competence $skill, Unlocker $unlocker, DeletionGuard $deletionGuard): Response {
 
-        if ($this->isCsrfTokenValid('delete' . $skill->getId(), $request->request->get('_csrf_token'))) {
+        if ($this->validToken($request, 'delete' . $skill->getId())) {
 
             $refusal = $deletionGuard->refusal($skill, $skill->getNom());
 

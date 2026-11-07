@@ -20,6 +20,8 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
  */
 class AccountController extends AbstractController
 {
+    use CsrfTokenTrait;
+
     /**
      * @Route("/account", name="account")
      */
@@ -68,7 +70,7 @@ class AccountController extends AbstractController
     {
         $user = $this->getUser();
 
-        if ($this->isCsrfTokenValid('main-character', $request->request->get('_csrf_token'))) {
+        if ($this->validToken($request, 'main-character')) {
 
             $chosen = $user->getPersonnages()->filter(
                 fn (Personnage $character) => $character->getId() === $request->request->getInt('character')
@@ -90,7 +92,7 @@ class AccountController extends AbstractController
     {
         $user = $this->getUser();
 
-        if ($user->isGameMaster() && $this->isCsrfTokenValid('navigation-mode', $request->request->get('_csrf_token'))) {
+        if ($user->isGameMaster() && $this->validToken($request, 'navigation-mode')) {
 
             $user->setPlayerMode($request->request->get('mode') === Utilisateur::MODE_PLAYER);
             $this->getDoctrine()->getManager()->flush();

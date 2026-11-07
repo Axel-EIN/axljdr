@@ -3,51 +3,100 @@
 namespace App\Controller;
 
 use App\Form\ContactType;
+use Psr\Cache\CacheItemPoolInterface;
 use Symfony\Component\Mime\Email;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 
 class ContactController extends AbstractController
 {
+    private const SHOWN_AT = 'contact_shown_at';
+    private const MIN_DELAY = 3;
+    private const MAX_PER_HOUR = 3;
+
     /**
      * @Route("/contact", name="contact")
      */
-    public function contact(Request $request, MailerInterface $mailer): Response
+    public function contact(Request $request, MailerInterface $mailer, CacheItemPoolInterface $cache): Response
     {
         $form = $this->createForm(ContactType::class);
         $form->handleRequest($request);
+        $session = $request->getSession();
+        $shownAt = $session->get(self::SHOWN_AT);
 
-        $notice = '';
+        if (!$form->isSubmitted()) {
+            $session->set(self::SHOWN_AT, time());
+        }
 
         if ($form->isSubmitted() && $form->isValid()) {
 
-            $data = $form->getData();
+            if (!empty($form->get('website')->getData()) || $shownAt === null || time() - $shownAt < self::MIN_DELAY) {
+                return $this->sent($request);
+            }
 
-            $email = new Email;
-            $email
-                ->from($data['email'])
-                ->to('axel.ein@gmail.com')
-                ->subject($data['objet'])
-                ->text(
-                    'On vous a envoyé un message. Voici ce qu\'il disait :'
-                        . PHP_EOL . PHP_EOL .
-                        $data['message']
-                        . PHP_EOL . PHP_EOL .
-                        'Cet email vous a été envoyé par une boîte automatique.'
-                        . PHP_EOL . PHP_EOL .
-                        'Si vous souhaitez répondre à cette personne, veuillez lui écrire à l\'adresse ' . $data['email'] . ' ou encore utiliser le bouton "Répondre".'
-                );
-            $mailer->send($email);
+            if (!$this->underLimit($request, $cache)) {
+                $this->addFlash('danger', 'Trop de messages envoyés, réessayez plus tard.');
 
-            $notice = 'Votre message a bien été envoyé.';
+                return $this->renderForm('contact/index.html.twig', ['form' => $form]);
+            }
+
+            try {
+                $mailer->send($this->email($form));
+            } catch (TransportExceptionInterface $e) {
+                $this->addFlash('danger', 'Le message n\'a pas pu être envoyé. Réessayez plus tard.');
+
+                return $this->renderForm('contact/index.html.twig', ['form' => $form]);
+            }
+
+            return $this->sent($request);
         }
 
-        return $this->render('contact/index.html.twig', [
-            'notice' => $notice,
-            'form' => $form->createView(),
-        ]);
+        return $this->renderForm('contact/index.html.twig', ['form' => $form]);
+    }
+
+    private function sent(Request $request): Response
+    {
+        $request->getSession()->remove(self::SHOWN_AT);
+        $this->addFlash('success', 'Votre message a bien été envoyé.');
+
+        return $this->redirectToRoute('contact');
+    }
+
+    private function underLimit(Request $request, CacheItemPoolInterface $cache): bool
+    {
+        $item = $cache->getItem('contact_' . hash('sha256', (string) $request->getClientIp()));
+        $sentAt = array_filter($item->isHit() ? $item->get() : [], fn($time) => $time > time() - 3600);
+
+        if (count($sentAt) >= self::MAX_PER_HOUR) {
+            return false;
+        }
+
+        $sentAt[] = time();
+        $cache->save($item->set($sentAt)->expiresAfter(3600));
+
+        return true;
+    }
+
+    private function email(FormInterface $form): Email
+    {
+        $data = $form->getData();
+
+        return (new Email())
+            ->from($this->getParameter('mailer_sender'))
+            ->replyTo($data['email'])
+            ->to($this->getParameter('contact_recipient'))
+            ->subject('[AXL-JDR Contact] ' . $data['objet'])
+            ->text(
+                'Message envoyé depuis le formulaire de contact par ' . $data['email'] . ' :'
+                . PHP_EOL . PHP_EOL
+                . $data['message']
+                . PHP_EOL . PHP_EOL
+                . 'Pour lui répondre, utilisez le bouton « Répondre ».'
+            );
     }
 }

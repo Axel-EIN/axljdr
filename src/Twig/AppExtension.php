@@ -11,6 +11,7 @@ use App\Service\ElementUrl;
 use App\Service\EntityRegistry;
 use App\Service\ImageBrightness;
 use App\Service\ImageNormalizer;
+use App\Service\RichText;
 use App\Service\TableFilter;
 use App\Service\Visibility;
 use Symfony\Component\Asset\Packages;
@@ -27,8 +28,9 @@ class AppExtension extends AbstractExtension
     private $currentPlayer;
     private $imageNormalizer;
     private $packages;
+    private $richText;
 
-    public function __construct(Visibility $visibility, ElementUrl $elementUrl, ImageBrightness $imageBrightness, TableFilter $tableFilter, CurrentPlayer $currentPlayer, ImageNormalizer $imageNormalizer, Packages $packages)
+    public function __construct(Visibility $visibility, ElementUrl $elementUrl, ImageBrightness $imageBrightness, TableFilter $tableFilter, CurrentPlayer $currentPlayer, ImageNormalizer $imageNormalizer, Packages $packages, RichText $richText)
     {
         $this->visibility = $visibility;
         $this->elementUrl = $elementUrl;
@@ -37,12 +39,14 @@ class AppExtension extends AbstractExtension
         $this->currentPlayer = $currentPlayer;
         $this->imageNormalizer = $imageNormalizer;
         $this->packages = $packages;
+        $this->richText = $richText;
     }
 
     public function getFilters()
     {
         return [
             new TwigFilter('relief', [$this, 'titleRelief']),
+            new TwigFilter('text', [$this->richText, 'render'], ['is_safe' => ['html']]),
             new TwigFilter('list_items', [$this, 'linesToList']),
             new TwigFilter('pricer', [$this, 'formatPrice']),
             new TwigFilter('expected_roll', [$this, 'expectedRoll']),

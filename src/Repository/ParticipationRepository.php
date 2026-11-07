@@ -2,6 +2,8 @@
 
 namespace App\Repository;
 
+use App\Entity\Access;
+use App\Entity\Chapitre;
 use App\Entity\Lieu;
 use App\Entity\Objet;
 use App\Entity\Participation;
@@ -22,6 +24,30 @@ class ParticipationRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Participation::class);
+    }
+
+    public function findInChapter(Chapitre $chapter, bool $pc): array
+    {
+        return $this->createQueryBuilder('p')
+            ->join('p.scene', 's')
+            ->join('s.episodeParent', 'e')
+            ->join('p.personnage', 'c')
+            ->addSelect('c')
+            ->leftJoin('c.fichePersonnage', 'sheet')
+            ->addSelect('sheet')
+            ->andWhere('e.chapitreParent = :chapter')
+            ->andWhere('e.access = :access')
+            ->andWhere('e.publishedAt IS NULL OR e.publishedAt <= :now')
+            ->andWhere('c.estPj = :pc')
+            ->setParameter('chapter', $chapter)
+            ->setParameter('access', Access::PUBLIC)
+            ->setParameter('now', new \DateTime())
+            ->setParameter('pc', $pc)
+            ->orderBy('e.numeroSaison', 'DESC')
+            ->addOrderBy('s.numero', 'DESC')
+            ->addOrderBy('p.id', 'DESC')
+            ->getQuery()
+            ->getResult();
     }
 
     public function findLastByEpisode(array $characterIds, int $limit): array

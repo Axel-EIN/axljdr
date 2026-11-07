@@ -117,11 +117,11 @@
                 <div class="part-body">
                     {% if record.aside is defined and record.aside is not empty %}
                         <aside class="aside">
-                            <p>{{ record.aside|raw|nl2br }}</p>
+                            <p>{{ record.aside|text }}</p>
                         </aside>
                     {% endif %}
 
-                    <div class="card-description text-description">{{ record.description|raw|nl2br }}</div>
+                    <div class="card-description text-description">{{ record.description|text }}</div>
                 </div>
 
                 {{ include('/parts/divider-ornament.html.twig') }}

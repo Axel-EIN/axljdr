@@ -71,7 +71,7 @@
                         </div>
                         <div>
                             <h3 class="label-amerigo">{{ attribute(dojo, 'tech' ~ i ~ 'Nom') }}</h3>
-                            <p class="text-justify text-regular">{{ attribute(dojo, 'tech' ~ i ~ 'Desc')|raw|nl2br }}</p>
+                            <p class="text-justify text-regular">{{ attribute(dojo, 'tech' ~ i ~ 'Desc')|text }}</p>
                         </div>
                     </div>
                 {% endif %}
@@ -80,7 +80,7 @@
             {% if dojo.techSpecialNom is not empty %}
                 <div class="technique-special" id="technique-special">
                     <h3 class="label-amerigo">{{ dojo.techSpecialNom }}</h3>
-                    <p>{{ dojo.techSpecialDesc|raw|nl2br }}</p>
+                    <p>{{ dojo.techSpecialDesc|text }}</p>
                 </div>
             {% endif %}
 

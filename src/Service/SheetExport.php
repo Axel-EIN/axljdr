@@ -310,7 +310,7 @@ class SheetExport
         $total = 0;
 
         for ($i = 0; $i < self::HP_ROWS; $i++) {
-            $hp = $i === 0 ? $earth * 5 : $earth * 2;
+            $hp = $earth * ($i === 0 ? FichePersonnage::PV_INDEMNE_PAR_TERRE : FichePersonnage::PV_BLESSURE_PAR_TERRE);
             $total += $hp;
             $pdf->text((string) $hp, self::HP_COLUMN, self::HP_FIRST + $i * self::HP_STEP, 28, $centered);
         }

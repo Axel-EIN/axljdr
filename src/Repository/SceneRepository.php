@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\Lieu;
 use App\Entity\Scene;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -17,6 +18,19 @@ class SceneRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Scene::class);
+    }
+
+    public function findByLocationWithEpisode(Lieu $location): array
+    {
+        return $this->createQueryBuilder('s')
+            ->join('s.episodeParent', 'e')
+            ->join('e.chapitreParent', 'c')
+            ->join('c.saisonParent', 'sa')
+            ->addSelect('e', 'c', 'sa')
+            ->andWhere('s.lieu = :location')
+            ->setParameter('location', $location)
+            ->getQuery()
+            ->getResult();
     }
 
     public function countScenes() {

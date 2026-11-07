@@ -1,6 +1,8 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Panneau d'Administration {{ parent() }}{% endblock %}
+{% set panel_label = app.user and is_granted('ROLE_ADMIN') ? "Panneau d'Administration" : 'Panneau du Maître' %}
+
+{% block title %}{{ panel_label }}{{ parent() }}{% endblock %}
 
 {% block stylesheets %}
     {{parent()}}
@@ -13,14 +15,7 @@
     <main class="container-fluid page-min">
         <div class="container py-5 relative">
             <h1 class="heading-gmpanel text-center">
-                {% block h1 %}
-                  Panneau
-                    {% if app.user and is_granted("ROLE_ADMIN") %}
-                      d'Administration
-                    {% else %}
-                      du Maître
-                    {% endif %}
-                {% endblock %}
+                {% block h1 %}{{ panel_label }}{% endblock %}
             </h1>
 
             {{ include('back_office/nav-admin.html.twig') }}

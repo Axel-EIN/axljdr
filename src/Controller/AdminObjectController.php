@@ -19,6 +19,8 @@ use App\Service\Unlocker;
 
 class AdminObjectController extends AbstractController
 {
+    use CsrfTokenTrait;
+
     private const TABLE_FILTERS = [
         'categorie:Catégorie',
     ];
@@ -116,10 +118,8 @@ class AdminObjectController extends AbstractController
         
 
         return $this->render('back_office/create.html.twig', [
-            'type' => 'create',
             'entity' => 'object',
             'label' => 'Objet',
-            'gender' => 'M',
             'article' => 'un',
             'form' => $form->createView()
         ]);
@@ -189,11 +189,9 @@ class AdminObjectController extends AbstractController
         }
 
         return $this->renderForm('back_office/edit.html.twig', [
-            'type' => 'edit',
             'object' => $object,
             'entity' => 'object',
             'label' => 'Objet',
-            'gender' => 'M',
             'article' => 'un',
             'form' => $form,
         ]);
@@ -205,7 +203,7 @@ class AdminObjectController extends AbstractController
      */
     public function deleteObject(Request $request, Objet $object, FileHandler $fileHandler, Unlocker $unlocker, DeletionGuard $deletionGuard): Response {
 
-        if ($this->isCsrfTokenValid('delete' . $object->getId(), $request->request->get('_csrf_token'))) {
+        if ($this->validToken($request, 'delete' . $object->getId())) {
 
             $refusal = $deletionGuard->refusal($object, $object->getNom());
 

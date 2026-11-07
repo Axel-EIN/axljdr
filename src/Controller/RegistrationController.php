@@ -11,6 +11,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mime\Address;
+use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
@@ -46,13 +47,25 @@ class RegistrationController extends AbstractController
             $entityManager->persist($user);
             $entityManager->flush();
 
-            $this->emailVerifier->sendEmailConfirmation('app_verify_email', $user,
-                (new TemplatedEmail())
-                    ->from(new Address('no-reply@axl-design.me', 'AXL-JDR'))
-                    ->to($user->getEmail())
-                    ->subject('Please Confirm your Email')
-                    ->htmlTemplate('registration/confirmation_email.html.twig')
-            );
+            try {
+                $this->emailVerifier->sendEmailConfirmation('app_verify_email', $user,
+                    (new TemplatedEmail())
+                        ->from(new Address($this->getParameter('mailer_sender'), 'AXL-JDR'))
+                        ->to($user->getEmail())
+                        ->subject('Confirmez votre adresse e-mail')
+                        ->htmlTemplate('registration/confirmation_email.html.twig')
+                );
+            } catch (TransportExceptionInterface) {
+                $entityManager->remove($user);
+                $entityManager->flush();
+                $this->addFlash('danger', 'L\'e-mail de confirmation n\'a pas pu être envoyé. Réessayez plus tard.');
+
+                return $this->render('registration/register.html.twig', [
+                    'registrationForm' => $form->createView(),
+                ]);
+            }
+
+            $this->addFlash('success', 'Compte créé : cliquez sur le lien envoyé à ' . $user->getEmail() . ' pour l\'activer.');
 
             return $this->redirectToRoute('app_login');
         }
@@ -81,13 +94,13 @@ class RegistrationController extends AbstractController
 
         try {
             $this->emailVerifier->handleEmailConfirmation($request, $user);
-        } catch (VerifyEmailExceptionInterface $exception) {
-            $this->addFlash('verify_email_error', $exception->getReason());
+        } catch (VerifyEmailExceptionInterface) {
+            $this->addFlash('verify_email_error', 'Ce lien de confirmation est invalide ou a expiré.');
 
             return $this->redirectToRoute('app_register');
         }
 
-        $this->addFlash('success', 'Your email address has been verified.');
+        $this->addFlash('success', 'Votre adresse e-mail est confirmée : vous pouvez vous connecter.');
 
         return $this->redirectToRoute('app_login');
     }

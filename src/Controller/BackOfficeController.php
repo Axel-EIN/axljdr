@@ -61,6 +61,10 @@ class BackOfficeController extends AbstractController
 
         UtilisateurRepository $userRepository ): Response
     {
+        if (!$this->isGranted('ROLE_MJ')) {
+            return $this->renderBackOffice($userRepository, []);
+        }
+
         $admin_elements = [];
         $i = 0;
 
@@ -255,7 +259,7 @@ class BackOfficeController extends AbstractController
         $admin_elements[$i]['label'] = 'Développements';
         $admin_elements[$i]['gender'] = 'M';
         $admin_elements[$i]['category'] = 'Personnages';
-        $admin_elements[$i]['count'] = count($developmentRepository->findAll());
+        $admin_elements[$i]['count'] = $developmentRepository->count([]);
         $lastDevelopment = $developmentRepository->findOneBy(array(),array('id' => 'DESC'));
         if (!empty($lastDevelopment)) {
             $admin_elements[$i]['last'] = $lastDevelopment;
@@ -403,13 +407,15 @@ class BackOfficeController extends AbstractController
             $admin_elements[$i]['image'] = '';
         }
 
-        $userCount = $userRepository->countUtilisateurs();
-        $lastUser = $userRepository->findOneBy(array(),array('id' => 'DESC'));
+        return $this->renderBackOffice($userRepository, $admin_elements);
+    }
 
+    private function renderBackOffice(UtilisateurRepository $userRepository, array $adminElements): Response
+    {
         return $this->render('back_office/index.html.twig', [
-            'userCount' => $userCount,
-            'lastUser' => $lastUser,
-            'admin_elements' => $admin_elements,
+            'userCount' => $userRepository->countUtilisateurs(),
+            'lastUser' => $userRepository->findOneBy([], ['id' => 'DESC']),
+            'admin_elements' => $adminElements,
         ]);
     }
 }

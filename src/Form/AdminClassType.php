@@ -11,7 +11,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\ColorType;
 
-use Symfony\Component\Validator\Constraints\File;
+use App\Validator\ImageFile;
 use Symfony\Component\Validator\Constraints\Length;
 
 class AdminClassType extends AbstractType
@@ -24,13 +24,13 @@ class AdminClassType extends AbstractType
                 'mapped' => false,
                 'data_class' => null,
                 'required' => false,
-                'constraints' => [new File(['maxSize' => '5M'])],
+                'constraints' => [new ImageFile()],
             ])
             ->add('image', FileType::class, [
                 'mapped' => false,
                 'data_class' => null,
                 'required' => false,
-                'constraints' => [new File(['maxSize' => '5M'])],
+                'constraints' => [new ImageFile()],
             ])
             ->add('description', TextareaType::class, [ 'required' => false, 'empty_data' => null, 'constraints' => [ new Length( [ 'max' => 600 ] ) ] ] )
             ->add('citation', TextType::class, [ 'required' => false, 'empty_data' => null, 'constraints' => [ new Length( [ 'max' => 100 ] ) ] ] )

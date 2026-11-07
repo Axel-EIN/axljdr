@@ -193,7 +193,7 @@ class AdminLocationController extends AbstractController
 
       if ($refusal !== null) {
         $this->addFlash('danger', $refusal);
-        return $this->redirectToRoute('admin_location');
+        return $this->backToLocation($request, $location);
       }
 
       $entityManager = $this->getDoctrine()->getManager();
@@ -207,8 +207,19 @@ class AdminLocationController extends AbstractController
       $entityManager->remove($location);
       $entityManager->flush();
       $this->addFlash('success', 'Le Lieu a bien été supprimé.');
+
+      return $request->query->get('redirect') === 'world'
+        ? $this->redirectToRoute('world', ['_fragment' => 'location'])
+        : $this->redirectToRoute('admin_location');
     }
 
-    return $this->redirectToRoute('admin_location');
+    return $this->backToLocation($request, $location);
+  }
+
+  private function backToLocation(Request $request, Lieu $location): Response
+  {
+    return $request->query->get('redirect') === 'world'
+      ? $this->redirectToRoute('world_location', ['id' => $location->getId()])
+      : $this->redirectToRoute('admin_location');
   }
 }

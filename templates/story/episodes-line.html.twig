@@ -2,7 +2,7 @@
   <span class="text-light">Il y a <strong class="text-accent-light">{{ episode.chapitreParent.episodes|length }} ÉPISODES</strong> dans ce chapitre.</span>
   <div class="episodes-carousel mt-2 d-none d-lg-flex">
     {% for listed_episode in episode.chapitreParent.episodes %}
-      {% if listed_episode.scenes|length > 0 or is_gm() %}
+      {% if episode_visible(listed_episode) %}
         <div class="vignette-episode {% if listed_episode.id == episode.id %}active{% endif %}">
           <span class="title">{{listed_episode.titre}}</span>
           <div class="ratio-169">
@@ -26,7 +26,7 @@
     </a>
     <div class="dropdown-menu dropdown-dark">
       {% for listed_episode in episode.chapitreParent.episodes %}
-        {% if listed_episode.id != episode.id and (listed_episode.scenes|length > 0 or is_gm()) %}
+        {% if listed_episode.id != episode.id and episode_visible(listed_episode) %}
           <a class="dropdown-item" href="{{ path('story_episode', { id: listed_episode.id, '_fragment': 'read-head' } ) }}">
             #{{ listed_episode.numeroSaison }} {{ listed_episode.titre }}
           </a>

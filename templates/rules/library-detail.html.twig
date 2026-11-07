@@ -131,28 +131,32 @@
 
     {% else %}
 
-        {% if (filters is defined and filters is not empty) or keywords is defined and keywords is not empty %}
+        {% if filters is not empty or keywords is not empty %}
             <div class="col-12 mt-3 library-row">
 
-                <div class="col-12 col-md-4">
-                    <label for="keyword-select">Filtrer par Mot Clés :</label>
-                    <select name="keyword" id="keyword-select" >
-                        <option value="">TOUS</option>
-                        {% for keyword in keywords %}
-                            <option value={{keyword}} {% if app.request.get('keyword') == keyword %}selected{% endif %}>{{keyword}}</option>
-                        {% endfor %}
-                    </select>
-                </div>
+                {% if keywords is not empty %}
+                    <div class="col-12 col-md-4">
+                        <label for="keyword-select">Filtrer par Mot Clés :</label>
+                        <select name="keyword" id="keyword-select" >
+                            <option value="">TOUS</option>
+                            {% for keyword in keywords %}
+                                <option value="{{ keyword }}" {% if app.request.get('keyword') == keyword %}selected{% endif %}>{{keyword}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                {% endif %}
 
-                <div class="col-12 col-md-4">
-                    <label for="filter-select">Filtrer par {{record.filterField|capitalize}} :</label>
-                    <select name="filter" id="filter-select" >
-                        <option value="">TOUS</option>
-                        {% for one_filter in filters %}
-                            <option value={{one_filter}} {% if app.request.get('filter') == one_filter %}selected{% endif %}>{{one_filter}}</option>
-                        {% endfor %}
-                    </select>
-                </div>
+                {% if filters is not empty %}
+                    <div class="col-12 col-md-4">
+                        <label for="filter-select">Filtrer par {{record.filterField|capitalize}} :</label>
+                        <select name="filter" id="filter-select" >
+                            <option value="">TOUS</option>
+                            {% for one_filter in filters %}
+                                <option value="{{ one_filter }}" {% if app.request.get('filter') == one_filter %}selected{% endif %}>{{one_filter}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                {% endif %}
 
             </div>
         {% endif %}

@@ -13,7 +13,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Component\Validator\Constraints\File;
+use App\Validator\ImageFile;
 
 class AdminLocationType extends AbstractType
 {
@@ -26,11 +26,11 @@ class AdminLocationType extends AbstractType
       ->add('surnom', TextType::class, [ 'required' => false ])
       ->add('icone', FileType::class, [
         'mapped' => false, 'data_class' => null, 'required' => false,
-        'constraints' => [new File(['maxSize' => '5M'])],
+        'constraints' => [new ImageFile()],
       ])
       ->add('image', FileType::class, [
         'mapped' => false, 'data_class' => null, 'required' => false,
-        'constraints' => [new File(['maxSize' => '5M'])],
+        'constraints' => [new ImageFile()],
       ])
       ->add('type', ChoiceType::class, [
         'placeholder' => 'Pas de type défini',
@@ -42,7 +42,7 @@ class AdminLocationType extends AbstractType
         'data_class' => null,
         'required' => false,
         'label' => 'Plan',
-        'constraints' => [new File(['maxSize' => '5M'])],
+        'constraints' => [new ImageFile()],
       ])
       ->add('description', TextareaType::class, array('required' => false))
       ->add('planDesc', TextareaType::class, [

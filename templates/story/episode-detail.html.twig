@@ -87,7 +87,7 @@
             {{ include('/story/scene-detail.html.twig', {scene, lazy: not loop.first}) }}
 
           {% else %}
-            <p class="text-center text-light py-5">Il n'y a pas encore de scènes pour cette épisode.</p>
+            <p class="text-center text-light py-5">Il n'y a pas encore de scène pour cet épisode.</p>
           {% endfor %}
 
           {% if is_gm() %}

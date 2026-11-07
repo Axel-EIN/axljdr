@@ -57,7 +57,7 @@ class MapController extends AbstractController
         return $this->render('map/panel.html.twig', [
             'location' => $location,
             'present_characters' => $locator->positions()[$location->getId()] ?? [],
-            'history' => $visibility->isReadable($location) ? $this->readableHistory($historyRanker->forLocation($location), $visibility) : [],
+            'history' => $visibility->isReadable($location) ? array_slice($historyRanker->forLocation($location), 0, self::PANEL_HISTORY_LIMIT) : [],
         ]);
     }
 
@@ -72,16 +72,7 @@ class MapController extends AbstractController
 
         return $this->render('map/panel.html.twig', [
             'character' => $character,
-            'history' => $visibility->isReadable($character) ? $this->readableHistory($historyRanker->forCharacter($character), $visibility) : [],
+            'history' => $visibility->isReadable($character) ? array_slice($historyRanker->forCharacter($character), 0, self::PANEL_HISTORY_LIMIT) : [],
         ]);
-    }
-
-    private function readableHistory(array $history, Visibility $visibility): array
-    {
-        $readable = array_filter($history, function ($block) use ($visibility) {
-            return $visibility->isReadable($block['episode']);
-        });
-
-        return array_slice(array_values($readable), 0, self::PANEL_HISTORY_LIMIT);
     }
 }

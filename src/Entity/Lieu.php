@@ -66,6 +66,7 @@ class Lieu
 
   /**
    * @ORM\Column(type="decimal", precision=5, scale=2, nullable=true)
+   * @Assert\Range(min=1, max=99)
    */
   private $locX;
 

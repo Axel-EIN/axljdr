@@ -3,6 +3,7 @@
 namespace App\Twig;
 
 use App\Entity\Access;
+use App\Entity\Episode;
 use App\Entity\FactionType;
 use App\Entity\Monnaie;
 use App\Entity\Status;
@@ -63,6 +64,7 @@ class AppExtension extends AbstractExtension
             new TwigFunction('element_unseen', [$this->visibility, 'isUnseen']),
             new TwigFunction('element_individual', [$this->visibility, 'isIndividuallyRevealed']),
             new TwigFunction('element_listed', [$this->visibility, 'isListed']),
+            new TwigFunction('episode_visible', [$this, 'isEpisodeVisible']),
             new TwigFunction('element_fresh', [$this->visibility, 'isFresh']),
             new TwigFunction('element_sort', [$this->visibility, 'sortByAccess']),
             new TwigFunction('element_key', [EntityRegistry::class, 'keyOf']),
@@ -138,6 +140,12 @@ class AppExtension extends AbstractExtension
     private const SMALL_WORDS = ['à', 'a', 'le', 'la', 'les', 'du', 'de', 'des', 'dans', 'et', 'son'];
 
     private const ELISIONS = ["l'" => "l'&nbsp;", "L'" => "L'", "d'" => "d'&nbsp;", "D'" => "D'"];
+
+    public function isEpisodeVisible(Episode $episode): bool
+    {
+        return $this->currentPlayer->seesAll()
+            || ($this->visibility->isReadable($episode) && !$episode->getScenes()->isEmpty());
+    }
 
     public function titleRelief($title)
     {

@@ -1,6 +1,13 @@
 @font-face {
   font-family: 'Barlow';
-  src: url("../assets/fonts/barlow-semi-condensed.ttf") format("truetype");
+  src: url("../assets/fonts/barlow-semi-condensed-regular.ttf") format("truetype");
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: 'Barlow';
+  src: url("../assets/fonts/barlow-semi-condensed-semibold.ttf") format("truetype");
+  font-weight: 600;
 }
 .font-barlow { font-family: 'Barlow'; }
 

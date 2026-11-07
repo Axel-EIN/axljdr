@@ -25,6 +25,11 @@
         .item-name { color: var(--color-alternate); }
     }
 
+    &.targeted,
+    &.targeted:hover {
+        background-color: var(--accent-lightest);
+    }
+
     &.AIR {
         box-shadow:
             inset 2px 2px 0 0 var(--color-background),

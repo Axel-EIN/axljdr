@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Access;
 use App\Entity\Episode;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -46,15 +47,20 @@ class EpisodeRepository extends ServiceEntityRepository
 
     public function findLastPublished(int $limit): array
     {
-        return $this->createQueryBuilder('e')
-            ->andWhere('e.access = :access')
-            ->andWhere('e.publishedAt IS NULL OR e.publishedAt <= :now')
-            ->setParameter('access', Access::PUBLIC)
-            ->setParameter('now', new \DateTime())
+        return self::onlyPublished($this->createQueryBuilder('e'), 'e')
             ->orderBy('e.numeroSaison', 'DESC')
             ->setMaxResults($limit)
             ->getQuery()
             ->getResult();
+    }
+
+    public static function onlyPublished(QueryBuilder $qb, string $alias): QueryBuilder
+    {
+        return $qb
+            ->andWhere($alias . '.access = :publishedAccess')
+            ->andWhere($alias . '.publishedAt IS NULL OR ' . $alias . '.publishedAt <= :publishedNow')
+            ->setParameter('publishedAccess', Access::PUBLIC)
+            ->setParameter('publishedNow', new \DateTime());
     }
 
     public function nextCampaignNumber(): int

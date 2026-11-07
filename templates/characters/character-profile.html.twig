@@ -146,24 +146,26 @@
         {{ form_start(form, {action: path('characters_profile_edit', {id: character.id})}) }}
         {% endif %}
 
-        <div class="profile-maincontent profile-zone">
+        <div class="profile-maincontent">
 
             {# ================================ #}
             {# ===== [CARD-SECTION] STORY ===== #}
             {# ================================ #}
 
-            <h2 class="profile-description-title">Histoire</h2>
+            <div class="profile-zone">
+                <h2 class="profile-description-title">Histoire</h2>
 
-            {% if character.titres is defined and character.titres is not empty %}
-                <h4 class="card-title-cartouche">{{ character.titres }}</h4>
-            {% endif %}
+                {% if character.titres is defined and character.titres is not empty %}
+                    <h4 class="card-title-cartouche">{{ character.titres }}</h4>
+                {% endif %}
 
-            <p class="text-description text-compact read-only">{{ character.description|text }}</p>
+                <p class="text-description text-compact read-only">{{ character.description|text }}</p>
 
-            {% if can_edit %}
-                {{ form_widget(form.description, {attr: {class: 'edit-only'}}) }}
-                {{ include('/btns/btn-interactive-edit-actions.html.twig', {label: 'Éditer'}) }}
-            {% endif %}
+                {% if can_edit %}
+                    {{ form_widget(form.description, {attr: {class: 'edit-only'}}) }}
+                    {{ include('/btns/btn-interactive-edit-actions.html.twig', {label: 'Éditer'}) }}
+                {% endif %}
+            </div>
 
             {# ========================================= #}
             {# ===== [CARD-SECTION] DEVELOPPEMENTS ===== #}

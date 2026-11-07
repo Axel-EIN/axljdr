@@ -17,6 +17,8 @@ use App\Service\Unlocker;
 
 class AdminAdvantageController extends AbstractController
 {
+    use CsrfTokenTrait;
+
     private const TABLE_FILTERS = [
         'genre:Genre',
     ];
@@ -81,10 +83,8 @@ class AdminAdvantageController extends AbstractController
         
 
         return $this->render('back_office/create.html.twig', [
-            'type' => 'create',
             'entity' => 'advantage',
             'label' => 'Avantage/Désavantage',
-            'gender' => 'M',
             'article' => 'un',
             'form' => $form->createView()
         ]);
@@ -115,11 +115,9 @@ class AdminAdvantageController extends AbstractController
         }
 
         return $this->renderForm('back_office/edit.html.twig', [
-            'type' => 'edit',
             'advantage' => $advantage,
             'entity' => 'advantage',
             'label' => 'Avantage/Désavantage',
-            'gender' => 'M',
             'article' => 'un',
             'form' => $form,
         ]);
@@ -131,7 +129,7 @@ class AdminAdvantageController extends AbstractController
      */
     public function deleteAdvantage(Request $request, Avantage $advantage, Unlocker $unlocker, DeletionGuard $deletionGuard): Response {
 
-        if ($this->isCsrfTokenValid('delete' . $advantage->getId(), $request->request->get('_csrf_token'))) {
+        if ($this->validToken($request, 'delete' . $advantage->getId())) {
 
             $refusal = $deletionGuard->refusal($advantage, $advantage->getNom());
 

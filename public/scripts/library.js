@@ -29,6 +29,9 @@ $(document).ready(function ()
         $(target).one("shown.bs.collapse", function () {
             target.parentElement.scrollIntoView({block: "center"});
         }).collapse("show");
+    } else if (target) {
+        target.scrollIntoView({block: "center"});
+        target.querySelectorAll(".item").forEach(function (item) { item.classList.add("targeted"); });
     }
 
 });

@@ -27,7 +27,7 @@
     {{ include('/parts/flash-messages.html.twig') }}
 
     <div class="relative d-flex w-100 flex-column">
-      {% set neighbor_chapters = {previous: previous_chapter, next: next_chapter}|map(c => c ? c.episodes|filter(e => e.scenes|length > 0 or is_gm())|first : null) %}
+      {% set neighbor_chapters = {previous: previous_chapter, next: next_chapter}|map(c => c ? c.episodes|filter(e => episode_visible(e))|first : null) %}
       <span class="chapter-number navigable display-5">
         <a class="prev btn-quaternary-style text-white50{{ neighbor_chapters.previous is empty ? ' invisible' }}"
            {% if neighbor_chapters.previous is not empty %}href="{{ path('story_episode', {id: neighbor_chapters.previous.id}) }}" title="Chapitre précédent"{% endif %}>
@@ -172,7 +172,7 @@
             </div>
             <div class="col text-right pr-0">
               {% if next_episode is not empty %}
-                {% if next_episode.scenes|length > 0 or is_gm() %}
+                {% if episode_visible(next_episode) %}
                   <a class="btn-primary-style btn-medium" href="{{ path('story_episode', {id: next_episode.id}) }}">
                     Suivant
                   </a>

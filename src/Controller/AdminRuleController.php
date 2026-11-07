@@ -17,6 +17,8 @@ use App\Service\Unlocker;
 
 class AdminRuleController extends AbstractController
 {
+    use CsrfTokenTrait;
+
     /**
      * @Route("/admin/rule", name="admin_rule")
      * @IsGranted("ROLE_MJ")
@@ -28,8 +30,8 @@ class AdminRuleController extends AbstractController
         return $this->render('back_office/list-element.html.twig', [
             'elements' => $rules,
             'element' => 'rule',
-            'label' => 'Rule',
-            'labels' => 'Rules',
+            'label' => 'Règle',
+            'labels' => 'Règles',
             'gender' => 'F',
             'article' => 'une',
             'table_cols' => [
@@ -90,10 +92,8 @@ class AdminRuleController extends AbstractController
         }
 
         return $this->render('back_office/create.html.twig', [
-            'type' => 'create',
             'entity' => 'rule',
-            'label' => 'Rule',
-            'gender' => 'F',
+            'label' => 'Règle',
             'article' => 'une',
             'form' => $form->createView()
         ]);
@@ -148,11 +148,9 @@ class AdminRuleController extends AbstractController
         }
 
         return $this->renderForm('back_office/edit.html.twig', [
-            'type' => 'edit',
             'rule' => $rule,
             'entity' => 'rule',
-            'label' => 'Rule',
-            'gender' => 'F',
+            'label' => 'Règle',
             'article' => 'une',
             'form' => $form,
         ]);
@@ -164,7 +162,7 @@ class AdminRuleController extends AbstractController
      */
     public function deleteRule(Request $request, Rule $rule, FileHandler $fileHandler, EntityManagerInterface $em, RuleRepository $ruleRepository, Orderer $orderer, Unlocker $unlocker): Response
     {
-        if ( $this->isCsrfTokenValid('delete' . $rule->getId(), $request->request->get('_csrf_token')))
+        if ( $this->validToken($request, 'delete' . $rule->getId()))
         {
 
             $fileHandler->handle(null, $rule->getImage(), null, 'rules');

@@ -86,8 +86,9 @@
 
           {% if variant == 'portrait' %}
             {% set na_gender = item.genre == 'F' ? NA_PERSO_PORTRAIT_F : (item.genre == 'M' ? NA_PERSO_PORTRAIT_M : NA_PERSO_PORTRAIT) %}
-            <img class="picture {{ item.dead|default(false) ? 'effect-dead' }}" src="{{ asset(item.icone|default(na_gender)) }}" loading="lazy" alt="{{ name }}" />
-            {% if not restricted and item.dead|default(false) %}
+            {% set dead_shown = not restricted and item.dead|default(false) %}
+            <img class="picture {{ dead_shown ? 'effect-dead' }}" src="{{ asset(item.icone|default(na_gender)) }}" loading="lazy" alt="{{ name }}" />
+            {% if dead_shown %}
               <img class="character-icon-dead" src="{{ asset(MORT_ICO) }}" alt="est mort" />
             {% endif %}
 

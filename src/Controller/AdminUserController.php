@@ -19,6 +19,8 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class AdminUserController extends AbstractController
 {
+    use CsrfTokenTrait;
+
     /**
      * @Route("/admin/user", name="admin_user")
      * @IsGranted("ROLE_ADMIN")
@@ -54,7 +56,7 @@ class AdminUserController extends AbstractController
 
             $em->persist($user);
             $em->flush();
-            $this->addFlash('success', 'L\'utilisateur a bien été crée.');
+            $this->addFlash('success', 'L\'utilisateur a bien été créé.');
 
             return $this->redirectToRoute('admin_user');
         }
@@ -112,7 +114,7 @@ class AdminUserController extends AbstractController
      * @IsGranted("ROLE_ADMIN")
      */
     public function deleteUser(Request $request, Utilisateur $user, FileHandler $fileHandler, DeletionGuard $deletionGuard): Response {
-        if ($this->isCsrfTokenValid('delete' . $user->getId(), $request->request->get('_csrf_token'))) {
+        if ($this->validToken($request, 'delete' . $user->getId())) {
 
             if ($this->isSelf($user)) {
                 $this->addFlash('danger', 'Vous ne pouvez pas supprimer votre propre compte.');

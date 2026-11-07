@@ -19,6 +19,8 @@ use App\Service\Unlocker;
 
 class AdminCharacterController extends AbstractController
 {
+    use CsrfTokenTrait;
+
     private const TABLE_FILTERS = [
         'estPj:Type:PJ|PNJ',
         'clan.nom:Clan',
@@ -116,10 +118,8 @@ class AdminCharacterController extends AbstractController
         }
 
         return $this->render('back_office/create.html.twig', [
-            'type' => 'create',
             'entity' => 'character',
             'label' => 'Personnage',
-            'gender' => 'M',
             'article' => 'un',
             'form' => $form->createView()
         ]);
@@ -189,11 +189,9 @@ class AdminCharacterController extends AbstractController
         }
 
         return $this->renderForm('back_office/edit.html.twig', [
-            'type' => 'edit',
             'character' => $character,
             'entity' => 'character',
             'label' => 'Personnage',
-            'gender' => 'M',
             'article' => 'un',
             'form' => $form,
         ]);
@@ -205,7 +203,7 @@ class AdminCharacterController extends AbstractController
      */
     public function deleteCharacter(Request $request, Personnage $character, FileHandler $fileHandler, NameTagger $nameTagger, Unlocker $unlocker, DeletionGuard $deletionGuard): Response {
 
-        if ($this->isCsrfTokenValid('delete' . $character->getId(), $request->request->get('_csrf_token'))) {
+        if ($this->validToken($request, 'delete' . $character->getId())) {
 
             $refusal = $deletionGuard->refusal($character, $character->getNomComplet());
 

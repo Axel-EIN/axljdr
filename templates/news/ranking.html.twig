@@ -9,10 +9,10 @@
     <a class="ranking-line" href="{{ path('characters_profile', {id: character.id}) }}" title="{{ character.firstName }}">
       <span class="ranking-rank">{{ rank }}</span>
       <span class="portrait-slot">
-        <img class="character-portrait medium outlined {{ character.id in mine ? '' : 'player' }} {{ character.dead ? 'effect-dead' }}"
+        <img class="character-portrait medium outlined {{ character.id in mine ? '' : 'player' }} {{ (character.dead ?? false) ? 'effect-dead' }}"
              src="{{ asset(character.icon|default(NA_PERSO_PORTRAIT)) }}"
              alt="Portrait de {{ character.firstName }}" />
-        {% if character.dead %}
+        {% if character.dead ?? false %}
           <img class="character-icon-dead" src="{{ asset(MORT_ICO) }}" alt="est mort" />
         {% endif %}
       </span>

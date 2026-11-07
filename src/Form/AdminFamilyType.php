@@ -14,7 +14,7 @@ use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
-use Symfony\Component\Validator\Constraints\File;
+use App\Validator\ImageFile;
 use Symfony\Component\Validator\Constraints\Length;
 
 class AdminFamilyType extends AbstractType
@@ -25,7 +25,7 @@ class AdminFamilyType extends AbstractType
             ->add('nom', TextType::class, array( 'constraints' => [ new Length( [ 'max' => 30 ] ) ] ) )
             ->add('mon', FileType::class, [
                 'mapped' => false, 'data_class' => null, 'required' => false,
-                'constraints' => [new File(['maxSize' => '5M'])],
+                'constraints' => [new ImageFile()],
             ])
             ->add('description', TextareaType::class, array( 'required' => false, 'constraints' => [ new Length( [ 'max' => 1000 ] ) ] ))
             ->add('bonusStatNom', ChoiceType::class, [

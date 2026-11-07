@@ -19,7 +19,7 @@
                 </a>
                 <strong class="d-block text-center mt-1">{{name}}</strong>
             {% else %}
-                <div class="text-muted text-center">Il n'y a pas encore de {{ label|lower }}</div>
+                <div class="text-muted text-center">Il n'y a pas encore {{ label|lower matches '/^[aeiouyéèêh]/u' ? "d'" : 'de ' }}{{ label|lower }}</div>
             {% endif %}
         </div>
 

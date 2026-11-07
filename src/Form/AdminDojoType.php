@@ -13,7 +13,7 @@ use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
-use Symfony\Component\Validator\Constraints\File;
+use App\Validator\ImageFile;
 use Symfony\Component\Validator\Constraints\Length;
 
 class AdminDojoType extends AbstractType
@@ -34,7 +34,7 @@ class AdminDojoType extends AbstractType
             ->add('image', FileType::class, [
                 'required' => false, 'mapped' => false, 'data_class' => null,
                 'label' => 'Image (facultative)',
-                'constraints' => [new File(['maxSize' => '5M'])],
+                'constraints' => [new ImageFile()],
             ])
             ->add('description', TextareaType::class, [ 'required' => false, 'constraints' => [ new Length( [ 'max' => 2000 ] ) ] ])
             ->add('bonusStatNom', ChoiceType::class, [

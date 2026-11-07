@@ -88,6 +88,11 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $reset_token;
 
+    /**
+     * @ORM\Column(type="datetime_immutable", nullable=true)
+     */
+    private $resetRequestedAt;
+
     public function __construct()
     {
         $this->personnages = new ArrayCollection();
@@ -161,6 +166,7 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
     public function setPassword(string $password): self
     {
         $this->password = $password;
+        $this->setResetToken(null);
 
         return $this;
     }
@@ -286,7 +292,13 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
     public function setResetToken(?string $reset_token): self
     {
         $this->reset_token = $reset_token;
+        $this->resetRequestedAt = $reset_token === null ? null : new \DateTimeImmutable();
 
         return $this;
+    }
+
+    public function getResetRequestedAt(): ?\DateTimeImmutable
+    {
+        return $this->resetRequestedAt;
     }
 }

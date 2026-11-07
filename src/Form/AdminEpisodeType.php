@@ -12,7 +12,7 @@ use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
-use Symfony\Component\Validator\Constraints\File;
+use App\Validator\ImageFile;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
@@ -27,7 +27,7 @@ class AdminEpisodeType extends AbstractType
             ->add('resume', TextareaType::class, ['required' => false, 'empty_data' => null, 'constraints' => [ new Length( [ 'max' => 200 ] ) ]])
             ->add('image', FileType::class, [
                 'mapped' => false, 'data_class' => null, 'required' => false,
-                'constraints' => [new File(['maxSize' => '5M'])],
+                'constraints' => [new ImageFile()],
             ])
             ->add('chapitreParent', EntityType::class, [
                 'class' => Chapitre::class,

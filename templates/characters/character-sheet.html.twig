@@ -820,7 +820,7 @@
                     data-toggle="popover" data-html="true" data-trigger="focus"
                     data-container="body" data-placement="top"
                     title="{{ dojo.techSpecialNom }}"
-                    data-content="{{ dojo.techSpecialDesc|raw|nl2br|e('html_attr') }}">
+                    data-content="{{ dojo.techSpecialDesc|text|e('html_attr') }}">
                   {{ dojo.techSpecialNom }}
                 </a>
               {% else %}
@@ -935,7 +935,7 @@
           </ul>
 
           <div class="appearance-text">
-            <p class="read-only">{{ sheet.appearance ?: 'Aucune description.' }}</p>
+            <p class="read-only">{{ sheet.appearance ? sheet.appearance|e|text : 'Aucune description.' }}</p>
             <textarea id="look-input-appearance" rows="2"
                       class="form-control form-control-sm edit-only">{{ sheet.appearance }}</textarea>
           </div>
@@ -945,7 +945,7 @@
           <div class="card-title-cartouche">Notes de Jeu</div>
 
           <div class="appearance-text">
-            <p class="read-only">{{ sheet.notes ? sheet.notes|nl2br : 'Aucune note.' }}</p>
+            <p class="read-only">{{ sheet.notes ? sheet.notes|e|text : 'Aucune note.' }}</p>
             <textarea id="look-input-notes" rows="5"
                       class="form-control form-control-sm edit-only">{{ sheet.notes }}</textarea>
           </div>

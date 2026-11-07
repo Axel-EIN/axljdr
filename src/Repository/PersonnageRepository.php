@@ -43,6 +43,7 @@ class PersonnageRepository extends ServiceEntityRepository
 
         return $this->orderByFaction($qb->addOrderBy('p.status', 'ASC'))
             ->addOrderBy('p.nom', 'ASC')
+            ->addOrderBy('p.prenom', 'ASC')
             ->getQuery()
             ->getResult();
     }

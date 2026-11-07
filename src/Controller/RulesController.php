@@ -120,6 +120,7 @@ class RulesController extends AbstractController
         $tab_field_name = $library->getTabField();
         $subtab_field_name = $library->getSubTabField();
         $filter_field_name = $library->getFilterField();
+        $keyword_fields = array_filter([$library->getKeyword1Field(), $library->getKeyword2Field(), $library->getKeyword3Field()]);
 
         $tab_url_param = $request->query->get('tab');
         $subtab_url_param = $request->query->get('subtab');
@@ -153,7 +154,7 @@ class RulesController extends AbstractController
 
             }
             $tabs = array_unique($tabs);
-            $filters = array_unique($filters);
+            $filters = array_unique(array_filter($filters));
 
             if ($library->getNom() == 'Grimoire' )
                 $tabs = ['MAGIE', 'MAHO', 'KIHO', 'TATOUAGE'];
@@ -185,27 +186,14 @@ class RulesController extends AbstractController
 
             }
 
-            $keyword2_field_name = $library->getKeyword2Field();
-            $keyword3_field_name = $library->getKeyword3Field();
-            $keyword1_field_name = $library->getKeyword1Field();
-            
             $keywords = [];
-  
-            foreach ( $items as $item ) {
 
-                if ( !empty($keyword1_field_name) && !empty( $item->{ 'get' .  ucfirst( $keyword1_field_name ) }() ) )
-                {
-                    $keywords[] = $item->{ 'get' .  ucfirst( $keyword1_field_name ) }();
-                }
-    
-                if ( !empty($keyword2_field_name) && !empty( $item->{ 'get' .  ucfirst( $keyword2_field_name ) }() ) )
-                {
-                    $keywords[] = $item->{ 'get' .  ucfirst( $keyword2_field_name ) }();
-                }
-                
-                if ( !empty($keyword3_field_name) && !empty( $item->{ 'get' .  ucfirst( $keyword3_field_name ) }() ) )
-                {
-                    $keywords[] = $item->{ 'get' .  ucfirst( $keyword3_field_name ) }();
+            foreach ( $items as $item ) {
+                foreach ( $keyword_fields as $field ) {
+                    $value = $item->{ 'get' . ucfirst( $field ) }();
+
+                    if ( !empty( $value ) )
+                        $keywords[] = $value;
                 }
             }
 
@@ -259,20 +247,8 @@ class RulesController extends AbstractController
         if ( !empty( $filter_url_param ) && !empty( $filter_field_name ) )
             $items = array_filter($items, function ($obj) use ($filter_url_param, $filter_field_name) { return $obj->{ 'get' .  ucfirst( $filter_field_name ) }() == $filter_url_param; });
 
-        if ( !empty( $keyword_url_param ) && ( !empty( $keyword1_field_name ) || !empty( $keyword2_field_name ) || !empty( $keyword3_field_name ) ) )
-        {
-            $filtered_items = [];
-            foreach ( $items as $item )
-            {
-                if ( !empty( $item->{ 'get' . ucfirst( $keyword1_field_name ) }() )  && $item->{ 'get' . ucfirst( $keyword1_field_name ) }() == $keyword_url_param )
-                    $filtered_items[] = $item;
-                elseif (!empty( $item->{ 'get' . ucfirst( $keyword2_field_name ) }() )  && $item->{ 'get' . ucfirst( $keyword2_field_name ) }() == $keyword_url_param )
-                    $filtered_items[] = $item;
-                elseif (!empty( $item->{ 'get' . ucfirst( $keyword3_field_name ) }() )  && $item->{ 'get' . ucfirst( $keyword3_field_name ) }() == $keyword_url_param )
-                    $filtered_items[] = $item;
-            }
-            $items = $filtered_items;
-        }
+        if ( !empty( $keyword_url_param ) && !empty( $keyword_fields ) )
+            $items = array_filter($items, fn($item) => in_array($keyword_url_param, array_map(fn($field) => $item->{ 'get' . ucfirst( $field ) }(), $keyword_fields), true));
 
         $otherLibraries = $libraryRepository->findOthersSameType($library->getId(), $library->getBase());
 

@@ -251,6 +251,8 @@
   &.portrait {
     line-height: 0;
 
+    .image-container { container: portrait / inline-size; }
+
     .picture {
       max-width: none;
       aspect-ratio: 1;

@@ -89,6 +89,12 @@
 
         &.in-glyph { width: auto; }
     }
+
+    @container portrait (max-width: 6rem) {
+        height: 40%;
+
+        &.in-glyph { font-size: var(--fontsize-medium); }
+    }
 }
 
 .badge-corner {

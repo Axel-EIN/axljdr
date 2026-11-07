@@ -10,7 +10,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
-use Symfony\Component\Validator\Constraints\File;
+use App\Validator\ImageFile;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 
@@ -22,7 +22,7 @@ class AdminArchiveType extends AbstractType
             ->add('titre', TextType::class)
             ->add('image', FileType::class, [
                 'mapped' => false, 'data_class' => null, 'required' => false,
-                'constraints' => [new File(['maxSize' => '5M'])],
+                'constraints' => [new ImageFile()],
             ])
             ->add('contenu', TextareaType::class)
             ->add('auteur', EntityType::class, [

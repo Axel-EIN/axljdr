@@ -2,8 +2,8 @@
 
 namespace App\Controller;
 
+use App\Service\Throttle;
 use App\Form\ContactType;
-use Psr\Cache\CacheItemPoolInterface;
 use Symfony\Component\Mime\Email;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -22,7 +22,7 @@ class ContactController extends AbstractController
     /**
      * @Route("/contact", name="contact")
      */
-    public function contact(Request $request, MailerInterface $mailer, CacheItemPoolInterface $cache): Response
+    public function contact(Request $request, MailerInterface $mailer, Throttle $throttle): Response
     {
         $form = $this->createForm(ContactType::class);
         $form->handleRequest($request);
@@ -39,7 +39,7 @@ class ContactController extends AbstractController
                 return $this->sent($request);
             }
 
-            if (!$this->underLimit($request, $cache)) {
+            if (!$throttle->allow('contact', $request, self::MAX_PER_HOUR)) {
                 $this->addFlash('danger', 'Trop de messages envoyés, réessayez plus tard.');
 
                 return $this->renderForm('contact/index.html.twig', ['form' => $form]);
@@ -65,21 +65,6 @@ class ContactController extends AbstractController
         $this->addFlash('success', 'Votre message a bien été envoyé.');
 
         return $this->redirectToRoute('contact');
-    }
-
-    private function underLimit(Request $request, CacheItemPoolInterface $cache): bool
-    {
-        $item = $cache->getItem('contact_' . hash('sha256', (string) $request->getClientIp()));
-        $sentAt = array_filter($item->isHit() ? $item->get() : [], fn($time) => $time > time() - 3600);
-
-        if (count($sentAt) >= self::MAX_PER_HOUR) {
-            return false;
-        }
-
-        $sentAt[] = time();
-        $cache->save($item->set($sentAt)->expiresAfter(3600));
-
-        return true;
     }
 
     private function email(FormInterface $form): Email

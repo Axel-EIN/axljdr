@@ -47,7 +47,7 @@
 
     <div class="chapter-intro relative">
       {{ include('story/chapter-characters.html.twig', {chapter: episode.chapitreParent, episode}) }}
-      <p class="quote quote-chapter">{{ episode.chapitreParent.citation|nl2br }}</p>
+      <p class="quote quote-chapter">{{ episode.chapitreParent.citation|e|text }}</p>
     </div>
 
   </header>

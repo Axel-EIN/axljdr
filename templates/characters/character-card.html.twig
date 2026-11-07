@@ -4,7 +4,7 @@
 {% set hide_clan = hide_clan|default(false) %}
 {% set compact = compact|default(false) %}
 
-<article class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2 {{ compact ? 'py-2' : 'py-3' }} {{ character.dead or character.missing ? 'character-inactive' }}">
+<article class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2 {{ compact ? 'py-2' : 'py-3' }} {{ readable and (character.dead or character.missing) ? 'character-inactive' }}">
 
     {% if readable %}
         <a href="{{ path('characters_profile', {id: character.id} ) }}" title="Voir le profil de {{character.prenom}}">
@@ -33,9 +33,9 @@
 
                 {{ include('parts/badge-catalog.html.twig', {item: character}) }}
 
-                {% if character.dead %}
+                {% if readable and character.dead %}
                     <img class="absolute icon-dead-big" src="{{ asset(MORT_ICO) }}" alt="Icône est mort" />
-                {% elseif character.missing %}
+                {% elseif readable and character.missing %}
                     <i class="absolute icon-missing-big fas fa-circle-question" title="Disparu"></i>
                 {% endif %}
 

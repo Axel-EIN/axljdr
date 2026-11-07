@@ -61,6 +61,7 @@ class RulesController extends AbstractController
 
         $sections[3]['name'] = "Règles Annexes";
         $sections[3]['entity'] = 'rule';
+        $sections[3]['anchor'] = 'rule-annex';
         $sections[3]['label_one'] = 'une Règle';
         $sections[3]['titleLight'] = 'Règles ';
         $sections[3]['titleStrong'] = 'Annexes';
@@ -156,8 +157,10 @@ class RulesController extends AbstractController
             $tabs = array_unique($tabs);
             $filters = array_unique(array_filter($filters));
 
-            if ($library->getNom() == 'Grimoire' )
-                $tabs = ['MAGIE', 'MAHO', 'KIHO', 'TATOUAGE'];
+            if ($library->getNom() == 'Grimoire' ) {
+                $grimoire_tabs = ['MAGIE', 'MAHO', 'KIHO', 'TATOUAGE'];
+                $tabs = $this->isGranted('ROLE_MJ') ? $grimoire_tabs : array_values(array_intersect($grimoire_tabs, $tabs));
+            }
         }
 
         if ( !empty( $tab_url_param ) && !empty( $tab_field_name ) )
@@ -183,6 +186,9 @@ class RulesController extends AbstractController
                     $subtabs = ['AIR', 'EAU', 'FEU', 'TERRE', 'VIDE', 'UNIVERSEL'];
 
                 $subtab_first = $subtabs[0] ?? null;
+
+                if ( !empty( $subtab_url_param ) && !in_array( $subtab_url_param, ['all', 'first'], true ) && !in_array( $subtab_url_param, $subtabs, true ) )
+                    throw $this->createNotFoundException();
 
             }
 
@@ -220,8 +226,8 @@ class RulesController extends AbstractController
 
         if ( $entity_name == 'advantage' ) {
             $discount_getters = [
-                'clan' => ['label' => 'Discount Clan/Faction', 'getter' => 'getDiscountClans'],
-                'class' => ['label' => 'Discount Classe', 'getter' => 'getDiscountClasses'],
+                'clan' => ['label' => 'réduction de faction', 'getter' => 'getDiscountClans'],
+                'class' => ['label' => 'réduction de classe', 'getter' => 'getDiscountClasses'],
             ];
 
             foreach ( $discount_getters as $param => $discount ) {

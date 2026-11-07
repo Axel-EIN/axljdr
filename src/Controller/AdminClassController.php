@@ -16,6 +16,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class AdminClassController extends AbstractController
 {
+    use CsrfTokenTrait;
+
     /**
      * @Route("/admin/class", name="admin_class")
      * @IsGranted("ROLE_MJ")
@@ -70,15 +72,17 @@ class AdminClassController extends AbstractController
             $em->flush();
             $this->addFlash('success', 'La classe a bien été ajoutée.');
 
+            if ($request->query->get('redirect') === 'class') {
+                return $this->redirectToRoute('rules_class', ['id' => $class->getId()]);
+            }
+
             return $this->redirectToRoute('admin_class');
         }
         
 
         return $this->render('back_office/create.html.twig', [
-            'type' => 'create',
             'entity' => 'class',
             'label' => 'Classe',
-            'gender' => 'F',
             'article' => 'une',
             'form' => $form->createView()
         ]);
@@ -123,11 +127,9 @@ class AdminClassController extends AbstractController
         }
 
         return $this->renderForm('back_office/edit.html.twig', [
-            'type' => 'edit',
             'class' => $class,
             'entity' => 'class',
             'label' => 'Classe',
-            'gender' => 'F',
             'article' => 'une',
             'form' => $form,
         ]);
@@ -139,7 +141,7 @@ class AdminClassController extends AbstractController
      */
     public function deleteClass(Request $request, Classe $class, FileHandler $fileHandler, DeletionGuard $deletionGuard): Response {
 
-        if ($this->isCsrfTokenValid('delete' . $class->getId(), $request->request->get('_csrf_token'))) {
+        if ($this->validToken($request, 'delete' . $class->getId())) {
 
             $refusal = $deletionGuard->refusal($class, $class->getNom());
 

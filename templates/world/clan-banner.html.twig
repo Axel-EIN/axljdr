@@ -39,7 +39,7 @@
                     <span class="quote text-white m-0 pr-3">«&nbsp;{{clan.citation}}&nbsp;»</span>
                 {% endif %}
 
-                {% if clan.chef is not empty %}
+                {% if clan.chef is not empty and element_listed(clan.chef) %}
                     <a style="color: {{ clan.couleur }}" class="d-flex justify-content-center hover-zoom mt-3" href="{{ path('characters_profile', {id: clan.chef.id} ) }}">
                         <img class="img-48" src="{{ asset(clan.chef.icone|default(NA_PERSO_PORTRAIT)) }}" alt="Icône du personnage" />
                         <div class="d-flex flex-column text-left ml-3">

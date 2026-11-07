@@ -16,6 +16,8 @@ use App\Service\Unlocker;
 
 class AdminArchiveController extends AbstractController
 {
+    use CsrfTokenTrait;
+
 
     /**
      * @Route("/admin/archive", name="admin_archive")
@@ -75,10 +77,8 @@ class AdminArchiveController extends AbstractController
         }
 
         return $this->render('back_office/create.html.twig', [
-            'type' => 'create',
             'entity' => 'archive',
             'label' => 'Archive',
-            'gender' => 'F',
             'article' => 'une',
             'form' => $form->createView()
         ]);
@@ -117,11 +117,9 @@ class AdminArchiveController extends AbstractController
         }
 
         return $this->renderForm('back_office/edit.html.twig', [
-            'type' => 'edit',
             'archive' => $archive,
             'entity' => 'archive',
             'label' => 'Archive',
-            'gender' => 'F',
             'article' => 'une',
             'form' => $form,
         ]);
@@ -133,7 +131,7 @@ class AdminArchiveController extends AbstractController
      */
     public function deleteArchive(Request $request, Archive $archive, FileHandler $fileHandler, Unlocker $unlocker): Response {
 
-        if ($this->isCsrfTokenValid('delete' . $archive->getId(), $request->request->get('_csrf_token'))) {
+        if ($this->validToken($request, 'delete' . $archive->getId())) {
 
             $entityManager = $this->getDoctrine()->getManager();
 

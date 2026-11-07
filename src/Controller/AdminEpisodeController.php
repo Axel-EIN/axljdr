@@ -20,6 +20,8 @@ use App\Service\Unlocker;
 
 class AdminEpisodeController extends AbstractController
 {
+    use CsrfTokenTrait;
+
     private const TABLE_FILTERS = [
         'chapitreParent.titre:Chapitre',
     ];
@@ -90,7 +92,7 @@ class AdminEpisodeController extends AbstractController
 
             $unlocker->sync($episode, $form->get('unlockedBy')->getData());
             $em->flush();
-            $this->addFlash('success', 'L\'épisode a bien été crée.');
+            $this->addFlash('success', 'L\'épisode a bien été créé.');
 
             $newSiblings = $episodeRepository->findBy(['chapitreParent' => $episode->getChapitreParent()->getId()]);
             $orderer->reorderNumber($episode->getId(), -1, $episode->getNumero(), [], $newSiblings);
@@ -102,10 +104,8 @@ class AdminEpisodeController extends AbstractController
         } 
 
         return $this->render('back_office/create.html.twig', [
-            'type' => 'create',
             'entity' => 'episode',
             'label' => 'Épisode',
-            'gender' => 'M',
             'article' => 'un',
             'form' => $form->createView()
         ]);
@@ -154,11 +154,9 @@ class AdminEpisodeController extends AbstractController
         }
 
         return $this->renderForm('back_office/edit.html.twig', [
-            'type' => 'edit',
             'episode' => $episode,
             'entity' => 'episode',
             'label' => 'Épisode',
-            'gender' => 'M',
             'article' => 'un',
             'form' => $form,
         ]);
@@ -171,7 +169,7 @@ class AdminEpisodeController extends AbstractController
     public function deleteEpisode(Request $request, Episode $episode, Orderer $orderer, EpisodeRepository $episodeRepository, FileHandler $fileHandler, Unlocker $unlocker, DeletionGuard $deletionGuard): Response {
         $parentChapter = $episode->getChapitreParent();
 
-        if ($this->isCsrfTokenValid('delete' . $episode->getId(), $request->request->get('_csrf_token'))) {
+        if ($this->validToken($request, 'delete' . $episode->getId())) {
 
             $refusal = $deletionGuard->refusal($episode, $episode->getTitre());
 

@@ -20,6 +20,8 @@ use App\Service\Unlocker;
 
 class AdminDojoController extends AbstractController
 {
+    use CsrfTokenTrait;
+
     private const TABLE_FILTERS = [
         'classe.nom:Classe',
         'clan.nom:Clan',
@@ -104,10 +106,8 @@ class AdminDojoController extends AbstractController
         }
 
         return $this->render('back_office/create.html.twig', [
-            'type' => 'create',
             'entity' => 'dojo',
             'label' => 'École',
-            'gender' => 'F',
             'article' => 'une',
             'form' => $form->createView()
         ]);
@@ -147,11 +147,9 @@ class AdminDojoController extends AbstractController
         }
 
         return $this->renderForm('back_office/edit.html.twig', [
-            'type' => 'edit',
             'dojo' => $dojo,
             'entity' => 'dojo',
             'label' => 'École',
-            'gender' => 'F',
             'article' => 'une',
             'form' => $form,
         ]);
@@ -163,7 +161,7 @@ class AdminDojoController extends AbstractController
      */
     public function deleteDojo(Request $request, Ecole $dojo, FileHandler $fileHandler, Unlocker $unlocker, DeletionGuard $deletionGuard): Response {
 
-        if ($this->isCsrfTokenValid('delete' . $dojo->getId(), $request->request->get('_csrf_token'))) {
+        if ($this->validToken($request, 'delete' . $dojo->getId())) {
 
             $refusal = $deletionGuard->refusal($dojo, $dojo->getNom());
 

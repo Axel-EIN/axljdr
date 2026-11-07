@@ -3,7 +3,6 @@
 namespace App\Repository;
 
 use App\Entity\Clan;
-use App\Entity\FactionType;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -37,25 +36,6 @@ class ClanRepository extends ServiceEntityRepository
     public function findByTypes(array $types)
     {
         return $this->findBy(array("type" => $types), array('nom' => 'ASC'));
-    }
-
-    public function findAllAutres()
-    {
-        return $this->createQueryBuilder('c')
-            ->andWhere('c.type != :majeur')
-            ->setParameter('majeur', FactionType::MAJEUR)
-            ->addOrderBy('c.nom', 'ASC')
-            ->getQuery()
-            ->getResult();
-    }
-
-    public function findAllExceptOne($id)
-    {
-        return $this->createQueryBuilder('c')
-            ->andWhere('c.id != :value_id')
-            ->setParameter('value_id', $id)
-            ->getQuery()
-            ->getResult();
     }
 
     public function countClans() {

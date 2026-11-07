@@ -17,6 +17,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class AdminSeasonController extends AbstractController
 {
+    use CsrfTokenTrait;
+
     /**
      * @Route("/admin/season", name="admin_season")
      * @IsGranted("ROLE_MJ")
@@ -78,10 +80,8 @@ class AdminSeasonController extends AbstractController
         }
 
         return $this->render('back_office/create.html.twig', [
-            'type' => 'create',
             'entity' => 'season',
             'label' => 'Saison',
-            'gender' => 'F',
             'article' => 'une',
             'form' => $form->createView()
         ]);
@@ -127,11 +127,9 @@ class AdminSeasonController extends AbstractController
         }
 
         return $this->renderForm('back_office/edit.html.twig', [
-            'type' => 'edit',
             'season' => $season,
             'entity' => 'season',
             'label' => 'Saison',
-            'gender' => 'F',
             'article' => 'une',
             'form' => $form,
         ]); 
@@ -143,7 +141,7 @@ class AdminSeasonController extends AbstractController
      */
     public function deleteSeason(Request $request, Saison $season, Orderer $orderer, SaisonRepository $seasonRepository, FileHandler $fileHandler, DeletionGuard $deletionGuard): Response {
 
-        if ($this->isCsrfTokenValid('delete' . $season->getId(), $request->request->get('_csrf_token'))) {
+        if ($this->validToken($request, 'delete' . $season->getId())) {
 
             $refusal = $deletionGuard->refusal($season, $season->getTitre());
 
@@ -161,8 +159,7 @@ class AdminSeasonController extends AbstractController
             $entityManager->remove($season);
             $entityManager->flush();
             $this->addFlash('success', 'La saison a bien été supprimée.');
-        } else
-            $this->addFlash('danger', 'Token de protection invalide !');
+        }
 
         if (!empty($request->query->get('redirect')) && $request->query->get('redirect') == 'story')
             return $this->redirectToRoute('story');

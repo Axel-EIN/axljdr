@@ -85,7 +85,7 @@
         {% if character.famille is defined and character.famille is not empty %}
             <li class="list-group-item infos-item">
                 Famille :
-                <a href="{{ path('world_clan', {id: character.clan.id, '_fragment': character.famille.nom } ) }}">
+                <a href="{{ path('world_clan', {id: character.famille.clan.id, '_fragment': character.famille.nom } ) }}">
                     {{ character.famille.nom }}
                     <img
                     class="img-48 rounded-circle" src="{{ asset(image_small(character.famille.mon|default(NA_MON))) }}"
@@ -100,7 +100,7 @@
                 École :
                 <a href="{{ path('rules_dojo', {id: character.ecole.id} ) }}">
                     {{ character.ecole.nom }}
-                    <img class="img-48" src="{{ asset(image_small(character.classe.icone|default(NA_CLASS_ICO))) }}" alt="Classe {{character.classe.nom}}" title="Classe {{character.classe.nom}}" />
+                    <img class="img-48" src="{{ asset(image_small(character.classe.icone ?? NA_CLASS_ICO)) }}" alt="Classe {{ character.classe.nom ?? '' }}" title="Classe {{ character.classe.nom ?? '' }}" />
                 </a>
             </li>
         {% endif %}

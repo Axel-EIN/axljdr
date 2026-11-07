@@ -94,7 +94,7 @@
             <li>
               <span class="label">Famille :</span>
               {% if sheet.personnage.famille %}
-                <a class="link-strong extrabold" href="{{ path('world_clan', {id: sheet.personnage.clan.id, '_fragment': sheet.personnage.famille.nom}) }}">
+                <a class="link-strong extrabold" href="{{ path('world_clan', {id: sheet.personnage.famille.clan.id, '_fragment': sheet.personnage.famille.nom}) }}">
                   <img  class="img-24 rounded-circle" src="{{ asset(image_small(sheet.personnage.famille.mon|default(NA_MON))) }}"
                         title="Mon de la famille {{ sheet.personnage.famille.nom }}" />
                   {{ sheet.personnage.famille.nom }}
@@ -644,7 +644,7 @@
                 >
                   <td class="text-center" data-skill-dojo-cell>
                     {% if slot.dojo_skill > 0 %}
-                      <img src="{{ asset(image_small(sheet.personnage.ecole.clan.mon)) }}" class="img-24" title="Compétence de l'École {{ sheet.personnage.ecole.nom }}" />
+                      <img src="{{ asset(image_small(sheet.personnage.ecole.clan.mon ?? NA_MON)) }}" class="img-24" title="Compétence de l'École {{ sheet.personnage.ecole.nom }}" />
                     {% else %}
                       <span class="d-inline-flex icon-20 rounded-circle border-base">&nbsp;</span>
                     {% endif %}
@@ -779,12 +779,12 @@
 
             <div class="col-6 col-lg-3">
               <h6>Affinité</h6>
-              <strong class="text-{{ dojo.affinite|upper }} text-uppercase">{{ dojo.affinite|default('—') }}</strong>
+              <strong class="text-{{ (dojo.affinite ?? '')|upper }} text-uppercase">{{ dojo.affinite ?? '—' }}</strong>
             </div>
 
             <div class="col-6 col-lg-3">
               <h6>Déficience</h6>
-              <strong class="text-{{ dojo.deficience|upper }} text-uppercase">{{ dojo.deficience|default('—') }}</strong>
+              <strong class="text-{{ (dojo.deficience ?? '')|upper }} text-uppercase">{{ dojo.deficience ?? '—' }}</strong>
             </div>
 
             <div class="col-6 col-lg-3">

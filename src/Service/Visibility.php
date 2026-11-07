@@ -4,6 +4,7 @@ namespace App\Service;
 
 use App\Entity\Access;
 use App\Entity\Personnage;
+use App\Entity\Status;
 use App\Repository\UnlockRepository;
 
 class Visibility
@@ -18,6 +19,22 @@ class Visibility
     public const PUBLIC = 'public';
 
     private const FRESHNESS_DAYS = 7;
+
+    private const RANKS = [
+        self::PUBLIC => 0,
+        self::UNLOCKED => 1,
+        self::DISCOVERED => 1,
+        self::COMMON_DISCOVERED => 1,
+        self::LOCKED => 2,
+        self::HIDDEN => 3,
+        self::SECRET => 3,
+        self::COMMON => 3,
+    ];
+
+    private const INACTIVE_RANKS = [
+        Status::MISSING => 4,
+        Status::DEAD => 5,
+    ];
 
     private const READABLE = [self::PUBLIC, self::UNLOCKED, self::DISCOVERED, self::COMMON_DISCOVERED];
 
@@ -69,7 +86,7 @@ class Visibility
             return $this->isPublished($element) ? self::PUBLIC : self::HIDDEN;
         }
 
-        if (($revealSession || $this->currentChapter->contains($element)) && !$this->isIndividualSecret($element)) {
+        if (($revealSession || $this->currentChapter->isRevealed($element)) && !$this->isIndividualSecret($element)) {
             return self::LEVELS[$access];
         }
 
@@ -108,25 +125,11 @@ class Visibility
 
     private function rankOf($element): int
     {
-        if ($element instanceof Personnage && $element->isDead()) {
-            return 5;
+        if ($element instanceof Personnage && isset(self::INACTIVE_RANKS[$element->getStatus()])) {
+            return self::INACTIVE_RANKS[$element->getStatus()];
         }
 
-        if ($element instanceof Personnage && $element->isMissing()) {
-            return 4;
-        }
-
-        $state = $this->state($element);
-
-        if ($state === self::PUBLIC) {
-            return 0;
-        }
-
-        if (in_array($state, self::READABLE, true)) {
-            return 1;
-        }
-
-        return in_array($state, self::UNSEEN, true) ? 3 : 2;
+        return self::RANKS[$this->state($element)];
     }
 
     public function isListed($element, bool $revealSession = false): bool

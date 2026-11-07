@@ -6,16 +6,19 @@ use App\Entity\Lieu;
 use App\Entity\Personnage;
 use App\Entity\Scene;
 use App\Repository\DevelopmentRepository;
+use App\Repository\SceneRepository;
 
 class HistoryRanker
 {
     private Visibility $visibility;
     private DevelopmentRepository $developmentRepository;
+    private SceneRepository $sceneRepository;
 
-    public function __construct(Visibility $visibility, DevelopmentRepository $developmentRepository)
+    public function __construct(Visibility $visibility, DevelopmentRepository $developmentRepository, SceneRepository $sceneRepository)
     {
         $this->visibility = $visibility;
         $this->developmentRepository = $developmentRepository;
+        $this->sceneRepository = $sceneRepository;
     }
 
     public function developmentsFor(Personnage $character): array
@@ -28,7 +31,7 @@ class HistoryRanker
 
     public function forLocation(Lieu $location): array
     {
-        $scenes = $location->getScenes()->toArray();
+        $scenes = $this->sceneRepository->findByLocationWithEpisode($location);
         usort($scenes, [$this, 'compare']);
 
         $lines = [];

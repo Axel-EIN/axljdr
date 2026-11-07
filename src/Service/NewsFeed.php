@@ -57,7 +57,6 @@ class NewsFeed
                 'icon' => $character->getIcone(),
                 'player' => $character->getJoueur(),
                 'xp' => $this->xpRanker->total($character),
-                'dead' => $character->isDead() ? 1 : 0,
             ];
         }
 

@@ -72,12 +72,10 @@ class StoryController extends AbstractController
         $previousChapter = $chapterRepository->findPrevious($episode->getChapitreParent()->getSaisonParent()->getId(), $episode->getChapitreParent()->getNumero());
 
         $nextChapter = $chapterRepository->findNext($episode->getChapitreParent()->getSaisonParent()->getId(), $episode->getChapitreParent()->getNumero());
-        $nextChapterEpisode = $nextChapter?->getEpisodes()[0];
 
         return $this->render('story/episode-detail.html.twig', [
             'episode' => $episode,
             'next_episode' => $next,
-            'next_chapter_episode' => $nextChapterEpisode,
             'previous_chapter' => $previousChapter,
             'next_chapter' => $nextChapter,
             'episode_ranking' => $episodeRanking,

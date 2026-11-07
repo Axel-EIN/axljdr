@@ -68,9 +68,9 @@
          {% if restricted or not href %}aria-disabled="true"{% else %}{% if show_label %}title="{{ name }}" {% endif %}{% if pdf_link %}target="_blank" rel="noopener" {% endif %}href="{{ href }}"{% endif %}>
         <div class="image-container {% if locked or restricted %}slight-fade{% endif %}">
 
-          {% if catalog %}
+          {% if catalog and not restricted %}
             {{ include('parts/badge-catalog.html.twig', {item: item}) }}
-          {% else %}
+          {% elseif not restricted %}
             {% set pinned = badge_pinned or (badge_hover and not is_gm() and element_individual(item)) %}
             {{ include('parts/badge-access.html.twig', {
               state: pinned and state == 'common-discovered' ? 'unlocked' : state,
@@ -111,7 +111,7 @@
             </div>
           {% endif %}
 
-          {% if not show_label %}
+          {% if not show_label and not restricted %}
             <span class="hover-tooltip caption"><span class="label">{{ name }}</span></span>
           {% endif %}
         </div>

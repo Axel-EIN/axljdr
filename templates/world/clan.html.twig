@@ -34,7 +34,7 @@
                         <div class="family-mon">
                             <img class="img-fluid circle-crop" src="{{ asset(family.mon|default(NA_MON)) }}" alt="Mon Famille" />
 
-                            {% if family.chef is not empty %}
+                            {% if family.chef is not empty and element_listed(family.chef) %}
                                 <a class="family-daimyo hover-zoom" href="{{ path('characters_profile', {id: family.chef.id} ) }}" title="{{ family.chef.nomComplet }}">
                                     <span class="text-muted">Daimyo</span>
                                     <img class="character-portrait medium" src="{{ asset(family.chef.icone|default(NA_PERSO_PORTRAIT)) }}" alt="Icône du personnage" />

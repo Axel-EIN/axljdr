@@ -9,7 +9,6 @@ use App\Form\PlayerSheetType;
 use App\Repository\AvantageRepository;
 use App\Repository\ChapitreRepository;
 use App\Repository\CompetenceRepository;
-use App\Repository\DevelopmentRepository;
 use App\Repository\EpisodeRepository;
 use App\Repository\ObjetRepository;
 use App\Repository\PersonnageRepository;
@@ -127,7 +126,7 @@ class CharactersController extends AbstractController
     /**
      * @Route("/characters/profile/{id}", name="characters_profile")
      */
-    public function showProfile(Personnage $character, PersonnageRepository $characterRepository, HistoryRanker $historyRanker, SaisonRepository $seasonRepository, Visibility $visibility, DevelopmentRepository $developmentRepository, NameTagger $nameTagger, XpRanker $xpRanker, Locator $locator): Response {
+    public function showProfile(Personnage $character, PersonnageRepository $characterRepository, HistoryRanker $historyRanker, SaisonRepository $seasonRepository, Visibility $visibility, NameTagger $nameTagger, XpRanker $xpRanker, Locator $locator): Response {
 
         if ($response = $this->accessGuard($visibility, $character, 'character', 'characters')) {
             return $response;
@@ -158,7 +157,7 @@ class CharactersController extends AbstractController
             'is_own_character' => $isOwnCharacter,
             'can_edit' => $canEdit,
             'form' => $form?->createView(),
-            'developments' => $developmentRepository->findByPersonnage($character),
+            'developments' => $historyRanker->developmentsFor($character),
             'name' => $character->getNomComplet(),
             'entity' => 'character',
             'category' => 'characters',

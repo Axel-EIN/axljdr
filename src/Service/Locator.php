@@ -161,7 +161,7 @@ class Locator
         foreach ($sheets as $sheet) {
             $character = $sheet->getPersonnage();
 
-            if ($this->visibility->isListed($character)) {
+            if ($this->visibility->isListed($character) && $this->lastSceneReadable($character)) {
                 $wanderers[$character->getId()] = [
                     'character' => $character,
                     'locX' => $sheet->getLocX(),
@@ -171,6 +171,13 @@ class Locator
         }
 
         return $wanderers;
+    }
+
+    private function lastSceneReadable(Personnage $character): bool
+    {
+        $last = $this->participationRepository->findLastForCharacter($character);
+
+        return $last === null || $this->visibility->isReadable($last->getScene()->getEpisodeParent());
     }
 
     private function journeys(): array

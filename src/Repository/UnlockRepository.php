@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\Personnage;
 use App\Entity\Unlock;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -19,24 +20,24 @@ class UnlockRepository extends ServiceEntityRepository
         parent::__construct($registry, Unlock::class);
     }
 
-    public function mapForCharacters(array $characterIds): array
+    public function mapForCharacter(?Personnage $character): array
     {
-        if (empty($characterIds)) {
+        if ($character === null) {
             return [];
         }
 
-        $lignes = $this->createQueryBuilder('u')
+        $rows = $this->createQueryBuilder('u')
             ->select('u.entity AS entity', 'u.elementId AS elementId', 'u.unlockedAt AS unlockedAt')
-            ->andWhere('u.character IN (:ids)')
-            ->setParameter('ids', $characterIds)
+            ->andWhere('u.character = :character')
+            ->setParameter('character', $character)
             ->getQuery()
             ->getArrayResult();
 
         $map = [];
-        foreach ($lignes as $ligne) {
-            $connue = $map[$ligne['entity']][$ligne['elementId']] ?? null;
-            if ($connue === null || $ligne['unlockedAt'] < $connue) {
-                $map[$ligne['entity']][$ligne['elementId']] = $ligne['unlockedAt'];
+        foreach ($rows as $row) {
+            $known = $map[$row['entity']][$row['elementId']] ?? null;
+            if ($known === null || $row['unlockedAt'] < $known) {
+                $map[$row['entity']][$row['elementId']] = $row['unlockedAt'];
             }
         }
 

@@ -20,7 +20,8 @@
 {% set emblem_at = emblem_at|default(center) %}
 {% set main_character = navigating_character() %}
 {% set main_id = main_character.id ?? null %}
-{% set current_color = current.clan.couleur ?? null %}
+{% set current_clan = current and current.clan and element_listed(current.clan) ? current.clan : null %}
+{% set current_color = current_clan.couleur ?? null %}
 {% set place_groups = place_groups|default([])|map(g => g|merge({locations: g.locations|filter(l => l.placed)|sort((a, b) => a.nom <=> b.nom)}))|filter(g => g.locations is not empty) %}
 {% set players = players|default([]) %}
 {% set placed = locations|filter(l => l.placed) %}
@@ -196,7 +197,8 @@
         {% set other_state = element_state(other) %}
         {% set other_secret = other_state == 'hidden' %}
         {% set other_size = other_secret ? '' : {'Cité': ' city', 'Ville': ' city', 'Région': ' region', 'Temple': ' temple'}[other.type] ?? '' %}
-        {% set other_color = other_secret ? null : other.clan.couleur ?? null %}
+        {% set other_clan = not other_secret and other.clan and element_listed(other.clan) ? other.clan : null %}
+        {% set other_color = other_clan.couleur ?? null %}
         <a {% if other_secret %}aria-disabled="true"{% else %}href="{{ path('world_location', {id: other.id}) }}"{% if worldmap %} data-panel="{{ path('map_location', {id: other.id}) }}"{% endif %}{% endif %}
            class="absolute other-location-marker{{ other_size }}" data-location="{{ other.id }}"
            style="left:{{other.locX}}%; top:{{other.locY}}%;{% if other_color %} --clan-color: {{other_color}};{% endif %}">
@@ -207,8 +209,8 @@
             <img class="location-marker-icon" src="{{ asset(other.icone|default(NA_LIEU_ICO)) }}" alt="Icone de {{ other.nom }}" />
             {{ include('parts/map-label.html.twig', {
               name: other.nom,
-              mon: other.clan.mon ?? null,
-              details: [other.type, other.clan.nom ?? null, other_state == 'secret' ? 'Secret' : null],
+              mon: other_clan.mon ?? null,
+              details: [other.type, other_clan.nom ?? null, other_state == 'secret' ? 'Secret' : null],
               state: other_state,
               variant: 'compact',
             }) }}
@@ -248,8 +250,8 @@
 
       {{ include('parts/map-label.html.twig', {
         name: current.nom,
-        mon: current.clan.mon ?? null,
-        details: [current.type, current.clan.nom ?? null],
+        mon: current_clan.mon ?? null,
+        details: [current.type, current_clan.nom ?? null],
         variant: 'absolute current',
         style: 'left:' ~ current.locX ~ '%; top:' ~ current.locY ~ '%;' ~ (current_color ? ' --clan-color: ' ~ current_color ~ ';' : ''),
       }) }}

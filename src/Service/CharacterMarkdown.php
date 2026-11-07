@@ -7,7 +7,6 @@ use App\Entity\FactionType;
 use App\Entity\FichePersonnage;
 use App\Entity\Personnage;
 use App\Entity\Status;
-use App\Repository\DevelopmentRepository;
 
 class CharacterMarkdown
 {
@@ -28,15 +27,13 @@ class CharacterMarkdown
     private SheetReader $reader;
     private HistoryRanker $historyRanker;
     private Locator $locator;
-    private DevelopmentRepository $developmentRepository;
 
-    public function __construct(XpRanker $xpRanker, SheetReader $reader, HistoryRanker $historyRanker, Locator $locator, DevelopmentRepository $developmentRepository)
+    public function __construct(XpRanker $xpRanker, SheetReader $reader, HistoryRanker $historyRanker, Locator $locator)
     {
         $this->xpRanker = $xpRanker;
         $this->reader = $reader;
         $this->historyRanker = $historyRanker;
         $this->locator = $locator;
-        $this->developmentRepository = $developmentRepository;
     }
 
     public function build(Personnage $character): string
@@ -336,7 +333,7 @@ class CharacterMarkdown
             return '- **' . $scene->getTitre() . '** (' . $episode->getChapitreParent()->getTitre()
                 . ' — EP #' . $episode->getNumeroSaison() . ' - Scène ' . $scene->getNumero() . ')'
                 . ($development->getEstMort() ? ', MORT' : '') . ' : ' . $this->line($development->getContent());
-        }, $this->developmentRepository->findByPersonnage($character));
+        }, $this->historyRanker->developmentsFor($character));
 
         $parts = [
             'Histoire' => $this->paragraph($character->getDescription()),

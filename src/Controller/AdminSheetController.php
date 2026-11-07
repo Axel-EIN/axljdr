@@ -16,6 +16,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class AdminSheetController extends AbstractController
 {
+    use CsrfTokenTrait;
+
     /**
      * @Route("/admin/sheet", name="admin_sheet")
      * @IsGranted("ROLE_MJ")
@@ -83,10 +85,8 @@ class AdminSheetController extends AbstractController
         }
 
         return $this->render('back_office/create.html.twig', [
-            'type' => 'create',
             'entity' => 'sheet',
             'label' => 'Fiche',
-            'gender' => 'F',
             'article' => 'une',
             'form' => $form->createView(),
             'skills_json' => $this->buildSkillsJson($skillRepository),
@@ -107,15 +107,17 @@ class AdminSheetController extends AbstractController
             $this->getDoctrine()->getManager()->flush();
             $this->addFlash('success', 'La fiche a bien été modifiée.');
 
+            if ($request->query->get('redirect') === 'sheet') {
+                return $this->redirectToRoute('characters_sheet', ['id' => $sheet->getId()]);
+            }
+
             return $this->redirectToRoute('admin_sheet');
         }
 
         return $this->renderForm('back_office/edit.html.twig', [
-            'type' => 'edit',
             'sheet' => $sheet,
             'entity' => 'sheet',
             'label' => 'Fiche',
-            'gender' => 'F',
             'article' => 'une',
             'form' => $form,
             'skills_json' => $this->buildSkillsJson($skillRepository),
@@ -146,7 +148,7 @@ class AdminSheetController extends AbstractController
      */
     public function deleteSheet(Request $request, FichePersonnage $sheet): Response {
 
-        if ($this->isCsrfTokenValid('delete' . $sheet->getId(), $request->request->get('_csrf_token'))) {
+        if ($this->validToken($request, 'delete' . $sheet->getId())) {
 
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($sheet);

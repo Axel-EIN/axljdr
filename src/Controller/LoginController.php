@@ -2,25 +2,28 @@
 
 namespace App\Controller;
 
-use Exception;
 use App\Entity\Utilisateur;
+use App\Service\Throttle;
 use App\Form\AccountPasswordType;
 use App\Form\ResetPassType;
 use Symfony\Component\Mime\Email;
 use App\Repository\UtilisateurRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Security\Csrf\TokenGenerator\TokenGeneratorInterface;
 
 class LoginController extends AbstractController
 {
+    private const MAX_RESETS_PER_HOUR = 3;
+    private const RESET_LIFETIME = '1 hour';
+
     /**
      * @Route("/login", name="app_login")
      */
@@ -50,53 +53,37 @@ class LoginController extends AbstractController
                                     Request $request,
                                     UtilisateurRepository $userRepository,
                                     MailerInterface $mailer,
-                                    TokenGeneratorInterface $tokenGenerator): Response
+                                    TokenGeneratorInterface $tokenGenerator,
+                                    Throttle $throttle): Response
     {
         $form = $this->createForm(ResetPassType::class);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $data = $form->getData();
 
-            $user = $userRepository->findOneBy( [ 'email' => $data['email'] ] );
+            if (!$throttle->allow('forgot_password', $request, self::MAX_RESETS_PER_HOUR)) {
+                $this->addFlash('danger', 'Trop de demandes envoyées, réessayez plus tard.');
 
-            if ($user === null) {
-                $this->addFlash('danger', 'Cette adresse e-mail est inconnue');
-                return $this->redirectToRoute('app_login');
+                return $this->redirectToRoute('app_forgotten_password');
             }
 
-            $token = $tokenGenerator->generateToken();
+            $user = $userRepository->findOneBy(['email' => $form->get('email')->getData()]);
 
-            try{
-                $user->setResetToken($token);
-                $entityManager = $this->getDoctrine()->getManager();
-                $entityManager->persist($user);
-                $entityManager->flush();
-            } catch (\Exception $e) {
-                $this->addFlash('warning', $e->getMessage());
-                return $this->redirectToRoute('app_login');
+            if ($user !== null) {
+                $token = $tokenGenerator->generateToken();
+                $user->setResetToken(hash('sha256', $token));
+                $this->getDoctrine()->getManager()->flush();
+
+                try {
+                    $mailer->send($this->resetEmail($user, $token));
+                } catch (TransportExceptionInterface $e) {
+                    $this->addFlash('danger', 'L\'e-mail n\'a pas pu être envoyé. Réessayez plus tard.');
+
+                    return $this->redirectToRoute('app_forgotten_password');
+                }
             }
 
-            $url = $this->generateUrl('app_reset_password', array('token' => $token), UrlGeneratorInterface::ABSOLUTE_URL);
-
-            $message = new Email;
-            $message
-                ->from('no-reply@axl-design.me')
-                ->to($user->getEmail())
-                ->subject('Mot de passe oublié')
-                ->text(
-                    'Bonjour,'
-                    . PHP_EOL . PHP_EOL .
-                    'Suite à une demande de réinitialisation du mot de passe, nous avons généré ce lien pour que vous puissiez le changer'
-                    . PHP_EOL . PHP_EOL .
-                    'Merci de cliquer sur ce lien pour accéder à la page pour le changement de mot de passe : '
-                    . $url
-                );
-            ;
-
-            $mailer->send($message);
-
-            $this->addFlash('success', 'E-mail de réinitialisation du mot de passe a été envoyé !');
+            $this->addFlash('success', 'Si un compte utilise cette adresse, un e-mail de réinitialisation vient de lui être envoyé.');
 
             return $this->redirectToRoute('app_login');
         }
@@ -107,35 +94,45 @@ class LoginController extends AbstractController
     /**
      * @Route("/reset-password/{token}", name="app_reset_password")
      */
-    public function resetPassword(Request $request, string $token, UserPasswordHasherInterface $userPasswordHasherInterface)
+    public function resetPassword(Request $request, string $token, UtilisateurRepository $userRepository, UserPasswordHasherInterface $userPasswordHasherInterface)
     {
-        $user = $this->getDoctrine()->getRepository(Utilisateur::class)->findOneBy(['reset_token' => $token]);
-        
-        if ($user === null) {
-            $this->addFlash('danger', 'Token Inconnu');
-            return $this->redirectToRoute('app_login');
+        $user = $userRepository->findOneBy(['reset_token' => hash('sha256', $token)]);
+
+        if ($user === null || $user->getResetRequestedAt() < new \DateTimeImmutable('-' . self::RESET_LIFETIME)) {
+            $this->addFlash('danger', 'Ce lien de réinitialisation est invalide ou a expiré. Faites une nouvelle demande.');
+
+            return $this->redirectToRoute('app_forgotten_password');
         }
 
         $form = $this->createForm(AccountPasswordType::class);
-
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $password = $form->get('plainPassword')->getData();
-
-            $user->setResetToken(null);
-
-            $user->setPassword($userPasswordHasherInterface->hashPassword($user, $password));
-
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($user);
-            $entityManager->flush();
+            $user->setPassword($userPasswordHasherInterface->hashPassword($user, $form->get('plainPassword')->getData()));
+            $this->getDoctrine()->getManager()->flush();
 
             $this->addFlash('success', 'Mot de passe mis à jour');
 
             return $this->redirectToRoute('app_login');
-        }else {
-            return $this->render('account/edit-password.html.twig',['form' => $form->createView()]);
         }
+
+        return $this->render('account/edit-password.html.twig',['form' => $form->createView()]);
+    }
+
+    private function resetEmail(Utilisateur $user, string $token): Email
+    {
+        $url = $this->generateUrl('app_reset_password', ['token' => $token], UrlGeneratorInterface::ABSOLUTE_URL);
+
+        return (new Email())
+            ->from($this->getParameter('mailer_sender'))
+            ->to($user->getEmail())
+            ->subject('Mot de passe oublié')
+            ->text(
+                'Bonjour,'
+                . PHP_EOL . PHP_EOL
+                . 'Pour choisir un nouveau mot de passe, ouvrez ce lien : ' . $url
+                . PHP_EOL . PHP_EOL
+                . 'Ce lien est valable une heure et ne sert qu\'une fois. Si vous n\'avez rien demandé, ignorez cet e-mail.'
+            );
     }
 }

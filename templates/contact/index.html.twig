@@ -15,11 +15,7 @@
 
         <p>Vous pouvez également nous contacter via le formulaire suivant.</p>
 
-        {% if notice is not empty %}
-            <div class="alert alert-success" role="alert">
-                {{ notice }}
-            </div>
-        {% endif %}
+        {{ include('parts/flash-messages.html.twig') }}
 
         {{ form(form) }}
 

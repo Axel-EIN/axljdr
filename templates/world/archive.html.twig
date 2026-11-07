@@ -9,7 +9,7 @@
 
             {{ include('parts/description.html.twig', {text: record.contenu, variant: 'aerated'}, with_context = false) }}
         
-            {% if record.auteur is not empty %}
+            {% if record.auteur is not empty and element_listed(record.auteur) %}
                 <ul class="list-group list-group-flush">
                     <li class="list-group-item">
                         <strong>Auteur&nbsp;:</strong> {{ record.auteur.nom }} <strong>{{ record.auteur.prenom }}</strong> 

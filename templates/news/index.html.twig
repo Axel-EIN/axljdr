@@ -31,7 +31,10 @@
                     </div>
 
                     {% if ranking %}
-                        {{ include('/news/ranking.html.twig', {items: ranking, mine: my_characters}) }}
+                        <div>
+                            <h3 class="label-amerigo news-subtitle text-white">Joueurs</h3>
+                            {{ include('/news/ranking.html.twig', {items: ranking, mine: my_characters}) }}
+                        </div>
                     {% endif %}
                 </div>
 
@@ -267,7 +270,7 @@
                         <p>Les secrets de votre personnage apparaîtront ici.</p>
                     {% else %}
                         <p>Connectez-vous pour voir les secrets de votre personnage.</p>
-                        <a class="btn btn-medium btn-secondary-style" href="{{ path('app_login') }}">Se connecter</a>
+                        <a class="btn-primary-style btn-medium" href="{{ path('app_login') }}">Se connecter</a>
                     {% endif %}
                 </div>
             {% endif %}

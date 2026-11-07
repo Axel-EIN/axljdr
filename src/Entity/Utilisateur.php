@@ -13,7 +13,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=UtilisateurRepository::class)
- * @UniqueEntity(fields={"pseudo"}, message="There is already an account with this pseudo")
+ * @UniqueEntity(fields={"pseudo"}, message="Ce pseudo est déjà pris.")
+ * @UniqueEntity(fields={"email"}, message="Un compte utilise déjà cette adresse e-mail.")
  */
 class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
 {
@@ -54,6 +55,8 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank(message="Veuillez entrer une adresse e-mail.")
+     * @Assert\Email(message="Cette adresse e-mail n'est pas valide.")
      */
     private $email;
 

@@ -9,6 +9,27 @@
     th {
         background-color: var(--color-secondarypasteldark);
         color: var(--color-background);
+
+        &[data-sort] {
+            cursor: pointer;
+            user-select: none;
+
+            &::after {
+                content: "↕";
+                margin-left: 0.3em;
+                opacity: 0.35;
+            }
+
+            &[aria-sort="ascending"]::after {
+                content: "▲";
+                opacity: 1;
+            }
+
+            &[aria-sort="descending"]::after {
+                content: "▼";
+                opacity: 1;
+            }
+        }
     }
     td {
         background-color: var(--color-white);

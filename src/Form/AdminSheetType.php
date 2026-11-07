@@ -29,10 +29,10 @@ class AdminSheetType extends AbstractType
         $builder
             ->add('personnage', EntityType::class, [
                 'class' => Personnage::class,
-                'choice_label' => 'prenom',
+                'choice_label' => 'nomComplet',
                 'required' => true,
                 'query_builder' => fn(EntityRepository $er) => $er->createQueryBuilder('p')
-                    ->orderBy('p.prenom', 'ASC'),
+                    ->orderBy('p.nom', 'ASC')->addOrderBy('p.prenom', 'ASC'),
             ])
             ->add('creationExp', IntegerType::class)
             ->add('avantage1', EntityType::class, [

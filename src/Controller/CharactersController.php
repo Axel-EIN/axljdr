@@ -91,13 +91,11 @@ class CharactersController extends AbstractController
             : [];
 
         $sections = [];
-        $sections[0]['name'] = "PJs";
         $sections[0]['entity'] = 'character';
         $sections[0]['label_one'] = "un personnage";
         $sections[0]['titleLight'] = '';
         $sections[0]['titleStrong'] = 'Personnages Joueurs';
 
-        $sections[1]['name'] = "PNJs";
         $sections[1]['entity'] = 'character';
         $sections[1]['anchor'] = 'npc';
         $sections[1]['label_one'] = "un personnage";
@@ -358,7 +356,7 @@ class CharactersController extends AbstractController
         $isOwnCharacter = $this->isOwnCharacter($sheet->getPersonnage());
 
         if (!$isOwnCharacter && !$this->isGranted('ROLE_MJ')) {
-            throw $this->createAccessDeniedException("Vous ne pouvez éditer que la fiche de votre propre personnage.");
+            throw $this->createNotFoundException();
         }
 
         $form = $this->createForm(PlayerSheetType::class, $sheet, [
@@ -385,7 +383,7 @@ class CharactersController extends AbstractController
         $isGm = $this->isGranted('ROLE_MJ');
 
         if (!$this->isOwnCharacter($character) && !$isGm) {
-            throw $this->createAccessDeniedException("Vous ne pouvez éditer que le profil de votre propre personnage.");
+            throw $this->createNotFoundException();
         }
 
         $previousDescription = $character->getDescription();

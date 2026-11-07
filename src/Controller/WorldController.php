@@ -141,8 +141,8 @@ class WorldController extends AbstractController
 
     $locations = $locationRepository->findAllSorted();
     $otherLocations = array_values(array_filter(
-      $locationRepository->findAllExceptOne($location->getId()),
-      fn (Lieu $other) => $other->getClan() === $location->getClan() && $visibility->isReadable($other)
+      $locations,
+      fn (Lieu $other) => $other->getId() !== $location->getId() && $other->getClan() === $location->getClan() && $visibility->isReadable($other)
     ));
     shuffle($otherLocations);
     $otherLocations = array_slice($otherLocations, 0, 12);

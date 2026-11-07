@@ -4,9 +4,11 @@ namespace App\Entity;
 
 use App\Repository\DevelopmentRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ORM\Entity(repositoryClass=DevelopmentRepository::class)
+ * @UniqueEntity(fields={"participation"}, errorPath="participation", message="Ce personnage a déjà un développement pour cette scène.")
  */
 class Development
 {

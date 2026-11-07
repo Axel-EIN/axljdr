@@ -19,6 +19,8 @@ use App\Service\Unlocker;
 
 class AdminLocationController extends AbstractController
 {
+    use CsrfTokenTrait;
+
   private const TABLE_FILTERS = [
     'clan.nom:Clan',
   ];
@@ -108,10 +110,8 @@ class AdminLocationController extends AbstractController
     }
 
     return $this->render('back_office/create.html.twig', [
-      'type' => 'create',
       'entity' => 'location',
       'label' => 'Lieu',
-      'gender' => 'M',
       'article' => 'un',
       'form' => $form->createView()
     ]);
@@ -173,11 +173,9 @@ class AdminLocationController extends AbstractController
     }
 
     return $this->renderForm('back_office/edit.html.twig', [
-      'type' => 'edit',
       'location' => $location,
       'entity' => 'location',
       'label' => 'Lieu',
-      'gender' => 'M',
       'article' => 'un',
       'form' => $form,
     ]);
@@ -189,7 +187,7 @@ class AdminLocationController extends AbstractController
    */
   public function deleteLocation(Request $request, Lieu $location, FileHandler $fileHandler, NameTagger $nameTagger, Unlocker $unlocker, DeletionGuard $deletionGuard): Response {
 
-    if ($this->isCsrfTokenValid('delete' . $location->getId(), $request->request->get('_csrf_token'))) {
+    if ($this->validToken($request, 'delete' . $location->getId())) {
 
       $refusal = $deletionGuard->refusal($location, $location->getNom());
 

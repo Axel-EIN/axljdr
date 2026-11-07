@@ -4,45 +4,73 @@
 
 {% block content %}
 
-  <h2 class="heading-cardtitle">Introduction</h2>
+  <p class="text-muted">Dernière mise à jour : 7 novembre 2026</p>
+
+  <h2 class="heading-cardtitle">Responsable du traitement</h2>
   <hr>
 
-  <p>Dans le cadre de son activité, le site AXL-JDR, est amenée à collecter et à traiter des informations dont certaines sont qualifiées de "données personnelles". Le site AXL-JDR attache une grande importance au respect de la vie privée, et n’utilise que des donnes de manière responsable et confidentielle et dans une finalité précise.</p>
+  <p>Le responsable du traitement est l'éditeur du site, décrit dans les <a href="{{ path('legal_notice') }}">Mentions Légales</a>. Pour toute question sur vos données, utilisez le <a href="{{ path('contact') }}">formulaire de contact</a>.</p>
 
-  <h2 class="heading-cardtitle">Données personnelles</h2>
+  <h2 class="heading-cardtitle">Données collectées</h2>
   <hr>
 
-  <p>Sur le site web AXL-JDR, il y a 2 types de données susceptibles d’être recueillies :</p>
   <ul>
-      <li><strong>Les données transmises directement</strong>
-      Ces données sont celles que vous nous transmettez directement, via un formulaire de contact ou bien par contact direct par email. Sont obligatoires dans le formulaire de contact le champs « prénom et nom », « entreprise ou organisation » et « email ».</li>
-      <li><strong>Les données collectées automatiquement</strong>
-      Lors de vos visites, une fois votre consentement donné, nous pouvons recueillir des informations de type « web analytics » relatives à votre navigation, la durée de votre consultation, votre adresse IP, votre type et version de navigateur.</li>
+      <li><strong>Votre compte</strong> : pseudonyme, adresse e-mail, mot de passe, avatar si vous en ajoutez un, rôles, état de vérification de l'adresse e-mail, mode de navigation, personnage principal, et un jeton temporaire quand vous demandez à réinitialiser votre mot de passe. Le mot de passe est enregistré sous forme hachée, jamais en clair.</li>
+      <li><strong>Vos contenus de jeu</strong> : vos personnages, leurs fiches et les contenus que vous publiez sur le site.</li>
+      <li><strong>Le formulaire de contact</strong> : votre adresse e-mail, l'objet et le message. Ils sont transmis par e-mail à l'administrateur et ne sont pas enregistrés dans la base du site. Pour limiter les abus, le site garde aussi une empreinte non réversible de votre adresse IP.</li>
+      <li><strong>Les journaux techniques</strong> : comme tout serveur web, celui de l'hébergeur peut enregistrer l'adresse IP, la date et la page demandée.</li>
   </ul>
+
+  <p>Le site n'utilise aucun outil de mesure d'audience, aucune publicité et aucun traceur.</p>
 
   <h2 class="heading-cardtitle">Utilisation des données</h2>
   <hr>
 
-  <p>Les données que vous nous transmettez directement sont utilisées dans le but de vous re-contacter et/ou dans le cadre de la demande que vous nous faites. Les données « web analytics » sont collectées de forme anonyme (en enregistrant des adresses IP anonymes) par Google Analytics, et nous permettent de mesurer l'audience de notre site web, les consultations et les éventuelles erreurs afin d’améliorer constamment l’expérience des utilisateurs. Ces données sont utilisées par AXL-JDR, responsable du traitement des données, et ne seront jamais cédées à un tiers ni utilisées à d’autres fins que celles détaillées ci-dessus.</p>
+  <ul>
+      <li>Les données du compte et les contenus de jeu servent à faire fonctionner le service décrit dans les <a href="{{ path('terms') }}">Conditions Générales d'Utilisation</a>. Base légale : l'exécution de ces conditions.</li>
+      <li>L'adresse e-mail sert aussi à vérifier votre compte et à réinitialiser votre mot de passe.</li>
+      <li>Les données du formulaire de contact servent à vous répondre. Base légale : votre demande.</li>
+      <li>L'empreinte de l'adresse IP sert à bloquer les envois abusifs. Base légale : l'intérêt légitime de l'éditeur à protéger le site.</li>
+  </ul>
 
-  <h2 class="heading-cardtitle">Base légale</h2>
+  <p>Les données ne sont ni vendues, ni cédées, ni utilisées à d'autres fins.</p>
+
+  <h2 class="heading-cardtitle">Destinataires</h2>
   <hr>
 
-  <p>Les données personnelles ne sont collectées qu’après consentement obligatoire de l’utilisateur. Ce consentement est valablement recueilli (boutons et cases à cocher), libre, clair et sans équivoque.</p>
+  <ul>
+      <li>L'administrateur du site.</li>
+      <li>Le meneur de jeu, pour les personnages et les fiches.</li>
+      <li>Les autres joueurs, pour les contenus que le meneur de jeu rend visibles.</li>
+      <li>L'hébergeur OVH SAS, qui stocke le site et sa base.</li>
+  </ul>
+
+  <h2 class="heading-cardtitle">Cookies et stockage local</h2>
+  <hr>
+
+  <p>Le site dépose un seul cookie : le cookie de session. Il sert uniquement à garder votre connexion active. Il est strictement nécessaire au fonctionnement du site, et ne demande donc pas votre consentement.</p>
+
+  <p>La carte enregistre aussi vos préférences d'affichage dans le stockage local de votre navigateur. Ces préférences restent sur votre appareil et ne sont jamais envoyées au site.</p>
+
+  <h2 class="heading-cardtitle">Ressources tierces</h2>
+  <hr>
+
+  <p>Pour afficher les pages, votre navigateur charge des fichiers depuis les serveurs de tiers : jsDelivr (Bootstrap, Cropper.js), jQuery (code.jquery.com) et Font Awesome (kit.fontawesome.com). Ces serveurs reçoivent votre adresse IP et les informations techniques de votre navigateur, selon leurs propres politiques de confidentialité.</p>
 
   <h2 class="heading-cardtitle">Durée de conservation</h2>
   <hr>
 
-  <p>Les données seront sauvegardées durant une durée maximale de 3 ans.</p>
+  <ul>
+      <li>Le compte, ses données et les contenus de jeu : jusqu'à votre demande de suppression.</li>
+      <li>Les messages du formulaire de contact : jusqu'à votre demande de suppression.</li>
+      <li>L'empreinte de l'adresse IP : une heure.</li>
+  </ul>
 
-  <h2 class="heading-cardtitle">Vos droits concernant les données personnelles</h2>
+  <h2 class="heading-cardtitle">Vos droits</h2>
   <hr>
 
-  <p>Vous avez le droit de consultation, demande de modification ou d’effacement sur l’ensemble de vos données personnelles. Vous pouvez également retirer votre consentement au traitement de vos données.</p>
+  <p>Vous avez un droit d'accès, de rectification, d'effacement, de limitation, d'opposition et de portabilité sur vos données. Pour exercer ces droits, ou pour demander la suppression de votre compte, utilisez le <a href="{{ path('contact') }}">formulaire de contact</a>.</p>
 
-  <h2 class="heading-cardtitle">Contact délégué à la protection des données</h2>
-  <hr>
-
-  <p>AXL Design - Veuillez utiliser le <a href="{{ path('contact') }}">formulaire de contact</a> pour me joindre</p>
+  <p>Si vous pensez que vos droits ne sont pas respectés, vous pouvez adresser une réclamation à la CNIL : <a href="https://www.cnil.fr/">www.cnil.fr</a>.</p>
 
 {% endblock %}

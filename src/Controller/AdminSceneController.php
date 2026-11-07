@@ -25,6 +25,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class AdminSceneController extends AbstractController
 {
+    use CsrfTokenTrait;
+
     private const TABLE_FILTERS = [
         'episodeParent.chapitreParent.titre:Chapitre',
         'episodeParent.titre:Épisode',
@@ -122,7 +124,6 @@ class AdminSceneController extends AbstractController
             'type' => 'create',
             'entity' => 'scene',
             'label' => 'Scène',
-            'gender' => 'F',
             'article' => 'une',
             'all_pcs' => $allPcs,
             'all_npcs' => $allNpcs,
@@ -252,7 +253,6 @@ class AdminSceneController extends AbstractController
             'scene' => $scene,
             'entity' => 'scene',
             'label' => 'Scène',
-            'gender' => 'F',
             'article' => 'une',
             'form' => $form,
             'pc_participations' => $pcParticipations,
@@ -270,7 +270,7 @@ class AdminSceneController extends AbstractController
         
         $episodeParent = $scene->getEpisodeParent();
 
-        if ($this->isCsrfTokenValid('delete' . $scene->getId(), $request->request->get('_csrf_token'))) {
+        if ($this->validToken($request, 'delete' . $scene->getId())) {
 
             $entityManager = $this->getDoctrine()->getManager();
 

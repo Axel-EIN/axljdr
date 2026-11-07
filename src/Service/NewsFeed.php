@@ -20,6 +20,7 @@ class NewsFeed
     private $participationRepository;
     private $characterRepository;
     private $xpRanker;
+    private $currentChapter;
 
     public function __construct(
         EntityManagerInterface $entityManager,
@@ -28,7 +29,8 @@ class NewsFeed
         EpisodeRepository $episodeRepository,
         ParticipationRepository $participationRepository,
         PersonnageRepository $characterRepository,
-        XpRanker $xpRanker
+        XpRanker $xpRanker,
+        CurrentChapter $currentChapter
     ) {
         $this->entityManager = $entityManager;
         $this->currentPlayer = $currentPlayer;
@@ -37,6 +39,7 @@ class NewsFeed
         $this->participationRepository = $participationRepository;
         $this->characterRepository = $characterRepository;
         $this->xpRanker = $xpRanker;
+        $this->currentChapter = $currentChapter;
     }
 
     public function generalRanking(): array
@@ -154,6 +157,23 @@ class NewsFeed
         }
 
         return $qb->getQuery()->getResult();
+    }
+
+    public function chapterCharacters(bool $pc, int $limit): array
+    {
+        $chapter = $this->currentChapter->lastEpisode()?->getChapitreParent();
+
+        if ($chapter === null) {
+            return [];
+        }
+
+        $characters = [];
+        foreach ($this->participationRepository->findInChapter($chapter, $pc) as $participation) {
+            $character = $participation->getPersonnage();
+            $characters[$character->getId()] ??= $character;
+        }
+
+        return array_slice($this->visibility->listedOnly($characters), 0, $limit);
     }
 
     public function latestAmong(array $keys, int $limit, array $criteria = []): array

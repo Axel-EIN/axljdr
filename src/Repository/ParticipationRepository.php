@@ -2,7 +2,6 @@
 
 namespace App\Repository;
 
-use App\Entity\Access;
 use App\Entity\Chapitre;
 use App\Entity\Lieu;
 use App\Entity\Objet;
@@ -11,6 +10,8 @@ use App\Entity\Personnage;
 use App\Entity\Saison;
 use App\Entity\Status;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\AbstractQuery;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -28,26 +29,63 @@ class ParticipationRepository extends ServiceEntityRepository
 
     public function findInChapter(Chapitre $chapter, bool $pc): array
     {
-        return $this->createQueryBuilder('p')
-            ->join('p.scene', 's')
-            ->join('s.episodeParent', 'e')
+        return $this->createPublishedQueryBuilder()
             ->join('p.personnage', 'c')
             ->addSelect('c')
             ->leftJoin('c.fichePersonnage', 'sheet')
             ->addSelect('sheet')
             ->andWhere('e.chapitreParent = :chapter')
-            ->andWhere('e.access = :access')
-            ->andWhere('e.publishedAt IS NULL OR e.publishedAt <= :now')
             ->andWhere('c.estPj = :pc')
             ->setParameter('chapter', $chapter)
-            ->setParameter('access', Access::PUBLIC)
-            ->setParameter('now', new \DateTime())
             ->setParameter('pc', $pc)
             ->orderBy('e.numeroSaison', 'DESC')
             ->addOrderBy('s.numero', 'DESC')
             ->addOrderBy('p.id', 'DESC')
             ->getQuery()
             ->getResult();
+    }
+
+    public function findAppearanceRanks(): array
+    {
+        $rows = $this->createPublishedQueryBuilder()
+            ->select('IDENTITY(p.personnage) AS characterId', 's.id AS sceneId')
+            ->orderBy('e.numeroSaison', 'DESC')
+            ->addOrderBy('s.numero', 'DESC')
+            ->addOrderBy('s.id', 'DESC')
+            ->getQuery()
+            ->getScalarResult();
+
+        $sceneRanks = [];
+        $ranks = [];
+        foreach ($rows as $row) {
+            $sceneRanks[$row['sceneId']] ??= count($sceneRanks);
+            $ranks[$row['characterId']] ??= $sceneRanks[$row['sceneId']];
+        }
+
+        return $ranks;
+    }
+
+    public function findLastChapterId(Personnage $character): ?int
+    {
+        $chapterId = $this->createPublishedQueryBuilder()
+            ->select('IDENTITY(e.chapitreParent)')
+            ->andWhere('p.personnage = :character')
+            ->setParameter('character', $character)
+            ->orderBy('e.numeroSaison', 'DESC')
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult(AbstractQuery::HYDRATE_SINGLE_SCALAR);
+
+        return $chapterId === null ? null : (int) $chapterId;
+    }
+
+    private function createPublishedQueryBuilder(): QueryBuilder
+    {
+        $qb = $this->createQueryBuilder('p')
+            ->join('p.scene', 's')
+            ->join('s.episodeParent', 'e');
+
+        return EpisodeRepository::onlyPublished($qb, 'e');
     }
 
     public function findLastByEpisode(array $characterIds, int $limit): array

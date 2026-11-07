@@ -7,6 +7,8 @@ parameters:
     assets_directory: '%kernel.project_dir%/public/assets'
     image_directory: '%kernel.project_dir%/public/assets/img'
     pdf_directory: '%kernel.project_dir%/storage/pdf'
+    mailer_sender: 'no-reply@axl-design.me'
+    contact_recipient: 'axel.ein@gmail.com'
     factions:
         - { nom: 'Imperial', titre: 'Familles Impériales' }
         - { nom: 'Crabe', titre: 'Clan du Crabe' }

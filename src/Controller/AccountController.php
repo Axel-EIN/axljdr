@@ -38,7 +38,7 @@ class AccountController extends AbstractController
     public function editPassword(Request $request, UserPasswordHasherInterface $userPasswordHasherInterface): Response
     {
         $user = $this->getUser();
-        $form = $this->createForm(AccountPasswordType::class, $user);
+        $form = $this->createForm(AccountPasswordType::class, $user, ['require_current' => true]);
 
         $form->handleRequest($request);
 
@@ -72,9 +72,16 @@ class AccountController extends AbstractController
 
         if ($this->validToken($request, 'main-character')) {
 
+            $characterId = $request->request->getInt('character');
             $chosen = $user->getPersonnages()->filter(
-                fn (Personnage $character) => $character->getId() === $request->request->getInt('character')
+                fn (Personnage $character) => $character->getId() === $characterId
             )->first();
+
+            if ($characterId !== 0 && !$chosen) {
+                $this->addFlash('danger', 'Ce personnage n\'appartient pas à votre compte.');
+
+                return $this->redirectToRoute('account');
+            }
 
             $user->setMainCharacter($chosen ?: null);
             $this->getDoctrine()->getManager()->flush();

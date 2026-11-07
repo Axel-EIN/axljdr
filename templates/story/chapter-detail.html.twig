@@ -53,10 +53,10 @@
             </button>
           {% else %}
             <div class="alert alert-light mx-auto alert-persist">
-              <strong>Il n'y a pas encore de session disponible !</strong>&nbsp;&nbsp;
+              <strong>Il n'y a pas encore d'épisode disponible !</strong>&nbsp;&nbsp;
               {% if is_gm() %}
                 <a class="btn-quaternary-style text-white50" href="{{path('admin_episode_create')}}?number=1&chapterID={{chapter.id}}&redirect=story">
-                  <i class="fas fa-plus-square" aria-hidden="true"></i>&nbsp;&nbsp;<strong>Ajouter une Session</strong>
+                  <i class="fas fa-plus-square" aria-hidden="true"></i>&nbsp;&nbsp;<strong>Ajouter un épisode</strong>
                 </a>
               {% endif %}
             </div>
@@ -76,7 +76,7 @@
 
           {% if is_gm() %}
             <a class="absolute btn-display-icon" href="{{path('admin_episode_create')}}?number={{(chapter.episodes|length)+1}}&chapterID={{chapter.id}}&redirect=story">
-              <i class="fas fa-plus-square" title="Ajouter une Session"></i>
+              <i class="fas fa-plus-square" title="Ajouter un épisode"></i>
             </a>
           {% endif %}
 

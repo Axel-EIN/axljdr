@@ -56,7 +56,7 @@
 
 {% block section_content1 %}
     {% set pcs = pcs|filter(p => element_listed(p)) %}
-    {% for character in element_sort(pcs) %}
+    {% for character in pcs %}
         {{ include('/characters/character-card.html.twig', {character}) }}
     {% endfor %}
     {% if pcs is empty %}
@@ -83,7 +83,7 @@
                 {% embed 'parts/picture-scroller.html.twig' with {scroller_id, scroller_class: 'desktop-only'} %}
                     {% block track %}
                         <div class="row scroller-track characters-track {{ group.faction ? 'compact' }}">
-                            {% for character in element_sort(group.characters, true) %}
+                            {% for character in group.characters %}
                                 {{ include('/characters/character-card.html.twig', {character, hide_clan: group.faction, compact: group.faction}) }}
                             {% endfor %}
                         </div>

@@ -29,8 +29,8 @@ class NewsController extends AbstractController
     ];
 
     private const GROUPS = [
-        ['title' => 'Personnages Joueurs', 'variant' => 'portrait', 'keys' => ['character'], 'criteria' => ['estPj' => true]],
-        ['title' => 'Personnages Non Joueurs', 'variant' => 'portrait', 'keys' => ['character'], 'criteria' => ['estPj' => false]],
+        ['title' => 'Personnages Joueurs', 'variant' => 'portrait', 'pc' => true],
+        ['title' => 'Personnages Non Joueurs', 'variant' => 'portrait', 'pc' => false],
         ['title' => 'Lieux', 'variant' => 'icon', 'keys' => ['location']],
         ['title' => 'Objets & Equipements', 'variant' => 'rule', 'field' => 'icon', 'sections' => [
             ['title' => 'Divers', 'keys' => ['object'], 'criteria' => ['categorie' => 'OBJET'], 'max' => 2],
@@ -98,10 +98,14 @@ class NewsController extends AbstractController
 
             $portrait = ($group['variant'] ?? null) === 'portrait';
             $max = $portrait ? self::PORTRAIT_THUMBNAILS : self::THUMBNAILS;
-            $elements = $newsFeed->latestAmong($group['keys'], $max, $group['criteria'] ?? []);
+            $byParticipation = isset($group['pc']);
+            $elements = $byParticipation
+                ? $newsFeed->chapterCharacters($group['pc'], $max)
+                : $newsFeed->latestAmong($group['keys'], $max, $group['criteria'] ?? []);
 
             if (!empty($elements)) {
                 $groups[] = $group + [
+                    'keepOrder' => $byParticipation,
                     'perRow' => ['desktop' => $portrait ? $max / 2 : $max, 'tablet' => $max / 2],
                     'elements' => $elements,
                 ];

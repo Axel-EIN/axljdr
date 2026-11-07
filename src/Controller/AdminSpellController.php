@@ -18,6 +18,8 @@ use App\Service\Unlocker;
 
 class AdminSpellController extends AbstractController
 {
+    use CsrfTokenTrait;
+
     private const TABLE_FILTERS = [
         'categorie:Catégorie',
         'anneau:Anneau',
@@ -111,10 +113,8 @@ class AdminSpellController extends AbstractController
         
 
         return $this->render('back_office/create.html.twig', [
-            'type' => 'create',
             'entity' => 'spell',
             'label' => 'Sort',
-            'gender' => 'M',
             'article' => 'un',
             'form' => $form->createView()
         ]);
@@ -159,11 +159,9 @@ class AdminSpellController extends AbstractController
         }
 
         return $this->renderForm('back_office/edit.html.twig', [
-            'type' => 'edit',
             'spell' => $spell,
             'entity' => 'spell',
             'label' => 'Sort',
-            'gender' => 'M',
             'article' => 'un',
             'form' => $form,
         ]);
@@ -175,7 +173,7 @@ class AdminSpellController extends AbstractController
      */
     public function deleteSpell(Request $request, Sort $spell, FileHandler $fileHandler, Unlocker $unlocker): Response {
 
-        if ($this->isCsrfTokenValid('delete' . $spell->getId(), $request->request->get('_csrf_token'))) {
+        if ($this->validToken($request, 'delete' . $spell->getId())) {
 
             $entityManager = $this->getDoctrine()->getManager();
             $unlocker->forget($spell);

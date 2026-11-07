@@ -16,6 +16,11 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
+use Symfony\Component\Security\Core\Exception\AuthenticationException;
+use Symfony\Component\Security\Core\Exception\BadCredentialsException;
+use Symfony\Component\Security\Core\Exception\InvalidCsrfTokenException;
+use Symfony\Component\Security\Core\Exception\CustomUserMessageAuthenticationException;
+use Symfony\Component\Security\Core\Exception\CustomUserMessageAccountStatusException;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Security\Csrf\TokenGenerator\TokenGeneratorInterface;
 
@@ -32,8 +37,9 @@ class LoginController extends AbstractController
 
         $error = $authenticationUtils->getLastAuthenticationError();
 
-        if ($error !== null)
-            $this->addFlash('danger', $error->getMessage());
+        if ($error !== null) {
+            $this->addFlash('danger', $this->loginErrorMessage($error));
+        }
 
         return $this->render('security/login.html.twig');
     }
@@ -117,6 +123,17 @@ class LoginController extends AbstractController
         }
 
         return $this->render('account/edit-password.html.twig',['form' => $form->createView()]);
+    }
+
+    private function loginErrorMessage(AuthenticationException $error): string
+    {
+        return match (true) {
+            $error instanceof CustomUserMessageAuthenticationException,
+            $error instanceof CustomUserMessageAccountStatusException => $error->getMessageKey(),
+            $error instanceof BadCredentialsException => 'Pseudo ou mot de passe incorrect.',
+            $error instanceof InvalidCsrfTokenException => 'Votre session a expiré. Réessayez.',
+            default => 'La connexion a échoué. Réessayez.',
+        };
     }
 
     private function resetEmail(Utilisateur $user, string $token): Email

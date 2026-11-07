@@ -15,10 +15,10 @@
     <div class="part-body">
       {% if attribute(record, 'part' ~ i ~ 'aside') is not empty %}
         <aside class="aside">
-          <p>{{ attribute(record, 'part' ~ i ~ 'aside')|raw|nl2br }}</p>
+          <p>{{ attribute(record, 'part' ~ i ~ 'aside')|text }}</p>
         </aside>
       {% endif %}
-      <div class="card-description articlepart text-description">{{ attribute(record, 'part' ~ i)|raw|nl2br }}</div>
+      <div class="card-description articlepart text-description">{{ attribute(record, 'part' ~ i)|text }}</div>
     </div>
 
     {{ include('/parts/divider-ornament.html.twig') }}

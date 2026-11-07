@@ -21,7 +21,7 @@
 
     {% set visible_episodes = [] %}
     {% for episode in chapter.episodes %}
-      {% if episode.scenes|length > 0 or is_gm() %}
+      {% if episode_visible(episode) %}
         {% set visible_episodes = visible_episodes|merge([episode]) %}
       {% endif %}
     {% endfor %}

@@ -45,28 +45,24 @@ class WorldController extends AbstractController
 
     $sections = [];
     $i = 0;
-    $sections[$i]['name'] = "Archives";
     $sections[$i]['entity'] = 'archive';
     $sections[$i]['label_one'] = "une archive";
     $sections[$i]['titleLight'] = 'Les ';
     $sections[$i]['titleStrong'] = 'Archives';
 
     $i++;
-    $sections[$i]['name'] = "Factions";
     $sections[$i]['entity'] = 'clan';
     $sections[$i]['label_one'] = "une faction";
     $sections[$i]['titleLight'] = 'Les ';
     $sections[$i]['titleStrong'] = 'Factions';
 
     $i++;
-    $sections[$i]['name'] = "Lieux";
     $sections[$i]['entity'] = 'location';
     $sections[$i]['label_one'] = "un lieu";
     $sections[$i]['titleLight'] = 'Les ';
     $sections[$i]['titleStrong'] = 'Lieux';
 
     $i++;
-    $sections[$i]['name'] = "Lore";
     $sections[$i]['entity'] = 'lore';
     $sections[$i]['label_one'] = "un Lore";
     $sections[$i]['titleLight'] = '';
@@ -74,7 +70,7 @@ class WorldController extends AbstractController
 
     $header_classname = 'world';
     $header_up = "Univers du Jeu";
-    $header_down = "L'Empire d'Emeraude";
+    $header_down = "L'Empire d'Émeraude";
     $category = 'world';
 
     return $this->render('world/index.html.twig', [
@@ -123,7 +119,6 @@ class WorldController extends AbstractController
       return $response;
     }
 
-    $archives = $archiveRepository->findall();
     $otherArchives = $archiveRepository->findAllExceptOne($archive->getId());
 
     return $this->render('world/archive.html.twig', [
@@ -131,7 +126,6 @@ class WorldController extends AbstractController
       'name' => $archive->getTitre(),
       'entity' => 'archive',
       'category' => 'world',
-      'archives' => $archives,
       'other_archives' => $otherArchives
     ]);
   }

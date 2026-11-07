@@ -276,6 +276,6 @@ class Visibility
             return $this->unlocks;
         }
 
-        return $this->unlocks = $this->unlockRepository->mapForCharacters($this->currentPlayer->characterIds());
+        return $this->unlocks = $this->unlockRepository->mapForCharacter($this->currentPlayer->navigatingCharacter());
     }
 }

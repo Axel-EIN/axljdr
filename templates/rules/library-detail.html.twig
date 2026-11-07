@@ -19,7 +19,7 @@
 
     {% set has_subtabs = record.subTabField is defined and record.subTabField is not empty %}
     {% set subtab = has_subtabs
-        ? (record.mixable == true ? app.request.get('subtab')|default('all') : 'first')
+        ? (record.mixable == true ? 'all' : 'first')
         : app.request.get('subtab') %}
 
     {% set tab_links = [] %}
@@ -136,7 +136,7 @@
 
                 {% if keywords is not empty %}
                     <div class="col-12 col-md-4">
-                        <label for="keyword-select">Filtrer par Mot Clés :</label>
+                        <label for="keyword-select">Filtrer par mot-clé :</label>
                         <select name="keyword" id="keyword-select" >
                             <option value="">TOUS</option>
                             {% for keyword in keywords %}
@@ -148,7 +148,7 @@
 
                 {% if filters is not empty %}
                     <div class="col-12 col-md-4">
-                        <label for="filter-select">Filtrer par {{record.filterField|capitalize}} :</label>
+                        <label for="filter-select">Filtrer par {{ record.filterField|lower }} :</label>
                         <select name="filter" id="filter-select" >
                             <option value="">TOUS</option>
                             {% for one_filter in filters %}

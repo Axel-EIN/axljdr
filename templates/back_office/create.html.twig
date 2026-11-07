@@ -2,5 +2,6 @@
 {% block title %}Ajouter {{article}} {{label}} | {{ parent() }}{% endblock %}
 {% block h1 %}Ajouter {{article}} {{label}}{% endblock %}
 {% block child %}
+    {{ include('back_office/text-syntax-help.html.twig') }}
     {{ include('admin_' ~ entity ~ '/_form.html.twig', {'button_label': 'Créer', 'button_gm': true}) }}
 {% endblock %}

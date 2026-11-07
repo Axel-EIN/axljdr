@@ -16,6 +16,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class AdminDevelopmentController extends AbstractController
 {
+    use CsrfTokenTrait;
+
     /**
      * @Route("/admin/development", name="admin_development")
      * @IsGranted("ROLE_MJ")
@@ -68,10 +70,8 @@ class AdminDevelopmentController extends AbstractController
         }
 
         return $this->render('back_office/create.html.twig', [
-            'type' => 'create',
             'entity' => 'development',
             'label' => 'Développement',
-            'gender' => 'M',
             'article' => 'un',
             'form' => $form->createView(),
         ]);
@@ -97,11 +97,9 @@ class AdminDevelopmentController extends AbstractController
         }
 
         return $this->renderForm('back_office/edit.html.twig', [
-            'type' => 'edit',
             'development' => $development,
             'entity' => 'development',
             'label' => 'Développement',
-            'gender' => 'M',
             'article' => 'un',
             'form' => $form,
         ]);
@@ -113,13 +111,13 @@ class AdminDevelopmentController extends AbstractController
      */
     public function deleteDevelopment(Request $request, Development $development, EntityManagerInterface $em): Response
     {
-        if ($this->isCsrfTokenValid('delete' . $development->getId(), $request->request->get('_csrf_token'))) {
+        if ($this->validToken($request, 'delete' . $development->getId())) {
             $em->remove($development);
             $em->flush();
             $this->addFlash('success', 'Le Développement a bien été supprimé');
         }
 
-        return $this->redirectToRoute('admin_development');
+        return $this->redirectAfter($request, $development);
     }
 
     private function redirectAfter(Request $request, Development $development): Response

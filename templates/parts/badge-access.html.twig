@@ -1,4 +1,5 @@
-{% if ACCESS_MARKS[state|default('')] is defined %}
+{% set state = state|default('') == 'common-discovered' and not is_gm() ? 'public' : state|default('') %}
+{% if ACCESS_MARKS[state] is defined %}
   <div class="badge-access {{ variant|default('') }}">
     <i class="badge-font-icon {{ state }} fas {{ ACCESS_MARKS[state][0] }}" title="{{ title|default(ACCESS_MARKS[state][1]) }}"></i>
   </div>

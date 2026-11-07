@@ -17,6 +17,8 @@ use App\Service\Unlocker;
 
 class AdminClanController extends AbstractController
 {
+    use CsrfTokenTrait;
+
     /**
      * @Route("/admin/clan", name="admin_clan")
      * @IsGranted("ROLE_MJ")
@@ -28,10 +30,10 @@ class AdminClanController extends AbstractController
         return $this->render('back_office/list-element.html.twig', [
             'elements' => $clans,
             'element' => 'clan',
-            'label' => 'Clan',
-            'labels' => 'Clans',
+            'label' => 'Faction',
+            'labels' => 'Factions',
             'gender' => 'M',
-            'article' => 'un',
+            'article' => 'une',
             'table_cols' => [
                 'mon:Mon:symbol:NA_MON',
                 'nom:Nom::bold',
@@ -85,7 +87,11 @@ class AdminClanController extends AbstractController
 
             $unlocker->sync($clan, $form->get('unlockedBy')->getData());
             $em->flush();
-            $this->addFlash('success', 'Le clan a bien été ajouté.');
+            $this->addFlash('success', 'La faction a bien été ajoutée.');
+
+            if ($request->query->get('redirect') === 'clan') {
+                return $this->redirectToRoute('world_clan', ['id' => $clan->getId()]);
+            }
 
             return $this->redirectToRoute('admin_clan');
         }
@@ -94,9 +100,8 @@ class AdminClanController extends AbstractController
         return $this->render('back_office/create.html.twig', [
             'type' => 'create',
             'entity' => 'clan',
-            'label' => 'Clan',
-            'gender' => 'M',
-            'article' => 'un',
+            'label' => 'Faction',
+            'article' => 'une',
             'form' => $form->createView()
         ]);
     }
@@ -141,7 +146,7 @@ class AdminClanController extends AbstractController
             $unlocker->sync($clan, $form->get('unlockedBy')->getData());
 
             $this->getDoctrine()->getManager()->flush();
-            $this->addFlash('success', 'Le clan a bien été modifié.');
+            $this->addFlash('success', 'La faction a bien été modifiée.');
 
             if (!empty($request->query->get('redirect')) && $request->query->get('redirect') == 'clan' )
                 return $this->redirectToRoute('world_clan', ['id' => $clan->getId()]);
@@ -153,9 +158,8 @@ class AdminClanController extends AbstractController
             'type' => 'edit',
             'clan' => $clan,
             'entity' => 'clan',
-            'label' => 'Clan',
-            'gender' => 'M',
-            'article' => 'un',
+            'label' => 'Faction',
+            'article' => 'une',
             'form' => $form,
         ]);
     }
@@ -166,7 +170,7 @@ class AdminClanController extends AbstractController
      */
     public function deleteClan(Request $request, Clan $clan, FileHandler $fileHandler, Unlocker $unlocker, DeletionGuard $deletionGuard): Response {
 
-        if ($this->isCsrfTokenValid('delete' . $clan->getId(), $request->request->get('_csrf_token'))) {
+        if ($this->validToken($request, 'delete' . $clan->getId())) {
 
             $refusal = $deletionGuard->refusal($clan, $clan->getNom());
 

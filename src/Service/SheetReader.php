@@ -51,7 +51,7 @@ class SheetReader
 
     public function armorTn(FichePersonnage $sheet, int $rank): int
     {
-        return $sheet->attributEffectif('reflexes') * 5 + $rank;
+        return $sheet->attributEffectif('reflexes') * 5 + $rank + (int) $sheet->getNdModifier();
     }
 
     public function reduction(FichePersonnage $sheet): int

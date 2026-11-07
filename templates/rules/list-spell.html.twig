@@ -53,47 +53,15 @@
 
     </div>
 
+{% set ring_icons = {
+    MAGIE: {AIR: FLAT_AIR, EAU: FLAT_EAU, FEU: FLAT_FEU, TERRE: FLAT_TERRE, VIDE: FLAT_VIDE},
+    MAHO: {AIR: FLAT_AIR_MAHO, EAU: FLAT_EAU_MAHO, FEU: FLAT_FEU_MAHO, TERRE: FLAT_TERRE_MAHO},
+    KIHO: {AIR: FLAT_AIR_KIHO, EAU: FLAT_EAU_KIHO, FEU: FLAT_FEU_KIHO, TERRE: FLAT_TERRE_KIHO, VIDE: FLAT_VIDE_KIHO},
+} %}
+
 {% for item in items %}
 
-    {% if item.anneau is defined %}
-
-        {% if app.request.get('tab') == 'MAGIE' %}
-            {% if item.anneau == 'AIR' %}
-                {% set icon = FLAT_AIR %}
-            {% elseif item.anneau == 'EAU' %}
-                {% set icon = FLAT_EAU %}
-            {% elseif item.anneau == 'FEU' %}
-                {% set icon = FLAT_FEU %}
-            {% elseif item.anneau == 'TERRE' %}
-                {% set icon = FLAT_TERRE %}
-            {% elseif item.anneau == 'VIDE' %}
-                {% set icon = FLAT_VIDE %}
-            {% endif %}
-        {% elseif app.request.get('tab') == 'MAHO' %}
-            {% if item.anneau == 'AIR' %}
-                {% set icon = FLAT_AIR_MAHO %}
-            {% elseif item.anneau == 'EAU' %}
-                {% set icon = FLAT_EAU_MAHO %}
-            {% elseif item.anneau == 'FEU' %}
-                {% set icon = FLAT_FEU_MAHO %}
-            {% elseif item.anneau == 'TERRE' %}
-                {% set icon = FLAT_TERRE_MAHO %}
-            {% endif %}
-        {% elseif app.request.get('tab') == 'KIHO' %}
-            {% if item.anneau == 'AIR' %}
-                {% set icon = FLAT_AIR_KIHO %}
-            {% elseif item.anneau == 'EAU' %}
-                {% set icon = FLAT_EAU_KIHO %}
-            {% elseif item.anneau == 'FEU' %}
-                {% set icon = FLAT_FEU_KIHO %}
-            {% elseif item.anneau == 'TERRE' %}
-                {% set icon = FLAT_TERRE_KIHO %}
-            {% elseif item.anneau == 'VIDE' %}
-                {% set icon = FLAT_VIDE_KIHO %}
-            {% endif %}
-        {% endif %}
-
-    {% endif %}
+    {% set icon = ring_icons[app.request.get('tab')][item.anneau|default('')] ?? null %}
 
     {% if not element_readable(item) %}
         {{ include('rules/list-item-locked.html.twig', {entity: 'spell', classes: past_rank != item.niveau ? 'mt-3'}) }}

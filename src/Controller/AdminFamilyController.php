@@ -18,6 +18,8 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
 class AdminFamilyController extends AbstractController
 {
+    use CsrfTokenTrait;
+
     private const TABLE_FILTERS = [
         'clan.nom:Clan',
     ];
@@ -78,7 +80,7 @@ class AdminFamilyController extends AbstractController
 
             $em->persist($family);
             $em->flush();
-            $this->addFlash('success', 'Le Famille a bien été ajoutée.');
+            $this->addFlash('success', 'La famille a bien été ajoutée.');
 
             if (in_array($request->query->get('redirect'), ['clan', 'family'], true))
                 return $this->redirectToRoute('world_clan', ['id' => $family->getClan()->getId()]);
@@ -88,10 +90,8 @@ class AdminFamilyController extends AbstractController
         
 
         return $this->render('back_office/create.html.twig', [
-            'type' => 'create',
             'entity' => 'family',
             'label' => 'Famille',
-            'gender' => 'F',
             'article' => 'une',
             'form' => $form->createView()
         ]);
@@ -127,11 +127,9 @@ class AdminFamilyController extends AbstractController
         }
 
         return $this->renderForm('back_office/edit.html.twig', [
-            'type' => 'edit',
             'family' => $family,
             'entity' => 'family',
             'label' => 'Famille',
-            'gender' => 'F',
             'article' => 'une',
             'form' => $form,
         ]);
@@ -143,7 +141,7 @@ class AdminFamilyController extends AbstractController
      */
     public function deleteFamily(Request $request, Famille $family, FileHandler $fileHandler, DeletionGuard $deletionGuard): Response {
 
-        if ($this->isCsrfTokenValid('delete' . $family->getId(), $request->request->get('_csrf_token'))) {
+        if ($this->validToken($request, 'delete' . $family->getId())) {
 
             $refusal = $deletionGuard->refusal($family, $family->getNom());
 

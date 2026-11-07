@@ -9,6 +9,7 @@
 {% endblock %}
 
 {% block element_content %}
+{% set location_clan = record.clan and element_listed(record.clan) ? record.clan : null %}
 
   <div class="col-12">
     <div class="card card-page">
@@ -21,9 +22,9 @@
         </h2>
 
         <div class="stats d-none d-lg-flex">
-          {% if record.clan is defined and record.clan is not empty %}
-            <a class="d-flex justify-content-end" href="{{ path('world_clan', {id:record.clan.id} ) }}" >
-              <img class="mb-2 img-64 circle-crop" src="{{ asset(image_small(record.clan.mon|default(NA_MON))) }}" alt="Mon d'une faction" title="{{record.clan.nom|default('')}}" />
+          {% if location_clan %}
+            <a class="d-flex justify-content-end" href="{{ path('world_clan', {id:location_clan.id} ) }}" >
+              <img class="mb-2 img-64 circle-crop" src="{{ asset(image_small(location_clan.mon|default(NA_MON))) }}" alt="Mon d'une faction" title="{{location_clan.nom|default('')}}" />
             </a>
           {% endif %}
           {% if record.type is defined and record.type is not empty %}<span>Type : <strong>{{ record.type }}</strong></span>{% endif %}
@@ -44,12 +45,12 @@
           <img class="img-96 mr-5" src="{{ asset(record.icone|default(NA_LIEU_ICO)) }}" alt="Icone de {{record.nom}}" />
 
           <ul class="list-decored text-left">
-            {% if record.clan is defined and record.clan is not empty %}
+            {% if location_clan %}
               <li>
                 <span class="label">Clan :</span>
-                <a class="extrabold" href="{{ path('world_clan', {id:record.clan.id} ) }}">
-                  <img class="img-24" src="{{ asset(image_small(record.clan.mon|default(NA_MON))) }}" alt="" title="Mon du clan {{record.clan.nom}}" />
-                  {{ record.clan.nom }}
+                <a class="extrabold" href="{{ path('world_clan', {id:location_clan.id} ) }}">
+                  <img class="img-24" src="{{ asset(image_small(location_clan.mon|default(NA_MON))) }}" alt="" title="Mon du clan {{location_clan.nom}}" />
+                  {{ location_clan.nom }}
                 </a>
               </li>
             {% endif %}

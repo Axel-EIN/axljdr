@@ -39,27 +39,23 @@ class RulesController extends AbstractController
 
         $sections = [];
 
-        $sections[0]['name'] = "Règles de Base";
         $sections[0]['entity'] = 'rule';
         $sections[0]['label_one'] = 'une Règle';
         $sections[0]['titleLight'] = 'Règles de ';
         $sections[0]['titleStrong'] = 'Base';
 
         
-        $sections[1]['name'] = "Classes";
         $sections[1]['entity'] = 'class';
         $sections[1]['label_one'] = 'une Classe';
         $sections[1]['titleLight'] = 'Les ';
         $sections[1]['titleStrong'] = 'Classes';
 
         
-        $sections[2]['name'] = "Bibliothèques";
         $sections[2]['entity'] = 'library';
         $sections[2]['label_one'] = 'une Bibliothèque';
         $sections[2]['titleLight'] = 'Les ';
         $sections[2]['titleStrong'] = 'Bibliothèques';
 
-        $sections[3]['name'] = "Règles Annexes";
         $sections[3]['entity'] = 'rule';
         $sections[3]['anchor'] = 'rule-annex';
         $sections[3]['label_one'] = 'une Règle';

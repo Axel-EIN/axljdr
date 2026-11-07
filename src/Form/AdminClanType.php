@@ -66,12 +66,12 @@ class AdminClanType extends AbstractType
             ->add('emblemY', MapCoordinateType::class, ['label' => 'Coord. % vert. mon'])
             ->add('chef', EntityType::class, [
                 'class' => Personnage::class,
-                'choice_label' => 'prenom',
+                'choice_label' => 'nomComplet',
                 'group_by' => 'clan.nom',
                 'placeholder' => 'Non défini',
                 'required' => false,
                 'query_builder' => fn(EntityRepository $er) => $er->createQueryBuilder('p')
-                    ->leftJoin('p.clan', 'c')->orderBy('c.nom', 'ASC')->addOrderBy('p.prenom', 'ASC'),
+                    ->leftJoin('p.clan', 'c')->orderBy('c.nom', 'ASC')->addOrderBy('p.nom', 'ASC')->addOrderBy('p.prenom', 'ASC'),
             ])
         ;
 

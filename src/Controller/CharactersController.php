@@ -99,6 +99,7 @@ class CharactersController extends AbstractController
 
         $sections[1]['name'] = "PNJs";
         $sections[1]['entity'] = 'character';
+        $sections[1]['anchor'] = 'npc';
         $sections[1]['label_one'] = "un personnage";
         $sections[1]['titleLight'] = '';
         $sections[1]['titleStrong'] = 'Personnages non-joueurs';

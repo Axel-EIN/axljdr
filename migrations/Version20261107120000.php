@@ -1,0 +1,27 @@
+<?php
+
+declare(strict_types=1);
+
+namespace DoctrineMigrations;
+
+use Doctrine\DBAL\Schema\Schema;
+use Doctrine\Migrations\AbstractMigration;
+
+final class Version20261107120000 extends AbstractMigration
+{
+  public function getDescription(): string
+  {
+    return 'utilisateur : ajout de reset_requested_at pour l\'expiration du jeton de réinitialisation ; les jetons en clair existants sont effacés.';
+  }
+
+  public function up(Schema $schema): void
+  {
+    $this->addSql('ALTER TABLE utilisateur ADD reset_requested_at DATETIME DEFAULT NULL COMMENT \'(DC2Type:datetime_immutable)\'');
+    $this->addSql('UPDATE utilisateur SET reset_token = NULL');
+  }
+
+  public function down(Schema $schema): void
+  {
+    $this->addSql('ALTER TABLE utilisateur DROP reset_requested_at');
+  }
+}

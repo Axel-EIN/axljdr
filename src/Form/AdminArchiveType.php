@@ -27,11 +27,11 @@ class AdminArchiveType extends AbstractType
             ->add('contenu', TextareaType::class)
             ->add('auteur', EntityType::class, [
                 'class' => Personnage::class,
-                'choice_label' => 'prenom',
+                'choice_label' => 'nomComplet',
                 'placeholder' => 'Non défini',
                 'required' => false,
                 'query_builder' => fn(EntityRepository $er) => $er->createQueryBuilder('p')
-                    ->orderBy('p.prenom', 'ASC'),
+                    ->orderBy('p.nom', 'ASC')->addOrderBy('p.prenom', 'ASC'),
             ])
         ;
 

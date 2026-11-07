@@ -87,7 +87,7 @@
     <div class="col-12">
       {{ include('/parts/picture-grid.html.twig', {
         items: other_objects,
-        title: 'Autres ' ~ (categories[record.categorie]|default(record.categorie))|lower ~ 's',
+        title: {ARME: 'Autres armes', ARMURE: 'Autres armures', PROJECTILE: 'Autres projectiles', OBJET: 'Autres objets divers'}[record.categorie]|default('Autres objets'),
         route: 'rules_object',
         variant: 'rule',
         field: 'icon',

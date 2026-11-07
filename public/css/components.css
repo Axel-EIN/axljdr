@@ -172,3 +172,27 @@
         height: auto;
     }
 }
+
+.password-field {
+    position: relative;
+
+    input {
+        padding-right: 2.5rem;
+    }
+
+    .password-toggle {
+        position: absolute;
+        top: 50%;
+        right: 0.5rem;
+        transform: translateY(-50%);
+        padding: 0.25rem;
+        border: 0;
+        background: none;
+        color: var(--color-body);
+        cursor: pointer;
+
+        &:hover {
+            color: var(--color-strong);
+        }
+    }
+}

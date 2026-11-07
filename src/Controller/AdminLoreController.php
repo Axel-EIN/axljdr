@@ -17,6 +17,8 @@ use App\Service\Unlocker;
 
 class AdminLoreController extends AbstractController
 {
+    use CsrfTokenTrait;
+
     /**
      * @Route("/admin/lore", name="admin_lore")
      * @IsGranted("ROLE_MJ")
@@ -89,10 +91,8 @@ class AdminLoreController extends AbstractController
         }
 
         return $this->render('back_office/create.html.twig', [
-            'type' => 'create',
             'entity' => 'lore',
             'label' => 'Lore',
-            'gender' => 'M',
             'article' => 'un',
             'form' => $form->createView()
         ]);
@@ -145,11 +145,9 @@ class AdminLoreController extends AbstractController
         }
 
         return $this->renderForm('back_office/edit.html.twig', [
-            'type' => 'edit',
             'lore' => $lore,
             'entity' => 'lore',
             'label' => 'Lore',
-            'gender' => 'M',
             'article' => 'un',
             'form' => $form,
         ]);
@@ -161,7 +159,7 @@ class AdminLoreController extends AbstractController
      */
     public function deleteLore(Request $request, Lore $lore, FileHandler $fileHandler, EntityManagerInterface $em, LoreRepository $loreRepository, Orderer $orderer, Unlocker $unlocker): Response
     {
-        if ( $this->isCsrfTokenValid('delete' . $lore->getId(), $request->request->get('_csrf_token')))
+        if ( $this->validToken($request, 'delete' . $lore->getId()))
         {
 
             $fileHandler->handle(null, $lore->getImage(), null, 'lores');

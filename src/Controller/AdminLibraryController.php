@@ -17,6 +17,8 @@ use App\Service\Unlocker;
 
 class AdminLibraryController extends AbstractController
 {
+    use CsrfTokenTrait;
+
     /**
      * @Route("/admin/library", name="admin_library")
      * @IsGranted("ROLE_MJ")
@@ -86,10 +88,8 @@ class AdminLibraryController extends AbstractController
         }
 
         return $this->render('back_office/create.html.twig', [
-            'type' => 'create',
             'entity' => 'library',
             'label' => 'Bibliothèque',
-            'gender' => 'F',
             'article' => 'une',
             'form' => $form->createView()
         ]);
@@ -143,11 +143,9 @@ class AdminLibraryController extends AbstractController
         }
 
         return $this->renderForm('back_office/edit.html.twig', [
-            'type' => 'edit',
             'library' => $library,
             'entity' => 'library',
             'label' => 'Bibliothèque',
-            'gender' => 'F',
             'article' => 'une',
             'form' => $form,
         ]);
@@ -159,7 +157,7 @@ class AdminLibraryController extends AbstractController
      */
     public function deleteLibrary(Request $request, Library $library, FileHandler $fileHandler, LibraryRepository $libraryRepository, Orderer $orderer, Unlocker $unlocker): Response
     {
-        if ( $this->isCsrfTokenValid('delete' . $library->getId(), $request->request->get('_csrf_token')))
+        if ( $this->validToken($request, 'delete' . $library->getId()))
         {
 
             $fileHandler->handle(null, $library->getImage(), null, 'libraries');

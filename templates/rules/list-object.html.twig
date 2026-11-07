@@ -31,8 +31,6 @@
 
 {% endif %}
 
-{% if items is defined and items is not empty %}
-
     <div class="col-12 list-heading-short relative">
         {% if is_gm() %}
             {% set action, entity, redirect, position, color, size = 'create', 'object', 'library&libraryID=' ~ library.id ~ '&tab=' ~ app.request.get('tab'), 'topright-overflow', 'link-gm', 'btn-icon-small' %}
@@ -52,7 +50,7 @@
             <div class="col-1">VD / Force</div>
 
             <div class="col-1 text-small">Dmg. Moy.<br><span class="text-mini">
-                {% if app.request.get('tab') is defined and app.request.get('tab') == 'ARC' %}
+                {% if app.request.get('subtab') == 'ARC' %}
                     Flèche 2g2 + 1g0
                 {% else %}
                     Force 4 + 1g0
@@ -144,4 +142,3 @@
             </div>
         {% endif %}
     {% endfor %}
-{% endif %}

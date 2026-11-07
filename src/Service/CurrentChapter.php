@@ -2,10 +2,10 @@
 
 namespace App\Service;
 
-use App\Entity\Access;
 use App\Entity\Episode;
 use App\Entity\Scene;
 use App\Repository\EpisodeRepository;
+use App\Repository\ParticipationRepository;
 use Doctrine\ORM\EntityManagerInterface;
 
 class CurrentChapter
@@ -18,13 +18,22 @@ class CurrentChapter
 
     private $entityManager;
     private $episodeRepository;
+    private $participationRepository;
+    private $currentPlayer;
     private $lastEpisode = false;
+    private $chapterIds;
     private $elementIds = [];
 
-    public function __construct(EntityManagerInterface $entityManager, EpisodeRepository $episodeRepository)
-    {
+    public function __construct(
+        EntityManagerInterface $entityManager,
+        EpisodeRepository $episodeRepository,
+        ParticipationRepository $participationRepository,
+        CurrentPlayer $currentPlayer
+    ) {
         $this->entityManager = $entityManager;
         $this->episodeRepository = $episodeRepository;
+        $this->participationRepository = $participationRepository;
+        $this->currentPlayer = $currentPlayer;
     }
 
     public function lastEpisode(): ?Episode
@@ -36,11 +45,25 @@ class CurrentChapter
         return $this->lastEpisode;
     }
 
-    public function contains($element): bool
+    public function isRevealed($element): bool
     {
         $key = EntityRegistry::keyOf($element);
 
         return $key !== null && isset($this->elementIds($key)[$element->getId()]);
+    }
+
+    private function chapterIds(): array
+    {
+        if ($this->chapterIds === null) {
+            $character = $this->currentPlayer->navigatingCharacter();
+
+            $this->chapterIds = array_values(array_unique(array_filter([
+                $this->lastEpisode()?->getChapitreParent()?->getId(),
+                $character === null ? null : $this->participationRepository->findLastChapterId($character),
+            ])));
+        }
+
+        return $this->chapterIds;
     }
 
     private function elementIds(string $key): array
@@ -54,10 +77,10 @@ class CurrentChapter
 
     private function findElementIds(string $key): array
     {
-        $chapter = $this->lastEpisode()?->getChapitreParent();
+        $chapterIds = $this->chapterIds();
         $source = self::SOURCES[$key] ?? null;
 
-        if ($chapter === null || $source === null) {
+        if ($chapterIds === [] || $source === null) {
             return [];
         }
 
@@ -65,12 +88,9 @@ class CurrentChapter
             ->select('DISTINCT ' . $source['id'] . ' AS id')
             ->from(Scene::class, 's')
             ->join('s.episodeParent', 'e')
-            ->andWhere('e.chapitreParent = :chapter')
-            ->andWhere('e.access = :access')
-            ->andWhere('e.publishedAt IS NULL OR e.publishedAt <= :now')
-            ->setParameter('chapter', $chapter)
-            ->setParameter('access', Access::PUBLIC)
-            ->setParameter('now', new \DateTime());
+            ->andWhere('e.chapitreParent IN (:chapters)')
+            ->setParameter('chapters', $chapterIds);
+        EpisodeRepository::onlyPublished($qb, 'e');
 
         if ($source['join'] !== null) {
             $qb->join($source['join'], 'element');

@@ -20,7 +20,7 @@
             {{ include('/parts/divider-ornament.html.twig') }}
 
             {% if is_gm() %}
-                {% set redirect, element, record, color, action = 'world', 'archive', record, 'link-gm', 'delete' %}
+                {% set redirect, record, color, action = 'world', record, 'link-gm', 'delete' %}
                 {{ include('/btns/btn-line.html.twig') }}
             {% endif %}
 

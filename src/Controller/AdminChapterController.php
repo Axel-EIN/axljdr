@@ -19,6 +19,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class AdminChapterController extends AbstractController
 {
+    use CsrfTokenTrait;
+
     private const TABLE_FILTERS = [
         'saisonParent.titre:Saison',
     ];
@@ -81,7 +83,7 @@ class AdminChapterController extends AbstractController
 
             $em->persist($chapter);
             $em->flush();
-            $this->addFlash('success', 'Le chapitre a bien été crée.');
+            $this->addFlash('success', 'Le chapitre a bien été créé.');
 
             $newSiblings = $chapterRepository->findBy(['saisonParent' => $chapter->getSaisonParent()->getId()]);
             $orderer->reorderNumber($chapter->getId(), -1, $chapter->getNumero(), [], $newSiblings);
@@ -94,10 +96,8 @@ class AdminChapterController extends AbstractController
         
 
         return $this->render('back_office/create.html.twig', [
-            'type' => 'create',
             'entity' => 'chapter',
             'label' => 'Chapitre',
-            'gender' => 'M',
             'article' => 'un',
             'form' => $form->createView()
         ]);
@@ -143,11 +143,9 @@ class AdminChapterController extends AbstractController
         }
 
         return $this->renderForm('back_office/edit.html.twig', [
-            'type' => 'edit',
             'chapter' => $chapter,
             'entity' => 'chapter',
             'label' => 'Chapitre',
-            'gender' => 'M',
             'article' => 'un',
             'form' => $form,
         ]);
@@ -161,7 +159,7 @@ class AdminChapterController extends AbstractController
 
         $parentSeason = $chapter->getSaisonParent();
 
-        if ($this->isCsrfTokenValid('delete' . $chapter->getId(), $request->request->get('_csrf_token'))) {
+        if ($this->validToken($request, 'delete' . $chapter->getId())) {
 
             $refusal = $deletionGuard->refusal($chapter, $chapter->getTitre());
 
@@ -181,8 +179,7 @@ class AdminChapterController extends AbstractController
             $entityManager->flush();
             $this->addFlash('success', 'Le chapitre a bien été supprimé.');
 
-        } else
-            $this->addFlash('danger', 'Token de protection invalide !');
+        }
 
         if (!empty($request->query->get('redirect')) && $request->query->get('redirect') == 'story')
             return $this->redirectToRoute('story_season', ['id' => $parentSeason->getId()], Response::HTTP_SEE_OTHER);

@@ -35,13 +35,4 @@ class LieuRepository extends ServiceEntityRepository
             ->getQuery()
             ->getSingleScalarResult();
     }
-
-    public function findAllExceptOne($id)
-    {
-        return $this->createQueryBuilder('l')
-            ->andWhere('l.id != :value_id')
-            ->setParameter('value_id', $id)
-            ->getQuery()
-            ->getResult();
-    }
 }

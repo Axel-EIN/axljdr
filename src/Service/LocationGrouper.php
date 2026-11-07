@@ -29,6 +29,10 @@ class LocationGrouper
             }
 
             $clan = $location->getClan();
+            if ($clan !== null && !$this->visibility->isListed($clan)) {
+                $clan = null;
+            }
+
             $major = $clan !== null && $clan->getType() === FactionType::MAJEUR;
             $ungrouped = $clan === null || ($major && !isset($this->titles[$clan->getNom()]));
 
@@ -42,7 +46,7 @@ class LocationGrouper
                 $groups[$key]['title'] = $major ? $this->titles[$clan->getNom()] : FactionType::GROUPS[$clan->getType()];
             }
 
-            if (!$ungrouped && $this->visibility->isListed($clan)) {
+            if (!$ungrouped) {
                 $groups[$key]['clans'][$clan->getId()] = $clan;
             }
 

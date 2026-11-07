@@ -17,7 +17,8 @@ use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 
-use Symfony\Component\Validator\Constraints\File;
+use App\Validator\ImageFile;
+use App\Validator\VideoFile;
 use Symfony\Component\Validator\Constraints\Length;
 
 class AdminClanType extends AbstractType
@@ -44,15 +45,15 @@ class AdminClanType extends AbstractType
             ->add('couleur', ColorType::class)
             ->add('mon', FileType::class, [
                 'mapped' => false, 'data_class' => null, 'required' => false,
-                'constraints' => [new File(['maxSize' => '5M'])],
+                'constraints' => [new ImageFile()],
             ])
             ->add('image', FileType::class, [
                 'mapped' => false, 'data_class' => null, 'required' => false,
-                'constraints' => [new File(['maxSize' => '5M'])],
+                'constraints' => [new ImageFile()],
             ])
             ->add('video', FileType::class, [
                 'mapped' => false, 'data_class' => null, 'required' => false,
-                'constraints' => [new File(['maxSize' => '50M'])],
+                'constraints' => [new VideoFile()],
             ])
             ->add('territoireDesc', TextareaType::class, ['required' => false])
             ->add('locX', MapCoordinateType::class, ['label' => 'Coord. % hori. carte'])

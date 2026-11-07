@@ -36,7 +36,7 @@
             {% for section in sections %}
                 {% set entity, label_one = section['entity'], section['label_one']|default(null) %}
 
-                <section id="{{section['entity']}}">
+                <section id="{{ section['anchor']|default(section['entity']) }}">
 
                     <div class="relative">
                         <h2 class="heading-categorysubsection">

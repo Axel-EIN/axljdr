@@ -83,12 +83,14 @@ class Search
     private $entityManager;
     private $visibility;
     private $elementUrl;
+    private $richText;
 
-    public function __construct(EntityManagerInterface $entityManager, Visibility $visibility, ElementUrl $elementUrl)
+    public function __construct(EntityManagerInterface $entityManager, Visibility $visibility, ElementUrl $elementUrl, RichText $richText)
     {
         $this->entityManager = $entityManager;
         $this->visibility = $visibility;
         $this->elementUrl = $elementUrl;
+        $this->richText = $richText;
     }
 
     public function find(string $term): array
@@ -266,7 +268,7 @@ class Search
 
     private function plain(?string $html): string
     {
-        $text = html_entity_decode(strip_tags((string) $html), ENT_QUOTES | ENT_HTML5, 'UTF-8');
+        $text = html_entity_decode(strip_tags($this->richText->render($html)), ENT_QUOTES | ENT_HTML5, 'UTF-8');
 
         return trim(preg_replace('/\s+/u', ' ', $text));
     }

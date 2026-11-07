@@ -178,8 +178,8 @@
                   </a>
                 {% endif %}
               {% else %}
-                {% if next_chapter_episode is not empty %}
-                  <a class="btn-primary-style btn-medium hue-fuschia" href="{{ path('story_episode', {id: next_chapter_episode.id}) }}">
+                {% if neighbor_chapters.next is not empty %}
+                  <a class="btn-primary-style btn-medium hue-fuschia" href="{{ path('story_episode', {id: neighbor_chapters.next.id}) }}">
                     Chapitre suivant&nbsp;<i class="fa-solid fa-book-open" aria-hidden="true"></i>
                   </a>
                 {% endif %}

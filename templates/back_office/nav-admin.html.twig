@@ -2,112 +2,31 @@
 
     {% if is_gm() %}
     
-        {% set navs = {
-            'Saisons': {
-                'element': 'season',
-                'label': 'Saisons',
-                'gender': 'F',
-            },
-            'Chapitres': {
-                'element': 'chapter',
-                'label': 'Chapitres',
-                'gender': 'M',
-            },
-            'Sessions': {
-                'element': 'episode',
-                'label': 'Épisodes',
-                'gender': 'M',
-            },
-            'Scènes': {
-                'element': 'scene',
-                'label': 'Scènes',
-                'gender': 'F',
-            },
-            'Clans': {
-                'element': 'clan',
-                'label': 'Clans',
-                'gender': 'M',
-            },
-            'Familles': {
-                'element': 'family',
-                'label': 'Familles',
-                'gender': 'F',
-            },
-            'Archive': {
-                'element': 'archive',
-                'label': 'Archives',
-                'gender': 'F',
-            },
-            'Lieux': {
-                'element': 'location',
-                'label': 'Lieux',
-                'gender': 'M',
-            },
-            'Lores': {
-                'element': 'lore',
-                'label': 'Lores',
-                'gender': 'M',
-            },
-            'Classes': {
-                'element': 'class',
-                'label': 'Classes',
-                'gender': 'F',
-            },
-            'Écoles': {
-                'element': 'dojo',
-                'label': 'Écoles',
-                'gender': 'F',
-            },
-            'Rule': {
-                'element': 'rule',
-                'label': 'Rules',
-                'gender': 'F',
-            },
-            'Bibliothèques': {
-                'element': 'library',
-                'label': 'Bibliothèques',
-                'gender': 'F',
-            },
-            'Avantages': {
-                'element': 'advantage',
-                'label': 'Avantages / Désavantages',
-                'gender': 'M',
-            },
-            'Compétences': {
-                'element': 'skill',
-                'label': 'Compétences',
-                'gender': 'F',
-            },
-            'Objets': {
-                'element': 'object',
-                'label': 'Objets',
-                'gender': 'M',
-            },
-            'Sorts': {
-                'element': 'spell',
-                'label': 'Sorts',
-                'gender': 'F',
-            },
-            'Fiches': {
-                'element': 'sheet',
-                'label': 'Fiches',
-                'gender': 'F',
-            },
-            'Personnages': {
-                'element': 'character',
-                'label': 'Personnages',
-                'gender': 'M',
-            },
-            'Développements': {
-                'element': 'development',
-                'label': 'Développements',
-                'gender': 'M',
-            },
-        }
-        %}
+        {% set navs = [
+            {element: 'season', label: 'Saisons'},
+            {element: 'chapter', label: 'Chapitres'},
+            {element: 'episode', label: 'Épisodes'},
+            {element: 'scene', label: 'Scènes'},
+            {element: 'character', label: 'Personnages'},
+            {element: 'sheet', label: 'Fiches'},
+            {element: 'development', label: 'Développements'},
+            {element: 'clan', label: 'Factions'},
+            {element: 'family', label: 'Familles'},
+            {element: 'archive', label: 'Archives'},
+            {element: 'location', label: 'Lieux'},
+            {element: 'lore', label: 'Lores'},
+            {element: 'rule', label: 'Règles'},
+            {element: 'library', label: 'Bibliothèques'},
+            {element: 'class', label: 'Classes'},
+            {element: 'dojo', label: 'Écoles'},
+            {element: 'advantage', label: 'Avantages / Désavantages'},
+            {element: 'skill', label: 'Compétences'},
+            {element: 'object', label: 'Objets'},
+            {element: 'spell', label: 'Sorts'},
+        ] %}
 
         {% for nav in navs %}
-            {% set element, label, gender = nav['element'], nav['label'], nav['gender'] %}
+            {% set element, label = nav.element, nav.label %}
             {{ include('/back_office/btn-gm-tab-link.html.twig') }}
         {% endfor %}
 
@@ -115,7 +34,7 @@
 
     {% if app.user and is_granted("ROLE_ADMIN") %}
 
-        <a class="nav-link admin-link{% if app.request.get('_route') == 'admin_user'
+        <a class="nav-link admin-link {% if app.request.get('_route') == 'admin_user'
                             or app.request.get('_route') == 'admin_user_create'
                             or app.request.get('_route') == 'admin_user_edit' %}active{% endif %}" 
                             href="{{ path('admin_user') }}">Utilisateurs</a>

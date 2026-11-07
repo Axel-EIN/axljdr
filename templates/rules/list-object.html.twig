@@ -124,7 +124,7 @@
                             </div>
                             <div class="col-10 p-3 m-0 mt-2">
                                 <p class="item-description text-justify">
-                                    {{ item.description|raw|nl2br }}
+                                    {{ item.description|text }}
                                 </p>
 
                                 {% if item.regles is defined and item.regles is not empty %}

@@ -19,8 +19,11 @@
           { label: 'Fiche de Jeu' },
         ] %}
       {% else %}
+        {% set anchor = {object: 'library', dojo: 'class'}[entity] ?? entity %}
+        {% if entity == 'rule' and record is defined and not record.base %}{% set anchor = 'rule-annex' %}{% endif %}
+        {% if entity == 'character' and record is defined and not record.estPj %}{% set anchor = 'npc' %}{% endif %}
         {% set breadcrumb_items = [
-          { label: category_label, path: path(category, {'_fragment': entity}) },
+          { label: category_label, path: path(category, {'_fragment': anchor}) },
           { label: name },
         ] %}
       {% endif %}

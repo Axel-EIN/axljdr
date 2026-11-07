@@ -42,7 +42,7 @@ final class BackfillUnlocksCommand extends Command
                 'date',
                 null,
                 InputOption::VALUE_REQUIRED,
-                'Date portée par les déblocages créés. Une date passée évite que tout le catalogue se marque « Nouveau » d\'un coup.',
+                'Date portée par les déblocages créés. Une date passée range ces déblocages après les découvertes récentes de l\'Accueil.',
                 '-1 month'
             );
     }

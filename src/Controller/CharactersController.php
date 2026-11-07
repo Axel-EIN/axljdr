@@ -15,6 +15,7 @@ use App\Repository\ObjetRepository;
 use App\Repository\PersonnageRepository;
 use App\Repository\SaisonRepository;
 use App\Repository\SortRepository;
+use App\Service\AppearanceRanker;
 use App\Service\CharacterMarkdown;
 use App\Service\NameTagger;
 use App\Service\HistoryRanker;
@@ -41,7 +42,8 @@ class CharactersController extends AbstractController
         PersonnageRepository $characterRepository,
         SaisonRepository $seasonRepository,
         ChapitreRepository $chapterRepository,
-        EpisodeRepository $episodeRepository
+        EpisodeRepository $episodeRepository,
+        AppearanceRanker $appearanceRanker
     ): Response {
         $seasonId  = null;
         $chapterId = null;
@@ -77,8 +79,8 @@ class CharactersController extends AbstractController
             }
         }
 
-        $pcs  = $characterRepository->findAllPJsSorted($seasonId, $chapterId, $episodeId);
-        $npcs = $characterRepository->findAllPNJsSorted($seasonId, $chapterId, $episodeId);
+        $pcs  = $appearanceRanker->sort($characterRepository->findAllPJsSorted($seasonId, $chapterId, $episodeId));
+        $npcs = $appearanceRanker->sort($characterRepository->findAllPNJsSorted($seasonId, $chapterId, $episodeId));
 
         $seasons  = $seasonRepository->findBy([], ['numero' => 'ASC']);
         $chapters = $seasonId !== null

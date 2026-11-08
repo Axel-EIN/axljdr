@@ -30,7 +30,7 @@ final class EntityRegistry
         'dojo'       => ['class' => Ecole::class,      'route' => 'rules_dojo',         'label' => 'École'],
         'object'     => ['class' => Objet::class,      'route' => 'rules_object',       'label' => 'Objet'],
         'spell'      => ['class' => Sort::class,       'route' => null,                 'label' => 'Sort', 'icon' => 'fa-scroll'],
-        'skill'      => ['class' => Competence::class, 'route' => null,                 'label' => 'Compétence'],
+        'skill'      => ['class' => Competence::class, 'route' => null,                 'label' => 'Compétence', 'icon' => 'fa-award'],
         'advantage'  => ['class' => Avantage::class,   'route' => null,                 'label' => 'Avantage'],
     ];
 
@@ -47,9 +47,24 @@ final class EntityRegistry
 
     public static function iconOf($element): ?string
     {
+        if ($element instanceof Avantage) {
+            return $element->getGenreIcon();
+        }
+
         $key = self::keyOf($element);
 
         return $key === null ? null : self::ENTITIES[$key]['icon'] ?? null;
+    }
+
+    public static function labelOf($element): ?string
+    {
+        if ($element instanceof Avantage) {
+            return $element->getGenre();
+        }
+
+        $key = self::keyOf($element);
+
+        return $key === null ? null : self::label($key);
     }
 
     public static function className(string $key): ?string

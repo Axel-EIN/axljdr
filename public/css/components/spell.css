@@ -3,6 +3,7 @@
     padding: 0.5rem 1rem;
     text-align: justify;
     color: var(--color-gray);
+    font-weight: normal;
 }
 
 .spell-abilities { color: var(--color-strong); }

@@ -8,6 +8,7 @@ use App\Entity\Objet;
 use App\Service\Orderer;
 use App\Form\AdminObjectType;
 use App\Service\FileHandler;
+use App\Service\NameTagger;
 use App\Repository\ObjetRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -129,7 +130,7 @@ class AdminObjectController extends AbstractController
      * @Route("/admin/object/{id}/edit", name="admin_object_edit")
      * @IsGranted("ROLE_MJ")
      */
-    public function editObject(Request $request, Objet $object, FileHandler $fileHandler, ObjetRepository $objectRepository, Orderer $orderer, Unlocker $unlocker): Response {
+    public function editObject(Request $request, Objet $object, FileHandler $fileHandler, ObjetRepository $objectRepository, Orderer $orderer, Unlocker $unlocker, NameTagger $nameTagger): Response {
 
         if ( empty( $object->getNumero() ) || !is_numeric( $object->getNumero() ) || $object->getNumero() < 0)
             $previousNumber = -1;
@@ -149,6 +150,7 @@ class AdminObjectController extends AbstractController
                 $prefix = 'objet-' . $object->getNom() . '-icon';
                 $object->setIcon($fileHandler->handle($newIcon, $object->getIcon(), $prefix, 'objets', 'square320'));
             } elseif ($request->request->get('remove_icon') === '1' && $object->getIcon()) {
+                $nameTagger->replaceWithDefaultIcon($object);
                 $fileHandler->handle(null, $object->getIcon(), null, 'objets');
                 $object->setIcon(null);
             }
@@ -201,7 +203,7 @@ class AdminObjectController extends AbstractController
      * @Route("/admin/object/{id}/delete", name="admin_object_delete", methods={"POST"})
      * @IsGranted("ROLE_MJ")
      */
-    public function deleteObject(Request $request, Objet $object, FileHandler $fileHandler, Unlocker $unlocker, DeletionGuard $deletionGuard): Response {
+    public function deleteObject(Request $request, Objet $object, FileHandler $fileHandler, Unlocker $unlocker, DeletionGuard $deletionGuard, NameTagger $nameTagger): Response {
 
         if ($this->validToken($request, 'delete' . $object->getId())) {
 
@@ -213,6 +215,7 @@ class AdminObjectController extends AbstractController
             }
 
             $entityManager = $this->getDoctrine()->getManager();
+            $nameTagger->replaceWithDefaultIcon($object);
             $fileHandler->handle(null, $object->getIcon(), null, 'objets');
             $fileHandler->handle(null, $object->getImage(), null, 'objets');
 

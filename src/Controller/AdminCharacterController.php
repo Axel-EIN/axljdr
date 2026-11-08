@@ -28,7 +28,7 @@ class AdminCharacterController extends AbstractController
 
     /**
      * @Route("/admin/character", name="admin_character")
-     * @IsGranted("ROLE_MJ")
+     * @IsGranted("ROLE_GM")
      */
     public function viewAdminCharacters(PersonnageRepository $characterRepository): Response
     {
@@ -62,7 +62,7 @@ class AdminCharacterController extends AbstractController
 
     /**
      * @Route("/admin/character/create", name="admin_character_create")
-     * @IsGranted("ROLE_MJ")
+     * @IsGranted("ROLE_GM")
      */
     public function addCharacter(Request $request, EntityManagerInterface $em, FileHandler $fileHandler, NameTagger $nameTagger, Unlocker $unlocker, TableFilter $tableFilter) {
 
@@ -127,7 +127,7 @@ class AdminCharacterController extends AbstractController
 
     /**
      * @Route("/admin/character/{id}/edit", name="admin_character_edit")
-     * @IsGranted("ROLE_MJ")
+     * @IsGranted("ROLE_GM")
      */
     public function editCharacter(Request $request, Personnage $character, FileHandler $fileHandler, NameTagger $nameTagger, Unlocker $unlocker): Response {
 
@@ -199,7 +199,7 @@ class AdminCharacterController extends AbstractController
 
     /**
      * @Route("/admin/character/{id}/delete", name="admin_character_delete", methods={"POST"})
-     * @IsGranted("ROLE_MJ")
+     * @IsGranted("ROLE_GM")
      */
     public function deleteCharacter(Request $request, Personnage $character, FileHandler $fileHandler, NameTagger $nameTagger, Unlocker $unlocker, DeletionGuard $deletionGuard): Response {
 

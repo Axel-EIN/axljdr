@@ -28,7 +28,7 @@ class AdminEpisodeController extends AbstractController
 
     /**
      * @Route("/admin/episode", name="admin_episode")
-     * @IsGranted("ROLE_MJ")
+     * @IsGranted("ROLE_GM")
      */
     public function viewAdminEpisodes(EpisodeRepository $episodeRepository): Response
     {
@@ -58,7 +58,7 @@ class AdminEpisodeController extends AbstractController
 
     /**
      * @Route("/admin/episode/create", name="admin_episode_create")
-     * @IsGranted("ROLE_MJ")
+     * @IsGranted("ROLE_GM")
      */
     public function addEpisode(Request $request, EntityManagerInterface $em, FileHandler $fileHandler, ChapitreRepository $chapterRepository, Orderer $orderer, EpisodeRepository $episodeRepository, Unlocker $unlocker, TableFilter $tableFilter) {
 
@@ -113,7 +113,7 @@ class AdminEpisodeController extends AbstractController
 
      /**
      * @Route("/admin/episode/{id}/edit", name="admin_episode_edit")
-     * @IsGranted("ROLE_MJ")
+     * @IsGranted("ROLE_GM")
      */
     public function editEpisode(Request $request, Episode $episode, FileHandler $fileHandler, Orderer $orderer, EpisodeRepository $episodeRepository, Unlocker $unlocker): Response {
 
@@ -164,7 +164,7 @@ class AdminEpisodeController extends AbstractController
 
     /**
      * @Route("/admin/episode/{id}/delete", name="admin_episode_delete", methods={"POST"})
-     * @IsGranted("ROLE_MJ")
+     * @IsGranted("ROLE_GM")
      */
     public function deleteEpisode(Request $request, Episode $episode, Orderer $orderer, EpisodeRepository $episodeRepository, FileHandler $fileHandler, Unlocker $unlocker, DeletionGuard $deletionGuard): Response {
         $parentChapter = $episode->getChapitreParent();

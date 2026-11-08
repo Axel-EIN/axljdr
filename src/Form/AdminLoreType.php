@@ -46,6 +46,10 @@ class AdminLoreType extends AbstractType
             ->add('part5aside', textareaType::class, ['required' => false])
         ;
 
+        for ($i = 1; $i <= 5; $i++) {
+            $builder->add('part' . $i . 'links', PartLinksType::class, ['part' => $i]);
+        }
+
         PublishableFields::add($builder);
     }
 

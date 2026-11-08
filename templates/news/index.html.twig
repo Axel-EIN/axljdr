@@ -31,9 +31,9 @@
                     </div>
 
                     {% if ranking %}
-                        <div>
+                        <div class="pt-1">
                             <h3 class="label-amerigo news-subtitle text-white">Joueurs</h3>
-                            {{ include('/news/ranking.html.twig', {items: ranking, mine: my_characters}) }}
+                            {{ include('/news/ranking.html.twig', {items: ranking, mine: my_characters, gained: true}) }}
                         </div>
                     {% endif %}
                 </div>
@@ -90,6 +90,19 @@
                                         <strong>{{ episode.titre }}</strong>
                                         <span class="episode-sub">{{ episode.chapitreParent.titre }}</span>
                                     </span>
+                                    {% set players = previous_players[episode.id]|default([]) %}
+                                    {% if players is not empty %}
+                                        <span class="episode-party">
+                                            <span class="party-count">{{ players|length }} joueur{{ players|length > 1 ? 's' }}</span>
+                                            <span class="party-portraits">
+                                                {% for character in players %}
+                                                    <img class="character-portrait small outlined thin {{ character.id in my_characters ? '' : 'player' }} {{ (character.dead ?? false) ? 'effect-dead' }}"
+                                                         src="{{ asset(character.icon|default(NA_PERSO_PORTRAIT)) }}"
+                                                         alt="{{ character.firstName }}" title="{{ character.firstName }}" loading="lazy" />
+                                                {% endfor %}
+                                            </span>
+                                        </span>
+                                    {% endif %}
                                     <img class="episode-picture" src="{{ asset(image_small(episode.image|default(NA_SESSION))) }}" width="{{ episode_preset.width }}" height="{{ episode_preset.height }}" loading="lazy" alt="" />
                                 </a>
                             {% endfor %}

@@ -155,7 +155,7 @@ class RulesController extends AbstractController
 
             if ($library->getNom() == 'Grimoire' ) {
                 $grimoire_tabs = ['MAGIE', 'MAHO', 'KIHO', 'TATOUAGE'];
-                $tabs = $this->isGranted('ROLE_MJ') ? $grimoire_tabs : array_values(array_intersect($grimoire_tabs, $tabs));
+                $tabs = $this->isGranted('ROLE_GM') ? $grimoire_tabs : array_values(array_intersect($grimoire_tabs, $tabs));
             }
         }
 

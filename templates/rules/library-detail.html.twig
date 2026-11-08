@@ -59,16 +59,12 @@
                         <li class="mt-auto mb-auto">
                             <a href="{{ path('rules_library', {id: record.id, 'tab' : app.request.get('tab'), 'subtab' : subtab } ) }}"
                                 class="{% if app.request.get('subtab') is defined and app.request.get('subtab') == subtab %}active{% endif %}">
-                                {% if app.request.get('tab') == 'MAGIE' %}
-                                    {% if subtab == 'UNIVERSEL' %}
-                                        {{subtab}}
-                                    {% else %}
-                                        <img class="img-48" src="/assets/icons/elements/{{subtab|lower}}.png" title='{{subtab}}' alt='Icône {{subtab}}' />
-                                    {% endif %}
-                                {% elseif app.request.get('tab') == 'MAHO' %}
-                                    <img class="img-48" src="/assets/icons/elements/{{subtab|lower}}-maho.png" title='{{subtab}} Maho' alt='Icône {{subtab}} Maho' />
-                                {% elseif app.request.get('tab') == 'KIHO' %}
-                                    <img class="img-48" src="/assets/icons/elements/{{subtab|lower}}-kiho.png" title='{{subtab}} Kiho' alt='Icône {{subtab}} Kiho' />
+                                {% set subtab_ring = ring_icon(app.request.get('tab'), subtab) %}
+                                {% if subtab_ring %}
+                                    {% set subtab_name = app.request.get('tab') == 'MAGIE' ? subtab : subtab ~ ' ' ~ app.request.get('tab')|capitalize %}
+                                    <img class="img-48" src="{{ asset(subtab_ring) }}" title="{{ subtab_name }}" alt="Icône {{ subtab_name }}" />
+                                {% elseif app.request.get('tab') == 'MAGIE' %}
+                                    {{ subtab }}
                                 {% else %}
                                     {{ tab_label(record, subtab, true) }}
                                 {% endif %}

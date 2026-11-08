@@ -31,6 +31,12 @@ class AvantageRepository extends ServiceEntityRepository
     public function findAllSorted()
     {
         return $this->createQueryBuilder('a')
+            ->leftJoin('a.discountClan', 'discountClan')
+            ->leftJoin('a.discountClan2', 'discountClan2')
+            ->leftJoin('a.discountClasse', 'discountClasse')
+            ->leftJoin('a.discountClasse2', 'discountClasse2')
+            ->leftJoin('a.exclusive', 'exclusive')
+            ->addSelect('discountClan', 'discountClan2', 'discountClasse', 'discountClasse2', 'exclusive')
             ->addOrderBy('a.nom', 'ASC')
             ->getQuery()
             ->getResult();

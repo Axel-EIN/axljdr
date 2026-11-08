@@ -26,7 +26,7 @@ class AdminFamilyController extends AbstractController
 
     /**
      * @Route("/admin/family", name="admin_family")
-     * @IsGranted("ROLE_MJ")
+     * @IsGranted("ROLE_GM")
      */
     public function viewAdminFamilies(FamilleRepository $familyRepository): Response
     {
@@ -53,7 +53,7 @@ class AdminFamilyController extends AbstractController
 
     /**
      * @Route("/admin/family/create", name="admin_family_create")
-     * @IsGranted("ROLE_MJ")
+     * @IsGranted("ROLE_GM")
      */
     public function addFamily(Request $request, EntityManagerInterface $em, ClanRepository $clanRepository, FileHandler $fileHandler, TableFilter $tableFilter) {
 
@@ -99,7 +99,7 @@ class AdminFamilyController extends AbstractController
 
     /**
      * @Route("/admin/family/{id}/edit", name="admin_family_edit")
-     * @IsGranted("ROLE_MJ")
+     * @IsGranted("ROLE_GM")
      */
     public function editFamily(Request $request, Famille $family, FileHandler $fileHandler): Response {
 
@@ -137,7 +137,7 @@ class AdminFamilyController extends AbstractController
 
     /**
      * @Route("/admin/family/{id}/delete", name="admin_family_delete", methods={"POST"})
-     * @IsGranted("ROLE_MJ")
+     * @IsGranted("ROLE_GM")
      */
     public function deleteFamily(Request $request, Famille $family, FileHandler $fileHandler, DeletionGuard $deletionGuard): Response {
 

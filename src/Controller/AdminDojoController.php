@@ -29,7 +29,7 @@ class AdminDojoController extends AbstractController
 
     /**
      * @Route("/admin/dojo", name="admin_dojo")
-     * @IsGranted("ROLE_MJ")
+     * @IsGranted("ROLE_GM")
      */
     public function viewAdminDojos(EcoleRepository $dojoRepository): Response {
 
@@ -67,7 +67,7 @@ class AdminDojoController extends AbstractController
 
      /**
      * @Route("/admin/dojo/create", name="admin_dojo_create")
-     * @IsGranted("ROLE_MJ")
+     * @IsGranted("ROLE_GM")
      */
     public function addDojo(Request $request, EntityManagerInterface $em, ClanRepository $clanRepository, FileHandler $fileHandler, Unlocker $unlocker, TableFilter $tableFilter) {
 
@@ -115,7 +115,7 @@ class AdminDojoController extends AbstractController
 
     /**
      * @Route("/admin/dojo/{id}/edit", name="admin_dojo_edit")
-     * @IsGranted("ROLE_MJ")
+     * @IsGranted("ROLE_GM")
      */
     public function editDojo(Request $request, Ecole $dojo, FileHandler $fileHandler, Unlocker $unlocker): Response {
 
@@ -157,7 +157,7 @@ class AdminDojoController extends AbstractController
 
     /**
      * @Route("/admin/dojo/{id}/delete", name="admin_dojo_delete", methods={"POST"})
-     * @IsGranted("ROLE_MJ")
+     * @IsGranted("ROLE_GM")
      */
     public function deleteDojo(Request $request, Ecole $dojo, FileHandler $fileHandler, Unlocker $unlocker, DeletionGuard $deletionGuard): Response {
 

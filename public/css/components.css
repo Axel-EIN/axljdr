@@ -106,6 +106,14 @@
         backdrop-filter: blur(6px);
     }
 
+    &.player {
+        --color-link: var(--color-blackonyx);
+        --color-link-strong: var(--color-blackonyx);
+
+        background-color: var(--color-flashblue);
+        color: var(--color-blackonyx);
+    }
+
     &.caption {
         display: inline-flex;
         justify-content: center;
@@ -179,10 +187,13 @@
 /* --------- DIVIDERS --------- */
 
 .divider-ornament {
+    --ornament-size: var(--icon-medium);
     display: flex;
     align-items: center;
     width: 60%;
     margin: 0 auto;
+
+    &.small { --ornament-size: var(--icon-regular); }
 
     hr {
         flex: 1;
@@ -192,7 +203,7 @@
     }
 
     .icon-ornament {
-        width: var(--icon-medium);
+        width: var(--ornament-size);
         height: auto;
     }
 }

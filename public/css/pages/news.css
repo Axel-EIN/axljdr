@@ -511,6 +511,8 @@
   margin-top: 0;
   margin-bottom: 0.75rem;
   text-transform: uppercase;
+
+  > i { margin-right: 0.25rem; }
 }
 
 .news-qualifier {

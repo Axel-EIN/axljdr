@@ -10,14 +10,6 @@
 {% block element_content %}
 
     {% set is_home = app.request.get('tab') is not defined or app.request.get('tab') is empty %}
-    {% set tab_plural = record.entity in ['advantage', 'skill', 'object'] ? 's' : '' %}
-    {% set subtab_plural = record.entity == 'object' ? 's' : '' %}
-    {% set plurals = {
-        'BUGEI': 'Bugei', 'COUTEAU': 'Couteaux', 'DIVERS': 'Divers',
-        'HAST': 'Hast', 'MARCHAND': 'Marchand', 'NINJUTSU': 'Ninjutsu',
-        'OBJET': 'Objets divers',
-    } %}
-
     {% set has_subtabs = record.subTabField is defined and record.subTabField is not empty %}
     {% set subtab = has_subtabs
         ? (record.mixable == true ? 'all' : 'first')
@@ -26,7 +18,7 @@
     {% set tab_links = [] %}
     {% for tab in tabs %}
         {% set tab_links = tab_links|merge([{
-            label: plurals[tab|upper]|default(tab|capitalize ~ tab_plural),
+            label: tab_label(record, tab),
             path: path('rules_library', {id: record.id, tab: tab, subtab: subtab}),
             active: app.request.get('tab') == tab,
         }]) %}
@@ -78,7 +70,7 @@
                                 {% elseif app.request.get('tab') == 'KIHO' %}
                                     <img class="img-48" src="/assets/icons/elements/{{subtab|lower}}-kiho.png" title='{{subtab}} Kiho' alt='Icône {{subtab}} Kiho' />
                                 {% else %}
-                                    {{ plurals[subtab|upper]|default(subtab|capitalize ~ subtab_plural) }}
+                                    {{ tab_label(record, subtab, true) }}
                                 {% endif %}
                             </a>
                         </li>
@@ -124,6 +116,8 @@
 
                     <div class="card-description text-description">{{ record.description|text }}</div>
                 </div>
+
+                {{ include('rule-lore-library/part-links.html.twig', {links: part_links(record, 1)}, with_context = false) }}
 
                 {{ include('/parts/divider-ornament.html.twig') }}
 

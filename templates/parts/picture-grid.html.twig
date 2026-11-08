@@ -120,8 +120,11 @@
           {% else %}
             {% if pdf_only %}<img class="badge-corner" src="{{ asset(PDF) }}" alt="Icône PDF" />{% endif %}
             <div class="frame ratio-{{ shape }}">
-              {% set picture = field|default(null) ? attribute(item, field)|default(image_na) : image_small(item.imageAffichee|default(item.image|default(image_na))) %}
+              {% set image = field|default(null) ? attribute(item, field)|default(null) : item.imageAffichee|default(item.image|default(null)) %}
+              {% set na_icon = image ? null : element_icon(item) %}
+              {% set picture = na_icon ? NA_43 : (field|default(null) ? image|default(image_na) : image_small(image|default(image_na))) %}
               <img class="ratio-cropped" src="{{ asset(picture) }}" loading="lazy" alt="{{ name }}" />
+              {% if na_icon %}<i class="na-icon fa-solid {{ na_icon }}" aria-hidden="true"></i>{% endif %}
               {% if not restricted and item.icone|default(null) %}
                 <img class="hover-icon" src="{{ asset(item.icone) }}" alt="" />
               {% endif %}

@@ -272,7 +272,7 @@
                                     {% if section.title is defined %}<h4 class="news-qualifier">{{ section.title }}</h4>{% endif %}
                                     {{ include('/parts/picture-grid.html.twig', {
                                         items: section.elements,
-                                        keep_order: section.pools is defined,
+                                        keep_order: true,
                                         badge_hover: true,
                                         variant: section.variant|default(group.variant|default('landscape')),
                                         field: group.field|default(null),
@@ -292,7 +292,7 @@
                             hint_above: true,
                             field: group.field|default(null),
                             per_row: group.perRow,
-                            keep_order: group.keepOrder,
+                            keep_order: true,
                             mark_players: group.characters|default(false),
                             label_soft: group_image is not null and group.variant|default(null) != 'portrait',
                             wrapper: 'compact',

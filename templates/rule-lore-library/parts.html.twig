@@ -1,3 +1,5 @@
+{% if record.hasParts %}<div class="reading-progress" aria-hidden="true"></div>{% endif %}
+
 {% for i in 1..5 %}
   {% if attribute(record, 'part' ~ i ~ 'titre') is not empty %}
     <div id="part{{ i }}" class="part-header">

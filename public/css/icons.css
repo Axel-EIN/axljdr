@@ -51,7 +51,7 @@
 
     &.primary {
         color: var(--color-primary);
-        transition: filter var(--duration) var(--ease);
+        transition: filter var(--motion-hover);
 
         &:hover { filter: contrast(200%) saturate(0%); }
 

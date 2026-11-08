@@ -184,7 +184,6 @@ class NewsController extends AbstractController
 
             if (!empty($elements)) {
                 $groups[] = $group + [
-                    'keepOrder' => $characters,
                     'perRow' => ['desktop' => $portrait && !($group['large'] ?? false) ? $max / 2 : $max, 'tablet' => $max / 2],
                     'elements' => $elements,
                 ];

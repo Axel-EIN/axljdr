@@ -35,9 +35,9 @@ class AdminClanController extends AbstractController
             'gender' => 'M',
             'article' => 'une',
             'table_cols' => [
+                'image:Image:image:NA_CLAN',
                 'mon:Mon:symbol:NA_MON',
                 'nom:Nom::bold',
-                'image:Image:image:NA_CLAN',
                 'chef.prenom:Chef',
                 'couleur:Couleur:color',
                 'description:Description:bool',

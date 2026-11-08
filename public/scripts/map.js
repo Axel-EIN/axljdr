@@ -18,7 +18,7 @@
   const MAX_SCALE = ZOOM_LEVELS[ZOOM_LEVELS.length - 1];
   const NORMAL_IMAGE_SCALE = 0.5;
   const FOCUS_SCALE = 1;
-  const ZOOMED_OUT_SCALE = 0.45;
+  const ZOOMED_OUT_SCALE = MIN_SCALE;
   const MARKER_MIN_SCALE = 0.5;
   const HOUR_DISTANCE = 24;
   const WALK_BLOCK_HOURS = 4;
@@ -52,6 +52,12 @@
       return direction > 0 ? level > scale + 0.001 : level < scale - 0.001;
     });
     return next === undefined ? levels[levels.length - 1] : next;
+  }
+
+  function nearestLevel() {
+    return ZOOM_LEVELS.reduce(function (best, level) {
+      return Math.abs(level - scale) < Math.abs(best - scale) ? level : best;
+    });
   }
 
   function clamp() {
@@ -244,6 +250,7 @@
       x = current.x - (pinch.x - pinch.offsetX) * next / pinch.scale;
       y = current.y - (pinch.y - pinch.offsetY) * next / pinch.scale;
       scale = next;
+      pinch.last = current;
       dragMoved = true;
       clamp();
       render();
@@ -254,7 +261,12 @@
   }, { passive: true });
   function touchEnd(e) {
     end();
-    if (e.touches.length < 2) pinch = null;
+    if (!pinch || e.touches.length >= 2) return;
+    const last = pinch.last;
+    pinch = null;
+    if (!last) return;
+    animate();
+    zoomAt(nearestLevel(), last.x, last.y);
   }
   document.addEventListener('touchend', touchEnd);
   document.addEventListener('touchcancel', touchEnd);
@@ -281,7 +293,7 @@
     },
     territories: function (on) {
       territories = on;
-      updateImage();
+      if (ready) updateImage();
     },
     party: function (on) {
       frame.classList.toggle('party-hidden', !on);
@@ -414,7 +426,7 @@
 
   map.addEventListener('click', function (e) {
     const trigger = e.target.closest('.other-location-marker[data-panel], .map-portrait-toggle');
-    if (!trigger) return;
+    if (!trigger || e.ctrlKey || e.metaKey || e.shiftKey) return;
     e.preventDefault();
     openPanel(trigger);
   });
@@ -531,7 +543,12 @@
   function selectedPlace(select) {
     const option = select.selectedOptions[0];
     if (!option || !option.value) return null;
-    return { x: parseFloat(option.dataset.locx), y: parseFloat(option.dataset.locy) };
+    return { id: option.value, x: parseFloat(option.dataset.locx), y: parseFloat(option.dataset.locy) };
+  }
+
+  function samePlace(from, to) {
+    if (from.id === to.id) return true;
+    return [from.id, to.id].includes('personnage') && from.x === to.x && from.y === to.y;
   }
 
   function hoursLabel(hours) {
@@ -575,7 +592,7 @@
     if (!ready) return;
     const from = selectedPlace(route.elements.from);
     const to = selectedPlace(route.elements.to);
-    if (!from || !to || (from.x === to.x && from.y === to.y)) {
+    if (!from || !to || samePlace(from, to)) {
       routeLine.classList.remove('shown');
       routeResult.textContent = !from || !to ? 'Choisissez un départ et une arrivée.' : 'Choisissez deux lieux différents.';
       return;

@@ -34,8 +34,8 @@ class AdminUserType extends AbstractType
                 'expanded' => true,
                 'required' => false,
                 'choices' => [
-                    'Joueur' => 'ROLE_JOUEUR',
-                    'Maître du Jeu' => 'ROLE_MJ',
+                    'Joueur' => 'ROLE_PLAYER',
+                    'Maître du Jeu' => 'ROLE_GM',
                     'Administrateur' => 'ROLE_ADMIN',
                 ]
             ])

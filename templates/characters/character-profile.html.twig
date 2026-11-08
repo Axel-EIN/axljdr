@@ -46,7 +46,7 @@
         <div class="relative">
             <div class="profile-illustration d-none d-lg-block {{ sheet_visible or sheet_addable ? 'with-btn' }}">
                 <img class="img-fluid w-100" src="{{ illustration_src }}" width="{{ illustration_preset.width }}" height="{{ illustration_preset.height }}" alt="{{ character.nomComplet }}" title="{{ character.nomComplet }}" />
-                {{ include('parts/badge-access.html.twig', {state: element_state(character)}) }}
+                {{ include('parts/badge-access.html.twig', {state: element_state(character), variant: 'inset glass'}) }}
             </div>
 
             {% if sheet_visible or sheet_addable %}

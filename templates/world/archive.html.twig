@@ -12,7 +12,7 @@
             {% if record.auteur is not empty and element_listed(record.auteur) %}
                 <ul class="list-group list-group-flush">
                     <li class="list-group-item">
-                        <strong>Auteur&nbsp;:</strong> {{ record.auteur.nom }} <strong>{{ record.auteur.prenom }}</strong> 
+                        <span class="bold">Auteur&nbsp;:</span> {{ record.auteur.nom }} <span class="bold">{{ record.auteur.prenom }}</span> 
                     </li>
                 </ul>
             {% endif %}

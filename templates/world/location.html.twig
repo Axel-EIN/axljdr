@@ -5,6 +5,7 @@
   <link rel="stylesheet" href="{{asset('css/components/history.css')}}" />
   <link rel="stylesheet" href="{{asset('css/components/map.css')}}" />
   <link rel="stylesheet" href="{{asset('css/components/image-viewer.css')}}" />
+  <link rel="stylesheet" href="{{asset('css/components/top-carousel.css')}}" />
   <link rel="stylesheet" href="{{asset('css/pages/location.css')}}" />
 {% endblock %}
 
@@ -33,7 +34,7 @@
           {% endif %}
         </div>
 
-        {{ include('/parts/card-top-image.html.twig', {image: record.image, na_image: NA_LIEU, alt: 'Image de ' ~ record.nom, img_class: 'crop-169', title: name, classes: 'gradient-desktop', state: element_state(record)}) }}
+        {{ include('/parts/card-top-image.html.twig', {image: record.image, gallery: record.slides, na_image: NA_LIEU, alt: 'Image de ' ~ record.nom, img_class: 'crop-169', title: name, classes: 'gradient-desktop', state: element_state(record)}) }}
       </div>
 
       <div class="location-mobile-info d-lg-none text-center">
@@ -142,4 +143,5 @@
   {{ parent() }}
   <script src="{{ asset('scripts/map.js') }}"></script>
   <script src="{{ asset('scripts/image-viewer.js') }}"></script>
+  {% if record.slides|length > 1 %}<script src="{{ asset('scripts/top-carousel.js') }}"></script>{% endif %}
 {% endblock %}

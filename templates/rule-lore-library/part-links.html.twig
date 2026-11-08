@@ -1,0 +1,10 @@
+{% if links is not empty %}
+  <nav class="part-links" aria-label="Pour aller plus loin">
+    <span class="part-links-title">Pour aller plus loin</span>
+    <ul>
+      {% for link in links %}
+        <li><a class="link-strong" href="{{ link.url }}"><i class="{{ link.icon }}" aria-hidden="true"></i>{{ link.label }}</a></li>
+      {% endfor %}
+    </ul>
+  </nav>
+{% endif %}

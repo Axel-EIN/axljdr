@@ -26,7 +26,8 @@ class MapController extends AbstractController
     {
         $trail = $locator->trail($currentPlayer->navigatingCharacter());
 
-        $target = $locationRepository->find($request->query->getInt('location'));
+        $targetId = $request->query->getInt('location');
+        $target = $targetId ? $locationRepository->find($targetId) : null;
         if ($target !== null && (!$target->isPlaced() || !$visibility->isListed($target))) {
             $target = null;
         }

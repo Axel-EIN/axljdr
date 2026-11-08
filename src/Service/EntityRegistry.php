@@ -29,7 +29,7 @@ final class EntityRegistry
         'library'    => ['class' => Library::class,    'route' => 'rules_library',      'label' => 'Bibliothèque'],
         'dojo'       => ['class' => Ecole::class,      'route' => 'rules_dojo',         'label' => 'École'],
         'object'     => ['class' => Objet::class,      'route' => 'rules_object',       'label' => 'Objet'],
-        'spell'      => ['class' => Sort::class,       'route' => null,                 'label' => 'Sort'],
+        'spell'      => ['class' => Sort::class,       'route' => null,                 'label' => 'Sort', 'icon' => 'fa-scroll'],
         'skill'      => ['class' => Competence::class, 'route' => null,                 'label' => 'Compétence'],
         'advantage'  => ['class' => Avantage::class,   'route' => null,                 'label' => 'Avantage'],
     ];
@@ -43,6 +43,13 @@ final class EntityRegistry
         }
 
         return null;
+    }
+
+    public static function iconOf($element): ?string
+    {
+        $key = self::keyOf($element);
+
+        return $key === null ? null : self::ENTITIES[$key]['icon'] ?? null;
     }
 
     public static function className(string $key): ?string

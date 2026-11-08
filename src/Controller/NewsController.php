@@ -62,6 +62,7 @@ class NewsController extends AbstractController
         $map = $locator->map($participations === [] ? null : $myCharacter, true);
         $episodes = $newsFeed->lastEpisodes(1 + self::PREVIOUS_SESSIONS);
         $lastEpisode = $episodes[0] ?? null;
+        $previousEpisodes = array_slice($episodes, 1);
 
         $participationsXp = [];
         foreach ($participations as $participation) {
@@ -137,7 +138,11 @@ class NewsController extends AbstractController
             'session_locations' => $lastEpisode === null ? [] : $newsFeed->episodeLocations($lastEpisode),
             'session_characters' => $lastEpisode === null ? [] : $newsFeed->episodeCharacters($lastEpisode),
             'session_objects' => $lastEpisode === null ? [] : $newsFeed->episodeObjects($lastEpisode),
-            'session_previous' => array_slice($episodes, 1),
+            'session_previous' => $previousEpisodes,
+            'previous_players' => array_combine(
+                array_map(fn ($episode) => $episode->getId(), $previousEpisodes),
+                array_map(fn ($episode) => $xpRanker->rankEpisodeCharacters($episode) ?: [], $previousEpisodes)
+            ),
             'my_characters' => $myCharacters,
             'my_character' => $myCharacter,
             'my_summary' => $mySummary,

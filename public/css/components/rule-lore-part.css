@@ -11,7 +11,7 @@
     padding: 0.5rem 0;
     color: var(--color-white);
 
-    & > strong {
+    & > .bold {
         margin: 0.5rem 1.5rem;
         font-size: var(--fontsize-large);
         text-align: center;

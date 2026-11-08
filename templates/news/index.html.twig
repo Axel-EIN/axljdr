@@ -244,19 +244,29 @@
     <div class="col-12">
         <div class="news-board">
             {% for group in groups %}
-                <div class="card card-body news-group{{ group.large|default(false) ? ' large' }}">
-                    <h3 class="label-amerigo news-subtitle">{% if group.icon is defined %}<i class="fa-solid {{ group.icon }}" aria-hidden="true"></i> {% endif %}{{ group.title }}</h3>
+                {% set group_image = group.image|default(null) %}
+                <div class="card card-body news-group{{ group.large|default(false) ? ' large' }}{{ group_image ? ' illustrated' }}"{% if group_image %} style="--group-image: url('{{ asset(group_image) }}')"{% endif %}>
+                    <div class="news-group-head">
+                        <h3 class="label-amerigo news-subtitle">{% if group.icon is defined %}<i class="fa-solid {{ group.icon }}" aria-hidden="true"></i> {% endif %}{{ group.title }}</h3>
+                        {% if group.link is defined %}
+                            <a class="news-group-link" href="{{ path(group.link.route, group.link.params|default({})) }}">
+                                {{ group.link.label }}<i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+                            </a>
+                        {% endif %}
+                    </div>
                     {% if group.sections is defined %}
                         <div class="news-sections">
                             {% for section in group.sections %}
                                 <div class="news-section" style="--span: {{ section.max }}">
-                                    <h4 class="news-qualifier">{{ section.title }}</h4>
+                                    {% if section.title is defined %}<h4 class="news-qualifier">{{ section.title }}</h4>{% endif %}
                                     {{ include('/parts/picture-grid.html.twig', {
                                         items: section.elements,
+                                        keep_order: section.pools is defined,
                                         badge_hover: true,
                                         variant: group.variant|default('landscape'),
                                         field: group.field|default(null),
-                                        per_row: section.max,
+                                        per_row: group.large|default(false) ? {desktop: section.max, tablet: 5, mobile: 3} : section.max,
+                                        label_soft: group_image is not null,
                                         wrapper: 'compact',
                                     }) }}
                                 </div>
@@ -271,6 +281,7 @@
                             field: group.field|default(null),
                             per_row: group.perRow,
                             keep_order: group.keepOrder,
+                            mark_players: group.characters|default(false),
                             wrapper: 'compact',
                         }) }}
                     {% endif %}

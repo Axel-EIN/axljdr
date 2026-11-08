@@ -381,7 +381,7 @@
     .episode-text {
       gap: 0.125rem;
 
-      strong {
+      .bold {
         color: var(--color-white);
         font-size: var(--fontsize-medium);
         line-height: var(--leading-base);

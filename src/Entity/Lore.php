@@ -13,6 +13,7 @@ class Lore
 {
     use PublishableTrait;
     use PartsTrait;
+    use PartLinksTrait;
 
     /**
      * @ORM\Id

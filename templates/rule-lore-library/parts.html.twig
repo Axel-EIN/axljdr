@@ -23,6 +23,8 @@
       <div class="card-description articlepart text-description">{{ attribute(record, 'part' ~ i)|text }}</div>
     </div>
 
+    {{ include('rule-lore-library/part-links.html.twig', {links: part_links(record, i)}, with_context = false) }}
+
     {{ include('/parts/divider-ornament.html.twig') }}
   {% endif %}
 {% endfor %}

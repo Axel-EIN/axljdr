@@ -67,21 +67,65 @@ class Unlocker
 
     public function syncAccess($element, ?\DateTimeInterface $at = null): void
     {
-        $met = $this->playersWhoMet($element);
+        $key = EntityRegistry::keyOf($element);
 
-        if (empty($met)) {
+        if ($key === null || $element->getId() === null) {
             return;
         }
 
-        if (Access::unlocksByMeeting($element)) {
-            foreach ($met as $player) {
-                $this->unlock($player, $element, true, $at);
+        if (!Access::unlocksByMeeting($element)) {
+            $this->unlockRepository->deleteMeetings($key, $element->getId());
+
+            return;
+        }
+
+        $met = [];
+        foreach ($this->playersWhoMet($element) as $player) {
+            $met[$player->getId()] = $player;
+        }
+
+        foreach ($this->unlockRepository->findForElement($key, $element->getId()) as $unlock) {
+            if ($unlock->isByMeeting() && !isset($met[$unlock->getCharacter()->getId()])) {
+                $this->entityManager->remove($unlock);
             }
-
-            return;
         }
 
-        $this->unlockRepository->deleteMeetings(EntityRegistry::keyOf($element), $element->getId());
+        foreach ($met as $player) {
+            $this->unlock($player, $element, true, $at);
+        }
+    }
+
+    public function sceneElements(Scene $scene): array
+    {
+        $elements = [];
+
+        foreach ($scene->getParticipations() as $participation) {
+            $elements[] = $participation->getPersonnage();
+        }
+
+        if ($scene->getLieu() !== null) {
+            $elements[] = $scene->getLieu();
+        }
+
+        foreach ($scene->getFoundObjects() as $object) {
+            $elements[] = $object;
+        }
+
+        return $elements;
+    }
+
+    public function syncMeetings(array $elements): void
+    {
+        $done = [];
+
+        foreach ($elements as $element) {
+            $entry = EntityRegistry::keyOf($element) . '|' . $element->getId();
+
+            if (!isset($done[$entry])) {
+                $done[$entry] = true;
+                $this->syncAccess($element);
+            }
+        }
     }
 
     private function playersWhoMet($element): array

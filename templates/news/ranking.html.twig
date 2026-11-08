@@ -7,7 +7,7 @@
     {% set previous_xp = character.xp %}
 
     <a class="ranking-line" href="{{ path('characters_profile', {id: character.id}) }}" title="{{ character.firstName }}">
-      <span class="ranking-rank">{{ rank }}</span>
+      {% if not gained|default(false) %}<span class="ranking-rank">{{ rank }}</span>{% endif %}
       <span class="portrait-slot">
         <img class="character-portrait medium outlined {{ character.id in mine ? '' : 'player' }} {{ (character.dead ?? false) ? 'effect-dead' }}"
              src="{{ asset(character.icon|default(NA_PERSO_PORTRAIT)) }}"
@@ -16,11 +16,17 @@
           <img class="character-icon-dead" src="{{ asset(MORT_ICO) }}" alt="est mort" />
         {% endif %}
       </span>
-      <span class="ranking-name">
-        <strong>{{ character.firstName }}</strong>
-        {% if character.player %}<span class="ranking-player">({{ character.player.pseudo }})</span>{% endif %}
-      </span>
-      <span class="ranking-xp">{{ include('parts/xp-gain.html.twig', {xp: character.xp, total: character.xpWithBonus|default(character.xp)}) }}</span>
+      <div class="character-line">
+        <span class="character-name">{{ character.firstName }}</span>
+        {% if character.player %}
+          <span class="character-player">({{ character.player.pseudo }})</span>
+        {% endif %}
+      </div>
+      {% if gained|default(false) %}
+        <span class="ranking-gain {{ character.id in mine ? 'text-your-xp' : 'text-xp' }}">{{ include('parts/xp-gain.html.twig', {xp: character.xp, total: character.xpWithBonus|default(character.xp), sign: '+', format: 'large'}) }}</span>
+      {% else %}
+        <span class="ranking-xp">{{ include('parts/xp-gain.html.twig', {xp: character.xp, total: character.xpWithBonus|default(character.xp)}) }}</span>
+      {% endif %}
     </a>
   {% endfor %}
 </div>

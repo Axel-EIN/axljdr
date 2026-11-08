@@ -33,11 +33,11 @@
 
                 <tr class="bg-surface">
                     <td class="p-2 border text-center">{{ user.id }}</td>
-                    <td class="p-2 border text-center"><strong>{{ user.pseudo }}</strong></td>
+                    <td class="p-2 border text-center"><span class="bold">{{ user.pseudo }}</span></td>
                     <td class="p-2 border text-center">{{ user.email }}</td>
                     <td class="p-2 border text-center">
                         {% if user.isVerified %}
-                            <strong class="text-success">vérifié</strong>
+                            <span class="bold text-success">vérifié</span>
                         {% else %}
                             <small class="text-muted">non</small>
                         {% endif %}

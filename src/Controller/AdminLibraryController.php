@@ -21,7 +21,7 @@ class AdminLibraryController extends AbstractController
 
     /**
      * @Route("/admin/library", name="admin_library")
-     * @IsGranted("ROLE_MJ")
+     * @IsGranted("ROLE_GM")
      */
     public function viewAdminLibraries(LibraryRepository $libraryRepository): Response
     {
@@ -50,7 +50,7 @@ class AdminLibraryController extends AbstractController
 
     /**
      * @Route("/admin/library/create", name="admin_library_create")
-     * @IsGranted("ROLE_MJ")
+     * @IsGranted("ROLE_GM")
      */
     public function addLibrary(Request $request, FileHandler $fileHandler, EntityManagerInterface $em, LibraryRepository $libraryRepository, Orderer $orderer, Unlocker $unlocker)
     {
@@ -97,7 +97,7 @@ class AdminLibraryController extends AbstractController
 
     /**
      * @Route("/admin/library/{id}/edit", name="admin_library_edit")
-     * @IsGranted("ROLE_MJ")
+     * @IsGranted("ROLE_GM")
      */
     public function editLibrary(Request $request, Library $library, FileHandler $fileHandler, LibraryRepository $libraryRepository, Orderer $orderer, Unlocker $unlocker): Response
     {
@@ -153,7 +153,7 @@ class AdminLibraryController extends AbstractController
 
     /**
      * @Route("/admin/library/{id}/delete", name="admin_library_delete", methods={"POST"})
-     * @IsGranted("ROLE_MJ")
+     * @IsGranted("ROLE_GM")
      */
     public function deleteLibrary(Request $request, Library $library, FileHandler $fileHandler, LibraryRepository $libraryRepository, Orderer $orderer, Unlocker $unlocker): Response
     {

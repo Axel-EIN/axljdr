@@ -27,7 +27,7 @@ class AdminSpellController extends AbstractController
 
     /**
      * @Route("/admin/spell", name="admin_spell")
-     * @IsGranted("ROLE_MJ")
+     * @IsGranted("ROLE_GM")
      */
     public function viewAdminSpells( SortRepository $spellRepository ): Response
     {
@@ -65,7 +65,7 @@ class AdminSpellController extends AbstractController
 
     /**
      * @Route("/admin/spell/create", name="admin_spell_create")
-     * @IsGranted("ROLE_MJ")
+     * @IsGranted("ROLE_GM")
      */
     public function addSpell(Request $request, EntityManagerInterface $em, FileHandler $fileHandler, SortRepository $spellRepository, Orderer $orderer, Unlocker $unlocker, TableFilter $tableFilter) {
 
@@ -122,7 +122,7 @@ class AdminSpellController extends AbstractController
 
     /**
      * @Route("/admin/spell/{id}/edit", name="admin_spell_edit")
-     * @IsGranted("ROLE_MJ")
+     * @IsGranted("ROLE_GM")
      */
     public function editSpell(Request $request, Sort $spell, SortRepository $spellRepository, Orderer $orderer, Unlocker $unlocker): Response {
 
@@ -169,7 +169,7 @@ class AdminSpellController extends AbstractController
 
     /**
      * @Route("/admin/spell/{id}/delete", name="admin_spell_delete", methods={"POST"})
-     * @IsGranted("ROLE_MJ")
+     * @IsGranted("ROLE_GM")
      */
     public function deleteSpell(Request $request, Sort $spell, FileHandler $fileHandler, Unlocker $unlocker): Response {
 

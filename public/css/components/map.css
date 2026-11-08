@@ -464,6 +464,11 @@
     filter: drop-shadow(0 0 6px rgba(0, 0, 0, 0.8));
     pointer-events: none;
     animation: lieu-pulse 1.6s ease-in-out infinite;
+
+    &.still {
+      transform: translate(-50%, -50%);
+      animation: none;
+    }
   }
 
   .location-current-label {

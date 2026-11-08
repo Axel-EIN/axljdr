@@ -53,10 +53,10 @@
             </button>
           {% else %}
             <div class="alert alert-light mx-auto alert-persist">
-              <strong>Il n'y a pas encore d'épisode disponible !</strong>&nbsp;&nbsp;
+              <span class="bold">Il n'y a pas encore d'épisode disponible !</span>&nbsp;&nbsp;
               {% if is_gm() %}
                 <a class="btn-quaternary-style text-white50" href="{{path('admin_episode_create')}}?number=1&chapterID={{chapter.id}}&redirect=story">
-                  <i class="fas fa-plus-square" aria-hidden="true"></i>&nbsp;&nbsp;<strong>Ajouter un épisode</strong>
+                  <i class="fas fa-plus-square" aria-hidden="true"></i>&nbsp;&nbsp;<span class="bold">Ajouter un épisode</span>
                 </a>
               {% endif %}
             </div>

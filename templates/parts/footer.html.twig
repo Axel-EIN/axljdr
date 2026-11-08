@@ -1,35 +1,42 @@
-<footer id="footer1" class="container-fluid">
-    <div class="container py-5 row">
+<footer class="site-footer">
+    <div class="site-footer-main">
+        <div class="container">
+            <div class="row">
+                <div class="col-12 col-lg-5 site-footer-brand">
+                    <a href="{{ path('news') }}"><img src="{{ asset(LOGO) }}" alt="Logo AXL-JDR" /></a>
+                    <p>{{ site_name }}</p>
+                </div>
 
-            <div class="col-12 col-lg-4">
-                <h5>Plan du site</h5>
-                <nav id="footernav" class="ml-3">
+                <nav class="col-6 col-lg-3 ml-lg-auto" aria-label="Rubriques du site">
+                    <h5>Explorer</h5>
                     <ul>
-                        <li><a class="footer-link" href="{{ path('story') }}">L'Aventure</a></li>
-                        <li><a class="footer-link" href="{{ path('characters') }}">Personnages</a></li>
-                        <li><a class="footer-link" href="{{ path('world') }}">L'Univers</a></li>
-                        <li><a class="footer-link" href="{{ path('rules') }}">Les Règles</a></li>
-                        <li><a class="footer-link" href="{{ path('contact') }}">Contactez-Nous</a></li>
-                        <li><a class="footer-link" href="{{ path('terms') }}">CGU</a></li>
-                        <li><a class="footer-link" href="{{ path('privacy_policy') }}">Politique de Confidentialité</a></li>
-                        <li><a class="footer-link" href="{{ path('legal_notice') }}">Mentions Légales</a></li>
-                        <li><a class="footer-link" href="{{ path('about') }}">À propos</a></li>
+                        <li><a href="{{ path('news') }}">Accueil</a></li>
+                        <li><a href="{{ path('story') }}">L'Aventure</a></li>
+                        <li><a href="{{ path('characters') }}">Personnages</a></li>
+                        <li><a href="{{ path('world') }}">L'Univers</a></li>
+                        <li><a href="{{ path('rules') }}">Les Règles</a></li>
+                        <li><a href="{{ path('map') }}">La Carte</a></li>
+                    </ul>
+                </nav>
+
+                <nav class="col-6 col-lg-3" aria-label="Informations">
+                    <h5>Informations</h5>
+                    <ul>
+                        <li><a href="{{ path('contact') }}">Contact</a></li>
+                        <li><a href="{{ path('about') }}">À propos</a></li>
+                        <li><a href="{{ path('terms') }}">CGU</a></li>
+                        <li><a href="{{ path('privacy_policy') }}">Politique de confidentialité</a></li>
+                        <li><a href="{{ path('legal_notice') }}">Mentions légales</a></li>
                     </ul>
                 </nav>
             </div>
-
-            <div class="col-12 col-lg-2 ml-lg-auto text-center mt-4 mt-lg-0">
-                <h5>Réseaux Sociaux</h5>
-                <nav id="social-medias" class="d-flex justify-content-center">
-                    <a href="" class="text-white hover-zoom"><i class="fab fa-twitter"></i></a>
-                    <a href="" class="text-white hover-zoom"><i class="fab fa-facebook"></i></a> 
-                    <a href="" class="text-white hover-zoom"><i class="fab fa-instagram"></i></a>
-                </nav>
-            </div>
-
+        </div>
     </div>
-</footer>
 
-<footer id="footer2" class="container-fluid">
-    <small class="container py-4 text-center align-middle">&copy;&nbsp;Site réalisé par AXL Design</small>
+    <div class="site-footer-bottom">
+        <div class="container">
+            <small>&copy;&nbsp;{{ 'now'|date('Y') }} · Site réalisé par AXL Design</small>
+            <a href="#"><i class="fa-solid fa-arrow-up" aria-hidden="true"></i> Haut de page</a>
+        </div>
+    </div>
 </footer>

@@ -4,6 +4,8 @@
   {{ sign|default('') }}{{ xp }}&nbsp;xp{% if bonus %}&nbsp;{{ bonus }}{% endif %}
 {%- elseif format == 'medium' -%}
   {{ sign|default('') }}{{ xp }}&nbsp;xp{% if bonus %} (Total avec bonus&nbsp;{{ bonus }} = {{ sign|default('') }}{{ total }}&nbsp;xp){% endif %}
+{%- elseif format == 'large' -%}
+  <strong class="text-medium">{{ sign|default('') }}{{ xp }}</strong> <span class="text-small">XP{% if bonus %}&nbsp;{{ bonus }}{% endif %}</span>
 {%- elseif bonus -%}
   Total avec bonus&nbsp;{{ bonus }} : {{ total }}&nbsp;xp
 {%- endif -%}

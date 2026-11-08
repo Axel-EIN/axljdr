@@ -12,6 +12,7 @@ use App\Service\ElementUrl;
 use App\Service\EntityRegistry;
 use App\Service\ImageBrightness;
 use App\Service\ImageNormalizer;
+use App\Service\PartLinker;
 use App\Service\RichText;
 use App\Service\TableFilter;
 use App\Service\Visibility;
@@ -30,8 +31,9 @@ class AppExtension extends AbstractExtension
     private $imageNormalizer;
     private $packages;
     private $richText;
+    private $partLinker;
 
-    public function __construct(Visibility $visibility, ElementUrl $elementUrl, ImageBrightness $imageBrightness, TableFilter $tableFilter, CurrentPlayer $currentPlayer, ImageNormalizer $imageNormalizer, Packages $packages, RichText $richText)
+    public function __construct(Visibility $visibility, ElementUrl $elementUrl, ImageBrightness $imageBrightness, TableFilter $tableFilter, CurrentPlayer $currentPlayer, ImageNormalizer $imageNormalizer, Packages $packages, RichText $richText, PartLinker $partLinker)
     {
         $this->visibility = $visibility;
         $this->elementUrl = $elementUrl;
@@ -41,6 +43,7 @@ class AppExtension extends AbstractExtension
         $this->imageNormalizer = $imageNormalizer;
         $this->packages = $packages;
         $this->richText = $richText;
+        $this->partLinker = $partLinker;
     }
 
     public function getFilters()
@@ -70,6 +73,8 @@ class AppExtension extends AbstractExtension
             new TwigFunction('element_key', [EntityRegistry::class, 'keyOf']),
             new TwigFunction('element_url', [$this->elementUrl, 'of']),
             new TwigFunction('pdf_url', [$this->elementUrl, 'pdf']),
+            new TwigFunction('part_links', [$this, 'partLinks']),
+            new TwigFunction('tab_label', [$this->partLinker, 'tabLabel']),
             new TwigFunction('access_label', [$this, 'accessLabel']),
             new TwigFunction('status_label', [$this, 'statusLabel']),
             new TwigFunction('faction_label', [$this, 'factionLabel']),
@@ -102,6 +107,11 @@ class AppExtension extends AbstractExtension
         }
 
         return implode(', ', $candidates);
+    }
+
+    public function partLinks($record, int $part): array
+    {
+        return $this->partLinker->resolve($record->getPartLinks($part));
     }
 
     public function accessLabel($access, bool $manualUnlock = false): string

@@ -21,7 +21,7 @@ class AdminSeasonController extends AbstractController
 
     /**
      * @Route("/admin/season", name="admin_season")
-     * @IsGranted("ROLE_MJ")
+     * @IsGranted("ROLE_GM")
      */
     public function viewAdminSeasons(SaisonRepository $seasonRepository): Response
     {
@@ -45,7 +45,7 @@ class AdminSeasonController extends AbstractController
 
     /**
      * @Route("/admin/season/create", name="admin_season_create")
-     * @IsGranted("ROLE_MJ")
+     * @IsGranted("ROLE_GM")
      */
     public function addSeason(Request $request, EntityManagerInterface $em, FileHandler $fileHandler, SaisonRepository $seasonRepository, Orderer $orderer) {
 
@@ -89,7 +89,7 @@ class AdminSeasonController extends AbstractController
 
     /**
      * @Route("/admin/season/{id}/edit", name="admin_season_edit")
-     * @IsGranted("ROLE_MJ")
+     * @IsGranted("ROLE_GM")
      */
     public function editSeason(Request $request, Saison $season, FileHandler $fileHandler, Orderer $orderer, SaisonRepository $seasonRepository): Response {
 
@@ -137,7 +137,7 @@ class AdminSeasonController extends AbstractController
 
     /**
      * @Route("/admin/season/{id}/delete", name="admin_season_delete", methods={"POST"})
-     * @IsGranted("ROLE_MJ")
+     * @IsGranted("ROLE_GM")
      */
     public function deleteSeason(Request $request, Saison $season, Orderer $orderer, SaisonRepository $seasonRepository, FileHandler $fileHandler, DeletionGuard $deletionGuard): Response {
 

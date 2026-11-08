@@ -41,10 +41,10 @@ class AdminLocationController extends AbstractController
       'article' => 'un',
       'table_filters' => self::TABLE_FILTERS,
       'table_cols' => [
+        'image:Image:image:NA_LIEU',
         'icone:Icone:symbol:NA_LIEU_ICO',
         'nom:Nom::bold',
         'surnom',
-        'image:Image:image:NA_LIEU',
         'clan.nom:Clan',
         'type:Type',
         'population:Population:number',

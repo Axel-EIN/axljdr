@@ -1,6 +1,7 @@
 .map-frame {
   --map-gap: 0.75rem;
   --map-top: var(--map-gap);
+  --map-panel-width: 20rem;
   --marker-size: 1;
   --current-size: 96px;
 
@@ -225,6 +226,7 @@
     z-index: 9;
     top: var(--map-top);
     left: var(--map-gap);
+    width: var(--map-panel-width);
     max-width: calc(100% - 4.5rem);
   }
 
@@ -232,7 +234,7 @@
     z-index: 9;
     top: calc(var(--map-top) + 3rem);
     left: var(--map-gap);
-    width: 20rem;
+    width: var(--map-panel-width);
     max-height: calc(100% - var(--map-top) - 3rem - var(--map-gap));
     overflow-y: auto;
     border: 1px solid rgb(from var(--color-earthlight) r g b / 70%);
@@ -599,7 +601,7 @@
     .map-portrait-toggle {
       display: block;
       padding: 0;
-      border: 1px solid var(--color-white50);
+      border: 0;
       border-radius: 4px;
       background: none;
       box-shadow: 0 0 4px var(--color-black);
@@ -618,14 +620,12 @@
     }
 
     &.mine .map-portrait-toggle {
-      border-color: var(--flash-green);
       animation: map-portrait-glow 1.4s ease-in-out infinite;
 
       @media (prefers-reduced-motion: reduce) { animation: none; }
     }
 
     &.selected .map-portrait-toggle {
-      border-color: var(--color-primarylighter);
       box-shadow: 0 0 0 2px var(--color-primarylighter), 0 0 8px var(--color-black);
     }
   }

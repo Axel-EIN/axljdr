@@ -25,7 +25,7 @@ class AdminAdvantageController extends AbstractController
 
     /**
      * @Route("/admin/advantage", name="admin_advantage")
-     * @IsGranted("ROLE_MJ")
+     * @IsGranted("ROLE_GM")
      */
     public function viewAdminAdvantages(AvantageRepository $advantageRepository): Response
     {
@@ -56,7 +56,7 @@ class AdminAdvantageController extends AbstractController
 
     /**
      * @Route("/admin/advantage/create", name="admin_advantage_create")
-     * @IsGranted("ROLE_MJ")
+     * @IsGranted("ROLE_GM")
      */
     public function addAdvantage(Request $request, EntityManagerInterface $em, Unlocker $unlocker, TableFilter $tableFilter) {
 
@@ -92,7 +92,7 @@ class AdminAdvantageController extends AbstractController
 
     /**
      * @Route("/admin/advantage/{id}/edit", name="admin_advantage_edit")
-     * @IsGranted("ROLE_MJ")
+     * @IsGranted("ROLE_GM")
      */
     public function editAdvantage(Request $request, Avantage $advantage, Unlocker $unlocker): Response {
 
@@ -125,7 +125,7 @@ class AdminAdvantageController extends AbstractController
 
     /**
      * @Route("/admin/advantage/{id}/delete", name="admin_advantage_delete", methods={"POST"})
-     * @IsGranted("ROLE_MJ")
+     * @IsGranted("ROLE_GM")
      */
     public function deleteAdvantage(Request $request, Avantage $advantage, Unlocker $unlocker, DeletionGuard $deletionGuard): Response {
 

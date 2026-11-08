@@ -83,6 +83,7 @@
                         {% endif %}
                         {{ include('parts/badge-access.html.twig', {state: element_state(item), variant: 'inline'}) }}
                         <strong class="item-name ml-1">{{ item.nom }}</strong>
+                        {% if element_fresh(item) %}{{ include('parts/badge-new.html.twig', {variant: 'inline'}) }}{% endif %}
                         {% if is_gm() %}<em class="ml-2 text-muted">- {{ item.originalName }}</em>{% endif %}
                     </div>
 

@@ -9,6 +9,7 @@ use App\Service\FileHandler;
 use App\Form\AdminLocationType;
 use App\Repository\LieuRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -91,6 +92,8 @@ class AdminLocationController extends AbstractController
         $location->setIcone($fileHandler->handle($newIcon, null, $prefix, 'lieux', 'square192'));
       }
 
+      $this->updateGallery($location, $form, $request, $fileHandler);
+
       $location->setDescription($nameTagger->tag($location->getDescription()));
       $location->setRegionDesc($nameTagger->tag($location->getRegionDesc()));
 
@@ -157,6 +160,8 @@ class AdminLocationController extends AbstractController
         $location->setIcone(null);
       }
 
+      $this->updateGallery($location, $form, $request, $fileHandler);
+
       $location->setDescription($nameTagger->tag($location->getDescription()));
       $location->setRegionDesc($nameTagger->tag($location->getRegionDesc()));
 
@@ -200,6 +205,9 @@ class AdminLocationController extends AbstractController
 
       $fileHandler->handle(null, $location->getImage(), null, 'lieux');
       $fileHandler->handle(null, $location->getPlanMap(), null, 'lieux');
+      foreach ($location->getGallery() as $image) {
+        $fileHandler->handle(null, $image, null, 'lieux');
+      }
       $nameTagger->replaceWithDefaultIcon($location);
       $fileHandler->handle(null, $location->getIcone(), null, 'lieux');
 
@@ -214,6 +222,30 @@ class AdminLocationController extends AbstractController
     }
 
     return $this->backToLocation($request, $location);
+  }
+
+  private function updateGallery(Lieu $location, FormInterface $form, Request $request, FileHandler $fileHandler): void
+  {
+    $removed = $request->request->all('remove_gallery');
+    $gallery = [];
+
+    foreach ($location->getGallery() as $image) {
+      if (in_array($image, $removed, true)) {
+        $fileHandler->handle(null, $image, null, 'lieux');
+      } else {
+        $gallery[] = $image;
+      }
+    }
+
+    foreach ($form->get('gallery')->getData() ?? [] as $file) {
+      $image = $fileHandler->handle($file, null, 'lieu-' . $location->getNom() . '-galerie', 'lieux', 'landscape720');
+
+      if ($image !== null) {
+        $gallery[] = $image;
+      }
+    }
+
+    $location->setGallery($gallery);
   }
 
   private function backToLocation(Request $request, Lieu $location): Response

@@ -16,9 +16,12 @@ class UserChecker implements UserCheckerInterface
     public function checkPostAuth(UserInterface $user): void
     {
         if ($user instanceof Utilisateur && !$user->isVerified()) {
-            throw new CustomUserMessageAccountStatusException(
+            $exception = new CustomUserMessageAccountStatusException(
                 'Votre compte n\'est pas encore activé. Cliquez sur le lien de confirmation reçu par e-mail, ou contactez un administrateur.'
             );
+            $exception->setUser($user);
+
+            throw $exception;
         }
     }
 }

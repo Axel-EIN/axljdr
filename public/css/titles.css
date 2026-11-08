@@ -47,9 +47,46 @@
     &.compact { font-size: var(--fontsize-larger); }
 }
 
+.heading-subtitle {
+    margin: -0.25rem 0 1rem;
+    color: var(--subtitle-color, var(--color-alternate));
+    font-size: var(--fontsize-medium);
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    line-height: var(--leading-base);
+    text-transform: uppercase;
+
+    &.on-banner {
+        @media (max-width: 991.98px) {
+            position: absolute;
+            z-index: 2;
+            top: calc(var(--profile-banner-h) - 1.75rem);
+            left: 1rem;
+            right: 1rem;
+            margin: 0;
+            color: var(--color-white);
+            font-size: var(--fontsize-small);
+            text-align: center;
+            text-shadow: 0 1px 4px var(--color-black);
+        }
+    }
+}
+
 .heading-episodedetail {
     color: var(--color-white);
     text-shadow: 4px 4px 1rem var(--color-strong);
+}
+
+.heading-section {
+    display: block;
+    font-size: var(--fontsize-huge);
+    font-family: 'Present';
+    color: var(--color-strong);
+    text-align: center;
+    margin: 2rem 0 1rem 0;
+    line-height: 1;
+
+    &.gm { color: var(--color-linkgm); }
 }
 
 /* ----- STYLE AVENIR ----- */

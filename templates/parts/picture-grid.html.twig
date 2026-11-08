@@ -1,8 +1,9 @@
-{% if items is defined and (items is not empty or empty_message is defined) %}
+{% set reveal_session = reveal_session|default(false) %}
+{% set hide_dead = hide_dead|default(false) %}
+{% set items = (items ?? null) is null ? null : items|filter(item => element_listed(item, reveal_session) and not (hide_dead and item.dead)) %}
 
-  {% set reveal_session = reveal_session|default(false) %}
-  {% set hide_dead = hide_dead|default(false) %}
-  {% set items = items|filter(item => element_listed(item, reveal_session) and not (hide_dead and item.dead)) %}
+{% if items is not null and (items is not empty or empty_message is defined) %}
+
   {% set scroll = scroll|default(false) %}
   {% set items = keep_order|default(false) ? items : element_sort(items, scroll) %}
   {% set variant = variant|default('landscape') %}

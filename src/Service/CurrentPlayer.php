@@ -44,7 +44,7 @@ class CurrentPlayer
 
     public function seesAll(): bool
     {
-        return $this->security->isGranted('ROLE_MJ');
+        return $this->security->isGranted('ROLE_GM');
     }
 
     public function characterIds(): array

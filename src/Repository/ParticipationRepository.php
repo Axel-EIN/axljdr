@@ -197,19 +197,14 @@ class ParticipationRepository extends ServiceEntityRepository
             ->getOneOrNullResult();
     }
 
-    public function findPlacedForLivingPlayers(): array
+    public function findPlacedPathsForLivingPlayers(): array
     {
         return $this->createQueryBuilder('p')
+            ->select('IDENTITY(p.personnage) AS character', 'l.id AS location', 'e.id AS episode')
             ->join('p.personnage', 'personnage')
-            ->addSelect('personnage')
-            ->leftJoin('personnage.fichePersonnage', 'fiche')
-            ->addSelect('fiche')
             ->join('p.scene', 's')
-            ->addSelect('s')
             ->join('s.lieu', 'l')
-            ->addSelect('l')
             ->join('s.episodeParent', 'e')
-            ->addSelect('e')
             ->join('e.chapitreParent', 'c')
             ->join('c.saisonParent', 'sa')
             ->andWhere('l.locX IS NOT NULL')
@@ -221,8 +216,9 @@ class ParticipationRepository extends ServiceEntityRepository
             ->addOrderBy('c.numero', 'DESC')
             ->addOrderBy('e.numero', 'DESC')
             ->addOrderBy('s.numero', 'DESC')
+            ->addOrderBy('p.id', 'ASC')
             ->getQuery()
-            ->getResult();
+            ->getArrayResult();
     }
 
     private function dedoublonner(array $participations): array

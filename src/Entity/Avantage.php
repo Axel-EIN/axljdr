@@ -13,6 +13,11 @@ class Avantage
 {
     use PublishableTrait;
 
+    private const GENRE_ICONS = [
+        'Avantage' => 'fa-person-arrow-up-from-line',
+        'Désavantage' => 'fa-person-arrow-down-to-line',
+    ];
+
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
@@ -100,6 +105,11 @@ class Avantage
     public function getGenre(): ?string
     {
         return $this->genre;
+    }
+
+    public function getGenreIcon(): ?string
+    {
+        return self::GENRE_ICONS[$this->genre] ?? null;
     }
 
     public function setGenre(string $genre): self

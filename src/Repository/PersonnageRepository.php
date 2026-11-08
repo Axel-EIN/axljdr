@@ -120,6 +120,15 @@ class PersonnageRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+    public function findWithSheet(array $ids): array
+    {
+        return $this->createListQueryBuilder()
+            ->andWhere('p.id IN (:ids)')
+            ->setParameter('ids', array_unique($ids) ?: [0])
+            ->getQuery()
+            ->getResult();
+    }
+
     private function createListQueryBuilder(): QueryBuilder
     {
         return $this->createQueryBuilder('p')

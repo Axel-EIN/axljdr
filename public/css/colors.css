@@ -16,6 +16,7 @@
     
     --color-link: var(--color-primarydarker);
     --color-link-hover: var(--color-primary);
+    --color-link-strong: var(--color-strong);
     --color-linkondark: var(--color-primarylight);
     --color-linkondark-hover: var(--color-primarylighter);
     --color-linkgm: var(--accent);

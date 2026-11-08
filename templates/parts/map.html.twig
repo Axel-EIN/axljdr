@@ -13,7 +13,7 @@
 {% set territories = territories|default(false) %}
 {% set labels = labels|default(false) %}
 {% set territories_on = territories or territories_on|default(false) %}
-{% set labels_on = worldmap or labels_on|default(false) %}
+{% set labels_on = worldmap or labels or labels_on|default(false) %}
 {% set large_markers = large_markers|default(false) %}
 {% set hide_minimap = hide_minimap|default(false) %}
 {% set emblem = emblem|default(null) %}
@@ -27,7 +27,7 @@
 {% set placed = locations|filter(l => l.placed) %}
 {% set current_city = current and current.type in ['Cité', 'Ville'] %}
 
-<div class="map-frame {{ variant }}{% if labels %} labels-shown{% elseif not labels_on %} labels-hidden{% endif %}{% if not worldmap %} d-none d-lg-block{% endif %}{% if large_markers %} large-markers{% endif %}{% if current_city %} current-city{% endif %}{% if draggable %} draggable{% endif %}"
+<div class="map-frame {{ variant }}{% if not labels_on %} labels-hidden{% endif %}{% if not worldmap %} d-none d-lg-block{% endif %}{% if large_markers %} large-markers{% endif %}{% if current_city %} current-city{% endif %}{% if draggable %} draggable{% endif %}"
   {% if center %}data-locx="{{ center.locX }}" data-locy="{{ center.locY }}"{% endif %}
   {% if highlight %}data-highlight="{{ highlight.id }}"{% endif %}
   {% if zoom %}data-zoom="{{ zoom }}"{% endif %}

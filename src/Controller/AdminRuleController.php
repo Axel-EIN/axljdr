@@ -21,7 +21,7 @@ class AdminRuleController extends AbstractController
 
     /**
      * @Route("/admin/rule", name="admin_rule")
-     * @IsGranted("ROLE_MJ")
+     * @IsGranted("ROLE_GM")
      */
     public function viewAdminRules(RuleRepository $ruleRepository): Response
     {
@@ -53,7 +53,7 @@ class AdminRuleController extends AbstractController
 
     /**
      * @Route("/admin/rule/create", name="admin_rule_create")
-     * @IsGranted("ROLE_MJ")
+     * @IsGranted("ROLE_GM")
      */
     public function addRule(Request $request, EntityManagerInterface $em, FileHandler $fileHandler, RuleRepository $ruleRepository, Orderer $orderer, Unlocker $unlocker): Response
     {
@@ -101,7 +101,7 @@ class AdminRuleController extends AbstractController
 
     /**
      * @Route("/admin/rule/{id}/edit", name="admin_rule_edit")
-     * @IsGranted("ROLE_MJ")
+     * @IsGranted("ROLE_GM")
      */
     public function editRule(Request $request, Rule $rule, FileHandler $fileHandler, RuleRepository $ruleRepository, Orderer $orderer, Unlocker $unlocker): Response
     {
@@ -158,7 +158,7 @@ class AdminRuleController extends AbstractController
 
     /**
      * @Route("/admin/rule/{id}/delete", name="admin_rule_delete", methods={"POST"})
-     * @IsGranted("ROLE_MJ")
+     * @IsGranted("ROLE_GM")
      */
     public function deleteRule(Request $request, Rule $rule, FileHandler $fileHandler, EntityManagerInterface $em, RuleRepository $ruleRepository, Orderer $orderer, Unlocker $unlocker): Response
     {

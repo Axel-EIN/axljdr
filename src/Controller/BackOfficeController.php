@@ -32,7 +32,7 @@ class BackOfficeController extends AbstractController
 {
     /**
      * @Route("/back-office", name="back_office")
-     * @Security("is_granted('ROLE_MJ') or is_granted('ROLE_ADMIN')")
+     * @Security("is_granted('ROLE_GM') or is_granted('ROLE_ADMIN')")
      */
     public function index(
         SaisonRepository $seasonRepository,
@@ -61,7 +61,7 @@ class BackOfficeController extends AbstractController
 
         UtilisateurRepository $userRepository ): Response
     {
-        if (!$this->isGranted('ROLE_MJ')) {
+        if (!$this->isGranted('ROLE_GM')) {
             return $this->renderBackOffice($userRepository, []);
         }
 

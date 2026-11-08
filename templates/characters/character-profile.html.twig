@@ -183,7 +183,7 @@
                             <span class="development-title">
                                 <a href="{{ scene_url }}">
                                     <img class="img-18 invert mr-1 align-middle" src="{{ asset(STORY_EPISODE_ICO) }}" alt="" />
-                                    <strong>{{ scene.titre }}</strong>
+                                    <span class="bold">{{ scene.titre }}</span>
                                 </a>
                                 {% if is_gm() %}
                                     {{ include('/btns/btn-icon-edit.html.twig', {
@@ -195,7 +195,7 @@
 
                             <span class="development-meta">{{ chapter.titre }} — EP #{{ episode.numeroSaison }} - Scène {{ scene.numero }}</span>
                             {% if development.estMort %}
-                                <strong class="text-dead">MORT</strong>
+                                <span class="bold text-dead">MORT</span>
                             {% endif %}
                         </div>
 
@@ -276,7 +276,7 @@
         <div class="card-text profile-history">
             {{ include('parts/history.html.twig', {history, current_season}) }}
             {% if creation_xp > 0 %}
-            <p class="profile-creation">Création du personnage {{ character.prenom }} avec <strong>{{ creation_xp }}xp</strong>.</p>
+            <p class="profile-creation">Création du personnage {{ character.prenom }} avec <span class="bold">{{ creation_xp }}xp</span>.</p>
             {% endif %}
         </div>
     </div>

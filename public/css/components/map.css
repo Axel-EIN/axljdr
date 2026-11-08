@@ -620,9 +620,29 @@
     }
 
     &.mine .map-portrait-toggle {
-      animation: map-portrait-glow 1.4s ease-in-out infinite;
+      position: relative;
+      isolation: isolate;
 
-      @media (prefers-reduced-motion: reduce) { animation: none; }
+      &::before {
+        content: '';
+        position: absolute;
+        z-index: -1;
+        inset: calc(-3px * var(--icon-scale, 1));
+        border-radius: calc(6px * var(--icon-scale, 1));
+        background: conic-gradient(
+          from var(--halo-angle),
+          transparent 0deg,
+          var(--flash-green) 70deg,
+          transparent 160deg,
+          transparent 180deg,
+          var(--flash-green) 250deg,
+          transparent 340deg
+        );
+        filter: blur(1px);
+        animation: map-portrait-halo 2.4s linear infinite;
+
+        @media (prefers-reduced-motion: reduce) { animation: none; }
+      }
     }
 
     &.selected .map-portrait-toggle {
@@ -754,7 +774,12 @@
   to { stroke-dashoffset: calc(-18px * var(--marker-scale, 1)); }
 }
 
-@keyframes map-portrait-glow {
-  0%, 100% { box-shadow: 0 0 4px var(--color-black), 0 0 4px var(--flash-green); }
-  50%      { box-shadow: 0 0 4px var(--color-black), 0 0 12px 3px var(--flash-green); }
+@property --halo-angle {
+  syntax: '<angle>';
+  inherits: false;
+  initial-value: 0deg;
+}
+
+@keyframes map-portrait-halo {
+  to { --halo-angle: 360deg; }
 }

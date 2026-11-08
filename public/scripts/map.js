@@ -18,7 +18,6 @@
   const MAX_SCALE = ZOOM_LEVELS[ZOOM_LEVELS.length - 1];
   const NORMAL_IMAGE_SCALE = 0.5;
   const FOCUS_SCALE = 1;
-  const ZOOMED_OUT_SCALE = MIN_SCALE;
   const MARKER_MIN_SCALE = 0.5;
   const HOUR_DISTANCE = 24;
   const WALK_BLOCK_HOURS = 4;
@@ -87,7 +86,6 @@
     map.style.transform = 'translate(' + x + 'px, ' + y + 'px) scale(' + scale + ')';
     if (zoomLevel) zoomLevel.textContent = '×' + scale.toLocaleString('fr-FR', { maximumFractionDigits: 2 });
     frame.style.setProperty('--marker-scale', markerSize * Math.min(Math.max(scale, MARKER_MIN_SCALE), 1) / scale);
-    frame.classList.toggle('zoomed-out', scale < ZOOMED_OUT_SCALE);
     frame.style.setProperty('--icon-scale', Math.max(scale, 1));
     updateMinimap();
     updateImage();

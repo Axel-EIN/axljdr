@@ -40,7 +40,7 @@
   <div id="episode{{ episode.id }}" class="collapse">
     {% for line in entry.lines %}
       <div class="history-scene">
-        <a href="{{ path('story_episode', {id: episode.id, '_fragment': 'scn' ~ line.scene.numero}) }}">
+        <a class="link-strong" href="{{ path('story_episode', {id: episode.id, '_fragment': 'scn' ~ line.scene.numero}) }}">
           Scène {{ line.scene.numero }} — <strong>{{ line.scene.titre }}</strong>
         </a>
 

@@ -25,7 +25,7 @@ class AdminSkillController extends AbstractController
 
     /**
      * @Route("/admin/skill", name="admin_skill")
-     * @IsGranted("ROLE_MJ")
+     * @IsGranted("ROLE_GM")
      */
     public function viewAdminSkills( CompetenceRepository $skillRepository ): Response
     {
@@ -59,7 +59,7 @@ class AdminSkillController extends AbstractController
 
     /**
      * @Route("/admin/skill/create", name="admin_skill_create")
-     * @IsGranted("ROLE_MJ")
+     * @IsGranted("ROLE_GM")
      */
     public function addSkill(Request $request, EntityManagerInterface $em, Unlocker $unlocker, TableFilter $tableFilter) {
 
@@ -95,7 +95,7 @@ class AdminSkillController extends AbstractController
 
     /**
      * @Route("/admin/skill/{id}/edit", name="admin_skill_edit")
-     * @IsGranted("ROLE_MJ")
+     * @IsGranted("ROLE_GM")
      */
     public function editSkill(Request $request, Competence $skill, Unlocker $unlocker): Response {
 
@@ -128,7 +128,7 @@ class AdminSkillController extends AbstractController
 
     /**
      * @Route("/admin/skill/{id}/delete", name="admin_skill_delete", methods={"POST"})
-     * @IsGranted("ROLE_MJ")
+     * @IsGranted("ROLE_GM")
      */
     public function deleteSkill(Request $request, Competence $skill, Unlocker $unlocker, DeletionGuard $deletionGuard): Response {
 

@@ -35,8 +35,8 @@ class AdminSeasonController extends AbstractController
             'gender' => 'F',
             'article' => 'une',
             'table_cols' => [
-                'numero:Ordre:number',
                 'image:Image:image:NA_SAISON',
+                'numero:Ordre:number',
                 'titre:Titre::bold',
                 'couleur:Couleur:color',
             ],

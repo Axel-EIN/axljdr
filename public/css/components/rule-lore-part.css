@@ -113,3 +113,32 @@
         flex-direction: column;
     }
 }
+
+.part-links {
+    clear: both;
+    margin: 1.5rem 1rem 0;
+    padding: 1rem 1.5rem;
+    border-left: 3px solid var(--color-primary);
+    border-radius: 0 0.5rem 0.5rem 0;
+    background-color: rgb(from var(--color-background) r g b / 50%);
+
+    .part-links-title {
+        display: block;
+        margin-bottom: 0.5rem;
+        color: var(--color-alternate);
+        font-size: var(--fontsize-small);
+        letter-spacing: 1px;
+        text-transform: uppercase;
+    }
+
+    ul {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem 1.5rem;
+        margin: 0;
+        padding: 0;
+        list-style: none;
+    }
+
+    i { margin-right: 0.4rem; }
+}

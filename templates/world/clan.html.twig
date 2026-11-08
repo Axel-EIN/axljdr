@@ -50,7 +50,7 @@
                             {% endif %}
                         </div>
 
-                        <p class="family-description text-description">{{ family.description|text }}</p>
+                        <p class="family-description text-description text-regular">{{ family.description|text }}</p>
 
                     </article>
                 {% else %}
@@ -89,7 +89,7 @@
             {% endif %}
 
             {% if territory_visible_mobile %}
-                {{ include('parts/description.html.twig', {text: clan.territoireDesc, variant: 'aerated'}, with_context = false) }}
+                {{ include('parts/description.html.twig', {text: clan.territoireDesc, variant: 'aerated p-4'}, with_context = false) }}
             {% endif %}
 
         </div>
@@ -142,7 +142,7 @@
             <div class="card card-body">
                 <h2 class="heading-cardtitle">Autres</h2>
                 <hr>
-                {{ include('parts/description.html.twig', {text: clan.longDescription}, with_context = false) }}
+                {{ include('parts/description.html.twig', {text: clan.longDescription, variant: 'aerated p-4'}, with_context = false) }}
             </div>
         </div>
     {% else %}

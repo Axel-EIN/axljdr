@@ -90,7 +90,7 @@ class Locator
         $steps = array_map(function (Lieu $location) {
             return ['locX' => $location->getLocX(), 'locY' => $location->getLocY()];
         }, $this->journeys()[$character->getId()]['locations'] ?? []);
-        $free = $this->freePosition($character);
+        $free = $this->wanderers()[$character->getId()] ?? null;
 
         if ($free !== null) {
             array_unshift($steps, ['locX' => $free['locX'], 'locY' => $free['locY']]);

@@ -36,13 +36,10 @@ class NewsController extends AbstractController
             ['title' => 'Divers', 'keys' => ['object'], 'criteria' => ['categorie' => 'OBJET'], 'max' => 2],
             ['title' => 'Armes & Armures', 'keys' => ['object'], 'criteria' => ['categorie' => ['ARME', 'ARMURE', 'PROJECTILE']], 'max' => 2],
         ]],
-        ['title' => 'Factions', 'variant' => 'emblem', 'keys' => ['clan']],
-        ['title' => 'Écoles', 'variant' => 'rule', 'keys' => ['dojo']],
-        ['title' => 'Archives et Lore', 'sections' => [
-            ['title' => 'Archives', 'keys' => ['archive'], 'max' => 2],
-            ['title' => 'Lore', 'keys' => ['lore'], 'max' => 2],
-        ]],
-        ['title' => 'Règles', 'icon' => 'fa-ruler', 'variant' => 'rule', 'keys' => ['rule']],
+        ['title' => 'Factions', 'icon' => 'fa-flag', 'variant' => 'emblem', 'keys' => ['clan']],
+        ['title' => 'Écoles', 'icon' => 'fa-graduation-cap', 'variant' => 'rule', 'keys' => ['dojo']],
+        ['title' => 'Univers', 'icon' => 'fa-earth-asia', 'variant' => 'rule', 'keys' => ['archive', 'lore']],
+        ['title' => 'Règles', 'icon' => 'fa-scale-balanced', 'variant' => 'rule', 'keys' => ['rule']],
         ['title' => 'Bibliothèques', 'icon' => 'fa-book', 'variant' => 'rule', 'large' => true, 'sections' => [
             ['title' => 'Avantages & Désavantages', 'keys' => ['advantage'], 'max' => 2],
             ['title' => 'Compétences', 'keys' => ['skill'], 'max' => 2],

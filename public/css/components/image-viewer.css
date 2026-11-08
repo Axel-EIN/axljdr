@@ -19,7 +19,7 @@
     &.dragging { cursor: grabbing; }
   }
 
-  &.animated .image-viewer-picture { transition: transform var(--duration) var(--ease); }
+  &.animated .image-viewer-picture { transition: transform var(--motion); }
 
   &:fullscreen {
     align-items: center;
@@ -52,7 +52,7 @@
     color: var(--color-white);
     font-size: var(--fontsize-regular);
     cursor: pointer;
-    transition: background-color var(--duration) var(--ease), opacity var(--duration) var(--ease);
+    transition: background-color var(--motion-hover), opacity var(--motion-hover);
 
     .icon-on { display: none; }
 

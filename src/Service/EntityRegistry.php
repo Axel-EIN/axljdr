@@ -51,6 +51,10 @@ final class EntityRegistry
             return $element->getGenreIcon();
         }
 
+        if ($element instanceof Sort) {
+            return $element->getCategorieIcon() ?? self::ENTITIES['spell']['icon'];
+        }
+
         $key = self::keyOf($element);
 
         return $key === null ? null : self::ENTITIES[$key]['icon'] ?? null;
@@ -60,6 +64,10 @@ final class EntityRegistry
     {
         if ($element instanceof Avantage) {
             return $element->getGenre();
+        }
+
+        if ($element instanceof Sort) {
+            return $element->getCategorieLabel() ?? self::label('spell');
         }
 
         $key = self::keyOf($element);

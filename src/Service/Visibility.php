@@ -171,7 +171,7 @@ class Visibility
             return $since;
         }
 
-        return min($since, \DateTime::createFromInterface($episodeDate)->setTime(0, 0));
+        return min($since, \DateTime::createFromInterface($episodeDate)->setTime(0, 0)->modify('-' . self::FRESHNESS_DAYS . ' days'));
     }
 
     private function publishedAt($element): ?\DateTimeInterface

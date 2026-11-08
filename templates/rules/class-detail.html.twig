@@ -29,4 +29,12 @@
         empty_message: "Il n'y a pas encore de personnages disponibles pour cette classe.",
     }) }}
 
+    {{ include('/parts/picture-grid.html.twig', {
+        title: 'Autres Classes',
+        variant: 'emblem',
+        items: classes|filter(other => other.id != character_class.id), route: 'rules_class',
+        na_image: NA_CLASS_ICO, field: 'icone',
+        per_row: {desktop: 6, mobile: 3},
+    }) }}
+
 {% endblock %}

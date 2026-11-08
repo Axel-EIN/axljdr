@@ -74,7 +74,7 @@
 
                     {% if participation.xpGagne != 0 and participation.estMort != 1 %}
                         <div class="d-inline-block {{ participation.personnage.joueur == app.user ? 'text-your-xp' : 'text-xp' }}">
-                            <strong class="text-medium">+{{participation.xpGagne}}</strong> <span class="text-small">XP</span>
+                            {{ include('parts/xp-gain.html.twig', {xp: participation.xpGagne, total: participation.xpEffectif, sign: '+', format: 'large'}) }}
                         </div><br/>
                     {% endif %}
 

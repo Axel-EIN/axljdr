@@ -16,6 +16,7 @@
 {% set labels_on = worldmap or labels or labels_on|default(false) %}
 {% set large_markers = large_markers|default(false) %}
 {% set hide_minimap = hide_minimap|default(false) %}
+{% set pulse = pulse ?? true %}
 {% set emblem = emblem|default(null) %}
 {% set emblem_at = emblem_at|default(center) %}
 {% set main_character = navigating_character() %}
@@ -244,9 +245,11 @@
     {% endif %}
 
     {% if current %}
-      <img class="absolute location-pulse-icon" style="left:{{current.locX}}%; top:{{current.locY}}%" src="{{ asset(current.icone|default(NA_LIEU_ICO)) }}" alt="Icone de {{current.nom}}" />
+      <img class="absolute location-pulse-icon{{ pulse ? '' : ' still' }}" style="left:{{current.locX}}%; top:{{current.locY}}%" src="{{ asset(current.icone|default(NA_LIEU_ICO)) }}" alt="Icone de {{current.nom}}" />
 
-      <div class="absolute location-current-label" style="left:{{current.locX}}%; top:{{current.locY}}%">Lieu actuel</div>
+      {% if not minimap %}
+        <div class="absolute location-current-label" style="left:{{current.locX}}%; top:{{current.locY}}%">Lieu actuel</div>
+      {% endif %}
 
       {{ include('parts/map-label.html.twig', {
         name: current.nom,

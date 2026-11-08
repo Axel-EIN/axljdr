@@ -21,6 +21,7 @@ use function Symfony\Component\String\u;
 
 class Search
 {
+    public const GROUP_PREVIEW = 5;
     public const MIN_LENGTH = 2;
 
     private const EXCERPT_BEFORE = 60;
@@ -93,11 +94,11 @@ class Search
         $this->richText = $richText;
     }
 
-    public function find(string $term): array
+    public function find(string $term, ?string $group = null): array
     {
         $groups = [];
 
-        foreach ($this->results($term) as $result) {
+        foreach ($this->results($term, false, isset(self::GROUPS[$group]) ? $group : null) as $result) {
             $groups[$result['group']]['label'] = $result['groupLabel'];
             $groups[$result['group']]['results'][] = $result;
         }
@@ -107,7 +108,12 @@ class Search
 
     public function suggest(string $term, int $limit): array
     {
-        $results = $this->results($term);
+        $results = $this->results($term, true);
+
+        if (count($results) < $limit) {
+            $results = $this->results($term);
+        }
+
         $order = array_flip(array_keys(self::GROUPS));
 
         usort($results, function ($a, $b) use ($order) {
@@ -117,7 +123,7 @@ class Search
         return array_slice($results, 0, $limit);
     }
 
-    private function results(string $term): array
+    private function results(string $term, bool $namesOnly = false, ?string $onlyGroup = null): array
     {
         $term = trim($term);
 
@@ -130,6 +136,10 @@ class Search
         $candidates = [];
 
         foreach (self::GROUPS as $group => $config) {
+            if ($onlyGroup !== null && $group !== $onlyGroup) {
+                continue;
+            }
+
             $groupResults = [];
             $candidates[$config['class']] ??= $this->candidates($term, $config['class']);
 
@@ -138,7 +148,7 @@ class Search
                     continue;
                 }
 
-                $result = $this->match($element, $group, $pattern);
+                $result = $this->match($element, $group, $pattern, $namesOnly);
 
                 if ($result !== null) {
                     $groupResults[] = $result;
@@ -187,7 +197,7 @@ class Search
         return $qb->getQuery()->getResult();
     }
 
-    private function match($element, string $group, string $pattern): ?array
+    private function match($element, string $group, string $pattern, bool $namesOnly = false): ?array
     {
         $source = self::SOURCES[self::GROUPS[$group]['class']];
 
@@ -197,6 +207,10 @@ class Search
                 $inName = true;
                 break;
             }
+        }
+
+        if ($namesOnly && !$inName) {
+            return null;
         }
 
         $excerpt = null;

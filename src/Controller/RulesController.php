@@ -172,7 +172,7 @@ class RulesController extends AbstractController
                 foreach ( $items as $item )
                     $subtabs[] = $item->{ 'get' .  ucfirst( $subtab_field_name ) }();
 
-                $subtabs = array_unique($subtabs);
+                $subtabs = array_values(array_unique(array_filter($subtabs)));
 
                 if ($library->getNom() == 'Avantages / Désavantages')
                     $subtabs = ['MENTAL','PHYSIQUE','SOCIAL','SPIRITUEL', 'MATERIEL'];

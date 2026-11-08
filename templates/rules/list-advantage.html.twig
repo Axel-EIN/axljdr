@@ -32,7 +32,7 @@
 
                 <div class="item-line">
                     {{ include('parts/badge-access.html.twig', {state: element_state(item), variant: 'inline'}) }}
-                    <strong class="item-name">{{ item.nom }}</strong>
+                    <span class="bold item-name">{{ item.nom }}</span>
                     {% if element_fresh(item) %}{{ include('parts/badge-new.html.twig', {variant: 'inline'}) }}{% endif %}
                     {% if item.exclusive %}
                         <div class="ml-2">
@@ -46,9 +46,9 @@
                         {% for discount_clan in discount_clans %}
                             <span class="badge badge-success">{{ discount_clan.nom }}</span>
                         {% endfor %}
-                        <strong class="ml-3 {% if item.genre == 'Avantage' %}text-dead{% elseif item.genre == 'Désavantage' %}text-your-xp{% endif %}">
+                        <span class="bold ml-3 xp-cost{% if item.genre == 'Avantage' %} spend{% elseif item.genre == 'Désavantage' %} gain{% endif %}">
                             {% if item.genre == 'Avantage' %}-{% elseif item.genre == 'Désavantage' %}+{% endif %}{{ item.cout }} xp
-                        </strong>
+                        </span>
                     </span>
                 </div>
 
@@ -67,18 +67,18 @@
                             {% for prefix, linked_entities in groups %}
                                 {% if not loop.first %}ou{% endif %}
                                 {{ prefix }}
-                                {% for linked_entity in linked_entities %}<strong>{{ linked_entity.nom }}</strong>{% if not loop.last %}, {% endif %}{% endfor %}
+                                {% for linked_entity in linked_entities %}<span class="bold">{{ linked_entity.nom }}</span>{% if not loop.last %}, {% endif %}{% endfor %}
                             {% endfor %}
                                 {% if item.genre == 'Avantage' %}
-                                    peuvent dépenser <strong>{{item.discount}} xp</strong>
+                                    peuvent dépenser <span class="bold">{{item.discount}} xp</span>
                                 {% elseif item.genre == 'Désavantage' %}
-                                    peuvent gagner jusqu'à <strong>{{item.discount}} xp</strong> en prenant ce Désavantage
+                                    peuvent gagner jusqu'à <span class="bold">{{item.discount}} xp</span> en prenant ce Désavantage
                                 {% endif %}
                         </div>
                     {% endif %}
                     {% if item.exclusive %}
                         <div class="text-small text-secondary ml-2">
-                            Exclusif aux personnages <strong>{{item.exclusive.nom}}</strong>
+                            Exclusif aux personnages <span class="bold">{{item.exclusive.nom}}</span>
                         </div>
                     {% endif %}
                 </div>

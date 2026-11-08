@@ -63,6 +63,7 @@
                                 variant: 'portrait',
                                 per_row: 4,
                                 empty_message: 'Aucun personnage rencontré',
+                                hint_block: true,
                             }) }}
                         </div>
                     </div>
@@ -266,6 +267,7 @@
                             items: group.elements,
                             badge_hover: true,
                             variant: group.variant|default('landscape'),
+                            hint_block: group.variant|default(null) == 'portrait',
                             field: group.field|default(null),
                             per_row: group.perRow,
                             keep_order: group.keepOrder,
@@ -275,7 +277,15 @@
                 </div>
             {% endfor %}
 
-            {% if not my_character %}
+            {% set secrets_locked = not my_character and not is_gm() %}
+
+            {% if groups is empty and not secrets_locked %}
+                <div class="card card-body news-group large">
+                    <span class="text-muted font-italic">Aucune nouveauté pour l'instant.</span>
+                </div>
+            {% endif %}
+
+            {% if secrets_locked %}
                 <div class="card card-body news-group{{ secrets_large ? ' large' }} locked">
                     <h3 class="label-amerigo news-subtitle">Secrets</h3>
                     <img class="news-lock fa-beat-fade" src="{{ asset(LOCKED_ICO) }}" alt="Cadenas" />

@@ -3,7 +3,7 @@
 .nickname-container {
   position: absolute;
   z-index: 10;
-  left: 5rem;
+  left: 4rem;
   bottom: 0.5rem;
   display: flex;
   align-items: center;
@@ -15,7 +15,7 @@
 .stats {
   position: absolute;
   z-index: 10;
-  right: 6rem;
+  right: 4rem;
   bottom: 1rem;
   display: flex;
   flex-direction: column;

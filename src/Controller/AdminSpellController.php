@@ -90,7 +90,7 @@ class AdminSpellController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
 
             $formNumber = $form->get('numero')->getData();
-            $newSiblings = $spellRepository->findBy(['anneau' => $form->get('anneau')->getData()]);
+            $newSiblings = $spellRepository->findBy($this->group($spell));
 
             if ( empty($formNumber) || !is_numeric($formNumber) || $formNumber < 1 )
                 $spell->setNumero( count($newSiblings) + 1 );
@@ -99,6 +99,8 @@ class AdminSpellController extends AbstractController
 
             $em->persist($spell);
             $em->flush();
+
+            $orderer->reorderNumber($spell->getId(), -1, $spell->getNumero(), [], $newSiblings);
 
             $unlocker->sync($spell, $form->get('unlockedBy')->getData());
             $em->flush();
@@ -131,7 +133,7 @@ class AdminSpellController extends AbstractController
         else
             $previousNumber = $spell->getNumero();
 
-        $previousSiblingsId = $spell->getAnneau();
+        $previousGroup = $this->group($spell);
 
         $form = $this->createForm(AdminSpellType::class, $spell);
         $form->get('unlockedBy')->setData($unlocker->charactersOf($spell));
@@ -139,10 +141,14 @@ class AdminSpellController extends AbstractController
 
         if($form->isSubmitted() && $form->isValid()) {
 
-            if ($previousNumber != $spell->getNumero() || $previousSiblingsId != $spell->getAnneau())
+            $newSiblings = $spellRepository->findBy($this->group($spell));
+
+            if ( empty($spell->getNumero()) || $spell->getNumero() < 1 )
+                $spell->setNumero( count(array_filter($newSiblings, fn (Sort $sibling) => $sibling->getId() != $spell->getId())) + 1 );
+
+            if ($previousNumber != $spell->getNumero() || $previousGroup != $this->group($spell))
             {
-                $previousSiblings = $spellRepository->findBy(['anneau' => $previousSiblingsId]);
-                $newSiblings = $spellRepository->findBy(['anneau' => $spell->getAnneau()]);
+                $previousSiblings = $spellRepository->findBy($previousGroup);
                 $orderer->reorderNumber($spell->getId(), $previousNumber, $spell->getNumero(), $previousSiblings, $newSiblings);
             }
 
@@ -183,6 +189,15 @@ class AdminSpellController extends AbstractController
         }
 
         return $this->redirectToRoute('admin_spell');
+    }
+
+    private function group(Sort $spell): array
+    {
+        return [
+            'categorie' => $spell->getCategorie(),
+            'anneau' => $spell->getAnneau(),
+            'niveau' => $spell->getNiveau(),
+        ];
     }
 
 }

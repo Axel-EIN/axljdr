@@ -96,7 +96,7 @@ class NameTagger
         $links = $this->linksIn($previous);
 
         return preg_replace_callback(
-            '#\[[^\]]*\]|\{[^}]*\}|\(\([^)]*\)\)#',
+            '#\[[^\]]*\](?!\()|\{[^}]*\}|\(\([^)]*\)\)#',
             fn (array $marker) => in_array($marker[0], $links, true) ? $this->tag($marker[0]) : $marker[0],
             $text
         );
@@ -106,9 +106,9 @@ class NameTagger
     {
         $matches = [];
 
-        preg_match_all('#\[(.*)\]#Ui', $text, $matches);
+        preg_match_all('#\[([^\]]*)\](?!\()#Ui', $text, $matches);
 
-        $patterns = array_fill(0, count($matches[1]), '#\[(.*)\]#Ui');
+        $patterns = array_fill(0, count($matches[1]), '#\[([^\]]*)\](?!\()#Ui');
         $replacements = [];
 
         foreach ($matches[1] as $match) {

@@ -43,10 +43,10 @@
                         </div>
 
                         <div class="family-header">
-                            <h3><strong>{{ family.nom }}</strong></h3>
+                            <h3><span class="bold">{{ family.nom }}</span></h3>
                             {% if family.bonusStatNom %}
                                 {% set labels = {'constitution':'Constitution','volonte':'Volonté','reflexes':'Réflexes','intuition':'Intuition','agilite':'Agilité','intelligence':'Intelligence','forceStat':'Force','perception':'Perception','vide':'Vide'} %}
-                                <strong style="color: {{ clan.couleur }}">Trait bonus : {{ labels[family.bonusStatNom] ?? family.bonusStatNom }} +1</strong>
+                                <span class="bold" style="color: {{ clan.couleur }}">Trait bonus : {{ labels[family.bonusStatNom] ?? family.bonusStatNom }} +1</span>
                             {% endif %}
                         </div>
 

@@ -14,6 +14,15 @@
     align-items: center;
     padding: 0.5rem;
     text-align: center;
+    @media (max-width: 991.98px) {
+      grid-row: 1;
+    }
+  }
+
+  .family-header {
+    @media (max-width: 991.98px) {
+      align-self: center;
+    }
   }
 
   .family-daimyo {
@@ -21,16 +30,15 @@
     flex-direction: column;
     align-items: center;
     margin-top: 1rem;
+    @media (max-width: 991.98px) {
+      display: none;
+    }
   }
 
-  .family-description { margin: 0; }
-
-  @media (max-width: 991.98px) {
-    .family-mon { grid-row: 1; }
-    .family-daimyo { display: none; }
-
-    .family-header { align-self: center; }
-
-    .family-description { grid-column: 1 / -1; }
+  .family-description {
+    margin: 0;
+    @media (max-width: 991.98px) {
+      grid-column: 1 / -1;
+    }
   }
 }

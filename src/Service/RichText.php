@@ -18,6 +18,21 @@ class RichText
             (string) $text
         );
 
+        $text = preg_replace_callback(
+            '/(?:^[ \t]*-[ \t]+.*(?:\R|$))+/mu',
+            fn (array $list) => '<span class="text-list">' . implode('', array_map(
+                fn (string $item) => '<span class="text-list-item">' . preg_replace('/^[ \t]*-[ \t]+/u', '', $item) . '</span>',
+                preg_split('/\R/u', rtrim($list[0], "\r\n"))
+            )) . '</span>',
+            $text
+        );
+
+        $text = preg_replace_callback(
+            '/\[([^\]\n]+)\]\(((?:https?:\/\/|\/)[^\s)"<>]*)\)/u',
+            fn (array $link) => '<a href="' . $link[2] . '"' . (str_starts_with($link[2], '/') ? '' : ' target="_blank" rel="noopener"') . '>' . $link[1] . '</a>',
+            $text
+        );
+
         return nl2br(preg_replace(
             [
                 '/\*\*\*(?=\S)(.+?)(?<=\S)\*\*\*/u',

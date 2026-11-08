@@ -3,8 +3,10 @@ namespace App\Service;
 
 use App\Entity\Development;
 use App\Entity\Lieu;
+use App\Entity\Objet;
 use App\Entity\Personnage;
 use App\Entity\Scene;
+use App\Repository\ObjetRepository;
 use App\Repository\PersonnageRepository;
 use App\Repository\LieuRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -20,15 +22,18 @@ class NameTagger
 
     private const CHARACTER_LINK = '#<a class="tag-character .*><img class="character-portrait small" .* \/> (.*)<\/a>#Ui';
     private const LOCATION_LINK = '#<a class="tag-location .*><img class="location-icon-small" .* \/> (.*)<\/a>#Ui';
+    private const OBJECT_LINK = '#<a class="tag-object .*><img class="location-icon-small" .* \/> (.*)<\/a>#Ui';
 
     private $characterRepository;
     private $locationRepository;
+    private $objectRepository;
     private $entityManager;
 
-    public function __construct(PersonnageRepository $characterRepository, LieuRepository $locationRepository, EntityManagerInterface $entityManager)
+    public function __construct(PersonnageRepository $characterRepository, LieuRepository $locationRepository, ObjetRepository $objectRepository, EntityManagerInterface $entityManager)
     {
         $this->characterRepository = $characterRepository;
         $this->locationRepository = $locationRepository;
+        $this->objectRepository = $objectRepository;
         $this->entityManager = $entityManager;
     }
 
@@ -38,6 +43,10 @@ class NameTagger
             return 'assets/placeholders/na_lieu_ico.png';
         }
 
+        if ($element instanceof Objet) {
+            return 'assets/placeholders/na_icon.png';
+        }
+
         $gender = $element->getGenre();
 
         return 'assets/placeholders/na_perso_icon' . (in_array($gender, ['M', 'F'], true) ? '_' . $gender : '') . '.jpg';
@@ -45,7 +54,9 @@ class NameTagger
 
     public function replaceWithDefaultIcon($element): int
     {
-        return empty($element->getIcone()) ? 0 : $this->replacePath($element->getIcone(), $this->defaultIcon($element));
+        $icon = $element instanceof Objet ? $element->getIcon() : $element->getIcone();
+
+        return empty($icon) ? 0 : $this->replacePath($icon, $this->defaultIcon($element));
     }
 
     public function replacePath(string $previous, string $new): int
@@ -68,12 +79,12 @@ class NameTagger
 
     public function tag(?string $text): ?string
     {
-        return empty($text) ? $text : $this->tagLocations($this->tagCharacters($text));
+        return empty($text) ? $text : $this->tagObjects($this->tagLocations($this->tagCharacters($text)));
     }
 
     public function untag(?string $text): ?string
     {
-        return empty($text) ? $text : $this->untagLocations($this->untagCharacters($text));
+        return empty($text) ? $text : $this->untagObjects($this->untagLocations($this->untagCharacters($text)));
     }
 
     public function retag(?string $text, ?string $previous): ?string
@@ -85,7 +96,7 @@ class NameTagger
         $links = $this->linksIn($previous);
 
         return preg_replace_callback(
-            '#\[[^\]]*\]|\{[^}]*\}#',
+            '#\[[^\]]*\]|\{[^}]*\}|\(\([^)]*\)\)#',
             fn (array $marker) => in_array($marker[0], $links, true) ? $this->tag($marker[0]) : $marker[0],
             $text
         );
@@ -183,6 +194,52 @@ class NameTagger
         return preg_replace($patterns, $replacements, $text, 1);
     }
 
+    public function tagObjects($text)
+    {
+        $matches = [];
+
+        preg_match_all('#\(\((.*)\)\)#Ui', $text, $matches);
+
+        $patterns = array_fill(0, count($matches[1]), '#\(\((.*)\)\)#Ui');
+        $replacements = [];
+
+        foreach ($matches[1] as $match) {
+            $object = $this->objectRepository->findOneBy(array('nom' => $match));
+
+            if ($object != null) {
+                $objectIcon = '../../' . ($object->getIcon() ?: $this->defaultIcon($object));
+
+                $replacements[] =
+                    '<a class="tag-object hover-zoom-quick location-icon bg-background pr-1 pt-0 pb-0 pl-0" href="../../rules/object/' . $object->getId() . '">'
+                                . '<img class="location-icon-small" src="../../' . $objectIcon
+                                . '" alt="Icône objet" title="Voir ' . $object->getNom() . '" /> ' . $object->getNom() . '</a>';
+            } else
+                $replacements[] = $match;
+        }
+
+        return preg_replace($patterns, $replacements, $text, 1);
+    }
+
+    public function untagObjects($text)
+    {
+        $matches = [];
+
+        preg_match_all(self::OBJECT_LINK, $text, $matches);
+
+        $patterns = array_fill(0, count($matches[1]), self::OBJECT_LINK);
+        $replacements = [];
+
+        foreach ($matches[1] as $match) {
+            $object = $this->objectRepository->findOneBy(array('nom' => $match));
+            if ($object != null) {
+                $replacements[] = '((' . $object->getNom() . '))';
+            } else
+                $replacements[] = $match;
+        }
+
+        return preg_replace($patterns, $replacements, $text, 1);
+    }
+
     private function linksIn(?string $text): array
     {
         if (empty($text)) {
@@ -191,10 +248,12 @@ class NameTagger
 
         preg_match_all(self::CHARACTER_LINK, $text, $characters);
         preg_match_all(self::LOCATION_LINK, $text, $locations);
+        preg_match_all(self::OBJECT_LINK, $text, $objects);
 
         return array_merge(
             array_map(fn (string $firstName) => '[' . $firstName . ']', $characters[1]),
-            array_map(fn (string $name) => '{' . $name . '}', $locations[1])
+            array_map(fn (string $name) => '{' . $name . '}', $locations[1]),
+            array_map(fn (string $name) => '((' . $name . '))', $objects[1])
         );
     }
 }

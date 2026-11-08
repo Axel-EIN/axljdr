@@ -13,7 +13,7 @@ button {
 .btn-quaternary-style,
 .btn-icon,
 .btn-display-icon {
-  transition: all var(--duration) var(--ease);
+  transition: all var(--motion-hover);
 }
 
 .btn-medium {
@@ -43,10 +43,9 @@ button {
   font-size: 8rem;
   text-decoration: none;
   color: var(--color-white50);
-  transition: var(--duration) var(--ease);
+  transition: var(--motion-hover);
   &:hover {
     color: var(--color-white);
-    transition: var(--duration) var(--ease);
   }
 }
 

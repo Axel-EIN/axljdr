@@ -25,6 +25,24 @@
             fallback: NA_LIEU, label: 'Image (1280×720 16:9 recommandé)', width: 1280, height: 720 }) }}
       </div>
 
+      <div class="col-12 mb-5">
+        <h2 class="heading-cardtitle">Carrousel</h2>
+        <hr>
+        {% set gallery = location.gallery ?? [] %}
+        {% if gallery is not empty %}
+          <div class="row">
+            {% for image in gallery %}
+              <div class="col-3 mb-3 text-center">
+                <img class="img-fluid border-soft" src="{{ asset(image) }}" alt="Image {{ loop.index }} du carrousel" />
+                <label class="mt-1"><input type="checkbox" name="remove_gallery[]" value="{{ image }}" /> Retirer</label>
+              </div>
+            {% endfor %}
+          </div>
+        {% endif %}
+        {{ form_row(form.gallery) }}
+        <small class="text-muted">L'image principale ouvre le carrousel ; les images ajoutées la suivent, dans l'ordre d'envoi.</small>
+      </div>
+
       {% set plan_filled = location.planMap|default(null) or location.planDesc|default(null) %}
 
       <div class="col-12 mt-5">

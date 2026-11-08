@@ -13,6 +13,7 @@ class Rule
 {
     use PublishableTrait;
     use PartsTrait;
+    use PartLinksTrait;
 
     /**
      * @ORM\Id

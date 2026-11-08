@@ -35,9 +35,9 @@
 
         <h1 class="heading-elementdetail relative">
           {% if category == 'characters' and entity == 'sheet' %}
-            <strong>Fiche de Jeu : {{ name }}</strong>
+            <span class="bold">Fiche de Jeu : {{ name }}</span>
           {% else %}
-            <strong>{{ name }}</strong>
+            <span class="bold">{{ name }}</span>
           {% endif %}
           {% if record is defined and element_fresh(record) %}{{ include('parts/badge-new.html.twig', {variant: 'inline'}) }}{% endif %}
 

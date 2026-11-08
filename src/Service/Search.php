@@ -46,25 +46,25 @@ class Search
     ];
 
     private const GROUPS = [
-        'avantage'      => ['label' => 'Avantage',      'class' => Avantage::class,   'filter' => ['genre' => ['Avantage']]],
-        'desavantage'   => ['label' => 'Désavantage',   'class' => Avantage::class,   'filter' => ['genre' => ['Désavantage']]],
-        'competence'    => ['label' => 'Compétence',    'class' => Competence::class],
-        'arme'          => ['label' => 'Arme',          'class' => Objet::class,      'filter' => ['categorie' => ['ARME', 'PROJECTILE']]],
-        'sort'          => ['label' => 'Sort',          'class' => Sort::class,       'filter' => ['categorie' => ['MAGIE']]],
-        'tatouage'      => ['label' => 'Tatouage',      'class' => Sort::class,       'filter' => ['categorie' => ['TATOUAGE']]],
+        'advantage'     => ['label' => 'Avantage',      'class' => Avantage::class,   'filter' => ['genre' => ['Avantage']]],
+        'disadvantage'  => ['label' => 'Désavantage',   'class' => Avantage::class,   'filter' => ['genre' => ['Désavantage']]],
+        'skill'         => ['label' => 'Compétence',    'class' => Competence::class],
+        'weapon'        => ['label' => 'Arme',          'class' => Objet::class,      'filter' => ['categorie' => ['ARME', 'PROJECTILE']]],
+        'spell'         => ['label' => 'Sort',          'class' => Sort::class,       'filter' => ['categorie' => ['MAGIE']]],
+        'tattoo'        => ['label' => 'Tatouage',      'class' => Sort::class,       'filter' => ['categorie' => ['TATOUAGE']]],
         'kiho'          => ['label' => 'Kiho',          'class' => Sort::class,       'filter' => ['categorie' => ['KIHO']]],
         'maho'          => ['label' => 'Maho',          'class' => Sort::class,       'filter' => ['categorie' => ['MAHO']]],
-        'armure'        => ['label' => 'Armure',        'class' => Objet::class,      'filter' => ['categorie' => ['ARMURE']]],
-        'ecole'         => ['label' => 'École',         'class' => Ecole::class],
+        'armor'         => ['label' => 'Armure',        'class' => Objet::class,      'filter' => ['categorie' => ['ARMURE']]],
+        'dojo'          => ['label' => 'École',         'class' => Ecole::class],
         'clan'          => ['label' => 'Faction',       'class' => Clan::class],
-        'famille'       => ['label' => 'Famille',       'class' => Famille::class],
-        'personnage'    => ['label' => 'Personnage',    'class' => Personnage::class],
-        'regle-base'    => ['label' => 'Règle de base', 'class' => Rule::class,       'filter' => ['base' => [true]]],
-        'regle-annexe'  => ['label' => 'Règle annexe',  'class' => Rule::class,       'filter' => ['base' => [false]]],
+        'family'        => ['label' => 'Famille',       'class' => Famille::class],
+        'character'     => ['label' => 'Personnage',    'class' => Personnage::class],
+        'base-rule'     => ['label' => 'Règle de base', 'class' => Rule::class,       'filter' => ['base' => [true]]],
+        'annex-rule'    => ['label' => 'Règle annexe',  'class' => Rule::class,       'filter' => ['base' => [false]]],
         'lore'          => ['label' => 'Lore',          'class' => Lore::class],
         'archive'       => ['label' => 'Archive',       'class' => Archive::class],
-        'lieu'          => ['label' => 'Lieu',          'class' => Lieu::class],
-        'objet'         => ['label' => 'Objet',         'class' => Objet::class,      'filter' => ['categorie' => ['OBJET']]],
+        'location'      => ['label' => 'Lieu',          'class' => Lieu::class],
+        'object'        => ['label' => 'Objet',         'class' => Objet::class,      'filter' => ['categorie' => ['OBJET']]],
         'episode'       => ['label' => 'Épisode',       'class' => Episode::class],
         'scene'         => ['label' => 'Scène',         'class' => Scene::class],
     ];
@@ -137,7 +137,6 @@ class Search
                 if (!$this->inGroup($element, $config)) {
                     continue;
                 }
-
 
                 $result = $this->match($element, $group, $pattern);
 

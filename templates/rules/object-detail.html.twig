@@ -28,7 +28,7 @@
             <span class="object-quality quality-{{ record.quality|lower }}">{{ record.quality }}</span>
           {% endif %}
           {% for stat in stats %}
-            <span>{{ stat.label }} : <strong>{{ stat.value }}</strong></span>
+            <span>{{ stat.label }} : <span class="bold">{{ stat.value }}</span></span>
           {% endfor %}
           {% if record.prix %}<span class="object-price">{{ record.prix|pricer|raw }}</span>{% endif %}
         </div>
@@ -47,7 +47,7 @@
 
         <ul class="list-decored text-left">
           {% for stat in stats %}
-            <li><span class="label">{{ stat.label }} :</span> <strong>{{ stat.value }}</strong></li>
+            <li><span class="label">{{ stat.label }} :</span> <span class="bold">{{ stat.value }}</span></li>
           {% endfor %}
           {% if record.prix %}
             <li><span class="label">Prix :</span> {{ record.prix|pricer|raw }}</li>

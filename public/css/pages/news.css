@@ -578,18 +578,22 @@
         margin-left: auto;
         margin-right: -1.5rem;
         padding: 0.5rem 0.75rem;
-        background-color: var(--color-blacktar);
+        border: 1px solid #FFFFFF20;
+        border-right: 0;
+        background-color: rgb(0 0 0 / 0.4);
+        -webkit-backdrop-filter: blur(16px);
+        backdrop-filter: blur(16px);
         color: var(--color-link-strong);
         font-size: var(--fontsize-small);
 
         &::after {
           content: '';
           position: absolute;
-          top: calc(100% - 1px);
+          top: 100%;
           right: 0;
           width: 0.5rem;
           height: calc(0.5rem + 1px);
-          background-color: color-mix(in srgb, var(--color-blacktar), black 40%);
+          background-color: rgb(0 0 0 / 0.6);
           clip-path: polygon(0 0, 100% 0, 0 100%);
         }
 

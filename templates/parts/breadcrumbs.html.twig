@@ -4,9 +4,9 @@
         {% for item in items %}
             &nbsp;&gt;&nbsp;
             {% if not loop.last and item.path is defined %}
-                <a href="{{ item.path }}"><strong>{{ item.label }}</strong></a>
+                <a href="{{ item.path }}"><span class="bold">{{ item.label }}</span></a>
             {% else %}
-                <strong>{{ item.label }}</strong>
+                <span class="bold">{{ item.label }}</span>
             {% endif %}
         {% endfor %}
     </span>

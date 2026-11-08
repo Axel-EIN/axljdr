@@ -39,6 +39,7 @@
           {% else %}
             <strong>{{ name }}</strong>
           {% endif %}
+          {% if record is defined and element_fresh(record) %}{{ include('parts/badge-new.html.twig', {variant: 'inline'}) }}{% endif %}
 
           {% if is_gm() %}
             {% set redirect, size, color, position = entity, 'btn-icon-medium', 'link-gm', 'topright-corner-snap' %}

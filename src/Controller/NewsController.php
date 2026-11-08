@@ -42,8 +42,8 @@ class NewsController extends AbstractController
             ['title' => 'Archives', 'keys' => ['archive'], 'max' => 2],
             ['title' => 'Lore', 'keys' => ['lore'], 'max' => 2],
         ]],
-        ['title' => 'Règles', 'variant' => 'rule', 'keys' => ['rule']],
-        ['title' => 'Bibliothèques', 'variant' => 'rule', 'large' => true, 'sections' => [
+        ['title' => 'Règles', 'icon' => 'fa-ruler', 'variant' => 'rule', 'keys' => ['rule']],
+        ['title' => 'Bibliothèques', 'icon' => 'fa-book', 'variant' => 'rule', 'large' => true, 'sections' => [
             ['title' => 'Avantages & Désavantages', 'keys' => ['advantage'], 'max' => 2],
             ['title' => 'Compétences', 'keys' => ['skill'], 'max' => 2],
             ['title' => 'Sorts', 'keys' => ['spell'], 'max' => 4],

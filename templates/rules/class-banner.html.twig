@@ -28,7 +28,7 @@
                 {% for other_class in classes %}
                     <a class="text-white py-2 px-3" {% if other_class.id == character_class.id %}style="background-color: {{character_class.couleur}}"{% endif %}
                     href="{{ path('rules_class', { id: other_class.id, '_fragment' : 'element-banner' } ) }}">
-                        <strong>{{other_class.nom|upper}}</strong>
+                        <span class="bold">{{other_class.nom|upper}}</span>
                     </a>
                 {% endfor %}
             </div>
@@ -38,7 +38,7 @@
                     style="background-color: {{character_class.couleur}}"
                     data-toggle="dropdown" href="#" role="button"
                     aria-expanded="false" aria-label="Choisir une autre classe">
-                    <strong>{{character_class.nom|upper}}</strong>
+                    <span class="bold">{{character_class.nom|upper}}</span>
                     <i class="fas fa-chevron-down ml-2"></i>
                 </a>
                 <div class="dropdown-menu dropdown-dark">

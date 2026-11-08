@@ -91,6 +91,12 @@
             opacity: 1;
             transform: translateX(var(--tip-shift, -50%)) scale(1);
         }
+
+        &.flip {
+            top: auto;
+            bottom: calc(100% + var(--tip-gap, 0.25rem));
+            transform-origin: bottom var(--tip-origin, center);
+        }
     }
 
     &.wrap {

@@ -75,7 +75,7 @@
         {% if character.clan is defined and character.clan is not empty %}
             <li class="list-group-item infos-item">
                 Clan :
-                <a href="{{ path('world_clan', {id: character.clan.id} ) }}">
+                <a class="link-strong" href="{{ path('world_clan', {id: character.clan.id} ) }}">
                     {{ character.clan.nom }}
                     <img class="img-48" src="{{ asset(image_small(character.clan.mon|default(NA_MON))) }}" alt="Mon du Clan {{character.clan.nom}}" title="Mon du Clan {{character.clan.nom}}" />
                 </a>
@@ -85,7 +85,7 @@
         {% if character.famille is defined and character.famille is not empty %}
             <li class="list-group-item infos-item">
                 Famille :
-                <a href="{{ path('world_clan', {id: character.famille.clan.id, '_fragment': character.famille.nom } ) }}">
+                <a class="link-strong" href="{{ path('world_clan', {id: character.famille.clan.id, '_fragment': character.famille.nom } ) }}">
                     {{ character.famille.nom }}
                     <img
                     class="img-48 rounded-circle" src="{{ asset(image_small(character.famille.mon|default(NA_MON))) }}"
@@ -98,7 +98,7 @@
         {% if character.ecole is defined and character.ecole is not empty %}
             <li class="list-group-item infos-item">
                 École :
-                <a href="{{ path('rules_dojo', {id: character.ecole.id} ) }}">
+                <a class="link-strong" href="{{ path('rules_dojo', {id: character.ecole.id} ) }}">
                     {{ character.ecole.nom }}
                     <img class="img-48" src="{{ asset(image_small(character.classe.icone ?? NA_CLASS_ICO)) }}" alt="Classe {{ character.classe.nom ?? '' }}" title="Classe {{ character.classe.nom ?? '' }}" />
                 </a>
@@ -112,7 +112,7 @@
       {% if free_position or current_position %}
         <li class="list-group-item infos-item{% if map_visible %} with-map{% endif %}">
           Position :
-          <a href="{{ known_position ? path('map', {location: current_position.id}) : path('map') }}" title="Voir sur la carte">
+          <a class="link-strong" href="{{ known_position ? path('map', {location: current_position.id}) : path('map') }}" title="Voir sur la carte">
             {{ free_position ? EN_DEPLACEMENT : (known_position ? current_position.nom : 'Inconnue') }}
             <i class="fa-solid fa-map-location-dot"></i>
           </a>

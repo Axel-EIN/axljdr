@@ -143,7 +143,7 @@ class CharactersController extends AbstractController
         $rank = $xpRanker->rank($totalXp);
 
         $isOwnCharacter = $this->isOwnCharacter($character);
-        $isGm = $this->isGranted('ROLE_MJ');
+        $isGm = $this->isGranted('ROLE_GM');
         $canEdit = $isOwnCharacter || $isGm;
 
         $form = null;
@@ -178,7 +178,7 @@ class CharactersController extends AbstractController
     {
         $isOwnCharacter = $this->isOwnCharacter($sheet->getPersonnage());
 
-        if (!$isOwnCharacter && !$this->isGranted('ROLE_MJ')) {
+        if (!$isOwnCharacter && !$this->isGranted('ROLE_GM')) {
             return $this->render('element-hidden.html.twig', [], new Response('', Response::HTTP_NOT_FOUND));
         }
 
@@ -314,7 +314,7 @@ class CharactersController extends AbstractController
      */
     public function exportSheet(FichePersonnage $sheet, SheetExport $sheetExport): Response
     {
-        if (!$this->isOwnCharacter($sheet->getPersonnage()) && !$this->isGranted('ROLE_MJ')) {
+        if (!$this->isOwnCharacter($sheet->getPersonnage()) && !$this->isGranted('ROLE_GM')) {
             return $this->render('element-hidden.html.twig', [], new Response('', Response::HTTP_NOT_FOUND));
         }
 
@@ -333,7 +333,7 @@ class CharactersController extends AbstractController
      */
     public function exportProfile(Personnage $character, CharacterMarkdown $characterMarkdown): Response
     {
-        if (!$this->isGranted('ROLE_MJ')) {
+        if (!$this->isGranted('ROLE_GM')) {
             return $this->render('element-hidden.html.twig', [], new Response('', Response::HTTP_NOT_FOUND));
         }
 
@@ -354,12 +354,12 @@ class CharactersController extends AbstractController
     {
         $isOwnCharacter = $this->isOwnCharacter($sheet->getPersonnage());
 
-        if (!$isOwnCharacter && !$this->isGranted('ROLE_MJ')) {
+        if (!$isOwnCharacter && !$this->isGranted('ROLE_GM')) {
             throw $this->createNotFoundException();
         }
 
         $form = $this->createForm(PlayerSheetType::class, $sheet, [
-            'sees_locked' => $this->isGranted('ROLE_MJ'),
+            'sees_locked' => $this->isGranted('ROLE_GM'),
             'unlocked' => $visibility->unlockedIds('object'),
         ]);
         $form->handleRequest($request);
@@ -379,7 +379,7 @@ class CharactersController extends AbstractController
      */
     public function editProfile(Request $request, Personnage $character, EntityManagerInterface $em, NameTagger $nameTagger): Response
     {
-        $isGm = $this->isGranted('ROLE_MJ');
+        $isGm = $this->isGranted('ROLE_GM');
 
         if (!$this->isOwnCharacter($character) && !$isGm) {
             throw $this->createNotFoundException();

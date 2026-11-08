@@ -11,13 +11,20 @@
   {% elseif groups is empty %}
     <p>Aucun résultat pour « {{ term }} ».</p>
   {% else %}
-    {% for group in groups %}
+    {% set preview = constant('App\\Service\\Search::GROUP_PREVIEW') %}
+
+    {% if group %}
+      <p><a href="{{ path('search', {q: term}) }}"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i> Tous les résultats</a></p>
+    {% endif %}
+
+    {% for key, found in groups %}
+      {% set total = found.results|length %}
       <section class="search-group">
-        <h2 class="label-amerigo">{{ group.label }} <small>({{ group.results|length }})</small></h2>
+        <h2 class="label-amerigo">{{ found.label }} <small>({{ total }})</small></h2>
         <hr>
 
         <ul class="search-results">
-          {% for result in group.results %}
+          {% for result in group ? found.results : found.results|slice(0, preview) %}
             <li class="search-result">
               <a class="search-result-title" href="{{ result.url }}">
                 {{ result.label }}
@@ -29,6 +36,11 @@
               {% endif %}
             </li>
           {% endfor %}
+          {% if not group and total > preview %}
+            <li class="search-more">
+              <a href="{{ path('search', {q: term, group: key}) }}">Voir les {{ total }} résultats <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
+            </li>
+          {% endif %}
         </ul>
       </section>
     {% endfor %}

@@ -22,7 +22,7 @@
 
             <div id="left-part" class="col-12 col-lg-5 py-3 py-lg-5 pl-lg-5 pr-lg-0 m-0 d-flex flex-column justify-content-center align-items-center" >
 
-                <strong class="text-white mb-3 text-shadow">{{ faction_label(clan.type) }}</strong>
+                <span class="bold text-white mb-3 text-shadow">{{ faction_label(clan.type) }}</span>
 
                 {% if clan.video is defined and clan.video is not empty %}
                     <button id="btn-play" class="btn-unstyled" onclick="focusVideo()">
@@ -43,7 +43,7 @@
                     <a style="color: {{ clan.couleur }}" class="d-flex justify-content-center hover-zoom mt-3" href="{{ path('characters_profile', {id: clan.chef.id} ) }}">
                         <img class="img-48" src="{{ asset(clan.chef.icone|default(NA_PERSO_PORTRAIT)) }}" alt="Icône du personnage" />
                         <div class="d-flex flex-column text-left ml-3">
-                            <strong>{{ clan.chef.nomComplet }}</strong>
+                            <span class="bold">{{ clan.chef.nomComplet }}</span>
                             (Champion)
                         </div>
                     </a>
@@ -65,7 +65,7 @@
                 {% for other_clan in all_clans %}
                     <a class="text-white py-2 px-3" {% if other_clan.id == clan.id %}style="background-color: {{clan.couleur}}"{% endif %}
                     href="{{ path('world_clan', { id: other_clan.id, '_fragment' : 'element-banner' } ) }}">
-                        <strong>{{other_clan.nom|upper}}</strong>
+                        <span class="bold">{{other_clan.nom|upper}}</span>
                     </a>
                 {% endfor %}
             </div>
@@ -75,7 +75,7 @@
                     style="background-color: {{clan.couleur}}"
                     data-toggle="dropdown" href="#" role="button"
                     aria-expanded="false" aria-label="Choisir un autre clan">
-                    <strong>{{clan.nom|upper}}</strong>
+                    <span class="bold">{{clan.nom|upper}}</span>
                     <i class="fas fa-chevron-down ml-2"></i>
                 </a>
                 <div class="dropdown-menu dropdown-dark">

@@ -20,7 +20,7 @@ class AdminDevelopmentController extends AbstractController
 
     /**
      * @Route("/admin/development", name="admin_development")
-     * @IsGranted("ROLE_MJ")
+     * @IsGranted("ROLE_GM")
      */
     public function viewAdminDevelopments(DevelopmentRepository $developmentRepository): Response
     {
@@ -47,7 +47,7 @@ class AdminDevelopmentController extends AbstractController
 
     /**
      * @Route("/admin/development/create", name="admin_development_create")
-     * @IsGranted("ROLE_MJ")
+     * @IsGranted("ROLE_GM")
      */
     public function addDevelopment(Request $request, EntityManagerInterface $em, PersonnageRepository $characterRepository, NameTagger $nameTagger): Response
     {
@@ -79,7 +79,7 @@ class AdminDevelopmentController extends AbstractController
 
     /**
      * @Route("/admin/development/{id}/edit", name="admin_development_edit")
-     * @IsGranted("ROLE_MJ")
+     * @IsGranted("ROLE_GM")
      */
     public function editDevelopment(Request $request, Development $development, EntityManagerInterface $em, NameTagger $nameTagger): Response
     {
@@ -107,7 +107,7 @@ class AdminDevelopmentController extends AbstractController
 
     /**
      * @Route("/admin/development/{id}/delete", name="admin_development_delete", methods={"POST"})
-     * @IsGranted("ROLE_MJ")
+     * @IsGranted("ROLE_GM")
      */
     public function deleteDevelopment(Request $request, Development $development, EntityManagerInterface $em): Response
     {

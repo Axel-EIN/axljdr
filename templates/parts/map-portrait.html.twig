@@ -1,6 +1,6 @@
 {% set title = title|default(character.nomComplet) %}
 {% set interactive = interactive ?? true %}
-{% set portrait %}<img src="{{ asset(character.icone|default(NA_PERSO_PORTRAIT)) }}" alt="Portrait de {{ character.prenom }}" draggable="false" />{% endset %}
+{% set portrait %}<img class="outlined thin{{ mine|default(false) ? '' : ' player' }}" src="{{ asset(character.icone|default(NA_PERSO_PORTRAIT)) }}" alt="Portrait de {{ character.prenom }}" draggable="false" />{% endset %}
 
 <div class="map-portrait{{ mine|default(false) ? ' mine' }}" data-character="{{ character.id }}">
   {% if interactive %}

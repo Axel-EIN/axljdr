@@ -235,7 +235,12 @@
     }
   }
 
-  &.rule .label { font-size: var(--fontsize-medium); }
+  &.rule {
+    --ease: var(--ease-steady);
+    --duration: 0.15s;
+
+    .label { font-size: var(--fontsize-medium); }
+  }
 
   &.emblem,
   &.icon {

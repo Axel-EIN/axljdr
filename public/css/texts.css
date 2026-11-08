@@ -4,7 +4,7 @@
   --fontsize-mini: 0.75rem;         /* 12px */
   --fontsize-small: 0.875rem;       /* 14px */
   --fontsize-base : 1rem;           /* 16px */
-  --fontsize-baseplus : 1.0625rem;  /* 17px */
+  --fontsize-normal : 1.0625rem;    /* 17px */
   --fontsize-regular : 1.125rem;    /* 18px */
   --fontsize-medium: 1.25rem;       /* 20px */
   --fontsize-plus: 1.375rem;        /* 22px */
@@ -26,19 +26,21 @@
   --leading-18: 1.8;
   --leading-20: 2;
 
-  .text-mini { font-size: var(--fontsize-mini); }
-  .text-small { font-size: var(--fontsize-small); }
-  .text-regular { font-size: var(--fontsize-base); }
-  .text-normal { font-size: var(--fontsize-regular); }
-  .text-medium { font-size: var(--fontsize-medium); }
-  .text-plus { font-size: var(--fontsize-plus); }
-  .text-pluser { font-size: var(--fontsize-pluser); }
-  .text-large { font-size: var(--fontsize-large); }
-  .text-big { font-size: var(--fontsize-big); }
-  .text-bigger { font-size: var(--fontsize-bigger); }
-  .text-huge { font-size: var(--fontsize-huge); }
-  .text-hero { font-size: var(--fontsize-hero); }
-  .text-giant { font-size: var(--fontsize-giant); }
+  .text-mini    { font-size: var(--fontsize-mini); }
+  .text-small   { font-size: var(--fontsize-small); }
+  .text-base    { font-size: var(--fontsize-base); }
+  .text-normal  { font-size: var(--fontsize-normal); }
+  .text-regular { font-size: var(--fontsize-regular); }
+  .text-medium  { font-size: var(--fontsize-medium); }
+  .text-plus    { font-size: var(--fontsize-plus); }
+  .text-pluser  { font-size: var(--fontsize-pluser); }
+  .text-large   { font-size: var(--fontsize-large); }
+  .text-larger  { font-size: var(--fontsize-larger); }
+  .text-big     { font-size: var(--fontsize-big); }
+  .text-bigger  { font-size: var(--fontsize-bigger); }
+  .text-huge    { font-size: var(--fontsize-huge); }
+  .text-hero    { font-size: var(--fontsize-hero); }
+  .text-giant   { font-size: var(--fontsize-giant); }
 
   .leading-1 { line-height: var(--leading-1); }
   .leading-12 { line-height: var(--leading-12); }

@@ -20,7 +20,7 @@ class AdminClassController extends AbstractController
 
     /**
      * @Route("/admin/class", name="admin_class")
-     * @IsGranted("ROLE_MJ")
+     * @IsGranted("ROLE_GM")
      */
     public function viewAdminClasses(ClasseRepository $classRepository): Response
     {
@@ -46,7 +46,7 @@ class AdminClassController extends AbstractController
 
     /**
      * @Route("/admin/class/create", name="admin_class_create")
-     * @IsGranted("ROLE_MJ")
+     * @IsGranted("ROLE_GM")
      */
     public function addClass(Request $request, EntityManagerInterface $em, FileHandler $fileHandler) {
 
@@ -90,7 +90,7 @@ class AdminClassController extends AbstractController
 
     /**
      * @Route("/admin/class/{id}/edit", name="admin_class_edit")
-     * @IsGranted("ROLE_MJ")
+     * @IsGranted("ROLE_GM")
      */
     public function editClass(Request $request, Classe $class, FileHandler $fileHandler): Response {
 
@@ -137,7 +137,7 @@ class AdminClassController extends AbstractController
 
     /**
      * @Route("/admin/class/{id}/delete", name="admin_class_delete", methods={"POST"})
-     * @IsGranted("ROLE_MJ")
+     * @IsGranted("ROLE_GM")
      */
     public function deleteClass(Request $request, Classe $class, FileHandler $fileHandler, DeletionGuard $deletionGuard): Response {
 

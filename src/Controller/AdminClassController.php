@@ -34,9 +34,9 @@ class AdminClassController extends AbstractController
             'gender' => 'F',
             'article' => 'une',
             'table_cols' => [
+                'image:Image:image:NA_CLASS',
                 'icone:Icone:symbol:NA_CLASS_ICO',
                 'nom:Nom::bold',
-                'image:Image:image:NA_CLASS',
                 'couleur:Couleur:color',
                 'citation:Citation:bool',
                 'description:Description:bool',

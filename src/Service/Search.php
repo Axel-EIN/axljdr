@@ -46,25 +46,25 @@ class Search
     ];
 
     private const GROUPS = [
-        'avantage'      => ['label' => 'Avantage',      'class' => Avantage::class,   'where' => "e.genre = 'Avantage'"],
-        'desavantage'   => ['label' => 'Désavantage',   'class' => Avantage::class,   'where' => "e.genre = 'Désavantage'"],
+        'avantage'      => ['label' => 'Avantage',      'class' => Avantage::class,   'filter' => ['genre' => ['Avantage']]],
+        'desavantage'   => ['label' => 'Désavantage',   'class' => Avantage::class,   'filter' => ['genre' => ['Désavantage']]],
         'competence'    => ['label' => 'Compétence',    'class' => Competence::class],
-        'arme'          => ['label' => 'Arme',          'class' => Objet::class,      'where' => "e.categorie IN ('ARME', 'PROJECTILE')"],
-        'sort'          => ['label' => 'Sort',          'class' => Sort::class,       'where' => "e.categorie = 'MAGIE'"],
-        'tatouage'      => ['label' => 'Tatouage',      'class' => Sort::class,       'where' => "e.categorie = 'TATOUAGE'"],
-        'kiho'          => ['label' => 'Kiho',          'class' => Sort::class,       'where' => "e.categorie = 'KIHO'"],
-        'maho'          => ['label' => 'Maho',          'class' => Sort::class,       'where' => "e.categorie = 'MAHO'"],
-        'armure'        => ['label' => 'Armure',        'class' => Objet::class,      'where' => "e.categorie = 'ARMURE'"],
+        'arme'          => ['label' => 'Arme',          'class' => Objet::class,      'filter' => ['categorie' => ['ARME', 'PROJECTILE']]],
+        'sort'          => ['label' => 'Sort',          'class' => Sort::class,       'filter' => ['categorie' => ['MAGIE']]],
+        'tatouage'      => ['label' => 'Tatouage',      'class' => Sort::class,       'filter' => ['categorie' => ['TATOUAGE']]],
+        'kiho'          => ['label' => 'Kiho',          'class' => Sort::class,       'filter' => ['categorie' => ['KIHO']]],
+        'maho'          => ['label' => 'Maho',          'class' => Sort::class,       'filter' => ['categorie' => ['MAHO']]],
+        'armure'        => ['label' => 'Armure',        'class' => Objet::class,      'filter' => ['categorie' => ['ARMURE']]],
         'ecole'         => ['label' => 'École',         'class' => Ecole::class],
         'clan'          => ['label' => 'Faction',       'class' => Clan::class],
         'famille'       => ['label' => 'Famille',       'class' => Famille::class],
         'personnage'    => ['label' => 'Personnage',    'class' => Personnage::class],
-        'regle-base'    => ['label' => 'Règle de base', 'class' => Rule::class,       'where' => 'e.base = true'],
-        'regle-annexe'  => ['label' => 'Règle annexe',  'class' => Rule::class,       'where' => 'e.base = false'],
+        'regle-base'    => ['label' => 'Règle de base', 'class' => Rule::class,       'filter' => ['base' => [true]]],
+        'regle-annexe'  => ['label' => 'Règle annexe',  'class' => Rule::class,       'filter' => ['base' => [false]]],
         'lore'          => ['label' => 'Lore',          'class' => Lore::class],
         'archive'       => ['label' => 'Archive',       'class' => Archive::class],
         'lieu'          => ['label' => 'Lieu',          'class' => Lieu::class],
-        'objet'         => ['label' => 'Objet',         'class' => Objet::class,      'where' => "e.categorie = 'OBJET'"],
+        'objet'         => ['label' => 'Objet',         'class' => Objet::class,      'filter' => ['categorie' => ['OBJET']]],
         'episode'       => ['label' => 'Épisode',       'class' => Episode::class],
         'scene'         => ['label' => 'Scène',         'class' => Scene::class],
     ];
@@ -127,11 +127,18 @@ class Search
 
         $pattern = $this->pattern($term);
         $results = [];
+        $candidates = [];
 
         foreach (self::GROUPS as $group => $config) {
             $groupResults = [];
+            $candidates[$config['class']] ??= $this->candidates($term, $config['class']);
 
-            foreach ($this->candidates($term, $config) as $element) {
+            foreach ($candidates[$config['class']] as $element) {
+                if (!$this->inGroup($element, $config)) {
+                    continue;
+                }
+
+
                 $result = $this->match($element, $group, $pattern);
 
                 if ($result !== null) {
@@ -149,14 +156,25 @@ class Search
         return $results;
     }
 
-    private function candidates(string $term, array $config): array
+    private function inGroup($element, array $config): bool
     {
-        $source = self::SOURCES[$config['class']];
+        foreach ($config['filter'] ?? [] as $field => $values) {
+            if (!in_array($this->read($element, $field), $values, true)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    private function candidates(string $term, string $class): array
+    {
+        $source = self::SOURCES[$class];
         $fields = array_merge($source['names'], $source['texts']);
 
         $qb = $this->entityManager->createQueryBuilder()
             ->select('e')
-            ->from($config['class'], 'e')
+            ->from($class, 'e')
             ->setParameter('term', '%' . addcslashes($term, '%_\\') . '%');
 
         foreach ($source['joins'] ?? [] as $join) {
@@ -166,10 +184,6 @@ class Search
         $qb->andWhere($qb->expr()->orX(...array_map(function ($field) {
             return 'e.' . $field . ' LIKE :term';
         }, $fields)));
-
-        if (isset($config['where'])) {
-            $qb->andWhere($config['where']);
-        }
 
         return $qb->getQuery()->getResult();
     }

@@ -45,6 +45,11 @@ class Chapitre
     private $couleur;
 
     /**
+     * @ORM\Column(type="boolean", options={"default": false})
+     */
+    private $prologue = false;
+
+    /**
      * @ORM\ManyToOne(targetEntity=Saison::class, inversedBy="chapitres")
      * @ORM\JoinColumn(nullable=false)
      */
@@ -122,6 +127,18 @@ class Chapitre
     public function setCouleur(string $couleur): self
     {
         $this->couleur = $couleur;
+
+        return $this;
+    }
+
+    public function isPrologue(): bool
+    {
+        return $this->prologue;
+    }
+
+    public function setPrologue(bool $prologue): self
+    {
+        $this->prologue = $prologue;
 
         return $this;
     }

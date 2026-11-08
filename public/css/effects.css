@@ -58,6 +58,13 @@
 
 .filter-shadow { filter: drop-shadow(4px 4px 16px rgba(0,0,0,0.5)); }
 
+.svg-filters {
+    position: absolute;
+    width: 0;
+    height: 0;
+    overflow: hidden;
+}
+
 .blur-cartouche {
     border: 1px solid #FFFFFF20;
     border-radius: 1rem;

@@ -163,7 +163,7 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function setRoles(array $roles): self
     {
-        if (!$this->isGameMaster() && in_array('ROLE_MJ', $roles, true)) {
+        if (!$this->isGameMaster() && in_array('ROLE_GM', $roles, true)) {
             $this->playerMode = false;
         }
 
@@ -286,7 +286,7 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function isGameMaster(): bool
     {
-        return in_array('ROLE_MJ', $this->roles, true);
+        return in_array('ROLE_GM', $this->roles, true);
     }
 
     public function isPlayerMode(): bool

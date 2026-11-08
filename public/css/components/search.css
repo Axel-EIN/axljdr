@@ -60,7 +60,7 @@
         .search-bar-input { width: 100%; }
     }
 
-    &.header {
+    &.in-header {
         flex: 1;
 
         .search-bar-input { width: 100%; }
@@ -135,6 +135,8 @@
 
         &:last-child { border-bottom: 0; }
     }
+
+    .search-more { padding-top: 0.75rem; }
 
     .search-result-title {
         display: inline-flex;

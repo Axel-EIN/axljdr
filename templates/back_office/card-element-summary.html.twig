@@ -6,7 +6,7 @@
             <a href="{{ path('admin_' ~ element ~ '_create') }}"><i class="fa-solid fa-plus ml-1"></i></a>
         </div>
 
-        <h5 class="m-0 mt-n3 text-strong"><span class="element-number">{{count}}</span> <strong>{{label}}</strong></h5>
+        <h5 class="m-0 mt-n3 text-strong"><span class="element-number">{{count}}</span> <span class="bold">{{label}}</span></h5>
 
         <div class="mt-2">
             {% if last is not empty %}
@@ -17,7 +17,7 @@
                         <img class="bg-background ratio-cropped" src="{{ asset(image_small(image|default(NA_43))) }}" alt="Image {{element}}" />
                     </div>
                 </a>
-                <strong class="d-block text-center mt-1">{{name}}</strong>
+                <span class="bold d-block text-center mt-1">{{name}}</span>
             {% else %}
                 <div class="text-muted text-center">Il n'y a pas encore {{ label|lower matches '/^[aeiouyéèêh]/u' ? "d'" : 'de ' }}{{ label|lower }}</div>
             {% endif %}

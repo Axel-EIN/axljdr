@@ -34,6 +34,7 @@
           <i class="fa-solid fa-chevron-left"></i>
         </a>
         CHAPITRE {{ episode.chapitreParent.numero }}
+        {{ include('story/chapter-badge.html.twig', {chapter: episode.chapitreParent}) }}
         <a class="btn-quaternary-style text-white50{{ neighbor_chapters.next is empty ? ' invisible' }}"
            {% if neighbor_chapters.next is not empty %}href="{{ path('story_episode', {id: neighbor_chapters.next.id}) }}" title="Chapitre suivant"{% endif %}>
           <i class="fa-solid fa-chevron-right"></i>

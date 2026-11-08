@@ -9,7 +9,7 @@
     <a class="ranking-line" href="{{ path('characters_profile', {id: character.id}) }}" title="{{ character.firstName }}">
       {% if not gained|default(false) %}<span class="ranking-rank">{{ rank }}</span>{% endif %}
       <span class="portrait-slot">
-        <img class="character-portrait medium outlined {{ character.id in mine ? '' : 'player' }} {{ (character.dead ?? false) ? 'effect-dead' }}"
+        <img class="character-portrait {{ size|default('medium') }} outlined {{ character.id in mine ? '' : 'player' }} {{ (character.dead ?? false) ? 'effect-dead' }}"
              src="{{ asset(character.icon|default(NA_PERSO_PORTRAIT)) }}"
              alt="Portrait de {{ character.firstName }}" />
         {% if character.dead ?? false %}

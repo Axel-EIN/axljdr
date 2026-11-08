@@ -5,12 +5,9 @@
 
 /* ZOOM */
 
-.hover-zoom, .hover-zoom:hover {
-    transition: var(--duration) var(--ease); }
-
+.hover-zoom, .hover-zoom:hover,
 .hover-zoom-quick, .hover-zoom-quick:hover {
-    transition: 0.1s var(--ease);
-}
+    transition: var(--motion-hover); }
 
 .hover-zoom:hover,
 .hover-zoom-quick:hover {
@@ -19,33 +16,30 @@
 /* ----- OPACITY ----- */
 
 .hover-slight-fade {
-    transition: var(--duration) var(--ease);
+    transition: var(--motion-hover);
     &:hover {
         opacity: 0.8;
-        transition: var(--duration) var(--ease);
     }
 }
 
 .hover-icon-visible:hover i {
     opacity: 1;
-    transition: var(--duration) var(--ease);
+    transition: var(--motion-hover);
 }
 
 .hover-opaque {
-    transition: var(--duration) var(--ease);
+    transition: var(--motion-hover);
     &:hover {
         filter: opacity(1);
-        transition: var(--duration) var(--ease);
     }
 }
 
 /* ----- BRIGHTNESS / SHINING ----- */
 
 .hover-shine {
-    transition: var(--duration) var(--ease);
+    transition: var(--motion-hover);
     &:hover {
         filter: brightness(1.3);
-        transition: var(--duration) var(--ease);
     }
 }
 

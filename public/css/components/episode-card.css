@@ -93,7 +93,7 @@
       }
 
       .card-text {
-        font-size: var(--fontsize-baseplus);
+        font-size: var(--fontsize-normal);
         line-height: var(--leading-base);
         color: var(--color-gray);
         font-weight: normal;

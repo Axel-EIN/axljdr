@@ -27,7 +27,7 @@ class AdminLocationController extends AbstractController
 
   /**
    * @Route("/admin/location", name="admin_location")
-   * @IsGranted("ROLE_MJ")
+   * @IsGranted("ROLE_GM")
    */
   public function viewAdminLocations(LieuRepository $locationRepository): Response {
     $locations = $locationRepository->findBy( [] , ['id' => 'DESC'] );
@@ -62,7 +62,7 @@ class AdminLocationController extends AbstractController
 
   /**
    * @Route("/admin/location/create", name="admin_location_create")
-   * @IsGranted("ROLE_MJ")
+   * @IsGranted("ROLE_GM")
    */
   public function addLocation(Request $request, EntityManagerInterface $em, FileHandler $fileHandler, NameTagger $nameTagger, Unlocker $unlocker, TableFilter $tableFilter) {
 
@@ -119,7 +119,7 @@ class AdminLocationController extends AbstractController
 
   /**
    * @Route("/admin/location/{id}/edit", name="admin_location_edit")
-   * @IsGranted("ROLE_MJ")
+   * @IsGranted("ROLE_GM")
    */
   public function editLocation(Request $request, Lieu $location, FileHandler $fileHandler, NameTagger $nameTagger, Unlocker $unlocker): Response {
 
@@ -183,7 +183,7 @@ class AdminLocationController extends AbstractController
 
   /**
    * @Route("/admin/location/{id}/delete", name="admin_location_delete", methods={"POST"})
-   * @IsGranted("ROLE_MJ")
+   * @IsGranted("ROLE_GM")
    */
   public function deleteLocation(Request $request, Lieu $location, FileHandler $fileHandler, NameTagger $nameTagger, Unlocker $unlocker, DeletionGuard $deletionGuard): Response {
 

@@ -33,6 +33,7 @@
           {{ include('/btns/btn-icon-edit.html.twig') }}
         {% endif %}
         CHAPITRE {{ chapter.numero }}
+        {{ include('story/chapter-badge.html.twig', {chapter}) }}
       </span>
       <div><hr></div>
 

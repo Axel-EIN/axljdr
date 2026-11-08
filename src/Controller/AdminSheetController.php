@@ -20,7 +20,7 @@ class AdminSheetController extends AbstractController
 
     /**
      * @Route("/admin/sheet", name="admin_sheet")
-     * @IsGranted("ROLE_MJ")
+     * @IsGranted("ROLE_GM")
      */
     public function viewAdminSheets(FichePersonnageRepository $sheetRepository): Response
     {
@@ -58,7 +58,7 @@ class AdminSheetController extends AbstractController
 
     /**
      * @Route("/admin/sheet/create", name="admin_sheet_create")
-     * @IsGranted("ROLE_MJ")
+     * @IsGranted("ROLE_GM")
      */
     public function addSheet(Request $request, EntityManagerInterface $em, CompetenceRepository $skillRepository, PersonnageRepository $characterRepository) {
 
@@ -95,7 +95,7 @@ class AdminSheetController extends AbstractController
 
     /**
      * @Route("/admin/sheet/{id}/edit", name="admin_sheet_edit")
-     * @IsGranted("ROLE_MJ")
+     * @IsGranted("ROLE_GM")
      */
     public function editSheet(Request $request, FichePersonnage $sheet, CompetenceRepository $skillRepository): Response {
 
@@ -144,7 +144,7 @@ class AdminSheetController extends AbstractController
 
     /**
      * @Route("/admin/sheet/{id}/delete", name="admin_sheet_delete", methods={"POST"})
-     * @IsGranted("ROLE_MJ")
+     * @IsGranted("ROLE_GM")
      */
     public function deleteSheet(Request $request, FichePersonnage $sheet): Response {
 

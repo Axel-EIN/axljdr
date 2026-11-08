@@ -1,5 +1,5 @@
 <div class="episodes-line">
-  <span class="text-light">Il y a <strong class="text-accent-light">{{ episode.chapitreParent.episodes|length }} ÉPISODES</strong> dans ce chapitre.</span>
+  <span class="text-light">Il y a <span class="bold text-accent-light">{{ episode.chapitreParent.episodes|length }} ÉPISODES</span> dans ce chapitre.</span>
   <div class="episodes-carousel mt-2 d-none d-lg-flex">
     {% for listed_episode in episode.chapitreParent.episodes %}
       {% if episode_visible(listed_episode) %}
@@ -21,7 +21,7 @@
         style="background-color: {{ episode.chapitreParent.couleur }}"
         data-toggle="dropdown" href="#" role="button"
         aria-expanded="false" aria-label="Choisir un autre épisode">
-      <strong>#{{ episode.numeroSaison }} {{ episode.titre }}</strong>
+      <span class="bold">#{{ episode.numeroSaison }} {{ episode.titre }}</span>
       <i class="fas fa-chevron-down ml-2"></i>
     </a>
     <div class="dropdown-menu dropdown-dark">

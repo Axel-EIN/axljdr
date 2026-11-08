@@ -47,6 +47,9 @@
           {% endif %}
         </h1>
         <hr class="hr-title">
+        {% if subtitle|default(null) %}
+          <p class="heading-subtitle{{ subtitle_class|default(null) ? ' ' ~ subtitle_class }}"{% if subtitle_color|default(null) %} style="--subtitle-color: {{ subtitle_color }}"{% endif %}>{{ subtitle }}</p>
+        {% endif %}
 
         <article class="row">
           {% block element_content %}{% endblock %}            

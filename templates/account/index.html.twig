@@ -16,24 +16,24 @@
 
       <dl class="account-infos">
         <dt>Utilisateur</dt>
-        <dd><strong>{{ app.user.pseudo }}</strong></dd>
+        <dd><span class="bold">{{ app.user.pseudo }}</span></dd>
 
         <dt>Votre E-mail</dt>
-        <dd><strong>{{ app.user.email }}</strong></dd>
+        <dd><span class="bold">{{ app.user.email }}</span></dd>
 
         <dt>Votre Mot de passe</dt>
         <dd>
-          <strong>******</strong>
+          <span class="bold">******</span>
           <a href="{{ path('account_password') }}"><i class="fas fa-edit" aria-hidden="true"></i> Modifier</a>
         </dd>
 
         <dt>Votre statut de compte</dt>
-        <dd><strong>{{ app.user.isVerified ? 'Vérifié' : 'Non-vérifié' }}</strong></dd>
+        <dd><span class="bold">{{ app.user.isVerified ? 'Vérifié' : 'Non-vérifié' }}</span></dd>
 
         <dt>Vos rôles</dt>
         <dd>
           {% for role in app.user.roles %}
-            <strong>{{ role }}</strong>{{ not loop.last ? ',' : '' }}
+            <span class="bold">{{ role }}</span>{{ not loop.last ? ',' : '' }}
           {% else %}
             Il n'y a pas de rôle
           {% endfor %}
@@ -81,7 +81,7 @@
             {% if main_character.clan %}
               <img class="img-24" src="{{ asset(image_small(main_character.clan.mon|default(NA_MON))) }}" alt="Mon du Clan {{ main_character.clan.nom }}" />
             {% endif %}
-            <strong>{{ main_character.nomComplet }}</strong>
+            <span class="bold">{{ main_character.nomComplet }}</span>
             {% if main_character.fichePersonnage is not empty %}
               <a href="{{ path('characters_sheet', {id: main_character.fichePersonnage.id}) }}">
                 <i class="fas fa-user-secret" aria-hidden="true"></i> Fiche privée
@@ -119,7 +119,7 @@
             <a href="{{ path('characters_profile', {id: character.id}) }}" class="hover-zoom">
               <img src="{{ asset(character.icone|default(NA_PERSO_PORTRAIT)) }}" alt="Portrait de {{ character.prenom }}" />
             </a>
-            <strong>{{ character.nomComplet }}</strong>
+            <span class="bold">{{ character.nomComplet }}</span>
             {% if character.fichePersonnage is not empty %}
               <a href="{{ path('characters_sheet', {id: character.fichePersonnage.id}) }}">
                 <i class="fas fa-user-secret" aria-hidden="true"></i> Fiche privée

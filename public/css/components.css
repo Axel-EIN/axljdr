@@ -45,7 +45,7 @@
 }
 
 .chevron-toggle {
-    .fa-chevron-down { transition: transform var(--duration) var(--ease); }
+    .fa-chevron-down { transition: transform var(--motion); }
 
     &[aria-expanded="true"] .fa-chevron-down { transform: rotate(180deg); }
 }
@@ -82,9 +82,9 @@
         transform-origin: top var(--tip-origin, center);
         pointer-events: none;
         transition:
-            opacity var(--duration) var(--ease),
-            transform var(--duration) var(--ease),
-            visibility var(--duration);
+            opacity var(--motion-hover),
+            transform var(--motion-hover),
+            visibility var(--motion-hover);
 
         :is(:hover, :focus-visible) > & {
             visibility: visible;
@@ -119,9 +119,9 @@
         opacity: 0;
         transform: translateY(16px);
         transition:
-            opacity var(--duration) var(--ease),
-            transform var(--duration) var(--ease),
-            visibility var(--duration);
+            opacity var(--motion-hover),
+            transform var(--motion-hover),
+            visibility var(--motion-hover);
 
         .label {
             min-width: 0;

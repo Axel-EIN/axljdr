@@ -74,6 +74,7 @@ class AdminLibraryType extends AbstractType
                 'required' => false ] )
             ->add('aside', TextareaType::class, [
                 'required' => false ] )
+            ->add('part1links', PartLinksType::class, ['part' => 1, 'label' => "Liens de l'introduction"])
         ;
 
         PublishableFields::add($builder);

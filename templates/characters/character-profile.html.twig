@@ -1,5 +1,11 @@
 {% extends 'element.html.twig' %}
 
+{% set subtitle = character.titres %}
+{% set subtitle_color = character.clan and element_listed(character.clan) ? character.clan.couleur : null %}
+{% set subtitle_class = 'on-banner' %}
+
+{% macro infos_name(name) %}<span class="infos-name" style="--name-length: {{ name|length }}">{{ name }}</span>{% endmacro %}
+
 {% block stylesheets %}
     {{parent()}}
     <link rel="stylesheet" href="{{asset('css/components/history.css')}}" />
@@ -9,6 +15,7 @@
 {% endblock %}
 
 {% block element_content %}
+{% import _self as profile %}
 
 {% if character.illustration is null and character.genre == 'F' %}
     {% set NA_PERSO_ILLU = NA_PERSO_ILLU_F %}
@@ -75,8 +82,8 @@
         {% if character.clan is defined and character.clan is not empty %}
             <li class="list-group-item infos-item">
                 Clan :
-                <a class="link-strong" href="{{ path('world_clan', {id: character.clan.id} ) }}">
-                    {{ character.clan.nom }}
+                <a class="link-strong infos-link" href="{{ path('world_clan', {id: character.clan.id} ) }}">
+                    {{ profile.infos_name(character.clan.nom) }}
                     <img class="img-48" src="{{ asset(image_small(character.clan.mon|default(NA_MON))) }}" alt="Mon du Clan {{character.clan.nom}}" title="Mon du Clan {{character.clan.nom}}" />
                 </a>
             </li>
@@ -85,8 +92,8 @@
         {% if character.famille is defined and character.famille is not empty %}
             <li class="list-group-item infos-item">
                 Famille :
-                <a class="link-strong" href="{{ path('world_clan', {id: character.famille.clan.id, '_fragment': character.famille.nom } ) }}">
-                    {{ character.famille.nom }}
+                <a class="link-strong infos-link" href="{{ path('world_clan', {id: character.famille.clan.id, '_fragment': character.famille.nom } ) }}">
+                    {{ profile.infos_name(character.famille.nom) }}
                     <img
                     class="img-48 rounded-circle" src="{{ asset(image_small(character.famille.mon|default(NA_MON))) }}"
                     alt="Mon de la Famille {{character.famille.nom}}" title="Mon de la Famille {{character.famille.nom}}"
@@ -98,8 +105,8 @@
         {% if character.ecole is defined and character.ecole is not empty %}
             <li class="list-group-item infos-item">
                 École :
-                <a class="link-strong" href="{{ path('rules_dojo', {id: character.ecole.id} ) }}">
-                    {{ character.ecole.nom }}
+                <a class="link-strong infos-link" href="{{ path('rules_dojo', {id: character.ecole.id} ) }}">
+                    {{ profile.infos_name(character.ecole.nom) }}
                     <img class="img-48" src="{{ asset(image_small(character.classe.icone ?? NA_CLASS_ICO)) }}" alt="Classe {{ character.classe.nom ?? '' }}" title="Classe {{ character.classe.nom ?? '' }}" />
                 </a>
             </li>
@@ -126,6 +133,7 @@
               zoom: known_position ? current_position.zoom : null,
               variant: 'mini',
               hide_minimap: true,
+              pulse: false,
             }, with_context = false) }}
           {% endif %}
         </li>
@@ -153,11 +161,7 @@
             {# ================================ #}
 
             <div class="profile-zone">
-                <h2 class="profile-description-title">Histoire</h2>
-
-                {% if character.titres is defined and character.titres is not empty %}
-                    <h4 class="card-title-cartouche">{{ character.titres }}</h4>
-                {% endif %}
+                <h2 class="heading-section">Histoire</h2>
 
                 <p class="text-description text-compact read-only">{{ character.description|text }}</p>
 
@@ -175,25 +179,21 @@
                 {% for development in developments %}
                     {% set scene = development.scene %}
                     {% set episode = scene.episodeParent %}
-                    {% set chapter = episode.chapitreParent %}
                     {% set scene_url = path('story_episode', {id: episode.id, '_fragment': 'scn' ~ scene.numero}) %}
 
                     <article class="development-line">
                         <div class="development-head">
-                            <span class="development-title">
-                                <a href="{{ scene_url }}">
-                                    <img class="img-18 invert mr-1 align-middle" src="{{ asset(STORY_EPISODE_ICO) }}" alt="" />
-                                    <span class="bold">{{ scene.titre }}</span>
-                                </a>
-                                {% if is_gm() %}
-                                    {{ include('/btns/btn-icon-edit.html.twig', {
-                                    entity: 'development', record: development, position: 'align-middle',
-                                    redirect: 'development', size: 'btn-icon-mini', color: 'link-gm',
-                                    }) }}
-                                {% endif %}
-                            </span>
+                            {% if is_gm() %}
+                                {{ include('/btns/btn-icon-edit.html.twig', {
+                                entity: 'development', record: development, position: 'topleft-overflow',
+                                redirect: 'development', size: 'btn-icon-mini', color: 'link-gm',
+                                }) }}
+                            {% endif %}
+                            <a href="{{ scene_url }}" class="heading-amerigo development-title" title="Voir la scène">
+                                {{ scene.titre }}
+                                <span class="development-icon"></span>
+                            </a>
 
-                            <span class="development-meta">{{ chapter.titre }} — EP #{{ episode.numeroSaison }} - Scène {{ scene.numero }}</span>
                             {% if development.estMort %}
                                 <span class="bold text-dead">MORT</span>
                             {% endif %}
@@ -201,9 +201,11 @@
 
                         <div class="development-content">
                             <p class="text-description text-compact">{{ development.content|text }}</p>
-                            <a class="development-image" href="{{ scene_url }}" title="Voir la scène {{ scene.numero }}">
-                                <img src="{{ asset(image_small(scene.image|default(NA_SCENE))) }}" loading="lazy" alt="Scène {{ scene.numero }} — {{ scene.titre }}" />
-                            </a>
+                            <div class="development-figure">
+                                <a class="development-image" href="{{ scene_url }}" title="Voir la scène">
+                                    <img src="{{ asset(image_small(scene.image|default(NA_SCENE))) }}" loading="lazy" alt="Scène {{ scene.numero }} — {{ scene.titre }}" />
+                                </a>
+                            </div>
                         </div>
                     </article>
                 {% endfor %}
@@ -225,7 +227,7 @@
 
                 <div class="profile-zone">
                     {{ include('/parts/divider-ornament.html.twig') }}
-                    <h2 class="profile-description-title">Secrets</h2>
+                    <h2 class="heading-section">Secrets</h2>
 
                     {% if character.playerNotes is not empty %}
                         <p class="text-description text-compact read-only">{{ character.playerNotes|e|text }}</p>
@@ -245,7 +247,7 @@
 
                     <div class="profile-zone">
                         {{ include('/parts/divider-ornament.html.twig') }}
-                        <h2 class="profile-description-title gm">Notes du Maître de Jeu</h2>
+                        <h2 class="heading-section gm">Notes du Maître</h2>
 
                         {% if character.gmNotes is not empty %}
                             <p class="text-description text-compact read-only">{{ character.gmNotes|e|text }}</p>

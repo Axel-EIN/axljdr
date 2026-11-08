@@ -87,7 +87,7 @@
     height: 0;
     margin: 0;
 
-    > strong {
+    > .bold {
       position: absolute;
       width: 1px;
       height: 1px;

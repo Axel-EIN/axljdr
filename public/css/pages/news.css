@@ -46,10 +46,7 @@
 
   hr { border-top-color: rgb(255 255 255 / 0.25); }
 
-  .ranking-rank,
-  .ranking-xp { color: var(--color-fade); }
-
-  .ranking-player { color: rgb(255 255 255 / 0.7); }
+  .character-player { color: rgb(255 255 255 / 0.7); }
 
   .ranking-line {
     border-radius: 0;
@@ -134,7 +131,7 @@
 .ranking-line {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 1rem;
   padding: 0.25rem 0.5rem;
   border-radius: 0.5rem;
 
@@ -147,7 +144,7 @@
     text-align: center;
   }
 
-  .ranking-name {
+  .character-line {
     display: flex;
     flex-direction: column;
     flex: 1;
@@ -159,17 +156,24 @@
       text-overflow: ellipsis;
       white-space: nowrap;
     }
-  }
 
-  .ranking-player {
-    color: var(--color-body);
-    font-size: var(--fontsize-small);
+    .character-name {
+      font-weight: bolder;
+      font-size: var(--fontsize-plus);
+    }
+
+    .character-player {
+      color: var(--color-body);
+      font-size: var(--fontsize-small);
+    }
   }
 
   .ranking-xp {
     color: var(--color-body);
     white-space: nowrap;
   }
+
+  .ranking-gain { white-space: nowrap; }
 }
 
 .session-links {
@@ -361,9 +365,34 @@
   &.inverted {
     background-color: rgb(255 255 255 / 0.08);
 
+    @media (max-width: 575.98px) { flex-wrap: wrap; }
+
     &:hover { background-color: rgb(255 255 255 / 0.16); }
 
-    .episode-sub { color: rgb(255 255 255 / 0.7); }
+    .episode-number {
+      min-width: 3.5rem;
+      color: var(--color-white);
+      font-size: var(--fontsize-huge);
+      line-height: var(--leading-1);
+      text-align: center;
+      padding: 0 0.25rem;
+    }
+
+    .episode-text {
+      gap: 0.125rem;
+
+      strong {
+        color: var(--color-white);
+        font-size: var(--fontsize-medium);
+        line-height: var(--leading-base);
+      }
+    }
+
+    .episode-sub {
+      color: var(--color-graymist);
+      font-size: var(--fontsize-small);
+      font-weight: normal;
+    }
   }
 
   .episode-number {
@@ -403,19 +432,41 @@
     }
   }
 
+  .episode-party {
+    display: flex;
+    flex-direction: column;
+    flex: none;
+    justify-content: space-between;
+    align-self: flex-end;
+    align-items: flex-end;
+    gap: 1rem;
+    padding: 0.25rem 0;
+
+    .party-count {
+      color: var(--color-graymist);
+      font-size: var(--fontsize-regular);
+      line-height: var(--leading-1);
+      font-weight: normal;
+    }
+
+    .party-portraits {
+      display: flex;
+      gap: 0.375rem;
+    }
+
+    @media (max-width: 575.98px) {
+      order: 1;
+      flex-basis: 100%;
+      align-items: flex-start;
+      padding-left: 4.25rem;
+    }
+  }
+
   .episode-picture {
     max-height: 64px;
     width: auto;
     border-radius: 0.25rem;
   }
-}
-
-.outlined.player {
-  box-shadow:
-    2px 2px 0 var(--color-flashblue),
-    -2px -2px 0 var(--color-flashblue),
-    2px -2px 0 var(--color-flashblue),
-    -2px 2px 0 var(--color-flashblue);
 }
 
 .news-board {

@@ -124,7 +124,12 @@
               {% set na_icon = image ? null : element_icon(item) %}
               {% set picture = na_icon ? NA_43 : (field|default(null) ? image|default(image_na) : image_small(image|default(image_na))) %}
               <img class="ratio-cropped" src="{{ asset(picture) }}" loading="lazy" alt="{{ name }}" />
-              {% if na_icon %}<i class="na-icon fa-solid {{ na_icon }}" aria-hidden="true"></i>{% endif %}
+              {% if na_icon %}
+                <span class="na-icon">
+                  <i class="fa-solid {{ na_icon }}" aria-hidden="true"></i>
+                  <span class="na-label">{{ element_label(item) }}</span>
+                </span>
+              {% endif %}
               {% if not restricted and item.icone|default(null) %}
                 <img class="hover-icon" src="{{ asset(item.icone) }}" alt="" />
               {% endif %}

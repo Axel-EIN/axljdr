@@ -8,7 +8,7 @@ use Symfony\Component\Security\Core\Authorization\Voter\VoterInterface;
 
 class PlayerModeVoter implements VoterInterface
 {
-    private const GAME_MASTER_ROLES = ['ROLE_MJ', 'ROLE_ADMIN'];
+    private const GAME_MASTER_ROLES = ['ROLE_GM', 'ROLE_ADMIN'];
 
     private $inner;
 

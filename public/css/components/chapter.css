@@ -120,9 +120,6 @@
   }
 
   .chapter-location-icon {
-    --ease: var(--ease-steady);
-    --duration: 0.15s;
-
     width: 48px;
     height: 48px;
     opacity: 0.4;
@@ -131,7 +128,7 @@
     border-radius: 4px;
     box-shadow: 8px 8px 16px var(--color-black25);
     filter: brightness(1);
-    transition: var(--duration) var(--ease);
+    transition: var(--motion-hover);
   }
 }
 
@@ -204,9 +201,6 @@
   }
 
   .chapter-portrait {
-    --ease: var(--ease-steady);
-    --duration: 0.15s;
-
     width: 40px;
     height: 40px;
     opacity: 0.4;
@@ -215,7 +209,7 @@
     border-radius: 4px;
     box-shadow: 8px 8px 16px var(--color-black25);
     filter: grayscale(1) brightness(0.5);
-    transition: var(--duration) var(--ease);
+    transition: var(--motion-hover);
     &.chapter-view { filter: brightness(1);}
     &.in-episode {
       opacity: 1;

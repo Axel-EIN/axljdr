@@ -5,5 +5,12 @@
 {% block content %}
   <div class="form-narrow">
     {{ include('/parts/login-form.html.twig') }}
+
+    {% if resend_verification|default(false) %}
+      <form class="text-center mt-4" method="post" action="{{ path('app_verify_resend') }}">
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token('verify_resend') }}" />
+        <button class="btn-secondary-style btn-medium" type="submit">Renvoyer le lien de confirmation</button>
+      </form>
+    {% endif %}
   </div>
 {% endblock %}

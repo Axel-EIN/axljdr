@@ -32,20 +32,41 @@ class NewsController extends AbstractController
     private const GROUPS = [
         ['title' => 'Personnages', 'icon' => 'fa-users', 'image' => '/assets/rubriques/characters.jpg', 'variant' => 'portrait', 'large' => true,
             'link' => ['label' => 'Tous les personnages', 'route' => 'characters'], 'characters' => true],
-        ['title' => 'Lieux', 'variant' => 'icon', 'keys' => ['location']],
-        ['title' => 'Objets & Équipements', 'icon' => 'fa-cube', 'variant' => 'rule', 'field' => 'icon', 'sections' => [
-            ['title' => 'Divers', 'keys' => ['object'], 'criteria' => ['categorie' => 'OBJET'], 'max' => 2],
-            ['title' => 'Armes & Armures', 'keys' => ['object'], 'criteria' => ['categorie' => ['ARME', 'ARMURE', 'PROJECTILE']], 'max' => 2],
+        ['title' => 'Lieux', 'icon' => 'fa-vihara', 'image' => '/assets/rubriques/world.jpg', 'variant' => 'icon', 'large' => true, 'max' => 8,
+            'link' => ['label' => 'Tous les lieux', 'route' => 'world', 'params' => ['_fragment' => 'location']], 'keys' => ['location']],
+        ['title' => 'Factions', 'icon' => 'fa-flag', 'library_image' => 'object', 'variant' => 'rule', 'large' => true,
+            'link' => ['segments' => [
+                'Tous les :',
+                ['label' => 'Factions', 'route' => 'world', 'params' => ['_fragment' => 'clan']],
+                '|',
+                ['label' => 'Écoles', 'route' => 'rules', 'params' => ['_fragment' => 'class']],
+            ]],
+            'sections' => [
+            'factions' => ['max' => 4, 'variant' => 'emblem', 'keys' => ['clan']],
+            'schools' => ['max' => 8, 'share' => 'factions', 'keys' => ['dojo']],
         ]],
-        ['title' => 'Factions', 'icon' => 'fa-flag', 'variant' => 'emblem', 'keys' => ['clan']],
-        ['title' => 'Écoles', 'icon' => 'fa-graduation-cap', 'variant' => 'rule', 'keys' => ['dojo']],
-        ['title' => 'Univers', 'icon' => 'fa-earth-asia', 'variant' => 'rule', 'keys' => ['archive', 'lore']],
-        ['title' => 'Règles', 'icon' => 'fa-scale-balanced', 'variant' => 'rule', 'keys' => ['rule']],
+        ['title' => 'Articles', 'icon' => 'fa-readme', 'icon_style' => 'fa-brands', 'image' => '/assets/rubriques/rules.jpg', 'variant' => 'rule', 'large' => true,
+            'link' => ['segments' => [
+                'Tous les :',
+                ['label' => 'Lore', 'route' => 'world', 'params' => ['_fragment' => 'lore']],
+                '|',
+                ['label' => 'Règles', 'route' => 'rules', 'params' => ['_fragment' => 'rule']],
+            ]],
+            'sections' => [
+            'world' => ['max' => 4, 'pools' => [
+                'lore' => ['keys' => ['lore'], 'quota' => 2],
+                'archive' => ['keys' => ['archive'], 'quota' => 2],
+            ]],
+            'rules' => ['max' => 8, 'share' => 'world', 'pools' => [
+                'base' => ['keys' => ['rule'], 'criteria' => ['base' => true], 'quota' => 2],
+                'annex' => ['keys' => ['rule'], 'criteria' => ['base' => false], 'quota' => 2],
+            ]],
+        ]],
         ['title' => 'Bibliothèques', 'icon' => 'fa-book', 'library_image' => 'spell', 'variant' => 'rule', 'large' => true,
             'link' => ['label' => 'Toutes les bibliothèques', 'route' => 'rules', 'params' => ['_fragment' => 'library']],
             'sections' => [
-            'spells' => ['max' => 5, 'pools' => [
-                'magic' => ['keys' => ['spell'], 'criteria' => ['categorie' => 'MAGIE'], 'quota' => 2],
+            'spells' => ['max' => 4, 'pools' => [
+                'magic' => ['keys' => ['spell'], 'criteria' => ['categorie' => 'MAGIE'], 'quota' => 1],
                 'kiho' => ['keys' => ['spell'], 'criteria' => ['categorie' => 'KIHO'], 'quota' => 1],
                 'tattoo' => ['keys' => ['spell'], 'criteria' => ['categorie' => 'TATOUAGE'], 'quota' => 1],
                 'maho' => ['keys' => ['spell'], 'criteria' => ['categorie' => 'MAHO'], 'quota' => 1],
@@ -54,6 +75,7 @@ class NewsController extends AbstractController
                 'skill' => ['keys' => ['skill'], 'quota' => 1],
                 'advantage' => ['keys' => ['advantage'], 'criteria' => ['genre' => 'Avantage'], 'quota' => 1],
                 'disadvantage' => ['keys' => ['advantage'], 'criteria' => ['genre' => 'Désavantage'], 'quota' => 1],
+                'object' => ['keys' => ['object'], 'quota' => 1],
             ]],
         ]],
     ];
@@ -154,7 +176,7 @@ class NewsController extends AbstractController
             }
 
             $portrait = ($group['variant'] ?? null) === 'portrait';
-            $max = $portrait ? self::PORTRAIT_THUMBNAILS : self::THUMBNAILS;
+            $max = $group['max'] ?? ($portrait ? self::PORTRAIT_THUMBNAILS : self::THUMBNAILS);
             $characters = $group['characters'] ?? false;
             $elements = $characters
                 ? $newsFeed->freshPlayersThenOthers($max)

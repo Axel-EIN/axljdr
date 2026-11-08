@@ -11,6 +11,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\ColorType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use App\Validator\ImageFile;
@@ -21,6 +22,7 @@ class AdminChapterType extends AbstractType
     {
         $builder
             ->add('numero', IntegerType::class)
+            ->add('prologue', CheckboxType::class, ['required' => false, 'label' => 'Prologue de saison'])
             ->add('titre', TextType::class)
             ->add('citation', TextareaType::class, ['required' => false, 'empty_data' => null])
             ->add('image', FileType::class, [

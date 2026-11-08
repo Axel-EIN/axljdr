@@ -1,1 +1,1 @@
-<span class="hover-tooltip below wrap">{{ navigating_character() ? "Votre personnage n'a pas encore découvert cet élément" : "Connectez votre personnage" }}</span>
+<span class="hover-tooltip below wrap{{ hint_block|default(false) ? ' glass' }}">{{ navigating_character() ? "Votre personnage n'a pas encore découvert cet élément" : "Connectez votre personnage" }}</span>

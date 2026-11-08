@@ -42,7 +42,7 @@
       color: var(--color-alternate);
       font-weight: bold;
       cursor: pointer;
-      transition: background-color 0.2s, color 0.2s;
+      transition: background-color var(--motion-hover), color var(--motion-hover);
 
       &:hover { color: var(--color-strong); }
 

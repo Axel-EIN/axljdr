@@ -28,7 +28,7 @@ class AdminObjectController extends AbstractController
 
     /**
      * @Route("/admin/object", name="admin_object")
-     * @IsGranted("ROLE_MJ")
+     * @IsGranted("ROLE_GM")
      */
     public function viewAdminObjects( ObjetRepository $objectRepository ): Response
     {
@@ -65,7 +65,7 @@ class AdminObjectController extends AbstractController
 
     /**
      * @Route("/admin/object/create", name="admin_object_create")
-     * @IsGranted("ROLE_MJ")
+     * @IsGranted("ROLE_GM")
      */
     public function addObject(Request $request, EntityManagerInterface $em, FileHandler $fileHandler, ObjetRepository $objectRepository, Orderer $orderer, Unlocker $unlocker, TableFilter $tableFilter) {
 
@@ -128,7 +128,7 @@ class AdminObjectController extends AbstractController
 
     /**
      * @Route("/admin/object/{id}/edit", name="admin_object_edit")
-     * @IsGranted("ROLE_MJ")
+     * @IsGranted("ROLE_GM")
      */
     public function editObject(Request $request, Objet $object, FileHandler $fileHandler, ObjetRepository $objectRepository, Orderer $orderer, Unlocker $unlocker, NameTagger $nameTagger): Response {
 
@@ -201,7 +201,7 @@ class AdminObjectController extends AbstractController
 
     /**
      * @Route("/admin/object/{id}/delete", name="admin_object_delete", methods={"POST"})
-     * @IsGranted("ROLE_MJ")
+     * @IsGranted("ROLE_GM")
      */
     public function deleteObject(Request $request, Objet $object, FileHandler $fileHandler, Unlocker $unlocker, DeletionGuard $deletionGuard, NameTagger $nameTagger): Response {
 

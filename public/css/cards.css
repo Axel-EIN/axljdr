@@ -42,7 +42,7 @@
   }
 
   &.aerated {
-    padding: 3rem 6rem;
+    padding: 3rem 4rem;
   }
 
   @media (max-width: 991.98px) {

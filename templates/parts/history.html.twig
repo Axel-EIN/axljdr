@@ -41,11 +41,11 @@
     {% for line in entry.lines %}
       <div class="history-scene">
         <a class="link-strong" href="{{ path('story_episode', {id: episode.id, '_fragment': 'scn' ~ line.scene.numero}) }}">
-          Scène {{ line.scene.numero }} — <strong>{{ line.scene.titre }}</strong>
+          Scène {{ line.scene.numero }} — <span class="bold">{{ line.scene.titre }}</span>
         </a>
 
         {% if line.dead %}
-          <strong class="text-dead">MORT</strong>
+          <span class="bold text-dead">MORT</span>
         {% elseif line.xp > 0 %}
           <span class="text-nowrap history-xp">
             {{ include('parts/xp-gain.html.twig', {xp: line.xp, sign: '+'}) }}

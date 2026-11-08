@@ -191,10 +191,12 @@
   }
 
   &:hover .hover-icon { opacity: 1; }
+  &[href]:hover .label { color: var(--color-link); }
   &:has(.hover-icon):hover .ratio-cropped { filter: brightness(0.35); }
 
   .label {
     margin-top: 0.25rem;
+    color: var(--color-link-strong);
     font-weight: bold;
     text-align: center;
     line-height: var(--leading-base);

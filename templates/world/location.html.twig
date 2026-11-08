@@ -28,9 +28,9 @@
               <img class="mb-2 img-64 circle-crop" src="{{ asset(image_small(location_clan.mon|default(NA_MON))) }}" alt="Mon d'une faction" title="{{location_clan.nom|default('')}}" />
             </a>
           {% endif %}
-          {% if record.type is defined and record.type is not empty %}<span>Type : <strong>{{ record.type }}</strong></span>{% endif %}
+          {% if record.type is defined and record.type is not empty %}<span>Type : <span class="bold">{{ record.type }}</span></span>{% endif %}
           {% if record.population is defined and record.population is not empty %}
-            <span>Population : <strong>{{ record.population|number_format(0, ',', '.') }} habitants</strong></span>
+            <span>Population : <span class="bold">{{ record.population|number_format(0, ',', '.') }} habitants</span></span>
           {% endif %}
         </div>
 

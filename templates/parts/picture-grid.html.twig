@@ -18,6 +18,8 @@
   {% set gm_plain = catalog and is_gm() %}
   {% set type_badges = type_badges|default([]) %}
   {% set type_icon = type_icon|default(false) %}
+  {% set mark_players = mark_players|default(false) %}
+  {% set label_soft = label_soft|default(false) %}
   {% set hint_block = hint_block|default(false) %}
 
   {% if scroll and per_row is not defined %}{% set per_row = {desktop: 6, mobile: 2} %}{% endif %}
@@ -47,7 +49,7 @@
   {% set wrapper_class = title is not defined ? wrapper|default('') : '' %}
 
   {% set track %}
-  <div class="picture-grid {{ scroll ? 'scroll scroller-track' : wrapper_class }}{{ hint_block ? ' hint-block' }}" style="{{ style }}">
+  <div class="picture-grid {{ scroll ? 'scroll scroller-track' : wrapper_class }}{{ hint_block ? ' hint-block' }}{{ label_soft ? ' label-soft' }}" style="{{ style }}">
     {% for item in limit is defined ? items|slice(0, limit) : items %}
 
       {% set state = element_state(item, reveal_session) %}
@@ -62,6 +64,7 @@
       {% endif %}
       {% set item_class = restricted ? 'restricted locked' ~ edges ~ (catalog ? ' catalog' : '') : (plain ? 'hover-zoom' : (element_unseen(item) and not gm_plain ? 'access-hidden ' : '') ~ (locked ? 'locked ' : '') ~ (catalog ? 'catalog ' : '') ~ (locked ? '' : 'hover-zoom')) %}
       {% set name = item.nomComplet is defined ? item.nomComplet : (item.nom is defined ? item.nom : item.titre) %}
+      {% set is_player = mark_players and item.estPj|default(false) %}
       {% set pdf_only = item.pdf|default(null) and item.hasParts is defined and not item.hasParts %}
       {% set image_na = pdf_only ? NA_PDF : na_image|default(NA_ICON) %}
       {% set pdf_link = pdf_only and not is_gm() and app.user %}
@@ -81,7 +84,7 @@
         </div>
       {% endset %}
 
-      <a class="picture-item {{ variant }} {{ item_class }}{{ label_inside ? ' label-inside' }}"
+      <a class="picture-item {{ variant }} {{ item_class }}{{ label_inside ? ' label-inside' }}{{ is_player ? ' player' }}"
          {% if restricted or not href %}aria-disabled="true"{% else %}{% if show_label %}title="{{ name }}" {% endif %}{% if pdf_link %}target="_blank" rel="noopener" {% endif %}href="{{ href }}"{% endif %}>
         <div class="image-container {% if locked or restricted %}slight-fade{% endif %}">
 
@@ -125,8 +128,13 @@
               {% set picture = na_icon ? NA_43 : (field|default(null) ? image|default(image_na) : image_small(image|default(image_na))) %}
               <img class="ratio-cropped" src="{{ asset(picture) }}" loading="lazy" alt="{{ name }}" />
               {% if na_icon %}
+                {% set ring_icon = item.ringIcon|default(null) %}
                 <span class="na-icon">
-                  <i class="fa-solid {{ na_icon }}" aria-hidden="true"></i>
+                  {% if ring_icon %}
+                    <img class="na-ring" src="{{ asset(ring_icon) }}" alt="" />
+                  {% else %}
+                    <i class="fa-solid {{ na_icon }}" aria-hidden="true"></i>
+                  {% endif %}
                   <span class="na-label">{{ element_label(item) }}</span>
                 </span>
               {% endif %}
@@ -138,7 +146,7 @@
           {% endif %}
 
           {% if not show_label and not restricted %}
-            <span class="hover-tooltip caption"><span class="label">{{ name }}</span></span>
+            <span class="hover-tooltip caption{{ is_player ? ' player' }}"><span class="label">{{ name }}</span></span>
           {% endif %}
         </div>
 

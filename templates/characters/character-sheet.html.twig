@@ -148,7 +148,7 @@
 
             <li>
               <span class="label">Expérience :</span>
-              <strong><span class="xp-total-value">{{ xp.total }}</span>xp</strong>
+              <span class="bold"><span class="xp-total-value">{{ xp.total }}</span>xp</span>
               &nbsp;
               <small>
                 (
@@ -162,7 +162,7 @@
             </li>
             <li>
               <span class="label">Dépensés :</span>
-              <strong><span class="xp-spent-value">{{ xp.spent }}</span>xp</strong>
+              <span class="bold"><span class="xp-spent-value">{{ xp.spent }}</span>xp</span>
               &nbsp;
               <small>
                 (
@@ -179,7 +179,7 @@
             </li>
             <li>
               <span class="label">Restants :</span>
-              <strong><span class="xp-remaining text-success">{{ xp.remaining }}xp</span></strong>
+              <span class="bold"><span class="xp-remaining text-success">{{ xp.remaining }}xp</span></span>
             </li>
 
           </ul>
@@ -504,13 +504,13 @@
               <div class="sheet-ring-line">
                 <img class="sheet-ring-icon" src="{{ mobile_ring.icon }}" alt="" />
                 <span class="text-plus extrabold">{{ mobile_ring.name }}</span>
-                <strong class="sheet-ring-rank text-plus">{{ mobile_ring.rank }}</strong>
+                <span class="bold sheet-ring-rank text-plus">{{ mobile_ring.rank }}</span>
               </div>
               {% for trait in mobile_ring.traits %}
                 <div class="sheet-trait-line">
                   <span>{{ trait.name }}</span>
                   {% if trait.bonus > 0 %}<small class="text-success">+{{ trait.bonus }}</small>{% endif %}
-                  <strong class="sheet-trait-value">{{ trait.val }}</strong>
+                  <span class="bold sheet-trait-value">{{ trait.val }}</span>
                 </div>
               {% endfor %}
             </div>
@@ -523,7 +523,7 @@
           {% set value = attribute(sheet, field) %}
           <li>
             <span class="label">{{ field|capitalize }}</span>
-            <strong class="read-only">{{ value is null ? '—' : value|number_format(1, '.', '') }}</strong>
+            <span class="bold read-only">{{ value is null ? '—' : value|number_format(1, '.', '') }}</span>
             <input type="number" min="0" max="10" step="0.1" id="standing-input-{{ field }}"
                    class="form-control form-control-sm edit-only" value="{{ value }}" />
           </li>
@@ -650,7 +650,7 @@
                     {% endif %}
                   </td>
                   <th class="text-strong extrabold" scope="row" data-skill-name>
-                    <a class="link-strong" href="{{ element_url(slot.skill) }}"><strong>{{ slot.skill.nom }}</strong></a>
+                    <a class="link-strong" href="{{ element_url(slot.skill) }}"><span class="bold">{{ slot.skill.nom }}</span></a>
                     {% if slot.skill.degradante %}<i class="skill-degrading after fa-solid fa-arrow-down-wide-short" title="Compétence dégradante"></i>{% endif %}
                   </th>
                   <td class="text-strong extrabold text-center" data-skill-val-cell>{{ slot.val ?? '' }}</td>
@@ -735,7 +735,7 @@
                   {% if technique.rank %}{{ technique.rank }}{% else %}<i class="fa-solid fa-star text-small" title="Technique spéciale"></i>{% endif %}
                 </span>
                 <div>
-                  <strong class="extrabold"><a class="link-strong" href="{{ element_url(dojo) }}#{{ technique.anchor }}">{{ technique.name }}</a></strong>
+                  <span class="bold extrabold"><a class="link-strong" href="{{ element_url(dojo) }}#{{ technique.anchor }}">{{ technique.name }}</a></span>
                   <p class="text-small text-body-c{% if not technique.summary %} text-clamp-2{% endif %}"
                      {% if not technique.summary %}data-toggle="tooltip" title="{{ technique.description }}"{% endif %}>
                     {{ technique.summary ?: technique.description }}
@@ -779,12 +779,12 @@
 
             <div class="col-6 col-lg-3">
               <h6>Affinité</h6>
-              <strong class="text-{{ (dojo.affinite ?? '')|upper }} text-uppercase">{{ dojo.affinite ?? '—' }}</strong>
+              <span class="bold text-{{ (dojo.affinite ?? '')|upper }} text-uppercase">{{ dojo.affinite ?? '—' }}</span>
             </div>
 
             <div class="col-6 col-lg-3">
               <h6>Déficience</h6>
-              <strong class="text-{{ (dojo.deficience ?? '')|upper }} text-uppercase">{{ dojo.deficience ?? '—' }}</strong>
+              <span class="bold text-{{ (dojo.deficience ?? '')|upper }} text-uppercase">{{ dojo.deficience ?? '—' }}</span>
             </div>
 
             <div class="col-6 col-lg-3">
@@ -897,7 +897,7 @@
           {% for field, entry in report %}
             <li>
               <span class="label">{{ entry.label }}</span>
-              <strong class="read-only">{{ entry.value ?: '—' }}</strong>
+              <span class="bold read-only">{{ entry.value ?: '—' }}</span>
               {% if field != 'sex' %}
                 <input type="{{ field == 'age' ? 'number' : 'text' }}" {% if field == 'age' %}min="0"{% endif %}
                        id="look-input-{{ field }}" class="form-control form-control-sm edit-only"
@@ -943,7 +943,7 @@
               <div class="flex-grow-1 flex-col">
                 Initiative
                 <span class="ml-2">
-                  <strong class="text-strong" data-stat="initiative">{{initiative_rolled}}g{{initiative_kept}}{% if initiative_mod != 0 %} {{ initiative_mod > 0 ? '+' : '' }}{{ initiative_mod }}{% endif %}</strong>
+                  <span class="bold text-strong" data-stat="initiative">{{initiative_rolled}}g{{initiative_kept}}{% if initiative_mod != 0 %} {{ initiative_mod > 0 ? '+' : '' }}{{ initiative_mod }}{% endif %}</span>
                   &nbsp;
                   <i
                     class="fa-solid fa-dice text-accent"
@@ -967,7 +967,7 @@
                 </span>
               </div>
               <div class="text-right text-small">
-                <strong data-stat="initiative-avg">{{ (((rank + eff_reflexes) ~ 'g' ~ eff_reflexes)|expected_roll) + initiative_mod }}</strong>
+                <span class="bold" data-stat="initiative-avg">{{ (((rank + eff_reflexes) ~ 'g' ~ eff_reflexes)|expected_roll) + initiative_mod }}</span>
                 <div data-stat="heavy-weapon"{% if not (sheet.armeActuelle and sheet.armeActuelle.type == 'LOURDE') %} class="d-none"{% endif %}>-5 (arme lourde)</div>
               </div>
               {{ sheet_macros.stat_mod('initiative', sheet.initiativeModifier ?? '', 'nombre') }}
@@ -1002,7 +1002,7 @@
                 Attaque <span class="text-small text-grayash">(<span data-stat="combat-skill-name">{{ sheet.compCombatActuelle ? sheet.compCombatActuelle.nom : '' }}</span>)</span>
                 <br/>
                 <span>
-                  <strong class="text-strong ml-2" data-stat="attack">{{attack_rolled}}g{{attack_kept}}</strong>
+                  <span class="bold text-strong ml-2" data-stat="attack">{{attack_rolled}}g{{attack_kept}}</span>
                   &nbsp;
                   <i
                     class="fa-solid fa-dice text-accent"
@@ -1025,7 +1025,7 @@
                 </span>
               </div>
               <div class="text-right text-small stat-attack-with-skill{% if not sheet.compCombatActuelle %} d-none{% endif %}">
-                <strong data-stat="attack-avg">{{(attack_rolled ~ 'g' ~ attack_kept)|expected_roll}}</strong>
+                <span class="bold" data-stat="attack-avg">{{(attack_rolled ~ 'g' ~ attack_kept)|expected_roll}}</span>
                 <br/><span class="edit-only">en Assaut : <span data-stat="attack-assault-avg">{{((attack_rolled + 2) ~ 'g' ~ (attack_kept + 1))|expected_roll}}</span></span>
               </div>
               <div class="stat-attack-no-skill{% if sheet.compCombatActuelle %} d-none{% endif %}">
@@ -1069,7 +1069,7 @@
                   Dommages <span class="text-small text-grayash">(<span data-stat="current-weapon-name">{{ sheet.armeActuelle ? sheet.armeActuelle.nom : '' }}</span>)</span>
                 </span>
                 <span class="ml-2 text-grayash">
-                  <strong class="text-strong" data-stat="damage">{{ damage_rolled ~ 'g' ~ damage_kept }}</strong>
+                  <span class="bold text-strong" data-stat="damage">{{ damage_rolled ~ 'g' ~ damage_kept }}</span>
                   &nbsp;
                   <i class="fa-solid fa-dice text-accent"
                       data-tooltip-stat="damage"
@@ -1094,7 +1094,7 @@
                 </span>
               </div>
               <div class="text-right text-small stat-damage-with-weapon{% if not sheet.armeActuelle %} d-none{% endif %}">
-                <strong data-stat="damage-avg">{{ ( damage_rolled ~  'g' ~ damage_kept  )|expected_roll }}</strong>
+                <span class="bold" data-stat="damage-avg">{{ ( damage_rolled ~  'g' ~ damage_kept  )|expected_roll }}</span>
                 <br/><span class="edit-only">3 Aug. : <span data-stat="damage-raise3-avg">{{ ( (damage_rolled + 3) ~  'g' ~ damage_kept  )|expected_roll }}</span></span>
               </div>
               <div class="stat-damage-no-weapon{% if sheet.armeActuelle %} d-none{% endif %}">
@@ -1109,7 +1109,7 @@
             <li class="list-group-item px-3 py-2 flex flex-wrap gap-2">
               <div class="flex-grow-1">
                 ND pour être touché
-                <br/><strong class="text-strong ml-2" data-stat="tn-hit">{{ eff_reflexes * 5 + rank + tn_mod }}</strong>
+                <br/><span class="bold text-strong ml-2" data-stat="tn-hit">{{ eff_reflexes * 5 + rank + tn_mod }}</span>
                 &nbsp;
                 <i
                   class="fa-solid fa-arrow-trend-up"
@@ -1123,7 +1123,7 @@
               </div>
               {% if sheet.armure %}
                 <small class="text-right">
-                  <strong data-stat="tn-hit-armor">{{ eff_reflexes * 5 + rank + sheet.armure.ndArmure + tn_mod }}</strong>
+                  <span class="bold" data-stat="tn-hit-armor">{{ eff_reflexes * 5 + rank + sheet.armure.ndArmure + tn_mod }}</span>
                   <br/>
                   Avec Armure
                 </small>
@@ -1135,8 +1135,8 @@
               <li class="list-group-item px-3 py-2 flex">
                 <div class="flex-grow-1" >
                   Armure <span class="text-small text-grayash">({{ sheet.armure.nom }})</span>
-                  <br/><strong class="text-strong ml-2">+{{ sheet.armure.ndArmure }} au ND pour être touché</strong>
-                  <br/><strong class="text-strong ml-2">-{{ sheet.armure.reduction }} Réduction de dommages</strong>
+                  <br/><span class="bold text-strong ml-2">+{{ sheet.armure.ndArmure }} au ND pour être touché</span>
+                  <br/><span class="bold text-strong ml-2">-{{ sheet.armure.reduction }} Réduction de dommages</span>
                 </div>
               </li>
             {% endif %}
@@ -1146,7 +1146,7 @@
             <li class="list-group-item px-3 py-2 d-flex flex-wrap">
               <div class="flex-grow-1">
                 Réduction
-                <br><strong class="ml-2 text-strong">{{ armor_reduction + reduction_mod }}</strong>
+                <br><span class="bold ml-2 text-strong">{{ armor_reduction + reduction_mod }}</span>
                 &nbsp;
                 <i
                   class="fa-solid fa-shield-halved"
@@ -1173,7 +1173,7 @@
             <li class="list-group-item px-3 py-2 d-flex">
               <div class="flex-grow-1">
                 Points de Vie
-                <br><strong class="ml-2 text-strong" data-stat="hp-total">{{ sheet.pvMax }}</strong>
+                <br><span class="bold ml-2 text-strong" data-stat="hp-total">{{ sheet.pvMax }}</span>
                 &nbsp;
                 <i
                   class="fa-solid fa-heart-pulse text-primary"
@@ -1189,7 +1189,7 @@
               </div>
               <div class="flex-grow-1">
                 Récupération
-                <br><strong class="ml-2 text-strong" data-stat="recovery">{{(eff_constitution * 2) + rank}}</strong>
+                <br><span class="bold ml-2 text-strong" data-stat="recovery">{{(eff_constitution * 2) + rank}}</span>
                 &nbsp;
                 <i 
                   class="fas fa-briefcase-medical text-success"
@@ -1277,7 +1277,7 @@
             <li>
               <img src="{{ asset('/assets/icons/money/' ~ coin ~ '.png') }}" alt="" />
               <span class="purse-label">{{ coin|capitalize }}</span>
-              <strong class="read-only">{{ attribute(sheet, coin) ?? 0 }}</strong>
+              <span class="bold read-only">{{ attribute(sheet, coin) ?? 0 }}</span>
               <input type="number" min="0" id="purse-input-{{ coin }}"
                      class="form-control form-control-sm edit-only"
                      value="{{ attribute(sheet, coin) ?? 0 }}" />
@@ -1791,9 +1791,9 @@
           name.textContent = spell.nom;
           li.appendChild(name);
           if (spell.niveau !== null) {
-              const rank = document.createElement('strong');
+              const rank = document.createElement('span');
               const color = ring.replace('KIHO_', '');
-              rank.className = 'text-rank reduced bg-' + (color === 'UNIVERSEL' ? 'black' : color);
+              rank.className = 'bold text-rank reduced bg-' + (color === 'UNIVERSEL' ? 'black' : color);
               rank.textContent = spell.niveau;
               li.appendChild(rank);
           }

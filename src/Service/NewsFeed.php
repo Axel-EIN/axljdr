@@ -20,11 +20,13 @@ class NewsFeed
     private $participationRepository;
     private $characterRepository;
     private $xpRanker;
+    private $currentChapter;
 
     public function __construct(
         EntityManagerInterface $entityManager,
         CurrentPlayer $currentPlayer,
         Visibility $visibility,
+        CurrentChapter $currentChapter,
         EpisodeRepository $episodeRepository,
         ParticipationRepository $participationRepository,
         PersonnageRepository $characterRepository,
@@ -33,6 +35,7 @@ class NewsFeed
         $this->entityManager = $entityManager;
         $this->currentPlayer = $currentPlayer;
         $this->visibility = $visibility;
+        $this->currentChapter = $currentChapter;
         $this->episodeRepository = $episodeRepository;
         $this->participationRepository = $participationRepository;
         $this->characterRepository = $characterRepository;
@@ -128,12 +131,15 @@ class NewsFeed
             $filter .= ' AND e.' . $field . (is_array($value) ? ' IN (:' . $field . ')' : ' = :' . $field);
         }
 
+        $recentIds = $this->currentChapter->lastEpisodeIds($key);
+        $recent = $recentIds === [] ? [] : ['recentIds' => $recentIds];
+
         $elements = array_merge(
             $this->latestPublished($class, 'e.access = :access' . $filter, ['access' => Access::PUBLIC] + $criteria, $limit),
             $this->visibility->listedOnly($this->latestPublished(
                 $class,
-                'e.access <> :access AND e.publishedAt >= :freshSince' . $filter,
-                ['access' => Access::PUBLIC, 'freshSince' => $this->visibility->freshSince()] + $criteria
+                'e.access <> :access AND (e.publishedAt >= :freshSince' . ($recent ? ' OR e.id IN (:recentIds)' : '') . ')' . $filter,
+                ['access' => Access::PUBLIC, 'freshSince' => $this->visibility->freshSince()] + $recent + $criteria
             ))
         );
 

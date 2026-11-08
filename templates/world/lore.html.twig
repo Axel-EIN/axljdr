@@ -38,3 +38,8 @@
   }) }}
 
 {% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('scripts/reading-progress.js') }}"></script>
+{% endblock %}

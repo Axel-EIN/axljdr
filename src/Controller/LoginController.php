@@ -16,6 +16,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
+use Symfony\Component\Security\Core\Exception\AccountStatusException;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Core\Exception\BadCredentialsException;
 use Symfony\Component\Security\Core\Exception\InvalidCsrfTokenException;
@@ -32,16 +33,21 @@ class LoginController extends AbstractController
     /**
      * @Route("/login", name="app_login")
      */
-    public function login(AuthenticationUtils $authenticationUtils): Response
+    public function login(Request $request, AuthenticationUtils $authenticationUtils): Response
     {
 
         $error = $authenticationUtils->getLastAuthenticationError();
+        $unverified = $error instanceof AccountStatusException && $error->getUser() instanceof Utilisateur;
 
         if ($error !== null) {
             $this->addFlash('danger', $this->loginErrorMessage($error));
         }
 
-        return $this->render('security/login.html.twig');
+        if ($unverified) {
+            $request->getSession()->set(RegistrationController::RESEND_SESSION_KEY, $error->getUser()->getId());
+        }
+
+        return $this->render('security/login.html.twig', ['resend_verification' => $unverified]);
     }
 
     /**

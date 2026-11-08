@@ -4,7 +4,7 @@
     <div class="card item locked">
         <div class="item-line">
             {{ include('parts/badge-access.html.twig', {state: state, variant: 'inline'}) }}
-            <strong class="item-name ml-2">{{ item.nom }}</strong>
+            <span class="bold item-name ml-2">{{ item.nom }}</span>
             <span class="ml-auto text-small">{{ state == 'locked' ? 'À débloquer' : 'À découvrir' }}</span>
         </div>
         {{ include('parts/access-hint.html.twig') }}

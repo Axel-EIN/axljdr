@@ -25,6 +25,7 @@ a {
 .on-image {
     --color-link: var(--color-linkonimage);
     --color-link-hover: var(--color-linkonimage-hover);
+    --color-link-strong: var(--color-linkonimage);
 }
 
 .link-gm {

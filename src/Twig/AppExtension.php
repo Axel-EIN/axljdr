@@ -6,6 +6,7 @@ use App\Entity\Access;
 use App\Entity\Episode;
 use App\Entity\FactionType;
 use App\Entity\Monnaie;
+use App\Entity\Sort;
 use App\Entity\Status;
 use App\Service\CurrentPlayer;
 use App\Service\ElementUrl;
@@ -73,6 +74,7 @@ class AppExtension extends AbstractExtension
             new TwigFunction('element_key', [EntityRegistry::class, 'keyOf']),
             new TwigFunction('element_icon', [EntityRegistry::class, 'iconOf']),
             new TwigFunction('element_label', [EntityRegistry::class, 'labelOf']),
+            new TwigFunction('ring_icon', [Sort::class, 'ringIconOf']),
             new TwigFunction('element_url', [$this->elementUrl, 'of']),
             new TwigFunction('pdf_url', [$this->elementUrl, 'pdf']),
             new TwigFunction('part_links', [$this, 'partLinks']),

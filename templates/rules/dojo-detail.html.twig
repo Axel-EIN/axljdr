@@ -68,7 +68,7 @@
                 {% if attribute(dojo, 'tech' ~ i ~ 'Nom') is not empty %}
                     <div class="technique" id="technique-{{ i }}">
                         <div class="tech-rank"{% if clan %} style="color: {{ clan.couleur }}"{% endif %}>
-                            <strong>Rang</strong><br/>
+                            <span class="bold">Rang</span><br/>
                             <span class="number-skillrank-effect skill-rank-number">{{ i }}</span>
                         </div>
                         <div>

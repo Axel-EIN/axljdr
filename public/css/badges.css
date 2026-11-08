@@ -13,10 +13,10 @@
     vertical-align: baseline;
     border-radius: 0.25rem;
     transition:
-      color var(--duration) var(--ease),
-      background-color var(--duration) var(--ease),
-      border-color var(--duration) var(--ease),
-      box-shadow var(--duration) var(--ease);
+      color var(--motion),
+      background-color var(--motion),
+      border-color var(--motion),
+      box-shadow var(--motion);
     color: #fff;
 
     &.large {
@@ -91,7 +91,7 @@
 
     &.hover-only {
         opacity: 0;
-        transition: opacity var(--duration) var(--ease);
+        transition: opacity var(--motion-hover);
 
         :hover > &,
         a:hover & { opacity: 1; }
@@ -102,7 +102,7 @@
         background-color: rgb(from var(--color-blackonyx) r g b / 45%);
         backdrop-filter: blur(6px);
         box-shadow: 0 4px 12px var(--color-black50);
-        transition: border-color var(--duration) var(--ease);
+        transition: border-color var(--motion-hover);
 
         :hover > & { border-color: var(--color-white); }
     }

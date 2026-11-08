@@ -1,9 +1,47 @@
 /* --------- PAGE PERSONNAGES --------- */
 
 .character-card {
+  --ease: var(--ease-steady);
+  --duration: 0.15s;
+
   border: unset;
   border-radius: 0.5rem;
   transition: var(--duration) var(--ease);
+
+  .player-name {
+    margin-top: 0.25rem;
+    font-weight: 600;
+    color: var(--color-gray) !important;
+  }
+
+  .character-surname {
+    margin-top: 0.25rem;
+    font-weight: normal;
+    color: var(--color-grayash) !important;
+  }
+
+  .character-card-title-cartouche {
+    font-family: 'Amerigo';
+    font-size: var(--fontsize-regular);
+    padding: 0.5rem;
+    text-transform: uppercase;
+    background-color: var(--color-blacktar);
+    color: var(--color-fade);
+    margin-left: -1rem;
+    width: min-content;
+    position: relative;
+
+    &::after {
+      content: '';
+      position: absolute;
+      top: 100%;
+      left: 0;
+      width: 0.5rem;
+      height: 0.5rem;
+      background-color: color-mix(in srgb, var(--color-blacktar), black 40%);
+      clip-path: polygon(0 0, 100% 0, 100% 100%);
+    }
+  }
 
   .ratio-916 {
     border-radius: inherit;

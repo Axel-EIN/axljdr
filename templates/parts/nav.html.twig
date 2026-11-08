@@ -76,7 +76,7 @@
         </ul>
 
         {% if with_search %}
-          {{ include('parts/search-bar.html.twig', {variant: 'header d-none d-lg-flex mx-4'}) }}
+          {{ include('parts/search-bar.html.twig', {variant: 'in-header d-none d-lg-flex mx-4'}) }}
         {% endif %}
 
         {% if app.user %}
@@ -84,7 +84,7 @@
           <div id="user-zone" class="connected">
 
             <div class="user-infos">
-              <strong>{{ app.user.pseudo }}</strong>
+              <span class="bold">{{ app.user.pseudo }}</span>
 
               {% if main_character %}
                 <a class="main-character" href="{{ path('characters_profile', {id: main_character.id}) }}">

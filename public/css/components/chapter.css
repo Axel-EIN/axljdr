@@ -120,9 +120,18 @@
   }
 
   .chapter-location-icon {
+    --ease: var(--ease-steady);
+    --duration: 0.15s;
+
     width: 48px;
     height: 48px;
+    opacity: 0.4;
+    background-color: var(--color-black50);
+    object-fit: cover;
+    border-radius: 4px;
+    box-shadow: 8px 8px 16px var(--color-black25);
     filter: brightness(1);
+    transition: var(--duration) var(--ease);
   }
 }
 
@@ -173,15 +182,6 @@
   text-shadow: var(--shadow-text);
 }
 
-.chapter-portrait, .chapter-location-icon {
-  opacity: 0.4;
-  background-color: var(--color-black50);
-  object-fit: cover;
-  border-radius: 4px;
-  box-shadow: 8px 8px 16px var(--color-black25);
-  transition: var(--duration) var(--ease);
-}
-
 .chapter-portraits-grid {
   display: grid;
   grid-template-rows: repeat(4, 40px);
@@ -205,9 +205,18 @@
   }
 
   .chapter-portrait {
+    --ease: var(--ease-steady);
+    --duration: 0.15s;
+
     width: 40px;
     height: 40px;
+    opacity: 0.4;
+    background-color: var(--color-black50);
+    object-fit: cover;
+    border-radius: 4px;
+    box-shadow: 8px 8px 16px var(--color-black25);
     filter: grayscale(1) brightness(0.5);
+    transition: var(--duration) var(--ease);
     &.chapter-view { filter: brightness(1);}
     &.in-episode {
       opacity: 1;

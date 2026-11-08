@@ -197,7 +197,7 @@
     font-family: "Amerigo";
     font-size: var(--fontsize-base);
     cursor: pointer;
-    transition: background-color var(--duration) var(--ease), border-color var(--duration) var(--ease);
+    transition: background-color var(--motion-hover), border-color var(--motion-hover);
 
     i,
     svg {
@@ -362,7 +362,7 @@
     user-select: none;
     will-change: transform;
 
-    &.animated { transition: transform 0.6s ease; }
+    &.animated { transition: transform var(--motion); }
 
     .map-image {
       display: block;
@@ -505,7 +505,7 @@
     width: calc(var(--icon-base) * var(--icon-scale, 1));
     height: calc(var(--icon-base) * var(--icon-scale, 1));
     transform: translate(-50%, -50%) scale(var(--marker-scale, 1));
-    transition: transform var(--duration) var(--ease-bounce), width var(--duration) var(--ease), height var(--duration) var(--ease);
+    transition: transform var(--motion-bounce), width var(--motion), height var(--motion);
 
     &.city { --icon-base: 100px; }
     &.region { --icon-base: 110px; }
@@ -525,7 +525,7 @@
       object-fit: contain;
       filter: drop-shadow(0 0 6px rgba(0, 0, 0, 0.8)) drop-shadow(0 0 0 transparent);
       pointer-events: none;
-      transition: filter var(--duration) var(--ease);
+      transition: filter var(--motion-hover);
     }
 
     &.focused .location-marker-icon { animation: map-focus-pulse 1.6s ease-in-out 3; }
@@ -564,7 +564,7 @@
       color: var(--color-white50);
       font-size: var(--fontsize-bigger);
       font-weight: bold;
-      transition: border-color var(--duration) var(--ease), color var(--duration) var(--ease);
+      transition: border-color var(--motion-hover), color var(--motion-hover);
     }
 
     &:hover .other-location-unknown {
@@ -648,9 +648,9 @@
   white-space: nowrap;
   filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.85));
   pointer-events: none;
-  transition: gap var(--duration) var(--ease);
+  transition: gap var(--motion-hover);
 
-  > * { transition: opacity var(--duration) var(--ease); }
+  > * { transition: opacity var(--motion-hover); }
 
   &::before {
     content: '';
@@ -677,7 +677,7 @@
     border-block: 1px solid;
     border-image: linear-gradient(90deg, transparent, var(--map-label-color), transparent) 1;
     background-image: linear-gradient(90deg, transparent, rgba(20, 17, 17, 0.72) 20%, rgba(20, 17, 17, 0.72) 80%, transparent);
-    transition: opacity var(--duration) var(--ease);
+    transition: opacity var(--motion-hover);
   }
 
   .map-label-mon {
@@ -687,7 +687,7 @@
     border-radius: 50%;
     box-shadow: 0 0 0 1px var(--color-black50), 0 0 6px var(--color-black50);
     object-fit: contain;
-    transition: width var(--duration) var(--ease), height var(--duration) var(--ease), opacity var(--duration) var(--ease);
+    transition: width var(--motion-hover), height var(--motion-hover), opacity var(--motion-hover);
   }
 
   .map-label-name {
@@ -706,7 +706,7 @@
     color: rgba(255, 255, 255, 0.75);
     font-size: var(--fontsize-mini);
     line-height: var(--leading-1);
-    transition: max-height var(--duration) var(--ease), margin-top var(--duration) var(--ease), opacity var(--duration) var(--ease);
+    transition: max-height var(--motion-hover), margin-top var(--motion-hover), opacity var(--motion-hover);
   }
 
   &.compact {

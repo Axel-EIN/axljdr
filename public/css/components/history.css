@@ -1,45 +1,42 @@
 /* -------- HISTORIQUE -------- */
 
-.history-season {
-  display: flex;
-  align-items: center;
-  margin: 3rem -1rem 1.5rem;
-  padding: 0 1rem;
-  text-transform: uppercase;
-  background-color: var(--color-primarydarken);
+.history {
+  padding-bottom: 1.5rem;
 
-  &.first { margin-top: 0; }
+  .history-season {
+    margin: 3rem 0 1.5rem;
 
-  @media (max-width: 991.98px) { font-size: var(--fontsize-plus); }
-}
-
-.history-episode {
-  display: flex;
-  align-items: center;
-  margin: 1rem 0 0 1.5rem;
-
-  .chevron-toggle {
-    color: var(--color-strong);
-    font-weight: bold;
-
-    &:hover, &:focus { color: var(--color-link); }
+    &.first { margin-top: 0; }
   }
 
-  .history-number { font-weight: normal; }
-}
+  .history-episode {
+    display: flex;
+    align-items: center;
+    margin: 1rem 0 0 1.5rem;
 
-.history-xp {
-  color: var(--color-alternate);
-  font-weight: normal;
-}
+    .chevron-toggle {
+      color: var(--color-strong);
+      font-weight: bold;
 
-.history-scene {
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  gap: 0.5rem;
-  margin-left: 3rem;
-  padding-left: 0.25rem;
+      &:hover, &:focus { color: var(--color-link); }
+    }
 
-  @media (max-width: 991.98px) { margin-left: 1rem; }
+    .history-number { font-weight: normal; }
+  }
+
+  .history-xp {
+    color: var(--color-alternate);
+    font-weight: normal;
+  }
+
+  .history-scene {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 0.5rem;
+    margin-left: 3rem;
+    padding-left: 0.25rem;
+
+    @media (max-width: 991.98px) { margin-left: 1rem; }
+  }
 }

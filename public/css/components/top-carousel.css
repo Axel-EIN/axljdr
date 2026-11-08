@@ -1,0 +1,80 @@
+.top-carousel {
+  display: grid;
+
+  &:focus-visible { outline: 2px solid var(--color-primary); }
+
+  .top-carousel-slide {
+    grid-area: 1 / 1;
+    opacity: 0;
+    transition: opacity var(--duration) var(--ease);
+
+    &.active { opacity: 1; }
+  }
+
+  .top-carousel-btn {
+    position: absolute;
+    z-index: 5;
+    top: 50%;
+    padding: 0.5rem 0.75rem;
+    border: 0;
+    border-radius: 0.5rem;
+    background-color: var(--color-black50);
+    color: var(--color-white);
+    opacity: 0;
+    transform: translateY(-50%);
+    transition:
+      opacity var(--duration) var(--ease),
+      background-color var(--duration) var(--ease);
+
+    &:hover { background-color: var(--color-primary); }
+
+    &:focus-visible { opacity: 1; }
+
+    &:is(.top-carousel:hover *) { opacity: 1; }
+
+    &.prev { left: 1rem; }
+
+    &.next { right: 1rem; }
+
+    @media (hover: none) {
+      opacity: 1;
+    }
+  }
+
+  .top-carousel-dots {
+    position: absolute;
+    z-index: 5;
+    bottom: 1rem;
+    left: 50%;
+    display: flex;
+    gap: 0.75rem;
+    transform: translateX(-50%);
+
+    @media (max-width: 991.98px) {
+      top: 1rem;
+      bottom: auto;
+      left: 1rem;
+      transform: none;
+    }
+  }
+
+  .top-carousel-dot {
+    width: 0.75rem;
+    height: 0.75rem;
+    padding: 0;
+    border: 2px solid var(--color-white);
+    border-radius: 50%;
+    background-color: transparent;
+    box-shadow: 0 1px 3px var(--color-black50);
+    transition:
+      background-color var(--duration) var(--ease),
+      transform var(--duration) var(--ease);
+
+    &:hover { background-color: rgb(from var(--color-white) r g b / 40%); }
+
+    &.active {
+      background-color: var(--color-white);
+      transform: scale(1.3);
+    }
+  }
+}

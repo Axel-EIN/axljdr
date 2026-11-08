@@ -87,20 +87,20 @@
 
                         {% if app.request.get('subtab') == 'ENSEMBLE' %}
                             <div class="col-5"></div>
-                            <div class="col-1 text-center"><strong class="text-medium">{{item.ndArmure}}</strong></div>
-                            <div class="col-1 text-center"><strong class="text-medium">{{item.reduction}}</strong></div>
+                            <div class="col-1 text-center"><span class="bold text-medium">{{item.ndArmure}}</span></div>
+                            <div class="col-1 text-center"><span class="bold text-medium">{{item.reduction}}</span></div>
                         {% else %}
                             <div class="col-1"></div>
-                            <div class="col-2 text-center"><strong class="align-text-middle">{{item.taille}}</strong></div>
-                            <div class="col-2 text-center"><strong class="align-text-middle">{{item.poids}}</strong></div>
+                            <div class="col-2 text-center"><span class="bold align-text-middle">{{item.taille}}</span></div>
+                            <div class="col-2 text-center"><span class="bold align-text-middle">{{item.poids}}</span></div>
                             <div class="col-1 text-center">
-                                <strong class="text-medium text-dead">
+                                <span class="bold text-medium text-dead">
                                     {% if app.request.get('subtab') is defined and app.request.get('subtab') == 'ARC' %}
                                         {{item.forceArc}}
                                     {% else %}
                                         {{item.vd}}
                                     {% endif %}
-                                </strong>
+                                </span>
                             </div>
                             <div class="col-1 text-center">
                                     {% if app.request.get('subtab') is defined and app.request.get('subtab') == 'ARC' and item.forceArc is defined and item.forceArc is not empty %}

@@ -726,7 +726,7 @@
 
     }
 
-    :is(.labels-hidden, .zoomed-out:not(.labels-shown)) .other-location-marker:not(:hover) & {
+    .labels-hidden .other-location-marker:not(:hover) & {
       &::after,
       > * { opacity: 0; }
     }

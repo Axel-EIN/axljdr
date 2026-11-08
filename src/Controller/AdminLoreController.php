@@ -21,7 +21,7 @@ class AdminLoreController extends AbstractController
 
     /**
      * @Route("/admin/lore", name="admin_lore")
-     * @IsGranted("ROLE_MJ")
+     * @IsGranted("ROLE_GM")
      */
     public function viewAdminLores(LoreRepository $loreRepository): Response
     {
@@ -52,7 +52,7 @@ class AdminLoreController extends AbstractController
 
     /**
      * @Route("/admin/lore/create", name="admin_lore_create")
-     * @IsGranted("ROLE_MJ")
+     * @IsGranted("ROLE_GM")
      */
     public function addLore(Request $request, EntityManagerInterface $em, FileHandler $fileHandler, LoreRepository $loreRepository, Orderer $orderer, Unlocker $unlocker): Response
     {
@@ -100,7 +100,7 @@ class AdminLoreController extends AbstractController
 
     /**
      * @Route("/admin/lore/{id}/edit", name="admin_lore_edit")
-     * @IsGranted("ROLE_MJ")
+     * @IsGranted("ROLE_GM")
      */
     public function editLore(Request $request, Lore $lore, FileHandler $fileHandler, LoreRepository $loreRepository, Orderer $orderer, Unlocker $unlocker): Response
     {
@@ -155,7 +155,7 @@ class AdminLoreController extends AbstractController
 
     /**
      * @Route("/admin/lore/{id}/delete", name="admin_lore_delete", methods={"POST"})
-     * @IsGranted("ROLE_MJ")
+     * @IsGranted("ROLE_GM")
      */
     public function deleteLore(Request $request, Lore $lore, FileHandler $fileHandler, EntityManagerInterface $em, LoreRepository $loreRepository, Orderer $orderer, Unlocker $unlocker): Response
     {

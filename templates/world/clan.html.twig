@@ -159,6 +159,14 @@
         empty_message: "Il n'y a pas encore de personnage rattaché à ce clan.",
     }) }}
 
+    {{ include('/parts/picture-grid.html.twig', {
+        title: 'Autres Clans',
+        variant: 'emblem',
+        items: all_clans|filter(other => other.id != clan.id), route: 'world_clan',
+        na_image: NA_MON,
+        per_row: {desktop: 8, mobile: 3},
+    }) }}
+
 {% endblock %}
 
 {% block javascripts %}

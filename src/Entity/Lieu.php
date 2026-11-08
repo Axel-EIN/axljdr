@@ -50,6 +50,11 @@ class Lieu
   private $image;
 
   /**
+   * @ORM\Column(type="json", nullable=true)
+   */
+  private $gallery = [];
+
+  /**
    * @ORM\Column(type="string", length=255, nullable=true)
    */
   private $planMap;
@@ -149,6 +154,23 @@ class Lieu
     $this->image = $image;
 
     return $this;
+  }
+
+  public function getGallery(): array
+  {
+    return $this->gallery ?? [];
+  }
+
+  public function setGallery(array $gallery): self
+  {
+    $this->gallery = array_values($gallery);
+
+    return $this;
+  }
+
+  public function getSlides(): array
+  {
+    return array_values(array_filter(array_merge([$this->image], $this->getGallery())));
   }
 
   public function getPlanMap(): ?string

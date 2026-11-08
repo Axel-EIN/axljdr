@@ -21,7 +21,7 @@ class AdminClanController extends AbstractController
 
     /**
      * @Route("/admin/clan", name="admin_clan")
-     * @IsGranted("ROLE_MJ")
+     * @IsGranted("ROLE_GM")
      */
     public function viewAdminClans(ClanRepository $clanRepository): Response
     {
@@ -54,7 +54,7 @@ class AdminClanController extends AbstractController
 
     /**
      * @Route("/admin/clan/create", name="admin_clan_create")
-     * @IsGranted("ROLE_MJ")
+     * @IsGranted("ROLE_GM")
      */
     public function addClan(Request $request, EntityManagerInterface $em, FileHandler $fileHandler, Unlocker $unlocker) {
 
@@ -108,7 +108,7 @@ class AdminClanController extends AbstractController
 
     /**
      * @Route("/admin/clan/{id}/edit", name="admin_clan_edit")
-     * @IsGranted("ROLE_MJ")
+     * @IsGranted("ROLE_GM")
      */
     public function editClan(Request $request, Clan $clan, FileHandler $fileHandler, Unlocker $unlocker): Response {
 
@@ -166,7 +166,7 @@ class AdminClanController extends AbstractController
 
     /**
      * @Route("/admin/clan/{id}/delete", name="admin_clan_delete", methods={"POST"})
-     * @IsGranted("ROLE_MJ")
+     * @IsGranted("ROLE_GM")
      */
     public function deleteClan(Request $request, Clan $clan, FileHandler $fileHandler, Unlocker $unlocker, DeletionGuard $deletionGuard): Response {
 

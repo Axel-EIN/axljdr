@@ -6,7 +6,7 @@
   .top-carousel-slide {
     grid-area: 1 / 1;
     opacity: 0;
-    transition: opacity var(--duration) var(--ease);
+    transition: opacity var(--motion);
 
     &.active { opacity: 1; }
   }
@@ -23,8 +23,8 @@
     opacity: 0;
     transform: translateY(-50%);
     transition:
-      opacity var(--duration) var(--ease),
-      background-color var(--duration) var(--ease);
+      opacity var(--motion-hover),
+      background-color var(--motion-hover);
 
     &:hover { background-color: var(--color-primary); }
 
@@ -67,8 +67,8 @@
     background-color: transparent;
     box-shadow: 0 1px 3px var(--color-black50);
     transition:
-      background-color var(--duration) var(--ease),
-      transform var(--duration) var(--ease);
+      background-color var(--motion-hover),
+      transform var(--motion);
 
     &:hover { background-color: rgb(from var(--color-white) r g b / 40%); }
 

@@ -5,6 +5,8 @@
   padding-top: 8px;
   padding-bottom: 8px;
   margin-bottom: 1rem;
+  display: flex;
+  flex-direction: column;
 
   @media (max-width: 991.98px) {
     max-width: 420px;
@@ -35,19 +37,13 @@
     background-color: #FFFFFF10;
     box-shadow: 0px -4px 16px var(--color-black25);
     backdrop-filter: blur(4px);
+    flex: 1;
     min-width: 265px;
     min-height: 336px;
-    max-height: 336px;
     border: 0;
 
-    .card-number {
-      position: absolute;
-      z-index: 10;
-      top: 72px;
-      left: 12px;
-      color: var(--color-white);
-      font-size: var(--fontsize-huge);
-      font-weight: bold;
+    @media (max-width: 991.98px) {
+      min-height: auto;
     }
 
     .image-container {
@@ -56,6 +52,28 @@
       background-color: var(--color-black);
       overflow: hidden;
       display: flex;
+
+      @media (max-width: 991.98px) {
+        height: 90px;
+      }
+
+      .card-number {
+        position: absolute;
+        z-index: 10;
+        bottom: 2.5rem;
+        left: 12px;
+        color: var(--color-white);
+        font-size: var(--fontsize-huge);
+        font-weight: bold;
+        line-height: 1;
+
+        @media (max-width: 991.98px) {
+          top: 50%;
+          bottom: auto;
+          left: 1rem;
+          transform: translateY(-50%);
+        }
+      }
 
       .card-image {
         width: 100%;
@@ -73,7 +91,10 @@
       position: relative;
       padding: 0.75rem;
       min-height: 120px;
-      max-height: 120px;
+
+      @media (max-width: 991.98px) {
+        min-height: 72px;
+      }
 
       .card-title-cartouche {
         position: absolute;
@@ -105,26 +126,6 @@
       margin-top: auto;
       margin-bottom: 0.5rem;
       align-self: center;
-    }
-
-    @media (max-width: 991.98px) {
-      --episode-image-height: 90px;
-
-      min-height: auto;
-      max-height: none;
-
-      .image-container { height: var(--episode-image-height); }
-
-      .card-number {
-        top: calc(var(--episode-image-height) / 2);
-        left: 1rem;
-        transform: translateY(-50%);
-      }
-
-      .text-container {
-        min-height: 72px;
-        max-height: 72px;
-      }
     }
   }
 }

@@ -150,7 +150,7 @@ label.required::after {
   font-weight: 500 !important;
 }
 
-strong, .extrabold {
+strong, .bold, .extrabold {
   font-weight: 600 !important;
 }
 

@@ -101,6 +101,20 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
         $this->personnages = new ArrayCollection();
     }
 
+    public function __serialize(): array
+    {
+        return ['id' => $this->id, 'pseudo' => $this->pseudo, 'password' => $this->password, 'roles' => $this->roles];
+    }
+
+    public function __unserialize(array $data): void
+    {
+        foreach (['id', 'pseudo', 'password', 'roles'] as $field) {
+            $this->$field = $data[$field] ?? $data["\0" . self::class . "\0" . $field] ?? null;
+        }
+        $this->roles = $this->roles ?? [];
+        $this->personnages = new ArrayCollection();
+    }
+
     public function getId(): ?int
     {
         return $this->id;

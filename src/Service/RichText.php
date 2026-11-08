@@ -40,7 +40,7 @@ class RichText
                 '/(?<![\w*])\*(?=[^\s*])(.+?)(?<=[^\s*])\*(?![\w*])/u',
                 '/==(?=\S)(.+?)(?<=\S)==/u',
             ],
-            ['<strong><em>$1</em></strong>', '<strong>$1</strong>', '<em>$1</em>', '<mark>$1</mark>'],
+            ['<span class="bold"><em>$1</em></span>', '<span class="bold">$1</span>', '<em>$1</em>', '<mark>$1</mark>'],
             $text
         ));
     }

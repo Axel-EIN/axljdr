@@ -142,6 +142,7 @@ class AdminSceneController extends AbstractController
         $previousNumber = $scene->getNumero();
         $previousSiblingsId = $scene->getEpisodeParent()->getId();
         $previousLocation = $scene->getLieu();
+        $previousElements = $unlocker->sceneElements($scene);
         
         $allPcs  = $characterRepository->findAllPJsSorted();
         $allNpcs = $characterRepository->findAllPNJsSorted();
@@ -235,7 +236,7 @@ class AdminSceneController extends AbstractController
 
             $this->getDoctrine()->getManager()->flush();
 
-            $unlocker->syncScene($scene);
+            $unlocker->syncMeetings(array_merge($previousElements, $unlocker->sceneElements($scene), $added));
             $this->getDoctrine()->getManager()->flush();
 
             $this->flashClearedPositions($locator->clearFreePositions($scene, $previousLocation === $scene->getLieu() ? $added : null));
@@ -266,7 +267,7 @@ class AdminSceneController extends AbstractController
      * @Route("/admin/scene/{id}/delete", name="admin_scene_delete", methods={"POST"})
      * @IsGranted("ROLE_MJ")
      */
-    public function deleteScene(Request $request, Scene $scene, Orderer $orderer, SceneRepository $sceneRepository, FileHandler $fileHandler): Response {
+    public function deleteScene(Request $request, Scene $scene, Orderer $orderer, SceneRepository $sceneRepository, FileHandler $fileHandler, Unlocker $unlocker): Response {
         
         $episodeParent = $scene->getEpisodeParent();
 
@@ -280,7 +281,12 @@ class AdminSceneController extends AbstractController
             $previousSiblings = $sceneRepository->findBy(['episodeParent' => $previousSiblingsId]);
             $orderer->reorderNumber($scene->getId(), $scene->getNumero(), -1, $previousSiblings, []);
 
+            $elements = $unlocker->sceneElements($scene);
+
             $entityManager->remove($scene);
+            $entityManager->flush();
+
+            $unlocker->syncMeetings($elements);
             $entityManager->flush();
             $this->addFlash('success', 'La scène a bien été supprimée.');
         }

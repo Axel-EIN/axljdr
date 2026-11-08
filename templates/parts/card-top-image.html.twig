@@ -1,11 +1,26 @@
 {% set has_pdf = pdf_url is defined and pdf_url is not empty %}
 {% set show_button = pdf_button|default(false) or is_gm() %}
+{% set slides = gallery|default([]) %}
+{% set image = image|default(slides|first) %}
 
 <div class="gradient-after-down {{ classes|default('') }}">
   {% if has_pdf and not show_button and app.user %}
     <a href="{{ pdf_url }}" target="_blank" rel="noopener">
       <img class="img-fluid {{ img_class|default('') }}" src="{{ asset(image|default(NA_PDF)) }}" alt="{{ alt }}" />
     </a>
+  {% elseif slides|length > 1 %}
+    <div class="top-carousel" data-carousel tabindex="0" aria-roledescription="carrousel" aria-label="{{ alt }}">
+      {% for slide in slides %}
+        <img class="img-fluid {{ img_class|default('') }} top-carousel-slide{{ loop.first ? ' active' }}" src="{{ asset(slide) }}" alt="{{ alt }} ({{ loop.index }}/{{ slides|length }})" />
+      {% endfor %}
+      <button type="button" class="top-carousel-btn prev" data-carousel-prev aria-label="Image précédente"><i class="fas fa-chevron-left" aria-hidden="true"></i></button>
+      <button type="button" class="top-carousel-btn next" data-carousel-next aria-label="Image suivante"><i class="fas fa-chevron-right" aria-hidden="true"></i></button>
+      <div class="top-carousel-dots">
+        {% for slide in slides %}
+          <button type="button" class="top-carousel-dot{{ loop.first ? ' active' }}" data-carousel-to="{{ loop.index0 }}" aria-label="Image {{ loop.index }}"{% if loop.first %} aria-current="true"{% endif %}></button>
+        {% endfor %}
+      </div>
+    </div>
   {% else %}
     <img class="img-fluid {{ img_class|default('') }}" src="{{ asset(image|default(na_image)) }}" alt="{{ alt }}" />
   {% endif %}

@@ -88,7 +88,7 @@
                                 <a class="episode-row inverted" href="{{ path('story_episode', {id: episode.id}) }}">
                                     <span class="episode-number">#{{ episode.numeroSaison }}</span>
                                     <span class="episode-text">
-                                        <strong>{{ episode.titre }}</strong>
+                                        <span class="bold">{{ episode.titre }}</span>
                                         <span class="episode-sub">{{ episode.chapitreParent.titre }}</span>
                                     </span>
                                     {% set players = previous_players[episode.id]|default([]) %}
@@ -203,7 +203,7 @@
                                 {% if episode_totals %}<span class="episode-xp">{{ include('parts/xp-gain.html.twig', {xp: episode_totals.xp, total: episode_totals.xpWithBonus, sign: '+'}) }}</span>{% endif %}
                             </span>
                             <span class="episode-text">
-                                <strong>{{ episode.titre }}</strong>
+                                <span class="bold">{{ episode.titre }}</span>
                                 {% if scene.lieu %}<span class="episode-sub">{{ scene.lieu.nom }}</span>{% endif %}
                             </span>
                             <img class="episode-picture" src="{{ asset(image_small(episode.image|default(NA_SESSION))) }}" width="{{ episode_preset.width }}" height="{{ episode_preset.height }}" loading="lazy" alt="" />

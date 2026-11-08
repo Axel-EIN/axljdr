@@ -1,57 +1,59 @@
-{% for entry in history %}
-  {% set episode = entry.episode %}
-  {% set previous = loop.index0 > 0 ? history[loop.index0 - 1].episode : null %}
-  {% set chapter = episode.chapitreParent %}
-  {% set season = chapter.saisonParent %}
-  {% set new_season = previous is null or previous.chapitreParent.saisonParent.id != season.id %}
+<div class="history">
+  {% for entry in history %}
+    {% set episode = entry.episode %}
+    {% set previous = loop.index0 > 0 ? history[loop.index0 - 1].episode : null %}
+    {% set chapter = episode.chapitreParent %}
+    {% set season = chapter.saisonParent %}
+    {% set new_season = previous is null or previous.chapitreParent.saisonParent.id != season.id %}
 
-  {% if new_season %}
-    <h3 class="history-season{{ previous is null ? ' first' : '' }}">
-      <img class="img-48 mr-2" src="{{ asset(STORY_SEASON_ICO) }}" alt="" />
-      <span class="text-white">{{ season.numero == current_season|default(null) ? 'Saison en cours' : season.titre }}</span>
-    </h3>
-  {% endif %}
-
-  {% if previous is null or previous.chapitreParent.id != chapter.id %}
-    {% if not new_season %}<hr class="my-4 mx-n3">{% endif %}
-    <h4 class="ml-2 p-0">
-      <img class="img-36 invert mr-2" src="{{ asset(STORY_CHAPTER_ICO) }}" alt="" />
-      {{ chapter.titre }}
-    </h4>
-  {% endif %}
-
-  <h5 class="history-episode">
-    <a  class="chevron-toggle d-flex align-items-center flex-grow-1"
-        data-toggle="collapse" href="#episode{{ episode.id }}" role="button"
-        aria-expanded="false" aria-controls="episode{{ episode.id }}">
-      <img class="img-24 invert mr-2" src="{{ asset(STORY_EPISODE_ICO) }}" alt="" />
-      <span class="history-number text-muted mr-2">#{{ episode.numeroSaison }}</span>
-      {{ episode.titre }}
-      <i class="fas fa-chevron-down ml-2 text-small"></i>
-      {% if entry.xp > 0 %}
-        <span class="ml-auto text-nowrap history-xp">{{ include('parts/xp-gain.html.twig', {xp: entry.xp, total: entry.xpWithBonus, format: 'medium', sign: '+'}) }}</span>
-      {% endif %}
-    </a>
-    <a class="ml-2 mr-2 mr-lg-0 text-small" href="{{ path('story_episode', {id: episode.id}) }}" title="Voir l'épisode">
-      <i class="fas fa-external-link-alt"></i>
-    </a>
-  </h5>
-
-  <div id="episode{{ episode.id }}" class="collapse">
-    {% for line in entry.lines %}
-      <div class="history-scene">
-        <a class="link-strong" href="{{ path('story_episode', {id: episode.id, '_fragment': 'scn' ~ line.scene.numero}) }}">
-          Scène {{ line.scene.numero }} — <span class="bold">{{ line.scene.titre }}</span>
-        </a>
-
-        {% if line.dead %}
-          <span class="bold text-dead">MORT</span>
-        {% elseif line.xp > 0 %}
-          <span class="text-nowrap history-xp">
-            {{ include('parts/xp-gain.html.twig', {xp: line.xp, sign: '+'}) }}
-          </span>
-        {% endif %}
+    {% if new_season %}
+      <div class="history-season{{ previous is null ? ' first' : '' }}">
+        {{ include('/parts/divider-ornament.html.twig', {classes: 'my-2', ornament_size: 'small', ornament_icon: STORY_SEASON_ICO, ornament_invert: true}) }}
+        <h3 class="heading-section mt-1">{{ season.numero == current_season|default(null) ? 'Saison en cours' : season.titre }}</h3>
       </div>
-    {% endfor %}
-  </div>
-{% endfor %}
+    {% endif %}
+
+    {% if previous is null or previous.chapitreParent.id != chapter.id %}
+      {% if not new_season %}<hr class="my-4 mx-n3">{% endif %}
+      <h4 class="ml-2 p-0">
+        <img class="img-36 invert mr-2" src="{{ asset(STORY_CHAPTER_ICO) }}" alt="" />
+        {{ chapter.titre }}
+      </h4>
+    {% endif %}
+
+    <h5 class="history-episode">
+      <a  class="chevron-toggle d-flex align-items-center flex-grow-1"
+          data-toggle="collapse" href="#episode{{ episode.id }}" role="button"
+          aria-expanded="false" aria-controls="episode{{ episode.id }}">
+        <img class="img-24 invert mr-2" src="{{ asset(STORY_EPISODE_ICO) }}" alt="" />
+        <span class="history-number text-muted mr-2">#{{ episode.numeroSaison }}</span>
+        {{ episode.titre }}
+        <i class="fas fa-chevron-down ml-2 text-small"></i>
+        {% if entry.xp > 0 %}
+          <span class="ml-auto text-nowrap history-xp">{{ include('parts/xp-gain.html.twig', {xp: entry.xp, total: entry.xpWithBonus, format: 'medium', sign: '+'}) }}</span>
+        {% endif %}
+      </a>
+      <a class="ml-2 mr-2 mr-lg-0 text-small" href="{{ path('story_episode', {id: episode.id}) }}" title="Voir l'épisode">
+        <i class="fas fa-external-link-alt"></i>
+      </a>
+    </h5>
+
+    <div id="episode{{ episode.id }}" class="collapse">
+      {% for line in entry.lines %}
+        <div class="history-scene">
+          <a class="link-strong" href="{{ path('story_episode', {id: episode.id, '_fragment': 'scn' ~ line.scene.numero}) }}">
+            Scène {{ line.scene.numero }} — <span class="bold">{{ line.scene.titre }}</span>
+          </a>
+
+          {% if line.dead %}
+            <span class="bold text-dead">MORT</span>
+          {% elseif line.xp > 0 %}
+            <span class="text-nowrap history-xp">
+              {{ include('parts/xp-gain.html.twig', {xp: line.xp, sign: '+'}) }}
+            </span>
+          {% endif %}
+        </div>
+      {% endfor %}
+    </div>
+  {% endfor %}
+</div>

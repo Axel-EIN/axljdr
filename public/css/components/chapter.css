@@ -199,7 +199,6 @@
 
     &:hover .chapter-portrait {
       border-color: var(--color-primary, #fff);
-      transform: scale(1.1);
       opacity: 1;
     }
   }

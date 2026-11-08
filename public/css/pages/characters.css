@@ -34,10 +34,10 @@
     &::after {
       content: '';
       position: absolute;
-      top: 100%;
+      top: calc(100% - 1px);
       left: 0;
       width: 0.5rem;
-      height: 0.5rem;
+      height: calc(0.5rem + 1px);
       background-color: color-mix(in srgb, var(--color-blacktar), black 40%);
       clip-path: polygon(0 0, 100% 0, 100% 100%);
     }
@@ -236,7 +236,10 @@ main.container-fluid {
             --cols: var(--col-xl-2-per-row);
             --track-spacing: 0.5rem;
 
-            &.compact { --track-spacing: 0.25rem; }
+            &.compact {
+                --track-spacing: 0.25rem;
+                --track-spacing-start: -0.5rem;
+            }
 
             @media (max-width: 1199.98px) { --cols: var(--col-lg-3-per-row); }
         }

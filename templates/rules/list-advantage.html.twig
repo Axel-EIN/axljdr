@@ -33,6 +33,7 @@
                 <div class="item-line">
                     {{ include('parts/badge-access.html.twig', {state: element_state(item), variant: 'inline'}) }}
                     <strong class="item-name">{{ item.nom }}</strong>
+                    {% if element_fresh(item) %}{{ include('parts/badge-new.html.twig', {variant: 'inline'}) }}{% endif %}
                     {% if item.exclusive %}
                         <div class="ml-2">
                             <span class="badge badge-secondary">{{item.exclusive.nom}}</span>

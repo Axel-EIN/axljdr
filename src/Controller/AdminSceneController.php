@@ -34,7 +34,7 @@ class AdminSceneController extends AbstractController
 
     /**
      * @Route("/admin/scene", name="admin_scene")
-     * @IsGranted("ROLE_MJ")
+     * @IsGranted("ROLE_GM")
      */
     public function viewAdminScenes(SceneRepository $sceneRepository): Response
     {
@@ -61,7 +61,7 @@ class AdminSceneController extends AbstractController
 
     /**
      * @Route("/admin/scene/create", name="admin_scene_create")
-     * @IsGranted("ROLE_MJ")
+     * @IsGranted("ROLE_GM")
      */
     public function addScene(Request $request, EntityManagerInterface $em, FileHandler $fileHandler, NameTagger $nameTagger,
                             ParticipationHandler $participationHandler, PersonnageRepository $characterRepository,
@@ -133,7 +133,7 @@ class AdminSceneController extends AbstractController
 
     /**
      * @Route("/admin/scene/{id}/edit", name="admin_scene_edit")
-     * @IsGranted("ROLE_MJ")
+     * @IsGranted("ROLE_GM")
      */
     public function editScene(Request $request, Scene $scene, FileHandler $fileHandler, Orderer $orderer, NameTagger $nameTagger,
                                 ParticipationHandler $participationHandler, PersonnageRepository $characterRepository,
@@ -265,7 +265,7 @@ class AdminSceneController extends AbstractController
 
     /**
      * @Route("/admin/scene/{id}/delete", name="admin_scene_delete", methods={"POST"})
-     * @IsGranted("ROLE_MJ")
+     * @IsGranted("ROLE_GM")
      */
     public function deleteScene(Request $request, Scene $scene, Orderer $orderer, SceneRepository $sceneRepository, FileHandler $fileHandler, Unlocker $unlocker): Response {
         

@@ -99,6 +99,10 @@ class Participation
 
     public function setEstMort(bool $estMort): self
     {
+        if ($estMort && !$this->estMort) {
+            $this->personnage?->setStatus(Status::DEAD);
+        }
+
         $this->estMort = $estMort;
 
         return $this;

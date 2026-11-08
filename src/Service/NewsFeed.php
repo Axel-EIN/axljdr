@@ -20,7 +20,6 @@ class NewsFeed
     private $participationRepository;
     private $characterRepository;
     private $xpRanker;
-    private $currentChapter;
 
     public function __construct(
         EntityManagerInterface $entityManager,
@@ -29,8 +28,7 @@ class NewsFeed
         EpisodeRepository $episodeRepository,
         ParticipationRepository $participationRepository,
         PersonnageRepository $characterRepository,
-        XpRanker $xpRanker,
-        CurrentChapter $currentChapter
+        XpRanker $xpRanker
     ) {
         $this->entityManager = $entityManager;
         $this->currentPlayer = $currentPlayer;
@@ -39,7 +37,6 @@ class NewsFeed
         $this->participationRepository = $participationRepository;
         $this->characterRepository = $characterRepository;
         $this->xpRanker = $xpRanker;
-        $this->currentChapter = $currentChapter;
     }
 
     public function generalRanking(): array
@@ -158,21 +155,17 @@ class NewsFeed
         return $qb->getQuery()->getResult();
     }
 
-    public function chapterCharacters(bool $pc, int $limit): array
+    public function freshPlayersThenOthers(int $limit): array
     {
-        $chapter = $this->currentChapter->lastEpisode()?->getChapitreParent();
+        $players = array_filter(
+            $this->latest('character', $limit, ['estPj' => true]),
+            fn ($character) => $this->visibility->isFresh($character)
+        );
+        $others = $this->visibility->listedOnly(
+            $this->latestPublished(Personnage::class, 'e.estPj = :estPj', ['estPj' => false])
+        );
 
-        if ($chapter === null) {
-            return [];
-        }
-
-        $characters = [];
-        foreach ($this->participationRepository->findInChapter($chapter, $pc) as $participation) {
-            $character = $participation->getPersonnage();
-            $characters[$character->getId()] ??= $character;
-        }
-
-        return array_slice($this->visibility->listedOnly($characters), 0, $limit);
+        return array_slice(array_merge($players, $others), 0, $limit);
     }
 
     public function latestAmong(array $keys, int $limit, array $criteria = []): array

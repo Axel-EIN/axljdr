@@ -70,7 +70,7 @@ button {
   font-weight: bold;
   color: var(--color-white);
 
-  &:hover, &:active, &:target {
+  &:hover, &:active, &:target, a:is(:hover, :focus-visible) > & {
     filter: contrast(200%) saturate(0%);
     color: var(--color-white);
     text-decoration: none;

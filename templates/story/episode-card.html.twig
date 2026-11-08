@@ -11,9 +11,9 @@
         {% set played = episode_totals[episode.id] %}
         <div class="character-box">
           {% if played.dead == 1 %}
-            <strong class="text-dead">MORT</strong>
+            <span class="bold text-dead">MORT</span>
           {% elseif played.xp != 0 %}
-            <strong class="text-your-xp">{{ include('parts/xp-gain.html.twig', {xp: played.xp, total: played.xpWithBonus, sign: '+'}) }}</strong>
+            <span class="bold text-your-xp">{{ include('parts/xp-gain.html.twig', {xp: played.xp, total: played.xpWithBonus, sign: '+'}) }}</span>
           {% endif %}
           <a href="{{ path('characters_profile', {id: played.id}) }}">
             <img class="character-portrait medium outlined {% if played.dead == 1 %}effect-dead{% elseif played.xp == 0 %}grayscale{% else %}hover-shine{% endif %}"
@@ -26,12 +26,12 @@
 
   <a class="card-inner" href="{{ path('story_episode', {id:episode.id} ) }}">
     {% if element_fresh(episode) %}{{ include('parts/badge-new.html.twig') }}{% endif %}
-    <span class="card-number"><span class="text-big">#</span>{{ episode.numeroSaison }}</span>
     {% set episode_image = episode.image|default(NA_SESSION) %}
     {% set episode_srcset = image_srcset(episode_image) %}
     {% set episode_preset = image_preset('landscape720') %}
 
     <div class="image-container gradient-after-down">
+      <span class="card-number"><span class="text-big">#</span>{{ episode.numeroSaison }}</span>
       <img class="card-image" src="{{ asset(episode_image) }}"
         {% if episode_srcset %}
           srcset="{{ episode_srcset }}"

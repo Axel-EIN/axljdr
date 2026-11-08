@@ -232,7 +232,7 @@
         {% else %}
             <div class="card card-body ranking-card">
                 <h3 class="label-amerigo news-subtitle">Classement Général</h3>
-                {{ include('/news/ranking.html.twig', {items: general_ranking}) }}
+                {{ include('/news/ranking.html.twig', {items: general_ranking, size: 'large'}) }}
             </div>
         {% endif %}
 
@@ -245,10 +245,21 @@
         <div class="news-board">
             {% for group in groups %}
                 {% set group_image = group.image|default(null) %}
-                <div class="card card-body news-group{{ group.large|default(false) ? ' large' }}{{ group_image ? ' illustrated' }}"{% if group_image %} style="--group-image: url('{{ asset(group_image) }}')"{% endif %}>
+                <div class="card card-body news-group{{ group.large|default(false) ? ' large' }}{{ group_image ? ' illustrated' }}"{% if group_image %}{% set group_color = image_color(group_image) %} style="--group-image: url('{{ asset(group_image) }}'){{ group_color ? '; --group-color: ' ~ group_color }}"{% endif %}>
                     <div class="news-group-head">
-                        <h3 class="label-amerigo news-subtitle">{% if group.icon is defined %}<i class="fa-solid {{ group.icon }}" aria-hidden="true"></i> {% endif %}{{ group.title }}</h3>
-                        {% if group.link is defined %}
+                        <h3 class="label-amerigo news-subtitle">{% if group.icon is defined %}<i class="{{ group.icon_style|default('fa-solid') }} {{ group.icon }}" aria-hidden="true"></i> {% endif %}{{ group.title }}</h3>
+                        {% if group.link.segments is defined %}
+                            <span class="news-group-link phrase">
+                                {%- for segment in group.link.segments -%}
+                                    {%- if segment is iterable -%}
+                                        <a href="{{ path(segment.route, segment.params|default({})) }}">{{ segment.label }}</a>
+                                    {%- else -%}
+                                        {{ segment }}
+                                    {%- endif -%}
+                                {%- endfor -%}
+                                <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+                            </span>
+                        {% elseif group.link is defined %}
                             <a class="news-group-link" href="{{ path(group.link.route, group.link.params|default({})) }}">
                                 {{ group.link.label }}<i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
                             </a>
@@ -263,7 +274,7 @@
                                         items: section.elements,
                                         keep_order: section.pools is defined,
                                         badge_hover: true,
-                                        variant: group.variant|default('landscape'),
+                                        variant: section.variant|default(group.variant|default('landscape')),
                                         field: group.field|default(null),
                                         per_row: group.large|default(false) ? {desktop: section.max, tablet: 5, mobile: 3} : section.max,
                                         label_soft: group_image is not null,
@@ -278,10 +289,12 @@
                             badge_hover: true,
                             variant: group.variant|default('landscape'),
                             hint_block: group.variant|default(null) == 'portrait',
+                            hint_above: true,
                             field: group.field|default(null),
                             per_row: group.perRow,
                             keep_order: group.keepOrder,
                             mark_players: group.characters|default(false),
+                            label_soft: group_image is not null and group.variant|default(null) != 'portrait',
                             wrapper: 'compact',
                         }) }}
                     {% endif %}
@@ -297,9 +310,11 @@
             {% endif %}
 
             {% if secrets_locked %}
-                <div class="card card-body news-group{{ secrets_large ? ' large' }} locked">
+                <div class="news-group{{ secrets_large ? ' large' }} locked">
+                    <div class="news-lock-line">
+                        <img class="news-lock animation-float" src="{{ asset(LOCKED_ICO) }}" alt="Cadenas" />
+                    </div>
                     <h3 class="label-amerigo news-subtitle">Secrets</h3>
-                    <img class="news-lock fa-beat-fade" src="{{ asset(LOCKED_ICO) }}" alt="Cadenas" />
                     {% if app.user %}
                         <p>Les secrets de votre personnage apparaîtront ici.</p>
                     {% else %}

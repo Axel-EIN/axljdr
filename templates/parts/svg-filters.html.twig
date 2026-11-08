@@ -1,0 +1,11 @@
+<svg class="svg-filters" aria-hidden="true" focusable="false">
+    <filter id="filter-ring-light" color-interpolation-filters="sRGB">
+        <feColorMatrix in="SourceGraphic" type="matrix" values="-1 0 0 0 1  0 -1 0 0 1  0 0 -1 0 1  0 0 0 1 0" result="inverted" />
+        <feColorMatrix in="SourceGraphic" type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  4 -4 0 0 0" result="accent" />
+        <feComposite in="accent" in2="SourceAlpha" operator="in" result="accent-masked" />
+        <feMerge>
+            <feMergeNode in="inverted" />
+            <feMergeNode in="accent-masked" />
+        </feMerge>
+    </filter>
+</svg>

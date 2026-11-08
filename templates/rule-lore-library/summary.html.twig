@@ -9,7 +9,7 @@
 
 {% if items|length > 1 %}
   <div id="table-of-contents" class="blur-cartouche summary d-none d-lg-flex">
-    <strong>SOMMAIRE</strong>
+    <span class="bold">SOMMAIRE</span>
     {% for item in items %}
       <a class="list-group-item list-group-item-action" href="{{ item.path }}">{{ item.label }}</a>
     {% endfor %}

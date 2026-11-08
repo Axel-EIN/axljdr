@@ -1,12 +1,9 @@
 /* --------- PAGE PERSONNAGES --------- */
 
 .character-card {
-  --ease: var(--ease-steady);
-  --duration: 0.15s;
-
   border: unset;
   border-radius: 0.5rem;
-  transition: var(--duration) var(--ease);
+  transition: var(--motion-hover);
 
   .player-name {
     margin-top: 0.25rem;
@@ -49,7 +46,7 @@
   }
 
   &.locked {
-    .icon-lock { transition: filter var(--duration) var(--ease); }
+    .icon-lock { transition: filter var(--motion-hover); }
 
     &:hover .icon-lock { filter: grayscale(1) opacity(0); }
   }

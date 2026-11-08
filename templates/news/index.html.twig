@@ -245,7 +245,7 @@
         <div class="news-board">
             {% for group in groups %}
                 <div class="card card-body news-group{{ group.large|default(false) ? ' large' }}">
-                    <h3 class="label-amerigo news-subtitle">{{ group.title }}</h3>
+                    <h3 class="label-amerigo news-subtitle">{% if group.icon is defined %}<i class="fa-solid {{ group.icon }}" aria-hidden="true"></i> {% endif %}{{ group.title }}</h3>
                     {% if group.sections is defined %}
                         <div class="news-sections">
                             {% for section in group.sections %}

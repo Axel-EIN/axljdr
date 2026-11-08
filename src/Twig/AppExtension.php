@@ -72,6 +72,7 @@ class AppExtension extends AbstractExtension
             new TwigFunction('element_sort', [$this->visibility, 'sortByAccess']),
             new TwigFunction('element_key', [EntityRegistry::class, 'keyOf']),
             new TwigFunction('element_icon', [EntityRegistry::class, 'iconOf']),
+            new TwigFunction('element_label', [EntityRegistry::class, 'labelOf']),
             new TwigFunction('element_url', [$this->elementUrl, 'of']),
             new TwigFunction('pdf_url', [$this->elementUrl, 'pdf']),
             new TwigFunction('part_links', [$this, 'partLinks']),
@@ -193,19 +194,19 @@ class AppExtension extends AbstractExtension
         $html = '';
 
         if ( $remainder >= Monnaie::ZENI_PAR_KOKU  ) {
-            $html = '<strong class="text-medium">' . floor($remainder / Monnaie::ZENI_PAR_KOKU) . '</strong>'
+            $html = '<span class="bold text-medium">' . floor($remainder / Monnaie::ZENI_PAR_KOKU) . '</span>'
                   . '<img class="ml-1 img-24 align-text-bottom" src="/assets/icons/money/koku.png" alt="image pièce koku" title="Koku" /><br>';
             $remainder = $remainder % Monnaie::ZENI_PAR_KOKU;
         }
 
         if ( $remainder >= Monnaie::ZENI_PAR_BU ) {
-            $html = $html . '<strong class="align-middle">' . floor($remainder / Monnaie::ZENI_PAR_BU) . '</strong>'
+            $html = $html . '<span class="bold align-middle">' . floor($remainder / Monnaie::ZENI_PAR_BU) . '</span>'
                           . '<img class="ml-1 img-18 align-middle" src="/assets/icons/money/bu.png" alt="image pièce bu" title="Bu" /><br>';
             $remainder = $remainder % Monnaie::ZENI_PAR_BU;
         }
 
         if ( $remainder > 0 ) {
-            $html = $html . '<strong class="text-small align-middle">' . $remainder . '</strong>'
+            $html = $html . '<span class="bold text-small align-middle">' . $remainder . '</span>'
                           . '<img class="ml-1 img-14 align-middle" src="/assets/icons/money/zeni.png" alt="image pièce zeni" title="Zeni" />';
         }
     

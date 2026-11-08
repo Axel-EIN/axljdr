@@ -24,7 +24,8 @@ class LieuRepository extends ServiceEntityRepository
     public function findAllSorted()
     {
         return $this->orderByFaction($this->createQueryBuilder('l')
-            ->leftJoin('l.clan', 'c'))
+            ->leftJoin('l.clan', 'c')
+            ->addSelect('c'))
             ->getQuery()
             ->getResult();
     }

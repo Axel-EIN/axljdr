@@ -237,6 +237,11 @@ class Objet
         return $this->image;
     }
 
+    public function getImageAffichee(): ?string
+    {
+        return $this->icon ?: $this->image;
+    }
+
     public function setImage(?string $image): self
     {
         $this->image = $image;

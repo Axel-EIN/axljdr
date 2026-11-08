@@ -1,5 +1,5 @@
 {% for i in 1..5 %}
-  {% set filled = record is not empty and attribute(record, 'part' ~ i) is not empty %}
+  {% set filled = record is not empty and (attribute(record, 'part' ~ i) is not empty or record.partLinks(i) is not empty) %}
 
   <section id="part{{ i }}" class="col-12 mt-5">
     <a class="w-100" data-toggle="collapse" href="#part{{ i }}collapse" role="button" aria-expanded="{{ filled ? 'true' : 'false' }}" aria-controls="part{{ i }}collapse">
@@ -11,6 +11,7 @@
       <div class="col-12">{{ form_row(attribute(form, 'part' ~ i ~ 'titre')) }}</div>
       <div class="col-8">{{ form_row(attribute(form, 'part' ~ i), {'attr': {'rows': '20'}}) }}</div>
       <div class="col-4">{{ form_row(attribute(form, 'part' ~ i ~ 'aside'), {'attr': {'rows': '20'}}) }}</div>
+      <div class="col-12">{{ form_row(attribute(form, 'part' ~ i ~ 'links')) }}</div>
     </div>
   </section>
 {% endfor %}

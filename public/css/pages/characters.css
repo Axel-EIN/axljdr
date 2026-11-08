@@ -38,6 +38,12 @@
       background-color: color-mix(in srgb, var(--color-blacktar), black 40%);
       clip-path: polygon(0 0, 100% 0, 100% 100%);
     }
+
+    &:last-child { margin-bottom: 0.5rem; }
+
+    @media (max-width: 575.98px) {
+      margin-bottom: 0.5rem;
+    }
   }
 
   .ratio-916 {

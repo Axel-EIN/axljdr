@@ -80,6 +80,7 @@
                         <div class="col-4 text-left">
                             {{ include('parts/badge-access.html.twig', {state: element_state(item), variant: 'inline'}) }}
                             <a class="item-name extrabold mr-1" href="{{ path('rules_object', {id: item.id}) }}">{{ item.nom }}</a>
+                            {% if element_fresh(item) %}{{ include('parts/badge-new.html.twig', {variant: 'inline'}) }}{% endif %}
                             <span class="badge badge-secondary">{{item.motCle1}}</span>
                             <span class="badge badge-secondary">{{item.motCle2}}</span>
                         </div>

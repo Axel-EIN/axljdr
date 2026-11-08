@@ -1,12 +1,14 @@
 <?php
 namespace App\Service;
 
+use App\Entity\Episode;
 use App\Entity\Lieu;
 use App\Entity\Participation;
 use App\Entity\Personnage;
 use App\Entity\Scene;
 use App\Repository\FichePersonnageRepository;
 use App\Repository\LieuRepository;
+use App\Repository\PersonnageRepository;
 use App\Repository\ParticipationRepository;
 use Doctrine\ORM\EntityManagerInterface;
 
@@ -17,16 +19,18 @@ class Locator
     private $visibility;
     private $entityManager;
     private $locationRepository;
+    private $characterRepository;
     private $journeys;
     private $wanderers;
 
-    public function __construct(ParticipationRepository $participationRepository, FichePersonnageRepository $sheetRepository, Visibility $visibility, EntityManagerInterface $entityManager, LieuRepository $locationRepository)
+    public function __construct(ParticipationRepository $participationRepository, FichePersonnageRepository $sheetRepository, Visibility $visibility, EntityManagerInterface $entityManager, LieuRepository $locationRepository, PersonnageRepository $characterRepository)
     {
         $this->participationRepository = $participationRepository;
         $this->sheetRepository = $sheetRepository;
         $this->visibility = $visibility;
         $this->entityManager = $entityManager;
         $this->locationRepository = $locationRepository;
+        $this->characterRepository = $characterRepository;
     }
 
     public function positions(): array
@@ -187,24 +191,39 @@ class Locator
         }
 
         $this->journeys = [];
-        foreach ($this->participationRepository->findPlacedForLivingPlayers() as $participation) {
-            $character = $participation->getPersonnage();
-            $scene = $participation->getScene();
+        $paths = $this->participationRepository->findPlacedPathsForLivingPlayers();
+        $characters = $this->indexById($this->characterRepository->findWithSheet(array_column($paths, 'character')));
+        $locations = $this->indexById($this->locationRepository->findBy(['id' => array_unique(array_column($paths, 'location'))]));
+        $episodes = $this->indexById($this->entityManager->getRepository(Episode::class)->findBy(['id' => array_unique(array_column($paths, 'episode'))]));
 
-            if (!$this->visibility->isReadable($scene->getEpisodeParent()) || !$this->visibility->isListed($character)) {
+        foreach ($paths as $path) {
+            $character = $characters[$path['character']];
+            $location = $locations[$path['location']];
+
+            if (!$this->visibility->isReadable($episodes[$path['episode']]) || !$this->visibility->isListed($character)) {
                 continue;
             }
 
             $id = $character->getId();
-            $locations = $this->journeys[$id]['locations'] ?? [];
-            $last = end($locations);
+            $visited = $this->journeys[$id]['locations'] ?? [];
+            $last = end($visited);
 
             $this->journeys[$id]['character'] = $character;
-            if ($last === false || $last->getId() !== $scene->getLieu()->getId()) {
-                $this->journeys[$id]['locations'][] = $scene->getLieu();
+            if ($last === false || $last->getId() !== $location->getId()) {
+                $this->journeys[$id]['locations'][] = $location;
             }
         }
 
         return $this->journeys;
+    }
+
+    private function indexById(array $entities): array
+    {
+        $indexed = [];
+        foreach ($entities as $entity) {
+            $indexed[$entity->getId()] = $entity;
+        }
+
+        return $indexed;
     }
 }

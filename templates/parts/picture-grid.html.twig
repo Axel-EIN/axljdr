@@ -38,7 +38,7 @@
       <div class="card card-body">
         {% if btn_add is defined %}{{ include('/btns/btn-add-element.html.twig', btn_add, with_context = false) }}{% endif %}
         <h2 class="heading-cardtitle">{{ title }}</h2>
-        <hr>
+        <hr class="mb-4">
   {% endif %}
 
   {% set wrapper_class = title is not defined ? wrapper|default('') : '' %}

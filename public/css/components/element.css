@@ -82,13 +82,18 @@
   color: var(--color-white);
 }
 
-@media (max-width: 991.98px) {
-  .element-page:has(.card-top-title) > .container > section > h1 {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    overflow: hidden;
-    clip-path: inset(50%);
+.element-page:has(.card-top-title) > .container > section > h1 {
+  @media (max-width: 991.98px) {
+    height: 0;
+    margin: 0;
+
+    > strong {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip-path: inset(50%);
+    }
   }
 }
 

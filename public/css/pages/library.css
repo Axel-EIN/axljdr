@@ -85,6 +85,7 @@
 .item-description {
     text-align: justify;
     color: var(--color-gray);
+    font-weight: normal;
 }
 
 #effects-reminder {

@@ -121,7 +121,7 @@
 
                         <a class="session-link" href="{{ path('story_season', {id: season.id}) }}#read-head-ch-id{{ chapter.id }}">
                             <img src="{{ asset(STORY_CHAPTER_ICO) }}" alt="Icône de chapitre" />
-                            <span>Chapitre {{ chapter.numero }} — {{ chapter.titre }}</span>
+                            <span>Chapitre {{ chapter.numero }} {{ include('story/chapter-badge.html.twig', {chapter, variant: 'compact'}) }} — {{ chapter.titre }}</span>
                         </a>
                     </div>
                 {% endif %}

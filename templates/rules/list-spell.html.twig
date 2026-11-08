@@ -82,7 +82,7 @@
                             <img class="img-24" src="{{asset(icon|default(NA_ICON))}}" />
                         {% endif %}
                         {{ include('parts/badge-access.html.twig', {state: element_state(item), variant: 'inline'}) }}
-                        <strong class="item-name ml-1">{{ item.nom }}</strong>
+                        <span class="bold item-name ml-1">{{ item.nom }}</span>
                         {% if element_fresh(item) %}{{ include('parts/badge-new.html.twig', {variant: 'inline'}) }}{% endif %}
                         {% if is_gm() %}<em class="ml-2 text-muted">- {{ item.originalName }}</em>{% endif %}
                     </div>
@@ -119,7 +119,7 @@
                     {% if app.request.get('tab') != 'TATOUAGE' %}
                         {% set ring = item.anneau in ['TERRE', 'AIR', 'FEU', 'EAU', 'VIDE'] ? item.anneau : 'black' %}
                         <div class="col-1 p-0 m-0 text-{{ ring|lower }}">
-                            <strong class="text-rank font-present bg-{{ ring|lower }}">{{ item.niveau }}</strong>
+                            <span class="bold text-rank font-present bg-{{ ring|lower }}">{{ item.niveau }}</span>
                         </div>
                     {% endif %}
 

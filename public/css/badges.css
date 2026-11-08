@@ -162,3 +162,27 @@
     text-transform: uppercase;
   }
 }
+
+.badge-chapter {
+  display: inline-block;
+  margin-left: 0.4em;
+  padding: 0.3em 0.7em;
+  border: 1px solid var(--color-white50);
+  border-radius: 0.25rem;
+  background-color: rgb(0 0 0 / 0.45);
+  color: var(--color-white);
+  font-size: 0.45em;
+  font-weight: 700;
+  line-height: var(--leading-1);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  vertical-align: middle;
+
+  &.compact {
+    margin-left: 0.25em;
+    padding: 0.2em 0.5em;
+    font-size: var(--fontsize-mini);
+    letter-spacing: 0.08em;
+  }
+}

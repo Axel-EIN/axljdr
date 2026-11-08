@@ -27,7 +27,7 @@ class AdminChapterController extends AbstractController
 
     /**
      * @Route("/admin/chapter", name="admin_chapter")
-     * @IsGranted("ROLE_MJ")
+     * @IsGranted("ROLE_GM")
      */
     public function viewAdminChapters(ChapitreRepository $chapterRepository): Response
     {
@@ -54,7 +54,7 @@ class AdminChapterController extends AbstractController
 
     /**
      * @Route("/admin/chapter/create", name="admin_chapter_create")
-     * @IsGranted("ROLE_MJ")
+     * @IsGranted("ROLE_GM")
      */
     public function addChapter(Request $request, EntityManagerInterface $em, FileHandler $fileHandler, SaisonRepository $seasonRepository, Orderer $orderer, ChapitreRepository $chapterRepository, TableFilter $tableFilter) {
 
@@ -105,7 +105,7 @@ class AdminChapterController extends AbstractController
 
     /**
      * @Route("/admin/chapter/{id}/edit", name="admin_chapter_edit")
-     * @IsGranted("ROLE_MJ")
+     * @IsGranted("ROLE_GM")
      */
     public function editChapter(Request $request, Chapitre $chapter, FileHandler $fileHandler, Orderer $orderer, ChapitreRepository $chapterRepository): Response {
 
@@ -153,7 +153,7 @@ class AdminChapterController extends AbstractController
 
     /**
      * @Route("/admin/chapter/{id}/delete", name="admin_chapter_delete", methods={"POST"})
-     * @IsGranted("ROLE_MJ")
+     * @IsGranted("ROLE_GM")
      */
     public function deleteChapter(Request $request, Chapitre $chapter, Orderer $orderer, FileHandler $fileHandler, ChapitreRepository $chapterRepository, DeletionGuard $deletionGuard): Response {
 

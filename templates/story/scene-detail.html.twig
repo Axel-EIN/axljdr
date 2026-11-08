@@ -20,6 +20,7 @@
                     {% if scene.lieu is not empty %}
                         <a href="{{path('world_location', {id: scene.lieu.id} ) }}" >
                             <img src="{{asset(scene.lieu.icone|default(NA_LIEU_ICO))}}" alt="icône du lieu" />
+                            <span class="hover-tooltip below">{{ scene.lieu.nom }}</span>
                         </a>
                     {% endif %}
                 </div>

@@ -13,6 +13,15 @@ class Sort
 {
     use PublishableTrait;
 
+    private const CATEGORIES = [
+        'MAGIE' => ['label' => 'Magie', 'ring_suffix' => ''],
+        'MAHO' => ['label' => 'Maho', 'ring_suffix' => '-maho'],
+        'KIHO' => ['label' => 'Kiho', 'ring_suffix' => '-kiho'],
+        'TATOUAGE' => ['label' => 'Tatouage', 'icon' => 'fa-dragon'],
+    ];
+
+    private const RINGS = ['AIR', 'EAU', 'FEU', 'TERRE', 'VIDE'];
+
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
@@ -134,6 +143,32 @@ class Sort
         $this->anneau = $anneau;
 
         return $this;
+    }
+
+    public function getCategorieLabel(): ?string
+    {
+        return self::CATEGORIES[$this->categorie]['label'] ?? null;
+    }
+
+    public function getCategorieIcon(): ?string
+    {
+        return self::CATEGORIES[$this->categorie]['icon'] ?? null;
+    }
+
+    public function getRingIcon(): ?string
+    {
+        return self::ringIconOf($this->categorie, $this->anneau);
+    }
+
+    public static function ringIconOf(?string $categorie, ?string $anneau): ?string
+    {
+        $suffix = self::CATEGORIES[$categorie]['ring_suffix'] ?? null;
+
+        if ($suffix === null || !in_array($anneau, self::RINGS, true)) {
+            return null;
+        }
+
+        return '/assets/icons/elements/' . strtolower($anneau) . $suffix . '.png';
     }
 
     public function getNiveau(): ?int

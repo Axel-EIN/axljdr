@@ -43,12 +43,12 @@ class AdminCharacterController extends AbstractController
             'article' => 'un',
             'table_filters' => self::TABLE_FILTERS,
             'table_cols' => [
+              'illustration:Illu:image:NA_PERSO_ILLU_{genre}',
               'estPj:PJ:bool',
               'joueur.pseudo:Player',
               'icone:Portrait:symbol:NA_PERSO_PORTRAIT_{genre}',
               'nom:Nom',
               'prenom:Prénom::bold',
-              'illustration:Illu:image:NA_PERSO_ILLU_{genre}',
               'famille.nom:Famille',
               'ecole.nom:Ecole',
               'clan.nom:Clan',

@@ -21,7 +21,7 @@ class AdminArchiveController extends AbstractController
 
     /**
      * @Route("/admin/archive", name="admin_archive")
-     * @IsGranted("ROLE_MJ")
+     * @IsGranted("ROLE_GM")
      */
     public function viewAdminArchives(ArchiveRepository $archiveRepository): Response
     {
@@ -47,7 +47,7 @@ class AdminArchiveController extends AbstractController
 
     /**
      * @Route("/admin/archive/create", name="admin_archive_create")
-     * @IsGranted("ROLE_MJ")
+     * @IsGranted("ROLE_GM")
      */
     public function addArchive(Request $request, EntityManagerInterface $em, FileHandler $fileHandler, Unlocker $unlocker) {
 
@@ -86,7 +86,7 @@ class AdminArchiveController extends AbstractController
 
      /**
      * @Route("/admin/archive/{id}/edit", name="admin_archive_edit")
-     * @IsGranted("ROLE_MJ")
+     * @IsGranted("ROLE_GM")
      */
     public function editArchive(Request $request, Archive $archive, FileHandler $fileHandler, Unlocker $unlocker): Response {
 
@@ -127,7 +127,7 @@ class AdminArchiveController extends AbstractController
 
     /**
      * @Route("/admin/archive/{id}/delete", name="admin_archive_delete", methods={"POST"})
-     * @IsGranted("ROLE_MJ")
+     * @IsGranted("ROLE_GM")
      */
     public function deleteArchive(Request $request, Archive $archive, FileHandler $fileHandler, Unlocker $unlocker): Response {
 

@@ -71,6 +71,7 @@ class AppExtension extends AbstractExtension
             new TwigFunction('element_fresh', [$this->visibility, 'isFresh']),
             new TwigFunction('element_sort', [$this->visibility, 'sortByAccess']),
             new TwigFunction('element_key', [EntityRegistry::class, 'keyOf']),
+            new TwigFunction('element_icon', [EntityRegistry::class, 'iconOf']),
             new TwigFunction('element_url', [$this->elementUrl, 'of']),
             new TwigFunction('pdf_url', [$this->elementUrl, 'pdf']),
             new TwigFunction('part_links', [$this, 'partLinks']),

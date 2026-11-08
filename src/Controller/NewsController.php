@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Repository\LibraryRepository;
 use App\Service\XpRanker;
 use App\Service\CurrentPlayer;
 use App\Service\Locator;
@@ -29,10 +30,10 @@ class NewsController extends AbstractController
     ];
 
     private const GROUPS = [
-        ['title' => 'Personnages Joueurs', 'variant' => 'portrait', 'pc' => true],
-        ['title' => 'Personnages Non Joueurs', 'variant' => 'portrait', 'pc' => false],
+        ['title' => 'Personnages', 'icon' => 'fa-users', 'image' => '/assets/rubriques/characters.jpg', 'variant' => 'portrait', 'large' => true,
+            'link' => ['label' => 'Tous les personnages', 'route' => 'characters'], 'characters' => true],
         ['title' => 'Lieux', 'variant' => 'icon', 'keys' => ['location']],
-        ['title' => 'Objets & Equipements', 'variant' => 'rule', 'field' => 'icon', 'sections' => [
+        ['title' => 'Objets & Équipements', 'icon' => 'fa-cube', 'variant' => 'rule', 'field' => 'icon', 'sections' => [
             ['title' => 'Divers', 'keys' => ['object'], 'criteria' => ['categorie' => 'OBJET'], 'max' => 2],
             ['title' => 'Armes & Armures', 'keys' => ['object'], 'criteria' => ['categorie' => ['ARME', 'ARMURE', 'PROJECTILE']], 'max' => 2],
         ]],
@@ -40,17 +41,27 @@ class NewsController extends AbstractController
         ['title' => 'Écoles', 'icon' => 'fa-graduation-cap', 'variant' => 'rule', 'keys' => ['dojo']],
         ['title' => 'Univers', 'icon' => 'fa-earth-asia', 'variant' => 'rule', 'keys' => ['archive', 'lore']],
         ['title' => 'Règles', 'icon' => 'fa-scale-balanced', 'variant' => 'rule', 'keys' => ['rule']],
-        ['title' => 'Bibliothèques', 'icon' => 'fa-book', 'variant' => 'rule', 'large' => true, 'sections' => [
-            ['title' => 'Avantages & Désavantages', 'keys' => ['advantage'], 'max' => 2],
-            ['title' => 'Compétences', 'keys' => ['skill'], 'max' => 2],
-            ['title' => 'Sorts', 'keys' => ['spell'], 'max' => 4],
+        ['title' => 'Bibliothèques', 'icon' => 'fa-book', 'library_image' => 'spell', 'variant' => 'rule', 'large' => true,
+            'link' => ['label' => 'Toutes les bibliothèques', 'route' => 'rules', 'params' => ['_fragment' => 'library']],
+            'sections' => [
+            'spells' => ['max' => 5, 'pools' => [
+                'magic' => ['keys' => ['spell'], 'criteria' => ['categorie' => 'MAGIE'], 'quota' => 2],
+                'kiho' => ['keys' => ['spell'], 'criteria' => ['categorie' => 'KIHO'], 'quota' => 1],
+                'tattoo' => ['keys' => ['spell'], 'criteria' => ['categorie' => 'TATOUAGE'], 'quota' => 1],
+                'maho' => ['keys' => ['spell'], 'criteria' => ['categorie' => 'MAHO'], 'quota' => 1],
+            ]],
+            'traits' => ['max' => 8, 'share' => 'spells', 'pools' => [
+                'skill' => ['keys' => ['skill'], 'quota' => 1],
+                'advantage' => ['keys' => ['advantage'], 'criteria' => ['genre' => 'Avantage'], 'quota' => 1],
+                'disadvantage' => ['keys' => ['advantage'], 'criteria' => ['genre' => 'Désavantage'], 'quota' => 1],
+            ]],
         ]],
     ];
 
     /**
      * @Route("/", name="news")
      */
-    public function index(NewsFeed $newsFeed, XpRanker $xpRanker, CurrentPlayer $currentPlayer, Visibility $visibility, Locator $locator): Response
+    public function index(NewsFeed $newsFeed, XpRanker $xpRanker, CurrentPlayer $currentPlayer, Visibility $visibility, Locator $locator, LibraryRepository $libraryRepository): Response
     {
         $myCharacters = $currentPlayer->characterIds();
         $myCharacter = $currentPlayer->navigatingCharacter();
@@ -74,41 +85,7 @@ class NewsController extends AbstractController
             ['entity' => 'news', 'titleLight' => '', 'titleStrong' => 'Nouveautés'],
         ];
 
-        $groups = [];
-
-        foreach (self::GROUPS as $group) {
-            if (isset($group['sections'])) {
-                $groupSections = [];
-                foreach ($group['sections'] as $section) {
-                    $elements = $newsFeed->latestAmong($section['keys'], $section['max'], $section['criteria'] ?? []);
-
-                    if (!empty($elements)) {
-                        $groupSections[] = $section + ['elements' => $elements];
-                    }
-                }
-
-                if (!empty($groupSections)) {
-                    $groups[] = ['sections' => $groupSections] + $group;
-                }
-
-                continue;
-            }
-
-            $portrait = ($group['variant'] ?? null) === 'portrait';
-            $max = $portrait ? self::PORTRAIT_THUMBNAILS : self::THUMBNAILS;
-            $byParticipation = isset($group['pc']);
-            $elements = $byParticipation
-                ? $newsFeed->chapterCharacters($group['pc'], $max)
-                : $newsFeed->latestAmong($group['keys'], $max, $group['criteria'] ?? []);
-
-            if (!empty($elements)) {
-                $groups[] = $group + [
-                    'keepOrder' => $byParticipation,
-                    'perRow' => ['desktop' => $portrait ? $max / 2 : $max, 'tablet' => $max / 2],
-                    'elements' => $elements,
-                ];
-            }
-        }
+        $groups = $this->groups($newsFeed, $libraryRepository);
 
         $column = 0;
         foreach ($groups as $group) {
@@ -155,5 +132,93 @@ class NewsController extends AbstractController
             'header_down' => 'Bienvenue à Rokugan',
             'category' => 'news',
         ] + $map);
+    }
+
+    private function groups(NewsFeed $newsFeed, LibraryRepository $libraryRepository): array
+    {
+        $groups = [];
+
+        foreach (self::GROUPS as $group) {
+            if (isset($group['library_image'])) {
+                $group['image'] = $libraryRepository->findOneBy(['entity' => $group['library_image'], 'base' => true])?->getImage();
+            }
+
+            if (isset($group['sections'])) {
+                $sections = $this->groupSections($newsFeed, $group['sections']);
+
+                if (!empty($sections)) {
+                    $groups[] = ['sections' => $sections] + $group;
+                }
+
+                continue;
+            }
+
+            $portrait = ($group['variant'] ?? null) === 'portrait';
+            $max = $portrait ? self::PORTRAIT_THUMBNAILS : self::THUMBNAILS;
+            $characters = $group['characters'] ?? false;
+            $elements = $characters
+                ? $newsFeed->freshPlayersThenOthers($max)
+                : $newsFeed->latestAmong($group['keys'], $max, $group['criteria'] ?? []);
+
+            if (!empty($elements)) {
+                $groups[] = $group + [
+                    'keepOrder' => $characters,
+                    'perRow' => ['desktop' => $portrait && !($group['large'] ?? false) ? $max / 2 : $max, 'tablet' => $max / 2],
+                    'elements' => $elements,
+                ];
+            }
+        }
+
+        return $groups;
+    }
+
+    private function groupSections(NewsFeed $newsFeed, array $sections): array
+    {
+        foreach ($sections as $name => $section) {
+            if (isset($section['share'])) {
+                $shared = count($sections[$section['share']]['elements']);
+                $sections[$section['share']]['max'] = $shared;
+                $section['max'] -= $shared;
+            }
+
+            $section['elements'] = $this->sectionElements($newsFeed, $section);
+            $sections[$name] = $section;
+        }
+
+        return array_values(array_filter($sections, fn ($section) => !empty($section['elements'])));
+    }
+
+    private function sectionElements(NewsFeed $newsFeed, array $section): array
+    {
+        if ($section['max'] <= 0) {
+            return [];
+        }
+
+        $candidates = [];
+        $taken = [];
+        $total = 0;
+        foreach ($section['pools'] ?? [$section] as $name => $pool) {
+            $candidates[$name] = $newsFeed->latestAmong($pool['keys'], $section['max'], $pool['criteria'] ?? []);
+            $taken[$name] = min($pool['quota'] ?? 0, count($candidates[$name]), $section['max'] - $total);
+            $total += $taken[$name];
+        }
+
+        do {
+            $added = false;
+            foreach (array_keys($candidates) as $name) {
+                if ($total < $section['max'] && $taken[$name] < count($candidates[$name])) {
+                    $taken[$name]++;
+                    $total++;
+                    $added = true;
+                }
+            }
+        } while ($added);
+
+        $elements = [];
+        foreach ($candidates as $name => $list) {
+            $elements = array_merge($elements, array_slice($list, 0, $taken[$name]));
+        }
+
+        return $elements;
     }
 }

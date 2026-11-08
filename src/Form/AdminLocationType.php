@@ -14,6 +14,7 @@ use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use App\Validator\ImageFile;
+use Symfony\Component\Validator\Constraints\All;
 
 class AdminLocationType extends AbstractType
 {
@@ -31,6 +32,11 @@ class AdminLocationType extends AbstractType
       ->add('image', FileType::class, [
         'mapped' => false, 'data_class' => null, 'required' => false,
         'constraints' => [new ImageFile()],
+      ])
+      ->add('gallery', FileType::class, [
+        'mapped' => false, 'data_class' => null, 'required' => false, 'multiple' => true,
+        'label' => 'Ajouter des images au carrousel',
+        'constraints' => [new All([new ImageFile()])],
       ])
       ->add('type', ChoiceType::class, [
         'placeholder' => 'Pas de type défini',

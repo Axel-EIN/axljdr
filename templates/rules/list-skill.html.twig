@@ -24,7 +24,7 @@
 
                 <div class="item-line">
                     {{ include('parts/badge-access.html.twig', {state: element_state(item), variant: 'inline'}) }}
-                    <strong class="item-name">{{ item.nom }}</strong>
+                    <span class="bold item-name">{{ item.nom }}</span>
                     {% if element_fresh(item) %}{{ include('parts/badge-new.html.twig', {variant: 'inline'}) }}{% endif %}
                     {% if item.globale is defined and item.globale == true %}
                         <div class="ml-2">
@@ -54,9 +54,9 @@
                             {% set ring = 'lighter' %}
                         {% endif %}
 
-                        <strong class="ml-2 p-1 text-{{ring}}">
+                        <span class="bold ml-2 p-1 text-{{ring}}">
                             {{ item.trait }}
-                        </strong>
+                        </span>
                     </span>
                 </div>
 
@@ -91,10 +91,10 @@
                         <span class="label-amerigo">Capacités de Maîtrise</span>
                         <ul>
                           {% if item.capacite is defined and item.capacite is not empty %}
-                            <li><strong>RANG 3</strong> : {{ item.capacite|text }}</li>
+                            <li><span class="bold">RANG 3</span> : {{ item.capacite|text }}</li>
                           {% endif %}
                           {% if item.capacite2 is defined and item.capacite2 is not empty %}
-                            <li><strong>RANG 6</strong> : {{ item.capacite2|text }}</li>
+                            <li><span class="bold">RANG 6</span> : {{ item.capacite2|text }}</li>
                           {% endif %}
                         </ul>
                     </div>

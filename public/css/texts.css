@@ -103,6 +103,17 @@ mark {
   }
 }
 
+.text-list {
+  display: block;
+  margin: 0.25rem 0;
+  padding-left: 1.5rem;
+
+  .text-list-item {
+    display: list-item;
+    list-style: disc;
+  }
+}
+
 /* ----- DESCRIPTION ----- */
 
 .text-description {

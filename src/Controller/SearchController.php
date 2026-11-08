@@ -18,10 +18,12 @@ class SearchController extends AbstractController
     public function index(Request $request, Search $search): Response
     {
         $term = trim((string) $request->query->get('q', ''));
+        $group = $request->query->get('group');
 
         return $this->render('search/index.html.twig', [
             'term' => $term,
-            'groups' => $search->find($term),
+            'group' => $group,
+            'groups' => $search->find($term, $group),
             'tooShort' => mb_strlen($term) < Search::MIN_LENGTH,
         ]);
     }

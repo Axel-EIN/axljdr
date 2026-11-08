@@ -23,6 +23,7 @@ class CurrentChapter
     private $lastEpisode = false;
     private $chapterIds;
     private $elementIds = [];
+    private $lastEpisodeIds = [];
 
     public function __construct(
         EntityManagerInterface $entityManager,
@@ -75,12 +76,29 @@ class CurrentChapter
         return $this->elementIds[$key];
     }
 
+    public function lastEpisodeIds(string $key): array
+    {
+        if (!isset($this->lastEpisodeIds[$key])) {
+            $episode = $this->lastEpisode();
+
+            $this->lastEpisodeIds[$key] = $episode === null ? [] : array_keys($this->sceneElementIds($key, 'e = :scope', $episode));
+        }
+
+        return $this->lastEpisodeIds[$key];
+    }
+
     private function findElementIds(string $key): array
     {
         $chapterIds = $this->chapterIds();
+
+        return $chapterIds === [] ? [] : $this->sceneElementIds($key, 'e.chapitreParent IN (:scope)', $chapterIds);
+    }
+
+    private function sceneElementIds(string $key, string $condition, $scope): array
+    {
         $source = self::SOURCES[$key] ?? null;
 
-        if ($chapterIds === [] || $source === null) {
+        if ($source === null) {
             return [];
         }
 
@@ -88,14 +106,14 @@ class CurrentChapter
             ->select('DISTINCT ' . $source['id'] . ' AS id')
             ->from(Scene::class, 's')
             ->join('s.episodeParent', 'e')
-            ->andWhere('e.chapitreParent IN (:chapters)')
-            ->setParameter('chapters', $chapterIds);
+            ->andWhere($condition)
+            ->setParameter('scope', $scope);
         EpisodeRepository::onlyPublished($qb, 'e');
 
         if ($source['join'] !== null) {
             $qb->join($source['join'], 'element');
         }
 
-        return array_fill_keys(array_column($qb->getQuery()->getScalarResult(), 'id'), true);
+        return array_fill_keys(array_filter(array_column($qb->getQuery()->getScalarResult(), 'id')), true);
     }
 }

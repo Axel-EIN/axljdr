@@ -184,12 +184,19 @@
 }
 
 .outlined {
+    --outline-color: var(--flash-green);
+    --outline-width: 2px;
+
     box-shadow:
-        2px 2px 0 var(--flash-green),
-        -2px -2px 0 var(--flash-green),
-        2px -2px 0 var(--flash-green),
-        -2px 2px 0 var(--flash-green)
+        var(--outline-width) var(--outline-width) 0 var(--outline-color),
+        calc(var(--outline-width) * -1) calc(var(--outline-width) * -1) 0 var(--outline-color),
+        var(--outline-width) calc(var(--outline-width) * -1) 0 var(--outline-color),
+        calc(var(--outline-width) * -1) var(--outline-width) 0 var(--outline-color)
     ;
+
+    &.player { --outline-color: var(--color-flashblue); }
+
+    &.thin { --outline-width: 1px; }
 }
 
 /* ----- IMAGE RATIO ----- */

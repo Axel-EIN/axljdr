@@ -30,11 +30,11 @@ class NewsController extends AbstractController
     ];
 
     private const GROUPS = [
-        ['title' => 'Personnages', 'icon' => 'fa-users', 'image' => '/assets/rubriques/characters.jpg', 'variant' => 'portrait', 'large' => true,
+        ['title' => 'Personnages', 'icon' => 'fa-users', 'image' => '/assets/rubriques/characters.jpg', 'variant' => 'portrait', 'large' => true, 'gap' => '1rem',
             'link' => ['label' => 'Tous les personnages', 'route' => 'characters'], 'characters' => true],
-        ['title' => 'Lieux', 'icon' => 'fa-vihara', 'image' => '/assets/rubriques/world.jpg', 'variant' => 'icon', 'large' => true, 'max' => 8,
+        ['title' => 'Lieux', 'icon' => 'fa-vihara', 'image' => '/assets/rubriques/world.jpg', 'variant' => 'icon', 'large' => true, 'max' => 8, 'gap' => '1rem',
             'link' => ['label' => 'Tous les lieux', 'route' => 'world', 'params' => ['_fragment' => 'location']], 'keys' => ['location']],
-        ['title' => 'Factions', 'icon' => 'fa-flag', 'library_image' => 'object', 'variant' => 'rule', 'large' => true,
+        ['title' => 'Factions', 'icon' => 'fa-flag', 'library_image' => 'object', 'variant' => 'rule', 'large' => true, 'gap' => '1rem',
             'link' => ['segments' => [
                 'Tous les :',
                 ['label' => 'Factions', 'route' => 'world', 'params' => ['_fragment' => 'clan']],
@@ -45,7 +45,7 @@ class NewsController extends AbstractController
             'factions' => ['max' => 4, 'variant' => 'emblem', 'keys' => ['clan']],
             'schools' => ['max' => 8, 'share' => 'factions', 'keys' => ['dojo']],
         ]],
-        ['title' => 'Articles', 'icon' => 'fa-readme', 'icon_style' => 'fa-brands', 'image' => '/assets/rubriques/rules.jpg', 'variant' => 'rule', 'large' => true,
+        ['title' => 'Articles', 'icon' => 'fa-readme', 'icon_style' => 'fa-brands', 'image' => '/assets/rubriques/rules.jpg', 'variant' => 'rule', 'large' => true, 'gap' => '1rem',
             'link' => ['segments' => [
                 'Tous les :',
                 ['label' => 'Lore', 'route' => 'world', 'params' => ['_fragment' => 'lore']],

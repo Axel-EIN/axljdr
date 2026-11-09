@@ -152,14 +152,14 @@ class Visibility
         }));
     }
 
-    public function isFresh($element): bool
+    public function isFresh($element, bool $revealSession = false): bool
     {
         $publishedAt = $this->publishedAt($element);
 
         return $publishedAt !== null
             && $publishedAt <= new \DateTime()
             && $publishedAt >= $this->freshSince()
-            && in_array($this->state($element), self::READABLE, true);
+            && $this->state($element, $revealSession) !== self::HIDDEN;
     }
 
     public function freshSince(): \DateTimeInterface

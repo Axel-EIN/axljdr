@@ -1,6 +1,7 @@
 {% set reveal_session = reveal_session|default(false) %}
+{% set reveal_hidden = reveal_hidden|default(reveal_session) %}
 {% set hide_dead = hide_dead|default(false) %}
-{% set items = (items ?? null) is null ? null : items|filter(item => element_listed(item, reveal_session) and not (hide_dead and item.dead)) %}
+{% set items = (items ?? null) is null ? null : items|filter(item => element_listed(item, reveal_hidden) and not (hide_dead and item.dead)) %}
 
 {% if items is not null and (items is not empty or empty_message is defined) %}
 
@@ -52,7 +53,7 @@
   <div class="picture-grid {{ scroll ? 'scroll scroller-track' : wrapper_class }}{{ hint_block ? ' hint-block' }}{{ label_soft ? ' label-soft' }}" style="{{ style }}">
     {% for item in limit is defined ? items|slice(0, limit) : items %}
 
-      {% set state = element_state(item, reveal_session) %}
+      {% set state = element_state(item, reveal_hidden) %}
       {% set restricted = not element_readable(item) %}
       {% set locked = not plain and not gm_plain and state == 'locked' %}
       {% set edges = '' %}

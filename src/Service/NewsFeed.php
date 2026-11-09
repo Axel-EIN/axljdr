@@ -138,9 +138,9 @@ class NewsFeed
             $this->latestPublished($class, 'e.access = :access' . $filter, ['access' => Access::PUBLIC] + $criteria, $limit),
             $this->visibility->listedOnly($this->latestPublished(
                 $class,
-                'e.access <> :access AND (e.publishedAt >= :freshSince' . ($recent ? ' OR e.id IN (:recentIds)' : '') . ')' . $filter,
-                ['access' => Access::PUBLIC, 'freshSince' => $this->visibility->freshSince()] + $recent + $criteria
-            ))
+                'e.access <> :access AND (e.access = :locked OR e.publishedAt >= :freshSince' . ($recent ? ' OR e.id IN (:recentIds)' : '') . ')' . $filter,
+                ['access' => Access::PUBLIC, 'locked' => Access::LOCKED, 'freshSince' => $this->visibility->freshSince()] + $recent + $criteria
+            ), true)
         );
 
         return array_slice($this->newestFirst($elements), 0, $limit);

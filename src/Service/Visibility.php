@@ -143,12 +143,12 @@ class Visibility
         return $this->currentPlayer->seesAll() || $this->state($element, $revealSession) !== self::HIDDEN;
     }
 
-    public function listedOnly(iterable $elements): array
+    public function listedOnly(iterable $elements, bool $revealSession = false): array
     {
         $elements = is_array($elements) ? $elements : iterator_to_array($elements, false);
 
-        return array_values(array_filter($elements, function ($element) {
-            return $this->isListed($element);
+        return array_values(array_filter($elements, function ($element) use ($revealSession) {
+            return $this->isListed($element, $revealSession);
         }));
     }
 

@@ -103,7 +103,7 @@
             {{ include('parts/icon-lock.html.twig', {state, classes: variant == 'icon' ? 'in-icon'}) }}
           {% endif %}
 
-          {% if element_fresh(item) %}{{ include('parts/badge-new.html.twig', {variant: pin}) }}{% endif %}
+          {% if element_fresh(item, reveal_hidden) %}{{ include('parts/badge-new.html.twig', {variant: pin}) }}{% endif %}
 
           {% if variant == 'portrait' %}
             {% set na_gender = item.genre == 'F' ? NA_PERSO_PORTRAIT_F : (item.genre == 'M' ? NA_PERSO_PORTRAIT_M : NA_PERSO_PORTRAIT) %}

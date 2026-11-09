@@ -279,6 +279,7 @@
                                     {{ include('/parts/picture-grid.html.twig', {
                                         items: section.elements,
                                         keep_order: true,
+                                        reveal_hidden: true,
                                         badge_hover: true,
                                         variant: section.variant|default(group.variant|default('landscape')),
                                         field: group.field|default(null),
@@ -299,6 +300,7 @@
                             field: group.field|default(null),
                             per_row: group.perRow,
                             keep_order: true,
+                            reveal_hidden: true,
                             mark_players: group.characters|default(false),
                             label_soft: group_image is not null and group.variant|default(null) != 'portrait',
                             wrapper: 'compact',

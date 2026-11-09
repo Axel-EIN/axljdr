@@ -104,7 +104,7 @@ class NewsController extends AbstractController
 
         $sections = [
             ['entity' => 'story', 'titleLight' => '', 'titleStrong' => 'Dernière Séance'],
-            ['entity' => 'news', 'titleLight' => '', 'titleStrong' => 'Nouveautés'],
+            ['entity' => 'news', 'titleLight' => '', 'titleStrong' => "Quoi de neuf\u{00A0}?"],
         ];
 
         $groups = $this->groups($newsFeed, $libraryRepository);

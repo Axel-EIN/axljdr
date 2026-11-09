@@ -245,7 +245,13 @@
         <div class="news-board">
             {% for group in groups %}
                 {% set group_image = group.image|default(null) %}
-                <div class="card card-body news-group{{ group.large|default(false) ? ' large' }}{{ group_image ? ' illustrated' }}"{% if group_image %}{% set group_color = image_color(group_image) %} style="--group-image: url('{{ asset(group_image) }}'){{ group_color ? '; --group-color: ' ~ group_color }}"{% endif %}>
+                {% set group_color = group_image ? image_color(group_image) : null %}
+                {% set group_style = [
+                    group_image ? "--group-image: url('" ~ asset(group_image) ~ "')",
+                    group_color ? '--group-color: ' ~ group_color,
+                    group.gap is defined ? '--gap: ' ~ group.gap,
+                ]|filter(rule => rule)|join('; ') %}
+                <div class="card card-body news-group{{ group.large|default(false) ? ' large' }}{{ group_image ? ' illustrated' }}"{% if group_style %} style="{{ group_style }}"{% endif %}>
                     <div class="news-group-head">
                         <h3 class="label-amerigo news-subtitle">{% if group.icon is defined %}<i class="{{ group.icon_style|default('fa-solid') }} {{ group.icon }}" aria-hidden="true"></i> {% endif %}{{ group.title }}</h3>
                         {% if group.link.segments is defined %}

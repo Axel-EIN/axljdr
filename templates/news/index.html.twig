@@ -272,41 +272,35 @@
                             </a>
                         {% endif %}
                     </div>
-                    {% if group.sections is defined %}
-                        <div class="news-sections">
-                            {% for section in group.sections %}
-                                <div class="news-section" style="--span: {{ section.max }}">
-                                    {% if section.title is defined %}<h4 class="news-qualifier">{{ section.title }}</h4>{% endif %}
-                                    {{ include('/parts/picture-grid.html.twig', {
-                                        items: section.elements,
-                                        keep_order: true,
-                                        reveal_hidden: true,
-                                        badge_hover: true,
-                                        variant: section.variant|default(group.variant|default('landscape')),
-                                        field: group.field|default(null),
-                                        per_row: group.large|default(false) ? {desktop: section.max, tablet: 5, mobile: 3} : section.max,
-                                        label_soft: group_image is not null,
-                                        wrapper: 'compact',
-                                    }) }}
-                                </div>
-                            {% endfor %}
-                        </div>
-                    {% else %}
-                        {{ include('/parts/picture-grid.html.twig', {
-                            items: group.elements,
-                            badge_hover: true,
-                            variant: group.variant|default('landscape'),
-                            hint_block: group.variant|default(null) == 'portrait',
-                            hint_above: true,
-                            field: group.field|default(null),
-                            per_row: group.perRow,
-                            keep_order: true,
-                            reveal_hidden: true,
-                            mark_players: group.characters|default(false),
-                            label_soft: group_image is not null and group.variant|default(null) != 'portrait',
-                            wrapper: 'compact',
-                        }) }}
-                    {% endif %}
+                    {% embed 'parts/picture-scroller.html.twig' with {scroller_class: 'outside'} %}
+                        {% block track %}
+                            <div class="news-pages scroller-track">
+                                {% for page in group.pages %}
+                                    <div class="news-sections">
+                                        {% for section in page %}
+                                            <div class="news-section" style="--span: {{ section.max }}">
+                                                {% if section.title is defined %}<h4 class="news-qualifier">{{ section.title }}</h4>{% endif %}
+                                                {{ include('/parts/picture-grid.html.twig', {
+                                                    items: section.elements,
+                                                    keep_order: true,
+                                                    reveal_hidden: true,
+                                                    badge_hover: true,
+                                                    variant: section.variant|default(group.variant|default('landscape')),
+                                                    field: group.field|default(null),
+                                                    hint_block: true,
+                                                    hint_above: true,
+                                                    per_row: group.perRow ?? (group.large|default(false) ? {desktop: section.max, tablet: 5, mobile: 3} : section.max),
+                                                    mark_players: group.characters|default(false),
+                                                    label_soft: group_image is not null and group.variant|default(null) != 'portrait',
+                                                    wrapper: 'compact',
+                                                }) }}
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        {% endblock %}
+                    {% endembed %}
                 </div>
             {% endfor %}
 

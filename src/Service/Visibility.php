@@ -111,13 +111,13 @@ class Visibility
             || in_array($this->state($element), self::READABLE, true);
     }
 
-    public function sortByAccess(iterable $elements, bool $freshFirst = false): array
+    public function sortByAccess(iterable $elements, bool $freshFirst = false, bool $revealSession = false): array
     {
         $elements = is_array($elements) ? array_values($elements) : iterator_to_array($elements, false);
 
-        usort($elements, function ($a, $b) use ($freshFirst) {
-            return [$freshFirst && !$this->isFresh($a), $this->rankOf($a)]
-                <=> [$freshFirst && !$this->isFresh($b), $this->rankOf($b)];
+        usort($elements, function ($a, $b) use ($freshFirst, $revealSession) {
+            return [$freshFirst && !$this->isFresh($a, $revealSession), $this->rankOf($a)]
+                <=> [$freshFirst && !$this->isFresh($b, $revealSession), $this->rankOf($b)];
         });
 
         return $elements;

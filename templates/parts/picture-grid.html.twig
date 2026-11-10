@@ -6,7 +6,8 @@
 {% if items is not null and (items is not empty or empty_message is defined) %}
 
   {% set scroll = scroll|default(false) %}
-  {% set items = keep_order|default(false) ? items : element_sort(items, scroll) %}
+  {% set fresh_first = fresh_first|default(scroll) %}
+  {% set items = keep_order|default(false) ? items : element_sort(items, fresh_first, reveal_hidden) %}
   {% set variant = variant|default('landscape') %}
   {% set shape = {landscape: '1610', rule: '43', icon: '11'}[variant]|default('1610') %}
   {% set pin = {portrait: 'pin-topleft', icon: 'pin-downcenter'}[variant]|default('') %}

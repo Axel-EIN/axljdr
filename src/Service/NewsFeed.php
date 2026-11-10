@@ -186,7 +186,7 @@ class NewsFeed
         return array_slice($this->newestFirst($elements), 0, $limit);
     }
 
-    private function newestFirst(array $elements): array
+    public function newestFirst(array $elements): array
     {
         usort($elements, function ($a, $b) {
             return [$b->getPublishedAt(), $b->getId()] <=> [$a->getPublishedAt(), $a->getId()];

@@ -620,6 +620,18 @@
       }
     }
 
+    .news-pages {
+      --cols: 1;
+      --scroll-inset: 0.75rem;
+
+      display: grid;
+      grid-auto-flow: column;
+      grid-auto-columns: 100%;
+      align-items: start;
+      gap: calc(2 * var(--scroll-inset));
+      margin-inline: calc(-1 * var(--scroll-inset));
+    }
+
     .news-sections {
       display: grid;
       grid-template-columns: repeat(4, minmax(0, 1fr));

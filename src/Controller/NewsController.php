@@ -17,6 +17,8 @@ class NewsController extends AbstractController
     private const THUMBNAILS = 4;
     private const PORTRAIT_THUMBNAILS = 8;
 
+    private const PAGES = 3;
+
     private const PARTICIPATIONS = 2;
 
     private const PREVIOUS_SESSIONS = 3;
@@ -63,13 +65,11 @@ class NewsController extends AbstractController
         ['title' => 'Bibliothèques', 'icon' => 'fa-book', 'library_image' => 'spell', 'variant' => 'rule', 'large' => true,
             'link' => ['label' => 'Toutes les bibliothèques', 'route' => 'rules', 'params' => ['_fragment' => 'library']],
             'sections' => [
-            'spells' => ['max' => 4, 'pools' => [
+            'library' => ['max' => 8, 'newest' => true, 'pools' => [
                 'magic' => ['keys' => ['spell'], 'criteria' => ['categorie' => 'MAGIE'], 'quota' => 1],
                 'kiho' => ['keys' => ['spell'], 'criteria' => ['categorie' => 'KIHO'], 'quota' => 1],
                 'tattoo' => ['keys' => ['spell'], 'criteria' => ['categorie' => 'TATOUAGE'], 'quota' => 1],
                 'maho' => ['keys' => ['spell'], 'criteria' => ['categorie' => 'MAHO'], 'quota' => 1],
-            ]],
-            'traits' => ['max' => 8, 'share' => 'spells', 'pools' => [
                 'skill' => ['keys' => ['skill'], 'quota' => 1],
                 'advantage' => ['keys' => ['advantage'], 'criteria' => ['genre' => 'Avantage'], 'quota' => 1],
                 'disadvantage' => ['keys' => ['advantage'], 'criteria' => ['genre' => 'Désavantage'], 'quota' => 1],
@@ -164,68 +164,76 @@ class NewsController extends AbstractController
             }
 
             if (isset($group['sections'])) {
-                $sections = $this->groupSections($newsFeed, $group['sections']);
+                $pages = $this->groupPages($newsFeed, $group['sections']);
+            } else {
+                $portrait = ($group['variant'] ?? null) === 'portrait';
+                $max = $group['max'] ?? ($portrait ? self::PORTRAIT_THUMBNAILS : self::THUMBNAILS);
+                $elements = ($group['characters'] ?? false)
+                    ? $newsFeed->freshPlayersThenOthers($max * self::PAGES)
+                    : $newsFeed->latestAmong($group['keys'], $max * self::PAGES, $group['criteria'] ?? []);
 
-                if (!empty($sections)) {
-                    $groups[] = ['sections' => $sections] + $group;
-                }
-
-                continue;
+                $group['perRow'] = ['desktop' => $portrait && !($group['large'] ?? false) ? $max / 2 : $max, 'tablet' => $max / 2];
+                $pages = array_map(fn ($chunk) => [['max' => $max, 'elements' => $chunk]], array_chunk($elements, $max));
             }
 
-            $portrait = ($group['variant'] ?? null) === 'portrait';
-            $max = $group['max'] ?? ($portrait ? self::PORTRAIT_THUMBNAILS : self::THUMBNAILS);
-            $characters = $group['characters'] ?? false;
-            $elements = $characters
-                ? $newsFeed->freshPlayersThenOthers($max)
-                : $newsFeed->latestAmong($group['keys'], $max, $group['criteria'] ?? []);
-
-            if (!empty($elements)) {
-                $groups[] = $group + [
-                    'perRow' => ['desktop' => $portrait && !($group['large'] ?? false) ? $max / 2 : $max, 'tablet' => $max / 2],
-                    'elements' => $elements,
-                ];
+            if (!empty($pages)) {
+                $groups[] = ['pages' => $pages] + $group;
             }
         }
 
         return $groups;
     }
 
-    private function groupSections(NewsFeed $newsFeed, array $sections): array
+    private function groupPages(NewsFeed $newsFeed, array $sections): array
     {
-        foreach ($sections as $name => $section) {
+        $candidates = [];
+        foreach ($sections as $key => $section) {
+            foreach ($section['pools'] ?? [$section] as $name => $pool) {
+                $candidates[$key][$name] = $newsFeed->latestAmong($pool['keys'], $section['max'] * self::PAGES, $pool['criteria'] ?? []);
+            }
+        }
+
+        $pages = [];
+        while (count($pages) < self::PAGES && ($page = $this->pageSections($newsFeed, $sections, $candidates)) !== []) {
+            $pages[] = $page;
+        }
+
+        return $pages;
+    }
+
+    private function pageSections(NewsFeed $newsFeed, array $sections, array &$candidates): array
+    {
+        foreach ($sections as $key => $section) {
             if (isset($section['share'])) {
                 $shared = count($sections[$section['share']]['elements']);
                 $sections[$section['share']]['max'] = $shared;
                 $section['max'] -= $shared;
             }
 
-            $section['elements'] = $this->sectionElements($newsFeed, $section);
-            $sections[$name] = $section;
+            $section['elements'] = $this->sectionElements($newsFeed, $section, $candidates[$key]);
+            $sections[$key] = $section;
         }
 
         return array_values(array_filter($sections, fn ($section) => !empty($section['elements'])));
     }
 
-    private function sectionElements(NewsFeed $newsFeed, array $section): array
+    private function sectionElements(NewsFeed $newsFeed, array $section, array &$pools): array
     {
         if ($section['max'] <= 0) {
             return [];
         }
 
-        $candidates = [];
         $taken = [];
         $total = 0;
-        foreach ($section['pools'] ?? [$section] as $name => $pool) {
-            $candidates[$name] = $newsFeed->latestAmong($pool['keys'], $section['max'], $pool['criteria'] ?? []);
-            $taken[$name] = min($pool['quota'] ?? 0, count($candidates[$name]), $section['max'] - $total);
+        foreach ($pools as $name => $list) {
+            $taken[$name] = min($section['pools'][$name]['quota'] ?? 0, count($list), $section['max'] - $total);
             $total += $taken[$name];
         }
 
         do {
             $added = false;
-            foreach (array_keys($candidates) as $name) {
-                if ($total < $section['max'] && $taken[$name] < count($candidates[$name])) {
+            foreach ($pools as $name => $list) {
+                if ($total < $section['max'] && $taken[$name] < count($list)) {
                     $taken[$name]++;
                     $total++;
                     $added = true;
@@ -234,8 +242,9 @@ class NewsController extends AbstractController
         } while ($added);
 
         $elements = [];
-        foreach ($candidates as $name => $list) {
+        foreach ($pools as $name => $list) {
             $elements = array_merge($elements, array_slice($list, 0, $taken[$name]));
+            $pools[$name] = array_slice($list, $taken[$name]);
         }
 
         return ($section['newest'] ?? false) ? $newsFeed->newestFirst($elements) : $elements;

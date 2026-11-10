@@ -15,7 +15,11 @@
 
   > .grid-empty { grid-column: 1 / -1; }
 
-  &.hint-block { position: relative; }
+  &.hint-block {
+    position: relative;
+
+    .picture-scroller & { position: static; }
+  }
 
   &.label-soft {
     .label {
@@ -51,6 +55,7 @@
 }
 
 .picture-scroller {
+  position: relative;
   display: flex;
   align-items: center;
   gap: 0.25rem;
@@ -129,6 +134,19 @@
     }
 
     &:is(.overflowing > *) { visibility: visible; }
+
+    &:is(.outside > *) {
+      position: absolute;
+      top: 50%;
+      padding-inline: 0.25rem;
+      transform: translateY(-50%);
+
+      &[data-direction="-1"] { right: calc(100% + var(--scroller-outside, 1.5rem)); }
+
+      &[data-direction="1"] { left: calc(100% + var(--scroller-outside, 1.5rem)); }
+
+      @media (max-width: 991.98px) { display: none; }
+    }
   }
 }
 

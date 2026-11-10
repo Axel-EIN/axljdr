@@ -53,11 +53,9 @@ class NewsController extends AbstractController
                 ['label' => 'Règles', 'route' => 'rules', 'params' => ['_fragment' => 'rule']],
             ]],
             'sections' => [
-            'world' => ['max' => 4, 'pools' => [
+            'articles' => ['max' => 8, 'newest' => true, 'pools' => [
                 'lore' => ['keys' => ['lore'], 'quota' => 2],
                 'archive' => ['keys' => ['archive'], 'quota' => 2],
-            ]],
-            'rules' => ['max' => 8, 'share' => 'world', 'pools' => [
                 'base' => ['keys' => ['rule'], 'criteria' => ['base' => true], 'quota' => 2],
                 'annex' => ['keys' => ['rule'], 'criteria' => ['base' => false], 'quota' => 2],
             ]],
@@ -240,6 +238,6 @@ class NewsController extends AbstractController
             $elements = array_merge($elements, array_slice($list, 0, $taken[$name]));
         }
 
-        return $elements;
+        return ($section['newest'] ?? false) ? $newsFeed->newestFirst($elements) : $elements;
     }
 }

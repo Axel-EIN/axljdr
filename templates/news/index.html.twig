@@ -21,7 +21,8 @@
 
             {% if last_episode %}
                 <div class="session-split">
-                    <div>
+                    <div class="pt-1">
+                        <h3 class="label-amerigo news-subtitle text-white">Résumé</h3>
                         {{ include('/story/episode-card.html.twig', {
                             episode: last_episode,
                             wrapper: 'w-100',
@@ -122,7 +123,7 @@
 
                         <a class="session-link" href="{{ path('story_season', {id: season.id}) }}#read-head-ch-id{{ chapter.id }}">
                             <img src="{{ asset(STORY_CHAPTER_ICO) }}" alt="Icône de chapitre" />
-                            <span>Chapitre {{ chapter.numero }} {{ include('story/chapter-badge.html.twig', {chapter, variant: 'compact'}) }} — {{ chapter.titre }}</span>
+                            <span class="session-link-label">Chapitre {{ chapter.numero }} {{ include('story/chapter-badge.html.twig', {chapter, variant: 'compact'}) }} — {{ chapter.titre }}</span>
                         </a>
                     </div>
                 {% endif %}

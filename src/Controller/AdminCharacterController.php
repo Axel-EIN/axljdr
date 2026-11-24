@@ -131,7 +131,8 @@ class AdminCharacterController extends AbstractController
      */
     public function editCharacter(Request $request, Personnage $character, FileHandler $fileHandler, NameTagger $nameTagger, Unlocker $unlocker): Response {
 
-        $character->setDescription($nameTagger->untag($character->getDescription()));
+        $previousDescription = $character->getDescription();
+        $character->setDescription($nameTagger->untag($previousDescription));
 
         $form = $this->createForm(AdminCharacterType::class, $character);
         $form->get('unlockedBy')->setData($unlocker->charactersOf($character));
@@ -174,7 +175,7 @@ class AdminCharacterController extends AbstractController
                 $character->setIllustration(null);
             }
 
-            $character->setDescription($nameTagger->tag($character->getDescription()));
+            $character->setDescription($nameTagger->tagDescription($character, $character->getDescription(), $previousDescription));
 
             $unlocker->sync($character, $form->get('unlockedBy')->getData());
             $unlocker->syncAccess($character);

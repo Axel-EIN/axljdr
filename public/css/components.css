@@ -212,6 +212,47 @@
         width: var(--ornament-size);
         height: auto;
     }
+
+    &.brush {
+        --ornament-color: var(--color-primary);
+        gap: 0.5rem;
+
+        &::before,
+        &::after {
+            content: '';
+            flex: none;
+            width: 0.375rem;
+            height: 0.375rem;
+            background-color: var(--ornament-color);
+            transform: rotate(45deg);
+        }
+
+        &::before { order: 2; }
+        &::after { order: 4; }
+
+        hr {
+            order: 1;
+            height: 0.75rem;
+            margin: 0;
+            border: 0;
+            background-color: var(--ornament-color);
+            mask: url('../assets/ui/divider-brush-stroke.svg') center / 100% 100% no-repeat;
+
+            &:last-child {
+                order: 5;
+                transform: scaleX(-1);
+            }
+        }
+
+        .icon-ornament {
+            order: 3;
+            flex: none;
+            height: var(--ornament-size);
+            margin: 0 0.25rem;
+            background-color: var(--ornament-color);
+            mask: var(--ornament-icon) center / contain no-repeat;
+        }
+    }
 }
 
 .password-field {

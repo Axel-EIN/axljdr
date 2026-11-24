@@ -8,6 +8,11 @@
   display: flex;
   flex-direction: column;
 
+  &.flush {
+    padding: 0;
+    margin-bottom: 0;
+  }
+
   @media (max-width: 991.98px) {
     max-width: 420px;
   }

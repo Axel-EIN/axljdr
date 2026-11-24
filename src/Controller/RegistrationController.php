@@ -23,6 +23,7 @@ class RegistrationController extends AbstractController
 
     public const RESEND_SESSION_KEY = 'verification_resend';
     private const MAX_RESENDS_PER_HOUR = 3;
+    private const MAX_REGISTRATIONS_PER_HOUR = 5;
 
     private EmailVerifier $emailVerifier;
 
@@ -34,11 +35,17 @@ class RegistrationController extends AbstractController
     /**
      * @Route("/register", name="app_register")
      */
-    public function register(Request $request, UserPasswordHasherInterface $userPasswordHasherInterface): Response
+    public function register(Request $request, UserPasswordHasherInterface $userPasswordHasherInterface, Throttle $throttle): Response
     {
         $user = new Utilisateur();
         $form = $this->createForm(RegistrationFormType::class, $user);
         $form->handleRequest($request);
+
+        if ($form->isSubmitted() && !$throttle->allow('register', $request, self::MAX_REGISTRATIONS_PER_HOUR)) {
+            $this->addFlash('danger', 'Trop de tentatives d\'inscription, réessayez plus tard.');
+
+            return $this->redirectToRoute('app_register');
+        }
 
         if ($form->isSubmitted() && $form->isValid()) {
 

@@ -125,6 +125,11 @@ class NameTagger
         return $text;
     }
 
+    public function tagDescription(Personnage $character, ?string $text, ?string $previous): ?string
+    {
+        return $character->getJoueur() === null ? $this->tag($text) : $this->retag($text, $previous);
+    }
+
     public function untag(?string $text): ?string
     {
         if (empty($text)) {

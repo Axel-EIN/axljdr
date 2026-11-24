@@ -8,6 +8,7 @@ use App\Service\CurrentPlayer;
 use App\Service\FileHandler;
 use App\Form\AccountPasswordType;
 use App\Form\AccountAvatarType;
+use App\Form\AccountDisplayNameType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -110,6 +111,28 @@ class AccountController extends AbstractController
         }
 
         return $this->redirectToRoute('account');
+    }
+
+    /**
+     * @Route("/account/display-name/edit", name="account_display_name")
+     */
+    public function editDisplayName(Request $request): Response
+    {
+        $user = $this->getUser();
+        $form = $this->createForm(AccountDisplayNameType::class, $user);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->getDoctrine()->getManager()->flush();
+
+            $this->addFlash('success', 'Votre nom affiché a bien été modifié.');
+
+            return $this->redirectToRoute('account');
+        }
+
+        return $this->render('account/edit-display-name.html.twig', [
+            'form' => $form->createView(),
+        ]);
     }
 
     /**

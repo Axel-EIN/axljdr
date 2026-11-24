@@ -3,6 +3,12 @@ name: Deploy to OVH
 on:
   push:
     branches: [main]
+  workflow_dispatch:
+    inputs:
+      vendor:
+        description: "Reconstruire et envoyer vendor/"
+        type: boolean
+        default: false
 
 jobs:
   deploy:
@@ -11,6 +17,26 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Détection d'un changement de dépendances
+        id: deps
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "changed=${{ inputs.vendor }}" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          status=0
+          git diff --quiet "${{ github.event.before }}" "${{ github.sha }}" -- composer.lock 2>/dev/null || status=$?
+
+          if [ "$status" -eq 1 ]; then
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            [ "$status" -eq 0 ] || echo "::warning::Comparaison de composer.lock impossible : vendor/ non envoyé. Relancer le workflow à la main avec l'option vendor si besoin."
+          fi
 
       - name: Deploy via FTP
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
@@ -40,6 +66,41 @@ jobs:
             public/assets/pdf/**
             public/assets/video/**
             storage/**
+
+      - name: PHP pour les dépendances
+        if: steps.deps.outputs.changed == 'true'
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.1"
+          extensions: gd, intl, pdo_mysql
+          tools: composer:v2
+
+      - name: Construction de vendor/
+        if: steps.deps.outputs.changed == 'true'
+        env:
+          APP_ENV: prod
+        run: composer install --no-dev --optimize-autoloader --no-interaction --no-scripts
+
+      - name: Envoi de vendor/ puis bascule
+        if: steps.deps.outputs.changed == 'true'
+        env:
+          FTP_SERVER: ${{ secrets.FTP_SERVER }}
+          FTP_USERNAME: ${{ secrets.FTP_USERNAME }}
+          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+          PROJECT_DIR: www/jdr
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq && sudo apt-get install -y -qq lftp
+
+          ftp_do() {
+            lftp -u "$FTP_USERNAME","$FTP_PASSWORD" "$FTP_SERVER" \
+                 -e "set ssl:verify-certificate no; set cmd:fail-exit yes; $1; bye"
+          }
+
+          ftp_do "rm -r -f $PROJECT_DIR/vendor_next" || true
+          ftp_do "mirror -R --parallel=8 vendor $PROJECT_DIR/vendor_next"
+          ftp_do "rm -r -f $PROJECT_DIR/vendor_prev" || true
+          ftp_do "mv $PROJECT_DIR/vendor $PROJECT_DIR/vendor_prev; mv $PROJECT_DIR/vendor_next $PROJECT_DIR/vendor"
 
       # Cache + migrations via un script jetable : déposé sous un nom aléatoire,
       # appelé une fois avec un jeton à usage unique, supprimé quoi qu'il arrive.
@@ -77,3 +138,13 @@ jobs:
                       -H "X-Deploy-Token: $TOKEN" "$SITE_URL/$NAME")
           cat /tmp/deploy-out.txt
           [ "$HTTP" = "200" ] || { echo "::error::Déploiement échoué (HTTP $HTTP)"; exit 1; }
+
+      - name: Suppression de l'ancien vendor/
+        if: steps.deps.outputs.changed == 'true'
+        env:
+          FTP_SERVER: ${{ secrets.FTP_SERVER }}
+          FTP_USERNAME: ${{ secrets.FTP_USERNAME }}
+          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+        run: |
+          lftp -u "$FTP_USERNAME","$FTP_PASSWORD" "$FTP_SERVER" \
+               -e "set ssl:verify-certificate no; rm -r -f www/jdr/vendor_prev; bye" || true

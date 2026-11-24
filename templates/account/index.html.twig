@@ -18,6 +18,12 @@
         <dt>Utilisateur</dt>
         <dd><span class="bold">{{ app.user.pseudo }}</span></dd>
 
+        <dt>Nom affiché</dt>
+        <dd>
+          <span class="bold">{{ app.user.displayName ?? 'Aucun' }}</span>
+          <a href="{{ path('account_display_name') }}"><i class="fas fa-edit" aria-hidden="true"></i> Modifier</a>
+        </dd>
+
         <dt>Votre E-mail</dt>
         <dd><span class="bold">{{ app.user.email }}</span></dd>
 

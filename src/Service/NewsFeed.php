@@ -46,7 +46,7 @@ class NewsFeed
     {
         $ranking = [];
 
-        foreach ($this->characterRepository->findRankable() as $character) {
+        foreach ($this->visibility->listedOnly($this->characterRepository->findRankable()) as $character) {
             if ($character->isDead() || $character->isMissing()) {
                 continue;
             }

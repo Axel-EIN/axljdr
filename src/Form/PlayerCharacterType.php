@@ -7,6 +7,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\Length;
 
 class PlayerCharacterType extends AbstractType
 {
@@ -17,11 +18,13 @@ class PlayerCharacterType extends AbstractType
                 'required' => false,
                 'label' => 'Profil public',
                 'attr' => ['rows' => 12],
+                'constraints' => [new Length(['max' => PlayerSheetType::TEXT_MAX_LENGTH])],
             ])
             ->add('playerNotes', TextareaType::class, [
                 'required' => false,
                 'label' => 'Notes de background pour le Maître de Jeu',
                 'attr' => ['rows' => 8],
+                'constraints' => [new Length(['max' => PlayerSheetType::TEXT_MAX_LENGTH])],
             ])
         ;
 

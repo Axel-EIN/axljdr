@@ -8,7 +8,7 @@
 
     {% if new_season %}
       <div class="history-season{{ previous is null ? ' first' : '' }}">
-        {{ include('/parts/divider-ornament.html.twig', {classes: 'my-2', ornament_size: 'small', ornament_icon: STORY_SEASON_ICO, ornament_invert: true}) }}
+        {{ include('/parts/divider-ornament.html.twig', {classes: 'my-2', ornament_size: 'small', ornament_variant: 'brush', ornament_icon: STORY_SEASON_ICO}) }}
         <h3 class="heading-section mt-1">{{ season.numero == current_season|default(null) ? 'Saison en cours' : season.titre }}</h3>
       </div>
     {% endif %}

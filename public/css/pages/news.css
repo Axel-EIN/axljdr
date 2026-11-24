@@ -14,14 +14,12 @@
 }
 
 .session-card {
+  --radius: 1rem;
+
   color: var(--color-white);
   border: 0;
-  background-color: var(--chapter-color, var(--color-black));
-  background-image:
-    linear-gradient(rgb(0 0 0 / 0.4), rgb(0 0 0 / 0.8)),
-    var(--chapter-image);
-  background-size: cover;
-  background-position: center;
+  border-radius: var(--radius);
+  background-color: transparent;
   isolation: isolate;
 
   @media (min-width: 992px) { height: 100%; }
@@ -29,14 +27,19 @@
   &::before {
     content: '';
     position: absolute;
-    inset: 0;
+    inset: -0.75rem;
     z-index: -1;
-    border-radius: inherit;
-    -webkit-backdrop-filter: blur(4px);
-    backdrop-filter: blur(4px);
+    background-color: var(--chapter-color, var(--color-black));
+    background-image:
+      linear-gradient(rgb(0 0 0 / 0.4), rgb(0 0 0 / 0.8)),
+      var(--chapter-image);
+    background-size: cover;
+    background-position: center;
+    filter: blur(4px);
+    clip-path: inset(0.75rem round var(--radius));
   }
 
-  &.bright {
+  &.bright::before {
     background-image:
       linear-gradient(rgb(0 0 0 / 0.65), rgb(0 0 0 / 0.9)),
       var(--chapter-image);
@@ -48,6 +51,8 @@
 
   .character-player { color: rgb(255 255 255 / 0.7); }
 
+  .ranking-list { margin-top: -2px; }
+
   .ranking-line {
     border-radius: 0;
     padding-right: 1rem;
@@ -58,7 +63,7 @@
 
 .session-split {
   display: flex;
-  gap: var(--gap);
+  gap: 1rem;
   margin-bottom: 1rem;
 
   > * {

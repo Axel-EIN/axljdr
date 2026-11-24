@@ -18,8 +18,8 @@
       </span>
       <div class="character-line">
         <span class="character-name">{{ character.firstName }}</span>
-        {% if character.player %}
-          <span class="character-player">({{ character.player.pseudo }})</span>
+        {% if character.player and character.player.displayName %}
+          <span class="character-player">({{ character.player.displayName }})</span>
         {% endif %}
       </div>
       {% if gained|default(false) %}

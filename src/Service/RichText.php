@@ -28,7 +28,7 @@ class RichText
         );
 
         $text = preg_replace_callback(
-            '/\[([^\]\n]+)\]\(((?:https?:\/\/|\/)[^\s)"<>]*)\)/u',
+            '/\[([^\]\n]+)\]\(((?:https?:\/\/|\/(?![\/\\\\]))[^\s)"<>]*)\)/u',
             fn (array $link) => '<a href="' . $link[2] . '"' . (str_starts_with($link[2], '/') ? '' : ' target="_blank" rel="noopener"') . '>' . $link[1] . '</a>',
             $text
         );

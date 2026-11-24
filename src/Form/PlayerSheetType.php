@@ -2,13 +2,14 @@
 
 namespace App\Form;
 
-use App\Entity\Access;
 use App\Entity\Avantage;
 use App\Entity\Competence;
 use App\Entity\FichePersonnage;
 use App\Entity\Objet;
 use App\Entity\Sort;
+use App\Service\Visibility;
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\QueryBuilder;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
@@ -19,30 +20,36 @@ use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Validator\Constraints\Length;
+use Symfony\Component\Validator\Constraints\Range;
 use Symfony\Component\Validator\Constraints\Regex;
 
 class PlayerSheetType extends AbstractType
 {
+    public const TEXT_MAX_LENGTH = 20000;
+
+    private const BITMASK = ['pattern' => '/^[01]{0,6}$/', 'message' => 'Valeur de spécialisation invalide.'];
+
+    private Visibility $visibility;
+    private array $readableIds = [];
+
+    public function __construct(Visibility $visibility)
+    {
+        $this->visibility = $visibility;
+    }
+
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $sheet = $builder->getData();
         $spellCategories = $sheet?->getPersonnage()?->getEcole()?->hasTattoos()
             ? ['MAGIE', 'KIHO', 'TATOUAGE']
             : ['MAGIE', 'KIHO'];
-        $equipped = array_filter([$sheet?->getArmeActuelle()?->getId()]) ?: [0];
 
-        $objectQuery = function (EntityRepository $er, ?string $category) use ($options, $equipped) {
-            $qb = $er->createQueryBuilder('o')->orderBy('o.nom', 'ASC');
+        $objectQuery = function (EntityRepository $er, ?string $category) {
+            $qb = $this->readable($er, 'o');
 
             if ($category !== null) {
                 $qb->andWhere('o.categorie = :cat')->setParameter('cat', $category);
-            }
-
-            if (!$options['sees_locked']) {
-                $qb->andWhere('(o.access = :access AND (o.publishedAt IS NULL OR o.publishedAt <= :now)) OR o.id IN (:allowed)')
-                    ->setParameter('access', Access::PUBLIC)
-                    ->setParameter('now', new \DateTime())
-                    ->setParameter('allowed', array_merge($equipped, $options['unlocked']));
             }
 
             return $qb;
@@ -53,16 +60,16 @@ class PlayerSheetType extends AbstractType
             'choice_label' => 'nom',
             'placeholder' => '— Aucun —',
             'required' => false,
-            'query_builder' => fn(EntityRepository $er) => $er->createQueryBuilder('a')
-                ->where('a.genre = :genre')->setParameter('genre', 'Avantage')->orderBy('a.nom', 'ASC'),
+            'query_builder' => fn(EntityRepository $er) => $this->readable($er, 'a')
+                ->andWhere('a.genre = :genre')->setParameter('genre', 'Avantage'),
         ];
         $disadvantageOptions = [
             'class' => Avantage::class,
             'choice_label' => 'nom',
             'placeholder' => '— Aucun —',
             'required' => false,
-            'query_builder' => fn(EntityRepository $er) => $er->createQueryBuilder('a')
-                ->where('a.genre = :genre')->setParameter('genre', 'Désavantage')->orderBy('a.nom', 'ASC'),
+            'query_builder' => fn(EntityRepository $er) => $this->readable($er, 'a')
+                ->andWhere('a.genre = :genre')->setParameter('genre', 'Désavantage'),
         ];
 
         $builder
@@ -84,8 +91,8 @@ class PlayerSheetType extends AbstractType
                 'choice_label' => 'nom',
                 'placeholder' => '— Aucune —',
                 'required' => false,
-                'query_builder' => fn(EntityRepository $er) => $er->createQueryBuilder('c')
-                    ->where('c.categorie = :cat')->setParameter('cat', 'Bugei')->orderBy('c.nom', 'ASC'),
+                'query_builder' => fn(EntityRepository $er) => $this->readable($er, 'c')
+                    ->andWhere('c.categorie = :cat')->setParameter('cat', 'Bugei'),
             ])
             ->add('armure', EntityType::class, [
                 'class' => Objet::class,
@@ -110,8 +117,14 @@ class PlayerSheetType extends AbstractType
             ->add('weight', TextType::class, ['required' => false])
             ->add('hair', TextType::class, ['required' => false])
             ->add('eyes', TextType::class, ['required' => false])
-            ->add('appearance', TextareaType::class, ['required' => false])
-            ->add('notes', TextareaType::class, ['required' => false])
+            ->add('appearance', TextareaType::class, [
+                'required' => false,
+                'constraints' => [new Length(['max' => self::TEXT_MAX_LENGTH])],
+            ])
+            ->add('notes', TextareaType::class, [
+                'required' => false,
+                'constraints' => [new Length(['max' => self::TEXT_MAX_LENGTH])],
+            ])
             ->add('koku', IntegerType::class, ['required' => false])
             ->add('bu', IntegerType::class, ['required' => false])
             ->add('zeni', IntegerType::class, ['required' => false])
@@ -132,16 +145,15 @@ class PlayerSheetType extends AbstractType
                 'choice_label' => 'nom',
                 'multiple' => true,
                 'required' => false,
-                'query_builder' => fn(EntityRepository $er) => $er->createQueryBuilder('o')->orderBy('o.nom', 'ASC'),
+                'query_builder' => fn(EntityRepository $er) => $objectQuery($er, null),
             ])
             ->add('knownSpells', EntityType::class, [
                 'class' => Sort::class,
                 'choice_label' => 'nom',
                 'multiple' => true,
                 'required' => false,
-                'query_builder' => fn(EntityRepository $er) => $er->createQueryBuilder('s')
-                    ->where('s.categorie IN (:categories)')->setParameter('categories', $spellCategories)
-                    ->orderBy('s.nom', 'ASC'),
+                'query_builder' => fn(EntityRepository $er) => $this->readable($er, 's')
+                    ->andWhere('s.categorie IN (:categories)')->setParameter('categories', $spellCategories),
             ])
             ->add('dmgModifier', TextType::class, [
                 'required' => false,
@@ -160,6 +172,7 @@ class PlayerSheetType extends AbstractType
             'group_by' => 'categorie',
             'placeholder' => '— Aucune —',
             'required' => false,
+            'query_builder' => fn(EntityRepository $er) => $this->readable($er, 'c'),
         ];
         $valueOptions = [
             'placeholder' => '—',
@@ -171,18 +184,45 @@ class PlayerSheetType extends AbstractType
             $builder
                 ->add('competence' . $i, EntityType::class, $skillOptions)
                 ->add('valeur' . $i, ChoiceType::class, $valueOptions)
-                ->add('specialisations' . $i, HiddenType::class, ['required' => false])
-                ->add('compEcole' . $i, HiddenType::class, ['required' => false])
-                ->add('speEcole' . $i, HiddenType::class, ['required' => false]);
+                ->add('specialisations' . $i, HiddenType::class, [
+                    'required' => false,
+                    'constraints' => [new Regex(self::BITMASK)],
+                ])
+                ->add('compEcole' . $i, HiddenType::class, [
+                    'required' => false,
+                    'constraints' => [new Range(['min' => 0, 'max' => 10])],
+                ])
+                ->add('speEcole' . $i, HiddenType::class, [
+                    'required' => false,
+                    'constraints' => [new Regex(self::BITMASK)],
+                ]);
         }
+    }
+
+    private function readable(EntityRepository $er, string $alias): QueryBuilder
+    {
+        $class = $er->getClassName();
+
+        if (!isset($this->readableIds[$class])) {
+            $this->readableIds[$class] = [];
+
+            foreach ($er->findAll() as $element) {
+                if ($this->visibility->isReadable($element)) {
+                    $this->readableIds[$class][] = $element->getId();
+                }
+            }
+        }
+
+        return $er->createQueryBuilder($alias)
+            ->andWhere($alias . '.id IN (:readable)')
+            ->setParameter('readable', $this->readableIds[$class] ?: [0])
+            ->orderBy($alias . '.nom', 'ASC');
     }
 
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
             'data_class' => FichePersonnage::class,
-            'sees_locked' => false,
-            'unlocked' => [],
         ]);
     }
 }

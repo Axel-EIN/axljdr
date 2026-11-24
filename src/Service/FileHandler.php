@@ -37,17 +37,24 @@ class FileHandler extends AbstractController
             return $previousFile;
         }
 
-        if (basename((string) $previousFile) !== $newFilename) {
-            $this->delete($previousFile, $folder, $root);
-        }
+        $overwritten = basename((string) $previousFile) === $newFilename;
 
         if ($preset !== null && $this->imageNormalizer->hasPreset($preset)) {
             $absolutePath = $root . '/' . $folder . '/' . $newFilename;
             $normalizedPath = $this->imageNormalizer->normalize($absolutePath, $preset);
 
-            if ($normalizedPath !== null) {
-                $newFilename = basename($normalizedPath);
+            if ($normalizedPath === null) {
+                $this->delete($newFilename, $folder, $root);
+                $this->addFlash('danger', 'L\'image n\'a pas pu être traitée. Essayez avec une autre image.');
+
+                return $overwritten ? null : $previousFile;
             }
+
+            $newFilename = basename($normalizedPath);
+        }
+
+        if (!$overwritten) {
+            $this->delete($previousFile, $folder, $root);
         }
 
         $newPath = 'assets/img/' . $folder . '/' . $newFilename;

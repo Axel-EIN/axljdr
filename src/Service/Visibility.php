@@ -152,6 +152,13 @@ class Visibility
         }));
     }
 
+    public function readableOnly(iterable $elements): array
+    {
+        $elements = is_array($elements) ? $elements : iterator_to_array($elements, false);
+
+        return array_values(array_filter($elements, fn ($element) => $this->isReadable($element)));
+    }
+
     public function isFresh($element, bool $revealSession = false): bool
     {
         $publishedAt = $this->publishedAt($element);

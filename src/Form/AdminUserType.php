@@ -28,6 +28,11 @@ class AdminUserType extends AbstractType
 
         $builder
             ->add('pseudo', TextType::class)
+            ->add('displayName', TextType::class, [
+                'label' => 'Nom affiché',
+                'required' => false,
+                'help' => 'Visible des autres joueurs à la place du pseudo. Vide : rien ne s\'affiche.',
+            ])
             ->add('roles', ChoiceType::class, [
                 'label' => 'rôles',
                 'multiple' => true,

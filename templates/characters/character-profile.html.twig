@@ -112,8 +112,8 @@
             </li>
         {% endif %}
 
-      {% if character.joueur is not empty %}
-        <li class="list-group-item infos-item">Joueur : <span class="bold">{{ character.joueur.pseudo }}</span></li>
+      {% if character.joueur is not empty and character.joueur.displayName %}
+        <li class="list-group-item infos-item">Joueur : <span class="bold">{{ character.joueur.displayName }}</span></li>
       {% endif %}
 
       {% if free_position or current_position %}

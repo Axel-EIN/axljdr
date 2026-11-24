@@ -40,7 +40,7 @@ RUN openssl req -x509 -nodes -days 3650 -newkey rsa:2048 \
         -out /etc/ssl/certs/axljdr-selfsigned.crt \
         -subj "/CN=localhost"
 COPY docker/apache-ssl.conf /etc/apache2/sites-available/default-ssl.conf
-RUN a2enmod ssl && a2ensite default-ssl
+RUN a2enmod ssl headers && a2ensite default-ssl
 
 # Recreate www-data with the host user's UID/GID so files written by Apache/Composer
 # inside the container (vendor/, var/cache, public/assets/img/...) stay owned by the

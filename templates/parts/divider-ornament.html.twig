@@ -1,5 +1,10 @@
-<div class="divider-ornament {{ ornament_size|default('') }} {{ classes|default('my-3') }}">
+{% set ornament_variant = ornament_variant|default('') %}
+<div class="divider-ornament {{ ornament_size|default('') }} {{ ornament_variant }} {{ classes|default('my-3') }}">
     <hr>
-    <img class="icon-ornament{{ ornament_invert|default(false) ? ' invert' }}" src="{{ asset(ornament_icon|default(ORNAMENT_ICO)) }}" alt="" />
+    {% if ornament_variant == 'brush' %}
+        <span class="icon-ornament" style="--ornament-icon: url('{{ asset(ornament_icon|default(ORNAMENT_ICO)) }}');"></span>
+    {% else %}
+        <img class="icon-ornament{{ ornament_invert|default(false) ? ' invert' }}" src="{{ asset(ornament_icon|default(ORNAMENT_ICO)) }}" alt="" />
+    {% endif %}
     <hr>
 </div>

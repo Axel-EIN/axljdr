@@ -42,7 +42,8 @@ class CharactersController extends AbstractController
         SaisonRepository $seasonRepository,
         ChapitreRepository $chapterRepository,
         EpisodeRepository $episodeRepository,
-        AppearanceRanker $appearanceRanker
+        AppearanceRanker $appearanceRanker,
+        Visibility $visibility
     ): Response {
         $seasonId  = null;
         $chapterId = null;
@@ -73,7 +74,7 @@ class CharactersController extends AbstractController
 
         if ($episodeId !== null && $chapterId !== null) {
             $episode = $episodeRepository->find($episodeId);
-            if ($episode === null || $episode->getChapitreParent()->getId() !== $chapterId) {
+            if ($episode === null || $episode->getChapitreParent()->getId() !== $chapterId || !$visibility->isReadable($episode)) {
                 $episodeId = null;
             }
         }
@@ -86,7 +87,7 @@ class CharactersController extends AbstractController
             ? $chapterRepository->findBy(['saisonParent' => $seasonId], ['numero' => 'ASC'])
             : [];
         $episodes = $chapterId !== null
-            ? $episodeRepository->findBy(['chapitreParent' => $chapterId], ['numero' => 'ASC'])
+            ? $visibility->readableOnly($episodeRepository->findBy(['chapitreParent' => $chapterId], ['numero' => 'ASC']))
             : [];
 
         $sections = [];
@@ -190,7 +191,7 @@ class CharactersController extends AbstractController
         $weaponsJson = [];
         $spellsJson = [];
         $objectsJson = [];
-        foreach ($skillRepository->findBy([], ['nom' => 'ASC']) as $skill) {
+        foreach ($visibility->readableOnly($skillRepository->findBy([], ['nom' => 'ASC'])) as $skill) {
             $skillsJson[] = [
                 'id' => $skill->getId(),
                 'nom' => $skill->getNom(),
@@ -218,10 +219,10 @@ class CharactersController extends AbstractController
                 'exclusiveId'       => $advantage->getExclusive()      ? $advantage->getExclusive()->getId()      : null,
             ];
         };
-        foreach ($advantageRepository->findBy(['genre' => 'Avantage'], ['nom' => 'ASC']) as $advantage) {
+        foreach ($visibility->readableOnly($advantageRepository->findBy(['genre' => 'Avantage'], ['nom' => 'ASC'])) as $advantage) {
             $advantagesJson[] = $serialize($advantage);
         }
-        foreach ($advantageRepository->findBy(['genre' => 'Désavantage'], ['nom' => 'ASC']) as $advantage) {
+        foreach ($visibility->readableOnly($advantageRepository->findBy(['genre' => 'Désavantage'], ['nom' => 'ASC'])) as $advantage) {
             $disadvantagesJson[] = $serialize($advantage);
         }
 
@@ -240,7 +241,7 @@ class CharactersController extends AbstractController
             ];
         }
 
-        foreach ($spellRepository->findBy(['categorie' => 'MAGIE'], ['niveau' => 'ASC', 'nom' => 'ASC']) as $spell) {
+        foreach ($visibility->readableOnly($spellRepository->findBy(['categorie' => 'MAGIE'], ['niveau' => 'ASC', 'nom' => 'ASC'])) as $spell) {
             $spellsJson[] = [
                 'id'     => $spell->getId(),
                 'nom'    => $spell->getNom(),
@@ -249,7 +250,7 @@ class CharactersController extends AbstractController
             ];
         }
 
-        foreach ($spellRepository->findBy(['categorie' => 'KIHO'], ['niveau' => 'ASC', 'nom' => 'ASC']) as $spell) {
+        foreach ($visibility->readableOnly($spellRepository->findBy(['categorie' => 'KIHO'], ['niveau' => 'ASC', 'nom' => 'ASC'])) as $spell) {
             $spellsJson[] = [
                 'id'     => $spell->getId(),
                 'nom'    => $spell->getNom(),
@@ -259,7 +260,7 @@ class CharactersController extends AbstractController
         }
 
         if ($sheet->getPersonnage()->getEcole()?->hasTattoos()) {
-            foreach ($spellRepository->findBy(['categorie' => 'TATOUAGE'], ['nom' => 'ASC']) as $spell) {
+            foreach ($visibility->readableOnly($spellRepository->findBy(['categorie' => 'TATOUAGE'], ['nom' => 'ASC'])) as $spell) {
                 $spellsJson[] = [
                     'id'     => $spell->getId(),
                     'nom'    => $spell->getNom(),
@@ -350,7 +351,7 @@ class CharactersController extends AbstractController
     /**
      * @Route("/characters/sheet/{id}/edit", name="characters_sheet_edit", methods={"POST"})
      */
-    public function editSheet(Request $request, FichePersonnage $sheet, EntityManagerInterface $em, Visibility $visibility): Response
+    public function editSheet(Request $request, FichePersonnage $sheet, EntityManagerInterface $em): Response
     {
         $isOwnCharacter = $this->isOwnCharacter($sheet->getPersonnage());
 
@@ -358,10 +359,7 @@ class CharactersController extends AbstractController
             throw $this->createNotFoundException();
         }
 
-        $form = $this->createForm(PlayerSheetType::class, $sheet, [
-            'sees_locked' => $this->isGranted('ROLE_GM'),
-            'unlocked' => $visibility->unlockedIds('object'),
-        ]);
+        $form = $this->createForm(PlayerSheetType::class, $sheet);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -391,7 +389,7 @@ class CharactersController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             if ($isGm) {
-                $character->setDescription($nameTagger->tag($character->getDescription()));
+                $character->setDescription($nameTagger->tagDescription($character, $character->getDescription(), $previousDescription));
             } else {
                 $character->setDescription($nameTagger->retag($this->withoutHtml($character->getDescription()), $previousDescription));
                 $character->setPlayerNotes($this->withoutHtml($character->getPlayerNotes()));

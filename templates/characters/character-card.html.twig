@@ -63,8 +63,8 @@
 
                 <div class="card-img-overlay">
                     <h4 class="character-card-title-cartouche {{text}}">{{ character.nomComplet }}</h4>
-                    {% if character.estPj == 1 and character.joueur %}
-                        <p class="card-text {{text}} player-name">{{ character.joueur.pseudo }}</p>
+                    {% if character.estPj == 1 and character.joueur and character.joueur.displayName %}
+                        <p class="card-text {{text}} player-name">{{ character.joueur.displayName }}</p>
                     {% endif %}
                     {% if character.titres %}
                         <p class="card-text character-surname {{text}}">{{ character.titres }}</p>

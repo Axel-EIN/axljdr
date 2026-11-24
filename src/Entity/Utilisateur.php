@@ -43,6 +43,16 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
     private $pseudo;
 
     /**
+     * @ORM\Column(type="string", length=50, nullable=true)
+     * @Assert\Length(max=50)
+     * @Assert\Regex(
+     *     pattern="/^[\p{L}\p{N} _'-]+$/u",
+     *     message="Le nom affiché n'accepte que des lettres, des chiffres, l'espace, le tiret, le souligné et l'apostrophe."
+     * )
+     */
+    private $displayName;
+
+    /**
      * @ORM\Column(type="json")
      */
     private $roles = [];
@@ -128,6 +138,19 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
     public function setPseudo(string $pseudo): self
     {
         $this->pseudo = $pseudo;
+
+        return $this;
+    }
+
+    public function getDisplayName(): ?string
+    {
+        return $this->displayName;
+    }
+
+    public function setDisplayName(?string $displayName): self
+    {
+        $displayName = $displayName === null ? null : trim($displayName);
+        $this->displayName = $displayName === '' ? null : $displayName;
 
         return $this;
     }
